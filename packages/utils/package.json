@@ -1,0 +1,11 @@
+{
+  "name": "@edoms/utils",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "typescript": "^4.6.4",
+    "vite": "^3.0.7"
+  }
+}
