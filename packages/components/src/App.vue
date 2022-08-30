@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+import { object } from '@edoms/utils'
+
+const obj = {
+  name: 'Tome',
+}
+
+console.log(object.deepClone(obj))
 </script>
 
 <template>

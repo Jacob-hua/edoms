@@ -1,6 +1,6 @@
 {
   "name": "@edoms/components",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
@@ -9,6 +9,7 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@edoms/utils": "workspace:^0.0.1",
     "vue": "^3.2.37"
   },
   "devDependencies": {
