@@ -11,6 +11,8 @@ export default defineConfig({
     alias: {
       '@edoms/utils': r('./packages/utils'),
       '@edoms/components': r('./packages/components'),
+      '@edoms/form': r('./packages/form'),
+      '@edoms/editor': r('./packages/editor'),
     },
   },
 })
