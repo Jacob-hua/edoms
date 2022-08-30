@@ -22,7 +22,7 @@ then
 	echo "refactor    重构（即不是新增功能，也不是修改bug的代码变动）"
 	echo "revert      恢复上一次提交"
 	echo "release     发布新版本"
-	echo "chore       其他修改（不再上述类型的修改）"
+	echo "chore       其他修改（不属于上述类型的修改）"
 	echo "详情请查看 git commit 提交规范：https://github.com/woai3c/Front-end-articles/blob/master/git%20commit%20style.md"
 	# 异常退出
 	exit 1
