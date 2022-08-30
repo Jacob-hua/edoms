@@ -5,7 +5,7 @@
 # 获取当前提交的 commit msg
 commit_msg=`cat $1`
 
-msg_re="^(feat|fix|docs|style|refactor|perf|test|workflow|build|ci|chore|release|workflow)(\(.+\))?:.{1,100}"
+msg_re="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|release|revert)(\(.+\))?:.{1,100}"
 
 if [[ ! $commit_msg =~ $msg_re ]]
 then
@@ -15,11 +15,14 @@ then
 	echo "fix         修补bug"
 	echo "docs        文档（新增or修改）"
 	echo "style       格式（不影响代码运行的变动）"
-	echo "refactor    重构（即不是新增功能，也不是修改bug的代码变动）"
-	echo "perf        性能优化"
 	echo "test        增加测试"
-	echo "chore       构建过程或辅助工具的变动"
-	echo ""
+	echo "build       影响项目构建或依赖项修改"
+	echo "ci          持续集成相关文件修改"
+	echo "perf        性能优化"
+	echo "refactor    重构（即不是新增功能，也不是修改bug的代码变动）"
+	echo "revert      恢复上一次提交"
+	echo "release     发布新版本"
+	echo "chore       其他修改（不再上述类型的修改）"
 	echo "详情请查看 git commit 提交规范：https://github.com/woai3c/Front-end-articles/blob/master/git%20commit%20style.md"
 	# 异常退出
 	exit 1
