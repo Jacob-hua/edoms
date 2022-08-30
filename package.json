@@ -1,0 +1,27 @@
+{
+  "name": "edoms-application-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .vue,.js,.ts --fix",
+    "format": "prettier --write ./**/*.{vue,ts,js,scss,css,json,md}"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.13",
+    "@types/node": "^18.7.13",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-define-config": "^1.6.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-tsdoc": "^0.2.16",
+    "eslint-plugin-vue": "^9.4.0",
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.7"
+  }
+}

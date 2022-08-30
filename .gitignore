@@ -1,0 +1,11 @@
+# tsup
+dist
+
+node_modules/
+
+# TypeDoc
+packages/*/docs
+
+# VSCode
+.vscode
+*.code-workspace
