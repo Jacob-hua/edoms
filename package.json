@@ -27,11 +27,11 @@
     "vite": "^3.0.7"
   },
   "lint-staged": {
-    "*.{js,vue,ts}": [
+    "./**/*.{js,vue,ts}": [
       "prettier --write",
       "eslint . --ext .vue,.js,.ts --fix"
     ],
-    "*.{html,css,less,scss,md}": [
+    "./**/*.{html,css,less,scss,md}": [
       "prettier --write"
     ]
   }
