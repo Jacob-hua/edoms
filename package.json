@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "vitest run",
-    "lint": "eslint . --ext .vue,.js,.ts --fix",
+    "lint": "eslint . --ext .vue,.js,.ts",
+    "lint-fix": "eslint . --ext .vue,.js,.ts --fix",
     "format": "prettier --write ./**/*.{vue,ts,js,scss,css,json,md}",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "prepare": "husky install"
   },
   "devDependencies": {
