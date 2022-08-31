@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { listApplications } from './api/application'
+
+const fetchUser = () => {
+  listApplications({
+    limit: 10,
+    page: 1,
+  })
+}
 </script>
 
 <template>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-    <el-button type="primary">elementButton</el-button>
+    <el-button type="primary" @click="fetchUser">elementButton</el-button>
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
 

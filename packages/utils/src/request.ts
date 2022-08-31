@@ -1,24 +1,23 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-export interface InterceptorHanlder<T> {
-  then: (res: T) => T
-  catch: (err: any) => any
+export * from 'axios'
+
+export interface HttpInterceptors {
+  requestInterceptors?: (config: AxiosRequestConfig) => AxiosRequestConfig
+  requestInterceptorsCatch: (error: any) => any
+  responseInterceptors?: <T = AxiosResponse>(response: T) => T
+  responseInterceptorsCatch: (error: any) => any
 }
 
-export interface HttpInterceptors<T, R> {
-  requestInterceptors?: InterceptorHanlder<T>
-  responseInterceptors?: InterceptorHanlder<R>
-}
-
-export interface RequestConfig<T, R> extends AxiosRequestConfig {
-  interceptors?: HttpInterceptors<T, R>
+export interface RequestConfig extends AxiosRequestConfig {
+  interceptors?: HttpInterceptors
 }
 
 export class Request {
   instance: AxiosInstance
-  interceptors?: HttpInterceptors<AxiosRequestConfig, AxiosResponse>
+  interceptors?: HttpInterceptors
 
-  constructor(config: RequestConfig<AxiosRequestConfig, AxiosResponse>) {
+  constructor(config: RequestConfig) {
     this.instance = axios.create(config)
     this.interceptors = config.interceptors
 
@@ -32,41 +31,47 @@ export class Request {
     )
 
     this.instance.interceptors.request.use(
-      this.interceptors?.requestInterceptors?.then,
-      this.interceptors?.requestInterceptors?.catch
+      this.interceptors?.requestInterceptors,
+      this.interceptors?.requestInterceptorsCatch
     )
 
     this.instance.interceptors.response.use(
-      this.interceptors?.responseInterceptors?.then,
-      this.interceptors?.responseInterceptors?.catch
+      this.interceptors?.responseInterceptors,
+      this.interceptors?.responseInterceptorsCatch
     )
 
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
-        return res.data
+        return new Promise((resolve, reject) => {
+          if (res.status === 200) {
+            resolve(res.data)
+          } else {
+            reject(res.data)
+          }
+        })
       },
       (err: any) => {
-        return err
+        return Promise.reject(err)
       }
     )
   }
 
-  request<T>(config: RequestConfig<AxiosRequestConfig, T>): Promise<T> {
+  request<T>(config: RequestConfig): Promise<T> {
     return new Promise((resolve, reject) => {
       if (config?.interceptors?.requestInterceptors) {
-        config = config.interceptors.requestInterceptors.then(config)
+        config = config.interceptors.requestInterceptors(config)
       }
       this.instance
         .request<any, T>(config)
         .then((res) => {
           if (config?.interceptors?.responseInterceptors) {
-            res = config.interceptors.responseInterceptors.then(res)
+            res = config.interceptors.responseInterceptors<T>(res)
           }
           resolve(res)
         })
         .catch((err: any) => {
           if (config?.interceptors?.responseInterceptors) {
-            config.interceptors.responseInterceptors.catch(err)
+            config.interceptors.responseInterceptorsCatch(err)
           }
           reject(err)
         })
