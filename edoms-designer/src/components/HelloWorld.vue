@@ -1,9 +1,3 @@
-<script setup lang="ts">
-defineProps<{
-  msg: string
-}>()
-</script>
-
 <template>
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
@@ -14,6 +8,23 @@ defineProps<{
     </h3>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed, defineExpose } from 'vue'
+const props = defineProps<{
+  msg: string
+}>()
+
+const msg = computed(() => props.msg)
+
+function test() {
+  console.log('test', msg.value)
+}
+
+defineExpose({
+  test,
+})
+</script>
 
 <style scoped>
 h1 {

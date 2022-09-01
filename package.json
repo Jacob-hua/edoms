@@ -7,7 +7,7 @@
     "bootstrap": "pnpm i",
     "designer": "pnpm --filter \"edoms-designer\" dev",
     "lint": "eslint . --ext .vue,.js,.ts",
-    "lint-fix": "eslint . --ext .vue,.js,.ts --fix",
+    "lint:fix": "eslint . --ext .vue,.js,.ts --fix",
     "format": "prettier --write ./**/*.{vue,ts,js,scss,css,json,md}",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
