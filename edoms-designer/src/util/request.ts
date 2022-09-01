@@ -1,7 +1,9 @@
 import { Request, RequestConfig, AxiosResponse } from '@edoms/utils'
 import { ElMessage } from 'element-plus'
+import { ContentType, RequestMethod } from '@/enums/http'
 
 export interface EdomsRequestConfig<T> extends RequestConfig {
+  method: RequestMethod
   data?: T
 }
 
@@ -20,7 +22,7 @@ const service = new Request({
   timeout: 1000 * 10,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json;charset=UTF-8',
+    'Content-Type': ContentType.JSON,
   },
   interceptors: {
     requestInterceptors(config) {
@@ -67,8 +69,8 @@ const service = new Request({
 })
 
 export const request = <D, R>(config: EdomsRequestConfig<D>) => {
-  const { method = 'GET' } = config
-  if (['GET', 'get'].includes(method)) {
+  const { method = RequestMethod.GET } = config
+  if (method === RequestMethod.GET) {
     config.params = config.data
   }
   return service.request<EdomsResponse<R>>(config)
