@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "bootstrap": "pnpm i",
     "lint": "eslint . --ext .vue,.js,.ts",
     "lint-fix": "eslint . --ext .vue,.js,.ts --fix",
     "format": "prettier --write ./**/*.{vue,ts,js,scss,css,json,md}",
