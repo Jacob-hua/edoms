@@ -9,12 +9,12 @@ interface Sample {
   skills: Function[]
 }
 
-interface ObjectTestContext {
+interface LocalContext {
   sample: Sample
 }
 
-describe('first', () => {
-  beforeEach<ObjectTestContext>(async (context) => {
+describe('object', () => {
+  beforeEach<LocalContext>(async (context) => {
     context.sample = {
       name: 'Tome',
       age: 12,
@@ -33,7 +33,7 @@ describe('first', () => {
     }
   })
 
-  test<ObjectTestContext>('deepClone', ({ sample }) => {
+  test<LocalContext>('deepClone', ({ sample }) => {
     const cloneSample = deepClone<Sample>(sample)
     expect(cloneSample.name).toBe(sample.name)
     cloneSample.eat('apple')
