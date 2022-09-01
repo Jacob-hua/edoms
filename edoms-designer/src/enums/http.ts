@@ -1,4 +1,4 @@
-export enum RequestMethod {
+export const enum RequestMethod {
   GET = 'GET',
   POST = 'POST',
   PATCH = 'PATCH',
@@ -6,7 +6,7 @@ export enum RequestMethod {
   DELETE = 'DELETE',
 }
 
-export enum ContentType {
+export const enum ContentType {
   // json
   JSON = 'application/json;charset=UTF-8',
   // text
