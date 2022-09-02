@@ -12,5 +12,11 @@ export const useCounterStore = defineStore({
     increment() {
       this.counter++
     },
+    randomizeCounter() {
+      this.counter = Math.round(100 * Math.random())
+    },
+    subtraction() {
+      this.counter -= 32
+    },
   },
 })

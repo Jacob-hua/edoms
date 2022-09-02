@@ -23,6 +23,7 @@ importers:
       prettier: ^2.7.1
       typescript: ^4.6.4
       vite: ^3.0.7
+      vite-plugin-vue-setup-extend: ^0.4.0
       vitest: ^0.22.1
       vue: ^3.2.37
     devDependencies:
@@ -45,6 +46,7 @@ importers:
       prettier: registry.npmmirror.com/prettier/2.7.1
       typescript: registry.npmmirror.com/typescript/4.6.4
       vite: registry.npmmirror.com/vite/3.0.9
+      vite-plugin-vue-setup-extend: registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0_vite@3.0.9
       vitest: registry.npmmirror.com/vitest/0.22.1_jsdom@20.0.0
       vue: registry.npmmirror.com/vue/3.2.37
 
@@ -4782,6 +4784,19 @@ packages:
     dependencies:
       spdx-correct: registry.npmmirror.com/spdx-correct/3.1.1
       spdx-expression-parse: registry.npmmirror.com/spdx-expression-parse/3.0.1
+    dev: true
+
+  registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0_vite@3.0.9:
+    resolution: {integrity: sha512-WMbjPCui75fboFoUTHhdbXzu4Y/bJMv5N9QT9a7do3wNMNHHqrk+Tn2jrSJU0LS5fGl/EG+FEDBYVUeWIkDqXQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vite-plugin-vue-setup-extend/-/vite-plugin-vue-setup-extend-0.4.0.tgz}
+    id: registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0
+    name: vite-plugin-vue-setup-extend
+    version: 0.4.0
+    peerDependencies:
+      vite: '>=2.0.0'
+    dependencies:
+      '@vue/compiler-sfc': registry.npmmirror.com/@vue/compiler-sfc/3.2.37
+      magic-string: registry.npmmirror.com/magic-string/0.25.9
+      vite: registry.npmmirror.com/vite/3.0.9
     dev: true
 
   registry.npmmirror.com/vite/3.0.9:

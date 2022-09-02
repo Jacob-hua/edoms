@@ -5,6 +5,7 @@
     <div class="wrapper">
       <HelloWorld ref="hello" msg="You did it!" />
 
+      <EdomCounter />
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
@@ -19,6 +20,7 @@
 import { onMounted, ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import EdomCounter from './components/EdomCounter.vue'
 import { listApplications } from './api/application'
 
 const hello = ref({
