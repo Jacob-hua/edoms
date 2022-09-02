@@ -3,6 +3,7 @@ import { describe, beforeEach, test, expect } from 'vitest'
 import {
   currentDateRange,
   dateRange,
+  daysInMonth,
   formatCurrentDateRange,
   formatDate,
   formatDateRange,
@@ -12,6 +13,10 @@ import {
   formatTodayRange,
   stringToDate,
   stringToTimestamp,
+  thisMonthRange,
+  thisWeekRange,
+  thisYearRange,
+  todayRange,
 } from '../date'
 
 interface Sample {
@@ -427,5 +432,95 @@ describe('date', () => {
     }
 
     expect(yearDateResult).toEqual(yearDateTarget)
+  })
+
+  test<LocalContext>('todayRange', () => {
+    const dayResult = todayRange(true)
+
+    const dayTarget = {
+      start: dayjs().startOf('day').valueOf(),
+      end: dayjs().endOf('day').valueOf(),
+      isTimestamp: true,
+    }
+
+    expect(dayResult).toEqual(dayTarget)
+
+    const dayDateResult = todayRange()
+
+    const dayDateTarget = {
+      start: dayjs().startOf('day').toDate(),
+      end: dayjs().endOf('day').toDate(),
+    }
+
+    expect(dayDateResult).toEqual(dayDateTarget)
+  })
+
+  test<LocalContext>('thisMonthRange', () => {
+    const monthResult = thisMonthRange(true)
+
+    const monthTarget = {
+      start: dayjs().startOf('month').valueOf(),
+      end: dayjs().endOf('month').valueOf(),
+      isTimestamp: true,
+    }
+
+    expect(monthResult).toEqual(monthTarget)
+
+    const monthDateResult = thisMonthRange()
+
+    const monthDateTarget = {
+      start: dayjs().startOf('month').toDate(),
+      end: dayjs().endOf('month').toDate(),
+    }
+
+    expect(monthDateResult).toEqual(monthDateTarget)
+  })
+
+  test<LocalContext>('thisYearRange', () => {
+    const yearResult = thisYearRange(true)
+
+    const yearTarget = {
+      start: dayjs().startOf('year').valueOf(),
+      end: dayjs().endOf('year').valueOf(),
+      isTimestamp: true,
+    }
+
+    expect(yearResult).toEqual(yearTarget)
+
+    const yearDateResult = thisYearRange()
+
+    const yearDateTarget = {
+      start: dayjs().startOf('year').toDate(),
+      end: dayjs().endOf('year').toDate(),
+    }
+
+    expect(yearDateResult).toEqual(yearDateTarget)
+  })
+
+  test<LocalContext>('thisWeekRange', () => {
+    const weekResult = thisWeekRange(true)
+
+    const weekTarget = {
+      start: dayjs().startOf('week').valueOf(),
+      end: dayjs().endOf('week').valueOf(),
+      isTimestamp: true,
+    }
+
+    expect(weekResult).toEqual(weekTarget)
+
+    const weekDateResult = thisWeekRange()
+
+    const weekDateTarget = {
+      start: dayjs().startOf('week').toDate(),
+      end: dayjs().endOf('week').toDate(),
+    }
+
+    expect(weekDateResult).toEqual(weekDateTarget)
+  })
+
+  test<LocalContext>('daysInMonth', ({ sample }) => {
+    const result = daysInMonth(sample.date)
+
+    expect(result).toBe(30)
   })
 })
