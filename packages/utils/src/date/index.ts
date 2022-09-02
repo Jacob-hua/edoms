@@ -1,34 +1,34 @@
-import moment, { unitOfTime, MomentInput } from 'moment'
-import { DateRange, FormatDateRange, MomentRange } from './type'
+import dayjs, { ConfigType, OpUnitType } from 'dayjs'
+import { DateRange, FormatDateRange, TimeRange } from './type'
 
-export function stringToDate(format: string) {
-  return moment(format).toDate()
+export function stringToDate(date: string) {
+  return dayjs(date).toDate()
 }
 
-export function stringToTimestamp(format: string) {
-  return moment(format).valueOf()
+export function stringToTimestamp(date: string) {
+  return dayjs(date).valueOf()
 }
 
-export function formatDate(date: MomentInput, format: string): string {
-  return moment(date).format(format)
+export function formatDate(date: ConfigType, format: string): string {
+  return dayjs(date).format(format)
 }
 
-export function momentRange(date: MomentInput, unitOfTime: unitOfTime.StartOf): MomentRange {
+export function timeRange(date: ConfigType, unitOfTime: OpUnitType): TimeRange {
   return {
-    start: moment(date).startOf(unitOfTime),
-    end: moment(date).endOf(unitOfTime),
+    start: dayjs(date).startOf(unitOfTime),
+    end: dayjs(date).endOf(unitOfTime),
   }
 }
 
-export function formatDateRange(date: MomentInput, unitOfTime: unitOfTime.StartOf, format: string): FormatDateRange {
-  const { start, end } = momentRange(date, unitOfTime)
+export function formatDateRange(date: ConfigType, unitOfTime: OpUnitType, format: string): FormatDateRange {
+  const { start, end } = timeRange(date, unitOfTime)
   return {
     start: start.format(format),
     end: end.format(format),
   }
 }
 
-export function formatCurrentDateRange(unitOfTime: unitOfTime.StartOf, format: string): FormatDateRange {
+export function formatCurrentDateRange(unitOfTime: OpUnitType, format: string): FormatDateRange {
   return formatDateRange(new Date(), unitOfTime, format)
 }
 
@@ -44,16 +44,12 @@ export function formatThisYearRange(format: string): FormatDateRange {
   return formatCurrentDateRange('year', format)
 }
 
-export function formatThisIsoWeekRange(format: string): FormatDateRange {
-  return formatCurrentDateRange('isoWeek', format)
-}
-
 export function formatThisWeekRange(format: string): FormatDateRange {
   return formatCurrentDateRange('week', format)
 }
 
-export function dateRange(date: moment.MomentInput, unitOfTime: unitOfTime.StartOf, isTimestamp: boolean): DateRange {
-  const { start, end } = momentRange(date, unitOfTime)
+export function dateRange(date: ConfigType, unitOfTime: OpUnitType, isTimestamp?: boolean): DateRange {
+  const { start, end } = timeRange(date, unitOfTime)
   if (isTimestamp) {
     return {
       start: start.valueOf(),
@@ -67,34 +63,30 @@ export function dateRange(date: moment.MomentInput, unitOfTime: unitOfTime.Start
   }
 }
 
-export function currentDateRange(unitOfTime: unitOfTime.StartOf, isTimestamp: boolean): DateRange {
+export function currentDateRange(unitOfTime: OpUnitType, isTimestamp?: boolean): DateRange {
   return dateRange(new Date(), unitOfTime, isTimestamp)
 }
 
-export function todayRange(isTimestamp: boolean): DateRange {
+export function todayRange(isTimestamp?: boolean): DateRange {
   return currentDateRange('day', isTimestamp)
 }
 
-export function thisMonthRange(isTimestamp: boolean): DateRange {
+export function thisMonthRange(isTimestamp?: boolean): DateRange {
   return currentDateRange('month', isTimestamp)
 }
 
-export function thisYearRange(isTimestamp: boolean): DateRange {
+export function thisYearRange(isTimestamp?: boolean): DateRange {
   return currentDateRange('year', isTimestamp)
 }
 
-export function thisIsoWeekRange(isTimestamp: boolean): DateRange {
-  return currentDateRange('isoWeek', isTimestamp)
-}
-
-export function thisWeekRange(isTimestamp: boolean): DateRange {
+export function thisWeekRange(isTimestamp?: boolean): DateRange {
   return currentDateRange('week', isTimestamp)
 }
 
-export function daysInMonth(date: MomentInput) {
-  return moment(date).daysInMonth()
+export function daysInMonth(date: ConfigType) {
+  return dayjs(date).daysInMonth()
 }
 
 export function daysInThisMonth() {
-  return moment().daysInMonth()
+  return dayjs().daysInMonth()
 }

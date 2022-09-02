@@ -1,8 +1,8 @@
-import { Moment } from 'moment'
+import { Dayjs } from 'dayjs'
 
-export interface MomentRange {
-  start: Moment
-  end: Moment
+export interface TimeRange {
+  start: Dayjs
+  end: Dayjs
 }
 
 export interface FormatDateRange {
