@@ -14,21 +14,13 @@ export function formatDate(date: MomentInput, format: string): string {
 }
 
 export function momentRange(date: MomentInput, unitOfTime: unitOfTime.StartOf): MomentRange {
-  const _moment = moment(date)
   return {
-    start: _moment.startOf(unitOfTime),
-    end: _moment.endOf(unitOfTime),
+    start: moment(date).startOf(unitOfTime),
+    end: moment(date).endOf(unitOfTime),
   }
 }
 
 export function formatDateRange(date: MomentInput, unitOfTime: unitOfTime.StartOf, format: string): FormatDateRange {
-  if (unitOfTime && ['d', 'day', 'days'].includes(unitOfTime)) {
-    const _moment = moment(moment(date).format('YYYY-MM-DD'))
-    return {
-      start: _moment.startOf(unitOfTime).format(format),
-      end: _moment.endOf(unitOfTime).format(format),
-    }
-  }
   const { start, end } = momentRange(date, unitOfTime)
   return {
     start: start.format(format),

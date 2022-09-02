@@ -15,15 +15,15 @@ describe('date', () => {
   beforeEach<LocalContext>(async (context) => {
     context.sample = {
       current: new Date(),
-      strDate: '2022/9/1 13:00:00',
-      date: new Date('2022/9/1 13:00:00'),
+      strDate: '2022-9-1 13:00:00',
+      date: new Date('2022-9-1 13:00:00'),
     }
   })
 
   test<LocalContext>('stringToDate', ({ sample }) => {
     const date = stringToDate(sample.strDate)
 
-    expect(date).toEqual(new Date('2022/9/1 13:00:00'))
+    expect(date).toEqual(new Date('2022-9-1 13:00:00'))
   })
 
   test<LocalContext>('stringToTimestamp', ({ sample }) => {
@@ -38,11 +38,19 @@ describe('date', () => {
     expect(formatStr).toEqual('2022-09-01 13:00:00')
   })
 
-  test<LocalContext>('formatDateRange', ({ sample }) => {
+  test<LocalContext>('formatDateRange day', ({ sample }) => {
     const todayRange = formatDateRange(sample.date, 'day', 'YYYY-MM-DD HH:mm:ss')
     expect(todayRange).toEqual({
       start: '2022-09-01 00:00:00',
       end: '2022-09-01 23:59:59',
+    })
+  })
+
+  test<LocalContext>('formatDateRange month', ({ sample }) => {
+    const todayRange = formatDateRange(sample.date, 'month', 'YYYY-MM-DD HH:mm:ss')
+    expect(todayRange).toEqual({
+      start: '2022-09-01 00:00:00',
+      end: '2022-09-30 23:59:59',
     })
   })
 })
