@@ -1,13 +1,16 @@
-import { fileURLToPath, URL } from 'node:url'
-
+import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueSetupExtend from 'vite-plugin-vue-setup-extend'
+
+const r = (p: string) => resolve(__dirname, p)
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx()],
+  plugins: [vue(), vueJsx(), vueSetupExtend()],
   server: {
+    host: '0.0.0.0',
     port: 8890,
     proxy: {
       '/api': {
@@ -18,10 +21,11 @@ export default defineConfig({
         },
       },
     },
+    open: true,
   },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@': r('./src'),
     },
   },
 })
