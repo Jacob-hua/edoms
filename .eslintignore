@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
-/dist
+dist
+coverage
+types
+public/entry
+public/runtime
 
-packages/**/dist
-**/**/dist
