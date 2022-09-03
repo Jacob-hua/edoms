@@ -1,6 +1,6 @@
 <template>
   <div>
-    dddd
+    dddd1111
     <el-button type="primary" @click="onIncrement">+</el-button>
     <span>{{ num }}</span>
     <el-button type="primary" @click="onSubtraction">---</el-button>
@@ -8,23 +8,18 @@
 </template>
 
 <script lang="ts" setup>
-// import { useCounterStore } from '@/stores/counter'
+import { useCounterStore } from '@/store/counter'
 import { computed } from 'vue'
 
-// const counter = useCounterStore()
+const counter = useCounterStore()
 
-// const num = computed(() => counter.counter)
-const num = computed(() => 1)
+const num = computed(() => counter.counter)
 
 function onIncrement() {
-  // counter.increment()
+  counter.increment()
 }
 
 function onSubtraction() {
-  try {
-    // counter.subtraction()
-  } catch (error) {
-    console.log(error)
-  }
+  counter.subtraction()
 }
 </script>
