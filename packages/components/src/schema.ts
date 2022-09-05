@@ -20,3 +20,19 @@ export interface EdApplication extends EdComponent {
 }
 
 export type EdNode = EdComponent | EdContainer | EdPage | EdApplication
+
+export interface EdFunction<T> {
+  (context: any, data: object): T
+}
+
+export type Text = string | EdFunction<string>
+
+export interface EdText extends EdComponent {
+  text?: Text
+  disableText?: Text
+}
+
+export interface EdButton extends EdComponent {
+  text?: Text
+  disabledText?: Text
+}

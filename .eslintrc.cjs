@@ -23,10 +23,7 @@ module.exports = defineConfig({
     'no-extra-bind': ['error'], // 禁止不必要的bind调用
 
     // typeScript (https://typescript-eslint.io/rules)
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      { vars: 'local', args: 'none', ignoreRestSiblings: true, caughtErrors: 'none' },
-    ], // 未使用变量检查
+    '@typescript-eslint/no-unused-vars': ['error'], // 未使用变量检查
     '@typescript-eslint/class-literal-property-style': ['error', 'getters'], // 只读字面量风格检查
     '@typescript-eslint/no-empty-function': ['off'], // 禁止使用空方法
 
