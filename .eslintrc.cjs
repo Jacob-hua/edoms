@@ -20,6 +20,7 @@ module.exports = defineConfig({
     'no-debugger': ['error'], // 禁止使用debugger
     'no-unused-vars': ['off'], // 未使用变量检查
     'prefer-const': ['error', { destructuring: 'all', ignoreReadBeforeAssign: true }], // 优先使用const
+    'no-extra-bind': ['error'], // 禁止不必要的bind调用
 
     // typeScript (https://typescript-eslint.io/rules)
     '@typescript-eslint/no-unused-vars': [
