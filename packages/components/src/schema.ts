@@ -1,22 +1,22 @@
-export interface EComponent {
+export interface EdComponent {
   id: string
   name: string
   type: string | 'container' | 'page' | 'app'
   [key: string]: any
 }
 
-export interface EContainer extends EComponent {
+export interface EdContainer extends EdComponent {
   type: 'container' | string
-  children: (EComponent | EContainer)[]
+  children: (EdComponent | EdContainer)[]
 }
 
-export interface EPage extends EContainer {
+export interface EdPage extends EdContainer {
   type: 'page'
 }
 
-export interface EApplication extends EComponent {
+export interface EdApplication extends EdComponent {
   type: 'app'
-  pages: EPage[]
+  pages: EdPage[]
 }
 
-export type ENode = EComponent | EContainer | EPage | EApplication
+export type EdNode = EdComponent | EdContainer | EdPage | EdApplication

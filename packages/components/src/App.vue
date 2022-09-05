@@ -2,9 +2,14 @@
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
   </header>
+  <nav>
+    <EdComponent />
+  </nav>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import EdComponent from './components/EdComponent.vue'
+</script>
 
 <style scoped>
 header {
