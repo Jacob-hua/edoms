@@ -1,4 +1,4 @@
-import { deepClone } from '../object'
+import { deepClone, typeOf } from '../src/object'
 import { describe, test, beforeEach, expect } from 'vitest'
 
 interface Sample {
@@ -7,6 +7,8 @@ interface Sample {
   interesting: string[]
   eat: Function
   skills: Function[]
+  isStudent: boolean
+  type: Symbol
 }
 
 interface LocalContext {
@@ -30,12 +32,23 @@ describe('object', () => {
           console.log('skill2')
         },
       ],
+      isStudent: true,
+      type: Symbol('test'),
     }
+  })
+
+  test<LocalContext>('typeOf', ({ sample }) => {
+    expect(typeOf(sample.name, String)).toEqual(true)
+    expect(typeOf(sample.age, Number)).toEqual(true)
+    expect(typeOf(sample.interesting, Array)).toEqual(true)
+    expect(typeOf(sample.eat, Function)).toEqual(true)
+    expect(typeOf(sample.isStudent, Boolean)).toEqual(true)
+    expect(typeOf(sample.type, Symbol)).toEqual(true)
   })
 
   test<LocalContext>('deepClone', ({ sample }) => {
     const cloneSample = deepClone<Sample>(sample)
     expect(cloneSample.name).toBe(sample.name)
-    cloneSample.eat('apple')
+    // cloneSample.eat('apple')
   })
 })

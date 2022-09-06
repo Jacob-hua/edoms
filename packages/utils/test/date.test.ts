@@ -17,7 +17,7 @@ import {
   thisWeekRange,
   thisYearRange,
   todayRange,
-} from '../date'
+} from '../src/date'
 
 interface Sample {
   current: Date
