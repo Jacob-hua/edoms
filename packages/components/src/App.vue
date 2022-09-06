@@ -1,7 +1,7 @@
 <template>
   <div>
     动态组件
-    <EdComponents v-for="config in configs" :key="config.id" :node="config" />
+    <EdComponent v-for="config in configs" :key="config.id" :node="config" />
   </div>
 </template>
 

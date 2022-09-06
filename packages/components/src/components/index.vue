@@ -4,7 +4,7 @@
 
 <script lang="ts">
 export default {
-  name: 'EdComponents',
+  name: 'EdComponent',
 }
 </script>
 
