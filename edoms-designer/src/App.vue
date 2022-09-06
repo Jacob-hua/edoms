@@ -1,42 +1,9 @@
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-    <el-button type="primary" @click="fetchUser">elementButton</el-button>
-    <div class="wrapper">
-      <HelloWorld ref="hello" msg="You did it!" />
-
-      <EdomCounter />
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
   <RouterView />
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import EdomCounter from './components/EdomCounter.vue'
-import { listApplications } from './api/application'
-
-const hello = ref({
-  test: () => {},
-})
-
-const fetchUser = () => {
-  listApplications({
-    limit: 10,
-    page: 1,
-  })
-}
-
-onMounted(() => {
-  hello.value.test()
-})
+import { RouterView } from 'vue-router'
 </script>
 
 <style scoped>
