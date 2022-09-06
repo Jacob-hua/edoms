@@ -27,4 +27,11 @@ export default defineConfig({
       '@': r('./src'),
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import '@/assets/style/main.css';`,
+      },
+    },
+  },
 })

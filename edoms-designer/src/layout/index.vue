@@ -1,13 +1,11 @@
 <template>
-  <div>
+  <el-container class="container">
+    <el-header class="header">Header</el-header>
     <el-container>
-      <el-header>Header</el-header>
-      <el-container>
-        <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
-      </el-container>
+      <el-aside class="aside">Aside</el-aside>
+      <el-main>Main</el-main>
     </el-container>
-  </div>
+  </el-container>
 </template>
 
 <script lang="ts">
@@ -18,4 +16,19 @@ export default {
 
 <script lang="ts" setup></script>
 
-<style scoped></style>
+<style scoped lang="scss">
+$header-bg-color: aqua;
+$aside-bg-color: aquamarine;
+
+.container {
+  height: 100%;
+
+  .header {
+    background-color: $header-bg-color;
+  }
+
+  .aside {
+    background-color: $aside-bg-color;
+  }
+}
+</style>
