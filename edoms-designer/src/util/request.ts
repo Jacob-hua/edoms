@@ -1,5 +1,5 @@
 import { Request, RequestConfig, AxiosResponse } from '@edoms/utils'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 import { ContentType, RequestMethod } from '@/enums/http'
 
 export interface EdomsRequestConfig<T> extends RequestConfig {
@@ -17,8 +17,13 @@ export interface EdomsResponse<T = any> {
   result: T
 }
 
+export interface LoadingService {
+  close: () => void
+  [key: string]: any
+}
+
 const service = new Request({
-  baseURL: 'http://127.0.0.1:8890/api/edoms/design-time',
+  baseURL: 'http://localhost:8890/api/edoms/design-time',
   timeout: 1000 * 10,
   withCredentials: true,
   headers: {
@@ -72,6 +77,35 @@ export const request = <D, R>(config: EdomsRequestConfig<D>) => {
   const { method = RequestMethod.GET } = config
   if (method === RequestMethod.GET) {
     config.params = config.data
+  }
+  let loading: LoadingService
+  config.interceptors = {
+    requestInterceptors(config) {
+      loading = ElLoading.service({
+        lock: false,
+        text: '加载中...',
+        background: 'rgba(0, 0, 0, 0.7)',
+      })
+      return config
+    },
+    requestInterceptorsCatch(error) {
+      if (loading) {
+        loading.close()
+      }
+      return Promise.reject(error)
+    },
+    responseInterceptors(response) {
+      if (loading) {
+        loading.close()
+      }
+      return response
+    },
+    responseInterceptorsCatch(error) {
+      if (loading) {
+        loading.close()
+      }
+      return Promise.reject(error)
+    },
   }
   return service.request<EdomsResponse<R>>(config)
 }

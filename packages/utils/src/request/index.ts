@@ -4,9 +4,9 @@ export * from 'axios'
 
 export interface HttpInterceptors {
   requestInterceptors?: (config: AxiosRequestConfig) => AxiosRequestConfig
-  requestInterceptorsCatch: (error: any) => any
+  requestInterceptorsCatch?: (error: any) => any
   responseInterceptors?: <T = AxiosResponse>(response: T) => T
-  responseInterceptorsCatch: (error: any) => any
+  responseInterceptorsCatch?: (error: any) => any
 }
 
 export interface RequestConfig extends AxiosRequestConfig {
@@ -70,7 +70,7 @@ export class Request {
           resolve(res)
         })
         .catch((err: any) => {
-          if (config?.interceptors?.responseInterceptors) {
+          if (config?.interceptors?.responseInterceptorsCatch) {
             config.interceptors.responseInterceptorsCatch(err)
           }
           reject(err)
