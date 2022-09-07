@@ -11,9 +11,18 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'index',
     component: () => import('@/layout/index.vue'),
-    meta: {
-      title: '首页',
-    },
+    children: [
+      {
+        path: 'about',
+        name: 'about',
+        component: () => import('@/views/AboutView.vue'),
+      },
+    ],
+  },
+  {
+    path: '/editor',
+    name: 'editor',
+    component: () => import('@/layout/EditorLayout.vue'),
   },
   {
     path: '/404',

@@ -1,34 +1,34 @@
 <template>
-  <el-container class="container">
-    <el-header class="header">Header</el-header>
-    <el-container>
-      <el-aside class="aside">Aside</el-aside>
-      <el-main>Main</el-main>
-    </el-container>
-  </el-container>
+  <div>
+    <BaseLayout>
+      <template #header>
+        <div class="describe">E-DOMS</div>
+      </template>
+      <RouterView />
+    </BaseLayout>
+  </div>
 </template>
 
 <script lang="ts">
 export default {
-  name: 'LayoutVue',
+  name: 'LayoutView',
 }
 </script>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { RouterView } from 'vue-router'
+import BaseLayout from './BaseLayout.vue'
+</script>
 
-<style scoped lang="scss">
-$header-bg-color: aqua;
-$aside-bg-color: aquamarine;
-
-.container {
+<style lang="scss" scoped>
+.describe {
   height: 100%;
-
-  .header {
-    background-color: $header-bg-color;
-  }
-
-  .aside {
-    background-color: $aside-bg-color;
-  }
+  margin: 0 41px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #fff;
+  display: flex;
+  align-items: center;
 }
 </style>
