@@ -1,6 +1,6 @@
-import component from './components/index.vue'
-import button from './button'
-import page from './page'
+import component from './EdComponent'
+import button from './EdButton'
+import page from './EdButton'
 
 const components = {
   button,
