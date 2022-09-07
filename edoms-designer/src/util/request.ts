@@ -4,6 +4,7 @@ import { ContentType, RequestMethod } from '@/enums/http'
 
 export interface EdomsRequestConfig<T> extends RequestConfig {
   method: RequestMethod
+  loading?: boolean
   data?: T
 }
 
@@ -24,7 +25,7 @@ export interface LoadingService {
 
 const service = new Request({
   baseURL: 'http://localhost:8890/api/edoms/design-time',
-  timeout: 1000 * 10,
+  timeout: 1000 * 3,
   withCredentials: true,
   headers: {
     'Content-Type': ContentType.JSON,
@@ -47,14 +48,21 @@ const service = new Request({
       return response
     },
     responseInterceptorsCatch(error) {
-      const response = error.response
+      const { code, response } = error
+      if (['ECONNABORTED'].includes(code)) {
+        ElMessage({
+          type: 'error',
+          message: '请求超时',
+        })
+        return Promise.reject(error)
+      }
       const res = response.data as EdomsResponse
       if (res.errorInfo.errorCode) {
         ElMessage({
           type: 'error',
           message: res.errorInfo.errorMsg,
         })
-        return
+        return Promise.reject(error)
       }
       if (response.status === 404) {
         ElMessage({
@@ -78,10 +86,10 @@ export const request = <D, R>(config: EdomsRequestConfig<D>) => {
   if (method === RequestMethod.GET) {
     config.params = config.data
   }
-  let loading: LoadingService
+  let loadingService: LoadingService
   config.interceptors = {
     requestInterceptors(config) {
-      loading = ElLoading.service({
+      loadingService = ElLoading.service({
         lock: false,
         text: '加载中...',
         background: 'rgba(0, 0, 0, 0.7)',
@@ -89,20 +97,20 @@ export const request = <D, R>(config: EdomsRequestConfig<D>) => {
       return config
     },
     requestInterceptorsCatch(error) {
-      if (loading) {
-        loading.close()
+      if (loadingService) {
+        loadingService.close()
       }
       return Promise.reject(error)
     },
     responseInterceptors(response) {
-      if (loading) {
-        loading.close()
+      if (loadingService) {
+        loadingService.close()
       }
       return response
     },
     responseInterceptorsCatch(error) {
-      if (loading) {
-        loading.close()
+      if (loadingService) {
+        loadingService.close()
       }
       return Promise.reject(error)
     },
