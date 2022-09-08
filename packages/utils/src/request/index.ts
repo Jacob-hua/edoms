@@ -11,6 +11,9 @@ export interface HttpInterceptors {
 
 export interface RequestConfig extends AxiosRequestConfig {
   interceptors?: HttpInterceptors
+  retry?: number
+  retryDelay?: number
+  __retryCount?: number
 }
 
 export class Request {
@@ -51,7 +54,24 @@ export class Request {
         })
       },
       (err: any) => {
-        return Promise.reject(err)
+        const { config }: { config: RequestConfig } = err
+        if (!config || !config.retry) {
+          return Promise.reject(err)
+        }
+        config.__retryCount = config.__retryCount ?? 0
+        if (config.__retryCount >= config.retry) {
+          return Promise.reject(err)
+        }
+
+        config.__retryCount += 1
+
+        const backoff = new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(undefined)
+          }, config.retryDelay ?? 1)
+        })
+
+        return backoff.then(() => this.request(config))
       }
     )
   }
@@ -70,9 +90,6 @@ export class Request {
           resolve(res)
         })
         .catch((err: any) => {
-          if (config?.interceptors?.responseInterceptorsCatch) {
-            config.interceptors.responseInterceptorsCatch(err)
-          }
           reject(err)
         })
     })
