@@ -14,6 +14,7 @@ export default {
 
 <script lang="ts" setup>
 import { listApplications } from '@/api/application'
+import { listPages } from '@/api/page'
 import { ref } from 'vue'
 
 const result = ref({})
@@ -28,6 +29,17 @@ const onClick = () => {
     })
     .catch((err) => {
       result.value = err
+    })
+  listPages({
+    page: 1,
+    limit: 10,
+    applicationId: '11',
+  })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
     })
 }
 </script>
