@@ -1,9 +1,9 @@
 <template>
   <div>计数器</div>
   <div>
-    <el-button type="primary" @click="increment">加+</el-button>
-    {{ count }}
-    <el-button type="primary" @click="subtraction">减-</el-button>
+    <el-button test-increment type="primary" @click="increment">加+</el-button>
+    <span>{{ count }}</span>
+    <el-button test-subtraction type="primary" @click="subtraction">减-</el-button>
   </div>
 </template>
 
