@@ -42,7 +42,7 @@ pipeline {
 				sh """
 				npm install -g pnpm
 				pnpm bootstrap
-				pnpm --filter "edoms-designer" build
+				pnpm build
 				"""
 			}
 		}
@@ -53,7 +53,7 @@ pipeline {
 				sh """
 				cat >Dockerfile<<-EOF
 					FROM nginx:alpine
-					ADD dist /usr/share/nginx/html/${suffix}/
+					ADD edoms-designer/dist /usr/share/nginx/html/${suffix}/
 				EOF
 				cat Dockerfile 
 				cat >deployment.yaml<<-EOF
