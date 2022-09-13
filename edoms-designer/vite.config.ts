@@ -7,7 +7,11 @@ const r = (p: string) => resolve(__dirname, p)
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/edoms-designtime-dev/',
   plugins: [vue(), vueSetupExtend()],
+  build: {
+    emptyOutDir: true,
+  },
   server: {
     host: '0.0.0.0',
     port: 8890,
