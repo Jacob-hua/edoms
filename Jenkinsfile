@@ -52,7 +52,7 @@ pipeline {
 				echo "3.Build Docker Image Stage"
 				sh """
 				cat >Dockerfile<<-EOF
-					FROM nginx:alpine
+					FROM 192.100.30.160:9000/nginx:alpine
 					ADD edoms-designer/dist /usr/share/nginx/html/${suffix}/
 				EOF
 				cat Dockerfile 
