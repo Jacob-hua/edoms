@@ -2,7 +2,7 @@
   "extends": "../tsconfig.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "isolatedModules": true,
     "paths": {
       "@/*": ["./src/*"]
