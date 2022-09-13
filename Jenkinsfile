@@ -40,8 +40,9 @@ pipeline {
 			steps {
 				echo "2. Npm build Package"
 				sh """
-				cnpm install
-				cnpm run build
+				npm install -g pnpm
+				pnpm bootstrap
+				pnpm --filter "edoms-designer" build
 				"""
 			}
 		}
