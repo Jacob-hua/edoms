@@ -14,7 +14,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { useCounterStore } from '@/store/counter'
+import { useCounterStore } from '../store/counter'
 import { computed } from 'vue'
 
 const counterStore = useCounterStore()
