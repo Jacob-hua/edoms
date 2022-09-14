@@ -6,13 +6,7 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'AboutView',
-}
-</script>
-
-<script lang="ts" setup>
+<script lang="ts" setup name="AboutView">
 import { listApplications } from '@/api/application'
 import { listPages } from '@/api/page'
 import { ref } from 'vue'

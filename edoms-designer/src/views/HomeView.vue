@@ -4,12 +4,6 @@
   </main>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'HomeView',
-}
-</script>
-
-<script setup lang="ts">
+<script setup lang="ts" name="HomeView">
 import CounterView from '@/components/CounterView.vue'
 </script>
