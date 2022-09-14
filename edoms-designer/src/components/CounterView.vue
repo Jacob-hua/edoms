@@ -7,13 +7,7 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'CounterView',
-}
-</script>
-
-<script lang="ts" setup>
+<script lang="ts" setup name="CounterView">
 import { useCounterStore } from '../store/counter'
 import { computed } from 'vue'
 
