@@ -7,7 +7,7 @@ const r = (p: string) => resolve(__dirname, p)
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/edoms-designtime-dev/',
+  base: './',
   plugins: [vue(), vueSetupExtend()],
   build: {
     emptyOutDir: true,
