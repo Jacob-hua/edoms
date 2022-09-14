@@ -13,17 +13,17 @@ const configs: Ref<EdNode[]> = ref([
   {
     id: '0',
     type: 'edom-text',
-    name: 'EDom',
+    name: 'text',
     text: '按钮',
-    disableText: '禁用按钮',
+    disabledText: '禁用按钮',
     disabled: true,
   },
   {
     id: '1',
     type: 'edom-button',
-    name: 'EDoms组件2',
+    name: 'button',
     text: '按钮',
-    disableText: '禁用按阿牛',
+    disabledText: '禁用按阿牛',
     disabled: true,
   },
 ])

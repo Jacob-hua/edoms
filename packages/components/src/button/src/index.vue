@@ -21,7 +21,8 @@ const textNode = computed<EdText>(() => ({
   name: 'ddd',
   type: 'EdText',
   text: props.node.text,
-  disableText: props.node.disabledText,
+  disabledText: props.node.disabledText,
+  disabled: props.node.disabled,
 }))
 
 console.log(textNode)

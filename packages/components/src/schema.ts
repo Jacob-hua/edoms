@@ -30,7 +30,7 @@ export type Text = string | EdFunction<string>
 
 export interface EdText extends EdComponent {
   text?: Text
-  disableText?: Text
+  disabledText?: Text
 }
 
 export interface EdButton extends EdComponent {

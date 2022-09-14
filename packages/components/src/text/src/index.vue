@@ -15,8 +15,8 @@ const vm: Instance = getCurrentInstance()?.proxy
 
 const displayText = computed(() => {
   let displayText = props.node.text ?? ''
-  if (props.node.disabled && props.node?.disableText) {
-    displayText = props.node.disableText
+  if (props.node.disabled && props.node?.disabledText) {
+    displayText = props.node.disabledText
   }
   if (typeof displayText === 'function') {
     return displayText.apply(vm, [vm, {}])
