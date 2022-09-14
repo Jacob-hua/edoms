@@ -12,7 +12,7 @@ import { EdNode } from './schema'
 const configs: Ref<EdNode[]> = ref([
   {
     id: '0',
-    type: 'EdButton',
+    type: 'EdText',
     name: 'EDom',
     text: '按钮',
     disableText: '禁用按钮',

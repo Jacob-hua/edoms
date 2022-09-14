@@ -1,5 +1,5 @@
 <template>
-  <span>{{ text }}</span>
+  <span>{{ displayText }}</span>
 </template>
 
 <script lang="ts" setup name="EdText">
@@ -13,14 +13,14 @@ const props = defineProps<{
 
 const vm: Instance = getCurrentInstance()?.proxy
 
-const text = computed(() => {
-  let text = props.node.text ?? ''
-  if (props.node?.disableText) {
-    text = props.node.disableText
+const displayText = computed(() => {
+  let displayText = props.node.text ?? ''
+  if (props.node.disabled && props.node?.disableText) {
+    displayText = props.node.disableText
   }
-  if (typeof text === 'function') {
-    return text.apply(vm, [vm, {}])
+  if (typeof displayText === 'function') {
+    return displayText.apply(vm, [vm, {}])
   }
-  return text
+  return displayText
 })
 </script>

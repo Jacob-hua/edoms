@@ -2,6 +2,7 @@ export interface EdComponent {
   id: string
   name: string
   type: string | 'container' | 'page' | 'app'
+  disabled?: boolean
   [key: string]: any
 }
 
