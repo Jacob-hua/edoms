@@ -1,5 +1,6 @@
 import {
   createRouter,
+  // createWebHashHistory,
   createWebHistory,
   NavigationGuardNext,
   RouteLocationNormalized,
@@ -41,6 +42,7 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
+  // history: createWebHashHistory(),
   routes,
 })
 
