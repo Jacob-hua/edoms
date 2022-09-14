@@ -2,7 +2,7 @@
   <span>{{ displayText }}</span>
 </template>
 
-<script lang="ts" setup name="EdText">
+<script lang="ts" setup name="edom-text">
 import { EdText } from '@/schema'
 import { computed, getCurrentInstance } from 'vue'
 import { Instance } from './type'

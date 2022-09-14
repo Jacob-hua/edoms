@@ -1,16 +1,28 @@
 <template>
-  <el-button type="primary">{{ name }}</el-button>
+  <el-button type="primary">
+    <slot>
+      <edom-text :node="textNode"></edom-text>
+    </slot>
+  </el-button>
 </template>
 
-<script lang="ts" setup name="EdButton">
-import { EdNode } from '@/schema'
+<script lang="ts" setup name="edom-button">
+import { EdButton, EdText } from '@/schema'
 import { computed } from 'vue'
 
 interface Props {
-  node: EdNode
+  node: EdButton
 }
 
 const props = defineProps<Props>()
 
-const name = computed(() => props.node.name)
+const textNode = computed<EdText>(() => ({
+  id: 'ddd',
+  name: 'ddd',
+  type: 'EdText',
+  text: props.node.text,
+  disableText: props.node.disabledText,
+}))
+
+console.log(textNode)
 </script>
