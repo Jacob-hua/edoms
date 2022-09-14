@@ -4,9 +4,9 @@ import ElementPlus from 'element-plus'
 
 import 'element-plus/theme-chalk/index.css'
 
-import Components from './EdComponent'
-import Button from './EdButton'
-import Text from './EdText'
+import Components from './component'
+import Button from './button'
+import Text from './text'
 
 const app = createApp(App)
 app.use(ElementPlus)

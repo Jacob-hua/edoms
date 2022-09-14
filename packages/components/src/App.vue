@@ -16,6 +16,7 @@ const configs: Ref<EdNode[]> = ref([
     name: 'EDom',
     text: '按钮',
     disableText: '禁用按钮',
+    disabled: true,
   },
   {
     id: '1',
