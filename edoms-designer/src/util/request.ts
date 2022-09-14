@@ -26,7 +26,7 @@ export interface LoadingService {
 let loadingService: LoadingService
 
 const service = new Request({
-  baseURL: 'http://localhost:8890/api/edoms/design-time',
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 1000 * 10,
   retry: 2,
   withCredentials: true,

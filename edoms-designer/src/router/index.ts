@@ -1,5 +1,6 @@
 import {
   createRouter,
+  // createWebHashHistory,
   createWebHistory,
   NavigationGuardNext,
   RouteLocationNormalized,
@@ -12,6 +13,11 @@ const routes: RouteRecordRaw[] = [
     name: 'index',
     component: () => import('@/layout/index.vue'),
     children: [
+      {
+        path: 'test',
+        name: 'test',
+        component: () => import('@/views/HomeView.vue'),
+      },
       {
         path: 'about',
         name: 'about',
@@ -35,7 +41,8 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.VITE_BASE_URL),
+  // history: createWebHashHistory(),
   routes,
 })
 
