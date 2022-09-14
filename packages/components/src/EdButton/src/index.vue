@@ -2,13 +2,7 @@
   <el-button type="primary">{{ name }}</el-button>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'EdButton',
-}
-</script>
-
-<script lang="ts" setup>
+<script lang="ts" setup name="EdButton">
 import { EdNode } from '@/schema'
 import { computed } from 'vue'
 

@@ -4,9 +4,9 @@ import ElementPlus from 'element-plus'
 
 import 'element-plus/theme-chalk/index.css'
 
-import Components from './components/index.vue'
-import Button from './components/button'
-import Text from './components/text'
+import Components from './EdComponent'
+import Button from './EdButton'
+import Text from './EdText'
 
 const app = createApp(App)
 app.use(ElementPlus)

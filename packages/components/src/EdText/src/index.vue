@@ -2,13 +2,7 @@
   <span>{{ text }}</span>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'EdText',
-}
-</script>
-
-<script lang="ts" setup>
+<script lang="ts" setup name="EdText">
 import { EdText } from '@/schema'
 import { computed, getCurrentInstance } from 'vue'
 import { Instance } from './type'

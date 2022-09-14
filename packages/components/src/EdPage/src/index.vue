@@ -2,10 +2,6 @@
   <div>Edoms页面组件</div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'EdPage',
-}
+<script lang="ts" setup name="EdPage">
+// TODO: 未实现
 </script>
-
-<script lang="ts" setup></script>
