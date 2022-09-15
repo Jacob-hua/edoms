@@ -3,5 +3,7 @@ packages:
   - 'packages/*'
   # edoms-designer in direct subdirs of edoms-designer/
   - 'edoms-designer'
+  # edoms-runtime in direct subdirs of edoms-runtime/
+  - 'edoms-runtime'
   # exclude packages that are inside test directories
   - '!**/test/**'
