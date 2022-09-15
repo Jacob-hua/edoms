@@ -33,17 +33,10 @@ export enum EdParameterType {
   COMPONENT = 'component',
 }
 
-export interface EdParameter {
-  type: EdParameterType
-  source: string
-  variable: string
-}
-
-export interface EdEvent {
-  name: string
+export interface EdAction {
+  action: string
   target: string
-  method: string
-  parameter?: EdParameter[]
+  response: string
 }
 
 export interface EdText extends EdComponent {
@@ -54,5 +47,5 @@ export interface EdText extends EdComponent {
 export interface EdButton extends EdComponent {
   text?: Text
   disabledText?: Text
-  events?: EdEvent[]
+  actions?: EdAction[]
 }

@@ -9,7 +9,7 @@ export enum ResponseEnum {
   ENABLED = 'enabled',
 }
 
-export const linkage: LinkageDefine = {
+const linkage: LinkageDefine = {
   actions: [
     {
       label: '点击',
@@ -28,4 +28,4 @@ export const linkage: LinkageDefine = {
   ],
 }
 
-console.log(linkage)
+export default linkage

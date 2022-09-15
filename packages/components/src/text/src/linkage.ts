@@ -7,7 +7,7 @@ export enum ResponseEnum {
   ENABLED = 'enabled',
 }
 
-export const linkage: LinkageDefine = {
+const linkage: LinkageDefine = {
   actions: [],
   responses: [
     {
@@ -20,3 +20,5 @@ export const linkage: LinkageDefine = {
     },
   ],
 }
+
+export default linkage
