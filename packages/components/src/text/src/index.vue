@@ -4,14 +4,26 @@
 
 <script lang="ts" setup name="edom-text">
 import { EdText } from '@/schema'
-import { computed, getCurrentInstance } from 'vue'
-import { Instance } from './type'
+import { computed, getCurrentInstance, ComponentPublicInstance } from 'vue'
 
-const props = defineProps<{
+interface Props {
   node: EdText
-}>()
+}
 
-const vm: Instance = getCurrentInstance()?.proxy
+type Instance =
+  | ComponentPublicInstance<
+      Props,
+      {},
+      {
+        [propName: string]: any
+      }
+    >
+  | null
+  | undefined
+
+const props = defineProps<Props>()
+
+const vm: Instance = getCurrentInstance()?.proxy as Instance
 
 const displayText = computed(() => {
   let displayText = props.node.text ?? ''
@@ -22,5 +34,14 @@ const displayText = computed(() => {
     return displayText.apply(vm, [vm, {}])
   }
   return displayText
+})
+
+defineExpose({
+  disabled: () => {
+    console.log('禁用文本')
+  },
+  enabled: () => {
+    console.log('启用文本')
+  },
 })
 </script>

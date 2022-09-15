@@ -14,8 +14,8 @@ const configs: Ref<EdNode[]> = ref([
     id: '0',
     type: 'edom-text',
     name: 'text',
-    text: '按钮',
-    disabledText: '禁用按钮',
+    text: '文本',
+    disabledText: '禁用文本',
     disabled: true,
   },
   {
@@ -23,8 +23,14 @@ const configs: Ref<EdNode[]> = ref([
     type: 'edom-button',
     name: 'button',
     text: '按钮',
-    disabledText: '禁用按阿牛',
+    disabledText: '禁用按钮',
     disabled: true,
+    events: [
+      {
+        name: 'click',
+        target: 'text',
+      },
+    ],
   },
 ])
 </script>

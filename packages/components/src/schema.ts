@@ -28,6 +28,24 @@ export interface EdFunction<T> {
 
 export type Text = string | EdFunction<string>
 
+export enum EdParameterType {
+  CONST = 'const',
+  COMPONENT = 'component',
+}
+
+export interface EdParameter {
+  type: EdParameterType
+  source: string
+  variable: string
+}
+
+export interface EdEvent {
+  name: string
+  target: string
+  method: string
+  parameter?: EdParameter[]
+}
+
 export interface EdText extends EdComponent {
   text?: Text
   disabledText?: Text
@@ -36,4 +54,5 @@ export interface EdText extends EdComponent {
 export interface EdButton extends EdComponent {
   text?: Text
   disabledText?: Text
+  events?: EdEvent[]
 }
