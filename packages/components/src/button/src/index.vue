@@ -8,7 +8,7 @@
 
 <script lang="ts" setup name="edom-button">
 import { EdButton, EdText } from '@/schema'
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 import { ActionEnum } from './linkage'
 
 interface Props {
@@ -17,23 +17,26 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const node: EdButton = reactive(props.node)
+
 const textNode = computed<EdText>(() => ({
   type: 'edom-text',
-  text: props.node.text,
-  disabledText: props.node.disabledText,
-  disabled: props.node.disabled,
+  text: node.text,
+  disabledText: node.disabledText,
+  disabled: node.disabled,
 }))
 
 const onClickButton = () => {
   console.log('触发', ActionEnum.CLICK)
 }
 
+console.log(node)
 defineExpose({
   disabled: () => {
-    console.log('禁用按钮')
+    node.disabled = true
   },
   enabled: () => {
-    console.log('启用按钮')
+    node.disabled = false
   },
 })
 </script>
