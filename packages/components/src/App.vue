@@ -28,7 +28,7 @@ const configs: Ref<EdNode[]> = ref([
     actions: [
       {
         action: 'edom-button:click',
-        target: 'text',
+        target: '0',
         response: 'disabled',
       },
     ],

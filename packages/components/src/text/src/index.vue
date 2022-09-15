@@ -5,6 +5,7 @@
 <script lang="ts" setup name="edom-text">
 import { EdText } from '@/schema'
 import { computed, reactive } from 'vue'
+import useCommonResponse from '@/useCommonResponse'
 
 interface Props {
   node: EdText
@@ -29,5 +30,6 @@ defineExpose({
   enabled: () => {
     node.disabled = false
   },
+  ...useCommonResponse(node),
 })
 </script>

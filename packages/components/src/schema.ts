@@ -1,8 +1,15 @@
+export interface EdStyle {
+  width?: string
+  height?: string
+  [key: string]: any
+}
+
 export interface EdComponent {
-  id?: string
+  id: string
   type: string | 'container' | 'page' | 'app'
   name?: string
   disabled?: boolean
+  style?: EdStyle
   [key: string]: any
 }
 
