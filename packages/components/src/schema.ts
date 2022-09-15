@@ -28,11 +28,6 @@ export interface EdFunction<T> {
 
 export type Text = string | EdFunction<string>
 
-export enum EdParameterType {
-  CONST = 'const',
-  COMPONENT = 'component',
-}
-
 export interface EdAction {
   action: string
   target: string
