@@ -1,7 +1,22 @@
+export interface EdStyle {
+  width?: string
+  height?: string
+  [key: string]: any
+}
+
+export interface EdAction {
+  action: string
+  target: string
+  response: string
+}
+
 export interface EdComponent {
   id: string
-  name: string
   type: string | 'container' | 'page' | 'app'
+  name?: string
+  disabled?: boolean
+  style?: EdStyle
+  actions?: EdAction[]
   [key: string]: any
 }
 
@@ -29,7 +44,7 @@ export type Text = string | EdFunction<string>
 
 export interface EdText extends EdComponent {
   text?: Text
-  disableText?: Text
+  disabledText?: Text
 }
 
 export interface EdButton extends EdComponent {

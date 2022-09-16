@@ -1,6 +1,6 @@
-import component from './EdComponent'
-import button from './EdButton'
-import page from './EdButton'
+import component from './component'
+import button from './button'
+import page from './page'
 
 const components = {
   button,

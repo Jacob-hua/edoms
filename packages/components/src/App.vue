@@ -1,28 +1,67 @@
 <template>
   <div>
     动态组件
-    <EdComponent v-for="config in configs" :key="config.id" :node="config" />
+    <edom-component v-for="config in configs" :key="config.id" :node="config" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
-import { EdNode } from './schema'
+import { computed, Ref, ref } from 'vue'
+import { EdApplication } from './schema'
 
-const configs: Ref<EdNode[]> = ref([
-  {
-    id: '0',
-    type: 'EdButton',
-    name: 'EDom',
-    text: '按钮',
-    disableText: '禁用按钮',
-  },
-  {
-    id: '1',
-    type: 'EdButton',
-    name: 'EDoms组件2',
-  },
-])
+const appInfo: Ref<EdApplication> = ref<EdApplication>({
+  id: 'app_0',
+  type: 'app',
+  name: '冷站监测系统',
+  disabeld: false,
+  pages: [
+    {
+      id: 'page_1',
+      type: 'page',
+      name: '首页',
+      children: [
+        {
+          id: 'text_0',
+          type: 'text',
+          name: '文本',
+          text: '示例文本',
+        },
+        {
+          id: 'text_1',
+          type: 'text',
+          name: '文本',
+          text: '示例文本',
+        },
+        {
+          id: 'text_2',
+          type: 'text',
+          name: '文本',
+          text: '示例文本',
+        },
+        {
+          id: 'button_2',
+          type: 'button',
+          name: '按钮',
+          text: '示例按钮',
+          actions: [
+            {
+              action: 'edom-button:click',
+              target: 'text_0',
+              response: 'disabled',
+            },
+            {
+              action: 'edom-button:click',
+              target: 'text_1',
+              response: 'disabled',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+})
+
+const configs = computed(() => appInfo.value.pages[0].children)
 </script>
 
 <style scoped></style>

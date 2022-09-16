@@ -6,7 +6,6 @@ pipeline {
     agent any
     environment {
 		service="edoms-application-ui"
-        suffix="edoms-designtime-dev"
 		def workspace = pwd()
 		namespace="edoms-dev"
 		Branch="${env.gitlabTargetBranch}"
