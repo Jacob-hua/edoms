@@ -13,7 +13,7 @@ const props = defineProps<Props>()
 
 const node: EdNode = reactive(props.node)
 
-const tagName = computed(() => `${node.type}`)
+const tagName = computed(() => `edom-${node.type}`)
 
 const style = computed(() => node.style)
 </script>
