@@ -4,12 +4,19 @@ export interface EdStyle {
   [key: string]: any
 }
 
+export interface EdAction {
+  action: string
+  target: string
+  response: string
+}
+
 export interface EdComponent {
   id: string
   type: string | 'container' | 'page' | 'app'
   name?: string
   disabled?: boolean
   style?: EdStyle
+  actions?: EdAction[]
   [key: string]: any
 }
 
@@ -35,12 +42,6 @@ export interface EdFunction<T> {
 
 export type Text = string | EdFunction<string>
 
-export interface EdAction {
-  action: string
-  target: string
-  response: string
-}
-
 export interface EdText extends EdComponent {
   text?: Text
   disabledText?: Text
@@ -49,5 +50,4 @@ export interface EdText extends EdComponent {
 export interface EdButton extends EdComponent {
   text?: Text
   disabledText?: Text
-  actions?: EdAction[]
 }
