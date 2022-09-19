@@ -4,7 +4,7 @@ import Node from './Node'
 
 interface PageProps {
   app: App
-  node: EdPage
+  meta: EdPage
 }
 
 class Page extends Node {
@@ -12,18 +12,18 @@ class Page extends Node {
 
   constructor(props: PageProps) {
     super(props)
-    this.setNode(props.node.id, this)
+    this.setNode(props.meta.id, this)
   }
 
-  public initNode(config: EdComponent | EdContainer, parent: Node) {
+  public initNode(meta: EdComponent | EdContainer, parent: Node) {
     const node = new Node({
-      node: config,
+      meta: meta,
       parent,
       page: this,
       app: this.app,
     })
 
-    this.setNode(config.id, node)
+    this.setNode(meta.id, node)
   }
 
   public setNode(id: string, node: Node) {

@@ -1,8 +1,8 @@
-import { EdApplication, EdPage } from '@edoms/components'
+import { EdAction, EdApplication, EdPage } from '@edoms/components'
 import { EventBus } from '@edoms/utils'
 
 interface AppProps {
-  node?: EdApplication
+  meta?: EdApplication
   currentPage?: string
   designWidth?: number
 }
@@ -21,10 +21,10 @@ class App extends EventBus {
     props.designWidth && (this.designWidth = props.designWidth)
   }
 
-  public setNode(node: EdApplication, curPage?: string) {
+  public setMeta(meta: EdApplication, curPage?: string) {
     this.pages = new Map<string, EdPage>()
-    if (node.pages) {
-      node.pages.forEach((page) => {
+    if (meta.pages) {
+      meta.pages.forEach((page) => {
         this.pages.set(page.id, page)
       })
     }
@@ -52,6 +52,25 @@ class App extends EventBus {
 
   public getComponent(type: string) {
     return this.components.get(type)
+  }
+
+  public bindEvents() {
+    if (!this.page) {
+      return
+    }
+
+    this.removeAllListeners()
+
+    this.page.children.forEach((meta) => {
+      meta.actions?.forEach((action) => this.bindEvent(action, meta.id))
+    })
+  }
+
+  public bindEvent(action: EdAction, id: string) {
+    return {
+      action,
+      id,
+    }
   }
 }
 

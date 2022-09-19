@@ -5,7 +5,7 @@ import Page from './Page'
 
 interface NodeProps {
   app: App
-  node: EdContainer | EdComponent
+  meta: EdContainer | EdComponent
   page?: Page
   parent?: Node
 }
@@ -21,9 +21,9 @@ class Node extends EventBus {
     super()
 
     this.app = props.app
-    this.data = props.node
+    this.data = props.meta
     this.parent = props.parent
-    this.actions = props.node.actions
+    this.actions = props.meta.actions
   }
 
   private lifeSafe() {
