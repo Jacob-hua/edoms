@@ -40,8 +40,8 @@ class EventBus {
   }
 
   public once(type: string, callback: Function, priority: number = 0): void {
-    const wrappedCallback = () => {
-      const result = callback.apply(null, arguments)
+    const wrappedCallback = (...args: any[]) => {
+      const result = callback.apply(null, args)
       this.off(type, wrappedCallback)
       return result
     }
