@@ -65,8 +65,10 @@ describe('EventBus 测试', () => {
     )
     eventBus.once(
       'test',
-      (event: InternalEvent) => {
-        expect(event.data).toEqual({ name: 3333 })
+      (_: any, data: any) => {
+        console.log(data)
+
+        expect(data).toEqual({ name: 3333 })
         console.log('只执行一次高优先级')
       },
       11
