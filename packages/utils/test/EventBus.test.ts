@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest'
-import EventBus, { InternalEvent } from '../src/event-bus'
+import { EventBus, InternalEvent } from '../src/event-bus'
 
 interface LocalContext {
   eventBus: EventBus
@@ -45,6 +45,31 @@ describe('EventBus 测试', () => {
       },
       11
     )
+    const result = eventBus.fire('test', { name: 3333 })
+    console.log(result)
+  })
+
+  test<LocalContext>('测试清空所有监听', ({ eventBus }) => {
+    eventBus.on('test', (event: InternalEvent) => {
+      expect(event.data).toEqual({ name: 3333 })
+    })
+    eventBus.on(
+      'test',
+      (event: InternalEvent) => {
+        expect(event.data).toEqual({ name: 3333 })
+        return false
+      },
+      10
+    )
+    eventBus.on(
+      'test',
+      (event: InternalEvent) => {
+        expect(event.data).toEqual({ name: 3333 })
+        return false
+      },
+      11
+    )
+    eventBus.removeAllListeners()
     const result = eventBus.fire('test', { name: 3333 })
     console.log(result)
   })

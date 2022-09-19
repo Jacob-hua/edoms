@@ -181,6 +181,19 @@ importers:
       vite: registry.npmmirror.com/vite/3.0.9
       vue-tsc: registry.npmmirror.com/vue-tsc/0.39.5_typescript@4.7.4
 
+  packages/engine:
+    specifiers:
+      '@edoms/components': workspace:^0.0.1
+      '@edoms/utils': workspace:^0.0.1
+      typescript: ^4.6.4
+      vite: ^3.1.0
+    dependencies:
+      '@edoms/utils': link:../utils
+    devDependencies:
+      '@edoms/components': link:../components
+      typescript: registry.npmmirror.com/typescript/4.7.4
+      vite: registry.npmmirror.com/vite/3.1.1
+
   packages/utils:
     specifiers:
       '@types/lodash': ^4.14.184

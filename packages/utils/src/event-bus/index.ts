@@ -25,7 +25,7 @@ export class InternalEvent {
   }
 }
 
-class EventBus {
+export class EventBus {
   private listeners: Map<string, Listener | undefined>
 
   constructor() {
@@ -92,6 +92,10 @@ class EventBus {
 
   public createEvent(type: string, data?: InternalEventData): InternalEvent {
     return new InternalEvent(type, data)
+  }
+
+  public removeAllListeners() {
+    this.listeners = new Map()
   }
 
   private addListener(type: string, newListener: Listener): void {
@@ -187,5 +191,3 @@ class EventBus {
     return result
   }
 }
-
-export default EventBus
