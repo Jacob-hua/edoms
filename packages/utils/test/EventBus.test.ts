@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest'
-import EventBus, { InternalEvent } from '../src/EventBus'
+import EventBus, { InternalEvent } from '../src/event-bus'
 
 interface LocalContext {
   eventBus: EventBus
