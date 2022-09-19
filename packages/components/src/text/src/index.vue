@@ -8,28 +8,28 @@ import { computed, reactive } from 'vue'
 import useCommonResponse from '@/useCommonResponse'
 
 interface Props {
-  config: EdText
+  meta: EdText
 }
 
 const props = defineProps<Props>()
 
-const config: EdText = reactive(props.config)
+const meta: EdText = reactive(props.meta)
 
 const displayText = computed(() => {
-  let displayText = config.text ?? ''
-  if (config.disabled && config?.disabledText) {
-    displayText = config.disabledText
+  let displayText = meta.text ?? ''
+  if (meta.disabled && meta?.disabledText) {
+    displayText = meta.disabledText
   }
   return displayText
 })
 
 defineExpose({
   disabled: () => {
-    config.disabled = true
+    meta.disabled = true
   },
   enabled: () => {
-    config.disabled = false
+    meta.disabled = false
   },
-  ...useCommonResponse(config),
+  ...useCommonResponse(meta),
 })
 </script>

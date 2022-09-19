@@ -1,7 +1,7 @@
 <template>
   <el-button type="primary" @click="onClickButton">
     <slot>
-      <edom-text :config="textNode"></edom-text>
+      <edom-text :meta="textMeta"></edom-text>
     </slot>
   </el-button>
 </template>
@@ -13,19 +13,19 @@ import { ActionEnum } from './linkage'
 import useCommonResponse from '@/useCommonResponse'
 
 interface Props {
-  config: EdButton
+  meta: EdButton
 }
 
 const props = defineProps<Props>()
 
-const config: EdButton = reactive(props.config)
+const meta: EdButton = reactive(props.meta)
 
-const textNode = computed<EdText>(() => ({
+const textMeta = computed<EdText>(() => ({
   id: '',
   type: 'edom-text',
-  text: config.text,
-  disabledText: config.disabledText,
-  disabled: config.disabled,
+  text: meta.text,
+  disabledText: meta.disabledText,
+  disabled: meta.disabled,
 }))
 
 const onClickButton = () => {
@@ -34,11 +34,11 @@ const onClickButton = () => {
 
 defineExpose({
   disabled: () => {
-    config.disabled = true
+    meta.disabled = true
   },
   enabled: () => {
-    config.disabled = false
+    meta.disabled = false
   },
-  ...useCommonResponse(config),
+  ...useCommonResponse(meta),
 })
 </script>

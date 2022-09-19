@@ -1,5 +1,5 @@
 <template>
-  <component :is="tagName" :config="config" :style="style"></component>
+  <component :is="tagName" :meta="meta" :style="style"></component>
 </template>
 
 <script lang="ts" setup name="edom-component">
@@ -7,13 +7,13 @@ import { EdNode } from '@/schema'
 import { computed, reactive } from 'vue'
 
 interface Props {
-  config: EdNode
+  meta: EdNode
 }
 const props = defineProps<Props>()
 
-const config: EdNode = reactive(props.config)
+const meta: EdNode = reactive(props.meta)
 
-const tagName = computed(() => `edom-${config.type}`)
+const tagName = computed(() => `edom-${meta.type}`)
 
-const style = computed(() => config.style)
+const style = computed(() => meta.style)
 </script>
