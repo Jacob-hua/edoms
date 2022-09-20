@@ -11,6 +11,7 @@ importers:
       '@typescript-eslint/parser': ^5.35.1
       '@vitejs/plugin-vue': ^3.0.3
       '@vitest/coverage-c8': ^0.22.1
+      '@vue/compiler-dom': ^3.2.39
       '@vue/test-utils': ^2.0.2
       eslint: ^8.23.0
       eslint-config-prettier: ^8.5.0
@@ -37,6 +38,7 @@ importers:
       '@typescript-eslint/parser': registry.npmmirror.com/@typescript-eslint/parser/5.35.1_pyvvhc3zqdua4akflcggygkl44
       '@vitejs/plugin-vue': registry.npmmirror.com/@vitejs/plugin-vue/3.0.3_vite@3.0.9+vue@3.2.37
       '@vitest/coverage-c8': registry.npmmirror.com/@vitest/coverage-c8/0.22.1_jsdom@20.0.0
+      '@vue/compiler-dom': registry.npmmirror.com/@vue/compiler-dom/3.2.39
       '@vue/test-utils': registry.npmmirror.com/@vue/test-utils/2.0.2_vue@3.2.37
       eslint: registry.npmmirror.com/eslint/8.23.0
       eslint-config-prettier: registry.npmmirror.com/eslint-config-prettier/8.5.0_eslint@8.23.0
