@@ -39,6 +39,9 @@ defineExpose({
   enabled: () => {
     meta.disabled = false
   },
+  testEffect: (data: any) => {
+    console.log(data)
+  },
   ...useCommonEffect(meta),
 })
 </script>

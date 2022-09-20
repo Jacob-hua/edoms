@@ -5,6 +5,7 @@ export enum ActionEnum {}
 export enum ResponseEnum {
   DISABLED = 'disatbled',
   ENABLED = 'enabled',
+  TEST = 'test',
 }
 
 const linkage: LinkageDefine = {
@@ -17,6 +18,11 @@ const linkage: LinkageDefine = {
     {
       label: '启用',
       value: ResponseEnum.ENABLED,
+    },
+    {
+      label: '测试',
+      value: ResponseEnum.TEST,
+      props: ['data'],
     },
   ],
 }

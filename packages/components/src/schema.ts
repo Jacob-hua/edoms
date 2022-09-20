@@ -4,26 +4,23 @@ export interface EdStyle {
   [key: string]: any
 }
 
+export enum EdActionPropType {
+  CONTEXT = 'context',
+  CONST = 'const',
+  ACTION = 'action',
+}
+
+export interface EdActionProp {
+  argument: string
+  type: EdActionPropType
+  source?: string
+}
+
 export interface EdAction {
   name: string
   target: string
   effect: string
-}
-
-export enum EdRequestCallType {
-  SINGLE = 'single',
-  CYCLE = 'cycle',
-}
-
-export interface EdRequest {
-  id: string
-  name: string
-  url: string
-  callType: EdRequestCallType
-  callInterval?: number
-  data: {
-    [key: string]: any
-  }
+  props?: EdActionProp[]
 }
 
 export interface EdComponent {

@@ -13,17 +13,17 @@ const linkage: LinkageDefine = {
   actions: [
     {
       label: '点击',
-      value: ActionEnum.CLICK,
+      value: 'edom-button:click',
     },
   ],
   effects: [
     {
       label: '禁用',
-      value: ResponseEnum.DISABLED,
+      value: 'disabled',
     },
     {
       label: '启用',
-      value: ResponseEnum.ENABLED,
+      value: 'enabled',
     },
   ],
 }
