@@ -5,7 +5,7 @@
 <script lang="ts" setup name="edom-text">
 import { EdText } from '@/schema'
 import { computed, reactive } from 'vue'
-import useCommonResponse from '@/useCommonResponse'
+import useCommonEffect from '@/useCommonEffect'
 
 interface Props {
   meta: EdText
@@ -30,6 +30,6 @@ defineExpose({
   enabled: () => {
     meta.disabled = false
   },
-  ...useCommonResponse(meta),
+  ...useCommonEffect(meta),
 })
 </script>

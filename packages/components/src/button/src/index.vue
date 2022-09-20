@@ -10,7 +10,7 @@
 import { EdButton, EdText } from '@/schema'
 import { computed, reactive } from 'vue'
 import { ActionEnum } from './linkage'
-import useCommonResponse from '@/useCommonResponse'
+import useCommonEffect from '@/useCommonEffect'
 
 interface Props {
   meta: EdButton
@@ -39,6 +39,6 @@ defineExpose({
   enabled: () => {
     meta.disabled = false
   },
-  ...useCommonResponse(meta),
+  ...useCommonEffect(meta),
 })
 </script>
