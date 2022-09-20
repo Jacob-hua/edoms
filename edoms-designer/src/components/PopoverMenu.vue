@@ -1,7 +1,7 @@
 <template>
   <el-popover placement="bottom" trigger="click">
     <div v-for="({ iconSize, iconColor, icon, name, action }, index) in menus" :key="index" class="plane-menu">
-      <div class="inner-box" @click="action(list)">
+      <div class="inner-box" @click="action">
         <el-icon :size="iconSize" :color="iconColor">
           <component :is="icon" />
         </el-icon>
@@ -16,23 +16,16 @@
   </el-popover>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup name="PopoverMenu">
 import { Menu } from './type'
-export default defineComponent({
-  expose: [],
-  props: {
-    menus: {
-      type: Array as PropType<Array<Menu>>,
-      required: true,
-      default: () => [],
-    },
-    list: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-})
+withDefaults(
+  defineProps<{
+    menus: Array<Menu>
+  }>(),
+  {
+    menus: () => [],
+  }
+)
 </script>
 
 <style lang="scss" scoped>

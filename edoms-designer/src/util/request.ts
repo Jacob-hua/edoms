@@ -26,7 +26,7 @@ export interface LoadingService {
 let loadingService: LoadingService
 
 const service = new Request({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_API,
   timeout: 1000 * 10,
   retry: 2,
   withCredentials: true,

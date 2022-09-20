@@ -6,40 +6,23 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+<script lang="ts" setup name="LongText">
 import { EffectType, PlacementType } from '@/components/type'
-
-export default defineComponent({
-  name: 'LongText',
-  expose: [],
-  props: {
-    effect: {
-      type: String as PropType<EffectType>,
-      default: () => 'dark',
-    },
-    content: {
-      type: String as PropType<string>,
-      required: true,
-    },
-    contentStyle: {
-      type: Object as PropType<Record<string, any>>,
-      default: () => ({
-        width: '96px',
-        color: '',
-        fontSize: '16px',
-      }),
-    },
-    linesClamp: {
-      type: Number as PropType<number>,
-      default: () => 1,
-    },
-    placement: {
-      type: String as PropType<PlacementType>,
-      default: () => 'top',
-    },
-  },
-})
+withDefaults(
+  defineProps<{
+    effect?: EffectType
+    content: string
+    contentStyle?: Record<string, any>
+    linesClamp?: number
+    placement?: PlacementType
+  }>(),
+  {
+    contentStyle: () => ({ width: '96px', color: '', fontSize: '16px' }),
+    effect: () => 'dark',
+    linesClamp: () => 1,
+    placement: () => 'top',
+  }
+)
 </script>
 
 <style lang="scss">

@@ -1,107 +1,117 @@
 <template>
-  <GridGroup
-    :spacing="spacing"
-    :title-props="titleProps"
-    :height="height"
-    :data="data"
-    :menus="menus"
-    @load-more="loadMore"
-  >
-    <template #firstBox>
-      <div class="slot-container" @click="add">
-        <div class="app-add-box">
-          <el-icon :size="55"><Plus /></el-icon>
-        </div>
-        <LongText
-          :lines-clamp="titleProps.linesClamp"
-          :content-style="{ ...titleProps.contentStyle }"
-          :effect="titleProps.effect"
-          :placement="titleProps.placement"
-          content="新建应用"
-        ></LongText>
-      </div>
-    </template>
-    <template #iconSlot> <slot name="iconSlot"></slot></template>
-  </GridGroup>
+  <el-scrollbar :height="height">
+    <div class="scroll-container">
+      <ul v-infinite-scroll="load" :infinite-scroll-immediate="false" :infinite-scroll-disabled="disabled">
+        <slot name="firstBox"></slot>
+        <li v-for="(item, index) in gridData" :key="index">
+          <div class="app-box">
+            <img alt="" :src="item.imgUrl" />
+            <div class="popover">
+              <PopoverMenu :menus="item.menus">
+                <template #iconSlot>
+                  <slot name="iconSlot"></slot>
+                </template>
+              </PopoverMenu>
+            </div>
+          </div>
+          <LongText
+            :effect="titleProps.effect"
+            :content-style="titleProps.contentStyle"
+            :lines-clamp="titleProps.linesClamp"
+            :placement="titleProps.placement"
+            :content="item.name"
+          ></LongText>
+        </li>
+      </ul>
+    </div>
+  </el-scrollbar>
 </template>
 
-<script lang="ts">
-import LongText from '@/components/LongText.vue'
-import GridGroup from './GridGroup.vue'
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" name="GridView" setup>
+import { computed, ref } from 'vue'
 import { Menu, Space, TileProps } from './type'
-
-export default defineComponent({
-  components: { LongText, GridGroup },
-  expose: [],
-  props: {
-    titleProps: {
-      type: Object as PropType<TileProps>,
-      default: () => ({
-        effect: 'dark',
-        contentStyle: {
-          width: '96px',
-          color: '',
-          fontSize: '16px',
-        },
-        linesClamp: 1,
-        placement: 'top',
-      }),
-    },
-    menus: {
-      type: Array as PropType<Array<Menu>>,
-      required: true,
-      default: () => [],
-    },
-    data: {
-      type: Array as PropType<any>,
-      default: () => [],
-    },
-    height: {
-      type: String as PropType<string>,
-      default: () => '',
-    },
-    spacing: {
-      type: Object as PropType<Space>,
-      default: () => ({
-        horizontal: '15px',
-        vertical: '20px',
-      }),
-    },
-  },
-  emits: ['loadMore', 'add'],
-  setup(props, { emit }) {
-    const loadMore = () => {
-      emit('loadMore', props.data)
-    }
-
-    const add = () => {
-      emit('add')
-    }
+import LongText from '@/components/LongText.vue'
+import PopoverMenu from './PopoverMenu.vue'
+const props = withDefaults(
+  defineProps<{
+    titleProps?: TileProps
+    menus?: Array<Menu>
+    data?: Array<any>
+    height?: string
+    spacing?: Space
+  }>(),
+  {
+    titleProps: () => ({
+      effect: 'dark',
+      contentStyle: {
+        width: '96px',
+        color: '',
+        fontSize: '16px',
+      },
+      linesClamp: 1,
+      placement: 'top',
+    }),
+    menus: () => [],
+    data: () => [],
+    height: () => '',
+    spacing: () => ({
+      horizontal: '15px',
+      vertical: '20px',
+    }),
+  }
+)
+const emit = defineEmits(['loadMore'])
+const disabled = ref<boolean>(false)
+const load = () => {
+  emit('loadMore', props.data)
+}
+const gridData = computed(() => {
+  return props.data.map((item: any) => {
     return {
-      loadMore,
-      add,
+      ...item,
+      menus: props.menus.map((menu) => {
+        return {
+          ...menu,
+          action: () => {
+            menu.action(item)
+          },
+        }
+      }),
     }
-  },
+  })
 })
 </script>
 
-<style scoped lang="scss">
-.app-add-box {
-  width: 200px;
-  height: 200px;
+<style lang="scss" scoped>
+.scroll-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #000;
-}
-.slot-container {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-right: v-bind('spacing.horizontal');
-  margin-bottom: v-bind('spacing.vertical');
+  ul {
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    li {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: v-bind('spacing.vertical');
+      margin-right: v-bind('spacing.horizontal');
+      .app-box {
+        text-align: center;
+        width: 200px;
+        height: 200px;
+        border: 1px solid #000;
+        img {
+          width: 198px;
+          height: 198px;
+        }
+        .popover {
+          position: absolute;
+          right: 0;
+          top: 0;
+        }
+      }
+    }
+  }
 }
 </style>

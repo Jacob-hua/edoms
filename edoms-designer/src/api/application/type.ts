@@ -3,6 +3,7 @@ export interface ApplictionInfo {
   name: string
   createBy: string
   createTime: string
+  thumbnailId: string
 }
 
 export interface ListApplicationsReq {
