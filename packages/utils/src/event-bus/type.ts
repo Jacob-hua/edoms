@@ -4,7 +4,3 @@ export interface Listener {
   _isTomb?: boolean
   next?: Listener
 }
-
-export interface InternalEventData {
-  [key: string]: any
-}

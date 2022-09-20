@@ -1,4 +1,4 @@
-import { InternalEventData, Listener } from './type'
+import { Listener } from './type'
 
 export class InternalEvent {
   public type: string
@@ -6,10 +6,10 @@ export class InternalEvent {
   public defaultPrevented: boolean
   public timeStamp: number
   public result?: any
-  public data?: InternalEventData
+  public data?: any[]
 
-  constructor(type: string, data?: InternalEventData) {
-    this.data = data
+  constructor(type: string, ...args: any[]) {
+    this.data = args
     this.type = type
     this.timeStamp = Date.now()
     this.cancelBubble = false
@@ -53,25 +53,20 @@ export class EventBus {
     this.removeListener(type, callback)
   }
 
-  public fire(type: string, data?: InternalEvent | InternalEventData): boolean | undefined {
+  public fire(type: string, ...args: any[]): boolean | undefined {
     let result = undefined
     const firstListener = this.getListener(type)
     if (!firstListener) {
       return result
     }
 
-    if (!(data instanceof InternalEvent)) {
-      data = this.createEvent(type, data)
-    }
-
-    const event = data as InternalEvent
+    const event = this.createEvent(type, ...args)
     event.timeStamp = Date.now()
     const originalType = event.type
     if (type !== originalType) {
       event.type = type
     }
-    const args = Array.prototype.slice.call(arguments)
-    args[0] = event
+    args.push(event)
     try {
       result = this.invokeListeners(event, args, firstListener)
     } finally {
@@ -90,8 +85,8 @@ export class EventBus {
     return this.fire('error', { error })
   }
 
-  public createEvent(type: string, data?: InternalEventData): InternalEvent {
-    return new InternalEvent(type, data)
+  public createEvent(type: string, ...args: any[]): InternalEvent {
+    return new InternalEvent(type, ...args)
   }
 
   public removeAllListeners() {

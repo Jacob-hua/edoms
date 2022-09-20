@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest'
-import { EventBus, InternalEvent } from '../src/event-bus'
+import { EventBus } from '../src/event-bus'
 
 interface LocalContext {
   eventBus: EventBus
@@ -11,13 +11,13 @@ describe('EventBus 测试', () => {
   })
 
   test<LocalContext>('事件携带参数', ({ eventBus }) => {
-    eventBus.on('test', (event: InternalEvent) => {
-      expect(event.data).toEqual({ name: 3333 })
+    eventBus.on('test', (data: any) => {
+      expect(data).toEqual({ name: 3333 })
     })
     eventBus.on(
       'test',
-      (event: InternalEvent) => {
-        expect(event.data).toEqual({ name: 3333 })
+      (data: any) => {
+        expect(data).toEqual({ name: 3333 })
       },
       10
     )
@@ -26,45 +26,46 @@ describe('EventBus 测试', () => {
   })
 
   test<LocalContext>('阻止事件传递', ({ eventBus }) => {
-    eventBus.on('test', (event: InternalEvent) => {
-      expect(event.data).toEqual({ name: 3333 })
+    eventBus.on('test', (data: any) => {
+      expect(data).toEqual({ name: 3333 })
     })
     eventBus.on(
       'test',
-      (event: InternalEvent) => {
-        expect(event.data).toEqual({ name: 3333 })
+      (data: any) => {
+        expect(data).toEqual({ name: 3333 })
         return false
       },
       10
     )
     eventBus.on(
       'test',
-      (event: InternalEvent) => {
-        expect(event.data).toEqual({ name: 3333 })
-        return false
+      (data: any, arg1: string) => {
+        expect(data).toEqual({ name: 3333 })
+        expect(arg1).toEqual('test_data')
+        return 1
       },
       11
     )
-    const result = eventBus.fire('test', { name: 3333 })
+    const result = eventBus.fire('test', { name: 3333 }, 'test_data')
     console.log(result)
   })
 
   test<LocalContext>('测试清空所有监听', ({ eventBus }) => {
-    eventBus.on('test', (event: InternalEvent) => {
-      expect(event.data).toEqual({ name: 3333 })
+    eventBus.on('test', (data: any) => {
+      expect(data).toEqual({ name: 3333 })
     })
     eventBus.on(
       'test',
-      (event: InternalEvent) => {
-        expect(event.data).toEqual({ name: 3333 })
+      (data: any) => {
+        expect(data).toEqual({ name: 3333 })
         return false
       },
       10
     )
     eventBus.on(
       'test',
-      (event: InternalEvent) => {
-        expect(event.data).toEqual({ name: 3333 })
+      (data: any) => {
+        expect(data).toEqual({ name: 3333 })
         return false
       },
       11
@@ -75,13 +76,13 @@ describe('EventBus 测试', () => {
   })
 
   test<LocalContext>('监听一次事件触发', ({ eventBus }) => {
-    eventBus.on('test', (event: InternalEvent) => {
-      expect(event.data).toEqual({ name: 3333 })
+    eventBus.on('test', (data: any) => {
+      expect(data).toEqual({ name: 3333 })
     })
     eventBus.on(
       'test',
-      (event: InternalEvent) => {
-        expect(event.data).toEqual({ name: 3333 })
+      (data: any) => {
+        expect(data).toEqual({ name: 3333 })
         console.log('执行低优先级')
 
         return false
@@ -90,7 +91,7 @@ describe('EventBus 测试', () => {
     )
     eventBus.once(
       'test',
-      (_: any, data: any) => {
+      (data: any) => {
         console.log(data)
 
         expect(data).toEqual({ name: 3333 })
