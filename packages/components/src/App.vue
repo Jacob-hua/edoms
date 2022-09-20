@@ -45,12 +45,12 @@ const appInfo: Ref<EdApplication> = ref<EdApplication>({
           text: '示例按钮',
           actions: [
             {
-              action: 'edom-button:click',
+              name: 'edom-button:click',
               target: 'text_0',
               response: 'disabled',
             },
             {
-              action: 'edom-button:click',
+              name: 'edom-button:click',
               target: 'text_1',
               response: 'disabled',
             },

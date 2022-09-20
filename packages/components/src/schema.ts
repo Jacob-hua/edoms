@@ -5,7 +5,7 @@ export interface EdStyle {
 }
 
 export interface EdAction {
-  action: string
+  name: string
   target: string
   response: string
 }
@@ -34,7 +34,7 @@ export interface EdApplication extends EdComponent {
   pages: EdPage[]
 }
 
-export type EdNode = EdComponent | EdContainer | EdPage | EdApplication
+export type EdMeta = EdComponent | EdContainer | EdPage | EdApplication
 
 export interface EdFunction<T> {
   (context: any, data: object): T
