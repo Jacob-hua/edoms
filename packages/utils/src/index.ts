@@ -7,3 +7,5 @@ export * as dateType from './date/type'
 
 export * from './event-bus'
 export * from './event-bus/type'
+
+export { default as Ids } from './ids'

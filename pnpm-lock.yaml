@@ -196,17 +196,21 @@ importers:
 
   packages/utils:
     specifiers:
+      '@types/hat': ^0.0.1
       '@types/lodash': ^4.14.184
       axios: ^0.27.2
       dayjs: ^1.11.5
+      hat: ^0.0.3
       lodash: ^4.17.21
       typescript: ^4.6.4
       vite: ^3.0.7
     dependencies:
       axios: registry.npmmirror.com/axios/0.27.2
       dayjs: registry.npmmirror.com/dayjs/1.11.5
+      hat: registry.npmmirror.com/hat/0.0.3
       lodash: registry.npmmirror.com/lodash/4.17.21
     devDependencies:
+      '@types/hat': registry.npmmirror.com/@types/hat/0.0.1
       '@types/lodash': registry.npmmirror.com/@types/lodash/4.14.184
       typescript: registry.npmmirror.com/typescript/4.7.4
       vite: registry.npmmirror.com/vite/3.0.9
@@ -832,6 +836,12 @@ packages:
     resolution: {integrity: sha512-hC7OMnszpxhZPduX+m+nrx+uFoLkWOMiR4oa/AZF3MuSETYTZmFfJAHqZEM8MVlvfG7BEUcgvtwoCTxBp6hm3g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/chai/-/chai-4.3.3.tgz}
     name: '@types/chai'
     version: 4.3.3
+    dev: true
+
+  registry.npmmirror.com/@types/hat/0.0.1:
+    resolution: {integrity: sha512-GQoFDN07Knft7pvik72m/ddy8wmwMykzJEPZLoT7Wp3PHZsttdAbQ51qKf1DLWAdU6Ac31xon1Ji3g0hqQv6sw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/hat/-/hat-0.0.1.tgz}
+    name: '@types/hat'
+    version: 0.0.1
     dev: true
 
   registry.npmmirror.com/@types/istanbul-lib-coverage/2.0.4:
@@ -3470,6 +3480,12 @@ packages:
     dependencies:
       function-bind: registry.npmmirror.com/function-bind/1.1.1
     dev: true
+
+  registry.npmmirror.com/hat/0.0.3:
+    resolution: {integrity: sha512-zpImx2GoKXy42fVDSEad2BPKuSQdLcqsCYa48K3zHSzM/ugWuYjLDr8IXxpVuL7uCLHw56eaiLxCRthhOzf5ug==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/hat/-/hat-0.0.3.tgz}
+    name: hat
+    version: 0.0.3
+    dev: false
 
   registry.npmmirror.com/hosted-git-info/2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz}
