@@ -1,41 +1,58 @@
 import { EdComponent, EdContainer, EdPage } from '@edoms/components'
 import App from './App'
-import Node from './Node'
+import Component from './Component'
 
 interface PageProps {
-  app: App
   meta: EdPage
+  app: App
 }
 
-class Page extends Node {
-  public nodes = new Map<string, Node>()
+class Page extends Component {
+  public components = new Map<string, Component>()
+  public data: EdPage
+  public app: App
 
   constructor(props: PageProps) {
     super(props)
-    this.setNode(props.meta.id, this)
+
+    this.data = props.meta
+    this.app = props.app
+    this.setComponent(props.meta.id, this)
+    this.init()
   }
 
-  public initNode(meta: EdComponent | EdContainer, parent: Node) {
-    const node = new Node({
-      meta: meta,
-      parent,
-      page: this,
-      app: this.app,
-    })
+  /**
+   * init方法会将Page所有的组件都在page中打平后以ID为key记录到map中
+   */
+  public init() {
+    const initComponent = (data: EdComponent | EdContainer, parent: Component) => {
+      const component = new Component({
+        meta: data,
+        parent,
+        app: this.app,
+        page: this,
+      })
 
-    this.setNode(meta.id, node)
+      this.setComponent(data.id, component)
+
+      data.children?.forEach((item: EdComponent | EdContainer) => {
+        initComponent(item, component)
+      })
+    }
+
+    initComponent(this.data, this)
   }
 
-  public setNode(id: string, node: Node) {
-    this.nodes.set(id, node)
+  public setComponent(id: string, component: Component) {
+    this.components.set(id, component)
   }
 
-  public getNode(id: string) {
-    return this.nodes.get(id)
+  public getComponent(id: string) {
+    return this.components.get(id)
   }
 
-  public deleteNode(id: string) {
-    this.nodes.delete(id)
+  public deleteComponent(id: string) {
+    this.components.delete(id)
   }
 }
 

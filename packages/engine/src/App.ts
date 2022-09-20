@@ -1,35 +1,33 @@
-import { EdAction, EdApplication, EdPage } from '@edoms/components'
+import { EdApplication } from '@edoms/components'
 import { EventBus } from '@edoms/utils'
+import Page from './Page'
 
 interface AppProps {
   meta?: EdApplication
-  currentPage?: string
-  designWidth?: number
+  curPage?: string
 }
 
 class App extends EventBus {
-  public pages = new Map<string, EdPage>()
+  public pages = new Map<string, Page>()
 
-  public designWidth: number = 1920
-
-  public components = new Map<string, any>()
-
-  public page: EdPage | undefined
+  public page: undefined | Page
 
   constructor(props: AppProps) {
     super()
-    props.designWidth && (this.designWidth = props.designWidth)
+    props.meta && this.setMeta(props.meta)
   }
 
-  public setMeta(meta: EdApplication, curPage?: string) {
-    this.pages = new Map<string, EdPage>()
-    if (meta.pages) {
-      meta.pages.forEach((page) => {
-        this.pages.set(page.id, page)
-      })
-    }
-
-    this.setPage(curPage || this.page?.id)
+  public setMeta(meta: EdApplication) {
+    this.pages = new Map()
+    meta.pages.forEach((page) => {
+      this.pages.set(
+        page.id,
+        new Page({
+          meta: page,
+          app: this,
+        })
+      )
+    })
   }
 
   public setPage(id?: string) {
@@ -42,35 +40,13 @@ class App extends EventBus {
     }
   }
 
-  public registerComponent(type: string, component: any) {
-    this.components.set(type, component)
-  }
-
-  public deleteComponent(type: string) {
-    this.components.delete(type)
-  }
-
-  public getComponent(type: string) {
-    return this.components.get(type)
-  }
-
   public bindEvents() {
     if (!this.page) {
       return
     }
 
     this.removeAllListeners()
-
-    this.page.children.forEach((meta) => {
-      meta.actions?.forEach((action) => this.bindEvent(action, meta.id))
-    })
-  }
-
-  public bindEvent(action: EdAction, id: string) {
-    return {
-      action,
-      id,
-    }
+    // TODO: 绑定事件，也就是将组件中定义的actions一一在app中监听
   }
 }
 
