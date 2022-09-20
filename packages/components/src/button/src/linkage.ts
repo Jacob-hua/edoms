@@ -16,7 +16,7 @@ const linkage: LinkageDefine = {
       value: ActionEnum.CLICK,
     },
   ],
-  responses: [
+  effects: [
     {
       label: '禁用',
       value: ResponseEnum.DISABLED,

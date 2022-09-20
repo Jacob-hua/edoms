@@ -7,7 +7,23 @@ export interface EdStyle {
 export interface EdAction {
   name: string
   target: string
-  response: string
+  effect: string
+}
+
+export enum EdRequestCallType {
+  SINGLE = 'single',
+  CYCLE = 'cycle',
+}
+
+export interface EdRequest {
+  id: string
+  name: string
+  url: string
+  callType: EdRequestCallType
+  callInterval?: number
+  data: {
+    [key: string]: any
+  }
 }
 
 export interface EdComponent {
@@ -36,11 +52,23 @@ export interface EdApplication extends EdComponent {
 
 export type EdMeta = EdComponent | EdContainer | EdPage | EdApplication
 
-export interface EdFunction<T> {
-  (context: any, data: object): T
+export enum EdDataType {
+  CONTEXT = 'context',
+  CONST = 'const',
+  API = 'api',
 }
 
-export type Text = string | EdFunction<string>
+export interface EdDataValue {
+  target: string
+  sourcePath: string
+}
+
+export interface EdData<T> {
+  type: EdDataType
+  value: T | EdDataValue
+}
+
+export type Text = string | EdData<string>
 
 export interface EdText extends EdComponent {
   text?: Text

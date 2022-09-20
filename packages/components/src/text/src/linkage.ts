@@ -9,7 +9,7 @@ export enum ResponseEnum {
 
 const linkage: LinkageDefine = {
   actions: [],
-  responses: [
+  effects: [
     {
       label: '禁用',
       value: ResponseEnum.DISABLED,
