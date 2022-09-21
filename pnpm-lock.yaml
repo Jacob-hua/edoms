@@ -26,7 +26,7 @@ importers:
       prettier: ^2.7.1
       typescript: ^4.6.4
       vite: ^3.0.0
-      vite-plugin-vue--extend: ^0.4.0
+      vite-plugin-vue-setup-extend: ^0.4.0
       vitest: ^0.22.1
       vue: ^3.2.37
     devDependencies:
@@ -1031,7 +1031,7 @@ packages:
       '@babel/plugin-syntax-import-meta': registry.npmmirror.com/@babel/plugin-syntax-import-meta/7.10.4_@babel+core@7.18.13
       '@babel/plugin-transform-typescript': registry.npmmirror.com/@babel/plugin-transform-typescript/7.18.12_@babel+core@7.18.13
       '@vue/babel-plugin-jsx': registry.npmmirror.com/@vue/babel-plugin-jsx/1.1.1_@babel+core@7.18.13
-      vite: registry.npmmirror.com/vite/3.0.9_sass@1.54.8
+      vite: registry.npmmirror.com/vite/3.0.9
       vue: registry.npmmirror.com/vue/3.2.37
     transitivePeerDependencies:
       - supports-color
@@ -1047,7 +1047,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: registry.npmmirror.com/vite/3.0.9_sass@1.54.8
+      vite: registry.npmmirror.com/vite/3.0.9
       vue: registry.npmmirror.com/vue/3.2.37
     dev: true
 
@@ -5350,7 +5350,7 @@ packages:
     peerDependencies:
       vite: '>=2.0.0'
     dependencies:
-      '@vue/compiler-sfc': registry.npmmirror.com/@vue/compiler-sfc/3.2.37
+      '@vue/compiler-sfc': registry.npmmirror.com/@vue/compiler-sfc/3.2.39
       magic-string: registry.npmmirror.com/magic-string/0.25.9
       vite: registry.npmmirror.com/vite/3.0.9
     dev: true
