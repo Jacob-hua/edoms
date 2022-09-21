@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1>This is an about page test</h1>
+    <h1>This is an about page</h1>
     <el-button @click="onClick">点击请求API</el-button>
     {{ result }}
   </div>

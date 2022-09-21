@@ -15,3 +15,8 @@ export function deepClone<T>(obj: T): T {
 export function deepEqual<T, Q>(var1: T, var2: Q): boolean {
   return isEqual(var1, var2)
 }
+
+export const equals = (newValue: unknown, oldValue: unknown): boolean => Object.is(newValue, oldValue)
+
+export const hasOwn = (val: object, key: string | symbol): key is keyof typeof val =>
+  Object.prototype.hasOwnProperty.call(val, key)
