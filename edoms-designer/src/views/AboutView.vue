@@ -1,9 +1,8 @@
 <template>
   <div class="about">
-    <h1>This is an about page test</h1>
+    <h1>This is an about page</h1>
     <el-button @click="onClick">点击请求API</el-button>
     {{ result }}
-    <ScrollListView />
   </div>
 </template>
 
@@ -11,7 +10,7 @@
 import { listApplications } from '@/api/application'
 import { listPages } from '@/api/page'
 import { ref } from 'vue'
-import ScrollListView from '@/components/ScrollListView/src/index.vue'
+
 const result = ref({})
 
 const onClick = () => {
