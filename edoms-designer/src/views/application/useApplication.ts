@@ -1,6 +1,6 @@
 import { listApplications } from '@/api/application'
 import { ref, type Ref } from 'vue'
-import { Menu } from '@/components/type'
+import { GridViewMenu } from '@/components/type'
 import { ApplicationInfo } from '@/api/application/type'
 const splicingImageUrl = (data: Array<ApplicationInfo>): Array<ApplicationInfo & { imgUrl: string }> => {
   return data.map((app) => {
@@ -26,14 +26,14 @@ const add = () => {
 
 export const useApplication = () => {
   const listData = ref<Array<ApplicationInfo>>([])
-  const panelMenuList = ref<Menu<ApplicationInfo>[]>([
+  const panelMenuList = ref<GridViewMenu<ApplicationInfo>[]>([
     {
       iconSize: 20,
       iconColor: '#000',
       icon: 'Operation',
       name: '发布应用',
-      action: (currentData) => {
-        console.log(currentData)
+      action: (data) => {
+        console.log(data)
         return '123'
       },
     },

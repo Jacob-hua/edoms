@@ -29,14 +29,14 @@
 
 <script lang="ts" name="GridView" setup>
 import { computed, ref } from 'vue'
-import { Menu, Space, TileProps } from './type'
+import { GridViewMenu, Space, TileProps } from './type'
 import LongText from '@/components/LongText.vue'
 import PopoverMenu from './PopoverMenu.vue'
 const props = withDefaults(
   defineProps<{
     titleProps?: TileProps
-    menus?: Array<Menu>
-    data?: Array<any>
+    menus?: GridViewMenu<any>[]
+    data?: any[]
     height?: string
     spacing?: Space
   }>(),
