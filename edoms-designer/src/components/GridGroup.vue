@@ -28,12 +28,12 @@
 <script lang="ts" setup name="GridGroup">
 import LongText from '@/components/LongText.vue'
 import GridView from './GridView.vue'
-import { Menu, Space, TileProps } from './type'
+import { GridViewMenu, Space, TileProps } from './type'
 const props = withDefaults(
   defineProps<{
     titleProps?: TileProps
-    menus?: Array<Menu<any>>
-    data?: Array<any>
+    menus?: GridViewMenu<any>[]
+    data?: any[]
     height?: string
     spacing?: Space
   }>(),
