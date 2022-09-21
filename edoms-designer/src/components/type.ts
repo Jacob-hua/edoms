@@ -14,16 +14,12 @@ export type PlacementType =
   | 'right-start'
   | 'right-end'
 
-export interface Menu {
+export interface Menu<T = any> {
   iconSize: number
   iconColor: string
   icon: string
   name: string
-  action: (event: Event) => void
-}
-
-export interface GridViewMenu extends Menu {
-  action: <T>(data: T) => void
+  action: (event: T) => void
 }
 
 export interface TileProps {
