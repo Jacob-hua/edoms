@@ -1,4 +1,4 @@
-export interface ApplictionInfo {
+export interface ApplicationInfo {
   applicationId: string
   name: string
   createBy: string
@@ -15,5 +15,5 @@ export interface ListApplicationsRes {
   count: string
   limit: string
   page: string
-  dataList: ApplictionInfo[]
+  dataList: ApplicationInfo[]
 }
