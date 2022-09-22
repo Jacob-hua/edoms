@@ -1,4 +1,4 @@
-import { EdComponent, EdContainer, EdPage } from '@edoms/components'
+import { EdComponent, EdContainer, EdPage } from '@edoms/meta-model'
 import App from './App'
 import Component from './Component'
 

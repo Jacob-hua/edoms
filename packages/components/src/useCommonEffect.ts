@@ -1,4 +1,4 @@
-import { EdComponent } from './schema'
+import { EdComponent } from '@edoms/meta-model'
 
 export default (node: EdComponent) => {
   return {

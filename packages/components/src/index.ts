@@ -9,5 +9,3 @@ const components = {
 }
 
 export default components
-
-export * from './schema'
