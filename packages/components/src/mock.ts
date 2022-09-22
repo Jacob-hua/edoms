@@ -1,4 +1,4 @@
-import { EdApplication } from './schema'
+import { EdApplication } from '@edoms/meta-model'
 
 export const mockMeta = {
   id: 'app_0',

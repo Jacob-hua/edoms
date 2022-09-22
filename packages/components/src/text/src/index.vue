@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup name="edom-text">
-import { EdText } from '@/schema'
+import { EdText } from '@edoms/meta-model'
 import { computed, reactive } from 'vue'
 import useCommonEffect from '@/useCommonEffect'
 import useApp from '@/useApp'

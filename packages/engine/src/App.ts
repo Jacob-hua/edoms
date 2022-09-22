@@ -1,4 +1,4 @@
-import { EdAction, EdApplication } from '@edoms/components'
+import { EdAction, EdApplication } from '@edoms/meta-model'
 import { EventBus, object } from '@edoms/utils'
 import Page from './Page'
 import { generateEventName } from './utils'

@@ -1,5 +1,5 @@
 {
-  "name": "@edoms/engine",
+  "name": "@edoms/meta-model",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -8,9 +8,5 @@
   "devDependencies": {
     "typescript": "^4.6.4",
     "vite": "^3.1.0"
-  },
-  "dependencies": {
-    "@edoms/meta-model": "workspace:^0.0.1",
-    "@edoms/utils": "workspace:^0.0.1"
   }
 }

@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup name="edom-button">
-import { EdButton, EdText } from '@/schema'
+import { EdButton, EdText } from '@edoms/meta-model'
 import { computed, reactive } from 'vue'
 import { ActionEnum } from './linkage'
 import useCommonEffect from '@/useCommonEffect'

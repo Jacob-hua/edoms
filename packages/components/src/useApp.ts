@@ -1,6 +1,6 @@
 import { App, generateEventName } from '@edoms/engine'
+import { EdMeta, EdInstance } from '@edoms/meta-model'
 import { inject, onMounted, onUnmounted } from 'vue'
-import { EdMeta, EdInstance } from './schema'
 
 export interface AppProps extends EdInstance {
   meta: EdMeta

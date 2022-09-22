@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup name="edom-component">
-import { EdMeta } from '@/schema'
+import { EdMeta } from '@edoms/meta-model'
 import { computed, reactive } from 'vue'
 
 interface Props {
