@@ -24,7 +24,7 @@ class Page extends Component {
   /**
    * init方法会将Page所有的组件都在page中打平后以ID为key记录到map中
    */
-  public init() {
+  public init(): void {
     const initComponent = (data: EdComponent | EdContainer, parent: Component) => {
       const component = new Component({
         meta: data,
@@ -43,15 +43,15 @@ class Page extends Component {
     initComponent(this.data, this)
   }
 
-  public setComponent(id: string, component: Component) {
+  public setComponent(id: string, component: Component): void {
     this.components.set(id, component)
   }
 
-  public getComponent(id: string) {
+  public getComponent(id: string): Component | undefined {
     return this.components.get(id)
   }
 
-  public deleteComponent(id: string) {
+  public deleteComponent(id: string): void {
     this.components.delete(id)
   }
 }

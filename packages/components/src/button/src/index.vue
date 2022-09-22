@@ -11,6 +11,7 @@ import { EdButton, EdText } from '@/schema'
 import { computed, reactive } from 'vue'
 import { ActionEnum } from './linkage'
 import useCommonEffect from '@/useCommonEffect'
+import useApp from '@/useApp'
 
 interface Props {
   meta: EdButton
@@ -28,20 +29,23 @@ const textMeta = computed<EdText>(() => ({
   disabled: meta.disabled,
 }))
 
-const onClickButton = () => {
-  console.log('触发', ActionEnum.CLICK)
-}
-
-defineExpose({
-  disabled: () => {
-    meta.disabled = true
+const app = useApp({
+  meta,
+  effects: {
+    disabled: () => {
+      meta.disabled = true
+    },
+    enabled: () => {
+      meta.disabled = false
+    },
+    testEffect: (data: any) => {
+      console.log(data)
+    },
+    ...useCommonEffect(meta),
   },
-  enabled: () => {
-    meta.disabled = false
-  },
-  testEffect: (data: any) => {
-    console.log(data)
-  },
-  ...useCommonEffect(meta),
 })
+
+const onClickButton = () => {
+  app?.fire(`${ActionEnum.CLICK}:${meta.id}`)
+}
 </script>

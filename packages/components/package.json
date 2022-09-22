@@ -10,12 +10,12 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@edoms/engine": "workspace:^0.0.1",
     "@edoms/utils": "workspace:^0.0.1",
     "element-plus": "^2.2.15",
     "vue": "^3.2.37"
   },
   "devDependencies": {
+    "@edoms/engine": "workspace:^0.0.1",
     "@types/node": "^16.11.47",
     "@vitejs/plugin-vue": "^3.0.1",
     "@vue/tsconfig": "^0.1.3",

@@ -6,6 +6,7 @@
 import { EdText } from '@/schema'
 import { computed, reactive } from 'vue'
 import useCommonEffect from '@/useCommonEffect'
+import useApp from '@/useApp'
 
 interface Props {
   meta: EdText
@@ -23,13 +24,18 @@ const displayText = computed(() => {
   return displayText
 })
 
-defineExpose({
-  disabled: () => {
-    meta.disabled = true
+useApp({
+  meta: props.meta,
+  effects: {
+    disabled: () => {
+      console.log(`触发了${meta.id}文本禁用`)
+      meta.disabled = true
+    },
+    enabled: () => {
+      console.log(`触发了${meta.id}文本启动`)
+      meta.disabled = false
+    },
+    ...useCommonEffect(meta),
   },
-  enabled: () => {
-    meta.disabled = false
-  },
-  ...useCommonEffect(meta),
 })
 </script>

@@ -145,11 +145,11 @@ importers:
       vue: ^3.2.37
       vue-tsc: ^0.39.5
     dependencies:
-      '@edoms/engine': link:../engine
       '@edoms/utils': link:../utils
       element-plus: registry.npmmirror.com/element-plus/2.2.15_vue@3.2.37
       vue: registry.npmmirror.com/vue/3.2.37
     devDependencies:
+      '@edoms/engine': link:../engine
       '@types/node': registry.npmmirror.com/@types/node/16.11.56
       '@vitejs/plugin-vue': registry.npmmirror.com/@vitejs/plugin-vue/3.0.3_vite@3.0.9+vue@3.2.37
       '@vue/tsconfig': registry.npmmirror.com/@vue/tsconfig/0.1.3_@types+node@16.11.56

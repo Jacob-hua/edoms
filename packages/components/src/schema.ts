@@ -49,6 +49,13 @@ export interface EdApplication extends EdComponent {
 
 export type EdMeta = EdComponent | EdContainer | EdPage | EdApplication
 
+export interface EdInstance {
+  effects: {
+    [key: string]: Function
+  }
+  [key: string]: any
+}
+
 export enum EdDataType {
   CONTEXT = 'context',
   CONST = 'const',
