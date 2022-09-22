@@ -46,6 +46,6 @@ const app = useApp({
 })
 
 const onClickButton = () => {
-  app?.fire(`${ActionEnum.CLICK}:${meta.id}`)
+  app?.fire(ActionEnum.CLICK)
 }
 </script>

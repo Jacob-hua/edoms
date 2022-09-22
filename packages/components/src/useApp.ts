@@ -1,4 +1,4 @@
-import { App } from '@edoms/engine'
+import { App, generateEventName } from '@edoms/engine'
 import { inject, onMounted, onUnmounted } from 'vue'
 import { EdMeta, EdInstance } from './schema'
 
@@ -20,5 +20,11 @@ export default (props: AppProps) => {
     component?.fire('destroyed', props)
   })
 
-  return app
+  function fire(actionName: string, ...args: any[]) {
+    app?.fire(generateEventName(actionName, props.meta.id), ...args)
+  }
+
+  return {
+    fire,
+  }
 }

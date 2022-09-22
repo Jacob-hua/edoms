@@ -15,27 +15,21 @@ export const mockMeta = {
           id: 'text_0',
           type: 'text',
           name: '文本',
-          text: '示例文本1',
-          disabledText: '禁用文本1',
+          text: '可用1',
+          disabledText: '禁用1~~~~~',
         },
         {
           id: 'text_1',
           type: 'text',
           name: '文本',
-          text: '示例文本2',
-          disabledText: '禁用文本2',
-        },
-        {
-          id: 'text_2',
-          type: 'text',
-          name: '文本',
-          text: '示例文本',
+          text: '可用2',
+          disabledText: '禁用2~~~~~',
         },
         {
           id: 'button_2',
           type: 'button',
           name: '按钮',
-          text: '禁用文本按钮',
+          text: '文本不可用',
           actions: [
             {
               name: 'edoms:action:click',
@@ -53,7 +47,7 @@ export const mockMeta = {
           id: 'button_3',
           type: 'button',
           name: '按钮',
-          text: '启用文本按钮',
+          text: '文本可用',
           actions: [
             {
               name: 'edoms:action:click',
