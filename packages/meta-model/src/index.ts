@@ -13,7 +13,7 @@ export enum EdActionPropType {
 export interface EdActionProp {
   argument: string
   type: EdActionPropType
-  source?: string
+  source: string
 }
 
 export interface EdAction {

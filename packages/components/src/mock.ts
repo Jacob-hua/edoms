@@ -35,6 +35,13 @@ export const mockMeta = {
               name: 'edoms:action:click',
               target: 'text_0',
               effect: 'disabled',
+              props: [
+                {
+                  argument: 'name',
+                  type: 'const',
+                  source: '3',
+                },
+              ],
             },
             {
               name: 'edoms:action:click',
