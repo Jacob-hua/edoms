@@ -2,21 +2,27 @@ import { LinkageDefine } from '@/type'
 
 export enum ActionEnum {}
 
-export enum ResponseEnum {
+export enum EffectEnum {
   DISABLED = 'disatbled',
   ENABLED = 'enabled',
+  TEST = 'test',
 }
 
 const linkage: LinkageDefine = {
   actions: [],
-  responses: [
+  effects: [
     {
       label: '禁用',
-      value: ResponseEnum.DISABLED,
+      value: EffectEnum.DISABLED,
     },
     {
       label: '启用',
-      value: ResponseEnum.ENABLED,
+      value: EffectEnum.ENABLED,
+    },
+    {
+      label: '测试',
+      value: EffectEnum.TEST,
+      props: ['data'],
     },
   ],
 }

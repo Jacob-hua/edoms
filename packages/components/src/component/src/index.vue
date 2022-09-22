@@ -1,19 +1,19 @@
 <template>
-  <component :is="tagName" :node="node" :style="style"></component>
+  <component :is="tagName" :meta="meta" :style="style"></component>
 </template>
 
 <script lang="ts" setup name="edom-component">
-import { EdNode } from '@/schema'
+import { EdMeta } from '@/schema'
 import { computed, reactive } from 'vue'
 
 interface Props {
-  node: EdNode
+  meta: EdMeta
 }
 const props = defineProps<Props>()
 
-const node: EdNode = reactive(props.node)
+const meta: EdMeta = reactive(props.meta)
 
-const tagName = computed(() => `edom-${node.type}`)
+const tagName = computed(() => `edom-${meta.type}`)
 
-const style = computed(() => node.style)
+const style = computed(() => meta.style)
 </script>

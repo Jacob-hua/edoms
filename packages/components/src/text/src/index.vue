@@ -5,31 +5,37 @@
 <script lang="ts" setup name="edom-text">
 import { EdText } from '@/schema'
 import { computed, reactive } from 'vue'
-import useCommonResponse from '@/useCommonResponse'
+import useCommonEffect from '@/useCommonEffect'
+import useApp from '@/useApp'
 
 interface Props {
-  node: EdText
+  meta: EdText
 }
 
 const props = defineProps<Props>()
 
-const node: EdText = reactive(props.node)
+const meta: EdText = reactive(props.meta)
 
 const displayText = computed(() => {
-  let displayText = node.text ?? ''
-  if (node.disabled && node?.disabledText) {
-    displayText = node.disabledText
+  let displayText = meta.text ?? ''
+  if (meta.disabled && meta?.disabledText) {
+    displayText = meta.disabledText
   }
   return displayText
 })
 
-defineExpose({
-  disabled: () => {
-    node.disabled = true
+useApp({
+  meta: props.meta,
+  effects: {
+    disabled: () => {
+      console.log(`触发了${meta.id}文本禁用`)
+      meta.disabled = true
+    },
+    enabled: () => {
+      console.log(`触发了${meta.id}文本启动`)
+      meta.disabled = false
+    },
+    ...useCommonEffect(meta),
   },
-  enabled: () => {
-    node.disabled = false
-  },
-  ...useCommonResponse(node),
 })
 </script>

@@ -4,10 +4,23 @@ export interface EdStyle {
   [key: string]: any
 }
 
+export enum EdActionPropType {
+  CONTEXT = 'context',
+  CONST = 'const',
+  ACTION = 'action',
+}
+
+export interface EdActionProp {
+  argument: string
+  type: EdActionPropType
+  source?: string
+}
+
 export interface EdAction {
-  action: string
+  name: string
   target: string
-  response: string
+  effect: string
+  props?: EdActionProp[]
 }
 
 export interface EdComponent {
@@ -34,13 +47,32 @@ export interface EdApplication extends EdComponent {
   pages: EdPage[]
 }
 
-export type EdNode = EdComponent | EdContainer | EdPage | EdApplication
+export type EdMeta = EdComponent | EdContainer | EdPage | EdApplication
 
-export interface EdFunction<T> {
-  (context: any, data: object): T
+export interface EdInstance {
+  effects: {
+    [key: string]: Function
+  }
+  [key: string]: any
 }
 
-export type Text = string | EdFunction<string>
+export enum EdDataType {
+  CONTEXT = 'context',
+  CONST = 'const',
+  API = 'api',
+}
+
+export interface EdDataValue {
+  target: string
+  sourcePath: string
+}
+
+export interface EdData<T> {
+  type: EdDataType
+  value: T | EdDataValue
+}
+
+export type Text = string | EdData<string>
 
 export interface EdText extends EdComponent {
   text?: Text

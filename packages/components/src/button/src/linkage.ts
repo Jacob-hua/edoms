@@ -1,10 +1,10 @@
 import { LinkageDefine } from '@/type'
 
 export enum ActionEnum {
-  CLICK = 'edom-button:click',
+  CLICK = 'edoms:action:click',
 }
 
-export enum ResponseEnum {
+export enum EffectEnum {
   DISABLED = 'disabled',
   ENABLED = 'enabled',
 }
@@ -16,14 +16,14 @@ const linkage: LinkageDefine = {
       value: ActionEnum.CLICK,
     },
   ],
-  responses: [
+  effects: [
     {
       label: '禁用',
-      value: ResponseEnum.DISABLED,
+      value: EffectEnum.DISABLED,
     },
     {
       label: '启用',
-      value: ResponseEnum.ENABLED,
+      value: EffectEnum.ENABLED,
     },
   ],
 }

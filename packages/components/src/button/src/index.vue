@@ -1,7 +1,7 @@
 <template>
   <el-button type="primary" @click="onClickButton">
     <slot>
-      <edom-text :node="textNode"></edom-text>
+      <edom-text :meta="textMeta"></edom-text>
     </slot>
   </el-button>
 </template>
@@ -10,35 +10,42 @@
 import { EdButton, EdText } from '@/schema'
 import { computed, reactive } from 'vue'
 import { ActionEnum } from './linkage'
-import useCommonResponse from '@/useCommonResponse'
+import useCommonEffect from '@/useCommonEffect'
+import useApp from '@/useApp'
 
 interface Props {
-  node: EdButton
+  meta: EdButton
 }
 
 const props = defineProps<Props>()
 
-const node: EdButton = reactive(props.node)
+const meta: EdButton = reactive(props.meta)
 
-const textNode = computed<EdText>(() => ({
+const textMeta = computed<EdText>(() => ({
   id: '',
   type: 'edom-text',
-  text: node.text,
-  disabledText: node.disabledText,
-  disabled: node.disabled,
+  text: meta.text,
+  disabledText: meta.disabledText,
+  disabled: meta.disabled,
 }))
 
-const onClickButton = () => {
-  console.log('触发', ActionEnum.CLICK)
-}
-
-defineExpose({
-  disabled: () => {
-    node.disabled = true
+const app = useApp({
+  meta,
+  effects: {
+    disabled: () => {
+      meta.disabled = true
+    },
+    enabled: () => {
+      meta.disabled = false
+    },
+    testEffect: (data: any) => {
+      console.log(data)
+    },
+    ...useCommonEffect(meta),
   },
-  enabled: () => {
-    node.disabled = false
-  },
-  ...useCommonResponse(node),
 })
+
+const onClickButton = () => {
+  app?.fire(ActionEnum.CLICK)
+}
 </script>
