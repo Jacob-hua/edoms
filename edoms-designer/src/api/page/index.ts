@@ -1,4 +1,4 @@
-import { RequestMethod } from '@/enums'
+import { RequestMethod } from '@edoms/utils'
 import { request } from '@/util/request'
 import { ListPageInfosReq, ListPageInfosRes } from './type'
 
