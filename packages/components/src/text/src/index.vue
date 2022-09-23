@@ -28,12 +28,13 @@ useApp({
   meta: props.meta,
   effects: {
     disabled: () => {
-      console.log(`触发了${meta.id}文本禁用`)
       meta.disabled = true
     },
     enabled: () => {
-      console.log(`触发了${meta.id}文本启动`)
       meta.disabled = false
+    },
+    updateText: ({ text, disabledText }: { text: any; disabledText: any }) => {
+      console.log(text, disabledText)
     },
     ...useCommonEffect(meta),
   },

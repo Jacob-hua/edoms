@@ -1,4 +1,4 @@
-import { cloneDeep, isEqual } from 'lodash'
+import { cloneDeep, isEqual, get, has } from 'lodash'
 
 export function typeOf(value: any, type: Function) {
   const functionNameReg = /(?<=(function )).*(?=(\())/g
@@ -20,3 +20,11 @@ export const equals = (newValue: unknown, oldValue: unknown): boolean => Object.
 
 export const hasOwn = (val: object, key: string | symbol): key is keyof typeof val =>
   Object.prototype.hasOwnProperty.call(val, key)
+
+export const getByPath = (object: object, path: string, defaultValue?: any): any => {
+  return get(object, path, defaultValue)
+}
+
+export const hasByPath = (object: object, path: string): boolean => {
+  return has(object, path)
+}

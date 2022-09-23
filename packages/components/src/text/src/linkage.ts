@@ -5,7 +5,7 @@ export enum ActionEnum {}
 export enum EffectEnum {
   DISABLED = 'disatbled',
   ENABLED = 'enabled',
-  TEST = 'test',
+  UPDATE_TEXT = 'updateText',
 }
 
 const linkage: LinkageDefine = {
@@ -20,9 +20,9 @@ const linkage: LinkageDefine = {
       value: EffectEnum.ENABLED,
     },
     {
-      label: '测试',
-      value: EffectEnum.TEST,
-      props: ['data'],
+      label: '更新文本',
+      value: EffectEnum.UPDATE_TEXT,
+      props: ['text', 'disabledText'],
     },
   ],
 }

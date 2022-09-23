@@ -46,6 +46,6 @@ const app = useApp({
 })
 
 const onClickButton = () => {
-  app?.fire(ActionEnum.CLICK)
+  app?.fire(ActionEnum.CLICK, 333)
 }
 </script>

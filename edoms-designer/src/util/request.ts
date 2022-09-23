@@ -1,6 +1,5 @@
-import { Request, RequestConfig, AxiosResponse } from '@edoms/utils'
+import { Request, RequestConfig, AxiosResponse, RequestMethod, ContentType } from '@edoms/utils'
 import { ElMessage, ElLoading } from 'element-plus'
-import { ContentType, RequestMethod } from '@/enums/http'
 
 export interface EdomsRequestConfig<T> extends RequestConfig {
   method: RequestMethod
