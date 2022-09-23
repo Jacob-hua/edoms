@@ -23,6 +23,10 @@ export interface EdAction {
   props?: EdActionProp[]
 }
 
+export interface EdRequest {
+  url: string
+}
+
 export interface EdComponent {
   id: string
   type: string | 'container' | 'page' | 'app'
