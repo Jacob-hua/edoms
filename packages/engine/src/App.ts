@@ -1,7 +1,7 @@
 import { EdAction, EdApplication } from '@edoms/meta-model'
 import { EventBus, object } from '@edoms/utils'
 import Page from './Page'
-import { generateEventName } from './utils'
+import { generateEffectProps, generateEventName } from './utils'
 
 interface AppProps {
   meta?: EdApplication
@@ -91,8 +91,7 @@ class App extends EventBus {
 
     if (targetComponent.instance) {
       if (object.typeOf(targetComponent.instance.effects[effect], Function)) {
-        // TODO: 需要处理action.props中关于argument的定义
-        targetComponent.instance.effects[effect](...args)
+        targetComponent.instance.effects[effect](generateEffectProps(action))
       }
     } else {
       // 如果此时目标组件实例未创建，需要将对应的事件缓存，当实例创建后刷新缓存事件

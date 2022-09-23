@@ -1,6 +1,5 @@
 <template>
   <div>
-    动态组件
     <edom-component v-for="config in configs" :key="config.id" :meta="config" />
   </div>
 </template>

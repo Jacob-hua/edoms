@@ -27,14 +27,14 @@ const displayText = computed(() => {
 useApp({
   meta: props.meta,
   effects: {
-    disabled: (data: any) => {
-      console.log(`触发了${meta.id}文本禁用`, data)
-      meta.disabledText = data
+    disabled: () => {
       meta.disabled = true
     },
-    enabled: (data: any) => {
-      console.log(`触发了${meta.id}文本启动`, data)
+    enabled: () => {
       meta.disabled = false
+    },
+    updateText: ({ text, disabledText }: { text: any; disabledText: any }) => {
+      console.log(text, disabledText)
     },
     ...useCommonEffect(meta),
   },

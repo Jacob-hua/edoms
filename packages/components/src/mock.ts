@@ -18,53 +18,78 @@ export const mockMeta = {
           text: '可用1',
           disabledText: '禁用1~~~~~',
         },
+        // {
+        //   id: 'text_1',
+        //   type: 'text',
+        //   name: '文本',
+        //   text: '可用2',
+        //   disabledText: '禁用2~~~~~',
+        // },
+        // {
+        //   id: 'button_2',
+        //   type: 'button',
+        //   name: '按钮',
+        //   text: '文本不可用',
+        //   actions: [
+        //     {
+        //       name: 'edoms:action:click',
+        //       target: 'text_0',
+        //       effect: 'disabled',
+        //       props: [
+        //         {
+        //           argument: 'name',
+        //           type: 'const',
+        //           source: '3',
+        //         },
+        //       ],
+        //     },
+        //     {
+        //       name: 'edoms:action:click',
+        //       target: 'text_1',
+        //       effect: 'disabled',
+        //     },
+        //   ],
+        // },
+        // {
+        //   id: 'button_3',
+        //   type: 'button',
+        //   name: '按钮',
+        //   text: '文本可用',
+        //   actions: [
+        //     {
+        //       name: 'edoms:action:click',
+        //       target: 'text_0',
+        //       effect: 'enabled',
+        //     },
+        //     {
+        //       name: 'edoms:action:click',
+        //       target: 'text_1',
+        //       effect: 'enabled',
+        //     },
+        //   ],
+        // },
         {
-          id: 'text_1',
-          type: 'text',
-          name: '文本',
-          text: '可用2',
-          disabledText: '禁用2~~~~~',
-        },
-        {
-          id: 'button_2',
+          id: 'button_4',
           type: 'button',
           name: '按钮',
-          text: '文本不可用',
+          text: '更新文本内容',
           actions: [
             {
               name: 'edoms:action:click',
               target: 'text_0',
-              effect: 'disabled',
+              effect: 'updateText',
               props: [
                 {
-                  argument: 'name',
+                  argument: 'text',
                   type: 'const',
-                  source: '3',
+                  source: '正常文字',
+                },
+                {
+                  argument: 'disabledText',
+                  type: 'const',
+                  source: '失效文字',
                 },
               ],
-            },
-            {
-              name: 'edoms:action:click',
-              target: 'text_1',
-              effect: 'disabled',
-            },
-          ],
-        },
-        {
-          id: 'button_3',
-          type: 'button',
-          name: '按钮',
-          text: '文本可用',
-          actions: [
-            {
-              name: 'edoms:action:click',
-              target: 'text_0',
-              effect: 'enabled',
-            },
-            {
-              name: 'edoms:action:click',
-              target: 'text_1',
-              effect: 'enabled',
             },
           ],
         },
