@@ -1,4 +1,4 @@
-import { deepClone, typeOf } from '../src/object'
+import { deepClone, getByPath, hasByPath, typeOf } from '../src/object'
 import { describe, test, beforeEach, expect } from 'vitest'
 
 interface Sample {
@@ -9,6 +9,7 @@ interface Sample {
   skills: Function[]
   isStudent: boolean
   type: Symbol
+  obj: Record<string, any>
 }
 
 interface LocalContext {
@@ -34,6 +35,15 @@ describe('object', () => {
       ],
       isStudent: true,
       type: Symbol('test'),
+      obj: {
+        a: [
+          {
+            b: {
+              c: 3,
+            },
+          },
+        ],
+      },
     }
   })
 
@@ -50,5 +60,19 @@ describe('object', () => {
     const cloneSample = deepClone<Sample>(sample)
     expect(cloneSample.name).toBe(sample.name)
     // cloneSample.eat('apple')
+  })
+
+  test<LocalContext>('getByPath', ({ sample }) => {
+    const result1 = getByPath(sample, 'obj.a[0].b.c')
+    expect(result1).toEqual(3)
+    const result2 = getByPath(sample, 'obj.a[0].b.c.d', 2)
+    expect(result2).toEqual(2)
+  })
+
+  test<LocalContext>('hasByPath', ({ sample }) => {
+    const result1 = hasByPath(sample, 'obj.a[0].b.c')
+    expect(result1).toEqual(true)
+    const result2 = hasByPath(sample, 'obj.a[0].b.c.d')
+    expect(result2).toEqual(false)
   })
 })
