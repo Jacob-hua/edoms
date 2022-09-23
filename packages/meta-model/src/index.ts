@@ -1,3 +1,5 @@
+import { ContentType, RequestMethod } from '@edoms/utils'
+
 export interface EdStyle {
   width?: string
   height?: string
@@ -25,6 +27,12 @@ export interface EdAction {
 
 export interface EdRequest {
   url: string
+  method: RequestMethod
+  heade: {
+    [key: string]: any
+    ['Content-Type']: ContentType
+  }
+  data: EdActionProp[]
 }
 
 export interface EdComponent {

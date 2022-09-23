@@ -34,7 +34,8 @@ useApp({
       meta.disabled = false
     },
     updateText: ({ text, disabledText }: { text: any; disabledText: any }) => {
-      console.log(text, disabledText)
+      meta.text = text
+      meta.disabledText = disabledText
     },
     ...useCommonEffect(meta),
   },
