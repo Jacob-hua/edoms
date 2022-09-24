@@ -1,4 +1,5 @@
 import { EdComponent, EdContainer, EdPage } from '@edoms/meta-model'
+import { object } from '@edoms/utils'
 import App from './App'
 import Component from './Component'
 
@@ -9,6 +10,7 @@ interface PageProps {
 
 class Page extends Component {
   public components = new Map<string, Component>()
+  public context = {} as Record<string, any>
   public data: EdPage
   public app: App
 
@@ -41,6 +43,14 @@ class Page extends Component {
     }
 
     initComponent(this.data, this)
+  }
+
+  public setContext(path: string, value: any): void {
+    object.setByPath(this.context, path, value)
+  }
+
+  public getContext(path: string, defaultValue?: any): any {
+    return object.getByPath(this.context, path, defaultValue)
   }
 
   public setComponent(id: string, component: Component): void {

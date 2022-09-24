@@ -44,6 +44,10 @@ class App extends EventBus {
     this.setPage()
   }
 
+  public setContext(path: string, value: any): void {
+    object.setByPath(this.context, path, value)
+  }
+
   public getContext(path: string, defaultValue?: any): any {
     return object.getByPath(this.context, path, defaultValue)
   }
