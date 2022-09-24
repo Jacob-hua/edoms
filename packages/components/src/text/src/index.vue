@@ -37,4 +37,6 @@ app.provideEffect('updateText', ({ text, disabledText }: { text: any; disabledTe
   meta.text = text
   meta.disabledText = disabledText
 })
+
+app.provideContext('text', displayText)
 </script>

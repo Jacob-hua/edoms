@@ -24,16 +24,26 @@ export default (props: AppProps) => {
     component?.fire('destroyed')
   })
 
-  function fire(actionName: string, ...args: any[]) {
+  function fire(actionName: string, ...args: any[]): void {
     app?.fire(generateEventName(actionName, props.meta.id), ...args)
   }
 
-  function provideEffect(key: string, effect: Function) {
+  function provideEffect(key: string, effect: Function): void {
     instance.effects[key] = effect
+  }
+
+  function provideContext(path: string, value: any): void {
+    component?.page?.setContext(path, value)
+  }
+
+  function provideGlobalContext(path: string, value: any): void {
+    app?.setContext(path, value)
   }
 
   return {
     fire,
     provideEffect,
+    provideContext,
+    provideGlobalContext,
   }
 }
