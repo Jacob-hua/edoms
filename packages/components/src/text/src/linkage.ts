@@ -22,7 +22,16 @@ const linkage: LinkageDefine = {
     {
       label: '更新文本',
       value: EffectEnum.UPDATE_TEXT,
-      props: ['text', 'disabledText'],
+      props: [
+        {
+          name: 'text',
+          label: '文本',
+        },
+        {
+          name: 'disabledText',
+          label: '禁用文本',
+        },
+      ],
     },
   ],
 }

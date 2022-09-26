@@ -5,7 +5,6 @@
 <script lang="ts" setup name="edom-text">
 import { EdText } from '@edoms/meta-model'
 import { computed, reactive } from 'vue'
-import useCommonEffect from '@/useCommonEffect'
 import useApp from '@/useApp'
 
 interface Props {
@@ -24,19 +23,20 @@ const displayText = computed(() => {
   return displayText
 })
 
-useApp({
-  meta: props.meta,
-  effects: {
-    disabled: () => {
-      meta.disabled = true
-    },
-    enabled: () => {
-      meta.disabled = false
-    },
-    updateText: ({ text, disabledText }: { text: any; disabledText: any }) => {
-      console.log(text, disabledText)
-    },
-    ...useCommonEffect(meta),
-  },
+const app = useApp(props)
+
+app.provideEffect('disabled', () => {
+  meta.disabled = true
 })
+
+app.provideEffect('enabled', () => {
+  meta.disabled = false
+})
+
+app.provideEffect('updateText', ({ text, disabledText }: { text: any; disabledText: any }) => {
+  meta.text = text
+  meta.disabledText = disabledText
+})
+
+app.provideContext('text', displayText)
 </script>

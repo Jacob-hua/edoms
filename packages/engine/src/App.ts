@@ -18,9 +18,11 @@ interface ActionCache {
 class App extends EventBus {
   public pages = new Map<string, Page>()
 
+  public actionCacheMap = new Map<string, ActionCache[]>()
+
   public page: undefined | Page
 
-  public actionCacheMap = new Map<string, ActionCache[]>()
+  public context = {} as Record<string, any>
 
   constructor(props: AppProps) {
     super()
@@ -40,6 +42,18 @@ class App extends EventBus {
     })
 
     this.setPage()
+  }
+
+  public setContext(path: string, value: any): void {
+    object.setByPath(this.context, path, value)
+  }
+
+  public getContext(path: string, defaultValue?: any): any {
+    return object.getByPath(this.context, path, defaultValue)
+  }
+
+  public contextHas(path: string): boolean {
+    return object.hasByPath(this.context, path)
   }
 
   public setPage(id?: string): void {

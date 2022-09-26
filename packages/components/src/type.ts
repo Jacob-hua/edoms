@@ -1,13 +1,18 @@
+export interface Argument {
+  name: string
+  label: string
+}
+
 export interface ActionOption {
   label: string
   value: string
-  returns?: string[]
+  returns?: Argument[]
 }
 
 export interface EffectOption {
   label: string
   value: string
-  props?: string[]
+  props?: Argument[]
 }
 
 export interface LinkageDefine {

@@ -17,8 +17,10 @@ app.component(Components.name, Components)
 app.component(Button.name, Button)
 app.component(Text.name, Text)
 
-const core = new Core({
-  meta: mockMeta,
-})
-app.provide('app', core)
+app.provide(
+  'app',
+  new Core({
+    meta: mockMeta,
+  })
+)
 app.mount('#app')
