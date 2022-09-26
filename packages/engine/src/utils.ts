@@ -16,6 +16,7 @@ export const generateEffectProps = (action: EdAction): Record<string, any> => {
   if (!action.props) {
     return {}
   }
+  // TODO: 此处需要考虑参数值来自其他作用域的情况，例如：来自action的args，来自context等
   return action.props.reduce((propObj, { argument, type, source }: EdActionProp) => {
     const result = { ...propObj }
     if (type === EdActionPropType.CONST) {

@@ -59,7 +59,7 @@ class Component extends EventBus {
     if (!instance.config) {
       return
     }
-
+    // TODO: 此处需要考虑多组件暴露context属性名重复问题
     Object.keys(instance.config.context).forEach((scope) => {
       if (scope === 'application') {
         for (const key in instance.config.context.application) {
