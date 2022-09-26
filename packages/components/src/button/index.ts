@@ -1,5 +1,5 @@
 import Button from './src/index.vue'
 
-export { default as linkage } from './src/linkage'
+export * from './src/config'
 
 export default Button

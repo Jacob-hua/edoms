@@ -9,7 +9,7 @@ export enum EffectEnum {
   ENABLED = 'enabled',
 }
 
-const linkage: LinkageDefine = {
+export const linkageDefine: LinkageDefine = {
   actionProps: [
     {
       label: '点击',
@@ -27,5 +27,3 @@ const linkage: LinkageDefine = {
     },
   ],
 }
-
-export default linkage

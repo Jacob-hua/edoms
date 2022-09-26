@@ -8,7 +8,7 @@ export enum EffectEnum {
   UPDATE_TEXT = 'updateText',
 }
 
-const linkage: LinkageDefine = {
+export const linkageDefine: LinkageDefine = {
   actionProps: [],
   effectProps: [
     {
@@ -35,5 +35,3 @@ const linkage: LinkageDefine = {
     },
   ],
 }
-
-export default linkage
