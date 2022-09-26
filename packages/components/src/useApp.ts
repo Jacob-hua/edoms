@@ -1,5 +1,5 @@
 import { App, generateEventName } from '@edoms/engine'
-import { EdMeta, EdInstance } from '@edoms/meta-model'
+import { EdMeta, EdInstance, EdContextScope } from '@edoms/meta-model'
 import { inject, onMounted, onUnmounted } from 'vue'
 
 export interface AppProps {
@@ -12,6 +12,17 @@ export default (props: AppProps) => {
 
   const instance: EdInstance = {
     effects: {},
+    config: {
+      linkageDefine: {
+        actionProps: [],
+        effectProps: [],
+      },
+      context: {
+        application: {},
+        page: {},
+        component: {},
+      },
+    },
   }
 
   component?.fire('created', instance)
@@ -32,18 +43,32 @@ export default (props: AppProps) => {
     instance.effects[key] = effect
   }
 
-  function provideContext(path: string, value: any): void {
-    component?.page?.setContext(path, value)
-  }
+  function provideContext(path: string | number | symbol, value: any, scopes?: EdContextScope[]): void {
+    if (!scopes) {
+      scopes = ['component']
+    }
 
-  function provideGlobalContext(path: string, value: any): void {
-    app?.setContext(path, value)
+    const scopeClassifier = {
+      ['application']: () => {
+        instance.config.context.application[path] = value
+      },
+      ['page']: () => {
+        instance.config.context.page[path] = value
+      },
+      ['component']: () => {
+        instance.config.context.component[path] = value
+      },
+    }
+
+    scopes.forEach((scope) => {
+      scopeClassifier[scope]()
+    })
+    component?.handleContext(instance)
   }
 
   return {
     fire,
     provideEffect,
     provideContext,
-    provideGlobalContext,
   }
 }

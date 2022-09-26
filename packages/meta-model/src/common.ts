@@ -1,5 +1,5 @@
 import { ContentType, RequestMethod } from '@edoms/utils'
-import { EdActionPropType } from './enum'
+import { EdActionPropType, EdContextScope } from './enum'
 
 export type EdComponentType = string | 'container' | 'page' | 'app'
 
@@ -82,15 +82,13 @@ export interface LinkageDefine {
   effectProps: EffectProps[]
 }
 
-export interface Context {
-  application: Record<string | number | symbol, any>
-  page: Record<string | number | symbol, any>
-  component: Record<string | number | symbol, any>
+export type Context = {
+  [key in EdContextScope]: Record<string | number | symbol, any>
 }
 
 export interface EdInstance {
   effects: Record<string, Function>
-  config?: {
+  config: {
     linkageDefine: LinkageDefine
     context: Context
   }

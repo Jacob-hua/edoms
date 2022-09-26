@@ -38,5 +38,8 @@ app.provideEffect('updateText', ({ text, disabledText }: { text: any; disabledTe
   meta.disabledText = disabledText
 })
 
-app.provideContext('text', displayText)
+setTimeout(() => {
+  app.provideContext('testText1', displayText, ['component', 'application'])
+})
+app.provideContext('testText', displayText, ['component', 'application'])
 </script>
