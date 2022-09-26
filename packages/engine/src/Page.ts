@@ -1,5 +1,4 @@
 import { EdComponent, EdContainer, EdPage } from '@edoms/meta-model'
-import { object } from '@edoms/utils'
 import App from './App'
 import Component from './Component'
 
@@ -10,7 +9,6 @@ interface PageProps {
 
 class Page extends Component {
   public components = new Map<string, Component>()
-  public context = {} as Record<string, any>
   public data: EdPage
   public app: App
 
@@ -19,7 +17,6 @@ class Page extends Component {
 
     this.data = props.meta
     this.app = props.app
-    this.setComponent(props.meta.id, this)
     this.init()
   }
 
@@ -27,30 +24,22 @@ class Page extends Component {
    * init方法会将Page所有的组件都在page中打平后以ID为key记录到map中
    */
   public init(): void {
-    const initComponent = (data: EdComponent | EdContainer, parent: Component) => {
-      const component = new Component({
-        meta: data,
-        parent,
-        app: this.app,
-        page: this,
-      })
+    const initComponent = (datas: Array<EdComponent | EdContainer>, parent: Component) => {
+      datas.forEach((meta: EdComponent | EdContainer) => {
+        const component = new Component({
+          meta,
+          parent,
+          app: this.app,
+          page: this,
+        })
 
-      this.setComponent(data.id, component)
+        this.setComponent(meta.id, component)
 
-      data.children?.forEach((item: EdComponent | EdContainer) => {
-        initComponent(item, component)
+        meta.children && initComponent(meta.children, component)
       })
     }
 
-    initComponent(this.data, this)
-  }
-
-  public setContext(path: string, value: any): void {
-    object.setByPath(this.context, path, value)
-  }
-
-  public getContext(path: string, defaultValue?: any): any {
-    return object.getByPath(this.context, path, defaultValue)
+    initComponent(this.data.children, this)
   }
 
   public setComponent(id: string, component: Component): void {

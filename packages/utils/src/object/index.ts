@@ -18,17 +18,17 @@ export function deepEqual<T, Q>(var1: T, var2: Q): boolean {
 
 export const equals = (newValue: unknown, oldValue: unknown): boolean => Object.is(newValue, oldValue)
 
-export const hasOwn = (val: object, key: string | symbol): key is keyof typeof val =>
+export const hasOwn = (val: object, key: string | symbol | number): key is keyof typeof val =>
   Object.prototype.hasOwnProperty.call(val, key)
 
-export const getByPath = (object: object, path: string, defaultValue?: any): any => {
+export const getByPath = (object: object, path: string | symbol | number, defaultValue?: any): any => {
   return get(object, path, defaultValue)
 }
 
-export const setByPath = (object: object, path: string, value?: any): void => {
+export const setByPath = (object: object, path: string | symbol | number, value?: any): void => {
   set(object, path, value)
 }
 
-export const hasByPath = (object: object, path: string): boolean => {
+export const hasByPath = (object: object, path: string | symbol | number): boolean => {
   return has(object, path)
 }

@@ -1,4 +1,4 @@
-import { EdAction, EdApplication } from '@edoms/meta-model'
+import { EdAction, EdApplication, EdInstance } from '@edoms/meta-model'
 import { EventBus, object } from '@edoms/utils'
 import Page from './Page'
 import { generateEffectProps, generateEventName } from './utils'
@@ -8,10 +8,12 @@ interface AppProps {
   curPage?: string
 }
 
+type FromInstance = EdInstance | null | undefined
+
 interface ActionCache {
   action: EdAction
   fromId: string
-  fromInstance: any
+  fromInstance: FromInstance
   args: any
 }
 
@@ -44,7 +46,7 @@ class App extends EventBus {
     this.setPage()
   }
 
-  public setContext(path: string, value: any): void {
+  public setContext(path: string | number | symbol, value: any): void {
     object.setByPath(this.context, path, value)
   }
 
@@ -85,12 +87,12 @@ class App extends EventBus {
     })
   }
 
-  public bindAction(action: EdAction, instance: any, id: string) {
+  public bindAction(action: EdAction, instance: FromInstance, id: string) {
     const actionName = generateEventName(action.name, id)
     this.on(actionName, (...args: any) => this.actionHandler(action, instance, id, args))
   }
 
-  public actionHandler(action: EdAction, fromInstance: any, fromId: string, args: any[]): void {
+  public actionHandler(action: EdAction, fromInstance: FromInstance, fromId: string, args: any[]): void {
     if (!this.page) {
       throw new Error('当前页面为空')
     }

@@ -1,4 +1,4 @@
-import { LinkageDefine } from '@/type'
+import { LinkageDefine } from '@edoms/meta-model'
 
 export enum ActionEnum {
   CLICK = 'edoms:action:click',
@@ -9,14 +9,14 @@ export enum EffectEnum {
   ENABLED = 'enabled',
 }
 
-const linkage: LinkageDefine = {
-  actions: [
+export const linkageDefine: LinkageDefine = {
+  actionProps: [
     {
       label: '点击',
       value: ActionEnum.CLICK,
     },
   ],
-  effects: [
+  effectProps: [
     {
       label: '禁用',
       value: EffectEnum.DISABLED,
@@ -27,5 +27,3 @@ const linkage: LinkageDefine = {
     },
   ],
 }
-
-export default linkage

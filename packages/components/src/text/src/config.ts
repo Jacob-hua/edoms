@@ -1,4 +1,4 @@
-import { LinkageDefine } from '@/type'
+import { LinkageDefine } from '@edoms/meta-model'
 
 export enum ActionEnum {}
 
@@ -8,9 +8,9 @@ export enum EffectEnum {
   UPDATE_TEXT = 'updateText',
 }
 
-const linkage: LinkageDefine = {
-  actions: [],
-  effects: [
+export const linkageDefine: LinkageDefine = {
+  actionProps: [],
+  effectProps: [
     {
       label: '禁用',
       value: EffectEnum.DISABLED,
@@ -22,7 +22,7 @@ const linkage: LinkageDefine = {
     {
       label: '更新文本',
       value: EffectEnum.UPDATE_TEXT,
-      props: [
+      arguments: [
         {
           name: 'text',
           label: '文本',
@@ -35,5 +35,3 @@ const linkage: LinkageDefine = {
     },
   ],
 }
-
-export default linkage

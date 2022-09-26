@@ -1,5 +1,5 @@
 import { ContentType, RequestMethod } from '@edoms/utils'
-import { EdActionPropType } from './enum'
+import { EdActionPropType, EdContextScope } from './enum'
 
 export type EdComponentType = string | 'container' | 'page' | 'app'
 
@@ -60,15 +60,36 @@ export interface EdApplication extends EdComponent {
 
 export type EdMeta = EdComponent | EdContainer | EdPage | EdApplication
 
+export interface Parameter {
+  name: string
+  label: string
+}
+
+export interface ActionProps {
+  label: string
+  value: string
+  returns?: Parameter[]
+}
+
+export interface EffectProps {
+  label: string
+  value: string
+  arguments?: Parameter[]
+}
+
+export interface LinkageDefine {
+  actionProps: ActionProps[]
+  effectProps: EffectProps[]
+}
+
+export type Context = {
+  [key in EdContextScope]: Record<string | number | symbol, any>
+}
+
 export interface EdInstance {
-  effects: {
-    [key: string]: Function
-  }
-  config?: {
-    effectOptions: any[]
-    actionOptions: any[]
-    context: any[]
-    globalContext: any[]
-    expose: any[]
+  effects: Record<string, Function>
+  config: {
+    linkageDefine: LinkageDefine
+    context: Context
   }
 }
