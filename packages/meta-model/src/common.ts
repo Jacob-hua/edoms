@@ -60,15 +60,38 @@ export interface EdApplication extends EdComponent {
 
 export type EdMeta = EdComponent | EdContainer | EdPage | EdApplication
 
+export interface Parameter {
+  name: string
+  label: string
+}
+
+export interface ActionProps {
+  label: string
+  value: string
+  returns?: Parameter[]
+}
+
+export interface EffectProps {
+  label: string
+  value: string
+  arguments?: Parameter[]
+}
+
+export interface LinkageDefine {
+  actionProps: ActionProps[]
+  effectProps: EffectProps[]
+}
+
+export interface Context {
+  application: Record<string | number | symbol, any>
+  page: Record<string | number | symbol, any>
+  component: Record<string | number | symbol, any>
+}
+
 export interface EdInstance {
-  effects: {
-    [key: string]: Function
-  }
+  effects: Record<string, Function>
   config?: {
-    effectOptions: any[]
-    actionOptions: any[]
-    context: any[]
-    globalContext: any[]
-    expose: any[]
+    linkageDefine: LinkageDefine
+    context: Context
   }
 }
