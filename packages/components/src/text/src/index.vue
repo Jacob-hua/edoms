@@ -39,7 +39,7 @@ app.provideEffect('updateText', ({ text, disabledText }: { text: any; disabledTe
 })
 
 setTimeout(() => {
-  app.provideContext('testText1', displayText, ['component', 'application'])
+  app.provideContext('testText1', displayText, ['component', 'application', 'page'])
 })
 app.provideContext('testText', displayText, ['component', 'application'])
 </script>

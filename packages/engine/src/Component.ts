@@ -71,7 +71,7 @@ class Component extends EventBus {
         }
       } else if (scope === 'page') {
         for (const key in instance.config.context.page) {
-          this.setContext(key, instance.config.context.page[key])
+          this.page?.setContext(key, instance.config.context.page[key])
         }
       }
     })
