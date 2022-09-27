@@ -8,5 +8,8 @@
   "devDependencies": {
     "typescript": "^4.6.4",
     "vite": "^3.1.0"
+  },
+  "dependencies": {
+    "@edoms/utils": "workspace:^0.0.1"
   }
 }
