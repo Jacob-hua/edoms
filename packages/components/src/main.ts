@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import ElementPlus from 'element-plus'
-import { App as Core } from '@edoms/engine'
+import { Engine } from '@edoms/engine'
 import { mockMeta } from './mock'
 
 import 'element-plus/theme-chalk/index.css'
@@ -19,7 +19,7 @@ app.component(Text.name, Text)
 
 app.provide(
   'app',
-  new Core({
+  new Engine({
     meta: mockMeta,
   })
 )
