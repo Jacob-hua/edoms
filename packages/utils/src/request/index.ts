@@ -1,5 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
+export * from './enum'
+
 export * from 'axios'
 
 export interface HttpInterceptors {

@@ -3,33 +3,43 @@
 </template>
 
 <script lang="ts" setup name="edom-text">
-import { EdText } from '@/schema'
+import { EdText } from '@edoms/meta-model'
 import { computed, reactive } from 'vue'
-import useCommonResponse from '@/useCommonResponse'
+import useApp from '@/useApp'
 
 interface Props {
-  node: EdText
+  meta: EdText
 }
 
 const props = defineProps<Props>()
 
-const node: EdText = reactive(props.node)
+const meta: EdText = reactive(props.meta)
 
 const displayText = computed(() => {
-  let displayText = node.text ?? ''
-  if (node.disabled && node?.disabledText) {
-    displayText = node.disabledText
+  let displayText = meta.text ?? ''
+  if (meta.disabled && meta?.disabledText) {
+    displayText = meta.disabledText
   }
   return displayText
 })
 
-defineExpose({
-  disabled: () => {
-    node.disabled = true
-  },
-  enabled: () => {
-    node.disabled = false
-  },
-  ...useCommonResponse(node),
+const app = useApp(props)
+
+app.provideEffect('disabled', () => {
+  meta.disabled = true
 })
+
+app.provideEffect('enabled', () => {
+  meta.disabled = false
+})
+
+app.provideEffect('updateText', ({ text, disabledText }: { text: any; disabledText: any }) => {
+  meta.text = text
+  meta.disabledText = disabledText
+})
+
+setTimeout(() => {
+  app.provideContext('testText1', displayText, ['component', 'application', 'page'])
+})
+app.provideContext('testText', displayText, ['component', 'application'])
 </script>
