@@ -1,5 +1,5 @@
 import { request } from '@/util/request'
-import { RequestMethod } from '@/enums/http'
+import { RequestMethod } from '@edoms/utils'
 import { AppForm, createAppRes, FileUploadRes, ListApplicationsReq, ListApplicationsRes } from './type'
 
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
