@@ -12,6 +12,8 @@
   "dependencies": {
     "@edoms/engine": "workspace:^0.0.1",
     "@edoms/meta-model": "workspace:^0.0.1",
-    "@edoms/utils": "workspace:^0.0.1"
+    "@edoms/utils": "workspace:^0.0.1",
+    "moveable": "^0.36.3",
+    "moveable-helper": "^0.4.0"
   }
 }
