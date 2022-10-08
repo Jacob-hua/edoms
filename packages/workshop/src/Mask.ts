@@ -1,4 +1,4 @@
-import { dom, EventBus } from '@edoms/utils'
+import { dom, EventBus, throttle } from '@edoms/utils'
 import { createMaskContent, createWrapper } from './utils'
 import Workshop from './WorkShop'
 
@@ -63,7 +63,9 @@ class Mask extends EventBus {
     })
   }
 
-  private highlightHandler = () => {}
+  private highlightHandler = throttle((event: MouseEvent): void => {
+    this.fire('highlight', event)
+  }, throttleTime)
 
   private mouseDownHandler = (event: MouseEvent): void => {
     this.fire('clearHighlight')
@@ -127,6 +129,26 @@ class Mask extends EventBus {
 
   private mouseLeaveHandler = (): void => {
     setTimeout(() => this.fire('clearHighlight'), throttleTime)
+  }
+
+  public mount(element: HTMLDivElement): void {
+    if (!this.content) {
+      throw new Error('This content is not exist')
+    }
+    element.appendChild(this.wrapper)
+  }
+
+  public destroy(): void {
+    this.content?.remove()
+    this.page = null
+    this.scrollParent = null
+    this.pageResizeObserver?.disconnect()
+    this.wrapperResizeObserver?.disconnect()
+    this.content.removeEventListener('mouseleave', this.mouseLeaveHandler)
+  }
+
+  public setLayout(element: HTMLElement): void {
+    this.setMode(dom.isFixedParent(element) ? Mode.FIXED : Mode.ABSOLUTE)
   }
 
   public setMode(mode: Mode): void {
