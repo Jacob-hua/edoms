@@ -234,10 +234,14 @@ importers:
 
   packages/workshop:
     specifiers:
+      '@edoms/engine': workspace:^0.0.1
+      '@edoms/meta-model': workspace:^0.0.1
       '@edoms/utils': workspace:^0.0.1
       typescript: ^4.6.4
       vite: ^3.1.0
     dependencies:
+      '@edoms/engine': link:../engine
+      '@edoms/meta-model': link:../meta-model
       '@edoms/utils': link:../utils
     devDependencies:
       typescript: registry.npmmirror.com/typescript/4.7.4

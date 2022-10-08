@@ -5,10 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import { App } from '@edoms/engine'
+import { Engine } from '@edoms/engine'
 import { computed, inject } from 'vue'
 
-const app = inject<App>('app')
+const app = inject<Engine>('app')
 
 const configs = computed(() => {
   if (!app?.page || !app?.page?.components) {
