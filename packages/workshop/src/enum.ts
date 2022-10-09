@@ -21,3 +21,10 @@ export enum ZIndex {
   GHOST_EL = '700',
   DRAG_EL = '9',
 }
+
+export enum GuidesType {
+  /** 水平 */
+  HORIZONTAL = 'horizontal',
+  /** 垂直 */
+  VERTICAL = 'vertical',
+}

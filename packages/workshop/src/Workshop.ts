@@ -1,5 +1,7 @@
 import { EventBus } from '@edoms/utils'
 import { MoveableOptions } from 'moveable'
+import DragBox from './DragBox'
+import Mask from './Mask'
 import Renderer from './Renderer'
 
 export type IsContainer = (element: HTMLElement) => boolean | Promise<boolean>
@@ -21,12 +23,15 @@ interface WorkshopConfig {
 
 class Workshop extends EventBus {
   public container?: HTMLDivElement
+  public selectedDom: HTMLElement | undefined
+  public selectedDomArray: HTMLElement[] | undefined
+  public renderer: Renderer
+  public mask: Mask
+  public dragBox: DragBox
   public zoom: number = 0
   public config: WorkshopConfig
   public isContainer: IsContainer
   public highlightContainer: HighlightContainer
-
-  public renderer: Renderer
 
   constructor(config: WorkshopConfig) {
     super()
@@ -36,6 +41,12 @@ class Workshop extends EventBus {
     this.highlightContainer = config.highlightContainer
 
     this.renderer = new Renderer(this)
+    this.mask = new Mask(this)
+    this.dragBox = new DragBox({
+      workshop: this,
+      container: this.mask.content,
+      mask: this.mask,
+    })
   }
 
   public getElementFromPoint(event: MouseEvent) {

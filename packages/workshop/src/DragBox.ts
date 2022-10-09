@@ -1,5 +1,5 @@
 import { dom, EventBus } from '@edoms/utils'
-import { Mode, ZIndex } from './enum'
+import { GuidesType, Mode, ZIndex } from './enum'
 import Mask from './Mask'
 import Workshop from './WorkShop'
 import Moveable, { MoveableOptions } from 'moveable'
@@ -65,6 +65,59 @@ class DragBox extends EventBus {
     }
   }
 
+  public updateMoveable(element = this.target): void {
+    if (!this.moveable) {
+      throw new Error('This moveable is not initialization')
+    }
+    if (!element) {
+      throw new Error('No elements selected')
+    }
+
+    this.target = element
+    this.init(element)
+    Object.entries(this.moveableOptions).forEach(([key, value]) => {
+      ;(this.moveable as any)[key] = value
+    })
+    this.moveable.updateTarget()
+  }
+
+  public setGuidelines(type: GuidesType, guidelines: number[]): void {
+    if (type === GuidesType.HORIZONTAL) {
+      this.horizontalGuidelines = guidelines
+      this.moveableOptions.horizontalGuidelines = guidelines
+    } else if (type === GuidesType.VERTICAL) {
+      this.verticalGuidelines = guidelines
+      this.moveableOptions.verticalGuidelines = guidelines
+    }
+    if (this.moveable) {
+      this.updateMoveable()
+    }
+  }
+
+  public clearGuides() {
+    this.horizontalGuidelines = []
+    this.verticalGuidelines = []
+    this.moveableOptions.horizontalGuidelines = []
+    this.moveableOptions.verticalGuidelines = []
+  }
+
+  public destroy(): void {
+    this.moveable?.destroy()
+    this.destroyDragElement()
+    this.destroyGhostElement()
+    this.dragStatus = ActionStatus.END
+    this.removeAllListeners()
+  }
+
+  private destroyGhostElement(): void {
+    this.ghostElement?.remove()
+    this.ghostElement = undefined
+  }
+
+  private destroyDragElement(): void {
+    this.dragElement?.remove()
+  }
+
   private init(element: HTMLElement): void {
     // 如果css滚动条没有隐藏，则隐藏滚动条
     if (/(auto|scroll)/.test(element.style.overflow)) {
@@ -73,7 +126,7 @@ class DragBox extends EventBus {
     this.mode = getMode(element)
 
     this.destroyGhostElement()
-    this.destroyDragEl()
+    this.destroyDragElement()
     this.dragElement = globalThis.document.createElement('div')
     this.container.append(this.dragElement)
     this.dragElement.style.cssText = getTargetElStyle(element)
@@ -399,15 +452,6 @@ class DragBox extends EventBus {
       frame.append(elementGuideline)
     }
     return frame
-  }
-
-  private destroyGhostElement(): void {
-    this.ghostElement?.remove()
-    this.ghostElement = undefined
-  }
-
-  private destroyDragEl(): void {
-    this.dragElement?.remove()
   }
 
   private update(isResize = false, parentElement: HTMLElement | null = null): void {
