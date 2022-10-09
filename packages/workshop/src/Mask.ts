@@ -1,18 +1,8 @@
 import { dom, EventBus, throttle } from '@edoms/utils'
 import { createMaskContent, createWrapper } from './utils'
 import Workshop from './WorkShop'
+import { Mode, MouseButton } from './enum'
 
-export enum Mode {
-  ABSOLUTE = 'absolute',
-  FIXED = 'fixed',
-  SORTABLE = 'sortable',
-}
-
-export enum MouseButton {
-  LEFT = 0,
-  MIDDLE = 1,
-  RIGHT = 2,
-}
 const throttleTime = 100
 
 class Mask extends EventBus {

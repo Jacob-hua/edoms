@@ -85,3 +85,30 @@ export const getScrollParent = (element: HTMLElement, includeHidden = false): HT
   }
   return null
 }
+
+export const addClassName = (element: Element, doc: Document, className: string): void => {
+  const oldElement = doc.querySelector(`.${className}`)
+  if (oldElement && oldElement !== element) {
+    removeClassName(oldElement, className)
+  }
+  if (!element.classList.contains(className)) {
+    element.classList.add(className)
+  }
+}
+
+export const removeClassName = (element: Element, className: string): void => {
+  element.classList.remove(className)
+}
+
+export const removeClassNameByClassName = (doc: Document, className: string): HTMLElement | null => {
+  const element: HTMLElement | null = doc.querySelector(`.${className}`)
+  element?.classList.remove(className)
+  return element
+}
+
+export const injectStyle = (doc: Document, style: string): HTMLElement => {
+  const styleElement = document.createElement('style')
+  styleElement.innerHTML = style
+  doc.head.appendChild(styleElement)
+  return styleElement
+}
