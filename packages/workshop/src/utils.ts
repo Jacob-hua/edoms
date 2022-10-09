@@ -39,3 +39,13 @@ export const getTargetElStyle = (el: HTMLElement) => {
     z-index: ${ZIndex.DRAG_EL};
   `
 }
+
+export const calculateValueByFontsize = (doc: Document, value: number): number => {
+  const { fontSize } = doc.documentElement.style
+
+  if (fontSize) {
+    const times = globalThis.parseFloat(fontSize) / 100
+    return Number((value / times).toFixed(2))
+  }
+  return value
+}

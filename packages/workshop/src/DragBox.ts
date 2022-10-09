@@ -4,17 +4,7 @@ import Mask from './Mask'
 import Workshop from './WorkShop'
 import Moveable, { MoveableOptions } from 'moveable'
 import MoveableHelper from 'moveable-helper'
-import { getMode, getTargetElStyle } from './utils'
-
-export const calculateValueByFontsize = (doc: Document, value: number): number => {
-  const { fontSize } = doc.documentElement.style
-
-  if (fontSize) {
-    const times = globalThis.parseFloat(fontSize) / 100
-    return Number((value / times).toFixed(2))
-  }
-  return value
-}
+import { getMode, getTargetElStyle, calculateValueByFontsize } from './utils'
 
 export interface DragBoxProps {
   workshop: Workshop
