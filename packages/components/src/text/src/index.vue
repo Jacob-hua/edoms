@@ -5,7 +5,7 @@
 <script lang="ts" setup name="edom-text">
 import { EdText } from '@edoms/meta-model'
 import { computed, reactive } from 'vue'
-import useApp from '@/useApp'
+import useApp from '../../useApp'
 
 interface Props {
   meta: EdText

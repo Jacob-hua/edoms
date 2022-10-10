@@ -10,7 +10,7 @@
 import { EdButton, EdText } from '@edoms/meta-model'
 import { computed, reactive } from 'vue'
 import { ActionEnum } from './config'
-import useApp from '@/useApp'
+import useApp from '../../useApp'
 
 interface Props {
   meta: EdButton
