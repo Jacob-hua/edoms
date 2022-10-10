@@ -1,4 +1,4 @@
-import { App, generateEventName } from '@edoms/engine'
+import { Engine, generateEventName } from '@edoms/engine'
 import { EdMeta, EdInstance, EdContextScope } from '@edoms/meta-model'
 import { inject, onMounted, onUnmounted } from 'vue'
 
@@ -7,7 +7,7 @@ export interface AppProps {
 }
 
 export default (props: AppProps) => {
-  const app: App | undefined = inject('app')
+  const app: Engine | undefined = inject('app')
   const component = app?.page?.getComponent(props.meta.id)
 
   const instance: EdInstance = {

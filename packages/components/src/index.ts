@@ -1,11 +1,10 @@
-import component from './component'
-import button from './button'
-import page from './page'
+import Button from './button'
+import Text from './text'
+import { App } from 'vue'
 
-const components = {
-  button,
-  page,
-  component,
+export default {
+  install: (app: App): void => {
+    app.component(Button.name, Button)
+    app.component(Text.name, Text)
+  },
 }
-
-export default components
