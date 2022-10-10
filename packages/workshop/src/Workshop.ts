@@ -138,7 +138,7 @@ class Workshop extends EventBus {
     return doc?.elementsFromPoint(x / zoom, y / zoom) as HTMLElement[]
   }
 
-  public setZoom(zoom: number = 9999) {
+  public setZoom(zoom: number = 1) {
     this.zoom = zoom
   }
 
