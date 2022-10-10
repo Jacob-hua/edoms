@@ -12,10 +12,13 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@edoms/utils': r('./packages/utils'),
-      '@edoms/components': r('./packages/components'),
-      '@edoms/attribute': r('./packages/attribute'),
-      '@edoms/editor': r('./packages/editor'),
+      '@edoms/utils': r('./packages/utils/src'),
+      '@edoms/components': r('./packages/components/src'),
+      '@edoms/attribute': r('./packages/attribute/src'),
+      '@edoms/editor': r('./packages/editor/src'),
+      '@edoms/meta-model': r('./packages/meta-model/src'),
+      '@edoms/workshop': r('./packages/workshop/src'),
+      '@edoms/engine': r('./packages/engine/src'),
     },
   },
 })
