@@ -1,3 +1,4 @@
+import { EdId } from '@edoms/meta-model'
 import { EventBus } from '@edoms/utils'
 import { MoveableOptions } from 'moveable'
 import DragBox from './DragBox'
@@ -28,6 +29,7 @@ class Workshop extends EventBus {
   public container?: HTMLDivElement
   public selectedDom: HTMLElement | undefined
   public selectedDomArray: HTMLElement[] | undefined
+  public highlightedDom: Element | undefined
   public renderer: Renderer
   public mask: Mask
   public dragBox: DragBox
@@ -78,12 +80,26 @@ class Workshop extends EventBus {
     })
 
     this.mask.on('changeGuides', (data: any) => {
+      this.dragBox.setGuidelines(data.type, data.guides)
       this.fire('changeGuides', data)
     })
 
-    this.mask.on('highlight', () => {})
+    this.mask.on('highlight', async (event: MouseEvent) => {
+      const element = await this.setElementFromPoint(event, 'mousemove')
+      if (!element) {
+        return
+      }
+      await this.highlight(element)
+      if (this.highlightedDom === this.selectedDom) {
+        this.highlightLayer.slake()
+        return
+      }
+      this.fire('highlight', this.highlightedDom)
+    })
 
-    this.mask.on('clearHighlight', () => {})
+    this.mask.on('clearHighlight', () => {
+      this.highlightLayer.slake()
+    })
 
     this.dragBox.on('update', (data: any) => {
       setTimeout(() => {
@@ -136,6 +152,21 @@ class Workshop extends EventBus {
       }
     }
     return doc?.elementsFromPoint(x / zoom, y / zoom) as HTMLElement[]
+  }
+
+  public async highlight(idOrEl: HTMLElement | EdId): Promise<void> {
+    let element
+    try {
+      element = await this.getTargetElement(idOrEl)
+    } catch (error) {
+      this.highlightLayer.slake()
+      return
+    }
+    if (element === this.highlightedDom || !element) {
+      return
+    }
+    this.highlightLayer.active(element)
+    this.highlightedDom = element
   }
 
   public setZoom(zoom: number = 1) {
