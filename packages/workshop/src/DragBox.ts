@@ -101,6 +101,15 @@ class DragBox extends EventBus {
     this.moveableOptions.verticalGuidelines = []
   }
 
+  public clearSelectStatus() {
+    if (!this.moveable) {
+      return
+    }
+    this.destroyDragElement()
+    this.moveable.target = null
+    this.moveable.destroy()
+  }
+
   public destroy(): void {
     this.moveable?.destroy()
     this.destroyDragElement()

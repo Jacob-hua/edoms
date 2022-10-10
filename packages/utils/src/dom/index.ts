@@ -112,3 +112,13 @@ export const injectStyle = (doc: Document, style: string): HTMLElement => {
   doc.head.appendChild(styleElement)
   return styleElement
 }
+
+export const getParents = (element: Element, relative: Element): Element[] => {
+  let current: Element | null = element.parentElement
+  const parents: Element[] = []
+  while (current && current !== relative) {
+    parents.push(current)
+    current = current.parentElement
+  }
+  return parents
+}

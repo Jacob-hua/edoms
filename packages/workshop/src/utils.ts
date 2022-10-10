@@ -1,4 +1,5 @@
 import { dom } from '@edoms/utils'
+import { removeClassName } from '@edoms/utils/src/dom'
 import { Mode, ZIndex } from './enum'
 
 export const createMaskContent = (): HTMLDivElement => {
@@ -48,4 +49,26 @@ export const calculateValueByFontsize = (doc: Document, value: number): number =
     return Number((value / times).toFixed(2))
   }
   return value
+}
+
+const SELECTED_CLASS = `.edoms-stage-selected-area`
+export const removeSelectedClassName = (doc: Document): void => {
+  const oldElement = doc.querySelector(SELECTED_CLASS)
+  if (oldElement) {
+    removeClassName(oldElement, SELECTED_CLASS)
+    if (oldElement.parentNode) {
+      removeClassName(oldElement.parentNode as Element, `${SELECTED_CLASS}-parent`)
+    }
+    doc.querySelectorAll(`.${SELECTED_CLASS}-parent`).forEach((element) => {
+      removeClassName(element, `${SELECTED_CLASS}-parent`)
+    })
+  }
+}
+
+export const addSelectedClassName = (element: Element, doc: Document): void => {
+  element.classList.add(SELECTED_CLASS)
+  ;(element.parentNode as Element)?.classList.add(`${SELECTED_CLASS}-parent`)
+  dom.getParents(element, doc.body).forEach((item) => {
+    item.classList.add(`${SELECTED_CLASS}-parents`)
+  })
 }

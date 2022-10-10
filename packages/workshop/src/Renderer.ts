@@ -20,7 +20,8 @@ interface DeleteData {
 
 interface Runtime {
   getEngine?: () => Engine
-  selete?: (id: EdId) => Promise<HTMLElement> | HTMLElement
+  beforeSelect?: (element: HTMLElement) => Promise<boolean> | boolean
+  select?: (id: EdId) => Promise<HTMLElement> | HTMLElement
   updateAppMeta?: (meta: EdApplication) => void
   updateCurrentPage?: (id: EdId) => void
   insert?: (data: InsertData) => void
