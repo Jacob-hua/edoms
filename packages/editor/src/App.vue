@@ -1,8 +1,11 @@
 <template>
   <header>ddddd</header>
+  <Workshop />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Workshop from './components/WorkshopView.vue'
+</script>
 
 <style scoped>
 header {
