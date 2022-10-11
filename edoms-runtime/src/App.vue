@@ -1,5 +1,5 @@
 <template>
-  <div>编辑器</div>
+  <div>运行时页面</div>
 </template>
 
 <script setup lang="ts"></script>
