@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@edoms/components": "workspace:^0.0.1",
+    "element-plus": "^2.2.15",
     "vue": "^3.2.37"
   },
   "devDependencies": {
