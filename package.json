@@ -6,6 +6,7 @@
   "scripts": {
     "bootstrap": "pnpm i",
     "designer": "pnpm --filter \"edoms-designer\" dev",
+    "playground": "pnpm --filter \"edoms-runtime\" --filter \"@edoms/editor\" dev",
     "build": "pnpm --filter \"edoms-designer\" build",
     "lint": "eslint . --ext .vue,.js,.ts",
     "lint:fix": "eslint . --ext .vue,.js,.ts --fix",
