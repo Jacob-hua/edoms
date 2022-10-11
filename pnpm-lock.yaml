@@ -72,6 +72,7 @@ importers:
       sass: ^1.54.8
       typescript: ~4.7.4
       vite: ^3.0.0
+      vite-plugin-vue-setup-extend: ^0.4.0
       vue: ^3.2.37
       vue-router: ^4.1.3
       vue-tsc: ^0.39.5
@@ -91,6 +92,7 @@ importers:
       sass: registry.npmmirror.com/sass/1.54.8
       typescript: registry.npmmirror.com/typescript/4.7.4
       vite: registry.npmmirror.com/vite/3.0.9_sass@1.54.8
+      vite-plugin-vue-setup-extend: registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0_vite@3.0.9
       vue-tsc: registry.npmmirror.com/vue-tsc/0.39.5_typescript@4.7.4
 
   edoms-runtime:
@@ -1184,7 +1186,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: registry.npmmirror.com/vite/3.0.9
+      vite: registry.npmmirror.com/vite/3.0.9_sass@1.54.8
       vue: registry.npmmirror.com/vue/3.2.37
     dev: true
 
@@ -5599,7 +5601,7 @@ packages:
     dependencies:
       '@vue/compiler-sfc': registry.npmmirror.com/@vue/compiler-sfc/3.2.39
       magic-string: registry.npmmirror.com/magic-string/0.25.9
-      vite: registry.npmmirror.com/vite/3.0.9
+      vite: registry.npmmirror.com/vite/3.0.9_sass@1.54.8
     dev: true
 
   registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0_vite@3.1.3:
