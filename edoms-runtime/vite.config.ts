@@ -4,30 +4,23 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
-  const { VITE_WATCH_INCLUDE = '', VITE_BASE, VITE_OUT_DIR } = loadEnv(mode, process.cwd(), '')
-
-  const htmlInput = {
-    page: './index.html',
-  }
+  const { VITE_BASE, VITE_OUT_DIR, VITE_WATCH_INCLUDE = '' } = loadEnv(mode, process.cwd(), '')
 
   const buildConfig = {
-    outDir: VITE_OUT_DIR,
+    outDir: VITE_OUT_DIR || 'dist',
     sourcemap: true,
     cssCodeSplit: false,
     rollupOptions: {
-      input:
-        command === 'build' && mode !== 'dev'
-          ? {
-              ...htmlInput,
-            }
-          : htmlInput,
+      input: {
+        value: './src/value-entry.ts',
+      },
       output: {
         entryFileNames: 'assets/[name].js',
       },
     },
   }
 
-  if (mode === 'dev') {
+  if (mode === 'lib') {
     return {
       build: {
         ...buildConfig,
@@ -39,8 +32,9 @@ export default defineConfig(({ command, mode }) => {
   }
 
   return {
-    base: VITE_BASE,
+    base: VITE_BASE || '/edoms/playground/runtime/',
     plugins: [vue(), vueSetupExtend()],
+    publicDir: command === 'serve' ? 'dist' : 'public',
     server: {
       host: '0.0.0.0',
     },

@@ -98,6 +98,7 @@ importers:
   edoms-runtime:
     specifiers:
       '@edoms/components': workspace:^0.0.1
+      '@edoms/meta-model': workspace:^0.0.1
       '@vitejs/plugin-vue': ^3.0.1
       element-plus: ^2.2.15
       typescript: ~4.7.4
@@ -107,6 +108,7 @@ importers:
       vue-tsc: ^0.39.5
     dependencies:
       '@edoms/components': link:../packages/components
+      '@edoms/meta-model': link:../packages/meta-model
       element-plus: registry.npmmirror.com/element-plus/2.2.15_vue@3.2.37
       vue: registry.npmmirror.com/vue/3.2.37
     devDependencies:
