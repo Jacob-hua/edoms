@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "npm run build:lib & npm run dev:lib",
-    "dev:lib": "vite --mode lib --port 8001",
+    "dev": "npm run build:lib & npm run dev:html",
+    "dev:html": "vite --port 8001",
     "build": "vue-tsc --noEmit && vite build",
     "build:lib": "vue-tsc --noEmit && vite build --mode lib",
     "preview": "vite preview"
