@@ -169,6 +169,13 @@ class Workshop extends EventBus {
     this.highlightedDom = element
   }
 
+  public async mount(element: HTMLDivElement) {
+    this.container = element
+    await this.renderer.mount(element)
+    this.mask.mount(element)
+    this.fire('mounted')
+  }
+
   public setZoom(zoom: number = 1) {
     this.zoom = zoom
   }
