@@ -97,17 +97,29 @@ importers:
 
   edoms-playground:
     specifiers:
+      '@edoms/editor': workspace:^0.0.1
+      '@edoms/meta-model': workspace:^0.0.1
+      '@edoms/utils': workspace:^0.0.1
+      '@edoms/workshop': workspace:^0.0.1
       '@vitejs/plugin-vue': ^3.1.0
+      element-plus: ^2.2.15
       typescript: ^4.6.4
       vite: ^3.1.0
+      vite-plugin-vue-setup-extend: ^0.4.0
       vue: ^3.2.37
       vue-tsc: ^0.40.4
     dependencies:
+      '@edoms/editor': link:../packages/editor
+      '@edoms/meta-model': link:../packages/meta-model
+      '@edoms/utils': link:../packages/utils
+      '@edoms/workshop': link:../packages/workshop
+      element-plus: registry.npmmirror.com/element-plus/2.2.15_vue@3.2.37
       vue: registry.npmmirror.com/vue/3.2.37
     devDependencies:
       '@vitejs/plugin-vue': registry.npmmirror.com/@vitejs/plugin-vue/3.1.0_vite@3.1.3+vue@3.2.37
       typescript: registry.npmmirror.com/typescript/4.7.4
       vite: registry.npmmirror.com/vite/3.1.3
+      vite-plugin-vue-setup-extend: registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0_vite@3.1.3
       vue-tsc: registry.npmmirror.com/vue-tsc/0.40.13_typescript@4.7.4
 
   edoms-runtime:

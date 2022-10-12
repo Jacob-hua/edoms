@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "bootstrap": "pnpm i",
+    "bootstrap": "pnpm i && pnpm build",
     "designer": "pnpm --filter \"edoms-designer\" dev",
     "playground": "pnpm --filter \"edoms-runtime\" --filter \"edoms-playground\" dev",
-    "build": "pnpm --filter \"edoms-designer\" build",
+    "build": "pnpm --filter \"edoms-designer\" --filter \"@edoms/*\" build",
     "lint": "eslint . --ext .vue,.js,.ts",
     "lint:fix": "eslint . --ext .vue,.js,.ts --fix",
     "format": "prettier --write ./**/*.{vue,ts,js,scss,css,json,md}",

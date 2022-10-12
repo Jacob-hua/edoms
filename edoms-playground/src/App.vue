@@ -1,5 +1,6 @@
 <template>
   <div>演练场</div>
+  <edoms-editor />
 </template>
 
 <script setup lang="ts"></script>
