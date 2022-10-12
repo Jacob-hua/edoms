@@ -86,7 +86,7 @@ module.exports = defineConfig({
     'vue/no-undef-properties': ['error', { ignores: ['/^\\$/'] }], // 检查未定义的属性
     'vue/no-unused-properties': ['error', { groups: ['props', 'data'] }], // 检查未使用的属性
     'vue/require-expose': ['error'], // 组件向外暴漏的属性或方法必须使用expose声明
-    'vue/multi-word-component-names': ['error', { ignores: ['index'] }], // vue组件名必须是多个单词
+    'vue/multi-word-component-names': ['error', { ignores: ['index', 'Editor', 'Workshop'] }], // vue组件名必须是多个单词
 
     'prettier/prettier': [
       'error',
