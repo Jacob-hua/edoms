@@ -1,11 +1,7 @@
 import { EdComponent, EdContainer, EdPage } from '@edoms/meta-model'
 import App from './App'
 import Component from './Component'
-
-interface PageProps {
-  meta: EdPage
-  app: App
-}
+import { PageProps } from './type'
 
 class Page extends Component {
   public components = new Map<string, Component>()
@@ -24,8 +20,8 @@ class Page extends Component {
    * init方法会将Page所有的组件都在page中打平后以ID为key记录到map中
    */
   public init(): void {
-    const initComponent = (datas: Array<EdComponent | EdContainer>, parent: Component) => {
-      datas.forEach((meta: EdComponent | EdContainer) => {
+    const initComponent = (data: Array<EdComponent | EdContainer>, parent: Component) => {
+      data.forEach((meta: EdComponent | EdContainer) => {
         const component = new Component({
           meta,
           parent,

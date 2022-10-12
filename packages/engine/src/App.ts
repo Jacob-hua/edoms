@@ -1,21 +1,8 @@
-import { EdAction, EdApplication, EdInstance } from '@edoms/meta-model'
+import { EdAction, EdApplication } from '@edoms/meta-model'
 import { EventBus, object } from '@edoms/utils'
 import Page from './Page'
 import { generateEffectProps, generateEventName } from './utils'
-
-interface AppProps {
-  meta?: EdApplication
-  curPage?: string
-}
-
-type FromInstance = EdInstance | null | undefined
-
-interface ActionCache {
-  action: EdAction
-  fromId: string
-  fromInstance: FromInstance
-  args: any
-}
+import { ActionCache, AppProps, FromInstance } from './type'
 
 class App extends EventBus {
   public pages = new Map<string, Page>()

@@ -27,7 +27,7 @@ export interface EdAction {
 export interface EdRequest {
   url: string
   method: RequestMethod
-  heade: {
+  header: {
     [key: string]: any
     ['Content-Type']: ContentType
   }

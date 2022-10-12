@@ -2,13 +2,7 @@ import { EdAction, EdComponent, EdContainer, EdInstance, EdPage } from '@edoms/m
 import { EventBus, object } from '@edoms/utils'
 import App from './App'
 import Page from './Page'
-
-interface ComponentProps {
-  app: App
-  meta: EdComponent | EdContainer
-  parent?: Component
-  page?: Page
-}
+import { ComponentProps } from './type'
 
 class Component extends EventBus {
   public data: EdComponent | EdContainer | EdPage
