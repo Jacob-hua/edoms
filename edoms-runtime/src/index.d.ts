@@ -1,8 +1,8 @@
-import { EdApplication } from '@edoms/meta-model'
+import { EdApplication } from '@edoms/meta-model';
 
 declare global {
   interface Window {
-    edomsMeta: EdApplication[]
-    edomsPresetValues: any
+    edomsMeta: EdApplication[];
+    edomsPresetValues: any;
   }
 }

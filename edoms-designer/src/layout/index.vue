@@ -12,12 +12,12 @@
 <script lang="ts">
 export default {
   name: 'LayoutView',
-}
+};
 </script>
 
 <script lang="ts" setup>
-import { RouterView } from 'vue-router'
-import BaseLayout from './BaseLayout.vue'
+import { RouterView } from 'vue-router';
+import BaseLayout from './BaseLayout.vue';
 </script>
 
 <style lang="scss" scoped>

@@ -1,19 +1,19 @@
-import { EdComponent, EdContainer, EdPage } from '@edoms/meta-model'
-import App from './App'
-import Component from './Component'
-import { PageProps } from './type'
+import { EdComponent, EdContainer, EdPage } from '@edoms/meta-model';
+import App from './App';
+import Component from './Component';
+import { PageProps } from './type';
 
 class Page extends Component {
-  public components = new Map<string, Component>()
-  public data: EdPage
-  public app: App
+  public components = new Map<string, Component>();
+  public data: EdPage;
+  public app: App;
 
   constructor(props: PageProps) {
-    super(props)
+    super(props);
 
-    this.data = props.meta
-    this.app = props.app
-    this.init()
+    this.data = props.meta;
+    this.app = props.app;
+    this.init();
   }
 
   /**
@@ -27,28 +27,28 @@ class Page extends Component {
           parent,
           app: this.app,
           page: this,
-        })
+        });
 
-        this.setComponent(meta.id, component)
+        this.setComponent(meta.id, component);
 
-        meta.children && initComponent(meta.children, component)
-      })
-    }
+        meta.children && initComponent(meta.children, component);
+      });
+    };
 
-    initComponent(this.data.children, this)
+    initComponent(this.data.children, this);
   }
 
   public setComponent(id: string, component: Component): void {
-    this.components.set(id, component)
+    this.components.set(id, component);
   }
 
   public getComponent(id: string): Component | undefined {
-    return this.components.get(id)
+    return this.components.get(id);
   }
 
   public deleteComponent(id: string): void {
-    this.components.delete(id)
+    this.components.delete(id);
   }
 }
 
-export default Page
+export default Page;

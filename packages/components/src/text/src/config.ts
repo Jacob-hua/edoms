@@ -1,4 +1,4 @@
-import { LinkageDefine } from '@edoms/meta-model'
+import { LinkageDefine } from '@edoms/meta-model';
 
 export enum ActionEnum {}
 
@@ -34,4 +34,4 @@ export const linkageDefine: LinkageDefine = {
       ],
     },
   ],
-}
+};

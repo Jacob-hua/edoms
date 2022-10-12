@@ -7,14 +7,14 @@
 </template>
 
 <script lang="ts" setup name="LongText">
-import { EffectType, PlacementType } from '@/components/type'
+import { EffectType, PlacementType } from '@/components/type';
 withDefaults(
   defineProps<{
-    effect?: EffectType
-    content: string
-    contentStyle?: Record<string, any>
-    linesClamp?: number
-    placement?: PlacementType
+    effect?: EffectType;
+    content: string;
+    contentStyle?: Record<string, any>;
+    linesClamp?: number;
+    placement?: PlacementType;
   }>(),
   {
     contentStyle: () => ({ width: '96px', color: '', fontSize: '16px' }),
@@ -22,7 +22,7 @@ withDefaults(
     linesClamp: () => 1,
     placement: () => 'top',
   }
-)
+);
 </script>
 
 <style lang="scss">

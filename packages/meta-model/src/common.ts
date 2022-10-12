@@ -1,95 +1,95 @@
-import { ContentType, RequestMethod } from '@edoms/utils'
-import { EdActionPropType, EdContextScope } from './enum'
+import { ContentType, RequestMethod } from '@edoms/utils';
+import { EdActionPropType, EdContextScope } from './enum';
 
-export type EdComponentType = string | 'container' | 'page' | 'app'
+export type EdComponentType = string | 'container' | 'page' | 'app';
 
-export type EdId = string
+export type EdId = string;
 
 export interface EdStyle {
-  width?: string
-  height?: string
-  [key: string]: any
+  width?: string;
+  height?: string;
+  [key: string]: any;
 }
 
 export interface EdActionProp {
-  argument: string
-  type: EdActionPropType
-  source: string
+  argument: string;
+  type: EdActionPropType;
+  source: string;
 }
 
 export interface EdAction {
-  name: string
-  target: string
-  effect: string
-  props?: EdActionProp[]
+  name: string;
+  target: string;
+  effect: string;
+  props?: EdActionProp[];
 }
 
 export interface EdRequest {
-  url: string
-  method: RequestMethod
+  url: string;
+  method: RequestMethod;
   header: {
-    [key: string]: any
-    ['Content-Type']: ContentType
-  }
-  data: EdActionProp[]
+    [key: string]: any;
+    ['Content-Type']: ContentType;
+  };
+  data: EdActionProp[];
 }
 
 export interface EdComponent {
-  id: EdId
-  type: EdComponentType
-  name?: string
-  disabled?: boolean
-  style?: EdStyle
-  actions?: EdAction[]
-  [key: string]: any
+  id: EdId;
+  type: EdComponentType;
+  name?: string;
+  disabled?: boolean;
+  style?: EdStyle;
+  actions?: EdAction[];
+  [key: string]: any;
 }
 
 export interface EdContainer extends EdComponent {
-  type: 'container' | string
-  children: (EdComponent | EdContainer)[]
+  type: 'container' | string;
+  children: (EdComponent | EdContainer)[];
 }
 
 export interface EdPage extends EdContainer {
-  type: 'page'
+  type: 'page';
 }
 
 export interface EdApplication extends EdComponent {
-  type: 'app'
-  pages: EdPage[]
+  type: 'app';
+  pages: EdPage[];
 }
 
-export type EdMeta = EdComponent | EdContainer | EdPage | EdApplication
+export type EdMeta = EdComponent | EdContainer | EdPage | EdApplication;
 
 export interface Parameter {
-  name: string
-  label: string
+  name: string;
+  label: string;
 }
 
 export interface ActionProps {
-  label: string
-  value: string
-  returns?: Parameter[]
+  label: string;
+  value: string;
+  returns?: Parameter[];
 }
 
 export interface EffectProps {
-  label: string
-  value: string
-  arguments?: Parameter[]
+  label: string;
+  value: string;
+  arguments?: Parameter[];
 }
 
 export interface LinkageDefine {
-  actionProps: ActionProps[]
-  effectProps: EffectProps[]
+  actionProps: ActionProps[];
+  effectProps: EffectProps[];
 }
 
 export type Context = {
-  [key in EdContextScope]: Record<string | number | symbol, any>
-}
+  [key in EdContextScope]: Record<string | number | symbol, any>;
+};
 
 export interface EdInstance {
-  effects: Record<string, Function>
+  effects: Record<string, Function>;
   config: {
-    linkageDefine: LinkageDefine
-    context: Context
-  }
+    linkageDefine: LinkageDefine;
+    context: Context;
+  };
 }

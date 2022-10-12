@@ -1,62 +1,62 @@
-import hat from 'hat'
+import hat from 'hat';
 
 export interface IdsProps {
-  bits?: number
-  base?: number
-  expandBy?: number
+  bits?: number;
+  base?: number;
+  expandBy?: number;
 }
 
 class Ids {
-  private bits?: number
-  private base?: number
-  private expandBy?: number
+  private bits?: number;
+  private base?: number;
+  private expandBy?: number;
 
-  private seed: any
+  private seed: any;
 
   constructor(props?: IdsProps) {
     if (props) {
-      props.bits && (this.bits = props.bits)
-      props.base && (this.base = props.base)
-      props.expandBy && (this.expandBy = props.expandBy)
+      props.bits && (this.bits = props.bits);
+      props.base && (this.base = props.base);
+      props.expandBy && (this.expandBy = props.expandBy);
     }
-    this.seed = hat.rack(this.bits, this.base, this.expandBy)
+    this.seed = hat.rack(this.bits, this.base, this.expandBy);
   }
 
   public next(element?: Record<any, any>): string {
-    return this.seed(element || true)
+    return this.seed(element || true);
   }
 
   public assigned(id: string): boolean {
-    return this.seed.get(id) || false
+    return this.seed.get(id) || false;
   }
 
   public claim(id: string, element?: Record<any, any>) {
-    this.seed.set(id, element)
+    this.seed.set(id, element);
   }
 
   public unclaim(id: string) {
-    this.seed.hats[id]
+    this.seed.hats[id];
   }
 
   public nextPrefixed(prefix: string, element?: Record<any, any>): string {
-    let id
+    let id;
 
     do {
-      id = prefix + this.next()
-    } while (this.assigned(id))
+      id = prefix + this.next();
+    } while (this.assigned(id));
 
     // claim {prefix}{random}
-    this.claim(id, element)
+    this.claim(id, element);
 
     // return
-    return id
+    return id;
   }
 
   public clear() {
     for (const id in this.seed.hats) {
-      this.unclaim(id)
+      this.unclaim(id);
     }
   }
 }
 
-export default Ids
+export default Ids;

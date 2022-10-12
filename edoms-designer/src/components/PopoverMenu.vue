@@ -17,15 +17,15 @@
 </template>
 
 <script lang="ts" setup name="PopoverMenu">
-import { Menu } from './type'
+import { Menu } from './type';
 withDefaults(
   defineProps<{
-    menus: Array<Menu>
+    menus: Array<Menu>;
   }>(),
   {
     menus: () => [],
   }
-)
+);
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
-export * from './common'
+export * from './common';
 
-export * from './enum'
+export * from './enum';
 
-export * from './text'
+export * from './text';
 
-export * from './button'
+export * from './button';

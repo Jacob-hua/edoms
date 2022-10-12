@@ -1,33 +1,33 @@
-import { EventBus } from '@edoms/utils'
-import DragBox from './DragBox'
-import { Mode } from './enum'
-import Mask from './Mask'
-import { getMode } from './utils'
-import Workshop from './WorkShop'
-import { TargetCalibrateProps, Offset } from './type'
+import { EventBus } from '@edoms/utils';
+import DragBox from './DragBox';
+import { Mode } from './enum';
+import Mask from './Mask';
+import { getMode } from './utils';
+import Workshop from './WorkShop';
+import { TargetCalibrateProps, Offset } from './type';
 
 class TargetCalibrate extends EventBus {
-  public parentElement: HTMLElement
-  public mask: Mask
-  public dragBox: DragBox
-  public workshop: Workshop
-  public operationElement: HTMLDivElement
+  public parentElement: HTMLElement;
+  public mask: Mask;
+  public dragBox: DragBox;
+  public workshop: Workshop;
+  public operationElement: HTMLDivElement;
 
   constructor(props: TargetCalibrateProps) {
-    super()
+    super();
 
-    this.parentElement = props.parentElement
-    this.mask = props.mask
-    this.dragBox = props.dragBox
-    this.workshop = props.workshop
+    this.parentElement = props.parentElement;
+    this.mask = props.mask;
+    this.dragBox = props.dragBox;
+    this.workshop = props.workshop;
 
-    this.operationElement = document.createElement('div')
-    this.parentElement.append(this.operationElement)
+    this.operationElement = document.createElement('div');
+    this.parentElement.append(this.operationElement);
   }
 
   public update(element: HTMLElement, prefix: string): HTMLElement {
-    const { left, top } = this.getOffset(element)
-    const { transform } = getComputedStyle(element)
+    const { left, top } = this.getOffset(element);
+    const { transform } = getComputedStyle(element);
     this.operationElement.style.cssText = `
       position: absolute;
       transform: ${transform};
@@ -35,29 +35,29 @@ class TargetCalibrate extends EventBus {
       top: ${top}px;
       width: ${element.clientWidth}px;
       height: ${element.clientHeight}px;
-    `
-    this.operationElement.id = `${prefix}_${element.id}`
+    `;
+    this.operationElement.id = `${prefix}_${element.id}`;
     if (typeof this.workshop.config.updateDragElement === 'function') {
-      this.workshop.config.updateDragElement(this.operationElement, element)
+      this.workshop.config.updateDragElement(this.operationElement, element);
     }
-    return this.operationElement
+    return this.operationElement;
   }
 
   public destroy() {
-    this.operationElement.remove()
+    this.operationElement.remove();
   }
 
   private getOffset(element: HTMLElement): Offset {
-    const left = element.offsetLeft
-    const top = element.offsetTop
+    const left = element.offsetLeft;
+    const top = element.offsetTop;
 
-    const { offsetParent } = element
+    const { offsetParent } = element;
     if (offsetParent) {
-      const parentOffset = this.getOffset(offsetParent as HTMLElement)
+      const parentOffset = this.getOffset(offsetParent as HTMLElement);
       return {
         left: left + parentOffset.left,
         top: top + parentOffset.top,
-      }
+      };
     }
 
     if (this.dragBox.mode === Mode.FIXED) {
@@ -65,24 +65,24 @@ class TargetCalibrate extends EventBus {
         return {
           left,
           top,
-        }
+        };
       }
       return {
         left: left - this.mask.scrollLeft,
         top: top - this.mask.scrollTop,
-      }
+      };
     }
     if (getMode(element) === Mode.FIXED) {
       return {
         left: left + this.mask.scrollLeft,
         top: top + this.mask.scrollTop,
-      }
+      };
     }
     return {
       left,
       top,
-    }
+    };
   }
 }
 
-export default TargetCalibrate
+export default TargetCalibrate;

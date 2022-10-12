@@ -1,5 +1,5 @@
-import Button from './src/index.vue'
+import Button from './src/index.vue';
 
-export * from './src/config'
+export * from './src/config';
 
-export default Button
+export default Button;

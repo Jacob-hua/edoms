@@ -3,43 +3,43 @@
 </template>
 
 <script lang="ts" setup name="edom-text">
-import { EdText } from '@edoms/meta-model'
-import { computed, reactive } from 'vue'
-import useApp from '../../useApp'
+import { EdText } from '@edoms/meta-model';
+import { computed, reactive } from 'vue';
+import useApp from '../../useApp';
 
 interface Props {
-  meta: EdText
+  meta: EdText;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const meta: EdText = reactive(props.meta)
+const meta: EdText = reactive(props.meta);
 
 const displayText = computed(() => {
-  let displayText = meta.text ?? ''
+  let displayText = meta.text ?? '';
   if (meta.disabled && meta?.disabledText) {
-    displayText = meta.disabledText
+    displayText = meta.disabledText;
   }
-  return displayText
-})
+  return displayText;
+});
 
-const app = useApp(props)
+const app = useApp(props);
 
 app.provideEffect('disabled', () => {
-  meta.disabled = true
-})
+  meta.disabled = true;
+});
 
 app.provideEffect('enabled', () => {
-  meta.disabled = false
-})
+  meta.disabled = false;
+});
 
 app.provideEffect('updateText', ({ text, disabledText }: { text: any; disabledText: any }) => {
-  meta.text = text
-  meta.disabledText = disabledText
-})
+  meta.text = text;
+  meta.disabledText = disabledText;
+});
 
 setTimeout(() => {
-  app.provideContext('testText1', displayText, ['component', 'application', 'page'])
-})
-app.provideContext('testText', displayText, ['component', 'application'])
+  app.provideContext('testText1', displayText, ['component', 'application', 'page']);
+});
+app.provideContext('testText', displayText, ['component', 'application']);
 </script>

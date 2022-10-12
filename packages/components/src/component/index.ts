@@ -1,3 +1,3 @@
-import Component from './src/index.vue'
+import Component from './src/index.vue';
 
-export default Component
+export default Component;

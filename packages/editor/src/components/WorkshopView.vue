@@ -3,19 +3,19 @@
 </template>
 
 <script lang="ts" setup name="WorkshopView">
-import { ref, watchEffect } from 'vue'
-import Workshop from '@edoms/workshop'
+import { ref, watchEffect } from 'vue';
+import Workshop from '@edoms/workshop';
 
-const workshopContainer = ref<HTMLDivElement>()
+const workshopContainer = ref<HTMLDivElement>();
 
-let workshop: Workshop | null = null
+let workshop: Workshop | null = null;
 
 watchEffect(() => {
   if (workshop) {
-    return
+    return;
   }
   if (!workshopContainer.value) {
-    return
+    return;
   }
   workshop = new Workshop({
     runtimeUrl: ' http://localhost:8001/edoms/playground/runtime/playground.html',
@@ -26,7 +26,7 @@ watchEffect(() => {
       duration: 800,
     },
     isContainer: (element: HTMLElement) => element.classList.contains('edoms-ui-container'),
-  })
-  workshop.mount(workshopContainer.value)
-})
+  });
+  workshop.mount(workshopContainer.value);
+});
 </script>

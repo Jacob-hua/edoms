@@ -1,4 +1,4 @@
-const { defineConfig } = require('eslint-define-config')
+const { defineConfig } = require('eslint-define-config');
 
 module.exports = defineConfig({
   root: true,
@@ -93,7 +93,7 @@ module.exports = defineConfig({
       {
         singleQuote: true,
         trailingComma: 'es5',
-        semi: false,
+        semi: true,
         arrowParens: 'always',
         bracketSpacing: true,
         printWidth: 120,
@@ -105,4 +105,4 @@ module.exports = defineConfig({
       },
     ],
   },
-})
+});

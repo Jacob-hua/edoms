@@ -28,11 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import GridGroup from '@/components/GridGroup.vue'
-import LongText from '@/components/LongText.vue'
-import { useApplication } from '@/views/application/useApplication'
+import GridGroup from '@/components/GridGroup.vue';
+import LongText from '@/components/LongText.vue';
+import { useApplication } from '@/views/application/useApplication';
 
-const { panelMenuList, listData, loadMore, add } = useApplication()
+const { panelMenuList, listData, loadMore, add } = useApplication();
 </script>
 
 <style lang="scss" scoped>

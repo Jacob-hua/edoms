@@ -5,7 +5,7 @@ import {
   NavigationGuardNext,
   RouteLocationNormalized,
   RouteRecordRaw,
-} from 'vue-router'
+} from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -43,18 +43,18 @@ const routes: RouteRecordRaw[] = [
       title: '404',
     },
   },
-]
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
   // history: createWebHashHistory(),
   routes,
-})
+});
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  console.log(to.path)
-  console.log(from.path)
-  next()
-})
+  console.log(to.path);
+  console.log(from.path);
+  next();
+});
 
-export default router
+export default router;

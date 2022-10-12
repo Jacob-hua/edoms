@@ -26,16 +26,16 @@
 </template>
 
 <script lang="ts" setup name="GridGroup">
-import LongText from '@/components/LongText.vue'
-import GridView from './GridView.vue'
-import { GridViewMenu, Space, TileProps } from './type'
+import LongText from '@/components/LongText.vue';
+import GridView from './GridView.vue';
+import { GridViewMenu, Space, TileProps } from './type';
 const props = withDefaults(
   defineProps<{
-    titleProps?: TileProps
-    menus?: GridViewMenu<any>[]
-    data?: any[]
-    height?: string
-    spacing?: Space
+    titleProps?: TileProps;
+    menus?: GridViewMenu<any>[];
+    data?: any[];
+    height?: string;
+    spacing?: Space;
   }>(),
   {
     titleProps: () => ({
@@ -56,18 +56,18 @@ const props = withDefaults(
       vertical: '20px',
     }),
   }
-)
+);
 const emit = defineEmits<{
-  (event: 'loadMore', data: Array<any>): void
-  (event: 'add'): void
-}>()
+  (event: 'loadMore', data: Array<any>): void;
+  (event: 'add'): void;
+}>();
 const loadMore = () => {
-  emit('loadMore', props.data)
-}
+  emit('loadMore', props.data);
+};
 
 const add = () => {
-  emit('add')
-}
+  emit('add');
+};
 </script>
 
 <style scoped lang="scss">

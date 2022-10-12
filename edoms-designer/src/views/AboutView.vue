@@ -7,11 +7,11 @@
 </template>
 
 <script lang="ts" setup name="AboutView">
-import { listApplications } from '@/api/application'
-import { listPages } from '@/api/page'
-import { ref } from 'vue'
+import { listApplications } from '@/api/application';
+import { listPages } from '@/api/page';
+import { ref } from 'vue';
 
-const result = ref({})
+const result = ref({});
 
 const onClick = () => {
   listApplications({
@@ -19,23 +19,23 @@ const onClick = () => {
     limit: 10,
   })
     .then((res) => {
-      result.value = res
+      result.value = res;
     })
     .catch((err) => {
-      result.value = err
-    })
+      result.value = err;
+    });
   listPages({
     page: 1,
     limit: 10,
     applicationId: '11',
   })
     .then((res) => {
-      console.log(res)
+      console.log(res);
     })
     .catch((err) => {
-      console.log(err)
-    })
-}
+      console.log(err);
+    });
+};
 </script>
 
 <style>

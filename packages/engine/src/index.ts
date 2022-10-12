@@ -1,3 +1,3 @@
-export { default as Engine } from './App'
+export { default as Engine } from './App';
 
-export * from './utils'
+export * from './utils';

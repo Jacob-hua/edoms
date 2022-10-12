@@ -8,7 +8,7 @@ const style1 = {
   width: '100px',
   height: '200px',
   'background-color': 'red',
-}
+};
 </script>
 
 <style scoped></style>

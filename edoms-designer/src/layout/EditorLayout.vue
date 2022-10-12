@@ -7,9 +7,9 @@
 <script lang="ts">
 export default {
   name: 'EditorLayout',
-}
+};
 </script>
 
 <script lang="ts" setup>
-import BaseLayout from './BaseLayout.vue'
+import BaseLayout from './BaseLayout.vue';
 </script>

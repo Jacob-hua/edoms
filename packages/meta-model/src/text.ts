@@ -1,6 +1,6 @@
-import { EdComponent } from './common'
+import { EdComponent } from './common';
 
 export interface EdText extends EdComponent {
-  text?: string
-  disabledText?: string
+  text?: string;
+  disabledText?: string;
 }

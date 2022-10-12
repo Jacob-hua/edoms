@@ -28,17 +28,17 @@
 </template>
 
 <script lang="ts" name="GridView" setup>
-import { computed, ref } from 'vue'
-import { GridViewMenu, Space, TileProps } from './type'
-import LongText from '@/components/LongText.vue'
-import PopoverMenu from './PopoverMenu.vue'
+import { computed, ref } from 'vue';
+import { GridViewMenu, Space, TileProps } from './type';
+import LongText from '@/components/LongText.vue';
+import PopoverMenu from './PopoverMenu.vue';
 const props = withDefaults(
   defineProps<{
-    titleProps?: TileProps
-    menus?: GridViewMenu<any>[]
-    data?: any[]
-    height?: string
-    spacing?: Space
+    titleProps?: TileProps;
+    menus?: GridViewMenu<any>[];
+    data?: any[];
+    height?: string;
+    spacing?: Space;
   }>(),
   {
     titleProps: () => ({
@@ -59,12 +59,12 @@ const props = withDefaults(
       vertical: '20px',
     }),
   }
-)
-const emit = defineEmits(['loadMore'])
-const disabled = ref<boolean>(false)
+);
+const emit = defineEmits(['loadMore']);
+const disabled = ref<boolean>(false);
 const load = () => {
-  emit('loadMore', props.data)
-}
+  emit('loadMore', props.data);
+};
 const gridData = computed(() => {
   return props.data.map((item: any) => {
     return {
@@ -73,13 +73,13 @@ const gridData = computed(() => {
         return {
           ...menu,
           action: () => {
-            menu.action(item)
+            menu.action(item);
           },
-        }
+        };
       }),
-    }
-  })
-})
+    };
+  });
+});
 </script>
 
 <style lang="scss" scoped>

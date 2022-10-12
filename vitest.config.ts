@@ -1,8 +1,8 @@
-import { resolve } from 'path'
-import { defineConfig } from 'vitest/config'
-import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path';
+import { defineConfig } from 'vitest/config';
+import vue from '@vitejs/plugin-vue';
 
-const r = (p: string) => resolve(__dirname, p)
+const r = (p: string) => resolve(__dirname, p);
 
 export default defineConfig({
   plugins: [vue()],
@@ -21,4 +21,4 @@ export default defineConfig({
       '@edoms/engine': r('./packages/engine/src'),
     },
   },
-})
+});

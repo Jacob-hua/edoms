@@ -1,4 +1,4 @@
-import { LinkageDefine } from '@edoms/meta-model'
+import { LinkageDefine } from '@edoms/meta-model';
 
 export enum ActionEnum {
   CLICK = 'edoms:action:click',
@@ -26,4 +26,4 @@ export const linkageDefine: LinkageDefine = {
       value: EffectEnum.ENABLED,
     },
   ],
-}
+};

@@ -4,4 +4,4 @@ export enum EdActionPropType {
   ACTION = 'action',
 }
 
-export type EdContextScope = 'application' | 'page' | 'component'
+export type EdContextScope = 'application' | 'page' | 'component';

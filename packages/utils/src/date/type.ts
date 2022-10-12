@@ -1,17 +1,17 @@
-import { Dayjs } from 'dayjs'
+import { Dayjs } from 'dayjs';
 
 export interface TimeRange {
-  start: Dayjs
-  end: Dayjs
+  start: Dayjs;
+  end: Dayjs;
 }
 
 export interface FormatDateRange {
-  start: string
-  end: string
+  start: string;
+  end: string;
 }
 
 export interface DateRange {
-  start: Date | number
-  end: Date | number
-  isTimestamp?: boolean
+  start: Date | number;
+  end: Date | number;
+  isTimestamp?: boolean;
 }

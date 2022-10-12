@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import Workshop from './components/WorkshopView.vue'
+import Workshop from './components/WorkshopView.vue';
 </script>
 
 <style scoped>

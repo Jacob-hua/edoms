@@ -7,18 +7,18 @@
 </template>
 
 <script lang="ts" setup name="edom-button">
-import { EdButton, EdText } from '@edoms/meta-model'
-import { computed, reactive } from 'vue'
-import { ActionEnum } from './config'
-import useApp from '../../useApp'
+import { EdButton, EdText } from '@edoms/meta-model';
+import { computed, reactive } from 'vue';
+import { ActionEnum } from './config';
+import useApp from '../../useApp';
 
 interface Props {
-  meta: EdButton
+  meta: EdButton;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const meta: EdButton = reactive(props.meta)
+const meta: EdButton = reactive(props.meta);
 
 const textMeta = computed<EdText>(() => ({
   id: '',
@@ -26,11 +26,11 @@ const textMeta = computed<EdText>(() => ({
   text: meta.text,
   disabledText: meta.disabledText,
   disabled: meta.disabled,
-}))
+}));
 
-const app = useApp(props)
+const app = useApp(props);
 
 const onClickButton = () => {
-  app?.fire(ActionEnum.CLICK, 333)
-}
+  app?.fire(ActionEnum.CLICK, 333);
+};
 </script>

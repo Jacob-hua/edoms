@@ -1,5 +1,5 @@
-import Text from './src/index.vue'
+import Text from './src/index.vue';
 
-export * from './src/config'
+export * from './src/config';
 
-export default Text
+export default Text;

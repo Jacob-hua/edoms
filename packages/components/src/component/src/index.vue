@@ -3,17 +3,17 @@
 </template>
 
 <script lang="ts" setup name="edom-component">
-import { EdMeta } from '@edoms/meta-model'
-import { computed, reactive } from 'vue'
+import { EdMeta } from '@edoms/meta-model';
+import { computed, reactive } from 'vue';
 
 interface Props {
-  meta: EdMeta
+  meta: EdMeta;
 }
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const meta: EdMeta = reactive(props.meta)
+const meta: EdMeta = reactive(props.meta);
 
-const tagName = computed(() => `edom-${meta.type}`)
+const tagName = computed(() => `edom-${meta.type}`);
 
-const style = computed(() => meta.style)
+const style = computed(() => meta.style);
 </script>
