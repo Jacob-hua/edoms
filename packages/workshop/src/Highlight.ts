@@ -2,11 +2,7 @@ import { EventBus } from '@edoms/utils'
 import Moveable from 'moveable'
 import TargetCalibrate from './TargetCalibrate'
 import Workshop from './WorkShop'
-
-interface HighlightProps {
-  workshop: Workshop
-  container: HTMLElement
-}
+import { HighlightProps } from './type'
 
 class Highlight extends EventBus {
   public workshop: Workshop

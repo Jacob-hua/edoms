@@ -1,41 +1,6 @@
-import { Engine } from '@edoms/engine'
-import { EdApplication, EdId, EdMeta } from '@edoms/meta-model'
 import { EventBus, url } from '@edoms/utils'
 import Workshop from './Workshop'
-
-interface InsertData {
-  meta: EdMeta
-  app: EdApplication
-}
-
-interface UpdateData {
-  meta: EdMeta
-  app: EdApplication
-}
-
-interface DeleteData {
-  id: EdId
-  app: EdApplication
-}
-
-interface Runtime {
-  getEngine?: () => Engine
-  beforeSelect?: (element: HTMLElement) => Promise<boolean> | boolean
-  select?: (id: EdId) => Promise<HTMLElement> | HTMLElement
-  updateAppMeta?: (meta: EdApplication) => void
-  updateCurrentPage?: (id: EdId) => void
-  insert?: (data: InsertData) => void
-  update?: (data: UpdateData) => void
-  delete?: (data: DeleteData) => void
-}
-
-interface Edoms {
-  onRuntimeReady: (runtime: Runtime) => void
-}
-
-interface RuntimeWindow extends Window {
-  edoms: Edoms
-}
+import { Runtime, RuntimeWindow, Edoms } from './type'
 
 class WorkshopRenderer extends EventBus {
   public workshop: Workshop

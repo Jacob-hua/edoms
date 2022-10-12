@@ -5,12 +5,7 @@ import Workshop from './WorkShop'
 import Moveable, { MoveableOptions } from 'moveable'
 import MoveableHelper from 'moveable-helper'
 import { getMode, getTargetElStyle, calculateValueByFontsize } from './utils'
-
-export interface DragBoxProps {
-  workshop: Workshop
-  container: HTMLElement
-  mask: Mask
-}
+import { DragBoxProps } from './type'
 
 enum ActionStatus {
   /** 开始拖动 */

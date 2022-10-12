@@ -1,29 +1,11 @@
 import { EdId } from '@edoms/meta-model'
 import { EventBus } from '@edoms/utils'
-import { MoveableOptions } from 'moveable'
 import DragBox from './DragBox'
 import Highlight from './Highlight'
 import Mask from './Mask'
 import Renderer from './Renderer'
 import { addSelectedClassName, removeSelectedClassName } from './utils'
-
-export type IsContainer = (element: HTMLElement) => boolean | Promise<boolean>
-
-interface HighlightContainer {
-  className: string
-  duration: number
-}
-
-interface WorkshopConfig {
-  zoom?: number
-  runtimeUrl?: string
-  highlightContainer: HighlightContainer
-  render?: () => Promise<HTMLElement> | HTMLElement
-  updateDragElement?: (element: HTMLDivElement, target: HTMLElement) => void
-  moveableOptions?: ((workshop: Workshop) => MoveableOptions) | MoveableOptions
-  isContainer: IsContainer
-  autoScrollIntoView?: boolean
-}
+import { WorkshopConfig, IsContainer, HighlightContainer } from './type'
 
 class Workshop extends EventBus {
   public container?: HTMLDivElement

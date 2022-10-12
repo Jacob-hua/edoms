@@ -4,18 +4,7 @@ import { Mode } from './enum'
 import Mask from './Mask'
 import { getMode } from './utils'
 import Workshop from './WorkShop'
-
-interface TargetCalibrateProps {
-  parentElement: HTMLElement
-  mask: Mask
-  dragBox: DragBox
-  workshop: Workshop
-}
-
-export interface Offset {
-  left: number
-  top: number
-}
+import { TargetCalibrateProps, Offset } from './type'
 
 class TargetCalibrate extends EventBus {
   public parentElement: HTMLElement
