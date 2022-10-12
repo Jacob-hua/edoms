@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "type": "module",
   "main": "src/index.ts",
-  "scripts": {},
   "devDependencies": {
     "typescript": "^4.6.4",
     "vite": "^3.1.0"

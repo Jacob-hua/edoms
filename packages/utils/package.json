@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "type": "module",
   "main": "src/index.ts",
-  "scripts": {},
   "devDependencies": {
     "@types/hat": "^0.0.1",
     "@types/lodash": "^4.14.184",

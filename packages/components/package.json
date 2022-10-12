@@ -2,13 +2,6 @@
   "name": "@edoms/components",
   "version": "0.0.1",
   "main": "src/index.ts",
-  "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check build-only",
-    "preview": "vite preview --port 4173",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit"
-  },
   "dependencies": {
     "@edoms/meta-model": "workspace:^0.0.1",
     "@edoms/utils": "workspace:^0.0.1",

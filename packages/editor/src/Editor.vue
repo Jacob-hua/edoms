@@ -1,5 +1,6 @@
 <template>
   <div>编辑器</div>
+  <Workshop />
 </template>
 
 <script lang="ts">
@@ -8,4 +9,6 @@ export default {
 };
 </script>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import Workshop from './components/WorkshopView.vue';
+</script>
