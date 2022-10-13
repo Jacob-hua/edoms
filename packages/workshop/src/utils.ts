@@ -5,15 +5,45 @@ import { Mode, ZIndex } from './enum';
 export const createMaskContent = (): HTMLDivElement => {
   return dom.createDiv({
     className: 'edoms-editor-mask',
-    cssText: 'position: absolute; top: 0; left: 0; transform: translate3d(0, 0, 0);',
+    cssText: `
+      position: absolute;
+      top: 0; 
+      left: 0; 
+      transform: translate3d(0, 0, 0);
+      background-color: blue;
+    `,
   });
 };
 
+export const hideScrollbar = () => {
+  dom.injectStyle(
+    globalThis.document,
+    `
+    .editor-mask-wrapper::-webkit-scrollbar {
+      width: 0 !important;
+      display: none
+    }
+    `
+  );
+};
+
 export const createWrapper = (): HTMLDivElement => {
-  return dom.createDiv({
+  const element = dom.createDiv({
     className: 'edoms-editor-mask-wrapper',
-    cssText: 'position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; z-index: 99999',
+    cssText: `
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      height: 100%; 
+      width: 100%; 
+      overflow: hidden; 
+      z-index: 99999;
+      background-color: yellow;
+      opacity: 0.3;
+    `,
   });
+  hideScrollbar();
+  return element;
 };
 
 export const getMode = (element: HTMLElement): Mode => {
