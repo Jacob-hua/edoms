@@ -3,7 +3,7 @@ import { LinkageDefine } from '@edoms/meta-model';
 export enum ActionEnum {}
 
 export enum EffectEnum {
-  DISABLED = 'disatbled',
+  DISABLED = 'disabled',
   ENABLED = 'enabled',
   UPDATE_TEXT = 'updateText',
 }

@@ -3,8 +3,11 @@
 </template>
 
 <script lang="ts" setup name="WorkshopView">
-import { ref, watchEffect } from 'vue';
+import { inject, ref, watchEffect } from 'vue';
 import Workshop from '@edoms/workshop';
+import { WorkshopOptions } from '@/type';
+
+const workshopOptions = inject<WorkshopOptions>('workshopOptions');
 
 const workshopContainer = ref<HTMLDivElement>();
 
@@ -17,9 +20,12 @@ watchEffect(() => {
   if (!workshopContainer.value) {
     return;
   }
+  if (!workshopOptions?.runtimeUrl || !workshopOptions.render) {
+    return;
+  }
   workshop = new Workshop({
-    runtimeUrl: '/edoms/playground/runtime/playground.html',
-    render: undefined,
+    runtimeUrl: workshopOptions.runtimeUrl,
+    render: workshopOptions.render,
     autoScrollIntoView: true,
     highlightContainer: {
       className: 'edoms-container-highlight',
