@@ -6,7 +6,6 @@ import EdomsComponents from '@edoms/components';
 import 'element-plus/theme-chalk/index.css';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
-console.log(App.name);
 const edomsApp = createApp(App);
 edomsApp.use(ElementPlus, {
   locale: zhCn,
