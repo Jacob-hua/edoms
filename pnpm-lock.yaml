@@ -208,7 +208,6 @@ importers:
       element-plus: ^2.2.15
       typescript: ~4.7.4
       vite: ^3.0.4
-      vite-plugin-vue-setup-extend: ^0.4.0
       vue: ^3.2.37
       vue-tsc: ^0.39.5
     dependencies:
@@ -223,7 +222,6 @@ importers:
       '@vitejs/plugin-vue': registry.npmmirror.com/@vitejs/plugin-vue/3.0.3_vite@3.0.9+vue@3.2.37
       typescript: registry.npmmirror.com/typescript/4.7.4
       vite: registry.npmmirror.com/vite/3.0.9
-      vite-plugin-vue-setup-extend: registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0_vite@3.0.9
       vue-tsc: registry.npmmirror.com/vue-tsc/0.39.5_typescript@4.7.4
 
   packages/engine:
@@ -1215,7 +1213,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: registry.npmmirror.com/vite/3.0.9_sass@1.54.8
+      vite: registry.npmmirror.com/vite/3.0.9
       vue: registry.npmmirror.com/vue/3.2.37
     dev: true
 

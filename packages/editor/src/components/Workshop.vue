@@ -18,7 +18,7 @@ watchEffect(() => {
     return;
   }
   workshop = new Workshop({
-    runtimeUrl: ' /edoms/playground/runtime/playground.html',
+    runtimeUrl: '/edoms/playground/runtime/playground.html',
     render: undefined,
     autoScrollIntoView: true,
     highlightContainer: {

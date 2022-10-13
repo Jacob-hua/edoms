@@ -3,12 +3,12 @@
   <Workshop />
 </template>
 
-<script lang="ts">
+<!-- <script lang="ts">
 export default {
   name: 'EdomsEditor',
 };
-</script>
+</script> -->
 
-<script lang="ts" setup>
+<script lang="ts" setup name="EdomsEditor">
 import Workshop from './components/Workshop.vue';
 </script>

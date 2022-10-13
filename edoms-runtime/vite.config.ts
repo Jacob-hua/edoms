@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, Plugin } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 
@@ -33,7 +33,7 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     base: VITE_BASE || '/edoms/playground/runtime/',
-    plugins: [vue(), vueSetupExtend()],
+    plugins: [vue(), vueSetupExtend() as Plugin],
     publicDir: command === 'serve' ? 'dist' : 'public',
     server: {
       host: '0.0.0.0',
