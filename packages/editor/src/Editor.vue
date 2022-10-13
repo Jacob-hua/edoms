@@ -10,5 +10,5 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import Workshop from './components/WorkshopView.vue';
+import Workshop from './components/Workshop.vue';
 </script>
