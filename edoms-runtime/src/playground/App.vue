@@ -29,7 +29,7 @@ watch(pageConfig, async () => {
 });
 
 onMounted(() => {
-  window.edoms.onRuntimeReady({
+  window.edoms?.onRuntimeReady({
     getEngine() {
       return app;
     },
