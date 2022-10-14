@@ -1,5 +1,6 @@
 <template>
   <div>playground页面111132323231</div>
+  <edom-page v-if="pageMeta" :meta="pageMeta"></edom-page>
 </template>
 
 <script setup lang="ts">
@@ -11,7 +12,7 @@ const root = ref<EdApplication>();
 const currentPageId = ref<EdId>();
 const selectedId = ref<EdId>();
 
-const pageConfig = computed(
+const pageMeta = computed(
   () => root.value?.pages.find((item: EdMeta) => item.id === currentPageId.value) || root.value?.pages?.[0]
 );
 
@@ -21,7 +22,7 @@ const app = new Engine({
 
 provide('app', app);
 
-watch(pageConfig, async () => {
+watch(pageMeta, async () => {
   await nextTick();
   const page = document.querySelector<HTMLElement>('.edoms-ui-page');
   // TODO: 需要将页面传递给workshop

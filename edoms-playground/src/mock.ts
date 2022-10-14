@@ -12,7 +12,7 @@ const mockData: EdApplication = {
       children: [
         {
           id: 'text_01',
-          type: 'edom-text',
+          type: 'text',
           name: 'text',
           text: '文本01',
         },
