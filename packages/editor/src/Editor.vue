@@ -26,6 +26,7 @@ watch(
   }
 );
 
+provide('root', reactive<EdApplication>(props.modelValue));
 provide(
   'workshopOptions',
   reactive<WorkshopOptions>({

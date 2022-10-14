@@ -38,7 +38,6 @@ onMounted(() => {
       app.setMeta(meta);
     },
     select(id: EdId) {
-      console.log(id);
       selectedId.value = id;
       const element = document.getElementById(`${id}`);
       if (element) {
