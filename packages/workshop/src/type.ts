@@ -50,6 +50,7 @@ export interface Runtime {
 }
 
 export interface Edoms {
+  onPageElUpdate: (element: HTMLElement) => void;
   onRuntimeReady: (runtime: Runtime) => void;
 }
 

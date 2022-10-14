@@ -71,6 +71,9 @@ class WorkshopRenderer extends EventBus {
 
   public generateEdoms(): Edoms {
     return {
+      onPageElUpdate: (element: HTMLElement) => {
+        this.fire('page-el-update', element);
+      },
       onRuntimeReady: (runtime: Runtime) => {
         this.runtime = runtime;
         this.fire('runtime-ready', runtime);

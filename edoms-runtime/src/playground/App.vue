@@ -25,8 +25,7 @@ provide('app', app);
 watch(pageMeta, async () => {
   await nextTick();
   const page = document.querySelector<HTMLElement>('.edoms-ui-page');
-  // TODO: 需要将页面传递给workshop
-  page && window.edoms;
+  page && window.edoms?.onPageElUpdate(page);
 });
 
 onMounted(() => {
