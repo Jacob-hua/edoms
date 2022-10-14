@@ -69,19 +69,16 @@ export const getScrollParent = (element: HTMLElement, includeHidden = false): HT
   if (style.position === 'fixed') {
     return null;
   }
-  let parent: HTMLElement | null = element;
-  while (parent && parent.parentElement) {
-    parent = element.parentElement;
+
+  for (let parent = element; parent.parentElement; ) {
+    parent = parent.parentElement;
     if (!parent) {
       continue;
     }
     style = globalThis.getComputedStyle(parent);
-    if (['absolute', 'static'].includes(style.position)) {
-      continue;
-    }
-    if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) {
-      return parent;
-    }
+    if (style.position === 'absolute' || style.position === 'static') continue;
+
+    if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) return parent;
   }
   return null;
 };
