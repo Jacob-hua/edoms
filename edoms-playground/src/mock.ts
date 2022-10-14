@@ -16,6 +16,12 @@ const mockData: EdApplication = {
           name: 'text',
           text: '文本01',
         },
+        {
+          id: 'button_01',
+          type: 'button',
+          name: 'submitButton',
+          text: '按钮',
+        },
       ],
     },
   ],
