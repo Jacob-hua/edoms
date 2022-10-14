@@ -1,5 +1,5 @@
 <template>
-  <div :id="`${meta.id}`">
+  <div :id="`${meta.id}`" class="edoms-ui-page">
     <slot></slot>
     <EdomComponent v-for="item in meta.children" :key="item.id" :meta="item"></EdomComponent>
   </div>
