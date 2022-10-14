@@ -22,13 +22,17 @@ class WorkshopRenderer extends EventBus {
     this.runtimeUrl = workshop.config.runtimeUrl;
     this.render = workshop.config.render;
 
-    this.iframe = window.document.createElement('iframe');
+    this.iframe = globalThis.document.createElement('iframe');
     let iframeSrc = '';
     if (this.runtimeUrl && url.isSameDomain(this.runtimeUrl)) {
       iframeSrc = this.runtimeUrl;
     }
     this.iframe.src = iframeSrc;
-    this.iframe.style.cssText = `border: 0; width: 100%; height: 100%;`;
+    this.iframe.style.cssText = `
+      border: 0;
+      width: 100%;
+      height: 100%;
+    `;
     this.iframe.addEventListener('load', this.loadHandler);
   }
 

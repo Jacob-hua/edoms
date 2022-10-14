@@ -41,7 +41,7 @@ class Workshop extends EventBus {
     });
 
     this.renderer.on('runtime-ready', (runtime: any) => {
-      this.fire('runtime-read', runtime);
+      this.fire('runtime-ready', runtime);
     });
 
     this.renderer.on('page-el-update', (element: HTMLElement) => {

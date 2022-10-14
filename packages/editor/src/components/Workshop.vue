@@ -34,5 +34,8 @@ watchEffect(() => {
     isContainer: (element: HTMLElement) => element.classList.contains('edoms-ui-container'),
   });
   workshop.mount(workshopContainer.value);
+  workshop.on('runtime-ready', (rt: any) => {
+    console.log(rt);
+  });
 });
 </script>
