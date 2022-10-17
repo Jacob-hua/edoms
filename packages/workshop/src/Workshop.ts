@@ -6,6 +6,7 @@ import Mask from './Mask';
 import Renderer from './Renderer';
 import { addSelectedClassName, removeSelectedClassName } from './utils';
 import { WorkshopConfig, IsContainer, HighlightContainer } from './type';
+import { GHOST_EL_ID_PREFIX } from './const';
 
 enum SelectType {
   MULTI_SELECT = 'multiSelect',
@@ -178,7 +179,7 @@ class Workshop extends EventBus {
     const elements = this.getElementsFromPoint(event);
     const stopped = false;
     for (const element of elements) {
-      if (!element.id.startsWith('ghost_el_')) {
+      if (!element.id.startsWith(GHOST_EL_ID_PREFIX)) {
         if (stopped) {
           break;
         }

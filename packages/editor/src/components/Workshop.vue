@@ -32,7 +32,7 @@ watchEffect(() => {
     autoScrollIntoView: true,
     highlightContainer: {
       className: 'edoms-container-highlight',
-      duration: 100,
+      duration: 800,
     },
     isContainer: (element: HTMLElement) => element.classList.contains('edoms-ui-container'),
   });

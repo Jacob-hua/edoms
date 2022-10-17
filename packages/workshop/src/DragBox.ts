@@ -6,6 +6,7 @@ import Moveable, { MoveableOptions } from 'moveable';
 import MoveableHelper from 'moveable-helper';
 import { getMode, getTargetElStyle, calculateValueByFontsize } from './utils';
 import { DragBoxProps } from './type';
+import { GHOST_EL_ID_PREFIX } from './const';
 
 enum ActionStatus {
   /** 开始拖动 */
@@ -307,7 +308,7 @@ class DragBox extends EventBus {
         for (const element of elements) {
           if (
             doc &&
-            !element.id.startsWith('ghost_el_') &&
+            !element.id.startsWith(GHOST_EL_ID_PREFIX) &&
             element !== this.target &&
             (await this.workshop.isContainer(element))
           ) {
@@ -422,7 +423,7 @@ class DragBox extends EventBus {
     }
     const ghostElement = element.cloneNode(true) as HTMLElement;
     const { top, left } = dom.getAbsolutePosition(element, dom.getElementOffset(element));
-    ghostElement.id = `ghost_el_id_${element.id}`;
+    ghostElement.id = `${GHOST_EL_ID_PREFIX}${element.id}`;
     ghostElement.style.zIndex = ZIndex.GHOST_EL;
     ghostElement.style.opacity = '0.5';
     ghostElement.style.position = 'absolute';
