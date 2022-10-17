@@ -7,6 +7,11 @@ import Renderer from './Renderer';
 import { addSelectedClassName, removeSelectedClassName } from './utils';
 import { WorkshopConfig, IsContainer, HighlightContainer } from './type';
 
+enum SelectType {
+  MULTI_SELECT = 'multiSelect',
+  SINGLE_SELECT = 'singleSelect',
+}
+
 class Workshop extends EventBus {
   public container?: HTMLDivElement;
   public selectedDom: HTMLElement | undefined;
@@ -49,7 +54,7 @@ class Workshop extends EventBus {
     });
 
     this.mask.on('beforeSelect', async (event: MouseEvent) => {
-      this.clearSelectStatus();
+      this.clearSelectStatus(SelectType.MULTI_SELECT);
       const element = await this.setElementFromPoint(event);
       if (!element) {
         return;
@@ -103,8 +108,6 @@ class Workshop extends EventBus {
     if (runtime.beforeSelect) {
       await runtime.beforeSelect(element);
     }
-
-    console.log(element);
 
     this.mask.setLayout(element);
     this.dragBox.select(element, event);
@@ -164,7 +167,10 @@ class Workshop extends EventBus {
     this.zoom = zoom;
   }
 
-  public clearSelectStatus() {
+  public clearSelectStatus(selectType: SelectType) {
+    if (selectType === SelectType.MULTI_SELECT) {
+      return;
+    }
     this.dragBox.clearSelectStatus();
   }
 

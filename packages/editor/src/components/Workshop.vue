@@ -32,13 +32,16 @@ watchEffect(() => {
     autoScrollIntoView: true,
     highlightContainer: {
       className: 'edoms-container-highlight',
-      duration: 800,
+      duration: 100,
     },
     isContainer: (element: HTMLElement) => element.classList.contains('edoms-ui-container'),
   });
   workshop.mount(workshopContainer.value);
   workshop.on('runtime-ready', (rt: Runtime) => {
     rt.updateAppMeta && appMeta && rt.updateAppMeta(appMeta);
+  });
+  workshop.on('select', (element: HTMLElement) => {
+    console.log('select element is', element);
   });
 });
 </script>

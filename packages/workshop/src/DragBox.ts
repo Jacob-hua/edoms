@@ -43,7 +43,6 @@ class DragBox extends EventBus {
   public select(element: HTMLElement, event?: MouseEvent): void {
     const oldTarget = this.target;
     this.target = element;
-
     // 切换拖拽目标是需要重新创建moveable
     if (!this.moveable || this.target !== oldTarget) {
       this.init(element);
