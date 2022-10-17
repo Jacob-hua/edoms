@@ -104,6 +104,8 @@ class Workshop extends EventBus {
       await runtime.beforeSelect(element);
     }
 
+    console.log(element);
+
     this.mask.setLayout(element);
     this.dragBox.select(element, event);
 

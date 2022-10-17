@@ -47,7 +47,6 @@ class DragBox extends EventBus {
     // 切换拖拽目标是需要重新创建moveable
     if (!this.moveable || this.target !== oldTarget) {
       this.init(element);
-      console.log('sdsdsadsafsd');
 
       this.moveableHelper = MoveableHelper.create({
         useBeforeRender: true,

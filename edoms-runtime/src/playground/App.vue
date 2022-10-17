@@ -1,5 +1,4 @@
 <template>
-  <div>playground页面111132323231</div>
   <edom-page v-if="pageMeta" :meta="pageMeta"></edom-page>
 </template>
 
@@ -49,4 +48,21 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style lang="scss">
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+#app {
+  position: relative;
+  overflow: auto;
+  background-color: aquamarine;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+}
+</style>

@@ -20,7 +20,7 @@ const mockData: EdApplication = {
           id: 'button_01',
           type: 'button',
           name: 'submitButton',
-          text: '按钮',
+          text: '点击按钮打开弹窗',
         },
       ],
     },

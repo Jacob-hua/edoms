@@ -10,7 +10,6 @@ export const createMaskContent = (): HTMLDivElement => {
       top: 0; 
       left: 0; 
       transform: translate3d(0, 0, 0);
-      background-color: blue;
     `,
   });
 };
@@ -38,8 +37,6 @@ export const createWrapper = (): HTMLDivElement => {
       width: 100%; 
       overflow: hidden; 
       z-index: 99999;
-      background-color: yellow;
-      opacity: 0.3;
     `,
   });
   hideScrollbar();
