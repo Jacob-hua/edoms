@@ -49,8 +49,6 @@ class Workshop extends EventBus {
     });
 
     this.mask.on('beforeSelect', async (event: MouseEvent) => {
-      console.log('ddddd');
-
       this.clearSelectStatus();
       const element = await this.setElementFromPoint(event);
       if (!element) {
