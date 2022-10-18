@@ -75,6 +75,7 @@ export const calculateValueByFontsize = (doc: Document, value: number): number =
     const times = globalThis.parseFloat(fontSize) / 100;
     return Number((value / times).toFixed(2));
   }
+
   return value;
 };
 

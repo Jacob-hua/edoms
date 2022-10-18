@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { dom, EventBus } from '@edoms/utils';
 import { GuidesType, Mode, ZIndex } from './enum';
 import Mask from './Mask';
@@ -5,8 +6,8 @@ import Workshop from './WorkShop';
 import Moveable, { MoveableOptions } from 'moveable';
 import MoveableHelper from 'moveable-helper';
 import { getMode, getTargetElStyle, calculateValueByFontsize } from './utils';
-import { DragBoxProps } from './type';
-import { GHOST_EL_ID_PREFIX } from './const';
+import { DragBoxProps, SortEventData } from './type';
+import { DRAG_EL_ID_PREFIX, GHOST_EL_ID_PREFIX } from './const';
 
 enum ActionStatus {
   /** 开始拖动 */
@@ -20,40 +21,60 @@ enum ActionStatus {
 class DragBox extends EventBus {
   public workshop: Workshop;
   public mask: Mask;
+  /** 画布容器 */
   public container: HTMLElement;
+  /** 目标节点 */
   public target?: HTMLElement;
-  public dragElement?: HTMLDivElement;
+  /** 目标节点在蒙层中的占位节点 */
+  public dragEl?: HTMLDivElement;
+  /** Moveable拖拽类实例 */
   public moveable?: Moveable;
+  /** 水平参考线 */
   public horizontalGuidelines: number[] = [];
+  /** 垂直参考线 */
   public verticalGuidelines: number[] = [];
+  /** 对齐元素集合 */
   public elementGuidelines: HTMLElement[] = [];
+  /** 布局方式：流式布局、绝对定位、固定定位 */
   public mode: Mode = Mode.ABSOLUTE;
 
   private moveableOptions: MoveableOptions = {};
-  private ghostElement: HTMLElement | undefined;
-  private moveableHelper?: MoveableHelper;
+  /** 拖动状态 */
   private dragStatus: ActionStatus = ActionStatus.END;
+  /** 流式布局下，目标节点的镜像节点 */
+  private ghostEl: HTMLElement | undefined;
+  private moveableHelper?: MoveableHelper;
 
   constructor(props: DragBoxProps) {
     super();
+
     this.workshop = props.workshop;
     this.container = props.container;
     this.mask = props.mask;
   }
 
-  public select(element: HTMLElement, event?: MouseEvent): void {
+  /**
+   * 将选中框渲染并覆盖到选中的组件Dom节点上方
+   * 当选中的节点是不是absolute时，会创建一个新的节点出来作为拖拽目标
+   * @param el 选中组件的Dom节点元素
+   * @param event 鼠标事件
+   */
+  public select(el: HTMLElement, event?: MouseEvent): void {
     const oldTarget = this.target;
-    this.target = element;
-    // 切换拖拽目标是需要重新创建moveable
-    if (!this.moveable || this.target !== oldTarget) {
-      this.init(element);
+    this.target = el;
 
+    // 从不能拖动到能拖动的节点之间切换，要重新创建moveable，不然dragStart不生效
+    if (!this.moveable || this.target !== oldTarget) {
+      this.init(el);
       this.moveableHelper = MoveableHelper.create({
         useBeforeRender: true,
         useRender: false,
         createAuto: true,
       });
+
       this.initMoveable();
+    } else {
+      this.updateMoveable();
     }
 
     if (event) {
@@ -61,16 +82,17 @@ class DragBox extends EventBus {
     }
   }
 
-  public updateMoveable(element = this.target): void {
-    if (!this.moveable) {
-      throw new Error('This moveable is not initialization');
-    }
-    if (!element) {
-      throw new Error('No elements selected');
-    }
+  /**
+   * 初始化选中框并渲染出来
+   */
+  public updateMoveable(el = this.target): void {
+    if (!this.moveable) throw new Error('未初始化moveable');
+    if (!el) throw new Error('未选中任何节点');
 
-    this.target = element;
-    this.init(element);
+    this.target = el;
+
+    this.init(el);
+
     Object.entries(this.moveableOptions).forEach(([key, value]) => {
       (this.moveable as any)[key] = value;
     });
@@ -85,6 +107,7 @@ class DragBox extends EventBus {
       this.verticalGuidelines = guidelines;
       this.moveableOptions.verticalGuidelines = guidelines;
     }
+
     if (this.moveable) {
       this.updateMoveable();
     }
@@ -95,65 +118,369 @@ class DragBox extends EventBus {
     this.verticalGuidelines = [];
     this.moveableOptions.horizontalGuidelines = [];
     this.moveableOptions.verticalGuidelines = [];
+    this.updateMoveable();
   }
 
-  public clearSelectStatus() {
-    if (!this.moveable) {
-      return;
-    }
-    this.destroyDragElement();
+  public clearSelectStatus(): void {
+    if (!this.moveable) return;
+    this.destroyDragEl();
     this.moveable.target = null;
     this.moveable.updateTarget();
   }
 
+  public destroyDragEl(): void {
+    this.dragEl?.remove();
+  }
+
+  /**
+   * 销毁实例
+   */
   public destroy(): void {
     this.moveable?.destroy();
-    this.destroyDragElement();
-    this.destroyGhostElement();
+    this.destroyGhostEl();
+    this.destroyDragEl();
     this.dragStatus = ActionStatus.END;
     this.removeAllListeners();
   }
 
-  private destroyGhostElement(): void {
-    this.ghostElement?.remove();
-    this.ghostElement = undefined;
-  }
-
-  private destroyDragElement(): void {
-    this.dragElement?.remove();
-  }
-
-  private init(element: HTMLElement): void {
-    // 如果css滚动条没有隐藏，则隐藏滚动条
-    if (/(auto|scroll)/.test(element.style.overflow)) {
-      element.style.overflow = 'hidden';
+  private init(el: HTMLElement): void {
+    // 如果有滚动条会导致resize时获取到width，height不准确
+    if (/(auto|scroll)/.test(el.style.overflow)) {
+      el.style.overflow = 'hidden';
     }
-    this.mode = getMode(element);
+    this.mode = getMode(el);
 
-    this.destroyGhostElement();
-    this.destroyDragElement();
-    this.dragElement = globalThis.document.createElement('div');
-    this.container.append(this.dragElement);
-    this.dragElement.style.cssText = getTargetElStyle(element);
-    this.dragElement.id = `drag_element_${element.id}`;
+    this.destroyGhostEl();
+    this.destroyDragEl();
+    this.dragEl = globalThis.document.createElement('div');
+    this.container.append(this.dragEl);
+    this.dragEl.style.cssText = getTargetElStyle(el);
+    this.dragEl.id = `${DRAG_EL_ID_PREFIX}${el.id}`;
 
-    if (typeof this.workshop.config.updateDragElement === 'function') {
-      this.workshop.config.updateDragElement(this.dragElement, element);
-    }
-
-    this.moveableOptions = this.generateOptions({
-      target: this.dragElement,
+    this.moveableOptions = this.getOptions({
+      target: this.dragEl,
     });
   }
 
-  private generateOptions(options: MoveableOptions = {}): MoveableOptions {
-    if (!this.target) {
-      return {};
+  private setElementGuidelines(nodes: HTMLElement[]) {
+    this.elementGuidelines.forEach((node) => {
+      node.remove();
+    });
+    this.elementGuidelines = [];
+
+    if (this.mode === Mode.ABSOLUTE) {
+      this.container.append(this.createGuidelineElements(nodes));
     }
+  }
+
+  private createGuidelineElements(nodes: HTMLElement[]) {
+    const frame = globalThis.document.createDocumentFragment();
+
+    for (const node of nodes) {
+      const { width, height } = node.getBoundingClientRect();
+      if (node === this.target) continue;
+      const { left, top } = dom.getElementOffset(node as HTMLElement);
+      const elementGuideline = globalThis.document.createElement('div');
+      elementGuideline.style.cssText = `position: absolute;width: ${width}px;height: ${height}px;top: ${top}px;left: ${left}px`;
+      this.elementGuidelines.push(elementGuideline);
+      frame.append(elementGuideline);
+    }
+
+    return frame;
+  }
+
+  private initMoveable() {
+    this.moveable?.destroy();
+
+    this.moveable = new Moveable(this.container, {
+      ...this.moveableOptions,
+    });
+
+    this.bindResizeEvent();
+    this.bindDragEvent();
+    this.bindRotateEvent();
+    this.bindScaleEvent();
+  }
+
+  private bindResizeEvent(): void {
+    if (!this.moveable) throw new Error('moveable 未初始化');
+
+    const frame = {
+      left: 0,
+      top: 0,
+    };
+
+    this.moveable
+      .on('resizeStart', (e) => {
+        if (!this.target) return;
+
+        this.dragStatus = ActionStatus.START;
+        this.moveableHelper?.onResizeStart(e);
+
+        frame.top = this.target.offsetTop;
+        frame.left = this.target.offsetLeft;
+      })
+      .on('resize', (e) => {
+        const { width, height, drag } = e;
+        if (!this.moveable || !this.target || !this.dragEl) return;
+
+        const { beforeTranslate } = drag;
+        this.dragStatus = ActionStatus.ING;
+
+        this.moveableHelper?.onResize(e);
+
+        // 流式布局
+        if (this.mode === Mode.SORTABLE) {
+          this.target.style.top = '0px';
+        } else {
+          this.target.style.left = `${frame.left + beforeTranslate[0]}px`;
+          this.target.style.top = `${frame.top + beforeTranslate[1]}px`;
+        }
+
+        this.target.style.width = `${width}px`;
+        this.target.style.height = `${height}px`;
+      })
+      .on('resizeEnd', () => {
+        this.dragStatus = ActionStatus.END;
+        this.update(true);
+      });
+  }
+
+  private bindDragEvent(): void {
+    if (!this.moveable) throw new Error('moveable 未初始化');
+
+    const frame = {
+      left: 0,
+      top: 0,
+    };
+
+    let timeout: NodeJS.Timeout | undefined;
+
+    const { contentWindow } = this.workshop.renderer;
+    const doc = contentWindow?.document;
+
+    this.moveable
+      .on('dragStart', (e) => {
+        if (!this.target) throw new Error('未选中组件');
+
+        this.dragStatus = ActionStatus.START;
+
+        this.moveableHelper?.onDragStart(e);
+
+        if (this.mode === Mode.SORTABLE) {
+          this.ghostEl = this.generateGhostEl(this.target);
+        }
+        frame.top = this.target.offsetTop;
+        frame.left = this.target.offsetLeft;
+      })
+      .on('drag', (e) => {
+        if (!this.target || !this.dragEl) return;
+
+        if (timeout) {
+          globalThis.clearTimeout(timeout);
+          timeout = undefined;
+        }
+
+        timeout = globalThis.setTimeout(async () => {
+          const els = this.workshop.getElementsFromPoint(e.inputEvent);
+          for (const el of els) {
+            if (
+              doc &&
+              !el.id.startsWith(GHOST_EL_ID_PREFIX) &&
+              el !== this.target &&
+              (await this.workshop.isContainer(el))
+            ) {
+              dom.addClassName(el, doc, this.workshop.config.highlightContainer.className);
+              break;
+            }
+          }
+        }, this.workshop.config.highlightContainer.duration);
+
+        this.dragStatus = ActionStatus.ING;
+
+        // 流式布局
+        if (this.ghostEl) {
+          this.ghostEl.style.top = `${frame.top + e.beforeTranslate[1]}px`;
+          return;
+        }
+
+        this.moveableHelper?.onDrag(e);
+
+        this.target.style.left = `${frame.left + e.beforeTranslate[0]}px`;
+        this.target.style.top = `${frame.top + e.beforeTranslate[1]}px`;
+      })
+      .on('dragEnd', () => {
+        if (timeout) {
+          globalThis.clearTimeout(timeout);
+          timeout = undefined;
+        }
+
+        let parentEl: HTMLElement | null = null;
+
+        if (doc) {
+          parentEl = dom.removeClassNameByClassName(doc, this.workshop.config.highlightContainer.className);
+        }
+
+        // 点击不拖动时会触发dragStart和dragEnd，但是不会有drag事件
+        if (this.dragStatus === ActionStatus.ING) {
+          if (parentEl) {
+            this.update(false, parentEl);
+          } else {
+            switch (this.mode) {
+              case Mode.SORTABLE:
+                this.sort();
+                break;
+              default:
+                this.update();
+            }
+          }
+        }
+
+        this.dragStatus = ActionStatus.END;
+        this.destroyGhostEl();
+      });
+  }
+
+  private bindRotateEvent(): void {
+    if (!this.moveable) throw new Error('moveable 未初始化');
+
+    this.moveable
+      .on('rotateStart', (e) => {
+        this.dragStatus = ActionStatus.START;
+        this.moveableHelper?.onRotateStart(e);
+      })
+      .on('rotate', (e) => {
+        if (!this.target || !this.dragEl) return;
+        this.dragStatus = ActionStatus.ING;
+        this.moveableHelper?.onRotate(e);
+        const frame = this.moveableHelper?.getFrame(e.target);
+        this.target.style.transform = frame?.toCSSObject().transform || '';
+      })
+      .on('rotateEnd', (e) => {
+        this.dragStatus = ActionStatus.END;
+        const frame = this.moveableHelper?.getFrame(e.target);
+        this.fire('update', {
+          el: this.target,
+          style: {
+            transform: frame?.get('transform'),
+          },
+        });
+      });
+  }
+
+  private bindScaleEvent(): void {
+    if (!this.moveable) throw new Error('moveable 未初始化');
+
+    this.moveable
+      .on('scaleStart', (e) => {
+        this.dragStatus = ActionStatus.START;
+        this.moveableHelper?.onScaleStart(e);
+      })
+      .on('scale', (e) => {
+        if (!this.target || !this.dragEl) return;
+        this.dragStatus = ActionStatus.ING;
+        this.moveableHelper?.onScale(e);
+        const frame = this.moveableHelper?.getFrame(e.target);
+        this.target.style.transform = frame?.toCSSObject().transform || '';
+      })
+      .on('scaleEnd', (e) => {
+        this.dragStatus = ActionStatus.END;
+        const frame = this.moveableHelper?.getFrame(e.target);
+        this.fire('update', {
+          el: this.target,
+          style: {
+            transform: frame?.get('transform'),
+          },
+        });
+      });
+  }
+
+  private sort(): void {
+    if (!this.target || !this.ghostEl) throw new Error('未知错误');
+    const { top } = this.ghostEl.getBoundingClientRect();
+    const { top: oriTop } = this.target.getBoundingClientRect();
+    const deltaTop = top - oriTop;
+    if (Math.abs(deltaTop) >= this.target.clientHeight / 2) {
+      if (deltaTop > 0) {
+        this.fire('sort', down(deltaTop, this.target));
+      } else {
+        this.fire('sort', up(deltaTop, this.target));
+      }
+    } else {
+      this.fire('sort', {
+        src: this.target.id,
+        dist: this.target.id,
+      });
+    }
+  }
+
+  private update(isResize = false, parentEl: HTMLElement | null = null): void {
+    if (!this.target) return;
+
+    const { contentWindow } = this.workshop.renderer;
+    const doc = contentWindow?.document;
+
+    if (!doc) return;
+
+    const offset =
+      this.mode === Mode.SORTABLE ? { left: 0, top: 0 } : { left: this.target.offsetLeft, top: this.target.offsetTop };
+
+    let left = calculateValueByFontsize(doc, offset.left);
+    let top = calculateValueByFontsize(doc, offset.top);
+    const width = calculateValueByFontsize(doc, this.target.clientWidth);
+    const height = calculateValueByFontsize(doc, this.target.clientHeight);
+
+    if (parentEl && this.mode === Mode.ABSOLUTE && this.dragEl) {
+      // eslint-disable-next-line no-unsafe-optional-chaining
+      const [translateX, translateY] = this.moveableHelper?.getFrame(this.dragEl).properties.transform.translate.value;
+      const { left: parentLeft, top: parentTop } = dom.getElementOffset(parentEl);
+      left =
+        calculateValueByFontsize(doc, this.dragEl.offsetLeft) +
+        parseFloat(translateX) -
+        calculateValueByFontsize(doc, parentLeft);
+      top =
+        calculateValueByFontsize(doc, this.dragEl.offsetTop) +
+        parseFloat(translateY) -
+        calculateValueByFontsize(doc, parentTop);
+    }
+
+    this.fire('update', {
+      el: this.target,
+      parentEl,
+      style: isResize ? { left, top, width, height } : { left, top },
+    });
+  }
+
+  private generateGhostEl(el: HTMLElement): HTMLElement {
+    if (this.ghostEl) {
+      this.destroyGhostEl();
+    }
+
+    const ghostEl = el.cloneNode(true) as HTMLElement;
+    const { top, left } = dom.getAbsolutePosition(el, dom.getElementOffset(el));
+    ghostEl.id = `${GHOST_EL_ID_PREFIX}${el.id}`;
+    ghostEl.style.zIndex = ZIndex.GHOST_EL;
+    ghostEl.style.opacity = '.5';
+    ghostEl.style.position = 'absolute';
+    ghostEl.style.left = `${left}px`;
+    ghostEl.style.top = `${top}px`;
+    el.after(ghostEl);
+    return ghostEl;
+  }
+
+  private destroyGhostEl(): void {
+    this.ghostEl?.remove();
+    this.ghostEl = undefined;
+  }
+
+  private getOptions(options: MoveableOptions = {}): MoveableOptions {
+    if (!this.target) return {};
 
     const isAbsolute = this.mode === Mode.ABSOLUTE;
     const isFixed = this.mode === Mode.FIXED;
+
     let { moveableOptions = {} } = this.workshop.config;
+
     if (typeof moveableOptions === 'function') {
       moveableOptions = moveableOptions(this.workshop);
     }
@@ -165,6 +492,7 @@ class DragBox extends EventBus {
     if (moveableOptions.elementGuidelines) {
       delete moveableOptions.elementGuidelines;
     }
+
     return {
       origin: false,
       rootContainer: this.workshop.container,
@@ -198,308 +526,89 @@ class DragBox extends EventBus {
       horizontalGuidelines: this.horizontalGuidelines,
       verticalGuidelines: this.verticalGuidelines,
       elementGuidelines: this.elementGuidelines,
+
       bounds: {
         top: 0,
+        // 设置0的话无法移动到left为0，所以只能设置为-1
+        left: -1,
         right: this.container.clientWidth,
         bottom: this.container.clientHeight,
-        left: -1,
+        ...(moveableOptions.bounds || {}),
       },
       ...options,
       ...moveableOptions,
     };
   }
-
-  private initMoveable(): void {
-    this.moveable?.destroy();
-    this.moveable = new Moveable(this.container, {
-      ...this.moveableOptions,
-    });
-    this.bindResizeEvent();
-    this.bindDragEvent();
-    this.bindRotateEvent();
-    this.bindScaleEvent();
-  }
-
-  private bindResizeEvent(): void {
-    if (!this.moveable) {
-      throw new Error('This moveable is not initialization');
-    }
-
-    const frame = {
-      left: 0,
-      top: 0,
-    };
-
-    this.moveable.on('resizeStart', (event) => {
-      if (!this.target) {
-        return;
-      }
-      this.dragStatus = ActionStatus.START;
-      this.moveableHelper?.onResizeStart(event);
-
-      frame.top = this.target.offsetTop;
-      frame.left = this.target.offsetLeft;
-    });
-
-    this.moveable.on('resize', (event) => {
-      if (!this.moveable || !this.target || !this.dragElement) {
-        return;
-      }
-      const { width, height, drag } = event;
-      const { beforeTranslate } = drag;
-      this.dragStatus = ActionStatus.ING;
-      this.moveableHelper?.onResize(event);
-
-      if (this.mode === Mode.SORTABLE) {
-        this.target.style.top = `0px`;
-      } else {
-        this.target.style.left = `${frame.left + beforeTranslate[0]}px`;
-        this.target.style.top = `${frame.top + beforeTranslate[1]}px`;
-      }
-
-      this.target.style.width = `${width}px`;
-      this.target.style.height = `${height}px`;
-    });
-
-    this.moveable.on('resizeEnd', () => {
-      this.dragStatus = ActionStatus.END;
-      this.update(true);
-    });
-  }
-
-  private bindDragEvent(): void {
-    if (!this.moveable) {
-      throw new Error('This moveable is not initialization');
-    }
-
-    const frame = {
-      left: 0,
-      top: 0,
-    };
-
-    let timeout: any;
-
-    const { contentWindow } = this.workshop.renderer;
-    const doc = contentWindow?.document;
-
-    this.moveable.on('dragStart', (event) => {
-      if (!this.target) {
-        throw new Error('No select any element');
-      }
-      this.dragStatus = ActionStatus.START;
-      this.moveableHelper?.onDragStart(event);
-      if (this.mode === Mode.SORTABLE) {
-        this.ghostElement = this.generateGhostElement(this.target);
-      }
-      frame.top = this.target.offsetTop;
-      frame.left = this.target.offsetLeft;
-    });
-
-    this.moveable.on('drag', (event) => {
-      if (!this.target || !this.dragElement) {
-        return;
-      }
-      if (timeout) {
-        globalThis.clearTimeout(timeout);
-        timeout = undefined;
-      }
-      timeout = globalThis.setTimeout(async () => {
-        const elements = this.workshop.getElementFromPoint(event.inputEvent);
-        for (const element of elements) {
-          if (
-            doc &&
-            !element.id.startsWith(GHOST_EL_ID_PREFIX) &&
-            element !== this.target &&
-            (await this.workshop.isContainer(element))
-          ) {
-            dom.addClassName(element, doc, this.workshop.highlightContainer.className);
-            break;
-          }
-        }
-      }, this.workshop.highlightContainer.duration);
-      this.dragStatus = ActionStatus.ING;
-
-      if (this.ghostElement) {
-        this.ghostElement.style.top = `${frame.top + event.beforeTranslate[1]}px`;
-        return;
-      }
-
-      this.moveableHelper?.onDrag(event);
-
-      this.target.style.left = `${frame.left + event.beforeTranslate[0]}px`;
-      this.target.style.top = `${frame.top + event.beforeTranslate[1]}px`;
-    });
-
-    this.moveable.on('dragEnd', () => {
-      if (timeout) {
-        globalThis.clearTimeout(timeout);
-        timeout = undefined;
-      }
-
-      let parentElement: HTMLElement | null = null;
-      if (doc) {
-        parentElement = dom.removeClassNameByClassName(doc, this.workshop.highlightContainer.className);
-      }
-
-      if (this.dragStatus === ActionStatus.ING) {
-        if (parentElement) {
-          this.update(false, parentElement);
-        } else {
-          this.update();
-        }
-      }
-      this.dragStatus = ActionStatus.END;
-      this.destroyGhostElement();
-    });
-  }
-
-  private bindRotateEvent(): void {
-    if (!this.moveable) {
-      throw new Error('This moveable is not initialization');
-    }
-
-    this.moveable.on('rotateStart', (event) => {
-      this.dragStatus = ActionStatus.START;
-      this.moveableHelper?.onRotateStart(event);
-    });
-
-    this.moveable.on('rotate', (event) => {
-      if (!this.target || !this.dragElement) {
-        return;
-      }
-      this.dragStatus = ActionStatus.ING;
-      this.moveableHelper?.onRotate(event);
-      const frame = this.moveableHelper?.getFrame(event.target);
-      this.target.style.transform = frame?.toCSSObject().transform || '';
-    });
-
-    this.moveable.on('rotateEnd', (event) => {
-      this.dragStatus = ActionStatus.END;
-      const frame = this.moveableHelper?.getFrame(event.target);
-      this.fire('update', {
-        element: this.target,
-        style: {
-          transform: frame?.get('transform'),
-        },
-      });
-    });
-  }
-
-  private bindScaleEvent(): void {
-    if (!this.moveable) {
-      throw new Error('This moveable is not initialization');
-    }
-
-    this.moveable.on('scaleStart', (event) => {
-      this.dragStatus = ActionStatus.START;
-      this.moveableHelper?.onScaleStart(event);
-    });
-
-    this.moveable.on('scale', (event) => {
-      if (!this.target || !this.ghostElement) {
-        return;
-      }
-      this.dragStatus = ActionStatus.ING;
-      this.moveableHelper?.onScale(event);
-      const frame = this.moveableHelper?.getFrame(event.target);
-      this.target.style.transform = frame?.toCSSObject().transform || '';
-    });
-
-    this.moveable.on('scaleEnd', (event) => {
-      this.dragStatus = ActionStatus.END;
-      const frame = this.moveableHelper?.getFrame(event.target);
-      this.fire('update', {
-        element: this.target,
-        style: {
-          transform: frame?.get('transform'),
-        },
-      });
-    });
-  }
-
-  private generateGhostElement(element: HTMLElement): HTMLElement {
-    if (this.ghostElement) {
-      this.destroyGhostElement();
-    }
-    const ghostElement = element.cloneNode(true) as HTMLElement;
-    const { top, left } = dom.getAbsolutePosition(element, dom.getElementOffset(element));
-    ghostElement.id = `${GHOST_EL_ID_PREFIX}${element.id}`;
-    ghostElement.style.zIndex = ZIndex.GHOST_EL;
-    ghostElement.style.opacity = '0.5';
-    ghostElement.style.position = 'absolute';
-    ghostElement.style.left = `${left}px`;
-    ghostElement.style.top = `${top}px`;
-    element.after(ghostElement);
-    return ghostElement;
-  }
-
-  private setElementGuidelines(nodes: HTMLElement[]): void {
-    this.elementGuidelines.forEach((el) => {
-      el.remove();
-    });
-    this.elementGuidelines = [];
-    if ((this.mode = Mode.ABSOLUTE)) {
-      this.container.append(this.createGuidelineElements(nodes));
-    }
-  }
-
-  private createGuidelineElements(nodes: HTMLElement[]): DocumentFragment {
-    const frame = globalThis.document.createDocumentFragment();
-    for (const node of nodes) {
-      const { width, height } = node.getBoundingClientRect();
-      if (node === this.target) {
-        continue;
-      }
-      const { left, top } = dom.getElementOffset(node as HTMLElement);
-      const elementGuideline = globalThis.document.createElement('div');
-      elementGuideline.style.cssText = `position: absolute; width: ${width}px; height: ${height}px; top: ${top}px; left: ${left}px;`;
-      this.elementGuidelines.push(elementGuideline);
-      frame.append(elementGuideline);
-    }
-    return frame;
-  }
-
-  private update(isResize = false, parentElement: HTMLElement | null = null): void {
-    if (!this.target) {
-      return;
-    }
-
-    const { contentWindow } = this.workshop.renderer;
-    const doc = contentWindow?.document;
-    if (!doc) {
-      return;
-    }
-
-    const offset =
-      this.mode === Mode.SORTABLE ? { left: 0, top: 0 } : { left: this.target.offsetLeft, top: this.target.offsetTop };
-
-    let left = calculateValueByFontsize(doc, offset.left);
-    let top = calculateValueByFontsize(doc, offset.top);
-    const width = calculateValueByFontsize(doc, this.target.clientWidth);
-    const height = calculateValueByFontsize(doc, this.target.clientHeight);
-
-    if (parentElement && this.mode === Mode.ABSOLUTE && this.dragElement) {
-      if (this.moveableHelper?.getFrame(this.dragElement).properties) {
-        const transform = this.moveableHelper?.getFrame(this.dragElement).properties;
-        const [translateX, translateY] = transform.translate.value;
-        const { left: parentLeft, top: parentTop } = dom.getElementOffset(parentElement);
-        left =
-          calculateValueByFontsize(doc, this.dragElement.offsetLeft) +
-          parseFloat(translateX) -
-          calculateValueByFontsize(doc, parentLeft);
-        top =
-          calculateValueByFontsize(doc, this.dragElement.offsetTop) +
-          parseFloat(translateY) -
-          calculateValueByFontsize(doc, parentTop);
-      }
-    }
-
-    this.fire('update', {
-      element: this.target,
-      parentElement,
-      style: isResize ? { left, top, width, height } : { left, top },
-    });
-  }
 }
+
+/**
+ * 下移组件位置
+ * @param {number} deltaTop 偏移量
+ * @param {Object} detail 当前选中的组件配置
+ */
+export const down = (deltaTop: number, target: HTMLElement | SVGElement): SortEventData | void => {
+  let swapIndex = 0;
+  let addUpH = target.clientHeight;
+  const brothers = Array.from(target.parentNode?.children || []).filter(
+    (node) => !node.id.startsWith(GHOST_EL_ID_PREFIX)
+  );
+  const index = brothers.indexOf(target);
+  // 往下移动
+  const downEls = brothers.slice(index + 1) as HTMLElement[];
+
+  for (let i = 0; i < downEls.length; i++) {
+    const ele = downEls[i];
+    // 是 fixed 不做处理
+    if (ele.style?.position === 'fixed') {
+      continue;
+    }
+    addUpH += ele.clientHeight / 2;
+    if (deltaTop <= addUpH) {
+      break;
+    }
+    addUpH += ele.clientHeight / 2;
+    swapIndex = i;
+  }
+  return {
+    src: target.id,
+    dist: downEls.length && swapIndex > -1 ? downEls[swapIndex].id : target.id,
+  };
+};
+
+/**
+ * 上移组件位置
+ * @param {Array} brothers 处于同一容器下的所有子组件配置
+ * @param {number} index 当前组件所处的位置
+ * @param {number} deltaTop 偏移量
+ * @param {Object} detail 当前选中的组件配置
+ */
+export const up = (deltaTop: number, target: HTMLElement | SVGElement): SortEventData | void => {
+  const brothers = Array.from(target.parentNode?.children || []).filter(
+    (node) => !node.id.startsWith(GHOST_EL_ID_PREFIX)
+  );
+  const index = brothers.indexOf(target);
+  // 往上移动
+  const upEls = brothers.slice(0, index) as HTMLElement[];
+
+  let addUpH = target.clientHeight;
+  let swapIndex = upEls.length - 1;
+
+  for (let i = upEls.length - 1; i >= 0; i--) {
+    const ele = upEls[i];
+    if (!ele) continue;
+    // 是 fixed 不做处理
+    if (ele.style.position === 'fixed') continue;
+
+    addUpH += ele.clientHeight / 2;
+    if (-deltaTop <= addUpH) break;
+    addUpH += ele.clientHeight / 2;
+
+    swapIndex = i;
+  }
+  return {
+    src: target.id,
+    dist: upEls.length && swapIndex > -1 ? upEls[swapIndex].id : target.id,
+  };
+};
 
 export default DragBox;

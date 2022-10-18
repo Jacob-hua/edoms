@@ -38,6 +38,12 @@ export interface DeleteData {
   app: EdApplication;
 }
 
+export interface SortEventData {
+  src: EdId;
+  dist: EdId;
+  root?: EdApplication;
+}
+
 export interface Runtime {
   getEngine?: () => Engine;
   beforeSelect?: (element: HTMLElement) => Promise<boolean> | boolean;
@@ -47,6 +53,7 @@ export interface Runtime {
   insert?: (data: InsertData) => void;
   update?: (data: UpdateData) => void;
   delete?: (data: DeleteData) => void;
+  sortNode?: (data: SortEventData) => void;
 }
 
 export interface Edoms {

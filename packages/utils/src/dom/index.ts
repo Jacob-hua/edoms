@@ -1,4 +1,3 @@
-import { typeOf } from '../object';
 import { DivProperty, ElementOffset } from './type';
 
 export const createDiv = ({ className, cssText }: DivProperty): HTMLDivElement => {
@@ -9,11 +8,13 @@ export const createDiv = ({ className, cssText }: DivProperty): HTMLDivElement =
 };
 
 export const getElementOffset = (element: HTMLElement): ElementOffset => {
+  const { offsetParent } = element;
+
   const left = element.offsetLeft;
   const top = element.offsetTop;
 
-  if (element.offsetParent && typeOf(element.offsetParent, HTMLElement)) {
-    const parentOffset = getElementOffset(element.offsetParent as HTMLElement);
+  if (offsetParent) {
+    const parentOffset = getElementOffset(offsetParent as HTMLElement);
     return {
       left: left + parentOffset.left,
       top: top + parentOffset.top,

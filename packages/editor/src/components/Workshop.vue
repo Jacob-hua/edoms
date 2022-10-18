@@ -1,5 +1,5 @@
 <template>
-  <div ref="workshopContainer"></div>
+  <div ref="workshopContainer" class="workshopWrapper"></div>
 </template>
 
 <script lang="ts" setup name="WorkshopView">
@@ -45,3 +45,11 @@ watchEffect(() => {
   });
 });
 </script>
+
+<style lang="scss">
+.workshopWrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+</style>
