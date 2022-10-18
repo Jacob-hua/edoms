@@ -6,6 +6,7 @@ import Page from './Page';
 export interface AppProps {
   meta?: EdApplication;
   curPage?: string;
+  transformStyle?: (style: Record<string, any>) => Record<string, any>;
 }
 
 export type FromInstance = EdInstance | null | undefined;

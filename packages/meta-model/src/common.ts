@@ -5,9 +5,39 @@ export type EdComponentType = string | 'container' | 'page' | 'app';
 
 export type EdId = string;
 
+export type NumStr = number | string;
+
 export interface EdStyle {
-  width?: string;
-  height?: string;
+  position?: string;
+  left?: NumStr;
+  top?: NumStr;
+  right?: NumStr;
+  bottom?: NumStr;
+  width?: NumStr;
+  height?: NumStr;
+  background?: string;
+  backgroundImage?: string;
+  backgroundColor?: string;
+  backgroundRepeat?: string;
+  backgroundSize?: string;
+  color?: string;
+  fontSize?: NumStr;
+  fontWeight?: NumStr;
+  borderColor?: string;
+  borderStyle?: string;
+  borderTopStyle?: string;
+  borderRightStyle?: string;
+  borderBottomStyle?: string;
+  borderLeftStyle?: string;
+  borderWidth?: NumStr;
+  borderTopWidth?: NumStr;
+  borderRightWidth?: NumStr;
+  borderBottomWidth?: NumStr;
+  borderLeftWidth?: NumStr;
+  borderTopLeftRadius?: NumStr;
+  borderTopRightRadius?: NumStr;
+  borderBottomRightRadius?: NumStr;
+  borderBottomLeftRadius?: NumStr;
   [key: string]: any;
 }
 
@@ -38,6 +68,8 @@ export interface EdComponent {
   id: EdId;
   type: EdComponentType;
   name?: string;
+  className?: string;
+  display?: boolean;
   disabled?: boolean;
   style?: EdStyle;
   actions?: EdAction[];
@@ -51,6 +83,7 @@ export interface EdContainer extends EdComponent {
 
 export interface EdPage extends EdContainer {
   type: 'page';
+  title: string;
 }
 
 export interface EdApplication extends EdComponent {

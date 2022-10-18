@@ -27,3 +27,41 @@ export const generateEffectProps = (action: EdAction): Record<string, any> => {
     return result;
   }, {} as Record<string, any>);
 };
+
+export const style2Object = (style: string): Record<string, any> => {
+  if (typeof style !== 'string') {
+    return style;
+  }
+
+  const obj: Record<string, any> = {};
+  style.split(';').forEach((element) => {
+    if (!element) {
+      return;
+    }
+
+    const items = element.split(':');
+
+    let key = items.shift();
+    let value = items.join(':');
+
+    if (!key) return;
+
+    key = key.replace(/^\s*/, '').replace(/\s*$/, '');
+    value = value.replace(/^\s*/, '').replace(/\s*$/, '');
+
+    key = key
+      .split('-')
+      .map((v, i) => (i > 0 ? `${v[0].toUpperCase()}${v.substr(1)}` : v))
+      .join('');
+
+    obj[key] = value;
+  });
+  return obj;
+};
+
+export const fillBackgroundImage = (value: string): string => {
+  if (value && !/^url/.test(value) && !/^linear-gradient/.test(value)) {
+    return `url(${value})`;
+  }
+  return value;
+};

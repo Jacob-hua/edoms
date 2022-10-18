@@ -70,5 +70,6 @@ export default (props: AppProps) => {
     fire,
     provideEffect,
     provideContext,
+    ...app,
   };
 };
