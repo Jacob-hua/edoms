@@ -205,11 +205,10 @@ importers:
 
   packages/editor:
     specifiers:
-      '@edoms/components': workspace:^0.0.1
       '@edoms/engine': workspace:^0.0.1
       '@edoms/meta-model': workspace:^0.0.1
+      '@edoms/stage': workspace:^0.0.1
       '@edoms/utils': workspace:^0.0.1
-      '@edoms/workshop': workspace:^0.0.1
       '@vitejs/plugin-vue': ^3.0.1
       element-plus: ^2.2.15
       typescript: ~4.7.4
@@ -217,11 +216,10 @@ importers:
       vue: ^3.2.37
       vue-tsc: ^0.39.5
     dependencies:
-      '@edoms/components': link:../components
       '@edoms/engine': link:../engine
       '@edoms/meta-model': link:../meta-model
+      '@edoms/stage': link:../stage
       '@edoms/utils': link:../utils
-      '@edoms/workshop': link:../workshop
       element-plus: registry.npmmirror.com/element-plus/2.2.15_vue@3.2.37
       vue: registry.npmmirror.com/vue/3.2.37
     devDependencies:

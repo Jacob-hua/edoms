@@ -5,39 +5,37 @@ export type EdComponentType = string | 'container' | 'page' | 'app';
 
 export type EdId = string;
 
-export type NumStr = number | string;
-
 export interface EdStyle {
   position?: string;
-  left?: NumStr;
-  top?: NumStr;
-  right?: NumStr;
-  bottom?: NumStr;
-  width?: NumStr;
-  height?: NumStr;
+  left?: number;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  width?: number;
+  height?: number;
   background?: string;
   backgroundImage?: string;
   backgroundColor?: string;
   backgroundRepeat?: string;
   backgroundSize?: string;
   color?: string;
-  fontSize?: NumStr;
-  fontWeight?: NumStr;
+  fontSize?: number;
+  fontWeight?: number;
   borderColor?: string;
   borderStyle?: string;
   borderTopStyle?: string;
   borderRightStyle?: string;
   borderBottomStyle?: string;
   borderLeftStyle?: string;
-  borderWidth?: NumStr;
-  borderTopWidth?: NumStr;
-  borderRightWidth?: NumStr;
-  borderBottomWidth?: NumStr;
-  borderLeftWidth?: NumStr;
-  borderTopLeftRadius?: NumStr;
-  borderTopRightRadius?: NumStr;
-  borderBottomRightRadius?: NumStr;
-  borderBottomLeftRadius?: NumStr;
+  borderWidth?: number;
+  borderTopWidth?: number;
+  borderRightWidth?: number;
+  borderBottomWidth?: number;
+  borderLeftWidth?: number;
+  borderTopLeftRadius?: number;
+  borderTopRightRadius?: number;
+  borderBottomRightRadius?: number;
+  borderBottomLeftRadius?: number;
   [key: string]: any;
 }
 
