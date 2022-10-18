@@ -5,7 +5,6 @@
   "module": "./src/index.ts",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview --port 4173",
     "type-check": "vue-tsc --noEmit"
   },

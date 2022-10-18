@@ -254,6 +254,37 @@ importers:
       typescript: registry.npmmirror.com/typescript/4.7.4
       vite: registry.npmmirror.com/vite/3.1.3
 
+  packages/stage:
+    specifiers:
+      '@edoms/engine': workspace:^0.0.1
+      '@edoms/meta-model': workspace:^0.0.1
+      '@edoms/utils': workspace:^0.0.1
+      '@scena/guides': ^0.17.0
+      '@types/node': ^15.12.4
+      keycon: ^1.1.2
+      lodash-es: ^4.17.21
+      moveable: ^0.30.0
+      moveable-helper: ^0.4.0
+      sass: ^1.35.1
+      typescript: ^4.3.4
+      vite: ^2.9.13
+      vite-plugin-dts: ^0.9.6
+    dependencies:
+      '@edoms/engine': link:../engine
+      '@edoms/meta-model': link:../meta-model
+      '@edoms/utils': link:../utils
+      '@scena/guides': registry.npmmirror.com/@scena/guides/0.17.0
+      keycon: registry.npmmirror.com/keycon/1.3.1
+      lodash-es: registry.npmmirror.com/lodash-es/4.17.21
+      moveable: registry.npmmirror.com/moveable/0.30.0
+      moveable-helper: registry.npmmirror.com/moveable-helper/0.4.0
+    devDependencies:
+      '@types/node': registry.npmmirror.com/@types/node/15.14.9
+      sass: registry.npmmirror.com/sass/1.54.8
+      typescript: registry.npmmirror.com/typescript/4.7.4
+      vite: registry.npmmirror.com/vite/2.9.15_sass@1.54.8
+      vite-plugin-dts: registry.npmmirror.com/vite-plugin-dts/0.9.10_vite@2.9.15
+
   packages/utils:
     specifiers:
       '@types/hat': ^0.0.1
@@ -669,6 +700,14 @@ packages:
     version: 0.2.3
     dev: true
 
+  registry.npmmirror.com/@cfcs/core/0.0.6:
+    resolution: {integrity: sha512-FxfJMwoLB8MEMConeXUCqtMGqxdtePQxRBOiGip9ULcYYam3WfCgoY6xdnMaSkYvRvmosp5iuG+TiPofm65+Pw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@cfcs/core/-/core-0.0.6.tgz}
+    name: '@cfcs/core'
+    version: 0.0.6
+    dependencies:
+      '@egjs/component': registry.npmmirror.com/@egjs/component/3.0.2
+    dev: false
+
   registry.npmmirror.com/@ctrl/tinycolor/3.4.1:
     resolution: {integrity: sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ctrl/tinycolor/-/tinycolor-3.4.1.tgz}
     name: '@ctrl/tinycolor'
@@ -700,6 +739,12 @@ packages:
     version: 1.0.1
     dependencies:
       '@egjs/list-differ': registry.npmmirror.com/@egjs/list-differ/1.0.0
+    dev: false
+
+  registry.npmmirror.com/@egjs/component/3.0.2:
+    resolution: {integrity: sha512-Mze3mwEE19+dERrimg0JVLtpOHG4AC+LOuKqvF4qGZjn0k23ZbNI7b/gy1LFR63LigC2b8k70aDjy8xoT+WNPA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@egjs/component/-/component-3.0.2.tgz}
+    name: '@egjs/component'
+    version: 3.0.2
     dev: false
 
   registry.npmmirror.com/@egjs/list-differ/1.0.0:
@@ -952,12 +997,43 @@ packages:
       '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
     dev: false
 
+  registry.npmmirror.com/@scena/guides/0.17.0:
+    resolution: {integrity: sha512-gs2um9m+X0oYoZ8oU2YHobiqGx5KxaI4CWy3frbqbUq4aPiaUNFD+uj/NQC9Ja5Ftl0rehhZAE/c1tbSYSILOQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/guides/-/guides-0.17.0.tgz}
+    name: '@scena/guides'
+    version: 0.17.0
+    dependencies:
+      '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
+      react-compat-guides: registry.npmmirror.com/react-compat-guides/0.14.0
+    dev: false
+
   registry.npmmirror.com/@scena/matrix/1.1.1:
     resolution: {integrity: sha512-JVKBhN0tm2Srl+Yt+Ywqu0oLgLcdemDQlD1OxmN9jaCTwaFPZ7tY8n6dhVgMEaR9qcR7r+kAlMXnSfNyYdE+Vg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/matrix/-/matrix-1.1.1.tgz}
     name: '@scena/matrix'
     version: 1.1.1
     dependencies:
       '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
+    dev: false
+
+  registry.npmmirror.com/@scena/react-guides/0.16.0:
+    resolution: {integrity: sha512-njivmQC89gsHKD1tqLsKwhQPADds+InloGDWsMDfEgfl9Fg0jE72RMLKJOxLW5kj/XMSDGSBB2FUWYTR4FcIZw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/react-guides/-/react-guides-0.16.0.tgz}
+    name: '@scena/react-guides'
+    version: 0.16.0
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
+      '@scena/react-ruler': registry.npmmirror.com/@scena/react-ruler/0.8.1
+      css-to-mat: registry.npmmirror.com/css-to-mat/1.0.3
+      framework-utils: registry.npmmirror.com/framework-utils/1.1.0
+      gesto: registry.npmmirror.com/gesto/1.13.3
+      react-css-styled: registry.npmmirror.com/react-css-styled/1.0.4
+    dev: false
+
+  registry.npmmirror.com/@scena/react-ruler/0.8.1:
+    resolution: {integrity: sha512-r9FbtF1kbs5CRrK7avVGcRvhJitk8BzzOUUV2uIEjDxS2dBqCOrUD2e09FXwPdv3hcFvVmGcLYeuNrjl4P7ddA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/react-ruler/-/react-ruler-0.8.1.tgz}
+    name: '@scena/react-ruler'
+    version: 0.8.1
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
+      framework-utils: registry.npmmirror.com/framework-utils/1.1.0
     dev: false
 
   registry.npmmirror.com/@sxzz/popperjs-es/2.11.7:
@@ -971,6 +1047,17 @@ packages:
     name: '@tootallnate/once'
     version: 2.0.0
     engines: {node: '>= 10'}
+    dev: true
+
+  registry.npmmirror.com/@ts-morph/common/0.12.3:
+    resolution: {integrity: sha512-4tUmeLyXJnJWvTFOKtcNJ1yh0a3SsTLi2MUoyj8iUNznFRN1ZquaNe7Oukqrnki2FzZkm0J9adCNLDZxUzvj+w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ts-morph/common/-/common-0.12.3.tgz}
+    name: '@ts-morph/common'
+    version: 0.12.3
+    dependencies:
+      fast-glob: registry.npmmirror.com/fast-glob/3.2.11
+      minimatch: registry.npmmirror.com/minimatch/3.1.2
+      mkdirp: registry.npmmirror.com/mkdirp/1.0.4
+      path-browserify: registry.npmmirror.com/path-browserify/1.0.1
     dev: true
 
   registry.npmmirror.com/@types/chai-subset/1.3.3:
@@ -1023,6 +1110,12 @@ packages:
     resolution: {integrity: sha512-RoZphVtHbxPZizt4IcILciSWiC6dcn+eZ8oX9IWEYfDMcocdd42f7NPI6fQj+6zI8y4E0L7gu2pcZKLGTRaV9Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/lodash/-/lodash-4.14.184.tgz}
     name: '@types/lodash'
     version: 4.14.184
+
+  registry.npmmirror.com/@types/node/15.14.9:
+    resolution: {integrity: sha512-qjd88DrCxupx/kJD5yQgZdcYKZKSIGBVDIBE1/LTGcNm3d2Np/jxojkdePDdfnBHJc5W7vSMpbJ1aB7p/Py69A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-15.14.9.tgz}
+    name: '@types/node'
+    version: 15.14.9
+    dev: true
 
   registry.npmmirror.com/@types/node/16.11.56:
     resolution: {integrity: sha512-aFcUkv7EddxxOa/9f74DINReQ/celqH8DiB3fRYgVDM2Xm5QJL8sl80QKuAnGvwAsMn+H3IFA6WCrQh1CY7m1A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-16.11.56.tgz}
@@ -2052,6 +2145,12 @@ packages:
       string-width: registry.npmmirror.com/string-width/4.2.3
       strip-ansi: registry.npmmirror.com/strip-ansi/6.0.1
       wrap-ansi: registry.npmmirror.com/wrap-ansi/7.0.0
+    dev: true
+
+  registry.npmmirror.com/code-block-writer/11.0.3:
+    resolution: {integrity: sha512-NiujjUFB4SwScJq2bwbYUtXbZhBSlY6vYzm++3Q6oC+U+injTqfPYFK8wS9COOmb2lueqp0ZRB4nK1VYeHgNyw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/code-block-writer/-/code-block-writer-11.0.3.tgz}
+    name: code-block-writer
+    version: 11.0.3
     dev: true
 
   registry.npmmirror.com/color-convert/1.9.3:
@@ -3448,6 +3547,17 @@ packages:
     version: 1.1.0
     dev: false
 
+  registry.npmmirror.com/fs-extra/10.1.0:
+    resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/fs-extra/-/fs-extra-10.1.0.tgz}
+    name: fs-extra
+    version: 10.1.0
+    engines: {node: '>=12'}
+    dependencies:
+      graceful-fs: registry.npmmirror.com/graceful-fs/4.2.10
+      jsonfile: registry.npmmirror.com/jsonfile/6.1.0
+      universalify: registry.npmmirror.com/universalify/2.0.0
+    dev: true
+
   registry.npmmirror.com/fs.realpath/1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/fs.realpath/-/fs.realpath-1.0.0.tgz}
     name: fs.realpath
@@ -4131,6 +4241,33 @@ packages:
     hasBin: true
     dev: true
 
+  registry.npmmirror.com/jsonfile/6.1.0:
+    resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/jsonfile/-/jsonfile-6.1.0.tgz}
+    name: jsonfile
+    version: 6.1.0
+    dependencies:
+      universalify: registry.npmmirror.com/universalify/2.0.0
+    optionalDependencies:
+      graceful-fs: registry.npmmirror.com/graceful-fs/4.2.10
+    dev: true
+
+  registry.npmmirror.com/keycode/2.2.1:
+    resolution: {integrity: sha512-Rdgz9Hl9Iv4QKi8b0OlCRQEzp4AgVxyCtz5S/+VIHezDmrDhkp2N2TqBWOLz0/gbeREXOOiI9/4b8BY9uw2vFg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/keycode/-/keycode-2.2.1.tgz}
+    name: keycode
+    version: 2.2.1
+    dev: false
+
+  registry.npmmirror.com/keycon/1.3.1:
+    resolution: {integrity: sha512-VwrgaBzl3gyG2D8mgEIApGcXhH5ilzib2WKT4j9sOEVBm+awV/ok4ctglygxUTyDZJ8lA2PhqMrWZYMqxAIEyA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/keycon/-/keycon-1.3.1.tgz}
+    name: keycon
+    version: 1.3.1
+    dependencies:
+      '@cfcs/core': registry.npmmirror.com/@cfcs/core/0.0.6
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
+      '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
+      keycode: registry.npmmirror.com/keycode/2.2.1
+    dev: false
+
   registry.npmmirror.com/levn/0.3.0:
     resolution: {integrity: sha512-0OO4y2iOHix2W6ujICbKIaEQXvFQHue65vUG3pb5EUomzPI90z9hsA1VsO/dbIIpC53J8gxM9Q4Oho0jrCM/yA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/levn/-/levn-0.3.0.tgz}
     name: levn
@@ -4387,6 +4524,14 @@ packages:
     version: 1.2.6
     dev: true
 
+  registry.npmmirror.com/mkdirp/1.0.4:
+    resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mkdirp/-/mkdirp-1.0.4.tgz}
+    name: mkdirp
+    version: 1.0.4
+    engines: {node: '>=10'}
+    hasBin: true
+    dev: true
+
   registry.npmmirror.com/moveable-helper/0.4.0:
     resolution: {integrity: sha512-t1FK9PO187Gn0N6GVZcrQgePjiHmuj8eUhmJjH38LvTMnVVxiHzWYRx6ARFZvSFIIW4yb6BEAv4C99Bsx84nFw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/moveable-helper/-/moveable-helper-0.4.0.tgz}
     name: moveable-helper
@@ -4394,6 +4539,17 @@ packages:
     dependencies:
       '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
       scenejs: registry.npmmirror.com/scenejs/1.6.0
+    dev: false
+
+  registry.npmmirror.com/moveable/0.30.0:
+    resolution: {integrity: sha512-WkIccP2vs7oi7Vtf7c8xmduyF7Kb6+lkJwxSOp+Yx3gFFHUdVTQDO8UhJWwuIrlX5eLymk99bIRi+RPttAK2Yg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/moveable/-/moveable-0.30.0.tgz}
+    name: moveable
+    version: 0.30.0
+    dependencies:
+      '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
+      react-compat-moveable: registry.npmmirror.com/react-compat-moveable/0.18.0
+      react-moveable: registry.npmmirror.com/react-moveable/0.33.0
+      react-simple-compat: registry.npmmirror.com/react-simple-compat/1.2.3
     dev: false
 
   registry.npmmirror.com/moveable/0.36.3:
@@ -4669,6 +4825,12 @@ packages:
       entities: registry.npmmirror.com/entities/4.4.0
     dev: true
 
+  registry.npmmirror.com/path-browserify/1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/path-browserify/-/path-browserify-1.0.1.tgz}
+    name: path-browserify
+    version: 1.0.1
+    dev: true
+
   registry.npmmirror.com/path-exists/4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/path-exists/-/path-exists-4.0.0.tgz}
     name: path-exists
@@ -4896,6 +5058,36 @@ packages:
       react-css-styled: registry.npmmirror.com/react-css-styled/1.0.4
     dev: false
 
+  registry.npmmirror.com/react-compat-guides/0.14.0:
+    resolution: {integrity: sha512-Qy5ZYSZQmbp2VvhXf9K73ZgZvx+eiDPH6GNUzzKmPcPCKVYJ3L2rbBVReOyWV9XMSQI8tLmHfkICoDBXsBDeZA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-compat-guides/-/react-compat-guides-0.14.0.tgz}
+    name: react-compat-guides
+    version: 0.14.0
+    dependencies:
+      '@scena/react-guides': registry.npmmirror.com/@scena/react-guides/0.16.0
+      react-compat-css-styled: registry.npmmirror.com/react-compat-css-styled/1.0.9
+      react-compat-ruler: registry.npmmirror.com/react-compat-ruler/0.7.1
+      react-simple-compat: registry.npmmirror.com/react-simple-compat/1.2.3
+    dev: false
+
+  registry.npmmirror.com/react-compat-moveable/0.18.0:
+    resolution: {integrity: sha512-ACEFE/GKtyqzJBSQ1cosZtD6cD2uuwFBsyNF/zIeM/JvF4zGae3cUUVchOpfHBjPBnjqiHjKMAaucMXPOTDosQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-compat-moveable/-/react-compat-moveable-0.18.0.tgz}
+    name: react-compat-moveable
+    version: 0.18.0
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
+      '@egjs/agent': registry.npmmirror.com/@egjs/agent/2.4.3
+      '@egjs/children-differ': registry.npmmirror.com/@egjs/children-differ/1.0.1
+      '@scena/dragscroll': registry.npmmirror.com/@scena/dragscroll/1.2.1
+      '@scena/matrix': registry.npmmirror.com/@scena/matrix/1.1.1
+      css-to-mat: registry.npmmirror.com/css-to-mat/1.0.3
+      framework-utils: registry.npmmirror.com/framework-utils/1.1.0
+      gesto: registry.npmmirror.com/gesto/1.13.3
+      overlap-area: registry.npmmirror.com/overlap-area/1.1.0
+      react-compat-css-styled: registry.npmmirror.com/react-compat-css-styled/1.0.9
+      react-css-styled: registry.npmmirror.com/react-css-styled/1.0.4
+      react-moveable: registry.npmmirror.com/react-moveable/0.33.0
+    dev: false
+
   registry.npmmirror.com/react-compat-moveable/0.24.3:
     resolution: {integrity: sha512-mkJm/v3pvx5PrZFrK7AYySE6WDb0dceuHI7UUE/2pkMalUzgRVcueEWRJjZZhMbZAQ3HsNdPTPJz/4vhx8ZC7w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-compat-moveable/-/react-compat-moveable-0.24.3.tgz}
     name: react-compat-moveable
@@ -4916,6 +5108,15 @@ packages:
       react-moveable: registry.npmmirror.com/react-moveable/0.39.3
     dev: false
 
+  registry.npmmirror.com/react-compat-ruler/0.7.1:
+    resolution: {integrity: sha512-aN70fW4Zy0T8Ys0kY9wn8HvnGxGar3Rqq0H1zVvonE1bXP9y/BlAJ0HgK2bQcmwQprq7LCgLs6reGBZoEDG+0w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-compat-ruler/-/react-compat-ruler-0.7.1.tgz}
+    name: react-compat-ruler
+    version: 0.7.1
+    dependencies:
+      '@scena/react-ruler': registry.npmmirror.com/@scena/react-ruler/0.8.1
+      react-simple-compat: registry.npmmirror.com/react-simple-compat/1.2.3
+    dev: false
+
   registry.npmmirror.com/react-css-styled/1.0.4:
     resolution: {integrity: sha512-nRske1bAKOCaf7Gf3o76tKQFIYggaW1qH4rutBlitH5lYnRPA7WoAYKrcxqdUPZd00oASg3SvFZSh3Mc1Wvj3w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-css-styled/-/react-css-styled-1.0.4.tgz}
     name: react-css-styled
@@ -4923,6 +5124,24 @@ packages:
     dependencies:
       css-styled: registry.npmmirror.com/css-styled/1.0.1
       framework-utils: registry.npmmirror.com/framework-utils/1.1.0
+    dev: false
+
+  registry.npmmirror.com/react-moveable/0.33.0:
+    resolution: {integrity: sha512-ro8dojnbyxHFpfpDCvYwZFF050bHoaVOKTKk3Kvc1Pz863dF7Ejrd3zjdg4ix4xNbZfNsfRKdz0BHgeZzyyzOg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-moveable/-/react-moveable-0.33.0.tgz}
+    name: react-moveable
+    version: 0.33.0
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
+      '@egjs/agent': registry.npmmirror.com/@egjs/agent/2.4.3
+      '@egjs/children-differ': registry.npmmirror.com/@egjs/children-differ/1.0.1
+      '@scena/dragscroll': registry.npmmirror.com/@scena/dragscroll/1.2.1
+      '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
+      '@scena/matrix': registry.npmmirror.com/@scena/matrix/1.1.1
+      css-to-mat: registry.npmmirror.com/css-to-mat/1.0.3
+      framework-utils: registry.npmmirror.com/framework-utils/1.1.0
+      gesto: registry.npmmirror.com/gesto/1.13.3
+      overlap-area: registry.npmmirror.com/overlap-area/1.1.0
+      react-css-styled: registry.npmmirror.com/react-css-styled/1.0.4
     dev: false
 
   registry.npmmirror.com/react-moveable/0.39.3:
@@ -5521,6 +5740,15 @@ packages:
       punycode: registry.npmmirror.com/punycode/2.1.1
     dev: true
 
+  registry.npmmirror.com/ts-morph/13.0.3:
+    resolution: {integrity: sha512-pSOfUMx8Ld/WUreoSzvMFQG5i9uEiWIsBYjpU9+TTASOeUa89j5HykomeqVULm1oqWtBdleI3KEFRLrlA3zGIw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ts-morph/-/ts-morph-13.0.3.tgz}
+    name: ts-morph
+    version: 13.0.3
+    dependencies:
+      '@ts-morph/common': registry.npmmirror.com/@ts-morph/common/0.12.3
+      code-block-writer: registry.npmmirror.com/code-block-writer/11.0.3
+    dev: true
+
   registry.npmmirror.com/tsconfig-paths/3.14.1:
     resolution: {integrity: sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz}
     name: tsconfig-paths
@@ -5629,6 +5857,13 @@ packages:
     engines: {node: '>= 4.0.0'}
     dev: true
 
+  registry.npmmirror.com/universalify/2.0.0:
+    resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/universalify/-/universalify-2.0.0.tgz}
+    name: universalify
+    version: 2.0.0
+    engines: {node: '>= 10.0.0'}
+    dev: true
+
   registry.npmmirror.com/update-browserslist-db/1.0.5_browserslist@4.21.3:
     resolution: {integrity: sha512-dteFFpCyvuDdr9S/ff1ISkKt/9YZxKjI9WlRR99c180GaztJtRa/fn18FdxGVKVsnPY7/a/FDN68mcvUmP4U7Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/update-browserslist-db/-/update-browserslist-db-1.0.5.tgz}
     id: registry.npmmirror.com/update-browserslist-db/1.0.5
@@ -5686,6 +5921,21 @@ packages:
       spdx-expression-parse: registry.npmmirror.com/spdx-expression-parse/3.0.1
     dev: true
 
+  registry.npmmirror.com/vite-plugin-dts/0.9.10_vite@2.9.15:
+    resolution: {integrity: sha512-dNfFJXRsm3YW8k+Wm8SesSaEGOaicKdgFz5PoUpT9zUh6URr5cwu5NMOBhJgiofrzcuYtOU2Ez7JQtg68RII8g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vite-plugin-dts/-/vite-plugin-dts-0.9.10.tgz}
+    id: registry.npmmirror.com/vite-plugin-dts/0.9.10
+    name: vite-plugin-dts
+    version: 0.9.10
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      vite: '>=2.4.4'
+    dependencies:
+      fast-glob: registry.npmmirror.com/fast-glob/3.2.11
+      fs-extra: registry.npmmirror.com/fs-extra/10.1.0
+      ts-morph: registry.npmmirror.com/ts-morph/13.0.3
+      vite: registry.npmmirror.com/vite/2.9.15_sass@1.54.8
+    dev: true
+
   registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0_vite@3.0.9:
     resolution: {integrity: sha512-WMbjPCui75fboFoUTHhdbXzu4Y/bJMv5N9QT9a7do3wNMNHHqrk+Tn2jrSJU0LS5fGl/EG+FEDBYVUeWIkDqXQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vite-plugin-vue-setup-extend/-/vite-plugin-vue-setup-extend-0.4.0.tgz}
     id: registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0
@@ -5696,7 +5946,7 @@ packages:
     dependencies:
       '@vue/compiler-sfc': registry.npmmirror.com/@vue/compiler-sfc/3.2.39
       magic-string: registry.npmmirror.com/magic-string/0.25.9
-      vite: registry.npmmirror.com/vite/3.0.9_sass@1.54.8
+      vite: registry.npmmirror.com/vite/3.0.9
     dev: true
 
   registry.npmmirror.com/vite-plugin-vue-setup-extend/0.4.0_vite@3.1.3:
@@ -5710,6 +5960,34 @@ packages:
       '@vue/compiler-sfc': registry.npmmirror.com/@vue/compiler-sfc/3.2.39
       magic-string: registry.npmmirror.com/magic-string/0.25.9
       vite: registry.npmmirror.com/vite/3.1.3_sass@1.54.8
+    dev: true
+
+  registry.npmmirror.com/vite/2.9.15_sass@1.54.8:
+    resolution: {integrity: sha512-fzMt2jK4vQ3yK56te3Kqpkaeq9DkcZfBbzHwYpobasvgYmP2SoAr6Aic05CsB4CzCZbsDv4sujX3pkEGhLabVQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vite/-/vite-2.9.15.tgz}
+    id: registry.npmmirror.com/vite/2.9.15
+    name: vite
+    version: 2.9.15
+    engines: {node: '>=12.2.0'}
+    hasBin: true
+    peerDependencies:
+      less: '*'
+      sass: '*'
+      stylus: '*'
+    peerDependenciesMeta:
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+    dependencies:
+      esbuild: registry.npmmirror.com/esbuild/0.14.54
+      postcss: registry.npmmirror.com/postcss/8.4.16
+      resolve: registry.npmmirror.com/resolve/1.22.1
+      rollup: registry.npmmirror.com/rollup/2.77.3
+      sass: registry.npmmirror.com/sass/1.54.8
+    optionalDependencies:
+      fsevents: registry.npmmirror.com/fsevents/2.3.2
     dev: true
 
   registry.npmmirror.com/vite/3.0.9:
