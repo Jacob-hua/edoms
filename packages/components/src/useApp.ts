@@ -6,7 +6,14 @@ export interface AppProps {
   meta: EdMeta;
 }
 
-export default (props: AppProps) => {
+export interface App {
+  transformStyle: (style: Record<string, any> | string) => Record<string, any>;
+  fire: (actionName: string, ...args: any[]) => void;
+  provideEffect: (key: string, effect: Function) => void;
+  provideContext: (path: string | number | symbol, value: any, scopes?: EdContextScope[]) => void;
+}
+
+export default (props: AppProps): App => {
   const app: Engine | undefined = inject('app');
   const component = app?.page?.getComponent(props.meta.id);
 
@@ -66,10 +73,17 @@ export default (props: AppProps) => {
     component?.handleContext(instance);
   }
 
+  function transformStyle(style: string | Record<string, any>): Record<string, any> {
+    if (app?.transformStyle) {
+      return app.transformStyle(style);
+    }
+    return {};
+  }
+
   return {
     fire,
     provideEffect,
     provideContext,
-    ...app,
+    transformStyle,
   };
 };
