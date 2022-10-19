@@ -1,0 +1,68 @@
+<!-- eslint-disable vue/no-undef-properties -->
+<template>
+  <el-switch
+    v-if="model"
+    v-model="model[n]"
+    :size="size"
+    :active-value="activeValue"
+    :inactive-value="inactiveValue"
+    :disabled="disabled"
+    @change="changeHandler"
+  ></el-switch>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent, PropType } from 'vue';
+
+import { SwitchConfig } from '../schema';
+import fieldProps from '../utils/fieldProps';
+import { useAddField } from '../utils/useAddField';
+export default defineComponent({
+  name: 'MFieldsSwitch',
+  expose: [],
+  props: {
+    ...fieldProps,
+    config: {
+      type: Object as PropType<SwitchConfig>,
+      required: true,
+    },
+  },
+
+  emits: ['change'],
+
+  setup(props, { emit }) {
+    // eslint-disable-next-line vue/no-undef-properties
+    useAddField(props.prop);
+
+    return {
+      // eslint-disable-next-line vue/no-undef-properties
+      n: computed(() => props.name || props.config.name || ''),
+      activeValue: computed(() => {
+        if (typeof props.config.activeValue === 'undefined') {
+          if (props.config.filter === 'number') {
+            return 1;
+          }
+        } else {
+          return props.config.activeValue;
+        }
+
+        return true;
+      }),
+      inactiveValue: computed(() => {
+        if (typeof props.config.inactiveValue === 'undefined') {
+          if (props.config.filter === 'number') {
+            return 0;
+          }
+        } else {
+          return props.config.inactiveValue;
+        }
+
+        return false;
+      }),
+      changeHandler: (v: boolean | number | string) => {
+        emit('change', v);
+      },
+    };
+  },
+});
+</script>

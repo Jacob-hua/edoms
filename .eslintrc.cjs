@@ -82,7 +82,7 @@ module.exports = defineConfig({
     'vue/no-lone-template': ['error'], // 禁止没有属性的<template></template>
     'vue/no-unused-refs': ['error'], // 检查未使用的refs
     'vue/no-useless-v-bind': ['error'], // 带有字符串值的v-bind改为静态属性
-    'vue/no-static-inline-styles': ['error'], // 禁止行内静态style样式
+    'vue/no-static-inline-styles': ['off'], // 禁止行内静态style样式
     'vue/no-undef-properties': ['error', { ignores: ['/^\\$/'] }], // 检查未定义的属性
     'vue/no-unused-properties': ['error', { groups: ['props', 'data'] }], // 检查未使用的属性
     'vue/require-expose': ['error'], // 组件向外暴漏的属性或方法必须使用expose声明
