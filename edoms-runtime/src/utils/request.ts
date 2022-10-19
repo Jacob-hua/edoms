@@ -16,21 +16,27 @@
  * limitations under the License.
  */
 
-import { createApp } from 'vue';
+import { App } from 'vue';
+import axios, { AxiosResponse } from 'axios';
 
-import App from './App.vue';
-
-import('../comp-entry').then((entry) => {
-  const { components, plugins } = entry.default;
-  const magicApp = createApp(App);
-
-  Object.values(components).forEach((component: any) => {
-    magicApp.component(component.name, component);
-  });
-
-  Object.values(plugins).forEach((plugin: any) => {
-    magicApp.use(plugin);
-  });
-
-  magicApp.mount('#app');
+const service = axios.create({
+  withCredentials: true,
+  timeout: 7000,
 });
+
+const requestHandler = function (config: Record<any, any>) {
+  return config;
+};
+
+const responseHandler = function (response: AxiosResponse) {
+  return response;
+};
+
+service.interceptors.request.use(requestHandler);
+service.interceptors.response.use(responseHandler);
+
+export default {
+  install(app: App) {
+    app.provide('request', service);
+  },
+};

@@ -1,10 +1,11 @@
-import { EdApplication } from '@edoms/meta-model';
-import { Edoms } from '@edoms/workshop';
+import type { MApp } from '@tmagic/schema';
 
 declare global {
   interface Window {
-    edomsMeta: EdApplication[];
-    edomsPresetValues: any;
-    edoms: Edoms;
+    magicDSL: MApp[];
+    magicPresetComponents: any;
+    magicPresetConfigs: any;
+    magicPresetValues: any;
+    magicPresetEvents: any;
   }
 }

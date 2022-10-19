@@ -16,21 +16,19 @@
  * limitations under the License.
  */
 
-import { createApp } from 'vue';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
-import App from './App.vue';
+import Editor from './pages/Editor.vue';
+import Form from './pages/Form.vue';
+import Table from './pages/Table.vue';
 
-import('../comp-entry').then((entry) => {
-  const { components, plugins } = entry.default;
-  const magicApp = createApp(App);
+const routes = [
+  { path: '/', component: Editor },
+  { path: '/form', component: Form },
+  { path: '/table', component: Table },
+];
 
-  Object.values(components).forEach((component: any) => {
-    magicApp.component(component.name, component);
-  });
-
-  Object.values(plugins).forEach((plugin: any) => {
-    magicApp.use(plugin);
-  });
-
-  magicApp.mount('#app');
+export default createRouter({
+  history: createWebHashHistory(),
+  routes,
 });

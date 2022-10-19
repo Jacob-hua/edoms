@@ -16,21 +16,8 @@
  * limitations under the License.
  */
 
-import { createApp } from 'vue';
+if (typeof (window as any).global === 'undefined') {
+  (window as any).global = window;
+}
 
-import App from './App.vue';
-
-import('../comp-entry').then((entry) => {
-  const { components, plugins } = entry.default;
-  const magicApp = createApp(App);
-
-  Object.values(components).forEach((component: any) => {
-    magicApp.component(component.name, component);
-  });
-
-  Object.values(plugins).forEach((plugin: any) => {
-    magicApp.use(plugin);
-  });
-
-  magicApp.mount('#app');
-});
+export {};

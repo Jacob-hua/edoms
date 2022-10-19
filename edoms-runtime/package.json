@@ -1,25 +1,33 @@
 {
   "name": "edoms-runtime",
+  "version": "1.1.0-beta.2",
   "private": true,
-  "version": "0.0.1",
-  "type": "module",
   "scripts": {
     "dev": "npm run build:lib & npm run dev:html",
-    "dev:html": "vite --port 8001",
-    "build": "vue-tsc --noEmit && vite build",
-    "build:lib": "vue-tsc --noEmit && vite build --mode lib",
-    "preview": "vite preview"
+    "build": "npm run entry && vite build",
+    "build:admin": "npm run entry && vite build --mode admin",
+    "serve": "vite preview",
+    "entry": "node scripts/build.js",
+    "build:lib": "vite build --mode lib",
+    "dev:html": "vite --port 8078"
   },
   "dependencies": {
-    "element-plus": "^2.2.15",
-    "vue": "^3.2.37"
+    "@tmagic/schema": "1.1.0-beta.2",
+    "@tmagic/stage": "1.1.0-beta.2",
+    "axios": "^0.25.0",
+    "vue": "^3.2.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^3.0.1",
-    "sass": "^1.54.8",
-    "typescript": "~4.7.4",
-    "vite": "^3.0.0",
-    "vite-plugin-vue-setup-extend": "^0.4.0",
-    "vue-tsc": "^0.39.5"
+    "@types/node": "^15.12.4",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "@vue/compiler-sfc": "^3.2.0",
+    "@vue/test-utils": "^2.0.0",
+    "recast": "^0.20.4",
+    "rollup": "^2.25.0",
+    "rollup-plugin-external-globals": "^0.6.1",
+    "sass": "^1.35.1",
+    "typescript": "^4.3.4",
+    "vite": "^2.9.13",
+    "vue-tsc": "^0.38.2"
   }
 }
