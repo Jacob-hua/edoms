@@ -15,10 +15,10 @@ export default defineConfig(({ command, mode }) => {
     event: './src/event-entry.ts',
   };
 
-  // const htmlInput = {
-  //   page: './page.html',
-  //   playground: './playground.html',
-  // };
+  const htmlInput = {
+    page: './page.html',
+    playground: './playground.html',
+  };
 
   const buildConfig = {
     outDir: OUT_DIR || 'dist',
@@ -28,25 +28,17 @@ export default defineConfig(({ command, mode }) => {
     cssCodeSplit: false,
 
     rollupOptions: {
-      input: {
-        ...libInput,
-      },
+      input:
+        command === 'build' && mode !== 'lib'
+          ? {
+              ...htmlInput,
+              ...libInput,
+            }
+          : libInput,
       output: {
         entryFileNames: 'assets/[name].js',
       },
     },
-    // rollupOptions: {
-    //   input:
-    //     command === 'build' && mode !== 'lib'
-    //       ? {
-    //           ...htmlInput,
-    //           ...libInput,
-    //         }
-    //       : libInput,
-    //   output: {
-    //     entryFileNames: 'assets/[name].js',
-    //   },
-    // },
   };
   console.log('start');
 
