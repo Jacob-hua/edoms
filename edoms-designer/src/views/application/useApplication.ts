@@ -27,7 +27,7 @@ const splicingImageUrl = (data: Array<ApplicationInfo>): Array<ApplicationInfo &
     }
   })
 }
-const concatApplications = async (data: Ref<Array<ApplicationInfo>>, pageInfo: Page) => {
+const concatApplications = async (data: Ref<Array<ApplicationInfo>> | ApplicationInfo[], pageInfo: Page) => {
   pageInfo.page += 1
   const { dataList, count } = await listApplications(pageInfo)
   totals.value = count
