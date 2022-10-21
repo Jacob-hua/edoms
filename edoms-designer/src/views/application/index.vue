@@ -24,15 +24,21 @@
         </template>
       </GridGroup>
     </div>
+    <NewApp
+      v-if="visible"
+      v-model:visible="visible"
+      @refresh-list="concatApplications(initData, { page: 0, limit: 16 })"
+    ></NewApp>
   </div>
 </template>
 
 <script setup lang="ts">
 import GridGroup from '@/components/GridGroup.vue'
 import LongText from '@/components/LongText.vue'
+import NewApp from './component/NewApp.vue'
+import { useRouter } from 'vue-router'
 import { useApplication } from '@/views/application/useApplication'
-
-const { panelMenuList, listData, loadMore, add } = useApplication()
+const { panelMenuList, listData, initData, visible, loadMore, add, concatApplications } = useApplication(useRouter())
 </script>
 
 <style lang="scss" scoped>

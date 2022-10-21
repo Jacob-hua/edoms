@@ -17,3 +17,19 @@ export interface ListApplicationsRes {
   page: string
   dataList: ApplicationInfo[]
 }
+
+export interface AppForm {
+  applicationId?: string
+  name: string
+  description: string
+  thumbnailId?: string | null
+  serviceAddress?: string | null
+}
+
+export interface CreateAppRes {
+  applicationId: number | null
+}
+
+export interface FileUploadRes {
+  contentId: string | null
+}
