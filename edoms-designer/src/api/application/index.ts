@@ -1,6 +1,6 @@
-import { request } from '@/util/request'
+import { EdomsResponse, request } from '@/util/request'
 import { RequestMethod } from '@edoms/utils'
-import { AppForm, createAppRes, FileUploadRes, ListApplicationsReq, ListApplicationsRes } from './type'
+import { AppForm, CreateAppRes, FileUploadRes, ListApplicationsReq, ListApplicationsRes } from './type'
 
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
@@ -20,9 +20,9 @@ export const listApplications = async (data: ListApplicationsReq): Promise<ListA
   }
 }
 
-export const createApplication = async (data: AppForm): Promise<createAppRes> => {
+export const createApplication = async (data: AppForm): Promise<CreateAppRes> => {
   try {
-    const { result } = await request<AppForm, createAppRes>({
+    const { result } = await request<AppForm, CreateAppRes>({
       url: '/application/create',
       method: RequestMethod.POST,
       data,
@@ -47,6 +47,23 @@ export const fileUpload = async (data: FormData): Promise<FileUploadRes> => {
   } catch (error) {
     return {
       contentId: null,
+    }
+  }
+}
+export const updateApplication = async (data: AppForm): Promise<EdomsResponse<string>> => {
+  try {
+    return await request<AppForm, string>({
+      url: '/application/update',
+      method: RequestMethod.PUT,
+      data,
+    })
+  } catch (error) {
+    return {
+      errorInfo: {
+        errorCode: '',
+        errorMsg: '',
+      },
+      result: '',
     }
   }
 }

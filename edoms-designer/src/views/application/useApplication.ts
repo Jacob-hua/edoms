@@ -1,8 +1,9 @@
 import { listApplications } from '@/api/application'
-import { reactive, ref, type Ref, isRef, isReactive, toRaw } from 'vue'
+import { reactive, ref, type Ref, isRef, isReactive, toRaw, watch } from 'vue'
 import { GridViewMenu } from '@/components/type'
 import { ApplicationInfo } from '@/api/application/type'
-
+import { type Router } from 'vue-router'
+import { useAppInfoStore } from '@/store/appInfo'
 interface Page {
   page: number
   limit: number
@@ -16,27 +17,6 @@ const pageInfo = reactive<Page>({
 const listData = ref<Array<ApplicationInfo>>([])
 const initData = ref<Array<ApplicationInfo>>([])
 const visible = ref<boolean>(false)
-const panelMenuList = ref<GridViewMenu<ApplicationInfo>[]>([
-  {
-    iconSize: 20,
-    iconColor: '#000',
-    icon: 'Operation',
-    name: '发布应用',
-    action: (data) => {
-      console.log(data)
-      return '123'
-    },
-  },
-  {
-    iconSize: 20,
-    iconColor: '#000',
-    icon: 'Operation',
-    name: '设置',
-    action: () => {
-      console.log('设置')
-    },
-  },
-])
 const totals = ref<string>('')
 
 const splicingImageUrl = (data: Array<ApplicationInfo>): Array<ApplicationInfo & { imgUrl: string }> => {
@@ -71,8 +51,60 @@ const loadMore = (data: any) => {
 const add = () => {
   visible.value = true
 }
-export const useApplication = () => {
-  concatApplications(listData, pageInfo)
+const operation = (data: ApplicationInfo) => {
+  console.log(data)
+}
+const setting = ({ push }: Router, data: ApplicationInfo) => {
+  push('/appSetting')
+  useAppInfoStore().$patch({
+    appInfo: data,
+  })
+}
+const resetPageInfo = (pageInfo: Page) => {
+  pageInfo.page = 0
+  pageInfo.limit = 16
+}
+enum IconEnum {
+  OPERATION = 'Operation',
+  SETTING = 'Setting',
+}
+
+const PanelActionEffect: Record<string, Function> = {
+  [IconEnum.OPERATION]: operation,
+  [IconEnum.SETTING]: setting,
+}
+export const useApplication = (router: Router) => {
+  const panelMenuList = ref<GridViewMenu<ApplicationInfo>[]>([
+    {
+      iconSize: 20,
+      iconColor: '#000',
+      icon: IconEnum.OPERATION,
+      name: '发布应用',
+      action: function (data) {
+        PanelActionEffect[this.icon](router, data)
+      },
+    },
+    {
+      iconSize: 20,
+      iconColor: '#000',
+      icon: IconEnum.SETTING,
+      name: '设置',
+      action: function (data) {
+        PanelActionEffect[this.icon](router, data)
+      },
+    },
+  ])
+  watch(
+    () => useAppInfoStore().appInfo.thumbnailId,
+    () => {
+      resetPageInfo(pageInfo)
+      concatApplications(ref<ApplicationInfo[]>([]), pageInfo)
+    },
+    {
+      immediate: true,
+      deep: true,
+    }
+  )
   return {
     panelMenuList,
     listData,

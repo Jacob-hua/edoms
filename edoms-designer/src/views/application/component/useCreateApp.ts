@@ -40,7 +40,7 @@ export const useCreateApp = (
         emit('refreshList')
       }
     } catch (e: any) {
-      console.log(e.toString())
+      console.log(e)
     }
   }
   return {

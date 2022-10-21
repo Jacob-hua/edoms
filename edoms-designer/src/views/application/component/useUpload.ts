@@ -3,13 +3,13 @@ import { ElMessage, UploadFile, UploadFiles } from 'element-plus'
 import { fileUpload } from '@/api/application'
 import { AppForm } from '@/api/application/type'
 
-export const useUpload = (dynamicValidateForm: AppForm) => {
+export const useUpload = (dynamicValidateForm: AppForm, files: { url: string; uid?: string }[] = []) => {
+  const { length } = files
   const dialogImageUrl = ref<string>('')
   const dialogVisible = ref<boolean>(false)
   const disabled = ref<boolean>(false)
-  const accept = ref<string>('.png, .jpg, .jpeg, .gif, .webp, .PNG, .JPG, .GIF, .WEBP')
-  const fileList = ref<UploadFiles>([])
-
+  const accept = ref<string>('.png, .jpg, .jpeg, .gif, .webp, .PNG, .JPG, .JPEG .GIF, .WEBP')
+  const fileList = length ? ref(files) : ref<UploadFiles>([])
   const checkImageUploadLimit = (uploadFiles: UploadFiles): boolean => {
     if (uploadFiles.length > 1) {
       ElMessage.error('缩略图只能上传一张图片')

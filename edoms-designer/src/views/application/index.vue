@@ -36,9 +36,9 @@
 import GridGroup from '@/components/GridGroup.vue'
 import LongText from '@/components/LongText.vue'
 import NewApp from './component/NewApp.vue'
+import { useRouter } from 'vue-router'
 import { useApplication } from '@/views/application/useApplication'
-
-const { panelMenuList, listData, initData, visible, loadMore, add, concatApplications } = useApplication()
+const { panelMenuList, listData, initData, visible, loadMore, add, concatApplications } = useApplication(useRouter())
 </script>
 
 <style lang="scss" scoped>

@@ -19,12 +19,14 @@ export interface ListApplicationsRes {
 }
 
 export interface AppForm {
+  applicationId?: string
   name: string
   description: string
   thumbnailId?: string | null
+  serviceAddress?: string | null
 }
 
-export interface createAppRes {
+export interface CreateAppRes {
   applicationId: number | null
 }
 
