@@ -86,18 +86,18 @@
 </template>
 
 <script lang="ts" setup name="appInfo">
-import { useUpload } from '@/views/application/component/useUpload'
-import { useAppInfo } from '@/views/applicationSetting/component/useAppInfo'
-import { useAppInfoStore } from '@/store/appInfo'
+import { useAppInfoStore } from '@/store/appInfo';
+import { useUpload } from '@/views/application/component/useUpload';
+import { useAppInfo } from '@/views/applicationSetting/component/useAppInfo';
 const emit = defineEmits<{
-  (event: 'back'): void
-}>()
-const { appInfo } = useAppInfoStore()
-const { formRef, update } = useAppInfo(emit)
+  (event: 'back'): void;
+}>();
+const { appInfo } = useAppInfoStore();
+const { formRef, update } = useAppInfo(emit);
 const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } =
   useUpload(appInfo, [
     { url: `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${appInfo.thumbnailId}&isPreview=true` },
-  ])
+  ]);
 </script>
 
 <style lang="scss" scoped>

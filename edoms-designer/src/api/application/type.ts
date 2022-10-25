@@ -1,35 +1,35 @@
 export interface ApplicationInfo {
-  applicationId: string
-  name: string
-  createBy: string
-  createTime: string
-  thumbnailId: string
+  applicationId: string;
+  name: string;
+  createBy: string;
+  createTime: string;
+  thumbnailId: string;
 }
 
 export interface ListApplicationsReq {
-  page: number
-  limit: number
+  page: number;
+  limit: number;
 }
 
 export interface ListApplicationsRes {
-  count: string
-  limit: string
-  page: string
-  dataList: ApplicationInfo[]
+  count: string;
+  limit: string;
+  page: string;
+  dataList: ApplicationInfo[];
 }
 
 export interface AppForm {
-  applicationId?: string
-  name: string
-  description: string
-  thumbnailId?: string | null
-  serviceAddress?: string | null
+  applicationId?: string;
+  name: string;
+  description: string;
+  thumbnailId?: string | null;
+  serviceAddress?: string | null;
 }
 
 export interface CreateAppRes {
-  applicationId: number | null
+  applicationId: number | null;
 }
 
 export interface FileUploadRes {
-  contentId: string | null
+  contentId: string | null;
 }

@@ -1,20 +1,34 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "moduleResolution": "Node",
     "strict": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
+    "jsx": "preserve",
+    "moduleResolution": "Node",
     "skipLibCheck": true,
-    "jsx": "preserve"
-  }
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "useDefineForClassFields": true,
+    "baseUrl": ".",
+    "lib": ["ESNext", "DOM"],
+    "paths": {
+      // 内部模块都指向 src/index.ts, 会有更好的代码跳转体验.
+      "@edoms/*": ["packages/*/src"],
+      "@editor/*": ["packages/editor/src/*"],
+      "@form/*": ["packages/form/src/*"],
+    },
+    "types": [
+      "node",
+      "vite/client",
+    ],
+  },
+  "exclude": [
+    "**/dist/**/*",
+    "**/node_modules/**/*",
+  ],
 }

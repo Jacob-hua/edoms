@@ -85,25 +85,26 @@
 </template>
 
 <script lang="ts" setup name="newApp">
-import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue'
-import { useUpload } from '@/views/application/component/useUpload'
-import { useCreateApp } from '@/views/application/component/useCreateApp'
+import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue';
+
+import { useCreateApp } from '@/views/application/component/useCreateApp';
+import { useUpload } from '@/views/application/component/useUpload';
 
 const props = withDefaults(
   defineProps<{
-    visible?: boolean
+    visible?: boolean;
   }>(),
   {
     visible: () => false,
   }
-)
+);
 const emit = defineEmits<{
-  (event: 'update:visible', data: boolean): void
-  (event: 'refreshList'): void
-}>()
-const { formRef, dynamicValidateForm, appVisible, cancel, submit } = useCreateApp(props.visible, emit)
+  (event: 'update:visible', data: boolean): void;
+  (event: 'refreshList'): void;
+}>();
+const { formRef, dynamicValidateForm, appVisible, cancel, submit } = useCreateApp(props.visible, emit);
 const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } =
-  useUpload(dynamicValidateForm)
+  useUpload(dynamicValidateForm);
 </script>
 
 <style scoped lang="scss">

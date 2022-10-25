@@ -1,12 +1,13 @@
-import { resolve } from 'path'
-import { defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueSetupExtend from 'vite-plugin-vue-setup-extend'
+import { resolve } from 'path';
+
+import { defineConfig, loadEnv } from 'vite';
+import vueSetupExtend from 'vite-plugin-vue-setup-extend';
+import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const r = (p: string) => resolve(__dirname, p)
-  const env = loadEnv(mode, process.cwd(), '')
+  const r = (p: string) => resolve(__dirname, p);
+  const env = loadEnv(mode, process.cwd(), '');
 
   return {
     base: env.VITE_BASE_URL,
@@ -19,10 +20,11 @@ export default defineConfig(({ mode }) => {
       port: 8890,
       proxy: {
         '/api': {
-          target: 'http://192.100.4.42:8061',
+          // target: 'http://192.100.4.25:8061',
+          target: 'http://k8s.isiact.com/edoms-designtime-service-dev',
           changeOrigin: true,
           rewrite(path) {
-            return path.replace(/\/api/, '')
+            return path.replace(/\/api/, '');
           },
         },
       },
@@ -33,5 +35,5 @@ export default defineConfig(({ mode }) => {
         '@': r('./src'),
       },
     },
-  }
-})
+  };
+});

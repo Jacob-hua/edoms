@@ -1,20 +1,20 @@
 <template>
   <div class="container">
-    <el-tooltip popper-class="popperStyle" :placement="placement" :content="content" :effect="effect">
-      <span class="text-hidden">{{ content }}</span>
+    <el-tooltip popper-class="popper" :placement="placement" :content="content" :effect="effect">
+      <span class="content">{{ content }}</span>
     </el-tooltip>
   </div>
 </template>
 
 <script lang="ts" setup name="LongText">
-import { EffectType, PlacementType } from '@/components/type'
+import { EffectType, PlacementType } from '@/components/type';
 withDefaults(
   defineProps<{
-    effect?: EffectType
-    content: string
-    contentStyle?: Record<string, any>
-    linesClamp?: number
-    placement?: PlacementType
+    effect?: EffectType;
+    content: string;
+    contentStyle?: Record<string, any>;
+    linesClamp?: number;
+    placement?: PlacementType;
   }>(),
   {
     contentStyle: () => ({ width: '96px', color: '', fontSize: '16px' }),
@@ -22,11 +22,11 @@ withDefaults(
     linesClamp: () => 1,
     placement: () => 'top',
   }
-)
+);
 </script>
 
 <style lang="scss">
-.text-hidden {
+.content {
   text-align: center;
   width: v-bind('contentStyle.width');
   color: v-bind('contentStyle.color');
@@ -38,7 +38,8 @@ withDefaults(
   overflow: hidden;
   word-break: break-all;
 }
-.popperStyle {
+
+.popper {
   position: relative !important;
   white-space: nowrap;
 }

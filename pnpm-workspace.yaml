@@ -1,9 +1,5 @@
 packages:
-  # all packages in direct subdirs of packages/
   - 'packages/*'
-  # edoms-designer in direct subdirs of edoms-designer/
+  - 'playground'
+  - 'runtime'
   - 'edoms-designer'
-  # edoms-runtime in direct subdirs of edoms-runtime/
-  - 'edoms-runtime'
-  # exclude packages that are inside test directories
-  - '!**/test/**'

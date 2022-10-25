@@ -32,20 +32,22 @@
 </template>
 
 <script lang="ts" setup>
-import AppInfo from './component/AppInfo.vue'
-import AdvancedSetting from './component/AdvancedSetting.vue'
-import { useAppInfoStore } from '@/store/appInfo'
-import { useRouter } from 'vue-router'
-const { go } = useRouter()
-const appInfoStore = useAppInfoStore()
+import { useRouter } from 'vue-router';
+
+import { useAppInfoStore } from '@/store/appInfo';
+
+import AdvancedSetting from './component/AdvancedSetting.vue';
+import AppInfo from './component/AppInfo.vue';
+const { go } = useRouter();
+const appInfoStore = useAppInfoStore();
 const {
   appInfo: { name },
-} = appInfoStore
+} = appInfoStore;
 
 const goBack = () => {
-  go(-1)
-  appInfoStore.$reset()
-}
+  go(-1);
+  appInfoStore.$reset();
+};
 </script>
 
 <style scoped lang="scss">

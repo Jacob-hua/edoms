@@ -1,6 +1,8 @@
-import { EdomsResponse, request } from '@/util/request'
-import { RequestMethod } from '@edoms/utils'
-import { AppForm, CreateAppRes, FileUploadRes, ListApplicationsReq, ListApplicationsRes } from './type'
+import { RequestMethod } from '@edoms/utils';
+
+import { EdomsResponse, request } from '@/util/request';
+
+import { AppForm, CreateAppRes, FileUploadRes, ListApplicationsReq, ListApplicationsRes } from './type';
 
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
@@ -8,17 +10,17 @@ export const listApplications = async (data: ListApplicationsReq): Promise<ListA
       url: '/application/page',
       method: RequestMethod.POST,
       data,
-    })
-    return result
+    });
+    return result;
   } catch (error) {
     return {
       count: '0',
       limit: '0',
       page: '0',
       dataList: [],
-    }
+    };
   }
-}
+};
 
 export const createApplication = async (data: AppForm): Promise<CreateAppRes> => {
   try {
@@ -26,14 +28,14 @@ export const createApplication = async (data: AppForm): Promise<CreateAppRes> =>
       url: '/application/create',
       method: RequestMethod.POST,
       data,
-    })
-    return result
+    });
+    return result;
   } catch (error) {
     return {
       applicationId: null,
-    }
+    };
   }
-}
+};
 
 export const fileUpload = async (data: FormData): Promise<FileUploadRes> => {
   try {
@@ -41,22 +43,22 @@ export const fileUpload = async (data: FormData): Promise<FileUploadRes> => {
       url: '/file/upload',
       method: RequestMethod.POST,
       data,
-    })
+    });
 
-    return result
+    return result;
   } catch (error) {
     return {
       contentId: null,
-    }
+    };
   }
-}
+};
 export const updateApplication = async (data: AppForm): Promise<EdomsResponse<string>> => {
   try {
     return await request<AppForm, string>({
       url: '/application/update',
       method: RequestMethod.PUT,
       data,
-    })
+    });
   } catch (error) {
     return {
       errorInfo: {
@@ -64,6 +66,6 @@ export const updateApplication = async (data: AppForm): Promise<EdomsResponse<st
         errorMsg: '',
       },
       result: '',
-    }
+    };
   }
-}
+};

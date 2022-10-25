@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useCounterStore = defineStore({
   id: 'counter',
@@ -10,13 +10,13 @@ export const useCounterStore = defineStore({
   },
   actions: {
     increment() {
-      this.counter++
+      this.counter++;
     },
     randomizeCounter() {
-      this.counter = Math.round(100 * Math.random())
+      this.counter = Math.round(100 * Math.random());
     },
     subtraction() {
-      this.counter -= 1
+      this.counter -= 1;
     },
   },
-})
+});

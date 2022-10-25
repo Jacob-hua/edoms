@@ -1,25 +1,27 @@
-# edoms-application-ui
-
-edoms-application-ui
-
 ## 环境准备
 
 node.js >= 16
 
-包管理器 pnpm
+先安装 pnpm
 
 ```bash
-npm install -g pnpm
+$ npm install -g pnpm
 ```
 
-安装依赖
+然后安装依赖
 
 ```bash
-pnpm bootstrap
+$ pnpm bootstrap
 ```
 
-## 运行设计时
+## 运行项目
+
+执行命令
 
 ```bash
-pnpm designer
+$ pnpm playground
 ```
+
+最后在浏览器中打开
+
+http://localhost:8098/edoms/playground/

@@ -7,11 +7,11 @@
 <script lang="ts">
 export default {
   name: '404Vue',
-}
+};
 </script>
 
 <script lang="ts" setup>
-import img from '@/assets/img/404.svg'
+import img from '@/assets/img/404.svg';
 </script>
 
 <style lang="scss" scoped>

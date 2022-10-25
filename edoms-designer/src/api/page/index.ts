@@ -1,6 +1,8 @@
-import { RequestMethod } from '@edoms/utils'
-import { request } from '@/util/request'
-import { ListPageInfosReq, ListPageInfosRes } from './type'
+import { RequestMethod } from '@edoms/utils';
+
+import { request } from '@/util/request';
+
+import { ListPageInfosReq, ListPageInfosRes } from './type';
 
 export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRes> => {
   try {
@@ -8,14 +10,14 @@ export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRe
       url: '/page/list',
       method: RequestMethod.POST,
       data,
-    })
-    return result
+    });
+    return result;
   } catch (error) {
     return {
       count: '0',
       limit: '0',
       page: '0',
       dataList: [],
-    }
+    };
   }
-}
+};

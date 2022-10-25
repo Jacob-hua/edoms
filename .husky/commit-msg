@@ -1,30 +1,4 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-# 用 `` 可以将命令的输出结果赋值给变量
-# 获取当前提交的 commit msg
-commit_msg=`cat $1`
-
-msg_re="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|release|revert|merge)(\(.+\))?:.{1,100}"
-
-if [[ ! $commit_msg =~ $msg_re ]]
-then
-	echo "不合法的 commit 消息提交格式，请使用正确的格式:"
-	echo ""
-	echo "merge       合并代码"
-	echo "feat        新功能（feature）"
-	echo "fix         修补bug"
-	echo "docs        文档（新增or修改）"
-	echo "style       格式（不影响代码运行的变动）"
-	echo "test        增加测试"
-	echo "build       影响项目构建或依赖项修改"
-	echo "ci          持续集成相关文件修改"
-	echo "perf        性能优化"
-	echo "refactor    重构（即不是新增功能，也不是修改bug的代码变动）"
-	echo "revert      恢复上一次提交"
-	echo "release     发布新版本"
-	echo "chore       其他修改（不属于上述类型的修改）"
-	echo "详情请查看 git commit 提交规范：https://github.com/woai3c/Front-end-articles/blob/master/git%20commit%20style.md"
-	# 异常退出
-	exit 1
-fi
+npx --no-install commitlint --edit $1

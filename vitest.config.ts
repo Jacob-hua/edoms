@@ -1,21 +1,33 @@
-import { resolve } from 'path'
-import { defineConfig } from 'vitest/config'
-import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path';
 
-const r = (p: string) => resolve(__dirname, p)
+import { defineConfig } from 'vitest/config';
+import Vue from '@vitejs/plugin-vue';
+
+const r = (p: string) => resolve(__dirname, p);
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [Vue()],
+
   test: {
+    exclude: ['**/node_modules/**', '**/dist/**', '**/cypress/**', '**/.{idea,git,cache,output,temp}/**'],
+    include: [
+      './packages/editor/tests/**',
+      './packages/form/tests/unit/utils/**',
+      './packages/stage/tests/**',
+      './packages/utils/tests/**',
+    ],
     environment: 'jsdom',
-    exclude: ['**/node_modules/**', '**/dist/**', '**/.{idea,git,cache,output,temp}/**'],
   },
+
   resolve: {
     alias: {
-      '@edoms/utils': r('./packages/utils'),
-      '@edoms/components': r('./packages/components'),
-      '@edoms/attribute': r('./packages/attribute'),
-      '@edoms/editor': r('./packages/editor'),
+      '@editor': r('./packages/editor/src'),
+      '@form': r('./packages/form/src'),
+      '@edoms/core': r('./packages/core/src'),
+      '@edoms/utils': r('./packages/utils/src'),
+      '@edoms/editor': r('./packages/editor/src'),
+      '@edoms/stage': r('./packages/stage/src'),
+      '@edoms/schema': r('./packages/schema/src'),
     },
   },
-})
+});

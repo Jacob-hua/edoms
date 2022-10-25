@@ -1,8 +1,17 @@
-.DS_Store
-node_modules
 dist
 coverage
+node_modules
+dest
 types
-public/entry
-public/runtime
+**/*/public/entry
+**/*/public/runtime
+**/*/lib
 
+comp-entry.ts
+config-entry.ts
+value-entry.types
+
+*.mjs
+*.mjs.map
+*.umd.js
+*.umd.js.map

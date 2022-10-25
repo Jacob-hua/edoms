@@ -1,20 +1,34 @@
 {
-  "name": "@edoms/utils",
-  "private": true,
   "version": "0.0.1",
-  "type": "module",
-  "main": "src/index.ts",
-  "scripts": {},
-  "devDependencies": {
-    "@types/hat": "^0.0.1",
-    "@types/lodash": "^4.14.184",
-    "typescript": "^4.6.4",
-    "vite": "^3.0.7"
+  "name": "@edoms/utils",
+  "main": "dist/edoms-utils.umd.js",
+  "module": "dist/edoms-utils.mjs",
+  "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/edoms-utils.mjs",
+      "require": "./dist/edoms-utils.umd.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:type && vite build",
+    "build:type": "npm run clear:type && tsc --declaration --emitDeclarationOnly --project tsconfig.build.json",
+    "clear:type": "rimraf ./types"
+  },
+  "engines": {
+    "node": ">=14"
   },
   "dependencies": {
-    "axios": "^0.27.2",
-    "dayjs": "^1.11.5",
-    "hat": "^0.0.3",
-    "lodash": "^4.17.21"
+    "@edoms/schema": "workspace:^0.0.1",
+    "axios": "^0.25.0",
+    "dayjs": "^1.11.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.186",
+    "@types/node": "^15.12.4",
+    "lodash": "^4.17.21",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.7.4",
+    "vite": "^3.1.3"
   }
 }
