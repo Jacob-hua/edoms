@@ -1,6 +1,5 @@
 import {
   createRouter,
-  // createWebHashHistory,
   createWebHistory,
   NavigationGuardNext,
   RouteLocationNormalized,
@@ -28,16 +27,6 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/applicationSetting/index.vue'),
         props: true,
       },
-      {
-        path: 'test',
-        name: 'test',
-        component: () => import('@/views/HomeView.vue'),
-      },
-      {
-        path: 'about',
-        name: 'about',
-        component: () => import('@/views/AboutView.vue'),
-      },
     ],
   },
   {
@@ -57,7 +46,6 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
-  // history: createWebHashHistory(),
   routes,
 });
 
