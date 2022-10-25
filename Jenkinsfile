@@ -42,7 +42,7 @@ pipeline {
 				sh """
 				npm install -g pnpm
 				pnpm bootstrap
-				pnpm build
+				pnpm build:designer
 				"""
 			}
 		}
