@@ -1,8 +1,7 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <el-date-picker
+  <ElDatePicker
     v-model="model[name]"
-    popper-class="magic-datetime-picker-popper"
+    popper-class="edoms-datetime-picker-popper"
     type="datetime"
     :size="size"
     :placeholder="config.placeholder"
@@ -11,53 +10,41 @@
     :value-format="config.valueFormat || 'YYYY-MM-DD HH:mm:ss'"
     :default-time="config.defaultTime"
     @change="changeHandler"
-  ></el-date-picker>
+  ></ElDatePicker>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-
-import { datetimeFormatter } from '@tmagic/utils';
+<script lang="ts" setup>
+import { ElDatePicker } from '@edoms/design';
+import { dateFormat } from '@edoms/utils';
 
 import { DateTimeConfig } from '../schema';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
 
-export default defineComponent({
-  name: 'MFieldsDatetime',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<DateTimeConfig>,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  config: DateTimeConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  emits: ['change'],
+const emit = defineEmits(['change']);
 
-  setup(props, { emit }) {
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+useAddField(props.prop);
 
-    // eslint-disable-next-line vue/no-undef-properties
-    const value = props.model?.[props.name].toString();
-    if (props.model) {
-      if (value === 'Invalid Date') {
-        // eslint-disable-next-line vue/no-mutating-props
-        props.model[props.name] = '';
-      } else {
-        // eslint-disable-next-line vue/no-mutating-props
-        props.model[props.name] = datetimeFormatter(props.model[props.name], '', props.config.valueFormat);
-      }
-    }
+const value = props.model?.[props.name].toString();
+if (props.model) {
+  if (value === 'Invalid Date') {
+    props.model[props.name] = '';
+  } else {
+    props.model[props.name] = dateFormat(props.model[props.name], '', props.config.valueFormat);
+  }
+}
 
-    return {
-      value,
-      changeHandler: (v: Date) => {
-        emit('change', v);
-      },
-    };
-  },
-});
+const changeHandler = (v: string) => {
+  emit('change', v);
+};
 </script>

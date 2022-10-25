@@ -1,19 +1,19 @@
 <template>
-  <el-scrollbar>
+  <ElScrollbar>
     <slot name="component-list-panel-header"></slot>
 
-    <el-collapse class="ui-component-panel" :model-value="collapseValue">
-      <el-input
+    <ElCollapse class="ui-component-panel" :model-value="collapseValue">
+      <ElInput
         v-model="searchText"
-        prefix-icon="el-icon-search"
         placeholder="输入关键字进行过滤"
         class="search-input"
         size="small"
         clearable
+        :prefix-icon="Search"
       />
       <template v-for="(group, index) in list">
-        <el-collapse-item v-if="group.items && group.items.length" :key="index" :name="index">
-          <template #title><i class="el-icon-s-grid"></i>{{ group.title }}</template>
+        <ElCollapseItem v-if="group.items && group.items.length" :key="index" :name="`${index}`">
+          <template #title><MIcon :icon="Grid"></MIcon>{{ group.title }}</template>
           <div
             v-for="item in group.items"
             :key="item.type"
@@ -24,123 +24,101 @@
             @dragend="dragendHandler"
             @drag="dragHandler"
           >
-            <MIcon :icon="item.icon"></MIcon>
+            <slot name="component-list-item" :component="item">
+              <MIcon :icon="item.icon"></MIcon>
 
-            <el-tooltip effect="dark" placement="bottom" :content="item.text">
-              <span>{{ item.text }}</span>
-            </el-tooltip>
+              <ElTooltip effect="dark" placement="bottom" :content="item.text">
+                <span>{{ item.text }}</span>
+              </ElTooltip>
+            </slot>
           </div>
-        </el-collapse-item>
+        </ElCollapseItem>
       </template>
-    </el-collapse>
-  </el-scrollbar>
+    </ElCollapse>
+  </ElScrollbar>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, inject, ref } from 'vue';
+import { Grid, Search } from '@element-plus/icons-vue';
 import serialize from 'serialize-javascript';
 
-import type StageCore from '@tmagic/stage';
-import { GHOST_EL_ID_PREFIX } from '@tmagic/stage';
-import { addClassName, removeClassNameByClassName } from '@tmagic/utils';
+import { ElCollapse, ElCollapseItem, ElInput, ElScrollbar, ElTooltip } from '@edoms/design';
+import type StageCore from '@edoms/stage';
+import { removeClassNameByClassName } from '@edoms/utils';
 
-import MIcon from '@editor/components/Icon.vue';
+import MIcon from '../../components/Icon.vue';
 import type { ComponentGroup, ComponentItem, Services, StageOptions } from '../../type';
 
-export default defineComponent({
-  name: 'UiComponentPanel',
-  expose: [],
-  components: { MIcon },
+const searchText = ref('');
+const services = inject<Services>('services');
+const stageOptions = inject<StageOptions>('stageOptions');
 
-  setup() {
-    const searchText = ref('');
-    const services = inject<Services>('services');
-    const stageOptions = inject<StageOptions>('stageOptions');
+const stage = computed(() => services?.editorService.get<StageCore>('stage'));
+const list = computed(() =>
+  services?.componentListService.getList().map((group: ComponentGroup) => ({
+    ...group,
+    items: group.items.filter((item: ComponentItem) => item.text.includes(searchText.value)),
+  }))
+);
+const collapseValue = computed(() =>
+  Array(list.value?.length)
+    .fill(1)
+    .map((x, i) => `${i}`)
+);
 
-    const stage = computed(() => services?.editorService.get<StageCore>('stage'));
-    const list = computed(() =>
-      services?.componentListService.getList().map((group: ComponentGroup) => ({
-        ...group,
-        items: group.items.filter((item: ComponentItem) => item.text.includes(searchText.value)),
-      }))
+let timeout: NodeJS.Timeout | undefined;
+let clientX: number;
+let clientY: number;
+
+const appendComponent = ({ text, type, data = {} }: ComponentItem): void => {
+  services?.editorService.add({
+    name: text,
+    type,
+    ...data,
+  });
+};
+
+const dragstartHandler = ({ text, type, data = {} }: ComponentItem, e: DragEvent) => {
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData(
+      'data',
+      serialize({
+        name: text,
+        type,
+        ...data,
+      }).replace(/"(\w+)":\s/g, '$1: ')
     );
-    const collapseValue = computed(() =>
-      Array(list.value?.length)
-        .fill(1)
-        .map((_, i) => i)
-    );
+  }
+};
 
-    // eslint-disable-next-line no-undef
-    let timeout: NodeJS.Timeout | undefined;
-    let clientX: number;
-    let clientY: number;
+const dragendHandler = () => {
+  if (timeout) {
+    globalThis.clearTimeout(timeout);
+    timeout = undefined;
+  }
+  const doc = stage.value?.renderer.contentWindow?.document;
+  if (doc && stageOptions) {
+    removeClassNameByClassName(doc, stageOptions.containerHighlightClassName);
+  }
+  clientX = 0;
+  clientY = 0;
+};
 
-    return {
-      searchText,
-      collapseValue,
-      list,
+const dragHandler = (e: DragEvent) => {
+  if (e.clientX !== clientX || e.clientY !== clientY) {
+    clientX = e.clientX;
+    clientY = e.clientY;
+    if (timeout) {
+      globalThis.clearTimeout(timeout);
+      timeout = undefined;
+    }
+    return;
+  }
 
-      appendComponent({ text, type, data = {} }: ComponentItem): void {
-        services?.editorService.add({
-          name: text,
-          type,
-          ...data,
-        });
-      },
+  if (timeout || !stage.value) return;
 
-      dragstartHandler({ text, type, data = {} }: ComponentItem, e: DragEvent) {
-        if (e.dataTransfer) {
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData(
-            'data',
-            serialize({
-              name: text,
-              type,
-              ...data,
-            }).replace(/"(\w+)":\s/g, '$1: ')
-          );
-        }
-      },
-
-      dragendHandler() {
-        if (timeout) {
-          globalThis.clearTimeout(timeout);
-          timeout = undefined;
-        }
-        const doc = stage.value?.renderer.contentWindow?.document;
-        if (doc && stageOptions) {
-          removeClassNameByClassName(doc, stageOptions.containerHighlightClassName);
-        }
-        clientX = 0;
-        clientY = 0;
-      },
-
-      dragHandler(e: DragEvent) {
-        if (e.clientX !== clientX || e.clientY !== clientY) {
-          clientX = e.clientX;
-          clientY = e.clientY;
-          if (timeout) {
-            globalThis.clearTimeout(timeout);
-            timeout = undefined;
-          }
-          return;
-        }
-
-        if (timeout) return;
-
-        timeout = globalThis.setTimeout(async () => {
-          if (!stageOptions || !stage.value) return;
-          const doc = stage.value.renderer.contentWindow?.document;
-          const els = stage.value.getElementsFromPoint(e);
-          for (const el of els) {
-            if (doc && !el.id.startsWith(GHOST_EL_ID_PREFIX) && (await stageOptions.isContainer(el))) {
-              addClassName(el, doc, stageOptions?.containerHighlightClassName);
-              break;
-            }
-          }
-        }, stageOptions?.containerHighlightDuration);
-      },
-    };
-  },
-});
+  timeout = stage.value.getAddContainerHighlightClassNameTimeout(e);
+};
 </script>

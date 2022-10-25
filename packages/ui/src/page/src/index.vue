@@ -1,27 +1,27 @@
 <template>
   <div
     :id="`${config.id || ''}`"
-    :class="`magic-ui-page magic-ui-container${config.className ? ` ${config.className}` : ''}`"
+    :class="`edoms-ui-page edoms-ui-container edoms-layout-${config.layout}${
+      config.className ? ` ${config.className}` : ''
+    }`"
     :style="style"
   >
     <slot></slot>
-    <magic-ui-component v-for="item in config.items" :key="item.id" :config="item"></magic-ui-component>
+    <edoms-ui-component v-for="item in config.items" :key="item.id" :config="item"></edoms-ui-component>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
 
-import type { MPage } from '@tmagic/schema';
+import type { MPage } from '@edoms/schema';
 
 import Component from '../../Component.vue';
 import useApp from '../../useApp';
 
 export default defineComponent({
-  name: 'MagicUiPage',
-  expose: [],
   components: {
-    'magic-ui-component': Component,
+    'edoms-ui-component': Component,
   },
 
   props: {

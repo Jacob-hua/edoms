@@ -3,7 +3,7 @@
     v-if="display()"
     :id="config.id"
     :is="tagName"
-    :class="`magic-ui-component${config.className ? ` ${config.className}` : ''}`"
+    :class="`edoms-ui-component${config.className ? ` ${config.className}` : ''}`"
     :style="style"
     :config="config"
   ></component>
@@ -12,12 +12,10 @@
 <script lang="ts">
 import { computed, defineComponent, getCurrentInstance, inject, provide } from 'vue';
 
-import Core from '@tmagic/core';
-import { toLine } from '@tmagic/utils';
+import Core from '@edoms/core';
+import { toLine } from '@edoms/utils';
 
 export default defineComponent({
-  name: 'MagicUiComponent',
-  expose: [],
   props: {
     config: {
       type: Object,
@@ -32,7 +30,7 @@ export default defineComponent({
     provide('hoc', vm);
 
     return {
-      tagName: computed(() => `magic-ui-${toLine(props.config.type)}`),
+      tagName: computed(() => `edoms-ui-${toLine(props.config.type)}`),
       style: computed(() => app?.transformStyle(props.config.style)),
 
       display: () => {

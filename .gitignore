@@ -1,15 +1,13 @@
-# tsup
+.DS_Store
+node_modules
 dist
-
-node_modules/
-
-coverage/
-
 types
 
 .temp
 .cache
+.edoms
 
+# local env files
 .env.local
 .env.*.local
 
@@ -19,10 +17,13 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# TypeDoc
-packages/*/docs
-
-# VSCode
+# Editor directories and files
 .idea
 .vscode
-*.code-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+coverage

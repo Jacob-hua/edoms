@@ -1,4 +1,4 @@
-.tmagic-stage-container-highlight::after {
+.edoms-stage-container-highlight::after {
   content: '';
   position: absolute;
   width: 100%;
@@ -6,5 +6,10 @@
   top: 0;
   left: 0;
   background-color: #000;
-  opacity: 0.1;
+  opacity: .1;
+  pointer-events: none;
+}
+
+.edoms-ui-container.edoms-layout-relative {
+  min-height: 50px;
 }

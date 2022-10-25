@@ -1,4 +1,4 @@
-import type { Id, MComponent, MContainer, MPage } from '@tmagic/schema';
+import type { Id, MComponent, MContainer, MPage } from '@edoms/schema';
 
 import type App from './App';
 import Node from './Node';

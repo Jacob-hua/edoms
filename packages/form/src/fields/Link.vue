@@ -1,10 +1,9 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
   <a v-if="config.href && !disabled" target="_blank" :href="href" :style="config.css || {}">{{ displayText }}</a>
   <span v-else-if="config.href && disabled" :style="config.disabledCss || {}">{{ displayText }}</span>
   <div v-else class="m-fields-link">
-    <el-button text type="primary" @click="editHandler">点击编辑</el-button>
-    <m-form-dialog
+    <ElButton :text="true" type="primary" @click="editHandler">点击编辑</ElButton>
+    <FormDialog
       ref="editor"
       :title="config.formTitle || '编辑扩展配置'"
       :width="config.formWidth"
@@ -13,106 +12,80 @@
       :parent-values="values"
       :fullscreen="config.fullscreen"
       @submit="action"
-    ></m-form-dialog>
+    ></FormDialog>
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, PropType, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, inject, ref } from 'vue';
+
+import { ElButton } from '@edoms/design';
 
 import FormDialog from '../FormDialog.vue';
 import { FormState, LinkConfig } from '../schema';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
 
-export default defineComponent({
-  name: 'MFieldsLink',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<LinkConfig>,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  config: LinkConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  emits: ['change'],
+const emit = defineEmits(['change']);
 
-  setup(props, { emit }) {
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+useAddField(props.prop);
 
-    const formValue = ref({});
-    const editor = ref<InstanceType<typeof FormDialog>>();
-    const mForm = inject<FormState | undefined>('mForm');
+const formValue = ref({});
+const editor = ref<InstanceType<typeof FormDialog>>();
+const mForm = inject<FormState | undefined>('mForm');
 
-    const href = computed(() => {
-      // eslint-disable-next-line vue/no-undef-properties
-      if (typeof props.config.href === 'function' && props.model) {
-        return props.config.href(props.model);
-      }
-      // eslint-disable-next-line vue/no-undef-properties
-      return props.config.href || props.model?.[props.name];
-    });
-
-    const init = () => {
-      formValue.value = props.model?.[props.name] || {};
-    };
-
-    return {
-      // ref
-      formValue,
-      editor,
-
-      // computed methods
-      href,
-
-      formConfig: computed(() => {
-        if (typeof props.config.form === 'function') {
-          return props.config.form(mForm, {
-            model: props.model || {},
-            // eslint-disable-next-line vue/no-undef-properties
-            values: props.values || {},
-          });
-        }
-        return props.config.form;
-      }),
-
-      disable: computed(() => {
-        if (typeof props.config.disabled !== 'undefined') {
-          return props.config.disabled;
-        }
-        return !href.value;
-      }),
-
-      displayText: computed(() => {
-        if (typeof props.config.displayText === 'function') {
-          return props.config.displayText(mForm, { model: props.model || {} });
-        }
-        if (props.config.displayText) {
-          return props.config.displayText;
-        }
-        return '跳转';
-      }),
-
-      // methods
-      init,
-
-      editHandler: () => {
-        init();
-        editor.value && (editor.value.dialogVisible = true);
-      },
-
-      action: (data: any) => {
-        if (props.model) {
-          // eslint-disable-next-line vue/no-mutating-props
-          props.model[props.name] = data;
-          formValue.value = data;
-          emit('change', props.model[props.name]);
-        }
-        editor.value && (editor.value.dialogVisible = false);
-      },
-    };
-  },
+const href = computed(() => {
+  if (typeof props.config.href === 'function' && props.model) {
+    return props.config.href(props.model);
+  }
+  return props.config.href || props.model?.[props.name];
 });
+
+const init = () => {
+  formValue.value = props.model?.[props.name] || {};
+};
+
+const formConfig = computed(() => {
+  if (typeof props.config.form === 'function') {
+    return props.config.form(mForm, {
+      model: props.model || {},
+      values: props.values || {},
+    });
+  }
+  return props.config.form;
+});
+
+const displayText = computed(() => {
+  if (typeof props.config.displayText === 'function') {
+    return props.config.displayText(mForm, { model: props.model || {} });
+  }
+  if (props.config.displayText) {
+    return props.config.displayText;
+  }
+  return '跳转';
+});
+
+const editHandler = () => {
+  init();
+  editor.value && (editor.value.dialogVisible = true);
+};
+
+const action = (data: any) => {
+  if (props.model) {
+    props.model[props.name] = data;
+    formValue.value = data;
+    emit('change', props.model[props.name]);
+  }
+  editor.value && (editor.value.dialogVisible = false);
+};
 </script>

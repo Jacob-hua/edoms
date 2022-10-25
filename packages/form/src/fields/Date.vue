@@ -1,6 +1,5 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <el-date-picker
+  <ElDatePicker
     v-model="model[name]"
     type="date"
     :size="size"
@@ -9,42 +8,34 @@
     :format="config.format"
     :value-format="config.format || 'YYYY-MM-DD HH:mm:ss'"
     @change="changeHandler"
-  ></el-date-picker>
+  ></ElDatePicker>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-
-import { datetimeFormatter } from '@tmagic/utils';
+<script lang="ts" setup>
+import { ElDatePicker } from '@edoms/design';
+import { dateFormat } from '@edoms/utils';
 
 import { DateConfig } from '../schema';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
 
-export default defineComponent({
-  name: 'MFieldsDate',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<DateConfig>,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  config: DateConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  emits: ['change', 'input'],
+const emit = defineEmits(['change']);
 
-  setup(props, { emit }) {
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+useAddField(props.prop);
 
-    // eslint-disable-next-line vue/no-mutating-props, vue/no-undef-properties
-    props.model[props.name] = datetimeFormatter(props.model[props.name], '');
-    return {
-      changeHandler(v: string) {
-        emit('change', v);
-      },
-    };
-  },
-});
+props.model[props.name] = dateFormat(props.model[props.name], '');
+
+const changeHandler = (v: string) => {
+  emit('change', v);
+};
 </script>

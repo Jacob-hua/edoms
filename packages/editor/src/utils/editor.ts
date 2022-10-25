@@ -1,11 +1,11 @@
-import type { MApp, MContainer, MNode, MPage } from '@tmagic/schema';
-import { NodeType } from '@tmagic/schema';
-import type StageCore from '@tmagic/stage';
-import { getNodePath, isNumber, isPage, isPop } from '@tmagic/utils';
+import type { MApp, MContainer, MNode, MPage } from '@edoms/schema';
+import { NodeType } from '@edoms/schema';
+import type StageCore from '@edoms/stage';
+import { getNodePath, isNumber, isPage, isPop } from '@edoms/utils';
 
 import { Layout } from '../type';
 
-export const COPY_STORAGE_KEY = '$MagicEditorCopyData';
+export const COPY_STORAGE_KEY = '$EdomsEditorCopyData';
 
 /**
  * 获取所有页面配置
@@ -70,10 +70,10 @@ export const getRelativeStyle = (style: Record<string, any> = {}): Record<string
   left: 0,
 });
 
-const getMiddleTop = (style: Record<string, any> = {}, parentNode: MNode, stage: StageCore) => {
-  let height = style.height || 0;
+const getMiddleTop = (node: MNode, parentNode: MNode, stage: StageCore | null) => {
+  let height = node.style?.height || 0;
 
-  if (!stage || typeof style.top !== 'undefined' || !parentNode.style) return style.top;
+  if (!stage || typeof node.style?.top !== 'undefined' || !parentNode.style) return node.style?.top;
 
   if (!isNumber(height)) {
     height = 0;
@@ -85,20 +85,15 @@ const getMiddleTop = (style: Record<string, any> = {}, parentNode: MNode, stage:
     const { scrollTop = 0, wrapperHeight } = stage.mask;
     return (wrapperHeight - height) / 2 + scrollTop;
   }
+
   return (parentHeight - height) / 2;
 };
 
-export const getInitPositionStyle = (
-  style: Record<string, any> = {},
-  layout: Layout,
-  parentNode: MNode,
-  stage: StageCore
-) => {
+export const getInitPositionStyle = (style: Record<string, any> = {}, layout: Layout) => {
   if (layout === Layout.ABSOLUTE) {
     return {
       ...style,
       position: 'absolute',
-      top: getMiddleTop(style, parentNode, stage),
     };
   }
 
@@ -205,9 +200,22 @@ export const fixNodeLeft = (config: MNode, parent: MContainer, doc?: Document) =
   const el = doc.getElementById(`${config.id}`);
   const parentEl = doc.getElementById(`${parent.id}`);
 
-  if (el && parentEl && el.offsetWidth + config.style?.left > parentEl.offsetWidth) {
+  const left = Number(config.style?.left) || 0;
+  if (el && parentEl && el.offsetWidth + left > parentEl.offsetWidth) {
     return parentEl.offsetWidth - el.offsetWidth;
   }
 
   return config.style.left;
+};
+
+export const fixNodePosition = (config: MNode, parent: MContainer, stage: StageCore | null) => {
+  if (config.style?.position !== 'absolute') {
+    return config.style;
+  }
+
+  return {
+    ...(config.style || {}),
+    top: getMiddleTop(config, parent, stage),
+    left: fixNodeLeft(config, parent, stage?.renderer.contentWindow?.document),
+  };
 };

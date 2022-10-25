@@ -1,7 +1,6 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <el-input
-    v-model="model[modelName]"
+  <ElInput
+    v-model="model[name]"
     clearable
     :size="size"
     :placeholder="config.placeholder"
@@ -10,7 +9,7 @@
     @input="inputHandler"
     @keyup="keyUpHandler($event)"
   >
-    <template #append v-if="config.append">
+    <template v-if="config.append" #append>
       <span v-if="typeof config.append === 'string'">{{ config.append }}</span>
       <el-button
         v-if="typeof config.append === 'object' && config.append.type === 'button'"
@@ -21,121 +20,109 @@
         {{ config.append.text }}
       </el-button>
     </template>
-  </el-input>
+  </ElInput>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, PropType } from 'vue';
+<script lang="ts" setup>
+import { inject } from 'vue';
+
+import { ElInput } from '@edoms/design';
+import { isNumber } from '@edoms/utils';
 
 import { FormState, TextConfig } from '../schema';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
 
-export default defineComponent({
-  name: 'MFieldsText',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<TextConfig>,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  config: TextConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  emits: ['change', 'input'],
+const emit = defineEmits(['change', 'input']);
 
-  setup(props, { emit }) {
-    const mForm = inject<FormState | undefined>('mForm');
+useAddField(props.prop);
 
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+const mForm = inject<FormState | undefined>('mForm');
 
-    // eslint-disable-next-line vue/no-undef-properties
-    const modelName = computed(() => props.name || props.config.name || '');
-    return {
-      modelName,
+const changeHandler = (value: number) => {
+  emit('change', value);
+};
 
-      changeHandler(v: string | number) {
-        emit('change', v);
-      },
+const inputHandler = (v: string) => {
+  emit('input', v);
+  mForm?.$emit('field-input', props.prop, v);
+};
 
-      inputHandler(v: string | number) {
-        emit('input', v);
+const buttonClickHandler = () => {
+  if (typeof props.config.append === 'string') return;
 
-        // eslint-disable-next-line vue/custom-event-name-casing
-        mForm?.$emit('field-input', props.prop, v);
-      },
+  if (props.config.append?.handler) {
+    props.config.append.handler(mForm, {
+      model: props.model,
+      values: mForm?.values,
+    });
+  }
+};
 
-      buttonClickHandler() {
-        if (typeof props.config.append === 'string') return;
+const keyUpHandler = ($event: KeyboardEvent) => {
+  if (!props.model) return;
+  if (!props.name) return;
 
-        if (props.config.append?.handler) {
-          props.config.append.handler(mForm, {
-            // eslint-disable-next-line vue/no-undef-properties
-            model: props.model,
-            values: mForm?.values,
-          });
-        }
-      },
+  const arrowUp = $event.key === 'ArrowUp';
+  const arrowDown = $event.key === 'ArrowDown';
 
-      keyUpHandler($event: KeyboardEvent) {
-        if (!props.model) return;
-        if (!modelName.value) return;
+  if (!arrowUp && !arrowDown) {
+    return;
+  }
 
-        const arrowUp = $event.key === 'ArrowUp';
-        const arrowDown = $event.key === 'ArrowDown';
+  const value = props.model[props.name];
+  let num;
+  let unit;
+  if (isNumber(value)) {
+    num = +value;
+  } else {
+    value.replace(/^([0-9.]+)([a-z%]+)$/, ($0: string, $1: string, $2: string) => {
+      num = +$1;
+      unit = $2;
+    });
+  }
 
-        if (!arrowUp && !arrowDown) {
-          return;
-        }
+  if (num === undefined) {
+    return;
+  }
 
-        const value = props.model[modelName.value];
-        let num;
-        let unit;
-        if (/^([0-9.]+)$/.test(value)) {
-          num = +value;
-        } else {
-          value.replace(/^([0-9.]+)([a-z%]+)$/, (_: string, $1: string, $2: string) => {
-            num = +$1;
-            unit = $2;
-          });
-        }
+  const ctrl = navigator.platform.match('Mac') ? $event.metaKey : $event.ctrlKey;
+  const shift = $event.shiftKey;
+  const alt = $event.altKey;
 
-        if (num === undefined) {
-          return;
-        }
+  if (arrowUp) {
+    if (ctrl) {
+      num += 100;
+    } else if (alt) {
+      num = (num * 10000 + 1000) / 10000;
+    } else if (shift) {
+      num = num + 10;
+    } else {
+      num += 1;
+    }
+  } else if (arrowDown) {
+    if (ctrl) {
+      num -= 100;
+    } else if (alt) {
+      num = (num * 10000 - 1000) / 10000;
+    } else if (shift) {
+      num -= 10;
+    } else {
+      num -= 1;
+    }
+  }
 
-        const ctrl = navigator.platform.match('Mac') ? $event.metaKey : $event.ctrlKey;
-        const shif = $event.shiftKey;
-        const alt = $event.altKey;
-
-        if (arrowUp) {
-          if (ctrl) {
-            num += 100;
-          } else if (alt) {
-            num = (num * 10000 + 1000) / 10000;
-          } else if (shif) {
-            num = num + 10;
-          } else {
-            num += 1;
-          }
-        } else if (arrowDown) {
-          if (ctrl) {
-            num -= 100;
-          } else if (alt) {
-            num = (num * 10000 - 1000) / 10000;
-          } else if (shif) {
-            num -= 10;
-          } else {
-            num -= 1;
-          }
-        }
-
-        // eslint-disable-next-line vue/no-undef-properties, vue/no-mutating-props
-        props.model[modelName.value] = `${num}${unit || ''}`;
-        emit('change', props.model[modelName.value]);
-      },
-    };
-  },
-});
+  props.model[props.name] = `${num}${unit || ''}`;
+  emit('change', props.model[props.name]);
+};
 </script>

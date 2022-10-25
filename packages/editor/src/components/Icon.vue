@@ -1,30 +1,19 @@
-<!-- eslint-disable vue/require-default-prop -->
 <template>
-  <el-icon v-if="!icon"><Edit></Edit></el-icon>
-  <img v-else-if="typeof icon === 'string' && icon.startsWith('http')" :src="icon" />
-  <i v-else-if="typeof icon === 'string'" :class="icon"></i>
-  <el-icon v-else><component :is="toRaw(icon)"></component></el-icon>
+  <ElIcon v-if="!icon" class="edoms-editor-icon"><Edit></Edit></ElIcon>
+  <ElIcon v-else-if="typeof icon === 'string' && icon.startsWith('http')" class="edoms-editor-icon"
+    ><img :src="icon"
+  /></ElIcon>
+  <i v-else-if="typeof icon === 'string'" class="edoms-editor-icon" :class="icon"></i>
+  <ElIcon v-else class="edoms-editor-icon"><component :is="toRaw(icon)"></component></ElIcon>
 </template>
 
-<script lang="ts">
-import { Component, defineComponent, PropType, toRaw } from 'vue';
+<script lang="ts" setup>
+import { toRaw } from 'vue';
 import { Edit } from '@element-plus/icons-vue';
 
-export default defineComponent({
-  name: 'MIcon',
-  expose: [],
-  components: { Edit },
+import { ElIcon } from '@edoms/design';
 
-  props: {
-    icon: {
-      type: [String, Object] as PropType<string | Component>,
-    },
-  },
-
-  setup() {
-    return {
-      toRaw,
-    };
-  },
-});
+defineProps<{
+  icon?: any;
+}>();
 </script>

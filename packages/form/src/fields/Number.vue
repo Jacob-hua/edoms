@@ -1,6 +1,5 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <el-input-number
+  <ElInputNumber
     v-if="model"
     v-model="model[name]"
     clearable
@@ -13,44 +12,40 @@
     :disabled="disabled"
     @change="changeHandler"
     @input="inputHandler"
-  ></el-input-number>
+  ></ElInputNumber>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, PropType } from 'vue';
+<script lang="ts" setup>
+import { inject } from 'vue';
+
+import { ElInputNumber } from '@edoms/design';
 
 import { FormState, NumberConfig } from '../schema';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
-export default defineComponent({
-  name: 'MFieldsNumber',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<NumberConfig>,
-      required: true,
-    },
-  },
 
-  emits: ['change', 'input'],
+const props = defineProps<{
+  config: NumberConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  setup(props, { emit }) {
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+const emit = defineEmits(['change', 'input']);
 
-    const mForm = inject<FormState | null>('mForm');
-    return {
-      mForm,
-      changeHandler: (value: number) => {
-        emit('change', value);
-      },
-      inputHandler: (v: string) => {
-        emit('input', v);
-        // eslint-disable-next-line vue/custom-event-name-casing
-        mForm?.$emit('field-input', props.prop, v);
-      },
-    };
-  },
-});
+useAddField(props.prop);
+
+const mForm = inject<FormState | null>('mForm');
+
+const changeHandler = (value: number) => {
+  emit('change', value);
+};
+
+const inputHandler = (v: string) => {
+  emit('input', v);
+  mForm?.$emit('field-input', props.prop, v);
+};
 </script>

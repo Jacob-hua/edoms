@@ -1,6 +1,5 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <el-input
+  <ElInput
     v-model="model[name]"
     type="textarea"
     :size="size"
@@ -10,54 +9,40 @@
     @change="changeHandler"
     @input="inputHandler"
   >
-  </el-input>
+  </ElInput>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, PropType } from 'vue';
+<script lang="ts" setup>
+import { inject } from 'vue';
+
+import { ElInput } from '@edoms/design';
 
 import { FormState, TextareaConfig } from '../schema';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
-export default defineComponent({
-  name: 'MFieldsTextarea',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<TextareaConfig>,
-      required: true,
-    },
-  },
 
-  emits: {
-    change(values: string | number) {
-      return values;
-    },
+const props = defineProps<{
+  config: TextareaConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-    input(values: string | number) {
-      return values;
-    },
-  },
+const emit = defineEmits(['change', 'input']);
 
-  setup(props, { emit }) {
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+useAddField(props.prop);
 
-    const mForm = inject<FormState | null>('mForm');
+const mForm = inject<FormState | null>('mForm');
 
-    return {
-      mForm,
-      changeHandler: (v: string) => {
-        emit('change', v);
-      },
+const changeHandler = (value: number) => {
+  emit('change', value);
+};
 
-      inputHandler: (v: string) => {
-        emit('input', v);
-        // eslint-disable-next-line vue/custom-event-name-casing
-        mForm?.$emit('field-input', props.prop, v);
-      },
-    };
-  },
-});
+const inputHandler = (v: string) => {
+  emit('input', v);
+  mForm?.$emit('field-input', props.prop, v);
+};
 </script>

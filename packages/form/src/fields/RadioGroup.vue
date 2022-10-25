@@ -1,35 +1,31 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <el-radio-group v-if="model" v-model="model[name]" :size="size" :disabled="disabled" @change="changeHandler">
-    <el-radio v-for="option in config.options" :key="option.value" :label="option.value">{{ option.text }}</el-radio>
-  </el-radio-group>
+  <ElRadioGroup v-if="model" v-model="model[name]" :size="size" :disabled="disabled" @change="changeHandler">
+    <ElRadio v-for="option in config.options" :key="`${option.value}`" :label="option.value">{{ option.text }}</ElRadio>
+  </ElRadioGroup>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ElRadio, ElRadioGroup } from '@edoms/design';
 
-import fieldProps from '../utils/fieldProps';
+import { RadioGroupConfig } from '../schema';
 import { useAddField } from '../utils/useAddField';
 
-export default defineComponent({
-  name: 'MFieldsRadioGroup',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  config: RadioGroupConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  emits: ['change'],
+const emit = defineEmits(['change']);
 
-  setup(props, { emit }) {
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
-    return {
-      changeHandler: (v: string | number | boolean) => emit('change', v),
-    };
-  },
-});
+const changeHandler = (value: number) => {
+  emit('change', value);
+};
+
+useAddField(props.prop);
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="menuData.length && visible" ref="menu" class="magic-editor-content-menu" :style="menuStyle">
+  <div v-if="menuData.length && visible" ref="menu" class="edoms-editor-content-menu" :style="menuStyle">
     <div>
       <ToolButton
         v-for="(item, index) in menuData"
@@ -22,119 +22,107 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, nextTick, onMounted, onUnmounted, PropType, ref } from 'vue';
+<script lang="ts" setup>
+import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 
-import { MenuButton, MenuItem } from '../type';
+import { MenuButton, MenuComponent } from '../type';
 
 import ToolButton from './ToolButton.vue';
 
-export default defineComponent({
-  components: { ToolButton },
-  expose: [],
-  props: {
-    menuData: {
-      type: Array as PropType<MenuItem[]>,
-      default: () => [],
-    },
+const props = withDefaults(
+  defineProps<{
+    menuData?: (MenuButton | MenuComponent)[];
+    isSubMenu?: boolean;
+  }>(),
+  {
+    menuData: () => [],
+    isSubMenu: false,
+  }
+);
 
-    isSubMenu: {
-      type: Boolean,
-      default: false,
-    },
-  },
+const emit = defineEmits(['hide', 'show']);
 
-  emits: ['hide', 'show'],
+const menu = ref<HTMLDivElement>();
+const subMenu = ref<any>();
+const visible = ref(false);
+const subMenuData = ref<(MenuButton | MenuComponent)[]>([]);
+const menuStyle = ref({
+  left: '0',
+  top: '0',
+});
 
-  setup(props, { emit }) {
-    const menu = ref<HTMLDivElement>();
-    const subMenu = ref<any>();
-    const visible = ref(false);
-    const subMenuData = ref<MenuItem[]>([]);
-    const menuStyle = ref({
-      left: '0',
-      top: '0',
-    });
+const hide = () => {
+  if (!visible.value) return;
 
-    const hide = () => {
-      if (!visible.value) return;
+  visible.value = false;
+  subMenu.value?.hide();
 
-      visible.value = false;
-      subMenu.value?.hide();
+  emit('hide');
+};
 
-      emit('hide');
-    };
+const hideHandler = (e: MouseEvent) => {
+  const target = e.target as HTMLElement | undefined;
+  if (!visible.value || !target) {
+    return;
+  }
+  if (menu.value?.contains(target) || subMenu.value?.$el?.contains(target)) {
+    return;
+  }
+  hide();
+};
 
-    const hideHandler = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | undefined;
-      if (!visible.value || !target) {
-        return;
+const show = (e: MouseEvent) => {
+  // 加settimeout是以为，如果菜单中的按钮监听的是mouseup，那么菜单显示出来时鼠标如果正好在菜单上就会马上触发按钮的mouseup
+  setTimeout(() => {
+    visible.value = true;
+
+    nextTick(() => {
+      const menuHeight = menu.value?.clientHeight || 0;
+
+      let top = e.clientY;
+      if (menuHeight + e.clientY > document.body.clientHeight) {
+        top = document.body.clientHeight - menuHeight;
       }
-      if (menu.value?.contains(target) || subMenu.value?.$el?.contains(target)) {
-        return;
-      }
-      hide();
-    };
 
-    onMounted(() => {
-      if (props.isSubMenu) return;
+      menuStyle.value = {
+        top: `${top}px`,
+        left: `${e.clientX}px`,
+      };
 
-      globalThis.addEventListener('mousedown', hideHandler, true);
+      emit('show');
     });
+  }, 300);
+};
 
-    onUnmounted(() => {
-      if (props.isSubMenu) return;
+const showSubMenu = (item: MenuButton | MenuComponent) => {
+  const menuItem = item as MenuButton;
+  if (typeof item !== 'object' || !menuItem.items?.length) {
+    return;
+  }
 
-      globalThis.removeEventListener('mousedown', hideHandler, true);
+  subMenuData.value = menuItem.items;
+  if (menu.value) {
+    subMenu.value.show({
+      clientX: menu.value.offsetLeft + menu.value.clientWidth,
+      clientY: menu.value.offsetTop,
     });
+  }
+};
 
-    return {
-      menu,
-      subMenu,
-      visible,
-      menuStyle,
-      subMenuData,
+onMounted(() => {
+  if (props.isSubMenu) return;
 
-      hide,
+  globalThis.addEventListener('mousedown', hideHandler, true);
+});
 
-      show(e: MouseEvent) {
-        // 加settimeout是以为，如果菜单中的按钮监听的是mouseup，那么菜单显示出来时鼠标如果正好在菜单上就会马上触发按钮的mouseup
-        setTimeout(() => {
-          visible.value = true;
+onUnmounted(() => {
+  if (props.isSubMenu) return;
 
-          nextTick(() => {
-            const menuHeight = menu.value?.clientHeight || 0;
+  globalThis.removeEventListener('mousedown', hideHandler, true);
+});
 
-            let top = e.clientY;
-            if (menuHeight + e.clientY > document.body.clientHeight) {
-              top = document.body.clientHeight - menuHeight;
-            }
-
-            menuStyle.value = {
-              top: `${top}px`,
-              left: `${e.clientX}px`,
-            };
-
-            emit('show');
-          });
-        }, 300);
-      },
-
-      showSubMenu(item: MenuItem) {
-        const menuItem = item as MenuButton;
-        if (typeof item !== 'object' || !menuItem.items?.length) {
-          return;
-        }
-
-        subMenuData.value = menuItem.items;
-        if (menu.value) {
-          subMenu.value.show({
-            clientX: menu.value.offsetLeft + menu.value.clientWidth,
-            clientY: menu.value.offsetTop,
-          });
-        }
-      },
-    };
-  },
+defineExpose({
+  hide,
+  show,
 });
 </script>

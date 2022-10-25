@@ -1,9 +1,12 @@
 import { EventEmitter } from 'events';
 
-import type { EventItemConfig, MComponent, MContainer, MPage } from '@tmagic/schema';
+import { isEmpty } from 'lodash-es';
+
+import type { EventItemConfig, MComponent, MContainer, MPage } from '@edoms/schema';
 
 import type App from './App';
 import type Page from './Page';
+import Store from './Store';
 
 interface NodeOptions {
   config: MComponent | MContainer;
@@ -21,6 +24,7 @@ class Node extends EventEmitter {
   public page?: Page;
   public parent?: Node;
   public app: App;
+  public store = new Store();
 
   constructor(options: NodeOptions) {
     super();
@@ -31,7 +35,6 @@ class Node extends EventEmitter {
     const { events } = options.config;
     this.data = options.config;
     this.events = events;
-
     this.listenLifeSafe();
 
     this.once('destroy', () => {
@@ -45,15 +48,12 @@ class Node extends EventEmitter {
   }
 
   private listenLifeSafe() {
-    this.once('created', (instance: any) => {
+    this.once('created', async (instance: any) => {
       this.instance = instance;
-
-      if (typeof this.data.created === 'function') {
-        this.data.created(this);
-      }
+      await this.runCodeBlock('created');
     });
 
-    this.once('mounted', (instance: any) => {
+    this.once('mounted', async (instance: any) => {
       this.instance = instance;
 
       const eventConfigQueue = this.app.eventQueueMap[instance.config.id] || [];
@@ -62,10 +62,17 @@ class Node extends EventEmitter {
         this.app.eventHandler(eventConfig.eventConfig, eventConfig.fromCpt, eventConfig.args);
       }
 
-      if (typeof this.data.mounted === 'function') {
-        this.data.mounted(this);
-      }
+      await this.runCodeBlock('mounted');
     });
+  }
+
+  private async runCodeBlock(hook: string) {
+    if (!Array.isArray(this.data[hook]) || !this.app.codeDsl || isEmpty(this.app?.codeDsl)) return;
+    for (const codeId of this.data[hook]) {
+      if (this.app.codeDsl[codeId] && typeof this.app?.codeDsl[codeId]?.content === 'function') {
+        await this.app.codeDsl[codeId].content(this);
+      }
+    }
   }
 }
 

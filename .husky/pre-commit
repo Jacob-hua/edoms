@@ -1,5 +1,5 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-echo "代码规范检查和风格统一"
-npx --no-install lint-staged
+npx lint-staged
+pnpm --filter "@edoms/*" build:type

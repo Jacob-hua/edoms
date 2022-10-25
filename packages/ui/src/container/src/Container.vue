@@ -2,28 +2,26 @@
   <div
     v-if="display()"
     :id="`${config.id || ''}`"
-    :class="`magic-ui-container${config.className ? ` ${config.className}` : ''}`"
+    :class="`edoms-ui-container edoms-layout-${config.layout}${config.className ? ` ${config.className}` : ''}`"
     :style="style"
   >
     <slot></slot>
-    <magic-ui-component v-for="item in config.items" :key="item.id" :config="item"></magic-ui-component>
+    <edoms-ui-component v-for="item in config.items" :key="item.id" :config="item"></edoms-ui-component>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
 
-import type { MContainer } from '@tmagic/schema';
+import type { MContainer } from '@edoms/schema';
 
 import Component from '../../Component.vue';
 import useApp from '../../useApp';
 import useCommonMethod from '../../useCommonMethod';
 
 export default defineComponent({
-  name: 'MagicUiContainer',
-  expose: [],
   components: {
-    'magic-ui-component': Component,
+    'edoms-ui-component': Component,
   },
 
   props: {

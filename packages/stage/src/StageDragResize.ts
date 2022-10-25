@@ -1,27 +1,19 @@
 /* eslint-disable no-param-reassign */
 import { EventEmitter } from 'events';
 
+import KeyController from 'keycon';
 import type { MoveableOptions } from 'moveable';
 import Moveable from 'moveable';
 import MoveableHelper from 'moveable-helper';
 
-import { addClassName, removeClassNameByClassName } from '@tmagic/utils';
+import { removeClassNameByClassName } from '@edoms/utils';
 
 import { DRAG_EL_ID_PREFIX, GHOST_EL_ID_PREFIX, GuidesType, Mode, ZIndex } from './const';
 import StageCore from './StageCore';
 import StageMask from './StageMask';
-import type { SortEventData, StageDragResizeConfig } from './types';
-import { calcValueByFontsize, getAbsolutePosition, getMode, getOffset, getTargetElStyle } from './util';
-
-/** 拖动状态 */
-enum ActionStatus {
-  /** 开始拖动 */
-  START = 'start',
-  /** 拖动中 */
-  ING = 'ing',
-  /** 拖动结束 */
-  END = 'end',
-}
+import type { StageDragResizeConfig } from './types';
+import { ContainerHighlightType, StageDragStatus } from './types';
+import { calcValueByFontsize, down, getAbsolutePosition, getMode, getOffset, getTargetElStyle, up } from './util';
 
 /**
  * 选中框
@@ -48,10 +40,11 @@ export default class StageDragResize extends EventEmitter {
 
   private moveableOptions: MoveableOptions = {};
   /** 拖动状态 */
-  private dragStatus: ActionStatus = ActionStatus.END;
+  private dragStatus: StageDragStatus = StageDragStatus.END;
   /** 流式布局下，目标节点的镜像节点 */
   private ghostEl: HTMLElement | undefined;
   private moveableHelper?: MoveableHelper;
+  private isContainerHighlight: Boolean = false;
 
   constructor(config: StageDragResizeConfig) {
     super();
@@ -59,6 +52,20 @@ export default class StageDragResize extends EventEmitter {
     this.core = config.core;
     this.container = config.container;
     this.mask = config.mask;
+
+    KeyController.global.keydown('alt', (e) => {
+      e.inputEvent.preventDefault();
+      this.isContainerHighlight = true;
+    });
+    KeyController.global.keyup('alt', (e) => {
+      e.inputEvent.preventDefault();
+
+      const doc = this.core.renderer.contentWindow?.document;
+      if (doc && this.canContainerHighlight()) {
+        removeClassNameByClassName(doc, this.core.containerHighlightClassName);
+      }
+      this.isContainerHighlight = false;
+    });
   }
 
   /**
@@ -70,6 +77,11 @@ export default class StageDragResize extends EventEmitter {
   public select(el: HTMLElement, event?: MouseEvent): void {
     const oldTarget = this.target;
     this.target = el;
+
+    if (!this.dragEl) {
+      this.dragEl = globalThis.document.createElement('div');
+      this.container.append(this.dragEl);
+    }
 
     // 从不能拖动到能拖动的节点之间切换，要重新创建moveable，不然dragStart不生效
     if (!this.moveable || this.target !== oldTarget) {
@@ -132,6 +144,7 @@ export default class StageDragResize extends EventEmitter {
   public clearSelectStatus(): void {
     if (!this.moveable) return;
     this.destroyDragEl();
+    this.dragEl = undefined;
     this.moveable.target = null;
     this.moveable.updateTarget();
   }
@@ -147,7 +160,7 @@ export default class StageDragResize extends EventEmitter {
     this.moveable?.destroy();
     this.destroyGhostEl();
     this.destroyDragEl();
-    this.dragStatus = ActionStatus.END;
+    this.dragStatus = StageDragStatus.END;
     this.removeAllListeners();
   }
 
@@ -159,15 +172,15 @@ export default class StageDragResize extends EventEmitter {
     this.mode = getMode(el);
 
     this.destroyGhostEl();
-    this.destroyDragEl();
-    this.dragEl = globalThis.document.createElement('div');
-    this.container.append(this.dragEl);
+
+    if (!this.dragEl) {
+      return;
+    }
+
     this.dragEl.style.cssText = getTargetElStyle(el);
     this.dragEl.id = `${DRAG_EL_ID_PREFIX}${el.id}`;
 
     if (typeof this.core.config.updateDragEl === 'function') {
-      console.log('sdasdfasdfasdfasdfasdfasdf');
-
       this.core.config.updateDragEl(this.dragEl, el);
     }
     this.moveableOptions = this.getOptions({
@@ -227,7 +240,7 @@ export default class StageDragResize extends EventEmitter {
       .on('resizeStart', (e) => {
         if (!this.target) return;
 
-        this.dragStatus = ActionStatus.START;
+        this.dragStatus = StageDragStatus.START;
         this.moveableHelper?.onResizeStart(e);
 
         frame.top = this.target.offsetTop;
@@ -238,14 +251,15 @@ export default class StageDragResize extends EventEmitter {
         if (!this.moveable || !this.target || !this.dragEl) return;
 
         const { beforeTranslate } = drag;
-        this.dragStatus = ActionStatus.ING;
-
-        this.moveableHelper?.onResize(e);
+        this.dragStatus = StageDragStatus.ING;
 
         // 流式布局
         if (this.mode === Mode.SORTABLE) {
           this.target.style.top = '0px';
+          this.dragEl.style.width = `${width}px`;
+          this.dragEl.style.height = `${height}px`;
         } else {
+          this.moveableHelper?.onResize(e);
           this.target.style.left = `${frame.left + beforeTranslate[0]}px`;
           this.target.style.top = `${frame.top + beforeTranslate[1]}px`;
         }
@@ -254,7 +268,7 @@ export default class StageDragResize extends EventEmitter {
         this.target.style.height = `${height}px`;
       })
       .on('resizeEnd', () => {
-        this.dragStatus = ActionStatus.END;
+        this.dragStatus = StageDragStatus.END;
         this.update(true);
       });
   }
@@ -267,7 +281,6 @@ export default class StageDragResize extends EventEmitter {
       top: 0,
     };
 
-    // eslint-disable-next-line no-undef
     let timeout: NodeJS.Timeout | undefined;
 
     const { contentWindow } = this.core.renderer;
@@ -277,13 +290,14 @@ export default class StageDragResize extends EventEmitter {
       .on('dragStart', (e) => {
         if (!this.target) throw new Error('未选中组件');
 
-        this.dragStatus = ActionStatus.START;
+        this.dragStatus = StageDragStatus.START;
 
         this.moveableHelper?.onDragStart(e);
 
         if (this.mode === Mode.SORTABLE) {
           this.ghostEl = this.generateGhostEl(this.target);
         }
+
         frame.top = this.target.offsetTop;
         frame.left = this.target.offsetLeft;
       })
@@ -295,22 +309,11 @@ export default class StageDragResize extends EventEmitter {
           timeout = undefined;
         }
 
-        timeout = globalThis.setTimeout(async () => {
-          const els = this.core.getElementsFromPoint(e.inputEvent);
-          for (const el of els) {
-            if (
-              doc &&
-              !el.id.startsWith(GHOST_EL_ID_PREFIX) &&
-              el !== this.target &&
-              (await this.core.isContainer(el))
-            ) {
-              addClassName(el, doc, this.core.containerHighlightClassName);
-              break;
-            }
-          }
-        }, this.core.containerHighlightDuration);
+        if (this.canContainerHighlight()) {
+          timeout = this.core.getAddContainerHighlightClassNameTimeout(e.inputEvent, [this.target]);
+        }
 
-        this.dragStatus = ActionStatus.ING;
+        this.dragStatus = StageDragStatus.ING;
 
         // 流式布局
         if (this.ghostEl) {
@@ -331,12 +334,12 @@ export default class StageDragResize extends EventEmitter {
 
         let parentEl: HTMLElement | null = null;
 
-        if (doc) {
+        if (doc && this.canContainerHighlight()) {
           parentEl = removeClassNameByClassName(doc, this.core.containerHighlightClassName);
         }
 
         // 点击不拖动时会触发dragStart和dragEnd，但是不会有drag事件
-        if (this.dragStatus === ActionStatus.ING) {
+        if (this.dragStatus === StageDragStatus.ING) {
           if (parentEl) {
             this.update(false, parentEl);
           } else {
@@ -350,7 +353,7 @@ export default class StageDragResize extends EventEmitter {
           }
         }
 
-        this.dragStatus = ActionStatus.END;
+        this.dragStatus = StageDragStatus.END;
         this.destroyGhostEl();
       });
   }
@@ -360,24 +363,28 @@ export default class StageDragResize extends EventEmitter {
 
     this.moveable
       .on('rotateStart', (e) => {
-        this.dragStatus = ActionStatus.START;
+        this.dragStatus = StageDragStatus.START;
         this.moveableHelper?.onRotateStart(e);
       })
       .on('rotate', (e) => {
         if (!this.target || !this.dragEl) return;
-        this.dragStatus = ActionStatus.ING;
+        this.dragStatus = StageDragStatus.ING;
         this.moveableHelper?.onRotate(e);
         const frame = this.moveableHelper?.getFrame(e.target);
         this.target.style.transform = frame?.toCSSObject().transform || '';
       })
       .on('rotateEnd', (e) => {
-        this.dragStatus = ActionStatus.END;
+        this.dragStatus = StageDragStatus.END;
         const frame = this.moveableHelper?.getFrame(e.target);
         this.emit('update', {
-          el: this.target,
-          style: {
-            transform: frame?.get('transform'),
-          },
+          data: [
+            {
+              el: this.target,
+              style: {
+                transform: frame?.get('transform'),
+              },
+            },
+          ],
         });
       });
   }
@@ -387,24 +394,28 @@ export default class StageDragResize extends EventEmitter {
 
     this.moveable
       .on('scaleStart', (e) => {
-        this.dragStatus = ActionStatus.START;
+        this.dragStatus = StageDragStatus.START;
         this.moveableHelper?.onScaleStart(e);
       })
       .on('scale', (e) => {
         if (!this.target || !this.dragEl) return;
-        this.dragStatus = ActionStatus.ING;
+        this.dragStatus = StageDragStatus.ING;
         this.moveableHelper?.onScale(e);
         const frame = this.moveableHelper?.getFrame(e.target);
         this.target.style.transform = frame?.toCSSObject().transform || '';
       })
       .on('scaleEnd', (e) => {
-        this.dragStatus = ActionStatus.END;
+        this.dragStatus = StageDragStatus.END;
         const frame = this.moveableHelper?.getFrame(e.target);
         this.emit('update', {
-          el: this.target,
-          style: {
-            transform: frame?.get('transform'),
-          },
+          data: [
+            {
+              el: this.target,
+              style: {
+                transform: frame?.get('transform'),
+              },
+            },
+          ],
         });
       });
   }
@@ -445,7 +456,6 @@ export default class StageDragResize extends EventEmitter {
     const height = calcValueByFontsize(doc, this.target.clientHeight);
 
     if (parentEl && this.mode === Mode.ABSOLUTE && this.dragEl) {
-      // eslint-disable-next-line no-unsafe-optional-chaining
       const [translateX, translateY] = this.moveableHelper?.getFrame(this.dragEl).properties.transform.translate.value;
       const { left: parentLeft, top: parentTop } = getOffset(parentEl);
       left =
@@ -457,9 +467,13 @@ export default class StageDragResize extends EventEmitter {
     }
 
     this.emit('update', {
-      el: this.target,
+      data: [
+        {
+          el: this.target,
+          style: isResize ? { left, top, width, height } : { left, top },
+        },
+      ],
       parentEl,
-      style: isResize ? { left, top, width, height } : { left, top },
     });
   }
 
@@ -469,6 +483,7 @@ export default class StageDragResize extends EventEmitter {
     }
 
     const ghostEl = el.cloneNode(true) as HTMLElement;
+    this.setGhostElChildrenId(ghostEl);
     const { top, left } = getAbsolutePosition(el, getOffset(el));
     ghostEl.id = `${GHOST_EL_ID_PREFIX}${el.id}`;
     ghostEl.style.zIndex = ZIndex.GHOST_EL;
@@ -478,6 +493,18 @@ export default class StageDragResize extends EventEmitter {
     ghostEl.style.top = `${top}px`;
     el.after(ghostEl);
     return ghostEl;
+  }
+
+  private setGhostElChildrenId(el: Element) {
+    for (const child of Array.from(el.children)) {
+      if (child.id) {
+        child.id = `${GHOST_EL_ID_PREFIX}${child.id}`;
+      }
+
+      if (child.children.length) {
+        this.setGhostElChildrenId(child);
+      }
+    }
   }
 
   private destroyGhostEl(): void {
@@ -490,6 +517,7 @@ export default class StageDragResize extends EventEmitter {
 
     const isAbsolute = this.mode === Mode.ABSOLUTE;
     const isFixed = this.mode === Mode.FIXED;
+    const isSortable = this.mode === Mode.SORTABLE;
 
     let { moveableOptions = {} } = this.core.config;
 
@@ -514,7 +542,7 @@ export default class StageDragResize extends EventEmitter {
       resizable: true,
       scalable: false,
       rotatable: false,
-      snappable: isAbsolute || isFixed,
+      snappable: true,
       snapGap: isAbsolute || isFixed,
       snapThreshold: 5,
       snapDigit: 0,
@@ -543,82 +571,19 @@ export default class StageDragResize extends EventEmitter {
         top: 0,
         // 设置0的话无法移动到left为0，所以只能设置为-1
         left: -1,
-        right: this.container.clientWidth,
-        bottom: this.container.clientHeight,
+        right: this.container.clientWidth - 1,
+        bottom: isSortable ? undefined : this.container.clientHeight,
         ...(moveableOptions.bounds || {}),
       },
       ...options,
       ...moveableOptions,
     };
   }
+
+  private canContainerHighlight() {
+    return (
+      this.core.containerHighlightType === ContainerHighlightType.DEFAULT ||
+      (this.core.containerHighlightType === ContainerHighlightType.ALT && this.isContainerHighlight)
+    );
+  }
 }
-
-/**
- * 下移组件位置
- * @param {number} deltaTop 偏移量
- * @param {Object} detail 当前选中的组件配置
- */
-export const down = (deltaTop: number, target: HTMLElement | SVGElement): SortEventData | void => {
-  let swapIndex = 0;
-  let addUpH = target.clientHeight;
-  const brothers = Array.from(target.parentNode?.children || []).filter(
-    (node) => !node.id.startsWith(GHOST_EL_ID_PREFIX)
-  );
-  const index = brothers.indexOf(target);
-  // 往下移动
-  const downEls = brothers.slice(index + 1) as HTMLElement[];
-
-  for (let i = 0; i < downEls.length; i++) {
-    const ele = downEls[i];
-    // 是 fixed 不做处理
-    if (ele.style?.position === 'fixed') {
-      continue;
-    }
-    addUpH += ele.clientHeight / 2;
-    if (deltaTop <= addUpH) {
-      break;
-    }
-    addUpH += ele.clientHeight / 2;
-    swapIndex = i;
-  }
-  return {
-    src: target.id,
-    dist: downEls.length && swapIndex > -1 ? downEls[swapIndex].id : target.id,
-  };
-};
-
-/**
- * 上移组件位置
- * @param {Array} brothers 处于同一容器下的所有子组件配置
- * @param {number} index 当前组件所处的位置
- * @param {number} deltaTop 偏移量
- * @param {Object} detail 当前选中的组件配置
- */
-export const up = (deltaTop: number, target: HTMLElement | SVGElement): SortEventData | void => {
-  const brothers = Array.from(target.parentNode?.children || []).filter(
-    (node) => !node.id.startsWith(GHOST_EL_ID_PREFIX)
-  );
-  const index = brothers.indexOf(target);
-  // 往上移动
-  const upEls = brothers.slice(0, index) as HTMLElement[];
-
-  let addUpH = target.clientHeight;
-  let swapIndex = upEls.length - 1;
-
-  for (let i = upEls.length - 1; i >= 0; i--) {
-    const ele = upEls[i];
-    if (!ele) continue;
-    // 是 fixed 不做处理
-    if (ele.style.position === 'fixed') continue;
-
-    addUpH += ele.clientHeight / 2;
-    if (-deltaTop <= addUpH) break;
-    addUpH += ele.clientHeight / 2;
-
-    swapIndex = i;
-  }
-  return {
-    src: target.id,
-    dist: upEls.length && swapIndex > -1 ? upEls[swapIndex].id : target.id,
-  };
-};

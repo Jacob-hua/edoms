@@ -1,15 +1,16 @@
-<!-- eslint-disable vue/attributes-order -->
 <template>
-  <el-option
+  <ElOption
     v-for="option in options"
+    :key="valueKey ? option.value[valueKey] : option.value"
     :label="option.text"
     :value="option.value"
-    :key="valueKey ? option.value[valueKey] : option.value"
     :disabled="option.disabled"
-  ></el-option>
+  ></ElOption>
 </template>
 
 <script lang="ts" setup>
+import { ElOption } from '@edoms/design';
+
 import { SelectOption } from '../schema';
 
 defineProps<{

@@ -4,58 +4,29 @@
   </span>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, onMounted, onUnmounted, ref, toRaw } from 'vue';
+<script lang="ts" setup>
+import { onMounted, onUnmounted, ref } from 'vue';
 import Gesto from 'gesto';
 
-import { Services } from '../type';
+const emit = defineEmits(['change']);
 
-export default defineComponent({
-  name: 'MEditorResize',
-  expose: [],
-  props: {
-    type: {
-      type: String,
-    },
-  },
+const target = ref<HTMLSpanElement>();
 
-  setup(props) {
-    const services = inject<Services>('services');
+let getso: Gesto;
 
-    const target = ref<HTMLSpanElement>();
+onMounted(() => {
+  if (!target.value) return;
+  getso = new Gesto(target.value, {
+    container: window,
+    pinchOutside: true,
+  }).on('drag', (e) => {
+    if (!target.value) return;
 
-    let getso: Gesto;
+    emit('change', e.deltaX);
+  });
+});
 
-    onMounted(() => {
-      if (!target.value) return;
-      getso = new Gesto(target.value, {
-        container: window,
-        pinchOutside: true,
-      }).on('drag', (e) => {
-        if (!target.value || !services) return;
-
-        let { left = 0, right = 0 } = {
-          ...toRaw(services.uiService.get('columnWidth')),
-        };
-        if (props.type === 'left') {
-          left += e.deltaX;
-        } else if (props.type === 'right') {
-          right -= e.deltaX;
-        }
-        services.uiService.set('columnWidth', {
-          left,
-          right,
-        });
-      });
-    });
-
-    onUnmounted(() => {
-      getso?.unset();
-    });
-
-    return {
-      target,
-    };
-  },
+onUnmounted(() => {
+  getso?.unset();
 });
 </script>

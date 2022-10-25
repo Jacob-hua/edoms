@@ -222,9 +222,8 @@ export interface MQrcode {
   url: string;
 }
 
-// eslint-disable-next-line no-redeclare
-export interface MPop extends MComponent {
-  items?: MComponent[] | MContainer[];
-  closeButtonStyle?: any;
-  closeButton?: boolean;
-}
+// export interface MPop extends MComponent {
+//   items?: MComponent[] | MContainer[];
+//   closeButtonStyle?: any;
+//   closeButton?: boolean;
+// }

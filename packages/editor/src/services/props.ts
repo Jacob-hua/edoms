@@ -1,13 +1,12 @@
 import { reactive } from 'vue';
-import { cloneDeep, mergeWith, random } from 'lodash-es';
+import { cloneDeep, mergeWith } from 'lodash-es';
 
-import type { FormConfig } from '@tmagic/form';
-import type { Id, MComponent, MNode, MPage } from '@tmagic/schema';
-import { NodeType } from '@tmagic/schema';
-import { isPop, toLine } from '@tmagic/utils';
+import type { FormConfig } from '@edoms/form';
+import type { MComponent, MNode } from '@edoms/schema';
+import { toLine } from '@edoms/utils';
 
 import type { PropsState } from '../type';
-import { DEFAULT_CONFIG, fillConfig, getDefaultPropsValue } from '../utils/props';
+import { fillConfig } from '../utils/props';
 
 import BaseService from './BaseService';
 
@@ -18,7 +17,16 @@ class Props extends BaseService {
   });
 
   constructor() {
-    super(['setPropsConfig', 'getPropsConfig', 'setPropsValue', 'getPropsValue', 'createId', 'setNewItemId']);
+    super([
+      'setPropsConfig',
+      'getPropsConfig',
+      'setPropsValue',
+      'getPropsValue',
+      'createId',
+      'setNewItemId',
+      'fillConfig',
+      'getDefaultPropsValue',
+    ]);
   }
 
   public setPropsConfigs(configs: Record<string, FormConfig>) {
@@ -28,13 +36,17 @@ class Props extends BaseService {
     this.emit('props-configs-change');
   }
 
+  public async fillConfig(config: FormConfig) {
+    return fillConfig(config);
+  }
+
   /**
    * 为指定类型组件设置组件属性表单配置
    * @param type 组件类型
    * @param config 组件属性表单配置
    */
-  public setPropsConfig(type: string, config: FormConfig) {
-    this.state.propsConfigMap[type] = fillConfig(Array.isArray(config) ? config : [config]);
+  public async setPropsConfig(type: string, config: FormConfig) {
+    this.state.propsConfigMap[type] = await this.fillConfig(Array.isArray(config) ? config : [config]);
   }
 
   /**
@@ -47,7 +59,7 @@ class Props extends BaseService {
       return await this.getPropsConfig('button');
     }
 
-    return cloneDeep(this.state.propsConfigMap[type] || DEFAULT_CONFIG);
+    return cloneDeep(this.state.propsConfigMap[type] || (await this.fillConfig([])));
   }
 
   public setPropsValues(values: Record<string, MNode>) {
@@ -70,7 +82,7 @@ class Props extends BaseService {
    * @param type 组件类型
    * @returns 组件初始值
    */
-  public async getPropsValue(type: string, defaultValue: Record<string, any> = {}) {
+  public async getPropsValue(type: string, { ...defaultValue }: Record<string, any> = {}) {
     if (type === 'area') {
       const value = (await this.getPropsValue('button')) as MComponent;
       value.className = 'action-area';
@@ -81,18 +93,26 @@ class Props extends BaseService {
       return value;
     }
 
-    const data = cloneDeep(defaultValue as any);
-
-    await this.setNewItemId(data);
+    const [id, defaultPropsValue, data] = await Promise.all([
+      this.createId(type),
+      this.getDefaultPropsValue(type),
+      this.setNewItemId(
+        cloneDeep({
+          type,
+          ...defaultValue,
+        } as any)
+      ),
+    ]);
 
     return {
-      ...getDefaultPropsValue(type, await this.createId(type)),
-      ...mergeWith(cloneDeep(this.state.propsValueMap[type] || {}), data),
+      id,
+      ...defaultPropsValue,
+      ...mergeWith({}, cloneDeep(this.state.propsValueMap[type] || {}), data),
     };
   }
 
   public async createId(type: string | number): Promise<string> {
-    return `${type}_${random(10000, false)}`;
+    return `${type}_${this.guid()}`;
   }
 
   /**
@@ -100,47 +120,58 @@ class Props extends BaseService {
    * @param {Object} config 组件配置
    */
   /* eslint no-param-reassign: ["error", { "props": false }] */
-  public async setNewItemId(config: MNode, parent?: MPage) {
-    const oldId = config.id;
-
+  public async setNewItemId(config: MNode) {
     config.id = await this.createId(config.type || 'component');
-
-    // 只有弹窗在页面下的一级子元素才有效
-    if (isPop(config) && parent?.type === NodeType.PAGE) {
-      updatePopId(oldId, config.id, parent);
-    }
 
     if (config.items && Array.isArray(config.items)) {
       for (const item of config.items) {
-        await this.setNewItemId(item, config as MPage);
+        await this.setNewItemId(item);
       }
     }
+
+    return config;
+  }
+
+  /**
+   * 获取默认属性配置
+   * @param type 组件类型
+   * @returns Object
+   */
+  public async getDefaultPropsValue(type: string) {
+    return ['page', 'container'].includes(type)
+      ? {
+          type,
+          layout: 'absolute',
+          style: {},
+          name: type,
+          items: [],
+        }
+      : {
+          type,
+          style: {},
+          name: type,
+        };
+  }
+
+  public destroy() {
+    this.state.propsConfigMap = {};
+    this.state.propsValueMap = {};
+    this.removeAllListeners();
+  }
+
+  /**
+   * 生成指定位数的GUID，无【-】格式
+   * @param digit 位数，默认值8
+   * @returns
+   */
+  private guid(digit = 8): string {
+    return 'x'.repeat(digit).replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
   }
 }
-
-/**
- * 复制页面时，需要把组件下关联的弹窗id换测复制出来的弹窗的id
- * @param {number} oldId 复制的源弹窗id
- * @param {number} popId 新的弹窗id
- * @param {Object} pageConfig 页面配置
- */
-const updatePopId = (oldId: Id, popId: Id, pageConfig: MPage) => {
-  pageConfig.items?.forEach((config) => {
-    if (config.pop === oldId) {
-      config.pop = popId;
-      return;
-    }
-
-    if (config.popId === oldId) {
-      config.popId = popId;
-      return;
-    }
-
-    if (Array.isArray(config.items)) {
-      updatePopId(oldId, popId, config as MPage);
-    }
-  });
-};
 
 export type PropsService = Props;
 

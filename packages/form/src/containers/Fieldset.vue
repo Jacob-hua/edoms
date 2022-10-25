@@ -1,5 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
-<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <fieldset
     v-if="name ? model[name] : model"
@@ -7,13 +5,13 @@
     :style="show ? 'padding: 15px 15px 0 5px;' : 'border: 0'"
   >
     <component v-if="name && config.checkbox" :is="!show ? 'div' : 'legend'">
-      <el-checkbox
+      <ElCheckbox
         v-model="model[name].value"
         :prop="`${prop}${prop ? '.' : ''}${config.name}.value`"
         :true-label="1"
         :false-label="0"
         ><span v-html="config.legend"></span><span v-if="config.extra" class="m-form-tip" v-html="config.extra"></span
-      ></el-checkbox>
+      ></ElCheckbox>
     </component>
     <legend v-else>
       <span v-html="config.legend"></span>
@@ -22,7 +20,7 @@
 
     <div v-if="config.schematic && show" style="display: flex">
       <div style="flex: 1">
-        <m-form-container
+        <Container
           v-for="(item, index) in config.items"
           :key="key(item, index)"
           :model="name ? model[name] : model"
@@ -32,14 +30,14 @@
           :label-width="lWidth"
           :size="size"
           @change="change"
-        ></m-form-container>
+        ></Container>
       </div>
 
       <img class="m-form-schematic" :src="config.schematic" />
     </div>
 
     <template v-else-if="show">
-      <m-form-container
+      <Container
         v-for="(item, index) in config.items"
         :key="key(item, index)"
         :model="name ? model[name] : model"
@@ -49,7 +47,7 @@
         :label-width="lWidth"
         :size="size"
         @change="change"
-      ></m-form-container>
+      ></Container>
     </template>
   </fieldset>
 </template>
@@ -57,7 +55,11 @@
 <script lang="ts" setup>
 import { computed, inject, watch } from 'vue';
 
+import { ElCheckbox } from '@edoms/design';
+
 import { FieldsetConfig, FormState } from '../schema';
+
+import Container from './Container.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -91,7 +93,7 @@ const lWidth = computed(() => {
   if (props.config.items) {
     return props.config.labelWidth || props.labelWidth;
   }
-  return props.config.labelWidth || props.labelWidth || (props.config.text ? null : '0');
+  return props.config.labelWidth || props.labelWidth || (props.config.text ? undefined : '0');
 });
 
 const change = () => {

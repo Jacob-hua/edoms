@@ -1,37 +1,34 @@
 <template>
-  <el-table-column type="expand">
+  <ElTableColumn type="expand">
     <template #default="scope">
-      <m-table
+      <MTable
         v-if="config.table"
         :show-header="false"
         :columns="config.table"
-        :data="scope.row[config.prop]"
-      ></m-table>
+        :data="(config.prop && scope.row[config.prop]) || []"
+      ></MTable>
       <MForm
         v-if="config.form"
         :config="config.form"
-        :init-values="config.values || scope.row[config.prop] || {}"
+        :init-values="config.values || (config.prop && scope.row[config.prop]) || {}"
       ></MForm>
     </template>
-  </el-table-column>
+  </ElTableColumn>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-
-import { MForm } from '@tmagic/form';
+<script lang="ts" setup>
+import { ElTableColumn } from '@edoms/design';
+import { MForm } from '@edoms/form';
 
 import { ColumnConfig } from './schema';
+import MTable from './Table.vue';
 
-export default defineComponent({
-  components: { MForm },
-  expose: [],
-  props: {
-    config: {
-      type: Object as PropType<ColumnConfig>,
-      default: () => ({}),
-      required: true,
-    },
-  },
-});
+withDefaults(
+  defineProps<{
+    config: ColumnConfig;
+  }>(),
+  {
+    config: () => ({}),
+  }
+);
 </script>

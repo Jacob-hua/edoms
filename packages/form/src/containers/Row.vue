@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="10">
+  <ElRow :gutter="10">
     <Col
       v-for="(col, index) in config.items"
       :key="col[mForm?.keyProp || '__key'] ?? index"
@@ -12,54 +12,31 @@
       :size="size"
       @change="changeHandler"
     />
-  </el-row>
+  </ElRow>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, PropType } from 'vue';
+<script setup lang="ts">
+import { inject } from 'vue';
+
+import { ElRow } from '@edoms/design';
 
 import { FormState, RowConfig } from '../schema';
 
 import Col from './Col.vue';
 
-export default defineComponent({
-  name: 'MFormRow',
-  expose: [],
-  // eslint-disable-next-line vue/no-reserved-component-names
-  components: { Col },
+const props = defineProps<{
+  model: any;
+  config: RowConfig;
+  name: string;
+  labelWidth?: string;
+  prop?: string;
+  size?: string;
+  expandMore?: boolean;
+}>();
 
-  props: {
-    labelWidth: String,
-    expandMore: Boolean,
+const emit = defineEmits(['change']);
 
-    model: {
-      type: Object,
-      default: () => ({}),
-    },
+const mForm = inject<FormState | undefined>('mForm');
 
-    config: {
-      type: Object as PropType<RowConfig>,
-      default: () => ({}),
-    },
-
-    prop: String,
-
-    name: String,
-
-    size: String,
-  },
-
-  emits: ['change'],
-
-  setup(props, { emit }) {
-    const mForm = inject<FormState | undefined>('mForm');
-
-    const changeHandler = () => emit('change', props.name ? props.model[props.name] : props.model);
-
-    return {
-      mForm,
-      changeHandler,
-    };
-  },
-});
+const changeHandler = () => emit('change', props.name ? props.model[props.name] : props.model);
 </script>

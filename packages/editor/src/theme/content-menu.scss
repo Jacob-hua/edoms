@@ -1,4 +1,4 @@
-.magic-editor-content-menu {
+.edoms-editor-content-menu {
   position: fixed;
   font-size: 12px;
   background: #fff;
@@ -29,6 +29,10 @@
     .el-button--text,
     i {
       color: $--font-color;
+    }
+
+    .edoms-editor-icon {
+      margin-right: 5px;
     }
 
     &.divider {

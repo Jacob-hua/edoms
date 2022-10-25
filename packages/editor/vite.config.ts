@@ -1,55 +1,32 @@
-/*
- * Tencent is pleased to support the open source community by making TMagicEditor available.
- *
- * Copyright (C) 2021 THL A29 Limited, a Tencent company.  All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import path from 'path';
 
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 import vue from '@vitejs/plugin-vue';
 
 import pkg from './package.json';
 
-const alias = [{ find: /@editor/, replacement: path.join(__dirname, './src') }];
-
 export default defineConfig({
-  plugins: [
-    dts({
-      outputDir: 'dist/types',
-      include: ['src/**/*'],
-      staticImport: true,
-      insertTypesEntry: true,
-      logDiagnostics: true,
-    }),
-    vue(),
-  ],
+  plugins: [vue()],
 
   resolve: {
     alias:
       process.env.NODE_ENV === 'production'
-        ? alias
+        ? []
         : [
-            ...alias,
-            { find: /^@tmagic\/schema/, replacement: path.join(__dirname, '../schema/src/index.ts') },
-            { find: /^@tmagic\/utils/, replacement: path.join(__dirname, '../utils/src/index.ts') },
-            { find: /^@tmagic\/core/, replacement: path.join(__dirname, '../core/src/index.ts') },
-            { find: /^@tmagic\/form/, replacement: path.join(__dirname, '../form/src/index.ts') },
-            { find: /^@tmagic\/stage/, replacement: path.join(__dirname, '../stage/src/index.ts') },
+            { find: /^@edoms\/schema/, replacement: path.join(__dirname, '../schema/src/index.ts') },
+            { find: /^@edoms\/utils/, replacement: path.join(__dirname, '../utils/src/index.ts') },
+            { find: /^@edoms\/core/, replacement: path.join(__dirname, '../core/src/index.ts') },
+            { find: /^@edoms\/form/, replacement: path.join(__dirname, '../form/src/index.ts') },
+            { find: /^@edoms\/stage/, replacement: path.join(__dirname, '../stage/src/index.ts') },
           ],
+  },
+
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
   },
 
   build: {
@@ -60,19 +37,14 @@ export default defineConfig({
 
     lib: {
       entry: 'src/index.ts',
-      name: 'TMagicEditor',
-      fileName: 'tmagic-editor',
+      name: 'EdomsEditor',
+      fileName: 'edoms-editor',
     },
 
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
       external(id: string) {
-        return (
-          /^vue/.test(id) ||
-          /^element-plus/.test(id) ||
-          /^@tmagic\//.test(id) ||
-          Object.keys(pkg.dependencies).some((k) => new RegExp(`^${k}`).test(id))
-        );
+        return Object.keys(pkg.dependencies).some((k) => new RegExp(`^${k}`).test(id));
       },
 
       output: {

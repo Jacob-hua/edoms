@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "strict": true,
     "jsx": "preserve",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -13,23 +13,22 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "sourceMap": true,
+    "useDefineForClassFields": true,
     "baseUrl": ".",
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ],
+    "lib": ["ESNext", "DOM"],
     "paths": {
       // 内部模块都指向 src/index.ts, 会有更好的代码跳转体验.
-      "@tmagic/*": ["packages/*/src"],
+      "@edoms/*": ["packages/*/src"],
       "@editor/*": ["packages/editor/src/*"],
+      "@form/*": ["packages/form/src/*"],
     },
     "types": [
       "node",
+      "vite/client",
     ],
   },
   "exclude": [
-    "**/dist/**/*"
+    "**/dist/**/*",
+    "**/node_modules/**/*",
   ],
 }

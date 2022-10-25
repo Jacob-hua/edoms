@@ -1,6 +1,6 @@
 <template>
-  <el-form
-    ref="elForm"
+  <ElForm
+    ref="edomsForm"
     class="m-form"
     :model="values"
     :label-width="labelWidth"
@@ -10,7 +10,7 @@
     :label-position="labelPosition"
   >
     <template v-if="initialized && Array.isArray(config)">
-      <m-form-container
+      <Container
         v-for="(item, index) in config"
         :key="item[keyProp] ?? index"
         :config="item"
@@ -19,179 +19,134 @@
         :step-active="stepActive"
         :size="size"
         @change="changeHandler"
-      ></m-form-container>
+      ></Container>
     </template>
-  </el-form>
+  </ElForm>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, provide, reactive, ref, toRaw, watch } from 'vue';
-import { ElForm } from 'element-plus';
-import { cloneDeep, isEqual } from 'lodash-es';
+<script setup lang="ts">
+import { provide, reactive, ref, toRaw, watch } from 'vue';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isEqual from 'lodash-es/isEqual';
 
+import { ElForm } from '@edoms/design';
+
+import Container from './containers/Container.vue';
 import { getConfig } from './utils/config';
 import { initValue } from './utils/form';
-import { FormConfig, FormState, FormValue } from './schema';
+import type { FormConfig, FormState, FormValue, ValidateError } from './schema';
 
-export interface ValidateError {
-  message: string;
-  field: string;
-}
+const props = withDefaults(
+  defineProps<{
+    config: FormConfig;
+    initValues: Object;
+    parentValues?: Object;
+    labelWidth?: string;
+    disabled?: boolean;
+    height?: string;
+    stepActive?: string | number;
+    size?: 'small' | 'default' | 'large';
+    inline?: boolean;
+    labelPosition?: string;
+    keyProp?: string;
+    popperClass?: string;
+  }>(),
+  {
+    config: () => [],
+    initValues: () => ({}),
+    parentValues: () => ({}),
+    labelWidth: '200px',
+    disabled: false,
+    height: 'auto',
+    stepActive: 1,
+    inline: false,
+    labelPosition: 'right',
+    keyProp: '__key',
+    popperClass: '',
+    size: 'default',
+  }
+);
 
-export interface FieldErrorList {
-  [field: string]: ValidateError[];
-}
+const emit = defineEmits(['change', 'field-input', 'field-change']);
 
-export default defineComponent({
-  name: 'MForm',
-  expose: [],
-  props: {
-    // 表单初始化值
-    initValues: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
+const edomsForm = ref<InstanceType<typeof ElForm>>();
+const initialized = ref(false);
+const values = ref<FormValue>({});
+const fields = new Map<string, any>();
 
-    parentValues: {
-      type: Object,
-      default: () => ({}),
-    },
+const requestFuc = getConfig('request') as Function;
 
-    // 表单配置
-    config: {
-      type: Array as PropType<FormConfig>,
-      required: true,
-      default: () => [],
-    },
-
-    labelWidth: {
-      type: String,
-      default: () => '200px',
-    },
-
-    disabled: {
-      type: Boolean,
-      default: () => false,
-    },
-
-    height: {
-      type: String,
-      default: () => 'auto',
-    },
-
-    stepActive: {
-      type: [String, Number],
-      default: () => 1,
-    },
-
-    size: {
-      type: String as PropType<'small' | 'default' | 'large'>,
-    },
-
-    inline: {
-      type: Boolean,
-      default: false,
-    },
-
-    labelPosition: {
-      type: String,
-      default: 'right',
-    },
-
-    keyProp: {
-      type: String,
-      default: '__key',
-    },
-
-    popperClass: {
-      type: String,
-    },
+const formState: FormState = reactive<FormState>({
+  keyProp: props.keyProp,
+  popperClass: props.popperClass,
+  config: props.config,
+  initValues: props.initValues,
+  parentValues: props.parentValues,
+  values,
+  $emit: emit as (event: string, ...args: any[]) => void,
+  fields,
+  setField: (prop: string, field: any) => fields.set(prop, field),
+  getField: (prop: string) => fields.get(prop),
+  deleteField: (prop: string) => fields.delete(prop),
+  post: (options: any) => {
+    if (requestFuc) {
+      return requestFuc({
+        ...options,
+        method: 'POST',
+      });
+    }
   },
+});
 
-  emits: ['change', 'field-input', 'field-change'],
+provide('mForm', formState);
 
-  setup(props, { emit }) {
-    const elForm = ref<InstanceType<typeof ElForm>>();
-    const initialized = ref(false);
-    const values = ref<FormValue>({});
-    const fields = new Map<string, any>();
+watch(
+  [() => props.config, () => props.initValues],
+  ([config], [preConfig]) => {
+    if (!isEqual(toRaw(config), toRaw(preConfig))) {
+      initialized.value = false;
+    }
 
-    const requestFuc = getConfig('request') as Function;
-
-    const formState: FormState = reactive<FormState>({
-      keyProp: props.keyProp,
-      popperClass: props.popperClass,
-      config: props.config,
+    initValue(formState, {
       initValues: props.initValues,
-      parentValues: props.parentValues,
-      values,
-      $emit: emit as (event: string, ...args: any[]) => void,
-      fields,
-      setField: (prop: string, field: any) => fields.set(prop, field),
-      getField: (prop: string) => fields.get(prop),
-      deleteField: (prop: string) => fields.delete(prop),
-      post: (options: any) => {
-        if (requestFuc) {
-          return requestFuc({
-            ...options,
-            method: 'POST',
-          });
-        }
-      },
+      config: props.config,
+    }).then((value) => {
+      values.value = value;
+      initialized.value = true;
     });
+  },
+  { immediate: true }
+);
 
-    provide('mForm', formState);
+const changeHandler = () => {
+  emit('change', values.value);
+};
 
-    watch(
-      [() => props.config, () => props.initValues],
-      ([config], [preConfig]) => {
-        if (!isEqual(toRaw(config), toRaw(preConfig))) {
-          initialized.value = false;
-        }
+defineExpose({
+  values,
+  formState,
+  initialized,
 
-        initValue(formState, {
-          initValues: props.initValues,
-          config: props.config,
-        }).then((value) => {
-          values.value = value;
-          initialized.value = true;
+  changeHandler,
+
+  resetForm: () => edomsForm.value?.resetFields(),
+
+  submitForm: async (native?: boolean): Promise<any> => {
+    try {
+      await edomsForm.value?.validate();
+      return native ? values.value : cloneDeep(toRaw(values.value));
+    } catch (invalidFields: any) {
+      const error: string[] = [];
+
+      Object.entries(invalidFields).forEach(([, ValidateError]) => {
+        (ValidateError as ValidateError[]).forEach(({ field, message }) => {
+          if (field && message) error.push(`${field} -> ${message}`);
+          if (field && !message) error.push(`${field} -> 出现错误`);
+          if (!field && message) error.push(`${message}`);
         });
-      },
-      { immediate: true }
-    );
-
-    return {
-      initialized,
-      values,
-      elForm,
-
-      formState,
-
-      changeHandler: () => {
-        emit('change', values.value);
-      },
-
-      resetForm: () => elForm.value?.resetFields(),
-
-      submitForm: async (native?: boolean): Promise<any> => {
-        try {
-          await elForm.value?.validate();
-          return native ? values.value : cloneDeep(toRaw(values.value));
-        } catch (invalidFields: any) {
-          const error: string[] = [];
-
-          Object.entries(invalidFields).forEach(([, ValidateError]) => {
-            (ValidateError as ValidateError[]).forEach(({ field, message }) => {
-              if (field && message) error.push(`${field} -> ${message}`);
-              if (field && !message) error.push(`${field} -> 出现错误`);
-              if (!field && message) error.push(`${message}`);
-            });
-          });
-          throw new Error(error.join('<br>'));
-        }
-      },
-    };
+      });
+      throw new Error(error.join('<br>'));
+    }
   },
 });
 </script>

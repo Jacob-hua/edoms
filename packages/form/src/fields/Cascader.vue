@@ -1,150 +1,98 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <div class="m-cascader" style="width: 100%">
-    <el-cascader
-      ref="cascader"
-      v-model="model[name]"
-      style="width: 100%"
-      clearable
-      filterable
-      :size="size"
-      :placeholder="config.placeholder"
-      :disabled="disabled"
-      :options="options"
-      :props="{ multiple: config.multiple }"
-      @change="changeHandler"
-    ></el-cascader>
-  </div>
+  <ElCascader
+    ref="edomsCascader"
+    v-model="model[name]"
+    style="width: 100%"
+    clearable
+    filterable
+    :size="size"
+    :placeholder="config.placeholder"
+    :disabled="disabled"
+    :options="options"
+    :props="{ multiple: config.multiple }"
+    @change="changeHandler"
+  ></ElCascader>
 </template>
 
-<script lang="ts">
-import {
-  ComponentInternalInstance,
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  inject,
-  PropType,
-  Ref,
-  ref,
-  watchEffect,
-} from 'vue';
-import { ElCascader, ElDialog } from 'element-plus';
+<script setup lang="ts">
+import { inject, ref, watchEffect } from 'vue';
+
+import { ElCascader } from '@edoms/design';
 
 import { CascaderConfig, FormState } from '../schema';
 import { getConfig } from '../utils/config';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
 
-export default defineComponent({
-  name: 'MFieldsCascader',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<CascaderConfig>,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  config: CascaderConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  emits: ['change'],
+const emit = defineEmits(['change']);
 
-  setup(props, { emit }) {
-    const mForm = inject<FormState | null>('mForm');
-    const vm = getCurrentInstance() as ComponentInternalInstance;
+const mForm = inject<FormState | null>('mForm');
 
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+useAddField(props.prop);
 
-    const requestFunc = getConfig('request') as Function;
+const requestFunc = getConfig('request') as Function;
 
-    const cascader: Ref<null | typeof ElCascader> = ref(null);
-    const dialog: Ref<null | typeof ElDialog> = ref(null);
+const edomsCascader = ref<InstanceType<typeof ElCascader>>();
 
-    const options = Array.isArray(props.config.options) ? ref(props.config.options) : ref([]);
-    const remoteData: Ref<any> = ref(null);
+const options = Array.isArray(props.config.options) ? ref(props.config.options) : ref([]);
+const remoteData = ref<any>(null);
 
-    const setRemoteOptions = async function () {
-      const { config } = props;
-      const { option } = config;
-      if (!option) return;
-      let { body } = option;
+const setRemoteOptions = async function () {
+  const { config } = props;
+  const { option } = config;
+  if (!option) return;
+  let { body } = option;
 
-      const postOptions: Record<string, any> = {
-        url: option.url,
-        cache: option.cache,
-        timeout: option.timeout,
-        data: {},
-      };
+  const postOptions: Record<string, any> = {
+    url: option.url,
+    cache: option.cache,
+    timeout: option.timeout,
+    data: {},
+  };
 
-      if (body && mForm) {
-        // eslint-disable-next-line vue/no-undef-properties
-        if (typeof body === 'function' && props.model && mForm) {
-          body = body(mForm, {
-            model: props.model,
-            formValue: mForm.values,
-            formValues: mForm.values,
-            config: props.config,
-          });
-        }
-        postOptions.data = body;
-      }
-
-      const res = await requestFunc(postOptions);
-
-      remoteData.value = res[option.root];
-      if (remoteData.value && typeof option?.item === 'function') {
-        options.value = option.item(res[option.root]);
-      }
-    };
-
-    // 初始化
-    if (typeof props.config.options === 'function' && props.model && mForm) {
-      watchEffect(
-        () => (options.value = (props.config.options as Function)(vm, { model: props.model, formValues: mForm.values }))
-      );
-    } else if (!props.config.options || !props.config.options.length || props.config.remote) {
-      Promise.resolve(setRemoteOptions());
+  if (body && mForm) {
+    if (typeof body === 'function' && props.model && mForm) {
+      body = body(mForm, {
+        model: props.model,
+        formValue: mForm.values,
+        formValues: mForm.values,
+        config: props.config,
+      });
     }
+    postOptions.data = body;
+  }
 
-    const action = computed(() => {
-      if (props.config.add?.action.method === 'post') {
-        return (options: any) =>
-          requestFunc({
-            ...props.config?.add?.action.body,
-            ...options,
-          });
-      }
-      return null;
-    });
+  const res = await requestFunc(postOptions);
 
-    return {
-      options,
-      remoteData,
-      addButtonStyle: {
-        top: 0,
-        left: 0,
-        width: 'auto',
-      },
-      dialogVisible: false,
-      cascader,
-      dialog,
-      action,
-      setRemoteOptions,
-      changeHandler: (value: any) => {
-        if (!cascader.value) return;
-        cascader.value.query = '';
-        cascader.value.previousQuery = null;
-        emit('change', value);
-      },
-      addHandler: () => {
-        if (!dialog.value) return;
-        dialog.value.dialogVisible = true;
-      },
-      editAfterAction: () => {
-        setRemoteOptions();
-      },
-    };
-  },
-});
+  remoteData.value = res[option.root];
+  if (remoteData.value && typeof option?.item === 'function') {
+    options.value = option.item(res[option.root]);
+  }
+};
+
+// 初始化
+if (typeof props.config.options === 'function' && props.model && mForm) {
+  watchEffect(
+    () => (options.value = (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values }))
+  );
+} else if (!props.config.options || !props.config.options.length || props.config.remote) {
+  Promise.resolve(setRemoteOptions());
+}
+
+const changeHandler = (value: any) => {
+  if (!edomsCascader.value) return;
+  edomsCascader.value.setQuery('');
+  edomsCascader.value.setPreviousQuery(null);
+  emit('change', value);
+};
 </script>

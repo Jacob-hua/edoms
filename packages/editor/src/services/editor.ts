@@ -1,55 +1,61 @@
 import { reactive, toRaw } from 'vue';
-import { cloneDeep, mergeWith } from 'lodash-es';
-import serialize from 'serialize-javascript';
+import { cloneDeep, mergeWith, uniq } from 'lodash-es';
 
-import type { Id, MApp, MComponent, MContainer, MNode, MPage } from '@tmagic/schema';
-import { NodeType } from '@tmagic/schema';
-import StageCore from '@tmagic/stage';
-import { getNodePath, isNumber, isPage, isPop } from '@tmagic/utils';
+import type { CodeBlockDSL, Id, MApp, MComponent, MContainer, MNode, MPage } from '@edoms/schema';
+import { NodeType } from '@edoms/schema';
+import StageCore from '@edoms/stage';
+import { getNodePath, isNumber, isPage, isPop } from '@edoms/utils';
 
-import historyService, { StepValue } from './history';
-import propsService from './props';
-import type { AddMNode, EditorNodeInfo, StoreState } from '../type';
+import codeBlockService from '../services/codeBlock';
+import historyService, { StepValue } from '../services/history';
+import storageService, { Protocol } from '../services/storage';
+import type { AddMNode, EditorNodeInfo, PastePosition, StoreState } from '../type';
 import { LayerOffset, Layout } from '../type';
 import {
   change2Fixed,
   COPY_STORAGE_KEY,
   Fixed2Other,
-  fixNodeLeft,
-  generatePageNameByApp,
+  fixNodePosition,
   getInitPositionStyle,
   getNodeIndex,
   isFixed,
   setLayout,
 } from '../utils/editor';
+import { beforePaste, getAddParent } from '../utils/operator';
 
 import BaseService from './BaseService';
+import propsService from './props';
 
 class Editor extends BaseService {
-  private isHistoryStateChange = false;
-
-  private state = reactive<StoreState>({
+  public state: StoreState = reactive({
     root: null,
     page: null,
     parent: null,
     node: null,
+    nodes: [],
     stage: null,
     highlightNode: null,
     modifiedNodeIds: new Map(),
     pageLength: 0,
   });
+  private isHistoryStateChange = false;
 
   constructor() {
     super(
       [
         'getLayout',
         'select',
+        'doAdd',
         'add',
+        'doRemove',
         'remove',
+        'doUpdate',
         'update',
         'sort',
         'copy',
         'paste',
+        'doPaste',
+        'duAlignCenter',
         'alignCenter',
         'moveLayer',
         'moveToContainer',
@@ -57,6 +63,8 @@ class Editor extends BaseService {
         'undo',
         'redo',
         'highlight',
+        'getCodeDsl',
+        'setCodeDsl',
       ],
       // 需要注意循环依赖问题，如果函数间有相互调用的话，不能设置为串行调用
       ['select', 'update', 'moveLayer']
@@ -65,13 +73,16 @@ class Editor extends BaseService {
 
   /**
    * 设置当前指点节点配置
-   * @param name 'root' | 'page' | 'parent' | 'node' | 'highlightNode'
+   * @param name 'root' | 'page' | 'parent' | 'node' | 'highlightNode' | 'nodes'
    * @param value MNode
    * @returns MNode
    */
   public set<T = MNode>(name: keyof StoreState, value: T) {
     this.state[name] = value as any;
-
+    // set nodes时将node设置为nodes第一个元素
+    if (name === 'nodes') {
+      this.set('node', (value as unknown as MNode[])[0]);
+    }
     if (name === 'root') {
       this.state.pageLength = (value as unknown as MApp)?.items?.length || 0;
       this.emit('root-change', value);
@@ -80,7 +91,7 @@ class Editor extends BaseService {
 
   /**
    * 获取当前指点节点配置
-   * @param name  'root' | 'page' | 'parent' | 'node'
+   * @param name  'root' | 'page' | 'parent' | 'node' | 'highlightNode' | 'nodes'
    * @returns MNode
    */
   public get<T = MNode>(name: keyof StoreState): T {
@@ -172,7 +183,7 @@ class Editor extends BaseService {
    */
   public async select(config: MNode | Id): Promise<MNode> | never {
     const { node, page, parent } = this.selectedConfigExceptionHandler(config);
-    this.set('node', node);
+    this.set('nodes', [node]);
     this.set('page', page || null);
     this.set('parent', parent || null);
 
@@ -247,87 +258,118 @@ class Editor extends BaseService {
   }
 
   /**
+   * 多选
+   * @param ids 指定节点ID
+   * @returns 加入多选的节点配置
+   */
+  public multiSelect(ids: Id[]): void {
+    const nodes: MNode[] = [];
+    const idsUnique = uniq(ids);
+    idsUnique.forEach((id) => {
+      const { node } = this.getNodeInfo(id);
+      if (!node) return;
+      nodes.push(node);
+    });
+    this.set('nodes', nodes);
+  }
+
+  public async doAdd(node: MNode, parent: MContainer): Promise<MNode> {
+    const root = this.get<MApp>('root');
+    const curNode = this.get<MNode>('node');
+    const stage = this.get<StageCore | null>('stage');
+
+    if ((parent?.type === NodeType.ROOT || curNode.type === NodeType.ROOT) && node.type !== NodeType.PAGE) {
+      throw new Error('app下不能添加组件');
+    }
+
+    if (parent.id !== curNode.id && node.type !== NodeType.PAGE) {
+      const index = parent.items.indexOf(curNode);
+      parent?.items?.splice(index + 1, 0, node);
+    } else {
+      // 新增节点添加到配置中
+      parent?.items?.push(node);
+    }
+
+    const layout = await this.getLayout(toRaw(parent), node as MNode);
+    node.style = getInitPositionStyle(node.style, layout);
+
+    await stage?.add({
+      config: cloneDeep(node),
+      parent: cloneDeep(parent),
+      parentId: parent.id,
+      root: cloneDeep(root),
+    });
+
+    const newStyle = fixNodePosition(node, parent, stage);
+
+    if (newStyle && (newStyle.top !== node.style.top || newStyle.left !== node.style.left)) {
+      node.style = newStyle;
+      await stage?.update({ config: cloneDeep(node), parentId: parent.id, root: cloneDeep(root) });
+    }
+
+    this.addModifiedNodeId(node.id);
+
+    return node;
+  }
+
+  /**
    * 向指点容器添加组件节点
    * @param addConfig 将要添加的组件节点配置
    * @param parent 要添加到的容器组件节点配置，如果不设置，默认为当前选中的组件的父节点
    * @returns 添加后的节点
    */
-  public async add(addNode: AddMNode, parent?: MContainer | null): Promise<MNode> {
-    console.log('addNode ============ ', addNode);
-
-    const { type, ...config } = addNode;
-    const curNode = this.get<MContainer>('node');
-
-    let parentNode: MContainer | undefined;
-    const isPage = type === NodeType.PAGE;
-
-    if (isPage) {
-      parentNode = this.get<MApp>('root');
-      // 由于支持中间件扩展，在parent参数为undefined时，parent会变成next函数
-    } else if (parent && typeof parent !== 'function') {
-      parentNode = parent;
-    } else if (curNode.items) {
-      parentNode = curNode;
-    } else {
-      parentNode = this.getParentById(curNode.id, false);
-    }
-
-    if (!parentNode) throw new Error('未找到父元素');
-
-    const layout = await this.getLayout(toRaw(parentNode), addNode as MNode);
-    const newNode = { ...toRaw(await propsService.getPropsValue(type, config)) };
-    newNode.style = getInitPositionStyle(newNode.style, layout, parentNode, this.get<StageCore>('stage'));
-
-    if ((parentNode?.type === NodeType.ROOT || curNode.type === NodeType.ROOT) && newNode.type !== NodeType.PAGE) {
-      throw new Error('app下不能添加组件');
-    }
-
-    parentNode?.items?.push(newNode);
-
+  public async add(addNode: AddMNode | MNode[], parent?: MContainer | null): Promise<MNode | MNode[]> {
     const stage = this.get<StageCore | null>('stage');
-    const root = this.get<MApp>('root');
 
-    await stage?.add({ config: cloneDeep(newNode), root: cloneDeep(root) });
+    // 新增多个组件只存在于粘贴多个组件,粘贴的是一个完整的config,所以不再需要getPropsValue
+    const addNodes = [];
+    if (!Array.isArray(addNode)) {
+      const { type, ...config } = addNode;
 
-    if (layout === Layout.ABSOLUTE) {
-      const fixedLeft = fixNodeLeft(newNode, parentNode, stage?.renderer.contentWindow?.document);
-      if (typeof fixedLeft !== 'undefined') {
-        newNode.style.left = fixedLeft;
-        await stage?.update({ config: cloneDeep(newNode), root: cloneDeep(root) });
+      if (!type) throw new Error('组件类型不能为空');
+
+      addNodes.push({ ...toRaw(await propsService.getPropsValue(type, config)) });
+    } else {
+      addNodes.push(...addNode);
+    }
+
+    const newNodes = await Promise.all(
+      addNodes.map((node) => {
+        const parentNode = parent && typeof parent !== 'function' ? parent : getAddParent(node);
+        if (!parentNode) throw new Error('未找到父元素');
+        return this.doAdd(node, parentNode);
+      })
+    );
+
+    if (newNodes.length > 1) {
+      const newNodeIds = newNodes.map((node) => node.id);
+      // 触发选中样式
+      stage?.multiSelect(newNodeIds);
+      await this.multiSelect(newNodeIds);
+    } else {
+      await this.select(newNodes[0]);
+
+      if (isPage(newNodes[0])) {
+        this.state.pageLength += 1;
+      } else {
+        // 新增页面，这个时候页面还有渲染出来，此时select会出错，在runtime-ready的时候回去select
+        stage?.select(newNodes[0].id);
       }
     }
 
-    await this.select(newNode);
+    this.pushHistoryState();
 
-    this.addModifiedNodeId(newNode.id);
-    if (!isPage) {
-      this.pushHistoryState();
-    }
+    this.emit('add', newNodes);
 
-    stage?.select(newNode.id);
-
-    if (isPage) {
-      this.state.pageLength += 1;
-    }
-
-    this.emit('add', newNode);
-
-    return newNode;
+    return Array.isArray(addNode) ? newNodes : newNodes[0];
   }
 
-  /**
-   * 删除组件
-   * @param {Object} node
-   * @return {Object} 删除的组件配置
-   */
-  public async remove(node: MNode): Promise<MNode | void> {
-    if (!node?.id) return;
-
+  public async doRemove(node: MNode): Promise<void> {
     const root = this.get<MApp | null>('root');
 
     if (!root) throw new Error('没有root');
 
-    const { parent, node: curNode } = this.getNodeInfo(node.id, false);
+    const { parent, node: curNode } = this.getNodeInfo(node.id);
 
     if (!parent || !curNode) throw new Error('找不要删除的节点');
 
@@ -337,7 +379,7 @@ class Editor extends BaseService {
 
     parent.items?.splice(index, 1);
     const stage = this.get<StageCore | null>('stage');
-    stage?.remove({ id: node.id, root: cloneDeep(this.get('root')) });
+    stage?.remove({ id: node.id, parentId: parent.id, root: cloneDeep(root) });
 
     if (node.type === NodeType.PAGE) {
       this.state.pageLength -= 1;
@@ -346,7 +388,7 @@ class Editor extends BaseService {
         await this.select(root.items[0]);
         stage?.select(root.items[0].id);
       } else {
-        this.set('node', null);
+        this.set('nodes', [root]);
         this.set('parent', null);
         this.set('page', null);
         this.set('stage', null);
@@ -354,9 +396,7 @@ class Editor extends BaseService {
         this.resetModifiedNodeId();
         historyService.reset();
 
-        this.emit('remove', node);
-
-        return node;
+        return;
       }
     } else {
       await this.select(parent);
@@ -364,19 +404,28 @@ class Editor extends BaseService {
     }
 
     this.addModifiedNodeId(parent.id);
-    this.pushHistoryState();
 
-    this.emit('remove', node);
-
-    return node;
+    // 通知codeBlockService解除绑定关系
+    codeBlockService.deleteCompsInRelation(node);
   }
 
   /**
-   * 更新节点
-   * @param config 新的节点配置，配置中需要有id信息
-   * @returns 更新后的节点配置
+   * 删除组件
+   * @param {Object} node
+   * @return {Object} 删除的组件配置
    */
-  public async update(config: MNode): Promise<MNode> {
+  public async remove(nodeOrNodeList: MNode | MNode[]): Promise<void> {
+    const nodes = Array.isArray(nodeOrNodeList) ? nodeOrNodeList : [nodeOrNodeList];
+
+    await Promise.all(nodes.map((node) => this.doRemove(node)));
+
+    // 更新历史记录
+    this.pushHistoryState();
+
+    this.emit('remove', nodes);
+  }
+
+  public async doUpdate(config: MNode) {
     if (!config?.id) throw new Error('没有配置或者配置缺少id值');
 
     const info = this.getNodeInfo(config.id, false);
@@ -387,11 +436,10 @@ class Editor extends BaseService {
 
     let newConfig = await this.toggleFixedPosition(toRaw(config), node, this.get<MApp>('root'));
 
-    newConfig = mergeWith(cloneDeep(node), newConfig, (_, srcValue) => {
+    newConfig = mergeWith(cloneDeep(node), newConfig, (objValue, srcValue) => {
       if (Array.isArray(srcValue)) {
         return srcValue;
       }
-      return;
     });
 
     if (!newConfig.type) throw new Error('配置缺少type值');
@@ -417,22 +465,42 @@ class Editor extends BaseService {
 
     parentNodeItems[index] = newConfig;
 
-    if (`${newConfig.id}` === `${this.get('node').id}`) {
-      this.set('node', newConfig);
-    }
+    // 将update后的配置更新到nodes中
+    const nodes = this.get<MNode[]>('nodes') || [];
+    const targetIndex = nodes.findIndex((nodeItem: MNode) => `${nodeItem.id}` === `${newConfig.id}`);
+    nodes.splice(targetIndex, 1, newConfig);
+    this.set('nodes', [...nodes]);
 
-    this.get<StageCore | null>('stage')?.update({ config: cloneDeep(newConfig), root: cloneDeep(this.get('root')) });
+    this.get<StageCore | null>('stage')?.update({
+      config: cloneDeep(newConfig),
+      parentId: parent.id,
+      root: cloneDeep(this.get('root')),
+    });
 
     if (newConfig.type === NodeType.PAGE) {
       this.set('page', newConfig);
     }
 
     this.addModifiedNodeId(newConfig.id);
-    this.pushHistoryState();
-
-    this.emit('update', newConfig);
 
     return newConfig;
+  }
+
+  /**
+   * 更新节点
+   * @param config 新的节点配置，配置中需要有id信息
+   * @returns 更新后的节点配置
+   */
+  public async update(config: MNode | MNode[]): Promise<MNode | MNode[]> {
+    const nodes = Array.isArray(config) ? config : [config];
+
+    const newNodes = await Promise.all(nodes.map((node) => this.doUpdate(node)));
+
+    this.pushHistoryState();
+
+    this.emit('update', newNodes);
+
+    return Array.isArray(config) ? newNodes : newNodes[0];
   }
 
   /**
@@ -454,7 +522,11 @@ class Editor extends BaseService {
     await this.update(parent);
     await this.select(node);
 
-    this.get<StageCore | null>('stage')?.update({ config: cloneDeep(node), root: cloneDeep(this.get('root')) });
+    this.get<StageCore | null>('stage')?.update({
+      config: cloneDeep(node),
+      parentId: parent.id,
+      root: cloneDeep(this.get('root')),
+    });
 
     this.addModifiedNodeId(parent.id);
     this.pushHistoryState();
@@ -465,67 +537,51 @@ class Editor extends BaseService {
    * @param config 组件节点配置
    * @returns 组件节点配置
    */
-  public async copy(config: MNode): Promise<void> {
-    globalThis.localStorage.setItem(COPY_STORAGE_KEY, serialize(config));
+  public async copy(config: MNode | MNode[]): Promise<void> {
+    await storageService.setItem(COPY_STORAGE_KEY, Array.isArray(config) ? config : [config], {
+      protocol: Protocol.OBJECT,
+    });
   }
 
   /**
    * 从localStorage中获取节点，然后添加到当前容器中
-   * @param position 如果设置，指定组件位置
+   * @param position 粘贴的坐标
    * @returns 添加后的组件节点配置
    */
-  public async paste(position: { left?: number; top?: number } = {}): Promise<MNode | void> {
-    const configStr = globalThis.localStorage.getItem(COPY_STORAGE_KEY);
-    // eslint-disable-next-line prefer-const
-    let config: any = {};
-    if (!configStr) {
-      return;
-    }
+  public async paste(position: PastePosition = {}): Promise<MNode | MNode[] | void> {
+    const config: MNode[] = await storageService.getItem(COPY_STORAGE_KEY);
 
-    try {
-      // eslint-disable-next-line no-eval
-      eval(`config = ${configStr}`);
-    } catch (e) {
-      console.error(e);
-      return;
-    }
+    if (!Array.isArray(config)) return;
 
-    await propsService.setNewItemId(config, this.get('root'));
-    if (config.style) {
-      config.style = {
-        ...config.style,
-        ...position,
-      };
-    }
+    const pasteConfigs = await this.doPaste(config, position);
 
-    if (isPage(config)) {
-      config.name = generatePageNameByApp(this.get('root'));
-    }
-
-    return await this.add(config);
+    return this.add(pasteConfigs);
   }
 
-  /**
-   * 将指点节点设置居中
-   * @param config 组件节点配置
-   * @returns 当前组件节点配置
-   */
-  public async alignCenter(config: MNode): Promise<MNode | void> {
-    const parent = this.get<MContainer>('parent');
-    const node = this.get<MNode>('node');
-    const layout = await this.getLayout(toRaw(parent), toRaw(node));
+  public async doPaste(config: MNode[], position: PastePosition = {}): Promise<MNode[]> {
+    const pasteConfigs = await beforePaste(position, cloneDeep(config));
+    return pasteConfigs;
+  }
+
+  public async doAlignCenter(config: MNode): Promise<MNode> {
+    const parent = this.getParentById(config.id);
+
+    if (!parent) throw new Error('找不到父节点');
+
+    const node = cloneDeep(toRaw(config));
+    const layout = await this.getLayout(parent, node);
     if (layout === Layout.RELATIVE) {
-      return;
+      return config;
     }
 
-    if (!node.style) return;
+    if (!node.style) return config;
 
     const stage = this.get<StageCore>('stage');
     const doc = stage?.renderer.contentWindow?.document;
 
     if (doc) {
-      const parentEl = doc.getElementById(`${parent.id}`);
       const el = doc.getElementById(`${node.id}`);
+      const parentEl = el?.offsetParent;
       if (parentEl && el) {
         node.style.left = (parentEl.clientWidth - el.clientWidth) / 2;
       }
@@ -533,15 +589,25 @@ class Editor extends BaseService {
       node.style.left = (parent.style.width - node.style.width) / 2;
     }
 
-    await this.update(node);
-    this.get<StageCore | null>('stage')?.update({
-      config: cloneDeep(toRaw(node)),
-      root: cloneDeep(this.get<MApp>('root')),
-    });
-    this.addModifiedNodeId(config.id);
-    this.pushHistoryState();
+    return node;
+  }
 
-    return config;
+  /**
+   * 将指点节点设置居中
+   * @param config 组件节点配置
+   * @returns 当前组件节点配置
+   */
+  public async alignCenter(config: MNode | MNode[]): Promise<MNode | MNode[]> {
+    const nodes = Array.isArray(config) ? config : [config];
+    const stage = this.get<StageCore | null>('stage');
+
+    const newNodes = await Promise.all(nodes.map((node) => this.doAlignCenter(node)));
+
+    const newNode = await this.update(newNodes);
+
+    await stage?.multiSelect(newNodes.map((node) => node.id));
+
+    return newNode;
   }
 
   /**
@@ -550,22 +616,33 @@ class Editor extends BaseService {
    */
   public async moveLayer(offset: number | LayerOffset): Promise<void> {
     const parent = this.get<MContainer>('parent');
-    const node = this.get('node');
+    const node = this.get<MNode>('node');
     const brothers: MNode[] = parent?.items || [];
     const index = brothers.findIndex((item) => `${item.id}` === `${node?.id}`);
 
+    // 流式布局与绝对定位布局操作的相反的
+    const layout = await this.getLayout(parent, node);
+    const isRelative = layout === Layout.RELATIVE;
+
+    brothers.splice(index, 1);
+
     if (offset === LayerOffset.TOP) {
-      brothers.splice(brothers.length - 1, 0, brothers.splice(index, 1)[0]);
+      brothers.splice(isRelative ? 0 : brothers.length - 1, 0, node);
     } else if (offset === LayerOffset.BOTTOM) {
-      brothers.splice(0, 0, brothers.splice(index, 1)[0]);
+      brothers.splice(isRelative ? brothers.length - 1 : 0, 0, node);
     } else {
-      brothers.splice(index + parseInt(`${offset}`, 10), 0, brothers.splice(index, 1)[0]);
+      brothers.splice(index + (isRelative ? -offset : offset), 0, node);
     }
 
+    const grandparent = this.getParentById(parent.id);
     this.get<StageCore | null>('stage')?.update({
       config: cloneDeep(toRaw(parent)),
+      parentId: grandparent?.id,
       root: cloneDeep(this.get<MApp>('root')),
     });
+
+    this.addModifiedNodeId(parent.id);
+    this.pushHistoryState();
   }
 
   /**
@@ -584,23 +661,23 @@ class Editor extends BaseService {
       const index = getNodeIndex(node, parent);
       parent.items?.splice(index, 1);
 
-      await stage.remove({ id: node.id, root });
+      await stage.remove({ id: node.id, parentId: parent.id, root });
 
       const layout = await this.getLayout(target);
 
-      const newConfig = mergeWith(cloneDeep(node), config, (_, srcValue) => {
+      const newConfig = mergeWith(cloneDeep(node), config, (objValue, srcValue) => {
         if (Array.isArray(srcValue)) {
           return srcValue;
         }
-        return;
       });
-      newConfig.style = getInitPositionStyle(newConfig.style, layout, target, stage);
+      newConfig.style = getInitPositionStyle(newConfig.style, layout);
 
       target.items.push(newConfig);
 
       await stage.select(targetId);
 
-      await stage.update({ config: cloneDeep(target), root });
+      const targetParent = this.getParentById(target.id);
+      await stage.update({ config: cloneDeep(target), parentId: targetParent?.id, root });
 
       await this.select(newConfig);
       stage.select(newConfig.id);
@@ -611,7 +688,6 @@ class Editor extends BaseService {
 
       return newConfig;
     }
-    return;
   }
 
   /**
@@ -638,7 +714,7 @@ class Editor extends BaseService {
     const node = toRaw(this.get('node'));
     if (!node || isPage(node)) return;
 
-    const { style, id } = node;
+    const { style, id, type } = node;
     if (!style || style.position !== 'absolute') return;
 
     if (top && !isNumber(style.top)) return;
@@ -646,6 +722,7 @@ class Editor extends BaseService {
 
     this.update({
       id,
+      type,
       style: {
         ...style,
         left: Number(style.left) + left,
@@ -658,12 +735,37 @@ class Editor extends BaseService {
     this.removeAllListeners();
     this.set('root', null);
     this.set('node', null);
+    this.set('nodes', []);
     this.set('page', null);
     this.set('parent', null);
+    this.set('stage', null);
+    this.set('highlightNode', null);
+    this.set('modifiedNodeIds', new Map());
+    this.set('pageLength', new Map());
   }
 
   public resetModifiedNodeId() {
     this.get<Map<Id, Id>>('modifiedNodeIds').clear();
+  }
+
+  /**
+   * 从dsl中的codeBlocks字段读取活动的代码块
+   * @returns {CodeBlockDSL | null}
+   */
+  public async getCodeDsl(): Promise<CodeBlockDSL | null> {
+    const root = this.get<MApp | null>('root');
+    if (!root) return null;
+    return root.codeBlocks || null;
+  }
+
+  /**
+   * 设置代码块到dsl的codeBlocks字段
+   * @param {CodeBlockDSL} codeDsl 代码DSL
+   * @returns {void}
+   */
+  public async setCodeDsl(codeDsl: CodeBlockDSL): Promise<void> {
+    if (!this.state.root) return;
+    this.state.root.codeBlocks = codeDsl;
   }
 
   private addModifiedNodeId(id: Id) {

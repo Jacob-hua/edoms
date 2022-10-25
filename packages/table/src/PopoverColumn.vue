@@ -1,40 +1,39 @@
 <template>
-  <el-table-column :label="config.label" :width="config.width" :fixed="config.fixed">
+  <ElTableColumn :label="config.label" :width="config.width" :fixed="config.fixed">
     <template #default="scope">
-      <el-popover :placement="config.popover.placement" :width="config.popover.width" :trigger="config.popover.trigger">
-        <m-table
+      <ElPopover
+        v-if="config.popover"
+        :placement="config.popover.placement"
+        :width="config.popover.width"
+        :trigger="config.popover.trigger"
+      >
+        <MTable
           v-if="config.popover.tableEmbed"
           :show-header="config.showHeader"
           :columns="config.table"
-          :data="scope.row[config.prop]"
-        ></m-table>
+          :data="(config.prop && scope.row[config.prop]) || []"
+        ></MTable>
         <template #reference>
-          <el-button text type="primary"> {{ config.text || formatter(config, scope.row) }}</el-button>
+          <ElButton text type="primary"> {{ config.text || formatter(config, scope.row) }}</ElButton>
         </template>
-      </el-popover>
+      </ElPopover>
     </template>
-  </el-table-column>
+  </ElTableColumn>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script lang="ts" setup>
+import { ElButton, ElPopover, ElTableColumn } from '@edoms/design';
 
 import { ColumnConfig } from './schema';
+import MTable from './Table.vue';
 import { formatter } from './utils';
 
-export default defineComponent({
-  props: {
-    config: {
-      type: Object as PropType<ColumnConfig>,
-      default: () => ({}),
-      required: true,
-    },
-  },
-  expose: [],
-  setup() {
-    return {
-      formatter,
-    };
-  },
-});
+withDefaults(
+  defineProps<{
+    config: ColumnConfig;
+  }>(),
+  {
+    config: () => ({}),
+  }
+);
 </script>

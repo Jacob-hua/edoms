@@ -1,4 +1,4 @@
-.magic-editor-layer-panel {
+.edoms-editor-layer-panel {
   background: $--sidebar-content-background-color;
 
   .search-input {
@@ -10,10 +10,15 @@
     left: 0;
     z-index: 1;
 
-    .el-input__suffix {
-      padding: 10px 5px;
+    .el-input__prefix {
+      padding: 7px;
     }
   }
+
+  .edoms-editor-layer-tree {
+    padding-top: 48px;
+  }
+
   .node-content {
     flex: 1;
     display: flex;
@@ -36,28 +41,28 @@
     }
   }
 }
-.magic-editor-layer-panel,
-.magic-editor-layer-panel .el-tree {
+.edoms-editor-layer-panel,
+.edoms-editor-layer-panel .el-tree {
   background-color: $--sidebar-content-background-color;
   color: #313a40;
 }
 
-.magic-editor-layer-panel .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+.edoms-editor-layer-panel .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
   background-color: $--sidebar-heder-background-color;
   color: #fff;
 }
 
-.magic-editor-layer-panel .cus-tree-node {
+.edoms-editor-layer-panel .cus-tree-node {
   width: 100%;
   overflow: hidden;
 }
 
-.magic-editor-layer-panel .cus-tree-node-hover {
+.edoms-editor-layer-panel .cus-tree-node-hover {
   background-color: $--hover-color;
   width: 100%;
 }
 
-.magic-editor-layer-panel .el-tree-node:focus > .el-tree-node__content {
+.edoms-editor-layer-panel .el-tree-node:focus > .el-tree-node__content {
   background-color: $--sidebar-heder-background-color;
   color: #fff;
 }

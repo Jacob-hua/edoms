@@ -1,5 +1,5 @@
 <template>
-  <img class="magic-ui-qrcode" :src="imgUrl" />
+  <img class="edoms-ui-qrcode" :src="imgUrl" />
 </template>
 
 <script lang="ts">
@@ -10,15 +10,12 @@ import { MQrcode } from '../../types';
 import useApp from '../../useApp';
 
 export default defineComponent({
-  name: 'MagicUiQrcode',
-  expose: [],
   props: {
     config: {
       type: Object as PropType<MQrcode>,
       default: () => ({}),
     },
 
-    // eslint-disable-next-line vue/no-unused-properties
     model: {
       type: Object,
       default: () => ({}),

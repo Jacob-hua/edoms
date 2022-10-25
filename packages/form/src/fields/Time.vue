@@ -1,48 +1,35 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <el-time-picker
+  <ElTimePicker
     v-model="model[name]"
     :size="size"
-    value-format="HH:mm:ss"
     :placeholder="config.placeholder"
     :disabled="disabled"
     @change="changeHandler"
-  ></el-time-picker>
+  ></ElTimePicker>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script lang="ts" setup>
+import { ElTimePicker } from '@edoms/design';
 
 import { TimeConfig } from '../schema';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
 
-export default defineComponent({
-  name: 'MFieldsTime',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<TimeConfig>,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  config: TimeConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  emits: {
-    change(values: Date) {
-      return values;
-    },
-  },
+const emit = defineEmits(['change']);
 
-  setup(props, { emit }) {
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+useAddField(props.prop);
 
-    return {
-      changeHandler: (v: Date) => {
-        emit('change', v);
-      },
-    };
-  },
-});
+const changeHandler = (v: string) => {
+  emit('change', v);
+};
 </script>

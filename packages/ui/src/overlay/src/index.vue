@@ -1,27 +1,24 @@
 <template>
-  <magic-ui-container v-if="visible" class="magic-ui-overlay" :config="{ items: config.items }">
+  <edoms-ui-container v-if="visible" class="edoms-ui-overlay" :config="{ items: config.items }">
     <slot></slot>
-  </magic-ui-container>
+  </edoms-ui-container>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import Core from '@tmagic/core';
-import type { MNode } from '@tmagic/schema';
+import Core from '@edoms/core';
+import type { MNode } from '@edoms/schema';
 
 import useApp from '../../useApp';
 
 export default defineComponent({
-  name: 'MagicUiOverlay',
-  expose: [],
   props: {
     config: {
       type: Object,
       default: () => ({}),
     },
 
-    // eslint-disable-next-line vue/no-unused-properties
     model: {
       type: Object,
       default: () => ({}),
@@ -34,7 +31,6 @@ export default defineComponent({
     const node = app?.page?.getNode(props.config.id);
 
     const openOverlay = () => {
-      console.log('sdasdafsdfasdfasdf');
       visible.value = true;
       if (app) {
         app.emit('overlay:open', node);
@@ -48,7 +44,7 @@ export default defineComponent({
       }
     };
 
-    app?.on('editor:select', (_, path) => {
+    app?.on('editor:select', (info, path) => {
       if (path.find((node: MNode) => node.id === props.config.id)) {
         openOverlay();
       } else {

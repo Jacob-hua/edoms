@@ -7,9 +7,9 @@ export const DRAG_EL_ID_PREFIX = 'drag_el_';
 /** 高亮时需要在蒙层中创建一个占位节点，该节点的id前缀 */
 export const HIGHLIGHT_EL_ID_PREFIX = 'highlight_el_';
 
-export const CONTAINER_HIGHLIGHT_CLASS = 'tmagic-stage-container-highlight';
+export const CONTAINER_HIGHLIGHT_CLASS = 'edoms-stage-container-highlight';
 
-export const PAGE_CLASS = 'magic-ui-page';
+export const PAGE_CLASS = 'edoms-ui-page';
 
 /** 默认放到缩小倍数 */
 export const DEFAULT_ZOOM = 1;
@@ -30,6 +30,7 @@ export enum ZIndex {
   SELECTED_EL = '666',
   GHOST_EL = '700',
   DRAG_EL = '9',
+  HIGHLIGHT_EL = '8',
 }
 
 /** 鼠标按键 */
@@ -53,4 +54,4 @@ export enum Mode {
 }
 
 /** 选中节点的class name */
-export const SELECTED_CLASS = 'tmagic-stage-selected-area';
+export const SELECTED_CLASS = 'edoms-stage-selected-area';

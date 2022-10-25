@@ -35,7 +35,6 @@ import './theme/index.scss';
 export * from './schema';
 export * from './utils/form';
 export * from './utils/useAddField';
-export { default as fieldProps } from './utils/fieldProps';
 
 export { default as MForm } from './Form.vue';
 export { default as MFormDialog } from './FormDialog.vue';
@@ -71,37 +70,37 @@ const install = (app: App, opt: any) => {
   const option = Object.assign(defaultInstallOpt, opt);
 
   // eslint-disable-next-line no-param-reassign
-  app.config.globalProperties.$MAGIC_FORM = option;
+  app.config.globalProperties.$EDOMS_FORM = option;
   setConfig(option);
 
-  app.component(Form.name, Form);
-  app.component(FormDialog.name, FormDialog);
-  app.component(Container.name, Container);
+  app.component('MForm', Form);
+  app.component('MFormDialog', FormDialog);
+  app.component('MFormContainer', Container);
   app.component('MFormFieldset', Fieldset);
-  app.component(GroupList.name, GroupList);
-  app.component(Panel.name, Panel);
-  app.component(Row.name, Row);
-  app.component(MStep.name, MStep);
-  app.component(Table.name, Table);
-  app.component(Tabs.name, Tabs);
-  app.component(Text.name, Text);
-  app.component(Number.name, Number);
-  app.component(Textarea.name, Textarea);
-  app.component(Hidden.name, Hidden);
-  app.component(Date.name, Date);
-  app.component(DateTime.name, DateTime);
-  app.component(Time.name, Time);
-  app.component(Checkbox.name, Checkbox);
-  app.component(Switch.name, Switch);
-  app.component(Daterange.name, Daterange);
-  app.component(ColorPicker.name, ColorPicker);
-  app.component(CheckboxGroup.name, CheckboxGroup);
-  app.component(RadioGroup.name, RadioGroup);
-  app.component(Display.name, Display);
-  app.component(Link.name, Link);
-  app.component(Select.name, Select);
-  app.component(Cascader.name, Cascader);
-  app.component(DynamicField.name, DynamicField);
+  app.component('MFormGroupList', GroupList);
+  app.component('MFormPanel', Panel);
+  app.component('MFormRow', Row);
+  app.component('MFormStep', MStep);
+  app.component('MFormTable', Table);
+  app.component('MFormTab', Tabs);
+  app.component('MFieldsText', Text);
+  app.component('MFieldsNumber', Number);
+  app.component('MFieldsTextarea', Textarea);
+  app.component('MFieldsHidden', Hidden);
+  app.component('MFieldsDate', Date);
+  app.component('MFieldsDatetime', DateTime);
+  app.component('MFieldsDaterange', Daterange);
+  app.component('MFieldsTime', Time);
+  app.component('MFieldsCheckbox', Checkbox);
+  app.component('MFieldsSwitch', Switch);
+  app.component('MFieldsColorPicker', ColorPicker);
+  app.component('MFieldsCheckboxGroup', CheckboxGroup);
+  app.component('MFieldsRadioGroup', RadioGroup);
+  app.component('MFieldsDisplay', Display);
+  app.component('MFieldsLink', Link);
+  app.component('MFieldsSelect', Select);
+  app.component('MFieldsCascader', Cascader);
+  app.component('MFieldsDynamicField', DynamicField);
 };
 
 export default {

@@ -1,5 +1,5 @@
 <template>
-  <el-table-column
+  <ElTableColumn
     show-overflow-tooltip
     :label="config.label"
     :width="config.width"
@@ -8,7 +8,7 @@
     :prop="config.prop"
   >
     <template #default="scope">
-      <el-form v-if="config.type && editState[scope.$index]" label-width="0" :model="editState[scope.$index]">
+      <ElForm v-if="config.type && editState[scope.$index]" label-width="0" :model="editState[scope.$index]">
         <m-form-container
           :prop="config.prop"
           :rules="config.rules"
@@ -16,62 +16,61 @@
           :name="config.prop"
           :model="editState[scope.$index]"
         ></m-form-container>
-      </el-form>
+      </ElForm>
 
-      <el-button v-else-if="config.action === 'actionLink'" text type="primary" @click="config.handler(scope.row)">
-        {{ formatter(config, scope.row) }}
-      </el-button>
+      <ElButton
+        v-else-if="config.action === 'actionLink' && config.prop"
+        text
+        type="primary"
+        @click="config.handler?.(scope.row)"
+      >
+        <span v-html="formatter(config, scope.row)"></span>
+      </ElButton>
 
-      <a v-else-if="config.action === 'img'" target="_blank" :href="scope.row[config.prop]"
+      <a v-else-if="config.action === 'img' && config.prop" target="_blank" :href="scope.row[config.prop]"
         ><img :src="scope.row[config.prop]" height="50"
       /></a>
 
-      <a v-else-if="config.action === 'link'" target="_blank" :href="scope.row[config.prop]" class="keep-all">{{
-        scope.row[config.prop]
-      }}</a>
+      <a
+        v-else-if="config.action === 'link' && config.prop"
+        target="_blank"
+        :href="scope.row[config.prop]"
+        class="keep-all"
+        >{{ scope.row[config.prop] }}</a
+      >
 
       <el-tooltip v-else-if="config.action === 'tip'" placement="left">
         <template #content>
           <div>{{ formatter(config, scope.row) }}</div>
         </template>
-        <el-button text type="primary">扩展配置</el-button>
+        <ElButton text type="primary">扩展配置</ElButton>
       </el-tooltip>
 
-      <el-tag
-        v-else-if="config.action === 'tag'"
+      <ElTag
+        v-else-if="config.action === 'tag' && config.prop"
         :type="typeof config.type === 'function' ? config.type(scope.row[config.prop], scope.row) : config.type"
         close-transition
-        >{{ formatter(config, scope.row) }}</el-tag
+        >{{ formatter(config, scope.row) }}</ElTag
       >
       <div v-else v-html="formatter(config, scope.row)"></div>
     </template>
-  </el-table-column>
+  </ElTableColumn>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script lang="ts" setup>
+import { ElButton, ElForm, ElTableColumn, ElTag } from '@edoms/design';
 
 import { ColumnConfig } from './schema';
 import { formatter } from './utils';
 
-export default defineComponent({
-  expose: [],
-  props: {
-    config: {
-      type: Object as PropType<ColumnConfig>,
-      default: () => ({}),
-      required: true,
-    },
-
-    editState: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  setup() {
-    return {
-      formatter,
-    };
-  },
-});
+withDefaults(
+  defineProps<{
+    config: ColumnConfig;
+    editState?: any;
+  }>(),
+  {
+    config: () => ({}),
+    editState: () => ({}),
+  }
+);
 </script>

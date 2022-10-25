@@ -1,4 +1,4 @@
-import { FormConfig, FormState } from '@tmagic/form';
+import { FormConfig, FormState } from '@edoms/form';
 
 import editorService from '../services/editor';
 import eventsService from '../services/events';
@@ -61,8 +61,8 @@ export const fillConfig = (config: FormConfig = []) => [
                   {
                     name: 'top',
                     text: 'top',
-                    disabled: (_: FormState, { model }: any) =>
-                      model.position === 'fixed' && model._magic_position === 'fixedBottom',
+                    disabled: (vm: FormState, { model }: any) =>
+                      model.position === 'fixed' && model._edoms_position === 'fixedBottom',
                   },
                   {
                     name: 'right',
@@ -71,8 +71,8 @@ export const fillConfig = (config: FormConfig = []) => [
                   {
                     name: 'bottom',
                     text: 'bottom',
-                    disabled: (_: FormState, { model }: any) =>
-                      model.position === 'fixed' && model._magic_position === 'fixedTop',
+                    disabled: (vm: FormState, { model }: any) =>
+                      model.position === 'fixed' && model._edoms_position === 'fixedTop',
                   },
                 ],
               },
@@ -172,7 +172,7 @@ export const fillConfig = (config: FormConfig = []) => [
                 name: 'name',
                 label: '事件名',
                 type: 'select',
-                options: (_: FormState, { formValue }: any) =>
+                options: (mForm: FormState, { formValue }: any) =>
                   eventsService.getEvent(formValue.type).map((option) => ({
                     text: option.label,
                     value: option.value,
@@ -187,7 +187,7 @@ export const fillConfig = (config: FormConfig = []) => [
                 name: 'method',
                 label: '动作',
                 type: 'select',
-                options: (_: FormState, { model }: any) => {
+                options: (mForm: FormState, { model }: any) => {
                   const node = editorService.getNodeById(model.to);
                   if (!node?.type) return [];
 
@@ -203,41 +203,22 @@ export const fillConfig = (config: FormConfig = []) => [
       },
       {
         title: '高级',
-        labelWidth: '80px',
+        lazy: true,
         items: [
           {
-            type: 'code-link',
             name: 'created',
             text: 'created',
-            formTitle: 'created',
+            type: 'code-select',
+            labelWidth: '100px',
+          },
+          {
+            name: 'mounted',
+            text: 'mounted',
+            type: 'code-select',
+            labelWidth: '100px',
           },
         ],
       },
     ],
   },
 ];
-
-// 默认组件属性表单配置
-export const DEFAULT_CONFIG: FormConfig = fillConfig([]);
-
-/**
- * 获取默认属性配置
- * @param type 组件类型
- * @returns Object
- */
-export const getDefaultPropsValue = (type: string, id: string) =>
-  ['page', 'container'].includes(type)
-    ? {
-        type,
-        id,
-        layout: 'absolute',
-        style: {},
-        name: type,
-        items: [],
-      }
-    : {
-        type,
-        id,
-        style: {},
-        name: type,
-      };

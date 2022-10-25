@@ -1,9 +1,9 @@
-let $MAGIC_FORM = {} as any;
+let $EDOMS_FORM = {} as any;
 
 const setConfig = (option: any): void => {
-  $MAGIC_FORM = option;
+  $EDOMS_FORM = option;
 };
 
-const getConfig = (key: string): unknown => $MAGIC_FORM[key];
+const getConfig = (key: string): unknown => $EDOMS_FORM[key];
 
 export { getConfig, setConfig };

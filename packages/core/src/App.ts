@@ -1,35 +1,12 @@
-/*
- * Tencent is pleased to support the open source community by making TMagicEditor available.
- *
- * Copyright (C) 2021 THL A29 Limited, a Tencent company.  All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { EventEmitter } from 'events';
 
-import type { EventItemConfig, Id, MApp } from '@tmagic/schema';
+import type { CodeBlockDSL, EventItemConfig, Id, MApp } from '@edoms/schema';
 
 import Env from './Env';
-import {
-  bindCommonEventListener,
-  DEFAULT_EVENTS,
-  getCommonEventName,
-  isCommonMethod,
-  triggerCommonMethod,
-} from './events';
+import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
+import type Node from './Node';
 import Page from './Page';
-import { fillBackgroundImage, style2Obj } from './utils';
+import { fillBackgroundImage, isNumber, style2Obj } from './utils';
 
 interface AppOptionsConfig {
   ua?: string;
@@ -49,7 +26,7 @@ interface EventCache {
 
 class App extends EventEmitter {
   public env;
-
+  public codeDsl: CodeBlockDSL | undefined;
   public pages = new Map<Id, Page>();
 
   public page: Page | undefined;
@@ -66,6 +43,8 @@ class App extends EventEmitter {
     super();
 
     this.env = new Env(options.ua);
+    // 代码块描述内容在dsl codeBlocks字段
+    this.codeDsl = options.config?.codeBlocks;
     options.platform && (this.platform = options.platform);
     options.jsEngine && (this.jsEngine = options.jsEngine);
     options.designWidth && (this.designWidth = options.designWidth);
@@ -73,8 +52,7 @@ class App extends EventEmitter {
     // 根据屏幕大小计算出跟节点的font-size，用于rem样式的适配
     if (this.platform === 'mobile' || this.platform === 'editor') {
       const calcFontsize = () => {
-        let { width } = document.documentElement.getBoundingClientRect();
-        width = Math.min(800, width);
+        const { width } = document.documentElement.getBoundingClientRect();
         const fontSize = width / (this.designWidth / 100);
         document.documentElement.style.fontSize = `${fontSize}px`;
       };
@@ -119,15 +97,16 @@ class App extends EventEmitter {
       if (key === 'backgroundImage') {
         value && (results[key] = fillBackgroundImage(value));
       } else if (key === 'transform' && typeof value !== 'string') {
-        results[key] = Object.entries(value as Record<string, string>)
+        const values = Object.entries(value as Record<string, string>)
           .map(([transformKey, transformValue]) => {
-            let defaultValue = 0;
-            if (transformKey === 'scale') {
-              defaultValue = 1;
+            if (!transformValue.trim()) return '';
+            if (transformKey === 'rotate' && isNumber(transformValue)) {
+              transformValue = `${transformValue}deg`;
             }
-            return `${transformKey}(${transformValue || defaultValue})`;
+            return `${transformKey}(${transformValue})`;
           })
           .join(' ');
+        results[key] = !values.trim() ? 'none' : values;
       } else if (!whiteList.includes(key) && value && /^[-]?[0-9]*[.]?[0-9]*$/.test(value)) {
         results[key] = `${value / 100}rem`;
       } else {
@@ -144,8 +123,8 @@ class App extends EventEmitter {
    * @param curPage 当前页面id
    */
   public setConfig(config: MApp, curPage?: Id) {
+    this.codeDsl = config.codeBlocks;
     this.pages = new Map();
-
     config.items?.forEach((page) => {
       this.pages.set(
         page.id,
@@ -172,7 +151,7 @@ class App extends EventEmitter {
 
     this.page = page;
 
-    if (this.platform !== 'magic') {
+    if (this.platform !== 'edoms') {
       this.bindEvents();
     }
   }
@@ -200,20 +179,21 @@ class App extends EventEmitter {
   }
 
   public bindEvent(event: EventItemConfig, id: string) {
-    let { name: eventName } = event;
-    if (DEFAULT_EVENTS.findIndex((defaultEvent) => defaultEvent.value === eventName) > -1) {
-      // common 事件名通过 node id 避免重复触发
-      eventName = getCommonEventName(eventName, id);
-    }
-
-    this.on(eventName, (fromCpt, ...args) => {
+    const { name } = event;
+    this.on(`${name}_${id}`, (fromCpt: Node, ...args) => {
       this.eventHandler(event, fromCpt, args);
     });
   }
 
+  public emit(name: string | symbol, node: any, ...args: any[]): boolean {
+    if (node?.data?.id) {
+      return super.emit(`${String(name)}_${node.data.id}`, node, ...args);
+    }
+    return super.emit(name, node, ...args);
+  }
+
   public eventHandler(eventConfig: EventItemConfig, fromCpt: any, args: any[]) {
     if (!this.page) throw new Error('当前没有页面');
-    console.log('dddddd');
 
     const { method: methodName, to } = eventConfig;
 

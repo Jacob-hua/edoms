@@ -3,7 +3,7 @@
     <div class="m-editor-empty-content">
       <div class="m-editor-empty-button" @click="clickHandler">
         <div>
-          <el-icon><Plus /></el-icon>
+          <MIcon :icon="Plus"></MIcon>
         </div>
         <p>新增页面</p>
       </div>
@@ -11,33 +11,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, toRaw } from 'vue';
+<script lang="ts" setup>
+import { inject, toRaw } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 
-import { NodeType } from '@tmagic/schema';
+import { NodeType } from '@edoms/schema';
 
+import MIcon from '../components/Icon.vue';
 import type { Services } from '../type';
 import { generatePageNameByApp } from '../utils';
 
-export default defineComponent({
-  components: { Plus },
-  expose: [],
-  setup() {
-    const services = inject<Services>('services');
+const services = inject<Services>('services');
 
-    return {
-      clickHandler() {
-        const { editorService } = services || {};
+const clickHandler = () => {
+  const { editorService } = services || {};
 
-        if (!editorService) return;
+  if (!editorService) return;
 
-        editorService.add({
-          type: NodeType.PAGE,
-          name: generatePageNameByApp(toRaw(editorService.get('root'))),
-        });
-      },
-    };
-  },
-});
+  editorService.add({
+    type: NodeType.PAGE,
+    name: generatePageNameByApp(toRaw(editorService.get('root'))),
+  });
+};
 </script>

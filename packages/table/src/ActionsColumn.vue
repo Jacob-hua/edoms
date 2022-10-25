@@ -1,10 +1,7 @@
-<!-- eslint-disable vue/no-mutating-props -->
-<!-- eslint-disable vue/no-v-text-v-html-on-component -->
-<!-- eslint-disable vue/no-v-html -->
 <template>
-  <el-table-column :label="config.label" :width="config.width" :fixed="config.fixed">
+  <ElTableColumn :label="config.label" :width="config.width" :fixed="config.fixed">
     <template #default="scope">
-      <el-button
+      <ElButton
         v-for="(action, actionIndex) in config.actions"
         v-show="display(action.display, scope.row) && !editState[scope.$index]"
         :key="actionIndex"
@@ -12,122 +9,71 @@
         text
         type="primary"
         size="small"
+        :icon="action.icon"
         @click="actionHandler(action, scope.row, scope.$index)"
-        v-html="action.text"
-      ></el-button>
-      <el-button
+        ><span v-html="formatter(action.text, scope.row)"></span
+      ></ElButton>
+      <ElButton
         v-show="editState[scope.$index]"
         class="action-btn"
         text
         type="primary"
         size="small"
         @click="save(scope.$index, config)"
-        >保存</el-button
+        >保存</ElButton
       >
-      <el-button
+      <ElButton
         v-show="editState[scope.$index]"
         class="action-btn"
         text
         type="primary"
         size="small"
         @click="editState[scope.$index] = undefined"
-        >取消</el-button
+        >取消</ElButton
       >
     </template>
-  </el-table-column>
+  </ElTableColumn>
 </template>
 
-<script lang="ts">
-import { PropType } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+<script lang="ts" setup>
+import { ElButton, elMessage, ElTableColumn } from '@edoms/design';
 
 import { ColumnActionConfig, ColumnConfig } from './schema';
-</script>
 
-<script lang="ts" setup>
-const props = defineProps({
-  columns: {
-    type: Array as PropType<any[]>,
-    require: true,
-    default: () => [],
-  },
-  config: {
-    type: Object as PropType<ColumnConfig>,
-    require: true,
-    default: () => {},
-  },
-
-  rowkeyName: {
-    type: String,
-    default: 'c_id',
-  },
-
-  editState: {
-    type: Object,
-    default: () => {},
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    columns: any[];
+    config: ColumnConfig;
+    rowkeyName?: string;
+    editState?: any;
+  }>(),
+  {
+    columns: () => [],
+    config: () => ({}),
+    rowkeyName: 'c_id',
+    editState: () => [],
+  }
+);
 
 const emit = defineEmits(['afterAction']);
 
 const display = (fuc: boolean | Function | undefined, row: any) => {
   if (typeof fuc === 'function') {
-    return fuc.call(this, this, row);
+    return fuc(row);
   }
   return true;
 };
 
-const success = (msg: string, action: ColumnActionConfig, row: any) => {
-  ElMessage.success(msg);
-  action.after?.(row);
-};
-
-const error = (msg: string) => ElMessage.error(msg);
-
-const deleteAction = async (action: ColumnActionConfig, row: any) => {
-  await ElMessageBox.confirm(`确认删除${row[action.name || 'c_name']}(${row[props.rowkeyName]})?`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  });
-
-  const res = await action.handler?.(row);
-
-  if (res.ret === 0) {
-    success('删除成功!', action, row);
-  } else {
-    error(res.msg || '删除失败');
+const formatter = (fuc: string | Function | undefined, row: any) => {
+  if (typeof fuc === 'function') {
+    return fuc(row);
   }
-};
-
-const copyHandler = async (action: ColumnActionConfig, row: any) => {
-  await ElMessageBox.confirm(`确定复制${row[action.name || 'c_name']}(${row.c_id})?`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  });
-
-  try {
-    const res = await action.handler?.(row);
-
-    if (res.ret === 0) {
-      success('复制成功!', action, row);
-    } else {
-      error(`复制失败!${res.msg}`);
-    }
-  } catch (e) {
-    error('复制失败!');
-  }
+  return fuc;
 };
 
 const actionHandler = async (action: ColumnActionConfig, row: any, index: number) => {
   await action.before?.(row);
-  if (action.type === 'delete') {
-    await deleteAction(action, row);
-  } else if (action.type === 'copy') {
-    await copyHandler(action, row);
-  } else if (action.type === 'edit') {
-    // eslint-disable-next-line vue/no-mutating-props
+  if (action.type === 'edit') {
     props.editState[index] = row;
   } else {
     await action.handler?.(row);
@@ -153,20 +99,13 @@ const save = async (index: number, config: ColumnConfig) => {
 
   if (res) {
     if (res.ret === 0) {
-      ElMessage.success('保存成功');
-      // eslint-disable-next-line vue/no-mutating-props
+      elMessage.success('保存成功');
       props.editState[index] = undefined;
       emit('afterAction');
     } else {
-      ElMessage.error({
-        duration: 10000,
-        showClose: true,
-        dangerouslyUseHTMLString: true,
-        message: res.msg || '保存失败',
-      });
+      elMessage.error(res.msg || '保存失败');
     }
   } else {
-    // eslint-disable-next-line vue/no-mutating-props
     props.editState[index] = undefined;
     emit('afterAction');
   }

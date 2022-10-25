@@ -1,29 +1,18 @@
 import path from 'path';
 
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 
 import pkg from './package.json';
 
 export default defineConfig({
-  plugins: [
-    dts({
-      outputDir: 'dist/types',
-      include: ['src/**/*'],
-      staticImport: true,
-      insertTypesEntry: true,
-      logDiagnostics: true,
-    }),
-  ],
-
   resolve: {
     alias:
       process.env.NODE_ENV === 'production'
         ? []
         : [
-            { find: /^@tmagic\/core/, replacement: path.join(__dirname, '../core/src/index.ts') },
-            { find: /^@tmagic\/schema/, replacement: path.join(__dirname, '../schema/src/index.ts') },
-            { find: /^@tmagic\/utils/, replacement: path.join(__dirname, '../utils/src/index.ts') },
+            { find: /^@edoms\/core/, replacement: path.join(__dirname, '../core/src/index.ts') },
+            { find: /^@edoms\/schema/, replacement: path.join(__dirname, '../schema/src/index.ts') },
+            { find: /^@edoms\/utils/, replacement: path.join(__dirname, '../utils/src/index.ts') },
           ],
   },
 
@@ -35,8 +24,8 @@ export default defineConfig({
 
     lib: {
       entry: 'src/index.ts',
-      name: 'TMagicStage',
-      fileName: 'tmagic-stage',
+      name: 'EdomsStage',
+      fileName: 'edoms-stage',
     },
 
     rollupOptions: {
@@ -44,7 +33,7 @@ export default defineConfig({
       external(id: string) {
         return (
           /^vue/.test(id) ||
-          /^@tmagic\//.test(id) ||
+          /^@edoms\//.test(id) ||
           Object.keys(pkg.dependencies).some((k) => new RegExp(`^${k}`).test(id))
         );
       },

@@ -1,74 +1,95 @@
-<!-- eslint-disable vue/no-undef-properties -->
-<!-- eslint-disable vue/custom-event-name-casing -->
 <template>
-  <Framework :code-options="codeOptions">
+  <framework :code-options="codeOptions">
     <template #nav>
-      <slot name="nav" :editor-service="editorService"><NavMenu :data="menu"></NavMenu></slot>
+      <slot name="nav" :editor-service="editorService"><nav-menu :data="menu"></nav-menu></slot>
     </template>
 
     <template #sidebar>
       <slot name="sidebar" :editor-service="editorService">
-        <Sidebar :data="sidebar">
+        <sidebar :data="sidebar">
           <template #layer-panel-header>
-            <!-- <slot name="layer-panel-header"></slot> -->
+            <slot name="layer-panel-header"></slot>
+          </template>
+
+          <template #layer-node-content="{ node, data }">
+            <slot name="layer-node-content" :data="data" :node="node"></slot>
           </template>
 
           <template #component-list-panel-header>
-            <!-- <slot name="component-list-panel-header"></slot> -->
+            <slot name="component-list-panel-header"></slot>
           </template>
-        </Sidebar>
+
+          <template #component-list-item="{ component }">
+            <slot name="component-list-item" :component="component"></slot>
+          </template>
+
+          <template #code-block-panel-header>
+            <slot name="code-block-panel-header"></slot>
+          </template>
+
+          <template #code-block-panel-tool="{ id, data }">
+            <slot :id="id" name="code-block-panel-tool" :data="data"></slot>
+          </template>
+
+          <template #code-block-edit-panel-header="{ id }">
+            <slot :id="id" name="code-block-edit-panel-header"></slot>
+          </template>
+        </sidebar>
       </slot>
     </template>
 
     <template #workspace>
       <slot name="workspace" :editor-service="editorService">
-        <Workspace>
+        <workspace>
+          <template #stage><slot name="stage"></slot></template>
           <template #workspace-content><slot name="workspace-content" :editor-service="editorService"></slot></template>
           <template #page-bar-title="{ page }"><slot name="page-bar-title" :page="page"></slot></template>
           <template #page-bar-popover="{ page }"><slot name="page-bar-popover" :page="page"></slot></template>
-        </Workspace>
+        </workspace>
       </slot>
     </template>
 
     <template #props-panel>
       <slot name="props-panel">
-        <PropsPanel @mounted="(instance: any) => $emit('props-panel-mounted', instance)">
+        <props-panel @mounted="(instance: any) => $emit('props-panel-mounted', instance)">
           <template #props-panel-header>
             <slot name="props-panel-header"></slot>
           </template>
-        </PropsPanel>
+        </props-panel>
       </slot>
     </template>
 
     <template #empty><slot name="empty" :editor-service="editorService"></slot></template>
-  </Framework>
+  </framework>
 </template>
 
 <script lang="ts">
 import { defineComponent, onUnmounted, PropType, provide, reactive, toRaw, watch } from 'vue';
 
-import { EventOption } from '@tmagic/core';
-import type { FormConfig } from '@tmagic/form';
-import type { MApp, MNode } from '@tmagic/schema';
-import type StageCore from '@tmagic/stage';
-import { CONTAINER_HIGHLIGHT_CLASS, MoveableOptions } from '@tmagic/stage';
+import { EventOption } from '@edoms/core';
+import type { FormConfig } from '@edoms/form';
+import type { MApp, MNode } from '@edoms/schema';
+import type StageCore from '@edoms/stage';
+import { CONTAINER_HIGHLIGHT_CLASS, ContainerHighlightType, MoveableOptions } from '@edoms/stage';
 
-import Framework from '@editor/layouts/Framework.vue';
-import NavMenu from '@editor/layouts/NavMenu.vue';
-import PropsPanel from '@editor/layouts/PropsPanel.vue';
-import Sidebar from '@editor/layouts/sidebar/Sidebar.vue';
-import Workspace from '@editor/layouts/workspace/Workspace.vue';
+import Framework from './layouts/Framework.vue';
+import NavMenu from './layouts/NavMenu.vue';
+import PropsPanel from './layouts/PropsPanel.vue';
+import Sidebar from './layouts/sidebar/Sidebar.vue';
+import Workspace from './layouts/workspace/Workspace.vue';
+import codeBlockService from './services/codeBlock';
 import componentListService from './services/componentList';
 import editorService from './services/editor';
 import eventsService from './services/events';
 import historyService from './services/history';
 import propsService from './services/props';
+import storageService from './services/storage';
 import uiService from './services/ui';
-import type { ComponentGroup, MenuBarData, MenuItem, Services, SideBarData, StageRect } from './type';
+import type { ComponentGroup, MenuBarData, MenuButton, MenuComponent, Services, SideBarData, StageRect } from './type';
 
 export default defineComponent({
   name: 'MEditor',
-  expose: [],
+
   components: {
     NavMenu,
     Sidebar,
@@ -97,12 +118,12 @@ export default defineComponent({
     },
 
     layerContentMenu: {
-      type: Array as PropType<MenuItem[]>,
+      type: Array as PropType<(MenuButton | MenuComponent)[]>,
       default: () => [],
     },
 
     stageContentMenu: {
-      type: Array as PropType<MenuItem[]>,
+      type: Array as PropType<(MenuButton | MenuComponent)[]>,
       default: () => [],
     },
 
@@ -158,7 +179,7 @@ export default defineComponent({
 
     isContainer: {
       type: Function as PropType<(el: HTMLElement) => boolean | Promise<boolean>>,
-      default: (el: HTMLElement) => el.classList.contains('magic-ui-container'),
+      default: (el: HTMLElement) => el.classList.contains('edoms-ui-container'),
     },
 
     containerHighlightClassName: {
@@ -169,6 +190,11 @@ export default defineComponent({
     containerHighlightDuration: {
       type: Number,
       default: 800,
+    },
+
+    containerHighlightType: {
+      type: String as PropType<ContainerHighlightType>,
+      default: ContainerHighlightType.DEFAULT,
     },
 
     stageRect: {
@@ -188,16 +214,24 @@ export default defineComponent({
   emits: ['props-panel-mounted', 'update:modelValue'],
 
   setup(props, { emit }) {
-    editorService.on('root-change', () => {
-      const node = editorService.get<MNode | null>('node') || props.defaultSelected;
-      node && editorService.select(node);
+    editorService.on('root-change', (value) => {
+      const node = editorService.get<MNode | null>('node');
+      const nodeId = node?.id || props.defaultSelected;
+      if (nodeId && node !== value) {
+        editorService.select(nodeId);
+      } else {
+        editorService.set('nodes', [value]);
+      }
+
       emit('update:modelValue', toRaw(editorService.get('root')));
     });
 
     // 初始值变化，重新设置节点信息
     watch(
       () => props.modelValue,
-      (modelValue) => editorService.set('root', modelValue),
+      (modelValue) => {
+        editorService.set('root', modelValue);
+      },
       {
         immediate: true,
       }
@@ -262,7 +296,15 @@ export default defineComponent({
       }
     );
 
-    onUnmounted(() => editorService.destroy());
+    onUnmounted(() => {
+      editorService.destroy();
+      historyService.destroy();
+      propsService.destroy();
+      uiService.destroy();
+      componentListService.destroy();
+      storageService.destroy();
+      codeBlockService.destroy();
+    });
 
     const services: Services = {
       componentListService,
@@ -271,6 +313,8 @@ export default defineComponent({
       propsService,
       editorService,
       uiService,
+      storageService,
+      codeBlockService,
     };
 
     provide('services', services);
@@ -289,6 +333,7 @@ export default defineComponent({
         isContainer: props.isContainer,
         containerHighlightClassName: props.containerHighlightClassName,
         containerHighlightDuration: props.containerHighlightDuration,
+        containerHighlightType: props.containerHighlightType,
       })
     );
 

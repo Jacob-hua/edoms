@@ -1,12 +1,14 @@
-import { datetimeFormatter } from '@tmagic/utils';
+import { dateFormat } from '@edoms/utils';
 
 import { ColumnConfig } from './schema';
 
 export const formatter = (item: ColumnConfig, row: any) => {
+  if (!item.prop) return '';
+
   if (item.formatter) {
     if (item.formatter === 'datetime') {
       // eslint-disable-next-line no-param-reassign
-      item.formatter = (value: string) => datetimeFormatter(value);
+      item.formatter = (value: string) => dateFormat(value);
     }
     try {
       return item.formatter(row[item.prop], row);

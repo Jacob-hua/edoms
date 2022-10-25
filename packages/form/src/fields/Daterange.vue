@@ -1,6 +1,5 @@
-<!-- eslint-disable vue/no-undef-properties -->
 <template>
-  <el-date-picker
+  <ElDatePicker
     v-model="value"
     type="datetimerange"
     range-separator="-"
@@ -11,80 +10,95 @@
     :disabled="disabled"
     :default-time="config.defaultTime"
     @change="changeHandler"
-  ></el-date-picker>
+  ></ElDatePicker>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+<script lang="ts" setup>
+import { ref, watch } from 'vue';
 
-import { datetimeFormatter } from '@tmagic/utils';
+import { ElDatePicker } from '@edoms/design';
+import { dateFormat } from '@edoms/utils';
 
 import { DaterangeConfig } from '../schema';
-import fieldProps from '../utils/fieldProps';
 import { useAddField } from '../utils/useAddField';
 
-export default defineComponent({
-  name: 'MFieldsDaterange',
-  expose: [],
-  props: {
-    ...fieldProps,
-    config: {
-      type: Object as PropType<DaterangeConfig>,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  config: DaterangeConfig;
+  model: any;
+  initValues?: any;
+  values?: any;
+  name: string;
+  prop: string;
+  disabled?: boolean;
+  size: 'mini' | 'small' | 'medium';
+}>();
 
-  emits: ['change'],
+const emit = defineEmits(['change']);
 
-  setup(props, { emit }) {
-    // eslint-disable-next-line vue/no-undef-properties
-    useAddField(props.prop);
+useAddField(props.prop);
 
-    // eslint-disable-next-line vue/no-setup-props-destructure
-    const { names } = props.config;
-    const value = ref<(string | number)[]>([]);
+// eslint-disable-next-line vue/no-setup-props-destructure
+const { names } = props.config;
+const value = ref<(Date | undefined)[] | null>([]);
 
-    // eslint-disable-next-line vue/no-undef-properties
-    if (props.model !== undefined) {
-      if (names?.length) {
-        value.value = names.map((item) => datetimeFormatter(props.model?.[item], ''));
-        // eslint-disable-next-line vue/no-undef-properties
-      } else if (props.name && props.model[props.name]) {
-        value.value = props.model[props.name].map((item: string) => datetimeFormatter(item, ''));
-      }
-    }
-
-    const setValue = (v: Date[] | Date) => {
-      if (names?.length && v instanceof Array) {
-        names.forEach((item, index) => {
-          if (props.model) {
-            // eslint-disable-next-line vue/no-mutating-props
-            props.model[item] = datetimeFormatter(v[index].toString(), '');
-          }
-        });
-      } else if (props.model && props.name && v instanceof Date) {
-        // eslint-disable-next-line vue/no-mutating-props
-        props.model[props.name] = datetimeFormatter(v.toString(), '');
-      } else if (names?.length) {
-        names.forEach((item) => {
-          if (props.model) {
-            // eslint-disable-next-line vue/no-mutating-props
-            props.model[item] = undefined;
-          }
-        });
-      } else if (props.name) {
-        // eslint-disable-next-line vue/no-mutating-props
-        props.model[props.name] = undefined;
-      }
-    };
-
-    return {
-      value,
-      changeHandler(v: Date[]) {
-        setValue(v);
-        emit('change', v);
+if (props.model !== undefined) {
+  if (names?.length) {
+    watch(
+      [() => props.model[names[0]], () => props.model[names[1]]],
+      ([start, end], [preStart, preEnd]) => {
+        if (!value.value) {
+          value.value = [];
+        }
+        if (!start || !end) value.value = [];
+        if (start !== preStart) value.value[0] = new Date(start);
+        if (end !== preEnd) value.value[1] = new Date(end);
       },
-    };
-  },
-});
+      {
+        immediate: true,
+      }
+    );
+  } else if (props.name && props.model[props.name]) {
+    watch(
+      () => props.model[props.name],
+      (start, preStart) => {
+        if (start !== preStart) value.value = start.map((item: string) => (item ? new Date(item) : undefined));
+      },
+      {
+        immediate: true,
+      }
+    );
+  }
+}
+
+const setValue = (v: Date[] | Date) => {
+  names?.forEach((item, index) => {
+    if (!props.model) {
+      return;
+    }
+    if (Array.isArray(v)) {
+      props.model[item] = dateFormat(v[index]?.toString(), '');
+    } else {
+      props.model[item] = undefined;
+    }
+  });
+};
+
+const changeHandler = (v: Date[]) => {
+  const value = v || [];
+
+  if (props.name) {
+    emit(
+      'change',
+      value.map((item?: Date) => {
+        if (item) return dateFormat(item, '');
+        return undefined;
+      })
+    );
+  } else {
+    if (names?.length) {
+      setValue(value);
+    }
+    emit('change', value);
+  }
+};
 </script>

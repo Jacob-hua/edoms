@@ -1,28 +1,21 @@
 import path from 'path';
 
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 import vue from '@vitejs/plugin-vue';
 
 import pkg from './package.json';
 
 export default defineConfig({
-  plugins: [
-    dts({
-      outputDir: 'dist/types',
-      include: ['src/**/*'],
-      staticImport: true,
-      insertTypesEntry: true,
-      logDiagnostics: true,
-    }),
-    vue(),
-  ],
+  plugins: [vue()],
 
   resolve: {
     alias:
       process.env.NODE_ENV === 'production'
         ? []
-        : [{ find: /^@tmagic\/utils/, replacement: path.join(__dirname, '../utils/src/index.ts') }],
+        : [
+            { find: /^@edoms\/utils/, replacement: path.join(__dirname, '../utils/src/index.ts') },
+            { find: /^@edoms\/design/, replacement: path.join(__dirname, '../design/src/index.ts') },
+          ],
   },
 
   build: {
@@ -33,8 +26,8 @@ export default defineConfig({
 
     lib: {
       entry: 'src/index.ts',
-      name: 'TMagicForm',
-      fileName: 'tmagic-form',
+      name: 'EdomsForm',
+      fileName: 'edoms-form',
     },
 
     rollupOptions: {
@@ -43,7 +36,7 @@ export default defineConfig({
         return (
           /^vue/.test(id) ||
           /^element-plus/.test(id) ||
-          /^@tmagic\//.test(id) ||
+          /^@edoms\//.test(id) ||
           Object.keys(pkg.dependencies).some((k) => new RegExp(`^${k}`).test(id))
         );
       },

@@ -16,12 +16,17 @@ class ComponentList extends BaseService {
   /**
    * @param componentGroupList 组件列表配置
    */
-  public setList(componentGroupList: ComponentGroup[]) {
+  public setList(componentGroupList: ComponentGroup[]): void {
     this.state.list = componentGroupList;
   }
 
-  public getList() {
+  public getList(): ComponentGroup[] {
     return this.state.list;
+  }
+
+  public destroy() {
+    this.state.list = [];
+    this.removeAllListeners();
   }
 }
 

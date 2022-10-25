@@ -1,6 +1,6 @@
 import { getCurrentInstance, inject, onMounted, onUnmounted } from 'vue';
 
-import Core from '@tmagic/core';
+import Core from '@edoms/core';
 
 export default (props: any) => {
   const app: Core | undefined = inject('app');

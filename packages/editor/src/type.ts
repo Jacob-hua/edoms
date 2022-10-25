@@ -1,15 +1,17 @@
 import type { Component } from 'vue';
 
-import type { FormConfig } from '@tmagic/form';
-import type { Id, MApp, MContainer, MNode, MPage } from '@tmagic/schema';
-import type StageCore from '@tmagic/stage';
-import type { MoveableOptions } from '@tmagic/stage';
+import type { FormConfig } from '@edoms/form';
+import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
+import type StageCore from '@edoms/stage';
+import type { ContainerHighlightType, MoveableOptions } from '@edoms/stage';
 
+import type { CodeBlockService } from './services/codeBlock';
 import type { ComponentListService } from './services/componentList';
 import type { EditorService } from './services/editor';
 import type { EventsService } from './services/events';
 import type { HistoryService } from './services/history';
 import type { PropsService } from './services/props';
+import type { StorageService } from './services/storage';
 import type { UiService } from './services/ui';
 
 export type BeforeAdd = (config: MNode, parent: MContainer) => Promise<MNode> | MNode;
@@ -22,10 +24,12 @@ export interface InstallOptions {
 export interface Services {
   editorService: EditorService;
   historyService: HistoryService;
+  storageService: StorageService;
   eventsService: EventsService;
   propsService: PropsService;
   componentListService: ComponentListService;
   uiService: UiService;
+  codeBlockService: CodeBlockService;
 }
 
 export interface StageOptions {
@@ -33,6 +37,7 @@ export interface StageOptions {
   autoScrollIntoView: boolean;
   containerHighlightClassName: string;
   containerHighlightDuration: number;
+  containerHighlightType: ContainerHighlightType;
   render: () => HTMLDivElement;
   moveableOptions: MoveableOptions | ((core?: StageCore) => MoveableOptions);
   canSelect: (el: HTMLElement) => boolean | Promise<boolean>;
@@ -46,6 +51,7 @@ export interface StoreState {
   parent: MContainer | null;
   node: MNode | null;
   highlightNode: MNode | null;
+  nodes: MNode[];
   stage: StageCore | null;
   modifiedNodeIds: Map<Id, Id>;
   pageLength: number;
@@ -60,16 +66,22 @@ export interface ComponentGroupState {
   list: ComponentGroup[];
 }
 
+export enum ColumnLayout {
+  LEFT = 'left',
+  CENTER = 'center',
+  RIGHT = 'right',
+}
+
 export interface SetColumnWidth {
-  left?: number;
-  center?: number | 'auto';
-  right?: number;
+  [ColumnLayout.LEFT]?: number;
+  [ColumnLayout.CENTER]?: number | 'auto';
+  [ColumnLayout.RIGHT]?: number;
 }
 
 export interface GetColumnWidth {
-  left: number;
-  center: number;
-  right: number;
+  [ColumnLayout.LEFT]: number;
+  [ColumnLayout.CENTER]: number;
+  [ColumnLayout.RIGHT]: number;
 }
 
 export interface StageRect {
@@ -96,6 +108,8 @@ export interface UiState {
   showRule: boolean;
   /** 用于控制该属性配置表单内组件的尺寸 */
   propsPanelSize: 'large' | 'default' | 'small';
+  /** 是否显示新增页面按钮 */
+  showAddPageButton: boolean;
 }
 
 export interface EditorNodeInfo {
@@ -107,7 +121,21 @@ export interface EditorNodeInfo {
 export interface AddMNode {
   type: string;
   name?: string;
+  inputEvent?: DragEvent;
   [key: string]: any;
+}
+
+export interface PastePosition {
+  left?: number;
+  top?: number;
+  /**
+   * 粘贴位置X方向偏移量
+   */
+  offsetX?: number;
+  /**
+   * 粘贴位置Y方向偏移量
+   */
+  offsetY?: number;
 }
 
 /**
@@ -138,6 +166,7 @@ export interface MenuButton {
   /** type为button/dropdown时点击运行的方法 */
   handler?: (data: Services, event: MouseEvent) => Promise<any> | any;
   /** type为dropdown时，下拉的菜单列表， 或者有子菜单时 */
+  className?: string;
   items?: MenuButton[];
 }
 
@@ -151,6 +180,7 @@ export interface MenuComponent {
   listeners?: Record<string, Function>;
   slots?: Record<string, any>;
   /** 是否显示，默认为true */
+  className?: string;
   display?: boolean | ((data?: Services) => Promise<boolean> | boolean);
 }
 
@@ -173,16 +203,17 @@ export type MenuItem =
   | 'guides'
   | 'rule'
   | MenuButton
-  | MenuComponent;
+  | MenuComponent
+  | string;
 
 /** 工具栏 */
 export interface MenuBarData {
   /** 顶部工具栏左边项 */
-  left?: MenuItem[];
+  [ColumnLayout.LEFT]?: MenuItem[];
   /** 顶部工具栏中间项 */
-  center?: MenuItem[];
+  [ColumnLayout.CENTER]?: MenuItem[];
   /** 顶部工具栏右边项 */
-  right?: MenuItem[];
+  [ColumnLayout.RIGHT]?: MenuItem[];
 }
 
 export interface SideComponent extends MenuComponent {
@@ -196,7 +227,7 @@ export interface SideComponent extends MenuComponent {
  * component-list: 组件列表
  * layer: 已选组件树
  */
-export type SideItem = 'component-list' | 'layer' | SideComponent;
+export type SideItem = 'component-list' | 'layer' | 'code-block' | SideComponent;
 
 /** 工具栏 */
 export interface SideBarData {
@@ -249,5 +280,96 @@ export enum Keys {
   ESCAPE = 'Space',
 }
 
-export const H_GUIDE_LINE_STORAGE_KEY = '$MagicStageHorizontalGuidelinesData';
-export const V_GUIDE_LINE_STORAGE_KEY = '$MagicStageVerticalGuidelinesData';
+export const H_GUIDE_LINE_STORAGE_KEY = '$EdomsStageHorizontalGuidelinesData';
+export const V_GUIDE_LINE_STORAGE_KEY = '$EdomsStageVerticalGuidelinesData';
+
+export interface ScrollViewerEvent {
+  scrollLeft: number;
+  scrollTop: number;
+  scrollHeight: number;
+  scrollWidth: number;
+}
+
+export interface CodeBlockDSL {
+  [id: string]: CodeBlockContent;
+}
+
+export interface CodeBlockContent {
+  /** 代码块名称 */
+  name: string;
+  /** 代码块内容 */
+  content: string;
+  /** 代码块与组件的绑定关系 */
+  comps?: CodeRelation;
+  /** 扩展字段 */
+  [propName: string]: any;
+}
+
+export type CodeState = {
+  /** 是否展示代码块编辑区 */
+  isShowCodeEditor: boolean;
+  /** 代码块DSL数据源 */
+  codeDsl: CodeBlockDSL | null;
+  /** 当前选中的代码块id */
+  id: string;
+  /** 代码块是否可编辑 */
+  editable: boolean;
+  /** 代码编辑面板的展示模式 */
+  mode: CodeEditorMode;
+  /** list模式下左侧展示的代码列表 */
+  combineIds: string[];
+  /** 为业务逻辑预留的不可删除的代码块列表，由业务逻辑维护（如代码块上线后不可删除） */
+  undeletableList: string[];
+};
+
+export type CodeRelation = {
+  /** 组件id:['created'] */
+  [compId: string | number]: string[];
+};
+
+export enum CodeEditorMode {
+  /** 左侧菜单，右侧代码 */
+  LIST = 'list',
+  /** 全屏代码 */
+  EDITOR = 'editor',
+}
+
+export interface CodeDslList {
+  /** 代码块id */
+  id: string;
+  /** 代码块名称 */
+  name: string;
+  /** 代码块函数内容 */
+  codeBlockContent?: CodeBlockContent;
+  /** 是否展示代码绑定关系 */
+  showRelation?: boolean;
+}
+
+export interface ListState {
+  /** 代码块列表 */
+  codeList: CodeDslList[];
+}
+
+export interface ListRelationState extends ListState {
+  /** 与代码块绑定的组件id信息 */
+  bindComps: {
+    /** 代码块id : 组件信息 */
+    [id: string]: MNode[];
+  };
+}
+
+export enum CodeDeleteErrorType {
+  /** 代码块存在于不可删除列表中 */
+  UNDELETEABLE = 'undeleteable',
+  /** 代码块存在绑定关系 */
+  BIND = 'bind',
+}
+
+export enum CodeSelectOp {
+  /** 增加 */
+  ADD = 'add',
+  /** 删除 */
+  DELETE = 'delete',
+  /** 单选修改 */
+  CHANGE = 'change',
+}

@@ -1,36 +1,24 @@
 <template>
-  <img class="magic-ui-img" :src="config.src" @click="clickHandler" />
+  <img class="edoms-ui-img" :src="config.src" @click="clickHandler" />
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-
+<script lang="ts" setup>
 import { MImg } from '../../types';
 import useApp from '../../useApp';
 
-export default defineComponent({
-  name: 'MagicUiImg',
-  expose: [],
-  props: {
-    config: {
-      type: Object as PropType<MImg>,
-      default: () => ({}),
-    },
+const props = withDefaults(
+  defineProps<{
+    config: MImg;
+    model?: Record<string, any>;
+  }>(),
+  {
+    model: () => ({}),
+  }
+);
 
-    // eslint-disable-next-line vue/no-unused-properties
-    model: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  setup(props) {
-    useApp(props);
+useApp(props);
 
-    return {
-      clickHandler() {
-        if (props.config.url) window.location.href = props.config.url;
-      },
-    };
-  },
-});
+const clickHandler = () => {
+  if (props.config.url) window.location.href = props.config.url;
+};
 </script>

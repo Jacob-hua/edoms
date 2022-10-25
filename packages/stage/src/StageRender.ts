@@ -1,10 +1,11 @@
 import { EventEmitter } from 'events';
 
-import { getHost, injectStyle, isSameDomain } from '@tmagic/utils';
+import { getHost, injectStyle, isSameDomain } from '@edoms/utils';
 
 import StageCore from './StageCore';
 import style from './style.css?raw';
 import type { Runtime, RuntimeWindow, StageRenderConfig } from './types';
+import { Edoms } from './types';
 
 export default class StageRender extends EventEmitter {
   /** 组件的js、css执行的环境，直接渲染为当前window，iframe渲染则为iframe.contentWindow */
@@ -39,7 +40,7 @@ export default class StageRender extends EventEmitter {
     this.iframe.addEventListener('load', this.loadHandler);
   }
 
-  public getMagicApi = () => ({
+  public getEdomsApi = (): Edoms => ({
     onPageElUpdate: (el: HTMLElement) => this.emit('page-el-update', el),
     onRuntimeReady: (runtime: Runtime) => {
       this.runtime = runtime;
@@ -54,20 +55,22 @@ export default class StageRender extends EventEmitter {
    * @param el 将页面挂载到该Dom节点上
    */
   public async mount(el: HTMLDivElement) {
-    if (this.iframe) {
-      if (!isSameDomain(this.runtimeUrl) && this.runtimeUrl) {
-        // 不同域，使用srcdoc发起异步请求，需要目标地址支持跨域
-        let html = await fetch(this.runtimeUrl).then((res) => res.text());
-        // 使用base, 解决相对路径或绝对路径的问题
-        const base = `${location.protocol}//${getHost(this.runtimeUrl)}`;
-        html = html.replace('<head>', `<head>\n<base href="${base}">`);
-        this.iframe.srcdoc = html;
-      }
-
-      el.appendChild<HTMLIFrameElement>(this.iframe);
-    } else {
+    if (!this.iframe) {
       throw Error('mount 失败');
     }
+
+    if (!isSameDomain(this.runtimeUrl) && this.runtimeUrl) {
+      // 不同域，使用srcdoc发起异步请求，需要目标地址支持跨域
+      let html = await fetch(this.runtimeUrl).then((res) => res.text());
+      // 使用base, 解决相对路径或绝对路径的问题
+      const base = `${location.protocol}//${getHost(this.runtimeUrl)}`;
+      html = html.replace('<head>', `<head>\n<base href="${base}">`);
+      this.iframe.srcdoc = html;
+    }
+
+    el.appendChild<HTMLIFrameElement>(this.iframe);
+
+    this.postEdomsRuntimeReady();
   }
 
   public getRuntime = (): Promise<Runtime> => {
@@ -93,26 +96,34 @@ export default class StageRender extends EventEmitter {
   }
 
   private loadHandler = async () => {
-    this.contentWindow = this.iframe?.contentWindow as RuntimeWindow;
+    if (!this.contentWindow?.edoms) {
+      this.postEdomsRuntimeReady();
+    }
 
-    this.contentWindow.magic = this.getMagicApi();
+    if (!this.contentWindow) return;
 
     if (this.render) {
       const el = await this.render(this.core);
       if (el) {
-        this.iframe?.contentDocument?.body?.appendChild(el);
+        this.contentWindow.document?.body?.appendChild(el);
       }
     }
 
     this.emit('onload');
 
+    injectStyle(this.contentWindow.document, style);
+  };
+
+  private postEdomsRuntimeReady() {
+    this.contentWindow = this.iframe?.contentWindow as RuntimeWindow;
+
+    this.contentWindow.edoms = this.getEdomsApi();
+
     this.contentWindow.postMessage(
       {
-        tmagicRuntimeReady: true,
+        edomsRuntimeReady: true,
       },
       '*'
     );
-
-    injectStyle(this.contentWindow.document, style);
-  };
+  }
 }

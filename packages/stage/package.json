@@ -1,35 +1,32 @@
 {
-  "version": "1.1.0-beta.2",
-  "name": "@tmagic/stage",
+  "version": "0.0.1",
+  "name": "@edoms/stage",
   "sideEffects": [
     "dist/*"
   ],
-  "main": "dist/tmagic-stage.umd.js",
-  "module": "dist/tmagic-stage.es.js",
-  "types": "dist/types/src/index.d.ts",
+  "main": "dist/edoms-stage.umd.js",
+  "module": "dist/edoms-stage.mjs",
+  "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/tmagic-stage.es.js",
-      "require": "./dist/tmagic-stage.umd.js"
+      "import": "./dist/edoms-stage.mjs",
+      "require": "./dist/edoms-stage.umd.js"
     },
     "./*": "./*"
   },
-  "license": "Apache-2.0",
   "scripts": {
-    "build": "vite build"
+    "build": "npm run build:type && vite build",
+    "build:type": "npm run clear:type && tsc --declaration --emitDeclarationOnly --project tsconfig.build.json",
+    "clear:type": "rimraf ./types"
   },
   "engines": {
     "node": ">=14"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Tencent/tmagic-editor.git"
-  },
   "dependencies": {
+    "@edoms/core": "workspace:^0.0.1",
+    "@edoms/schema": "workspace:^0.0.1",
+    "@edoms/utils": "workspace:^0.0.1",
     "@scena/guides": "^0.17.0",
-    "@tmagic/core": "1.1.0-beta.2",
-    "@tmagic/schema": "1.1.0-beta.2",
-    "@tmagic/utils": "1.1.0-beta.2",
     "events": "^3.3.0",
     "keycon": "^1.1.2",
     "lodash-es": "^4.17.21",
@@ -40,9 +37,9 @@
     "@types/events": "^3.0.0",
     "@types/lodash-es": "^4.17.4",
     "@types/node": "^15.12.4",
+    "rimraf": "^3.0.2",
     "sass": "^1.35.1",
-    "typescript": "^4.3.4",
-    "vite": "^2.9.13",
-    "vite-plugin-dts": "^0.9.6"
+    "typescript": "^4.7.4",
+    "vite": "^3.1.3"
   }
 }

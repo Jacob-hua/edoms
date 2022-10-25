@@ -1,15 +1,15 @@
 import { reactive } from 'vue';
 import { cloneDeep } from 'lodash-es';
 
-import { DEFAULT_EVENTS, DEFAULT_METHODS, EventOption } from '@tmagic/core';
-import { toLine } from '@tmagic/utils';
+import { DEFAULT_EVENTS, DEFAULT_METHODS, EventOption } from '@edoms/core';
+import { toLine } from '@edoms/utils';
 
 import type { ComponentGroup } from '../type';
 
 import BaseService from './BaseService';
 
-const eventMap: Record<string, EventOption[]> = reactive({});
-const methodMap: Record<string, EventOption[]> = reactive({});
+let eventMap: Record<string, EventOption[]> = reactive({});
+let methodMap: Record<string, EventOption[]> = reactive({});
 
 class Events extends BaseService {
   constructor() {
@@ -56,6 +56,12 @@ class Events extends BaseService {
 
   public getMethod(type: string) {
     return cloneDeep(methodMap[type] || DEFAULT_METHODS);
+  }
+
+  public destroy() {
+    eventMap = reactive({});
+    methodMap = reactive({});
+    this.removeAllListeners();
   }
 }
 
