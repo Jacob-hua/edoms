@@ -7,8 +7,12 @@
         </slot>
       </div>
     </div>
-    <slot v-if="loading" name="loading">Loading...</slot>
-    <div v-if="noMore" name="noMore">No more</div>
+    <slot v-if="loading" name="loading">
+      <p>Loading...</p>
+    </slot>
+    <slot v-if="noMore" name="noMore">
+      <p>No more</p>
+    </slot>
   </div>
 </template>
 

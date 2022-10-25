@@ -4,6 +4,12 @@
       <template #default="item">
         {{ item.item }}
       </template>
+      <template #loading>
+        <p>加载中....</p>
+      </template>
+      <template #noMore>
+        <p>没有更多了</p>
+      </template>
     </GridList>
   </div>
 </template>
