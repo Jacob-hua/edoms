@@ -8,8 +8,9 @@
 </template>
 
 <script lang="ts" setup name="CounterView">
-import { useCounterStore } from '../store/counter';
 import { computed } from 'vue';
+
+import { useCounterStore } from '../store/counter';
 
 const counterStore = useCounterStore();
 

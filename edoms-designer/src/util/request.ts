@@ -1,5 +1,6 @@
-import { Request, RequestConfig, AxiosResponse, RequestMethod, ContentType } from '@edoms/utils';
-import { ElMessage, ElLoading } from 'element-plus';
+import { ElLoading, ElMessage } from 'element-plus';
+
+import { AxiosRequestConfig, AxiosResponse, ContentType, Request, RequestConfig, RequestMethod } from '@edoms/utils';
 
 export interface EdomsRequestConfig<T> extends RequestConfig {
   method: RequestMethod;
@@ -33,7 +34,7 @@ const service = new Request({
     'Content-Type': ContentType.JSON,
   },
   interceptors: {
-    requestInterceptors(config) {
+    requestInterceptors(config: AxiosRequestConfig) {
       if (loadingService) {
         loadingService.close();
       }
@@ -44,7 +45,7 @@ const service = new Request({
       });
       return config;
     },
-    requestInterceptorsCatch(error) {
+    requestInterceptorsCatch(error: any) {
       if (loadingService) {
         loadingService.close();
       }
@@ -63,7 +64,7 @@ const service = new Request({
       }
       return response;
     },
-    responseInterceptorsCatch(error) {
+    responseInterceptorsCatch(error: any) {
       const { code, response, config } = error;
       if (!code) {
         return Promise.reject(error);

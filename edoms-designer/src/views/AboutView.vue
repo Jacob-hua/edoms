@@ -7,9 +7,10 @@
 </template>
 
 <script lang="ts" setup name="AboutView">
+import { ref } from 'vue';
+
 import { listApplications } from '@/api/application';
 import { listPages } from '@/api/page';
-import { ref } from 'vue';
 
 const result = ref({});
 

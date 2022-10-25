@@ -1,7 +1,8 @@
+import { type Ref, ref } from 'vue';
+
 import { listApplications } from '@/api/application';
-import { ref, type Ref } from 'vue';
-import { GridViewMenu } from '@/components/type';
 import { ApplicationInfo } from '@/api/application/type';
+import { GridViewMenu } from '@/components/type';
 const splicingImageUrl = (data: Array<ApplicationInfo>): Array<ApplicationInfo & { imgUrl: string }> => {
   return data.map((app) => {
     return {

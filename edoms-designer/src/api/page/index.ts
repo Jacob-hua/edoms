@@ -1,5 +1,7 @@
 import { RequestMethod } from '@edoms/utils';
+
 import { request } from '@/util/request';
+
 import { ListPageInfosReq, ListPageInfosRes } from './type';
 
 export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRes> => {

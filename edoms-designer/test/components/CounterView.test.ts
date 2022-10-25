@@ -1,8 +1,10 @@
-import { describe, test, beforeEach, expect } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
 import { mount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
+
 import CounterView from '../../src/components/CounterView.vue';
+
 import { useCounterStore } from './../../src/store/counter';
 
 // 组件测试参考: https://v1.test-utils.vuejs.org/zh
