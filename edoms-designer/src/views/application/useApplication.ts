@@ -55,7 +55,7 @@ const operation = (data: ApplicationInfo) => {
   console.log(data)
 }
 const setting = ({ push }: Router, data: ApplicationInfo) => {
-  push('/appSetting')
+  push('/app-setting')
   useAppInfoStore().$patch({
     appInfo: data,
   })

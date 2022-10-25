@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/application/index.vue'),
       },
       {
-        path: 'appSetting',
+        path: 'app-setting',
         name: 'appSetting',
         component: () => import('@/views/applicationSetting/index.vue'),
         props: true,
