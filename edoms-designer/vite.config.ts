@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
       port: 8890,
       proxy: {
         '/api': {
+          // target: 'http://192.100.4.25:8061',
           target: 'http://k8s.isiact.com/edoms-designtime-service-dev',
           changeOrigin: true,
           rewrite(path) {

@@ -1,8 +1,25 @@
-import { type Ref, ref } from 'vue';
+import { type Ref, isReactive, isRef, reactive, ref, toRaw, watch } from 'vue';
+import { type Router } from 'vue-router';
 
 import { listApplications } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
 import { GridViewMenu } from '@/components/type';
+import { useAppInfoStore } from '@/store/appInfo';
+interface Page {
+  page: number;
+  limit: number;
+}
+
+const pageInfo = reactive<Page>({
+  page: 0,
+  limit: 16,
+});
+
+const listData = ref<Array<ApplicationInfo>>([]);
+const initData = ref<Array<ApplicationInfo>>([]);
+const visible = ref<boolean>(false);
+const totals = ref<string>('');
+
 const splicingImageUrl = (data: Array<ApplicationInfo>): Array<ApplicationInfo & { imgUrl: string }> => {
   return data.map((app) => {
     return {
@@ -11,48 +28,92 @@ const splicingImageUrl = (data: Array<ApplicationInfo>): Array<ApplicationInfo &
     };
   });
 };
-const concatApplications = async (listData: Ref<Array<ApplicationInfo>>) => {
-  const { dataList } = await listApplications({
-    page: 1,
-    limit: 10,
-  });
-  listData.value = listData.value.concat(splicingImageUrl(dataList));
+const concatApplications = async (data: Ref<Array<ApplicationInfo>> | ApplicationInfo[], pageInfo: Page) => {
+  pageInfo.page += 1;
+  const { dataList, count } = await listApplications(pageInfo);
+  totals.value = count;
+  if (isRef(data)) {
+    listData.value = data.value ? data.value.concat(splicingImageUrl(dataList)) : splicingImageUrl(dataList);
+  }
+  if (isReactive(data)) {
+    listData.value = toRaw(data as any).concat(splicingImageUrl(dataList));
+  }
 };
-const loadMore = (data: any) => {
-  concatApplications(data);
-};
-const add = () => {
-  console.log('add');
+const checkNoMore = (data: any): boolean => {
+  return String(data.length) === totals.value;
 };
 
-export const useApplication = () => {
-  const listData = ref<Array<ApplicationInfo>>([]);
+const loadMore = (data: any) => {
+  if (checkNoMore(data)) {
+    return;
+  }
+  concatApplications(data, pageInfo);
+};
+const add = () => {
+  visible.value = true;
+};
+const operation = (data: ApplicationInfo) => {
+  console.log(data);
+};
+const setting = ({ push }: Router, data: ApplicationInfo) => {
+  push('/app-setting');
+  useAppInfoStore().$patch({
+    appInfo: data,
+  });
+};
+const resetPageInfo = (pageInfo: Page) => {
+  pageInfo.page = 0;
+  pageInfo.limit = 16;
+};
+enum IconEnum {
+  OPERATION = 'Operation',
+  SETTING = 'Setting',
+}
+
+const PanelActionEffect: Record<string, Function> = {
+  [IconEnum.OPERATION]: operation,
+  [IconEnum.SETTING]: setting,
+};
+export const useApplication = (router: Router) => {
   const panelMenuList = ref<GridViewMenu<ApplicationInfo>[]>([
     {
       iconSize: 20,
       iconColor: '#000',
-      icon: 'Operation',
+      icon: IconEnum.OPERATION,
       name: '发布应用',
-      action: (data) => {
-        console.log(data);
-        return '123';
+      action: function (data) {
+        PanelActionEffect[this.icon](router, data);
       },
     },
     {
       iconSize: 20,
       iconColor: '#000',
-      icon: 'Operation',
+      icon: IconEnum.SETTING,
       name: '设置',
-      action: () => {
-        console.log('设置');
+      action: function (data) {
+        PanelActionEffect[this.icon](router, data);
       },
     },
   ]);
-  concatApplications(listData);
+  watch(
+    () => useAppInfoStore().appInfo.thumbnailId,
+    () => {
+      resetPageInfo(pageInfo);
+      concatApplications(ref<ApplicationInfo[]>([]), pageInfo);
+    },
+    {
+      immediate: true,
+      deep: true,
+    }
+  );
   return {
     panelMenuList,
     listData,
+    pageInfo,
     loadMore,
     add,
+    visible,
+    initData,
+    concatApplications,
   };
 };
