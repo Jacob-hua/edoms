@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <el-tooltip popper-class="popperStyle" :placement="placement" :content="content" :effect="effect">
-      <span class="text-hidden">{{ content }}</span>
+    <el-tooltip popper-class="popper" :placement="placement" :content="content" :effect="effect">
+      <span class="content">{{ content }}</span>
     </el-tooltip>
   </div>
 </template>
@@ -26,7 +26,7 @@ withDefaults(
 </script>
 
 <style lang="scss">
-.text-hidden {
+.content {
   text-align: center;
   width: v-bind('contentStyle.width');
   color: v-bind('contentStyle.color');
@@ -38,7 +38,8 @@ withDefaults(
   overflow: hidden;
   word-break: break-all;
 }
-.popperStyle {
+
+.popper {
   position: relative !important;
   white-space: nowrap;
 }
