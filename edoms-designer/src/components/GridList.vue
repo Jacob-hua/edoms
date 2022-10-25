@@ -2,13 +2,13 @@
   <div class="infinite-list-wrapper" style="overflow: auto">
     <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled">
       <div v-for="i in count" :key="i">
-        <slot name="item">
+        <slot :item="i">
           {{ i }}
         </slot>
       </div>
     </div>
-    <div v-if="loading">Loading...</div>
-    <div v-if="noMore">No more</div>
+    <slot v-if="loading" name="loading">Loading...</slot>
+    <div v-if="noMore" name="noMore">No more</div>
   </div>
 </template>
 
@@ -28,9 +28,9 @@ withDefaults(
   }
 );
 
-const count = ref(10);
+const count = ref(15);
 const loading = ref(false);
-const noMore = computed(() => count.value >= 20);
+const noMore = computed(() => count.value >= 30);
 const disabled = computed(() => loading.value || noMore.value);
 
 const load = () => {

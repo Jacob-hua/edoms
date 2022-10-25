@@ -1,6 +1,10 @@
 <template>
   <div>
-    <GridList class="test" column-gap="20px" row-gap="20px" />
+    <GridList class="test" column-gap="20px" row-gap="20px">
+      <template #default="item">
+        {{ item.item }}
+      </template>
+    </GridList>
   </div>
 </template>
 
