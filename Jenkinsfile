@@ -43,6 +43,7 @@ pipeline {
 				npm install -g pnpm
 				pnpm bootstrap
 				pnpm build:designer
+				pnpm build:playground
 				"""
 			}
 		}
