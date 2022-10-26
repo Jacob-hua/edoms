@@ -28,12 +28,13 @@ type RequestFunc = (data: GridListItem[]) => GridListItem[];
 
 const props = withDefaults(
   defineProps<{
-    request: RequestFunc;
+    request?: RequestFunc;
     itemMinWidth?: string;
     rowGap?: string;
     columnGap?: string;
   }>(),
   {
+    request: () => () => [],
     itemMinWidth: () => '200px',
     rowGap: () => '0px',
     columnGap: () => '0px',
@@ -41,7 +42,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (event: 'loadMore'): void;
+  (event: 'loaded'): void;
 }>();
 
 const data = reactive<GridListItem[]>([]);
@@ -51,14 +52,15 @@ const noMore = ref(false);
 const disabled = computed(() => loading.value || noMore.value);
 
 const load = async () => {
-  emit('loadMore');
   loading.value = true;
   const newData = await Promise.resolve(props.request(data));
   loading.value = false;
   if (newData.length === 0) {
     noMore.value = true;
+  } else {
+    data.push(...newData);
   }
-  data.push(...newData);
+  emit('loaded');
 };
 </script>
 
