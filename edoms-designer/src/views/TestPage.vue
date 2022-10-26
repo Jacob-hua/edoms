@@ -1,8 +1,10 @@
 <template>
   <div>
-    <GridList class="test" column-gap="20px" row-gap="20px" :request="loadData">
+    <GridList ref="gridList" class="test" column-gap="20px" row-gap="20px" :page-size="5" :request="loadData">
       <template #default="{ item }">
-        {{ item }}
+        <div class="item">
+          {{ item }}
+        </div>
       </template>
       <template #loading>
         <p>加载中....</p>
@@ -11,49 +13,36 @@
         <p>没有更多了</p>
       </template>
     </GridList>
+    <el-button @click="refreshGridList">强制刷新</el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import GridList, { GridListItem } from '@/components/GridList.vue';
+import { ref } from 'vue';
 
-let i = 0;
+import { listApplications } from '@/api/application';
+import GridList, { GridListItem, RequestFunc } from '@/components/GridList.vue';
 
-const loadData = (): GridListItem[] => {
-  i++;
-  console.log(i);
+const gridList = ref();
 
-  if (i < 100) {
-    return [
-      {
-        label: i + 1,
-      },
-      {
-        label: i + 2,
-      },
-      {
-        label: i + 3,
-      },
-      {
-        label: i + 4,
-      },
-      {
-        label: i + 5,
-      },
-      {
-        label: i + 6,
-      },
-      {
-        label: i + 7,
-      },
-    ];
-  }
-  return [];
+const loadData: RequestFunc = async ({ pageSize, current }) => {
+  const { dataList, count } = await listApplications({ page: current, limit: pageSize });
+  return {
+    data: dataList as GridListItem[],
+    total: Number(count),
+  };
+};
+
+const refreshGridList = () => {
+  gridList.value?.reload();
 };
 </script>
 
 <style lang="scss" scoped>
 .test {
   height: 200px;
+}
+.item {
+  background-color: aqua;
 }
 </style>

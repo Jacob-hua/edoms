@@ -1,5 +1,5 @@
 <template>
-  <div class="infinite-list-wrapper" style="overflow: auto">
+  <div v-if="isAlive" class="infinite-list-wrapper" style="overflow: auto">
     <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
       <slot name="operation"></slot>
       <div v-for="(item, index) in data" :key="index">
@@ -18,23 +18,40 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 
 export interface GridListItem {
   label?: string | number;
 }
 
-type RequestFunc = (data: GridListItem[]) => GridListItem[];
+export interface Pagination {
+  pageSize: number;
+  current: number;
+}
+
+export interface RequestResult {
+  data: GridListItem[];
+  total: number;
+}
+
+export type RequestFunc = (pagination: Pagination) => Promise<RequestResult> | RequestResult;
 
 const props = withDefaults(
   defineProps<{
+    dataSource?: GridListItem[];
+    pageSize?: number;
     request?: RequestFunc;
     itemMinWidth?: string;
     rowGap?: string;
     columnGap?: string;
   }>(),
   {
-    request: () => () => [],
+    dataSource: () => [],
+    pageSize: () => 5,
+    request: () => () => ({
+      data: [],
+      total: 0,
+    }),
     itemMinWidth: () => '200px',
     rowGap: () => '0px',
     columnGap: () => '0px',
@@ -45,23 +62,49 @@ const emit = defineEmits<{
   (event: 'loaded'): void;
 }>();
 
-const data = reactive<GridListItem[]>([]);
-
+const isAlive = ref(true);
 const loading = ref(false);
 const noMore = ref(false);
+const data = ref<GridListItem[]>(props.dataSource);
+const total = ref(0);
+const current = ref(1);
+const pages = computed(() => Math.ceil(total.value / props.pageSize));
 const disabled = computed(() => loading.value || noMore.value);
+
+const reload = () => {
+  isAlive.value = false;
+  nextTick(() => {
+    isAlive.value = true;
+    data.value = [];
+    total.value = 0;
+    current.value = 1;
+    noMore.value = false;
+    load();
+  });
+};
 
 const load = async () => {
   loading.value = true;
-  const newData = await Promise.resolve(props.request(data));
+  const result = await Promise.resolve(
+    props.request({
+      pageSize: props.pageSize,
+      current: current.value,
+    })
+  );
   loading.value = false;
-  if (newData.length === 0) {
+  total.value = result.total;
+  current.value += 1;
+  if (result.data.length === 0 || current.value > pages.value) {
     noMore.value = true;
   } else {
-    data.push(...newData);
+    data.value.push(...result.data);
   }
   emit('loaded');
 };
+
+defineExpose({
+  reload,
+});
 </script>
 
 <style lang="scss" scoped>
