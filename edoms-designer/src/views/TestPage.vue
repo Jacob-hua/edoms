@@ -14,6 +14,28 @@
       </template>
     </GridList>
     <el-button @click="refreshGridList">强制刷新</el-button>
+    <PopMenu @change="handlePopClick">
+      <template #header>
+        <h1>Title</h1>
+      </template>
+      <template #footer>
+        <h1>Footer</h1>
+      </template>
+      <PopMenuOptGroup label="分组1" disabled>
+        <PopMenuOption label="测试1" value="1"></PopMenuOption>
+        <PopMenuOption label="测试2" value="2" disabled></PopMenuOption>
+        <template #groupFooter>
+          {{ '测试' }}
+        </template>
+      </PopMenuOptGroup>
+      <PopMenuOptGroup label="分组2">
+        <PopMenuOption label="测试1" value="1"></PopMenuOption>
+        <PopMenuOption label="测试2" value="2" disabled></PopMenuOption>
+        <template #groupFooter>
+          {{ '测试' }}
+        </template>
+      </PopMenuOptGroup>
+    </PopMenu>
   </div>
 </template>
 
@@ -22,6 +44,9 @@ import { ref } from 'vue';
 
 import { listApplications } from '@/api/application';
 import GridList, { GridListItem, RequestFunc } from '@/components/GridList.vue';
+import PopMenu from '@/components/PopMenu.vue';
+import PopMenuOptGroup from '@/components/PopMenuOptGroup.vue';
+import PopMenuOption from '@/components/PopMenuOption.vue';
 
 const gridList = ref();
 
@@ -35,6 +60,10 @@ const loadData: RequestFunc = async ({ pageSize, current }) => {
 
 const refreshGridList = () => {
   gridList.value?.reload();
+};
+
+const handlePopClick = (selectedValue: number | string) => {
+  console.log('ddd', selectedValue);
 };
 </script>
 
