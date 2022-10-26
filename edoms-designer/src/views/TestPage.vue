@@ -1,16 +1,18 @@
 <template>
   <div>
-    <GridList ref="gridList" class="test" column-gap="20px" row-gap="20px" :page-size="5" :request="loadData">
+    <GridList
+      ref="gridList"
+      class="test"
+      column-gap="20px"
+      row-gap="20px"
+      :page-size="5"
+      :item-min-width="'500px'"
+      :request="loadData"
+    >
       <template #default="{ item }">
         <div class="item">
           {{ item }}
         </div>
-      </template>
-      <template #loading>
-        <p>加载中....</p>
-      </template>
-      <template #noMore>
-        <p>没有更多了</p>
       </template>
     </GridList>
     <el-button @click="refreshGridList">强制刷新</el-button>
