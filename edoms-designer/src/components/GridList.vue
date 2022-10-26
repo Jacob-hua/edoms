@@ -75,7 +75,7 @@ const reload = () => {
   isAlive.value = false;
   nextTick(() => {
     isAlive.value = true;
-    data.value = [];
+    data.value = [...props.dataSource];
     total.value = 0;
     current.value = 1;
     noMore.value = false;
