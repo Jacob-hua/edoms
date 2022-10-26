@@ -1,9 +1,10 @@
 <template>
   <div class="infinite-list-wrapper" style="overflow: auto">
-    <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled">
-      <div v-for="i in count" :key="i">
-        <slot :item="i">
-          {{ i }}
+    <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
+      <slot name="operation"></slot>
+      <div v-for="(item, index) in data" :key="index">
+        <slot :item="item" :index="index">
+          {{ item }}
         </slot>
       </div>
     </div>
@@ -17,10 +18,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
-withDefaults(
+export interface GridListItem {
+  label?: string | number;
+}
+
+type RequestFunc = (data: GridListItem[]) => GridListItem[];
+
+const props = withDefaults(
   defineProps<{
+    request: RequestFunc;
     itemMinWidth?: string;
     rowGap?: string;
     columnGap?: string;
@@ -32,17 +40,25 @@ withDefaults(
   }
 );
 
-const count = ref(15);
+const emit = defineEmits<{
+  (event: 'loadMore'): void;
+}>();
+
+const data = reactive<GridListItem[]>([]);
+
 const loading = ref(false);
-const noMore = computed(() => count.value >= 30);
+const noMore = ref(false);
 const disabled = computed(() => loading.value || noMore.value);
 
-const load = () => {
+const load = async () => {
+  emit('loadMore');
   loading.value = true;
-  setTimeout(() => {
-    count.value += 2;
-    loading.value = false;
-  }, 2000);
+  const newData = await Promise.resolve(props.request(data));
+  loading.value = false;
+  if (newData.length === 0) {
+    noMore.value = true;
+  }
+  data.push(...newData);
 };
 </script>
 
