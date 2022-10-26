@@ -1,9 +1,19 @@
 <template>
-  <el-popover placement="bottom" trigger="click">
+  <el-popover
+    :placement="placement"
+    :trigger="trigger"
+    :disabled="disabled"
+    @show="handlePopShow"
+    @hide="handlePopHide"
+  >
     <template #reference>
-      <slot name="reference">
-        <el-button>菜单</el-button>
-      </slot>
+      <div :class="referenceClass">
+        <slot name="reference">
+          <span class="el-icon">
+            <component :is="reference" />
+          </span>
+        </slot>
+      </div>
     </template>
     <div>
       <div>
@@ -18,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { provide } from 'vue';
+import { computed, provide } from 'vue';
 
 import { throttle } from '@edoms/utils';
 
@@ -30,22 +40,65 @@ const props = withDefaults(
   defineProps<{
     disabled?: boolean;
     clickDelay?: number;
+    reference?: string;
+    trigger?: string;
+    placement?: string;
   }>(),
   {
     disabled: () => false,
     clickDelay: () => 0,
+    reference: () => 'More',
+    trigger: () => 'click',
+    placement: () => 'bottom',
   }
 );
 
 const emit = defineEmits<{
-  (event: 'change', selectedValue: string | number): void;
+  (event: 'menuClick', selectedValue: string | number): void;
+  (event: 'show'): void;
+  (event: 'hide'): void;
 }>();
 
+const referenceClass = computed(() => (props.disabled ? ['reference', 'reference-disabled'] : ['reference']));
+
 const handleClick = (selectedValue: string | number) => {
-  emit('change', selectedValue);
+  emit('menuClick', selectedValue);
+};
+
+const handlePopShow = () => {
+  emit('show');
+};
+
+const handlePopHide = () => {
+  emit('hide');
 };
 
 provide<PopMenuProvide>('popMenu', {
   handleClick: throttle(handleClick, props.clickDelay),
 });
 </script>
+
+<style lang="scss" scoped>
+.reference {
+  display: inline-block;
+  cursor: pointer;
+  margin: 1em;
+}
+.reference-disabled {
+  cursor: auto;
+  color: black;
+}
+.el-icon {
+  --color: inherit;
+  height: 1em;
+  width: 1em;
+  line-height: 1em;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  fill: currentColor;
+  color: var(--color);
+  font-size: inherit;
+}
+</style>

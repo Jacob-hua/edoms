@@ -14,7 +14,7 @@
       </template>
     </GridList>
     <el-button @click="refreshGridList">强制刷新</el-button>
-    <PopMenu @change="handlePopClick">
+    <PopMenu trigger="hover" @menu-click="handlePopMenuClick">
       <template #header>
         <h1>Title</h1>
       </template>
@@ -62,7 +62,7 @@ const refreshGridList = () => {
   gridList.value?.reload();
 };
 
-const handlePopClick = (selectedValue: number | string) => {
+const handlePopMenuClick = (selectedValue: number | string) => {
   console.log('ddd', selectedValue);
 };
 </script>

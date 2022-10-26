@@ -49,6 +49,7 @@ const classNames = computed(() =>
 }
 
 .pop-menu-option-disabled {
+  cursor: auto;
   color: aliceblue;
   background-color: azure;
 }
