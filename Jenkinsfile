@@ -7,7 +7,7 @@ pipeline {
     environment {
 		service="edoms-application-ui"
 		suffix="edoms-designtime-dev"
-		suffix1="playground"
+		suffix1="edoms-playground"
 		def workspace = pwd()
 		namespace="edoms-dev"
 		Branch="${env.gitlabTargetBranch}"
