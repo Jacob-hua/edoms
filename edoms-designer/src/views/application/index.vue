@@ -29,7 +29,7 @@
         </template>
       </GridList>
     </div>
-    <NewApp v-if="visible" v-model:visible="visible" @refresh-list="handleAppCreated"></NewApp>
+    <NewApplication v-if="visible" v-model:visible="visible" @refresh-list="handleAppCreated"></NewApplication>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ import GridList, { RequestFunc } from '@/components/GridList.vue';
 import LongText from '@/components/LongText.vue';
 
 import ApplicationItem from './component/ApplicationItem.vue';
-import NewApp from './component/NewApp.vue';
+import NewApplication from './component/NewApplication.vue';
 
 const gridList = ref();
 
