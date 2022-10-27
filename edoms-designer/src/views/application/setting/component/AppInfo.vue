@@ -91,7 +91,7 @@ import { toRefs } from 'vue';
 // import { useAppInfoStore } from '@/store/appInfo'
 import { ApplicationInfo } from '@/api/application/type';
 import { useUpload } from '@/views/application/component/useUpload';
-import { useAppInfo } from '@/views/applicationSetting/component/useAppInfo';
+import { useAppInfo } from '@/views/application/setting/component/useAppInfo';
 const emit = defineEmits<{
   (event: 'back'): void;
 }>();
