@@ -86,17 +86,23 @@
 </template>
 
 <script lang="ts" setup name="appInfo">
-import { useAppInfoStore } from '@/store/appInfo';
+import { toRefs } from 'vue';
+
+// import { useAppInfoStore } from '@/store/appInfo'
+import { ApplicationInfo } from '@/api/application/type';
 import { useUpload } from '@/views/application/component/useUpload';
 import { useAppInfo } from '@/views/applicationSetting/component/useAppInfo';
 const emit = defineEmits<{
   (event: 'back'): void;
 }>();
-const { appInfo } = useAppInfoStore();
+const props = defineProps<{
+  appInfo: ApplicationInfo;
+}>();
+const { appInfo } = toRefs(props);
 const { formRef, update } = useAppInfo(emit);
 const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } =
-  useUpload(appInfo, [
-    { url: `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${appInfo.thumbnailId}&isPreview=true` },
+  useUpload(appInfo.value, [
+    { url: `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${appInfo.value?.thumbnailId}&isPreview=true` },
   ]);
 </script>
 

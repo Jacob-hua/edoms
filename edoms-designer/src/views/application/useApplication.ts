@@ -1,10 +1,10 @@
-import { type Ref, isReactive, isRef, reactive, ref, toRaw, watch } from 'vue';
+import { type Ref, isReactive, isRef, reactive, ref, toRaw } from 'vue';
 import { type Router } from 'vue-router';
 
 import { listApplications } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
 import { GridViewMenu } from '@/components/type';
-import { useAppInfoStore } from '@/store/appInfo';
+// import { useAppInfoStore } from '@/store/appInfo'
 interface Page {
   page: number;
   limit: number;
@@ -55,11 +55,16 @@ const add = () => {
 const operation = (data: ApplicationInfo) => {
   console.log(data);
 };
-const setting = ({ push }: Router, data: ApplicationInfo) => {
-  push('/app-setting');
-  useAppInfoStore().$patch({
-    appInfo: data,
+const setting = ({ push }: Router, { applicationId }: ApplicationInfo) => {
+  push({
+    path: '/app-setting',
+    query: {
+      applicationId,
+    },
   });
+  // useAppInfoStore().$patch({
+  //   appInfo: data,
+  // })
 };
 const resetPageInfo = (pageInfo: Page) => {
   pageInfo.page = 0;
@@ -95,17 +100,17 @@ export const useApplication = (router: Router) => {
       },
     },
   ]);
-  watch(
-    () => useAppInfoStore().appInfo.thumbnailId,
-    () => {
-      resetPageInfo(pageInfo);
-      concatApplications(ref<ApplicationInfo[]>([]), pageInfo);
-    },
-    {
-      immediate: true,
-      deep: true,
-    }
-  );
+  // watch(
+  // () => useAppInfoStore().appInfo.thumbnailId,
+  // () => {
+  resetPageInfo(pageInfo);
+  concatApplications(ref<ApplicationInfo[]>([]), pageInfo);
+  //   },
+  //   {
+  //     immediate: true,
+  //     deep: true,
+  //   }
+  // )
   return {
     panelMenuList,
     listData,
