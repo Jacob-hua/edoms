@@ -14,16 +14,16 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        redirect: '/app',
+        redirect: '/application',
       },
       {
-        path: '/app',
-        name: 'app',
+        path: '/application',
+        name: 'Application',
         component: () => import('@/views/application/index.vue'),
       },
       {
-        path: '/app/setting',
-        name: 'appSetting',
+        path: '/application/setting',
+        name: 'ApplicationSetting',
         component: () => import('@/views/application/setting/index.vue'),
       },
       {

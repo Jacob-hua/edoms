@@ -57,7 +57,7 @@ const operation = (data: ApplicationInfo) => {
 };
 const setting = ({ push }: Router, { applicationId }: ApplicationInfo) => {
   push({
-    path: '/app/setting',
+    path: '/application/setting',
     query: {
       applicationId,
     },
