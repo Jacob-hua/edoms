@@ -29,7 +29,7 @@
         </template>
       </GridList>
     </div>
-    <NewApplication v-if="visible" v-model:visible="visible" @refresh-list="handleAppCreated"></NewApplication>
+    <NewApplication v-model:visible="visible" @submitted="handleAppCreated"></NewApplication>
   </div>
 </template>
 
