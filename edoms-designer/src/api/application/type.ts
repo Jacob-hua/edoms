@@ -2,8 +2,11 @@ export interface ApplicationInfo {
   applicationId: string;
   name: string;
   createBy: string;
+  description: string;
+  serviceAddress: string;
   createTime: string;
   thumbnailId: string;
+  tenantId: string;
 }
 
 export interface ListApplicationsReq {

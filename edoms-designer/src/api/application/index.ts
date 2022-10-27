@@ -2,7 +2,14 @@ import { RequestMethod } from '@edoms/utils';
 
 import { EdomsResponse, request } from '@/util/request';
 
-import { AppForm, CreateAppRes, FileUploadRes, ListApplicationsReq, ListApplicationsRes } from './type';
+import {
+  AppForm,
+  ApplicationInfo,
+  CreateAppRes,
+  FileUploadRes,
+  ListApplicationsReq,
+  ListApplicationsRes,
+} from './type';
 
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
@@ -66,6 +73,32 @@ export const updateApplication = async (data: AppForm): Promise<EdomsResponse<st
         errorMsg: '',
       },
       result: '',
+    };
+  }
+};
+export const getAppInfo = async (data: { applicationId: string }): Promise<EdomsResponse<ApplicationInfo>> => {
+  try {
+    return await request<{ applicationId: string }, ApplicationInfo>({
+      url: 'application/applicationInfo',
+      method: RequestMethod.GET,
+      data,
+    });
+  } catch (error) {
+    return {
+      errorInfo: {
+        errorCode: '',
+        errorMsg: '',
+      },
+      result: {
+        applicationId: '',
+        createBy: '',
+        createTime: '',
+        description: '',
+        name: '',
+        serviceAddress: '',
+        tenantId: '',
+        thumbnailId: '',
+      },
     };
   }
 };

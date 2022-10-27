@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header-top">
       <el-icon class="header-icon" :size="23" @click="goBack"><ArrowLeft /></el-icon>
-      <span>{{ name }}</span>
+      <span>{{ appInfo.name }}</span>
     </div>
     <section>
       <div class="section-left">
@@ -14,7 +14,7 @@
                 <span>应用信息</span>
               </span>
             </template>
-            <AppInfo @back="goBack" />
+            <AppInfo v-if="appInfoVisible" :app-info="appInfo" @back="goBack" />
           </el-tab-pane>
           <el-tab-pane>
             <template #label>
@@ -32,22 +32,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
-
-import { useAppInfoStore } from '@/store/appInfo';
+import { useRoute, useRouter } from 'vue-router';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
 import AppInfo from './component/AppInfo.vue';
-const { go } = useRouter();
-const appInfoStore = useAppInfoStore();
-const {
-  appInfo: { name },
-} = appInfoStore;
+import { useSetting } from './useSetting';
 
-const goBack = () => {
-  go(-1);
-  appInfoStore.$reset();
-};
+const { appInfo, appInfoVisible, goBack } = useSetting(useRouter(), useRoute());
 </script>
 
 <style scoped lang="scss">
