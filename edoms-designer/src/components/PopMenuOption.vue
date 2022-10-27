@@ -14,15 +14,17 @@ import { PopMenuOptGroupProvide } from './PopMenuOptGroup.vue';
 
 const props = withDefaults(
   defineProps<{
-    label: string;
     value: string | number;
+    label?: string;
     disabled?: boolean;
   }>(),
-  {}
+  {
+    label: '',
+  }
 );
 
-const popMenu = inject<PopMenuProvide>('popMenu');
-const popMenuOptGroup = inject<PopMenuOptGroupProvide>('popMenuOptGroup');
+const popMenu = inject<PopMenuProvide>('popMenu', {});
+const popMenuOptGroup = inject<PopMenuOptGroupProvide>('popMenuOptGroup', {});
 
 const handleClick = () => {
   if (props.disabled) {
@@ -31,7 +33,7 @@ const handleClick = () => {
   if (popMenuOptGroup?.disabled) {
     return;
   }
-  if (popMenu) {
+  if (popMenu && typeof popMenu.handleClick === 'function') {
     popMenu.handleClick(props.value);
   }
 };

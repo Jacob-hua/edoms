@@ -7,6 +7,7 @@ export interface ApplicationInfo {
   createTime: string;
   thumbnailId: string;
   tenantId: string;
+  [key: string]: any;
 }
 
 export interface ListApplicationsReq {

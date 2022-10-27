@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="header-top">
-      <el-icon class="header-icon" :size="23" @click="goBack"><ArrowLeft /></el-icon>
+    <div class="header-top" @click="goBack">
+      <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
       <span>{{ appInfo.name }}</span>
     </div>
     <section>
