@@ -16,7 +16,7 @@
 import { provide } from 'vue';
 
 export interface PopMenuOptGroupProvide {
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 const props = withDefaults(

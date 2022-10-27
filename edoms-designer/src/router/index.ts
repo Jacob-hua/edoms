@@ -13,25 +13,18 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/layout/index.vue'),
     children: [
       {
-        path: '/',
+        path: '',
+        redirect: '/application',
+      },
+      {
+        path: '/application',
+        name: 'Application',
         component: () => import('@/views/application/index.vue'),
       },
       {
-        path: 'app',
-        name: 'app',
-        component: () => import('@/views/application/index.vue'),
-      },
-      {
-        path: 'app-setting',
-        name: 'appSetting',
-        component: () => import('@/views/applicationSetting/index.vue'),
-        props: true,
-      },
-      {
-        path: 'test',
-        name: 'test',
-        component: () => import('@/views/TestPage.vue'),
-        props: true,
+        path: '/application/setting',
+        name: 'ApplicationSetting',
+        component: () => import('@/views/application-setting/index.vue'),
       },
     ],
   },

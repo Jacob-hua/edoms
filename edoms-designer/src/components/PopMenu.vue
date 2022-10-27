@@ -33,7 +33,7 @@ import { computed, provide } from 'vue';
 import { throttle } from '@edoms/utils';
 
 export interface PopMenuProvide {
-  handleClick: (selectedValue: string | number) => void;
+  handleClick?: (selectedValue: string | number) => void;
 }
 
 const props = withDefaults(

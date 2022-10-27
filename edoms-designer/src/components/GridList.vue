@@ -20,27 +20,23 @@
 <script lang="ts" setup>
 import { computed, nextTick, ref } from 'vue';
 
-export interface GridListItem {
-  label?: string | number;
-}
-
 export interface Pagination {
   pageSize: number;
   current: number;
 }
 
-export interface RequestResult {
-  data: GridListItem[];
+export interface RequestResult<T> {
+  data: T[];
   total: number;
 }
 
-export type RequestFunc = (pagination: Pagination) => Promise<RequestResult> | RequestResult;
+export type RequestFunc<T> = (pagination: Pagination) => Promise<RequestResult<T>> | RequestResult<T>;
 
 const props = withDefaults(
   defineProps<{
-    dataSource?: GridListItem[];
+    dataSource?: any[];
     pageSize?: number;
-    request?: RequestFunc;
+    request?: RequestFunc<any>;
     itemMinWidth?: string;
     rowGap?: string;
     columnGap?: string;
@@ -65,7 +61,7 @@ const emit = defineEmits<{
 const isAlive = ref(true);
 const loading = ref(false);
 const noMore = ref(false);
-const data = ref<GridListItem[]>(props.dataSource);
+const data = ref(props.dataSource);
 const total = ref(0);
 const current = ref(1);
 const pages = computed(() => Math.ceil(total.value / props.pageSize));
@@ -75,7 +71,7 @@ const reload = () => {
   isAlive.value = false;
   nextTick(() => {
     isAlive.value = true;
-    data.value = [...props.dataSource];
+    data.value.length = 0;
     total.value = 0;
     current.value = 1;
     noMore.value = false;
