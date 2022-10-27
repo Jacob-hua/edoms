@@ -2,45 +2,73 @@
   <div class="container">
     <div class="container-left">
       <div class="user-info">
-        <img
-          alt=""
-          src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202005%2F02%2F20200502185802_FuFU2.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666144323&t=9f3d6e4acb3a5c8ca6b7bdfcdfc403fa"
-        />
+        <img alt="" src="" />
         <LongText :content-style="{ marginBottom: '20px' }" effect="dark" content="王麻子"></LongText>
       </div>
     </div>
     <div class="container-right">
-      <GridGroup
-        :title-props="{ effect: 'dark' }"
-        :spacing="{ horizontal: '35px', vertical: '15px' }"
-        height="850px"
-        :menus="panelMenuList"
-        :data="listData"
-        @load-more="loadMore"
-        @add="add"
+      <GridList
+        ref="gridList"
+        class="grid-list"
+        column-gap="20px"
+        row-gap="20px"
+        item-min-width="250px"
+        :page-size="15"
+        :request="loadData"
       >
-        <template #iconSlot>
-          <MoreFilled />
+        <template #operation>
+          <div class="slot-container" @click="handleCreateApp">
+            <div class="app-add-box">
+              <el-icon :size="55"><Plus /></el-icon>
+            </div>
+            新建应用
+          </div>
         </template>
-      </GridGroup>
+        <template #default="{ item }">
+          <ApplicationItem :application="item"></ApplicationItem>
+        </template>
+      </GridList>
     </div>
-    <NewApp
-      v-if="visible"
-      v-model:visible="visible"
-      @refresh-list="concatApplications(initData, { page: 0, limit: 16 })"
-    ></NewApp>
+    <NewApp v-if="visible" v-model:visible="visible" @refresh-list="handleAppCreated"></NewApp>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
-import GridGroup from '@/components/GridGroup.vue';
+import { listApplications } from '@/api/application';
+import { ApplicationInfo, ListApplicationsRes } from '@/api/application/type';
+import GridList, { RequestFunc } from '@/components/GridList.vue';
 import LongText from '@/components/LongText.vue';
-import { useApplication } from '@/views/application/useApplication';
 
+import ApplicationItem from './component/ApplicationItem.vue';
 import NewApp from './component/NewApp.vue';
-const { panelMenuList, listData, initData, visible, loadMore, add, concatApplications } = useApplication(useRouter());
+
+const gridList = ref();
+
+const visible = ref<boolean>(false);
+
+const loadData: RequestFunc<ApplicationInfo> = async ({ pageSize, current }) => {
+  const { dataList, count }: ListApplicationsRes = await listApplications({
+    page: current,
+    limit: pageSize,
+  });
+  dataList.forEach((item: ApplicationInfo) => {
+    item.imgUrl = `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${item.thumbnailId}&isPreview=true`;
+  });
+  return {
+    data: dataList,
+    total: Number(count),
+  };
+};
+
+const handleCreateApp = () => {
+  visible.value = true;
+};
+
+const handleAppCreated = () => {
+  gridList.value?.reload();
+};
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +97,25 @@ const { panelMenuList, listData, initData, visible, loadMore, add, concatApplica
   }
   .container-right {
     width: 75%;
+    .grid-list {
+      height: 100%;
+    }
   }
+}
+.slot-container {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-add-box {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #000;
 }
 </style>
