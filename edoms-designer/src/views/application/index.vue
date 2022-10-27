@@ -13,7 +13,7 @@
         column-gap="20px"
         row-gap="20px"
         item-min-width="250px"
-        :page-size="15"
+        :page-size="10"
         :request="loadData"
       >
         <template #operation>
@@ -98,7 +98,7 @@ const handleAppCreated = () => {
   .container-right {
     width: 75%;
     .grid-list {
-      height: 100%;
+      height: 760px;
     }
   }
 }
