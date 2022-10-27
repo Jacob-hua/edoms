@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run build:libs && vite --config dev.vite.config.ts",
+    "edoms:entry": "edoms entry",
     "build": "npm run build:libs && npm run build:page && npm run build:playground",
     "build:admin": "npm run build:libs:admin && npm run build:page:admin && npm run build:playground:admin",
     "build:page": "vite build --mode page",
