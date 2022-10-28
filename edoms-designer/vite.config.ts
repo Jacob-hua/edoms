@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { join, resolve } from 'path';
 
 import { defineConfig, loadEnv } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
@@ -14,6 +14,31 @@ export default defineConfig(({ mode }) => {
     plugins: [vue(), vueSetupExtend()],
     build: {
       emptyOutDir: true,
+    },
+    resolve: {
+      alias: [
+        {
+          find: '@',
+          replacement: r('./src'),
+        },
+        {
+          find: /^@edoms\/editor\/src\/theme\/index.scss/,
+          replacement: join(__dirname, '../packages/editor/src/theme/index.scss'),
+        },
+        { find: /^@edoms\/core/, replacement: join(__dirname, '../packages/core/src/index.ts') },
+        { find: /^@edoms\/editor/, replacement: join(__dirname, '../packages/editor/src/index.ts') },
+        { find: /^@edoms\/schema/, replacement: join(__dirname, '../packages/schema/src/index.ts') },
+        { find: /^@edoms\/form/, replacement: join(__dirname, '../packages/form/src/index.ts') },
+        { find: /^@edoms\/stage/, replacement: join(__dirname, '../packages/stage/src/index.ts') },
+        { find: /^@edoms\/utils/, replacement: join(__dirname, '../packages/utils/src/index.ts') },
+        { find: /^@edoms\/design/, replacement: join(__dirname, '../packages/design/src/index.ts') },
+        {
+          find: /^@edoms\/element-plus-adapter/,
+          replacement: join(__dirname, '../packages/element-plus-adapter/src/index.ts'),
+        },
+        { find: /^vue$/, replacement: join(__dirname, 'node_modules/vue/dist/vue.esm-bundler.js') },
+        { find: /^element-plus$/, replacement: join(__dirname, 'node_modules/element-plus/es/index.mjs') },
+      ],
     },
     optimizeDeps: {
       esbuildOptions: {
@@ -41,11 +66,6 @@ export default defineConfig(({ mode }) => {
         },
       },
       open: true,
-    },
-    resolve: {
-      alias: {
-        '@': r('./src'),
-      },
     },
   };
 });
