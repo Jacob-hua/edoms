@@ -48,8 +48,12 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
+      fs: {
+        strict: false,
+      },
       host: '0.0.0.0',
       port: 8890,
+      strictPort: true,
       proxy: {
         '/api': {
           // target: 'http://192.100.4.25:8061',
@@ -60,6 +64,11 @@ export default defineConfig(({ mode }) => {
           },
         },
         '^/edoms/playground/runtime': {
+          target: 'http://127.0.0.1:8078',
+          changeOrigin: true,
+          prependPath: false,
+        },
+        '^/edoms/playground/entry': {
           target: 'http://127.0.0.1:8078',
           changeOrigin: true,
           prependPath: false,
