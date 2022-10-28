@@ -1,6 +1,6 @@
 <template>
   <div class="editor-app">
-    <m-editor
+    <edoms-editor
       ref="editor"
       v-model="value"
       :menu="menu"
@@ -17,7 +17,7 @@
       <template #workspace-content>
         <DeviceGroup v-model="stageRect"></DeviceGroup>
       </template>
-    </m-editor>
+    </edoms-editor>
 
     <el-dialog
       v-model="previewVisible"
