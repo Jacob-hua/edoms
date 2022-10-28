@@ -1,7 +1,9 @@
-export default {
+import { MApp, NodeType } from '@edoms/schema';
+
+const DSL: MApp = {
   id: '75f0extui9d7yksklx27hff8xg',
   name: 'test',
-  type: 'app',
+  type: NodeType.ROOT,
   codeBlocks: {
     code_5336: {
       name: 'getData',
@@ -23,7 +25,7 @@ export default {
   },
   items: [
     {
-      type: 'page',
+      type: NodeType.PAGE,
       id: 'page_299',
       name: 'index',
       title: '',
@@ -270,3 +272,5 @@ export default {
     },
   ],
 };
+
+export default DSL;

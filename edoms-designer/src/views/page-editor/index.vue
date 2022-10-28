@@ -38,7 +38,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
 import { editorService, EdomsEditor, MenuBarData, MoveableOptions } from '@edoms/editor';
-import type { Id, MContainer, MNode } from '@edoms/schema';
+import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { asyncLoadJs } from '@edoms/utils';
@@ -52,7 +52,7 @@ const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
 const editor = ref<InstanceType<typeof EdomsEditor>>();
 const previewVisible = ref(false);
-const value = ref(dsl);
+const value = ref<MApp>(dsl);
 const defaultSelected = ref(dsl.items[0].id);
 const propsValues = ref<Record<string, any>>({});
 const propsConfigs = ref<Record<string, any>>({});

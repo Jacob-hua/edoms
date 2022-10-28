@@ -1,6 +1,8 @@
 import { FolderOpened, Grid, PictureFilled, SwitchButton, Tickets } from '@element-plus/icons-vue';
 
-export default [
+import { ComponentGroup } from '@edoms/editor';
+
+const componentGroupList: ComponentGroup[] = [
   {
     title: '基础容器',
     items: [
@@ -47,6 +49,7 @@ export default [
       {
         icon: Tickets,
         text: '弹窗',
+        type: 'popover',
         data: {
           type: 'overlay',
           style: {
@@ -81,3 +84,5 @@ export default [
     ],
   },
 ];
+
+export default componentGroupList;
