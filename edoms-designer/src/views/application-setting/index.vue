@@ -14,7 +14,7 @@
                 <span>应用信息</span>
               </span>
             </template>
-            <AppInfo v-if="appInfoVisible" :app-info="appInfo" @back="goBack" />
+            <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @back="goBack" />
           </el-tab-pane>
           <el-tab-pane>
             <template #label>
@@ -32,13 +32,42 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+const { go } = useRouter();
+import { LocationQueryValue } from 'vue-router';
+import { ElMessage } from 'element-plus';
+
+import { getAppInfo } from '@/api/application';
+import { ApplicationInfo } from '@/api/application/type';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
-import AppInfo from './component/AppInfo.vue';
-import { useSetting } from './useSetting';
+import BasicInfo from './component/BasicInfo.vue';
 
-const { appInfo, appInfoVisible, goBack } = useSetting(useRouter(), useRoute());
+const appInfoVisible = ref<boolean>(false);
+const appInfo = ref<ApplicationInfo>({
+  applicationId: '',
+  createBy: '',
+  createTime: '',
+  description: '',
+  name: '',
+  serviceAddress: '',
+  tenantId: '',
+  thumbnailId: '',
+});
+const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
+  const { result, errorInfo } = await getAppInfo({ applicationId } as { applicationId: string });
+  if (errorInfo.errorCode) {
+    ElMessage.error(errorInfo.errorMsg);
+    return;
+  }
+  appInfoVisible.value = true;
+  appInfo.value = result;
+};
+const goBack = () => {
+  go(-1);
+};
+getAppDetail(useRoute().query.applicationId);
 </script>
 
 <style scoped lang="scss">

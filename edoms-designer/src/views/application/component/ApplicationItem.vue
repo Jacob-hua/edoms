@@ -5,7 +5,7 @@
       <div class="pop-menu">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
-            <div class="">
+            <div class="pop-menu-item">
               <el-icon>
                 <component :is="menu.icon" />
               </el-icon>
@@ -64,6 +64,13 @@ const handleMenuClick = (value: string | number) => {
 </script>
 
 <style lang="scss" scoped>
+.pop-menu-item {
+  display: flex;
+  align-items: center;
+  span {
+    margin-left: 15px;
+  }
+}
 .app-wrapper {
   display: flex;
   flex-direction: column;
