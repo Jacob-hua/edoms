@@ -14,9 +14,6 @@
       :auto-scroll-into-view="true"
       :stage-rect="stageRect"
     >
-      <template #workspace-content>
-        <DeviceGroup v-model="stageRect"></DeviceGroup>
-      </template>
     </edoms-editor>
 
     <el-dialog
@@ -43,7 +40,6 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { asyncLoadJs } from '@edoms/utils';
 
-import DeviceGroup from '@/components/DeviceGroup.vue';
 import componentGroupList from '@/configs/componentGroupList';
 import dsl from '@/configs/dsl';
 
@@ -58,8 +54,8 @@ const propsValues = ref<Record<string, any>>({});
 const propsConfigs = ref<Record<string, any>>({});
 const eventMethodList = ref<Record<string, any>>({});
 const stageRect = ref({
-  width: 375,
-  height: 817,
+  width: 1200,
+  height: 950,
 });
 
 const previewUrl = computed(
