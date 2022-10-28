@@ -1,42 +1,10 @@
 <template>
   <div class="appInfo">
-    <el-form ref="formRef" :model="appInfo" label-width="80px" class="demo-dynamic">
-      <el-form-item
-        label="名称"
-        prop="name"
-        :rules="[
-          {
-            required: true,
-            message: '请输入应用名称',
-            trigger: 'blur',
-          },
-          {
-            min: 1,
-            max: 20,
-            message: '应用名称长度1-20字符',
-            trigger: 'blur',
-          },
-        ]"
-      >
+    <el-form ref="formRef" :model="appInfo" :rules="rules" label-width="80px" class="demo-dynamic">
+      <el-form-item label="名称" prop="name">
         <el-input v-model="appInfo.name" placeholder="请输入应用名称"></el-input>
       </el-form-item>
-      <el-form-item
-        label="简介"
-        prop="description"
-        :rules="[
-          {
-            required: true,
-            message: '请输入应用简介',
-            trigger: 'blur',
-          },
-          {
-            min: 1,
-            max: 40,
-            message: '应用简介长度1-40字符',
-            trigger: 'blur',
-          },
-        ]"
-      >
+      <el-form-item label="简介" prop="description">
         <el-input
           v-model="appInfo.description"
           type="textarea"
@@ -86,24 +54,80 @@
 </template>
 
 <script lang="ts" setup name="appInfo">
-import { toRefs } from 'vue';
+import { ref, toRefs } from 'vue';
+import { ElMessage, FormInstance } from 'element-plus';
 
-// import { useAppInfoStore } from '@/store/appInfo'
+import { updateApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
+import { AppForm } from '@/api/application/type';
 import { useUpload } from '@/views/application/component/useUpload';
-import { useAppInfo } from '@/views/application-setting/component/useAppInfo';
+
 const emit = defineEmits<{
   (event: 'back'): void;
 }>();
 const props = defineProps<{
   appInfo: ApplicationInfo;
 }>();
+const rules = {
+  name: [
+    {
+      required: true,
+      message: '请输入应用名称',
+      trigger: 'blur',
+    },
+    {
+      min: 1,
+      max: 20,
+      message: '应用名称长度1-20字符',
+      trigger: 'blur',
+    },
+  ],
+  description: [
+    {
+      required: true,
+      message: '请输入应用简介',
+      trigger: 'blur',
+    },
+    {
+      min: 1,
+      max: 40,
+      message: '应用简介长度1-40字符',
+      trigger: 'blur',
+    },
+  ],
+  serviceAddress: [],
+};
 const { appInfo } = toRefs(props);
-const { formRef, update } = useAppInfo(emit);
 const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } =
   useUpload(appInfo.value, [
     { url: `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${appInfo.value?.thumbnailId}&isPreview=true` },
   ]);
+
+const formRef = ref<FormInstance>();
+const updateApp = async ({ applicationId, name, description, thumbnailId, serviceAddress }: AppForm) => {
+  const { errorInfo } = await updateApplication({
+    applicationId,
+    name,
+    description,
+    thumbnailId,
+    serviceAddress,
+  });
+  if (errorInfo.errorCode) {
+    ElMessage.error(errorInfo.errorMsg);
+    return;
+  }
+  ElMessage.success('更新成功');
+};
+const update = async (appInfo: AppForm) => {
+  if (!formRef.value) return;
+  try {
+    await formRef.value?.validate();
+    await updateApp(appInfo);
+    emit('back');
+  } catch (e: any) {
+    console.log(e);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
