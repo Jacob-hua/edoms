@@ -33,7 +33,6 @@
 
 <script lang="ts" setup>
 import { computed, ref, toRaw } from 'vue';
-import { useRouter } from 'vue-router';
 import { Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
@@ -51,7 +50,6 @@ import dsl from '@/configs/dsl';
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
-const router = useRouter();
 const editor = ref<InstanceType<typeof EdomsEditor>>();
 const previewVisible = ref(false);
 const value = ref(dsl);
@@ -72,21 +70,11 @@ const menu: MenuBarData = {
   left: [
     {
       type: 'text',
-      text: 'E-DOMS',
+      text: '页面名称',
     },
   ],
   center: ['delete', 'undo', 'redo', 'guides', 'rule', 'zoom'],
   right: [
-    {
-      type: 'button',
-      text: 'Form Playground',
-      handler: () => router.push('form'),
-    },
-    {
-      type: 'button',
-      text: 'Table Playground',
-      handler: () => router.push('table'),
-    },
     '/',
     {
       type: 'button',
