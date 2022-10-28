@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="m-editor-scroll-viewer-container">
+  <div ref="container" class="edoms-editor-scroll-viewer-container">
     <div ref="el" :style="style">
       <slot></slot>
     </div>

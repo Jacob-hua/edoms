@@ -1,7 +1,7 @@
 <template>
-  <div class="m-editor-empty-panel">
-    <div class="m-editor-empty-content">
-      <div class="m-editor-empty-button" @click="clickHandler">
+  <div class="edoms-editor-empty-panel">
+    <div class="edoms-editor-empty-content">
+      <div class="edoms-editor-empty-button" @click="clickHandler">
         <div>
           <MIcon :icon="Plus"></MIcon>
         </div>

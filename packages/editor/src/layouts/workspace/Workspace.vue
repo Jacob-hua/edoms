@@ -1,5 +1,5 @@
 <template>
-  <div ref="workspace" class="m-editor-workspace" tabindex="-1">
+  <div ref="workspace" class="edoms-editor-workspace" tabindex="-1">
     <slot name="stage">
       <EdomsStage :key="page?.id"></EdomsStage>
     </slot>

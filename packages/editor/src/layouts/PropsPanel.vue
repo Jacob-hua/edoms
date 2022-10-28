@@ -1,10 +1,10 @@
 <template>
-  <div class="m-editor-props-panel">
+  <div class="edoms-editor-props-panel">
     <slot name="props-panel-header"></slot>
     <m-form
       ref="configForm"
-      :class="`m-editor-props-panel ${propsPanelSize}`"
-      :popper-class="`m-editor-props-panel-popper ${propsPanelSize}`"
+      :class="`edoms-editor-props-panel ${propsPanelSize}`"
+      :popper-class="`edoms-editor-props-panel-popper ${propsPanelSize}`"
       :size="propsPanelSize"
       :init-values="values"
       :config="curFormConfig"

@@ -201,7 +201,7 @@ html {
   width: 100%;
   height: 100%;
 
-  .m-editor {
+  .edoms-editor {
     flex: 1;
     height: 100%;
   }

@@ -1,5 +1,5 @@
 <template>
-  <span ref="target" class="m-editor-resizer">
+  <span ref="target" class="edoms-editor-resizer">
     <slot></slot>
   </span>
 </template>
