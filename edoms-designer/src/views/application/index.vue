@@ -43,11 +43,8 @@ import LongText from '@/components/LongText.vue';
 
 import ApplicationItem from './component/ApplicationItem.vue';
 import NewApplication from './component/NewApplication.vue';
-
 const gridList = ref();
-
 const visible = ref<boolean>(false);
-
 const loadData: RequestFunc<ApplicationInfo> = async ({ pageSize, current }) => {
   const { dataList, count }: ListApplicationsRes = await listApplications({
     page: current,
