@@ -1,5 +1,5 @@
 <template>
-  <div class="m-editor-nav-menu" :style="{ height: `${height}px` }">
+  <div class="edoms-editor-nav-menu" :style="{ height: `${height}px` }">
     <div v-for="key in keys" :key="key" :class="`menu-${key}`" :style="`width: ${columnWidth?.[key]}px`">
       <tool-button v-for="(item, index) in buttons[key]" :key="index" :data="item"></tool-button>
     </div>

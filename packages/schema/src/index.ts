@@ -63,6 +63,7 @@ export interface CodeBlockContent {
   name: string;
   /** 代码块内容 */
   content: any;
+  [key: string]: any;
 }
 export interface PastePosition {
   left?: number;

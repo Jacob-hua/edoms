@@ -35,8 +35,8 @@
           v-if="!isEmpty(codeConfig)"
           :class="[
             mode === CodeEditorMode.LIST
-              ? 'm-editor-code-block-editor-panel-list-mode'
-              : 'm-editor-code-block-editor-panel',
+              ? 'edoms-editor-code-block-editor-panel-list-mode'
+              : 'edoms-editor-code-block-editor-panel',
           ]"
         >
           <slot :id="id" name="code-block-edit-panel-header"></slot>
@@ -47,11 +47,11 @@
                 <ElInput v-if="codeConfig" v-model="codeConfig.name" class="code-name-input" :disabled="!editable" />
               </div>
             </template>
-            <div class="m-editor-wrapper">
+            <div class="edoms-editor-wrapper">
               <edoms-code-editor
                 v-if="codeConfig"
                 ref="codeEditor"
-                class="m-editor-container"
+                class="edoms-editor-container"
                 :init-values="`${codeConfig.content}`"
                 :options="{
                   tabSize: 2,
@@ -61,11 +61,11 @@
                 }"
                 @save="saveCode"
               ></edoms-code-editor>
-              <div v-if="editable" class="m-editor-content-bottom">
+              <div v-if="editable" class="edoms-editor-content-bottom">
                 <ElButton type="primary" class="button" @click="saveCode">保存</ElButton>
                 <ElButton type="primary" class="button" @click="saveAndClose">关闭</ElButton>
               </div>
-              <div v-else class="m-editor-content-bottom">
+              <div v-else class="edoms-editor-content-bottom">
                 <ElButton type="primary" class="button" @click="saveAndClose">关闭</ElButton>
               </div>
             </div>

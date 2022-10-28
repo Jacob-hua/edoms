@@ -10,6 +10,8 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
+declare module 'serialize-javascript';
+
 declare module '*.vue' {
   import type { DefineComponent } from 'vue';
 

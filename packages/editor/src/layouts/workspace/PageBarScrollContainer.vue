@@ -1,26 +1,26 @@
 <template>
-  <div ref="pageBar" class="m-editor-page-bar">
+  <div ref="pageBar" class="edoms-editor-page-bar">
     <div
       v-if="showAddPageButton"
-      id="m-editor-page-bar-add-icon"
-      class="m-editor-page-bar-item m-editor-page-bar-item-icon"
+      id="edoms-editor-page-bar-add-icon"
+      class="edoms-editor-page-bar-item edoms-editor-page-bar-item-icon"
       @click="addPage"
     >
       <Icon :icon="Plus"></Icon>
     </div>
     <div v-else style="width: 21px"></div>
-    <div v-if="canScroll" class="m-editor-page-bar-item m-editor-page-bar-item-icon" @click="scroll('left')">
+    <div v-if="canScroll" class="edoms-editor-page-bar-item edoms-editor-page-bar-item-icon" @click="scroll('left')">
       <Icon :icon="ArrowLeftBold"></Icon>
     </div>
     <div
       v-if="pageLength"
       ref="itemsContainer"
-      class="m-editor-page-bar-items"
+      class="edoms-editor-page-bar-items"
       :style="`width: ${itemsContainerWidth}px`"
     >
       <slot></slot>
     </div>
-    <div v-if="canScroll" class="m-editor-page-bar-item m-editor-page-bar-item-icon" @click="scroll('right')">
+    <div v-if="canScroll" class="edoms-editor-page-bar-item edoms-editor-page-bar-item-icon" @click="scroll('right')">
       <Icon :icon="ArrowRightBold"></Icon>
     </div>
   </div>

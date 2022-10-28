@@ -1,6 +1,6 @@
 <template>
-  <div ref="bar" class="m-editor-scroll-bar" :class="isHorizontal ? 'horizontal' : 'vertical'">
-    <div ref="thumb" class="m-editor-scroll-bar-thumb" :style="thumbStyle"></div>
+  <div ref="bar" class="edoms-editor-scroll-bar" :class="isHorizontal ? 'horizontal' : 'vertical'">
+    <div ref="thumb" class="edoms-editor-scroll-bar-thumb" :style="thumbStyle"></div>
   </div>
 </template>
 
@@ -86,13 +86,13 @@ const scrollBy = (delta: number) => {
 </script>
 
 <style lang="scss">
-.m-editor-scroll-bar {
+.edoms-editor-scroll-bar {
   position: absolute;
   background-color: transparent;
   opacity: 0.3;
   transition: background-color 0.2s linear, opacity 0.2s linear;
 
-  .m-editor-scroll-bar-thumb {
+  .edoms-editor-scroll-bar-thumb {
     background-color: #aaa;
     border-radius: 6px;
     position: absolute;
@@ -103,7 +103,7 @@ const scrollBy = (delta: number) => {
     height: 15px;
     bottom: 0;
 
-    .m-editor-scroll-bar-thumb {
+    .edoms-editor-scroll-bar-thumb {
       height: 6px;
       transition: background-color 0.2s linear, height 0.2s ease-in-out;
       bottom: 2px;
@@ -115,7 +115,7 @@ const scrollBy = (delta: number) => {
     width: 15px;
     right: 5px;
 
-    .m-editor-scroll-bar-thumb {
+    .edoms-editor-scroll-bar-thumb {
       width: 6px;
       transition: background-color 0.2s linear, width 0.2s ease-in-out;
       right: 2px;
@@ -127,18 +127,18 @@ const scrollBy = (delta: number) => {
     background-color: #eee;
     opacity: 0.9;
 
-    .m-editor-scroll-bar-thumb {
+    .edoms-editor-scroll-bar-thumb {
       background-color: #999;
     }
 
     &.horizontal {
-      .m-editor-scroll-bar-thumb {
+      .edoms-editor-scroll-bar-thumb {
         height: 11px;
       }
     }
 
     &.vertical {
-      .m-editor-scroll-bar-thumb {
+      .edoms-editor-scroll-bar-thumb {
         width: 11px;
       }
     }

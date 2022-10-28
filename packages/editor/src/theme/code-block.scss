@@ -1,4 +1,4 @@
-.m-editor-code-block-list {
+.edoms-editor-code-block-list {
   margin-top: 5px;
   .el-tree-node__content {
     height: auto;
@@ -142,7 +142,7 @@
     }
   }
 
-  .m-editor-code-block-editor-panel-list-mode {
+  .edoms-editor-code-block-editor-panel-list-mode {
     height: 100%;
     z-index: 10;
     background: #fff;
@@ -151,7 +151,7 @@
     }
   }
 
-  .m-editor-code-block-editor-panel {
+  .edoms-editor-code-block-editor-panel {
     position: absolute;
     top: 0;
     left: 4px;
@@ -164,12 +164,12 @@
     }
   }
 
-  .m-editor-wrapper {
+  .edoms-editor-wrapper {
     height: 100%;
-    .m-editor-container {
+    .edoms-editor-container {
       height: calc(100% - 70px);
     }
-    .m-editor-content-bottom {
+    .edoms-editor-content-bottom {
       height: 40px;
       width: 100%;
       display: flex;

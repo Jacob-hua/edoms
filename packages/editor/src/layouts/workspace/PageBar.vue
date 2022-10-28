@@ -3,11 +3,11 @@
     <div
       v-for="item in (root && root.items) || []"
       :key="item.key"
-      class="m-editor-page-bar-item"
+      class="edoms-editor-page-bar-item"
       :class="{ active: page?.id === item.id }"
       @click="switchPage(item)"
     >
-      <div class="m-editor-page-bar-title">
+      <div class="edoms-editor-page-bar-title">
         <slot name="page-bar-title" :page="item">
           <ElTooltip effect="dark" placement="top-start" :content="item.name">
             <span>{{ item.name || item.id }}</span>
@@ -37,7 +37,7 @@
           </slot>
         </div>
         <template #reference>
-          <ElIcon class="m-editor-page-bar-menu-icon">
+          <ElIcon class="edoms-editor-page-bar-menu-icon">
             <CaretBottom></CaretBottom>
           </ElIcon>
         </template>

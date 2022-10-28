@@ -78,9 +78,16 @@ importers:
 
   edoms-designer:
     specifiers:
+      '@edoms/design': workspace:^0.0.1
+      '@edoms/editor': workspace:^0.0.1
+      '@edoms/element-plus-adapter': workspace:^0.0.1
+      '@edoms/form': workspace:^0.0.1
+      '@edoms/schema': workspace:^0.0.1
+      '@edoms/stage': workspace:^0.0.1
       '@edoms/utils': workspace:^0.0.1
       '@element-plus/icons-vue': ^2.0.9
       '@types/node': ^16.11.47
+      '@types/serialize-javascript': ^5.0.1
       '@vitejs/plugin-vue': ^3.0.1
       '@vue/test-utils': ^2.0.2
       '@vue/tsconfig': ^0.1.3
@@ -88,6 +95,7 @@ importers:
       npm-run-all: ^4.1.5
       pinia: ^2.0.17
       sass: ^1.54.8
+      serialize-javascript: ^6.0.0
       typescript: ~4.7.4
       vite: ^3.0.0
       vite-plugin-vue-setup-extend: ^0.4.0
@@ -95,14 +103,22 @@ importers:
       vue-router: ^4.1.3
       vue-tsc: ^0.39.5
     dependencies:
+      '@edoms/design': link:../packages/design
+      '@edoms/editor': link:../packages/editor
+      '@edoms/element-plus-adapter': link:../packages/element-plus-adapter
+      '@edoms/form': link:../packages/form
+      '@edoms/schema': link:../packages/schema
+      '@edoms/stage': link:../packages/stage
       '@edoms/utils': link:../packages/utils
       '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue/2.0.9_vue@3.2.37
       element-plus: registry.npmmirror.com/element-plus/2.2.17_vue@3.2.37
       pinia: registry.npmmirror.com/pinia/2.0.23_j6bzmzd4ujpabbp5objtwxyjp4
+      serialize-javascript: registry.npmmirror.com/serialize-javascript/6.0.0
       vue: registry.npmmirror.com/vue/3.2.37
       vue-router: registry.npmmirror.com/vue-router/4.1.6_vue@3.2.37
     devDependencies:
       '@types/node': registry.npmmirror.com/@types/node/16.18.0
+      '@types/serialize-javascript': registry.npmmirror.com/@types/serialize-javascript/5.0.2
       '@vitejs/plugin-vue': registry.npmmirror.com/@vitejs/plugin-vue/3.1.0_vite@3.1.3+vue@3.2.37
       '@vue/test-utils': registry.npmmirror.com/@vue/test-utils/2.2.0_vue@3.2.37
       '@vue/tsconfig': registry.npmmirror.com/@vue/tsconfig/0.1.3_@types+node@16.18.0
@@ -6811,6 +6827,12 @@ packages:
     version: 7.3.12
     dev: true
 
+  registry.npmmirror.com/@types/serialize-javascript/5.0.2:
+    resolution: {integrity: sha512-BRLlwZzRoZukGaBtcUxkLsZsQfWZpvog6MZk3PWQO9Q6pXmXFzjU5iGzZ+943evp6tkkbN98N1Z31KT0UG1yRw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/serialize-javascript/-/serialize-javascript-5.0.2.tgz}
+    name: '@types/serialize-javascript'
+    version: 5.0.2
+    dev: true
+
   registry.npmmirror.com/@types/web-bluetooth/0.0.15:
     resolution: {integrity: sha512-w7hEHXnPMEZ+4nGKl/KDRVpxkwYxYExuHOYXyzIzCDzEZ9ZCGMAewulr9IqJu2LR4N37fcnb1XVeuZ09qgOxhA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/web-bluetooth/-/web-bluetooth-0.0.15.tgz}
     name: '@types/web-bluetooth'
@@ -8915,6 +8937,14 @@ packages:
     version: 1.2.3
     dev: true
 
+  registry.npmmirror.com/randombytes/2.1.0:
+    resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/randombytes/-/randombytes-2.1.0.tgz}
+    name: randombytes
+    version: 2.1.0
+    dependencies:
+      safe-buffer: registry.npmmirror.com/safe-buffer/5.2.1
+    dev: false
+
   registry.npmmirror.com/read-pkg/3.0.0:
     resolution: {integrity: sha512-BLq/cCO9two+lBgiTYNqD6GdtK8s4NpaWrl6/rCO9w0TUS8oJl7cmToOZfRYllKTISY6nt1U7jQ53brmKqY6BA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/read-pkg/-/read-pkg-3.0.0.tgz}
     name: read-pkg
@@ -9025,6 +9055,12 @@ packages:
     version: 5.1.2
     dev: false
 
+  registry.npmmirror.com/safe-buffer/5.2.1:
+    resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/safe-buffer/-/safe-buffer-5.2.1.tgz}
+    name: safe-buffer
+    version: 5.2.1
+    dev: false
+
   registry.npmmirror.com/sass/1.52.2:
     resolution: {integrity: sha512-mfHB2VSeFS7sZlPv9YohB9GB7yWIgQNTGniQwfQ04EoQN0wsQEv7SwpCwy/x48Af+Z3vDeFXz+iuXM3HK/phZQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/sass/-/sass-1.52.2.tgz}
     name: sass
@@ -9070,6 +9106,14 @@ packages:
     dependencies:
       lru-cache: registry.npmmirror.com/lru-cache/6.0.0
     dev: true
+
+  registry.npmmirror.com/serialize-javascript/6.0.0:
+    resolution: {integrity: sha512-Qr3TosvguFt8ePWqsvRfrKyQXIiW+nGbYpy8XK24NQHE83caxWt+mIymTT19DGFbNWNLfEwsrkSmN64lVWB9ag==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/serialize-javascript/-/serialize-javascript-6.0.0.tgz}
+    name: serialize-javascript
+    version: 6.0.0
+    dependencies:
+      randombytes: registry.npmmirror.com/randombytes/2.1.0
+    dev: false
 
   registry.npmmirror.com/shebang-command/1.2.0:
     resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/shebang-command/-/shebang-command-1.2.0.tgz}

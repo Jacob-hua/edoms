@@ -1,19 +1,19 @@
 <template>
-  <div ref="el" class="m-editor-layout">
+  <div ref="el" class="edoms-editor-layout">
     <template v-if="typeof props.left !== 'undefined'">
-      <div class="m-editor-layout-left" :class="leftClass" :style="`width: ${left}px`">
+      <div class="edoms-editor-layout-left" :class="leftClass" :style="`width: ${left}px`">
         <slot name="left"></slot>
       </div>
       <Resizer @change="changeLeft"></Resizer>
     </template>
 
-    <div class="m-editor-layout-center" :class="centerClass" :style="`width: ${center}px`">
+    <div class="edoms-editor-layout-center" :class="centerClass" :style="`width: ${center}px`">
       <slot name="center"></slot>
     </div>
 
     <template v-if="typeof props.right !== 'undefined'">
       <Resizer @change="changeRight"></Resizer>
-      <div class="m-editor-layout-right" :class="rightClass" :style="`width: ${right}px`">
+      <div class="edoms-editor-layout-right" :class="rightClass" :style="`width: ${right}px`">
         <slot name="right"></slot>
       </div>
     </template>

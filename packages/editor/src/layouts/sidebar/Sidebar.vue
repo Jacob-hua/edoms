@@ -2,7 +2,7 @@
   <ElTabs
     v-if="data.type === 'tabs' && data.items.length"
     v-model="activeTabName"
-    class="m-editor-sidebar"
+    class="edoms-editor-sidebar"
     type="card"
     tab-position="left"
   >

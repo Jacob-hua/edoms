@@ -1,10 +1,10 @@
 <template>
-  <div class="m-editor">
-    <slot name="nav" class="m-editor-nav-menu"></slot>
+  <div class="edoms-editor">
+    <slot name="nav" class="edoms-editor-nav-menu"></slot>
 
     <edoms-code-editor
       v-if="showSrc"
-      class="m-editor-content"
+      class="edoms-editor-content"
       :init-values="root"
       :options="codeOptions"
       @save="saveCode"
@@ -14,10 +14,10 @@
       v-else
       v-model:left="columnWidth.left"
       v-model:right="columnWidth.right"
-      class="m-editor-content"
-      left-class="m-editor-framework-left"
-      center-class="m-editor-framework-center"
-      right-class="m-editor-framework-right"
+      class="edoms-editor-content"
+      left-class="edoms-editor-framework-left"
+      center-class="edoms-editor-framework-center"
+      right-class="edoms-editor-framework-right"
       :min-left="45"
       :min-right="1"
       @change="columnWidthChange"
