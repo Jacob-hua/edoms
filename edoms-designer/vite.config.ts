@@ -15,6 +15,13 @@ export default defineConfig(({ mode }) => {
     build: {
       emptyOutDir: true,
     },
+    optimizeDeps: {
+      esbuildOptions: {
+        define: {
+          global: 'globalThis',
+        },
+      },
+    },
     server: {
       host: '0.0.0.0',
       port: 8890,
