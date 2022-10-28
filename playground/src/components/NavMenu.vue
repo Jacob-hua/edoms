@@ -1,5 +1,5 @@
 <template>
-  <div class="m-editor-nav-menu">
+  <div class="edoms-editor-nav-menu">
     <el-button
       v-for="(item, index) in data"
       :key="index"
@@ -31,7 +31,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.m-editor-nav-menu {
+.edoms-editor-nav-menu {
   justify-content: flex-end;
   height: 35px;
 }

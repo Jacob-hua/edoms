@@ -88,7 +88,7 @@ import uiService from './services/ui';
 import type { ComponentGroup, MenuBarData, MenuButton, MenuComponent, Services, SideBarData, StageRect } from './type';
 
 export default defineComponent({
-  name: 'MEditor',
+  name: 'EdomsEditor',
 
   components: {
     NavMenu,

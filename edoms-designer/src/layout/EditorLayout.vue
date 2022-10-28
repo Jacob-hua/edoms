@@ -1,6 +1,8 @@
 <template>
   <div>
-    <BaseLayout> dddd </BaseLayout>
+    <BaseLayout>
+      <RouterView />
+    </BaseLayout>
   </div>
 </template>
 

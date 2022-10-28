@@ -14,9 +14,6 @@
       :auto-scroll-into-view="true"
       :stage-rect="stageRect"
     >
-      <template #workspace-content>
-        <DeviceGroup v-model="stageRect"></DeviceGroup>
-      </template>
     </edoms-editor>
 
     <el-dialog
@@ -33,35 +30,32 @@
 
 <script lang="ts" setup>
 import { computed, ref, toRaw } from 'vue';
-import { useRouter } from 'vue-router';
 import { Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
 import { editorService, EdomsEditor, MenuBarData, MoveableOptions } from '@edoms/editor';
-import type { Id, MContainer, MNode } from '@edoms/schema';
+import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { asyncLoadJs } from '@edoms/utils';
 
-import DeviceGroup from '../components/DeviceGroup.vue';
-import componentGroupList from '../configs/componentGroupList';
-import dsl from '../configs/dsl';
+import componentGroupList from '@/configs/componentGroupList';
+import dsl from '@/configs/dsl';
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
-const router = useRouter();
 const editor = ref<InstanceType<typeof EdomsEditor>>();
 const previewVisible = ref(false);
-const value = ref(dsl);
+const value = ref<MApp>(dsl);
 const defaultSelected = ref(dsl.items[0].id);
 const propsValues = ref<Record<string, any>>({});
 const propsConfigs = ref<Record<string, any>>({});
 const eventMethodList = ref<Record<string, any>>({});
 const stageRect = ref({
-  width: 375,
-  height: 817,
+  width: 1200,
+  height: 950,
 });
 
 const previewUrl = computed(
@@ -72,21 +66,11 @@ const menu: MenuBarData = {
   left: [
     {
       type: 'text',
-      text: 'E-DOMS',
+      text: '页面名称',
     },
   ],
   center: ['delete', 'undo', 'redo', 'guides', 'rule', 'zoom'],
   right: [
-    {
-      type: 'button',
-      text: 'Form Playground',
-      handler: () => router.push('form'),
-    },
-    {
-      type: 'button',
-      text: 'Table Playground',
-      handler: () => router.push('table'),
-    },
     '/',
     {
       type: 'button',

@@ -75,7 +75,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.m-editor-workspace {
+.edoms-editor-workspace {
   * {
     user-select: none;
   }

@@ -1,7 +1,7 @@
 <template>
   <scroll-viewer
     ref="stageWrap"
-    class="m-editor-stage"
+    class="edoms-editor-stage"
     :width="stageRect?.width"
     :height="stageRect?.height"
     :wrap-width="stageContainerRect?.width"
@@ -10,7 +10,7 @@
   >
     <div
       ref="stageContainer"
-      class="m-editor-stage-container"
+      class="edoms-editor-stage-container"
       :style="`transform: scale(${zoom});`"
       @contextmenu="contextmenuHandler"
       @drop="dropHandler"

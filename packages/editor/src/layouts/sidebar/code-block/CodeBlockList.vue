@@ -1,5 +1,5 @@
 <template>
-  <div class="m-editor-code-block-list">
+  <div class="edoms-editor-code-block-list">
     <slot name="code-block-panel-header">
       <div class="code-header-wrapper">
         <ElInput
