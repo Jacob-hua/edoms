@@ -27,4 +27,9 @@ $header-bg-color: #21202e;
     background-color: $header-bg-color;
   }
 }
+
+.el-main {
+  margin: 0;
+  padding: 0;
+}
 </style>
