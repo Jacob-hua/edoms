@@ -34,7 +34,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-const { go } = useRouter();
 import { LocationQueryValue } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
@@ -43,7 +42,7 @@ import { ApplicationInfo } from '@/api/application/type';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
 import BasicInfo from './component/BasicInfo.vue';
-
+const { go } = useRouter();
 const appInfoVisible = ref<boolean>(false);
 const appInfo = ref<ApplicationInfo>({
   applicationId: '',
