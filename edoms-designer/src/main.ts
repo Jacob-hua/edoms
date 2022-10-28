@@ -7,6 +7,7 @@ import { createPinia } from 'pinia';
 import ElDesign from '@edoms/design';
 import EdomsEditor from '@edoms/editor';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
+import EdomsForm from '@edoms/form';
 
 console.log('EdomsElementPlusAdapter');
 import App from './App.vue';
@@ -28,4 +29,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 app.use(ElDesign, EdomsElementPlusAdapter);
 app.use(EdomsEditor);
+app.use(EdomsForm);
 app.mount('#app');

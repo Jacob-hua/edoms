@@ -34,6 +34,11 @@ export default defineConfig(({ mode }) => {
             return path.replace(/\/api/, '');
           },
         },
+        '^/edoms/playground/runtime': {
+          target: 'http://127.0.0.1:8078',
+          changeOrigin: true,
+          prependPath: false,
+        },
       },
       open: true,
     },

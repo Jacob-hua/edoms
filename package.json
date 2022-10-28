@@ -5,7 +5,7 @@
   "packageManager": "pnpm@7.1.9",
   "scripts": {
     "bootstrap": "pnpm i && pnpm build",
-    "designer": "pnpm --filter \"edoms-designer\" dev",
+    "designer": "pnpm --filter \"runtime\" --filter \"edoms-designer\" dev",
     "playground": "pnpm --filter \"runtime\" --filter \"playground\" dev",
     "build": "pnpm --filter \"@edoms/*\" build",
     "build:designer": "pnpm --filter \"edoms-designer\" build",
