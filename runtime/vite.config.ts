@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
 
   if (['page', 'playground', 'page:admin', 'playground:admin'].includes(mode)) {
     const [type, isAdmin] = mode.split(':');
-    const base = isAdmin ? `/edoms-runtime-dev/runtime/${type}/` : `/edoms/playground/runtime/${type}`;
+    const base = isAdmin ? `./runtime/${type}/` : `/edoms/playground/runtime/${type}`;
     const outDir = isAdmin
       ? path.resolve(process.cwd(), `./dist/runtime/${type}`)
       : path.resolve(process.cwd(), `../playground/public/runtime/${type}`);
