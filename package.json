@@ -8,7 +8,7 @@
     "designer": "pnpm --filter \"runtime\" --filter \"edoms-designer\" dev",
     "playground": "pnpm --filter \"runtime\" --filter \"playground\" dev",
     "build": "pnpm --filter \"@edoms/*\" build",
-    "build:designer": "pnpm --filter \"edoms-designer\" build",
+    "build:designer": "pnpm --filter \"runtime\" build:admin && pnpm --filter \"edoms-designer\" build",
     "build:runtime:admin": "pnpm --filter \"runtime\" build:admin",
     "build:playground": "pnpm --filter \"runtime\" build && pnpm --filter \"playground\" build",
     "clean": "pnpm clean:top && pnpm clean:modules",
