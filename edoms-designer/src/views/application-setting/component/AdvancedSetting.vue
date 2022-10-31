@@ -46,6 +46,9 @@ const handleConfirm = () => {
   deleteVisible.value = false;
 };
 const handleExportApplication = () => {};
+const handleClose = () => {
+  deleteVisible.value = false;
+};
 const advanceItems = ref<AdvanceItem[]>([
   {
     name: '导出',
