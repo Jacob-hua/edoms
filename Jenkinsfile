@@ -7,7 +7,7 @@ pipeline {
     environment {
 		service="edoms-application-ui"
 		suffix="edoms-designtime-dev"
-		suffix1="edoms-playground"
+		suffix1="edoms-runtime-dev"
 		def workspace = pwd()
 		namespace="edoms-dev"
 		Branch="${env.gitlabTargetBranch}"
@@ -55,6 +55,7 @@ pipeline {
 				cat >Dockerfile<<-EOF
 					FROM 192.100.30.160:9000/nginx:alpine
 					ADD edoms-designer/dist /usr/share/nginx/html/${suffix}/
+					ADD runtime/dist /usr/share/nginx/html/${suffix1}/
 					RUN sed -i '/try_files/s/index.html/${suffix}\\/index.html/'  /etc/nginx/conf.d/default.conf
 				EOF
 				cat Dockerfile 
