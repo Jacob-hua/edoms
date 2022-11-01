@@ -64,12 +64,12 @@ export default defineConfig(({ mode }) => {
           },
         },
         '^/edoms/playground/runtime': {
-          target: 'http://k8s.isiact.com/edoms-runtime',
+          target: 'http://localhost:8078',
           changeOrigin: true,
           prependPath: false,
         },
         '^/edoms/playground/entry': {
-          target: 'http://k8s.isiact.com/edoms-runtime',
+          target: 'http://localhost:8078',
           changeOrigin: true,
           prependPath: false,
         },

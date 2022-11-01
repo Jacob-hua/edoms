@@ -40,7 +40,7 @@
 
     <template #workspace>
       <slot name="workspace" :editor-service="editorService">
-        <workspace>
+        <workspace @runtime-ready="$emit('runtime-ready')">
           <template #stage><slot name="stage"></slot></template>
           <template #workspace-content><slot name="workspace-content" :editor-service="editorService"></slot></template>
           <template #page-bar-title="{ page }"><slot name="page-bar-title" :page="page"></slot></template>
@@ -211,7 +211,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['props-panel-mounted', 'update:modelValue'],
+  emits: ['props-panel-mounted', 'update:modelValue', 'runtime-ready'],
 
   setup(props, { emit }) {
     editorService.on('root-change', (value) => {
