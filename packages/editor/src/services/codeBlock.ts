@@ -18,7 +18,7 @@ class CodeBlock extends BaseService {
     editable: true,
     mode: CodeEditorMode.EDITOR,
     combineIds: [],
-    undeletableList: [],
+    protectedList: [],
   });
 
   constructor() {
@@ -33,7 +33,7 @@ class CodeBlock extends BaseService {
       'setEditStatus',
       'setMode',
       'setCombineIds',
-      'setUndeleteableList',
+      'setProtectedList',
       'deleteCodeDslByIds',
     ]);
   }
@@ -290,8 +290,8 @@ class CodeBlock extends BaseService {
    * 获取不可删除列表
    * @returns {string[]}
    */
-  public getUndeletableList(): string[] {
-    return this.state.undeletableList;
+  public getProtectedList(): string[] {
+    return this.state.protectedList;
   }
 
   /**
@@ -299,8 +299,8 @@ class CodeBlock extends BaseService {
    * @param {string[]} codeIds 代码块id数组
    * @returns {void}
    */
-  public async setUndeleteableList(codeIds: string[]): Promise<void> {
-    this.state.undeletableList = codeIds;
+  public async setProtectedList(codeIds: string[]): Promise<void> {
+    this.state.protectedList = codeIds;
   }
 
   /**
@@ -374,7 +374,7 @@ class CodeBlock extends BaseService {
     this.state.editable = true;
     this.state.mode = CodeEditorMode.EDITOR;
     this.state.combineIds = [];
-    this.state.undeletableList = [];
+    this.state.protectedList = [];
   }
 
   // 删除组件时 如果是容器 需要遍历删除其包含节点的绑定信息
