@@ -1,6 +1,6 @@
 import {
   createRouter,
-  createWebHashHistory,
+  createWebHistory,
   NavigationGuardNext,
   RouteLocationNormalized,
   RouteRecordRaw,
@@ -26,6 +26,14 @@ const routes: RouteRecordRaw[] = [
         name: 'ApplicationSetting',
         component: () => import('@/views/application-setting/index.vue'),
       },
+      {
+        path: '/404',
+        name: '404',
+        component: () => import('@/layout/404.vue'),
+        meta: {
+          title: '404',
+        },
+      },
     ],
   },
   {
@@ -41,17 +49,13 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: '/404',
-    name: '404',
-    component: () => import('@/layout/404.vue'),
-    meta: {
-      title: '404',
-    },
+    path: '/:catchAll(.*)',
+    redirect: '/404',
   },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.VITE_BASE_URL),
+  history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes,
 });
 
