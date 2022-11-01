@@ -13,6 +13,7 @@
       :moveable-options="moveableOptions"
       :auto-scroll-into-view="true"
       :stage-rect="stageRect"
+      @runtime-ready="handleRuntimeReady"
     >
     </edoms-editor>
 
@@ -169,6 +170,10 @@ editorService.usePlugin({
     return [config, parent];
   },
 });
+
+const handleRuntimeReady = () => {
+  console.log('准备好了');
+};
 </script>
 
 <style lang="scss">

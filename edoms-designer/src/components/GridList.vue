@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, reactive, ref } from 'vue';
 
 export interface Pagination {
   pageSize: number;
@@ -44,7 +44,7 @@ const props = withDefaults(
   {
     dataSource: () => [],
     pageSize: () => 5,
-    request: () => () => ({
+    request: () => ({
       data: [],
       total: 0,
     }),
@@ -61,7 +61,7 @@ const emit = defineEmits<{
 const isAlive = ref(true);
 const loading = ref(false);
 const noMore = ref(false);
-const data = ref(props.dataSource);
+const data = reactive(props.dataSource);
 const total = ref(0);
 const current = ref(1);
 const pages = computed(() => Math.ceil(total.value / props.pageSize));
@@ -71,7 +71,8 @@ const reload = () => {
   isAlive.value = false;
   nextTick(() => {
     isAlive.value = true;
-    data.value.length = 0;
+    data.length = 0;
+    data.concat(props.dataSource);
     total.value = 0;
     current.value = 1;
     noMore.value = false;
@@ -93,7 +94,7 @@ const load = async () => {
   if (result.data.length === 0 || current.value > pages.value) {
     noMore.value = true;
   } else {
-    data.value.push(...result.data);
+    data.push(...result.data);
   }
   emit('loaded');
 };

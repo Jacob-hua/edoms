@@ -1,7 +1,7 @@
 <template>
   <div ref="workspace" class="edoms-editor-workspace" tabindex="-1">
     <slot name="stage">
-      <EdomsStage :key="page?.id"></EdomsStage>
+      <EdomsStage :key="page?.id" @runtime-ready="emit('runtime-ready')"></EdomsStage>
     </slot>
 
     <slot name="workspace-content"></slot>
@@ -24,6 +24,10 @@ import type { Services } from '../../type';
 
 import PageBar from './PageBar.vue';
 import EdomsStage from './Stage.vue';
+
+const emit = defineEmits<{
+  (event: 'runtime-ready'): void;
+}>();
 
 const services = inject<Services>('services');
 const workspace = ref<HTMLDivElement>();
