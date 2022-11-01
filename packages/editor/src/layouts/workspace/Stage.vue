@@ -38,6 +38,10 @@ import ViewerMenu from './ViewerMenu.vue';
 let stage: StageCore | null = null;
 let runtime: Runtime | null = null;
 
+const emit = defineEmits<{
+  (event: 'runtime-ready'): void;
+}>();
+
 const services = inject<Services>('services');
 const stageOptions = inject<StageOptions>('stageOptions');
 
@@ -71,6 +75,7 @@ watchEffect(() => {
     // toRaw返回的值是一个引用而非快照，需要cloneDeep
     root.value && runtime?.updateRootConfig?.(cloneDeep(toRaw(root.value)));
     page.value?.id && runtime?.updatePageId?.(page.value.id);
+    emit('runtime-ready');
     setTimeout(() => {
       node.value && stage?.select(toRaw(node.value.id));
     });
