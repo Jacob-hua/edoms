@@ -27,12 +27,9 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/application-setting/index.vue'),
       },
       {
-        path: '/404',
-        name: '404',
-        component: () => import('@/layout/404.vue'),
-        meta: {
-          title: '404',
-        },
+        path: '/model',
+        name: 'Model',
+        component: () => import('@/views/model/index.vue'),
       },
     ],
   },

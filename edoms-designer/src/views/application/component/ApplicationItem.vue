@@ -55,6 +55,19 @@ const menus = [
       });
     },
   },
+  {
+    name: 'model',
+    label: 'CIM模型',
+    icon: 'Setting',
+    action: () => {
+      router.push({
+        path: '/model',
+        query: {
+          applicationId: props.application.applicationId,
+        },
+      });
+    },
+  },
 ];
 
 const handleMenuClick = (value: string | number) => {
