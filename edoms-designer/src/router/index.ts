@@ -26,6 +26,11 @@ const routes: RouteRecordRaw[] = [
         name: 'ApplicationSetting',
         component: () => import('@/views/application-setting/index.vue'),
       },
+      {
+        path: '/model',
+        name: 'Model',
+        component: () => import('@/views/model/index.vue'),
+      },
     ],
   },
   {
