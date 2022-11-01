@@ -6,7 +6,7 @@
       column-gap="20px"
       row-gap="20px"
       item-min-width="200px"
-      :data-source="dataSource"
+      :request="loadData"
     >
       <template #default="{ item }">
         <div class="item">{{ item.name }}</div>
@@ -22,24 +22,31 @@
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
-import GridList from '@/components/GridList.vue';
+import GridList, { RequestFunc } from '@/components/GridList.vue';
+
 const route = useRoute();
 console.log(route.query.applicationId);
 const gridList = ref(null);
-const dataSource = ref([
-  {
-    name: '模型表1',
-  },
-  {
-    name: '模型表2',
-  },
-  {
-    name: '模型表3',
-  },
-  {
-    name: '模型表4',
-  },
-]);
+const loadData: RequestFunc<{ name: string }> = async () => {
+  const dataSource = [
+    {
+      name: '模型表1',
+    },
+    {
+      name: '模型表2',
+    },
+    {
+      name: '模型表3',
+    },
+    {
+      name: '模型表4',
+    },
+  ];
+  return {
+    data: dataSource,
+    total: dataSource.length,
+  };
+};
 </script>
 
 <style lang="scss" scoped>
@@ -48,6 +55,7 @@ const dataSource = ref([
 }
 .container {
   .grid-list {
+    height: 800px;
     width: 300px;
     div {
       text-align: left;
