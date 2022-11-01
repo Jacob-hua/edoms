@@ -287,7 +287,7 @@ class CodeBlock extends BaseService {
   }
 
   /**
-   * 获取不可删除列表
+   * 获取受保护列表
    * @returns {string[]}
    */
   public getProtectedList(): string[] {
@@ -295,7 +295,7 @@ class CodeBlock extends BaseService {
   }
 
   /**
-   * 设置不可删除列表：为业务逻辑预留的不可删除的代码块列表，由业务逻辑维护（如代码块上线后不可删除）
+   * 设置受保护列表：为业务逻辑预留的受保护的代码块列表，由业务逻辑维护（如代码块上线后不可删除）
    * @param {string[]} codeIds 代码块id数组
    * @returns {void}
    */

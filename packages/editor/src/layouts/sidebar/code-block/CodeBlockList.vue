@@ -199,7 +199,7 @@ const deleteCode = (key: string) => {
   const existBinds = !!(state.bindComps[key]?.length > 0);
   const protectedList = services?.codeBlockService.getProtectedList() || [];
   if (!existBinds && !protectedList.includes(key)) {
-    // 无绑定关系，且不在不可删除列表中
+    // 无绑定关系，且不在受保护列表中
     services?.codeBlockService.deleteCodeDslByIds([key]);
   } else {
     if (typeof props.customError === 'function') {
