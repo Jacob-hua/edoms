@@ -9,7 +9,10 @@
       :data-source="dataSource"
     >
       <template #default="{ item }">
-        <div>{{ item.name }}</div>
+        <div class="item">{{ item.name }}</div>
+      </template>
+      <template #noMore>
+        <div></div>
       </template>
     </GridList>
   </div>
@@ -17,12 +20,11 @@
 
 <script lang="ts" setup name="StaticModel">
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import GridList from '@/components/GridList.vue';
-
-defineProps<{
-  application: string;
-}>();
+const route = useRoute();
+console.log(route.query.applicationId);
 const gridList = ref(null);
 const dataSource = ref([
   {
@@ -41,9 +43,11 @@ const dataSource = ref([
 </script>
 
 <style lang="scss" scoped>
+.item {
+  border-bottom: 1px solid #e1e1e1;
+}
 .container {
   .grid-list {
-    height: 50px;
     width: 300px;
     div {
       text-align: left;

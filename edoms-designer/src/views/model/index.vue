@@ -12,14 +12,20 @@
         </span>
       </div>
       <div class="header-bar-right">
-        <span>动态模型</span><el-switch v-model="useType" size="large" @change="handleChange"></el-switch
-        ><span>静态模型</span>
+        <el-switch
+          v-model="useType"
+          :inactive-value="switchInactive.value"
+          :inactive-text="switchInactive.text"
+          :active-value="switchActive.value"
+          :active-text="switchActive.text"
+          size="large"
+        ></el-switch>
       </div>
     </div>
     <section class="model-main">
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleTabClick">
-        <el-tab-pane v-for="({ name, label, component }, index) in tabPanels" :key="index" :label="label" :name="name">
-          <component v-if="isShowComponent(activeName, name)" :is="component" v-bind="defaultProps"></component>
+      <el-tabs v-model="tabActive" class="demo-tabs">
+        <el-tab-pane v-for="{ value, text, component } in tabPanels" :key="value" :label="text" :name="value">
+          <component :is="component"></component>
         </el-tab-pane>
       </el-tabs>
     </section>
@@ -27,44 +33,40 @@
 </template>
 
 <script lang="ts" setup name="Model">
-import { ref, shallowRef } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import DynamicModel from './component/DynamicModel.vue';
 import StaticModel from './component/StaticModel.vue';
 
-const modelText = ref<string>('静态模型');
 const { go } = useRouter();
-const useType = ref<boolean>(true);
-const modelMap = new Map<number, string>([
-  [0, '静态模型'],
-  [1, '动态模型'],
-]);
-const activeName = ref<string>('static');
-const defaultProps = ref<{ application: string }>({
-  application: '21321',
-});
-const tabPanels = shallowRef([
-  {
-    label: '静态模型',
-    name: 'static',
+
+const enum ModelType {
+  STATIC = 0,
+  DYNAMIC = 1,
+}
+const modelTypeConfig = {
+  [ModelType.STATIC]: {
+    value: ModelType.STATIC,
+    text: '静态模型',
     component: StaticModel,
   },
-  {
-    label: '动态模型',
-    name: 'dynamic',
+  [ModelType.DYNAMIC]: {
+    value: ModelType.DYNAMIC,
+    text: '动态模型',
     component: DynamicModel,
   },
-]);
-const isShowComponent = (activeName: string, name: string): boolean => {
-  return activeName === name;
 };
-const handleTabClick = () => {
-  console.log(activeName.value);
-};
-const handleChange = (value: boolean) => {
-  modelText.value = modelMap.get(Number(value)) as string;
-};
+const switchActive = computed(() => modelTypeConfig[ModelType.DYNAMIC]);
+const switchInactive = computed(() => modelTypeConfig[ModelType.STATIC]);
+
+const useType = ref<ModelType>(ModelType.STATIC);
+const modelText = computed(() => modelTypeConfig[useType.value]?.text);
+
+const tabPanels = computed(() => Object.values(modelTypeConfig));
+
+const tabActive = ref<ModelType>(tabPanels.value[0].value);
+
 const goBack = () => {
   go(-1);
 };
