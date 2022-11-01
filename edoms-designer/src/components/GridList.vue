@@ -64,7 +64,6 @@ const noMore = ref(false);
 const data = reactive(props.dataSource);
 const total = ref(0);
 const current = ref(1);
-const pages = computed(() => Math.ceil(total.value / props.pageSize));
 const disabled = computed(() => loading.value || noMore.value);
 
 const reload = () => {
@@ -90,12 +89,12 @@ const load = async () => {
   );
   loading.value = false;
   total.value = result.total;
-  current.value += 1;
-  if (result.data.length === 0 || current.value > pages.value) {
+  if (result.total === 0 || result.data.length < props.pageSize) {
     noMore.value = true;
   } else {
-    data.push(...result.data);
+    current.value += 1;
   }
+  data.push(...result.data);
   emit('loaded');
 };
 
