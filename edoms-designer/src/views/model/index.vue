@@ -36,15 +36,13 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { ModelType } from '@/const/model-type';
+
 import DynamicModel from './component/DynamicModel.vue';
 import StaticModel from './component/StaticModel.vue';
 
 const { go } = useRouter();
 
-const enum ModelType {
-  STATIC = 0,
-  DYNAMIC = 1,
-}
 const modelTypeConfig = {
   [ModelType.STATIC]: {
     value: ModelType.STATIC,
