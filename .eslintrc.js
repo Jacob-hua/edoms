@@ -35,7 +35,7 @@ module.exports = defineConfig({
     'no-extra-bind': ['error'], // 禁止不必要的bind调用
     'no-sparse-arrays': ['off'], // 可以使用稀疏数组
     'no-param-reassign': ['off'],
-    'no-control-regex': ['warn'],
+    'no-control-regex': ['off'],
 
     // typeScript (https://typescript-eslint.io/rules)
     '@typescript-eslint/no-unused-vars': ['error'], // 未使用变量检查
@@ -50,6 +50,7 @@ module.exports = defineConfig({
     ],
 
     // vue (https://eslint.vuejs.org/rules)
+    'vue/require-default-prop': ['off'],
     'vue/no-mutating-props': ['off'],
     'vue/multi-word-component-names': ['off'], // vue组件名必须是多个单词
     'vue/padding-line-between-blocks': ['error'], // <template/>和<script/>之间必须空行
@@ -93,7 +94,7 @@ module.exports = defineConfig({
         ],
       },
     ], // 组件属性声明顺序
-    'vue/valid-attribute-name': ['warn'],
+    'vue/valid-attribute-name': ['off'], // 检查无效的HTML属性
     'vue/no-v-html': ['off'],
     'vue/no-unused-refs': ['error'], // 检查未使用的refs
     'vue/no-lone-template': ['error'], // 禁止没有属性的<template></template>
