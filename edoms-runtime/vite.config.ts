@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
         sourcemap: true,
         minify: false,
         target: 'esnext',
-        outDir: isAdmin ? `./dist/entry/${type}` : `../playground/public/entry/${type}`,
+        outDir: isAdmin ? `./dist/entry/${type}` : `./public/entry/${type}`,
 
         lib: {
           entry: `.edoms/${type}-entry.ts`,
@@ -35,7 +35,7 @@ export default defineConfig(({ mode }) => {
     const base = isAdmin ? `/edoms-runtime-dev/runtime/${type}/` : `/edoms-playground/runtime/${type}`;
     const outDir = isAdmin
       ? path.resolve(process.cwd(), `./dist/runtime/${type}`)
-      : path.resolve(process.cwd(), `../playground/public/runtime/${type}`);
+      : path.resolve(process.cwd(), `./public/runtime/${type}`);
     return {
       plugins: [
         vue(),
