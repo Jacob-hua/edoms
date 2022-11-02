@@ -1,5 +1,5 @@
 packages:
   - 'packages/*'
   - 'playground'
-  - 'runtime'
+  - 'edoms-runtime'
   - 'edoms-designer'
