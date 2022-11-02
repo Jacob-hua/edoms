@@ -6,6 +6,24 @@ export enum NodeType {
 
 export type Id = string | number;
 
+export const enum VariableSpace {
+  COMPONENT = 'component',
+  PAGE = 'page',
+  APP = 'app',
+  CONST = 'const',
+  EXPRESSION = 'expression',
+}
+
+export interface MappingStruct {
+  target: string;
+  ignore?: boolean;
+  source?: string;
+  sourceSpace?: VariableSpace;
+  const?: string;
+  defaultValue?: string;
+  defaultExpression?: string;
+}
+
 export interface EventItemConfig {
   /** 被选中组件ID */
   to: Id;
@@ -13,6 +31,7 @@ export interface EventItemConfig {
   name: string;
   /** 触发事件后执行被选中组件的方法 */
   method: string;
+  mappings?: MappingStruct[];
 }
 
 export interface MComponent {
