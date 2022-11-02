@@ -30,7 +30,7 @@ const state = reactive<UiState>({
   showAddPageButton: true,
 });
 
-class Ui extends BaseService {
+export class UiService extends BaseService {
   constructor() {
     super(['zoom', 'calcZoom']);
   }
@@ -92,6 +92,4 @@ class Ui extends BaseService {
   }
 }
 
-export type UiService = Ui;
-
-export default new Ui();
+export default new UiService();

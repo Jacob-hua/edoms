@@ -26,7 +26,7 @@ import { beforePaste, getAddParent } from '../utils/operator';
 import BaseService from './BaseService';
 import propsService from './props';
 
-class Editor extends BaseService {
+export class EditorService extends BaseService {
   public state: StoreState = reactive({
     root: null,
     page: null,
@@ -838,6 +838,4 @@ class Editor extends BaseService {
   }
 }
 
-export type EditorService = Editor;
-
-export default new Editor();
+export default new EditorService();

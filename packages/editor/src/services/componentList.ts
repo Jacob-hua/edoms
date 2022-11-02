@@ -4,7 +4,7 @@ import type { ComponentGroup, ComponentGroupState } from '../type';
 
 import BaseService from './BaseService';
 
-class ComponentList extends BaseService {
+export class ComponentListService extends BaseService {
   private state = reactive<ComponentGroupState>({
     list: [],
   });
@@ -30,6 +30,4 @@ class ComponentList extends BaseService {
   }
 }
 
-export type ComponentListService = ComponentList;
-
-export default new ComponentList();
+export default new ComponentListService();
