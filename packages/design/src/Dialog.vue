@@ -1,5 +1,5 @@
 <template>
-  <component :is="uiComponent.component" v-bind="uiProps" @close="closeHandler" @update:modelValue="updateModelValue">
+  <component :is="uiComponent.component" v-bind="uiProps" @close="closeHandler" @update:model-value="updateModelValue">
     <slot></slot>
 
     <template #footer>

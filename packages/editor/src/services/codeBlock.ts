@@ -10,7 +10,7 @@ import { error, info } from '../utils/logger';
 
 import BaseService from './BaseService';
 
-class CodeBlock extends BaseService {
+export class CodeBlockService extends BaseService {
   private state = reactive<CodeState>({
     isShowCodeEditor: false,
     codeDsl: null,
@@ -392,6 +392,4 @@ class CodeBlock extends BaseService {
   }
 }
 
-export type CodeBlockService = CodeBlock;
-
-export default new CodeBlock();
+export default new CodeBlockService();

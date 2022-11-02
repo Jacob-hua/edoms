@@ -1,5 +1,10 @@
 <template>
-  <component :is="uiComponent.component" v-bind="uiProps" @update:modelValue="updateModelValue" @change="changeHandler">
+  <component
+    :is="uiComponent.component"
+    v-bind="uiProps"
+    @update:model-value="updateModelValue"
+    @change="changeHandler"
+  >
     <template #default>
       <slot></slot>
     </template>

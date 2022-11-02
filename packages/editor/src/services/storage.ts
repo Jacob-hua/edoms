@@ -18,7 +18,7 @@ export enum Protocol {
 /**
  * 数据存储服务
  */
-export class WebStorage extends BaseService {
+export class StorageService extends BaseService {
   private storage: Storage = globalThis.localStorage;
   private namespace = 'edoms';
 
@@ -133,5 +133,4 @@ export class WebStorage extends BaseService {
   }
 }
 
-export type StorageService = WebStorage;
-export default new WebStorage();
+export default new StorageService();

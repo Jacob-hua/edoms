@@ -3,7 +3,7 @@
     ref="cascader"
     :is="uiComponent.component"
     v-bind="uiProps"
-    @update:modelValue="updateModelValue"
+    @update:model-value="updateModelValue"
     @change="changeHandler"
   ></component>
 </template>

@@ -11,7 +11,7 @@ import BaseService from './BaseService';
 let eventMap: Record<string, EventOption[]> = reactive({});
 let methodMap: Record<string, EventOption[]> = reactive({});
 
-class Events extends BaseService {
+export class EventsService extends BaseService {
   constructor() {
     super([]);
   }
@@ -65,6 +65,4 @@ class Events extends BaseService {
   }
 }
 
-export type EventsService = Events;
-
-export default new Events();
+export default new EventsService();

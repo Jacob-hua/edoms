@@ -40,7 +40,7 @@
           :config="item"
           :rowkey-name="rowkeyName"
           :edit-state="editState"
-          @afterAction="$emit('afterAction')"
+          @after-action="$emit('afterAction')"
         ></ActionsColumn>
       </template>
 
@@ -71,7 +71,9 @@ const props = withDefaults(
     data: any[];
     columns?: any[];
     /** 合并行或列的计算方法 */
-    spanMethod?: (data: { row: any; column: any; rowIndex: number; columnIndex: number }) => [number, number];
+    spanMethod?:
+      | ((data: { row: any; column: any; rowIndex: number; columnIndex: number }) => [number, number])
+      | undefined;
     loading?: boolean;
     /** Table 的最大高度。合法的值为数字或者单位为 px 的高度 */
     bodyHeight?: string | number;
@@ -87,9 +89,13 @@ const props = withDefaults(
   }>(),
   {
     columns: () => [],
+    spanMethod: undefined,
     loading: false,
+    bodyHeight: '',
     showHeader: true,
+    emptyText: '',
     defaultExpandAll: false,
+    rowkeyName: '',
     border: false,
   }
 );

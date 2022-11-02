@@ -19,7 +19,7 @@ export interface HistoryState {
   canUndo: boolean;
 }
 
-class History extends BaseService {
+export class HistoryService extends BaseService {
   public state = reactive<HistoryState>({
     pageSteps: {},
     pageId: undefined,
@@ -108,6 +108,4 @@ class History extends BaseService {
   }
 }
 
-export type HistoryService = History;
-
-export default new History();
+export default new HistoryService();

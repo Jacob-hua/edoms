@@ -10,7 +10,7 @@ import { fillConfig } from '../utils/props';
 
 import BaseService from './BaseService';
 
-class Props extends BaseService {
+export class PropsService extends BaseService {
   private state = reactive<PropsState>({
     propsConfigMap: {},
     propsValueMap: {},
@@ -173,6 +173,4 @@ class Props extends BaseService {
   }
 }
 
-export type PropsService = Props;
-
-export default new Props();
+export default new PropsService();
