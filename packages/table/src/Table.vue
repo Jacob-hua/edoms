@@ -40,7 +40,7 @@
           :config="item"
           :rowkey-name="rowkeyName"
           :edit-state="editState"
-          @afterAction="$emit('afterAction')"
+          @after-action="$emit('afterAction')"
         ></ActionsColumn>
       </template>
 

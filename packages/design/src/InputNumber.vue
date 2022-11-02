@@ -4,7 +4,7 @@
     v-bind="uiProps"
     @change="changeHandler"
     @input="inputHandler"
-    @update:modelValue="updateModelValue"
+    @update:model-value="updateModelValue"
   ></component>
 </template>
 

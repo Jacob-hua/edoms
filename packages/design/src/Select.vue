@@ -5,7 +5,7 @@
     v-bind="uiProps"
     @change="changeHandler"
     @visible-change="visibleHandler"
-    @update:modelValue="updateModelValue"
+    @update:model-value="updateModelValue"
   >
     <slot></slot>
   </component>
