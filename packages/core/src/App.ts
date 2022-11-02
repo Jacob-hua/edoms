@@ -151,9 +151,7 @@ class App extends EventEmitter {
 
     this.page = page;
 
-    if (this.platform !== 'edoms') {
-      this.bindEvents();
-    }
+    this.bindEvents();
   }
 
   public registerComponent(type: string, Component: any) {

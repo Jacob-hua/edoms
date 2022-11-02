@@ -132,6 +132,7 @@ export interface Edoms {
 
 export interface RuntimeWindow extends Window {
   edoms: Edoms;
+  appInstance: Core;
 }
 
 export interface StageHighlightConfig {

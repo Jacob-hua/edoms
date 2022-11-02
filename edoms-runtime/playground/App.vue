@@ -13,6 +13,7 @@ import { getNodePath } from '@edoms/utils';
 declare global {
   interface Window {
     edoms: Edoms;
+    appInstance: Core;
   }
 }
 
@@ -33,7 +34,7 @@ export default defineComponent({
       platform: 'editor',
     });
 
-    globalThis.appInstance = app;
+    window.appInstance = app;
 
     provide('app', app);
 
