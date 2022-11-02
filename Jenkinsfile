@@ -6,7 +6,7 @@ pipeline {
     agent any
     environment {
 		service="edoms-application-ui"
-		suffix="edoms-designtime-dev"
+		suffix="edoms-designer-dev"
 		suffix1="edoms-runtime-dev"
 		def workspace = pwd()
 		namespace="edoms-dev"
@@ -55,7 +55,7 @@ pipeline {
 				cat >Dockerfile<<-EOF
 					FROM 192.100.30.160:9000/nginx:alpine
 					ADD edoms-designer/dist /usr/share/nginx/html/${suffix}/
-					ADD runtime/dist /usr/share/nginx/html/${suffix1}/
+					ADD edoms-runtime/dist /usr/share/nginx/html/${suffix1}/
 				EOF
 				cat Dockerfile 
 				cat >deployment.yaml<<-EOF

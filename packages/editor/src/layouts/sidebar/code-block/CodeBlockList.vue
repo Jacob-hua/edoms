@@ -197,13 +197,13 @@ const editCode = async (key: string) => {
 // 删除代码块
 const deleteCode = (key: string) => {
   const existBinds = !!(state.bindComps[key]?.length > 0);
-  const undeleteableList = services?.codeBlockService.getUndeletableList() || [];
-  if (!existBinds && !undeleteableList.includes(key)) {
-    // 无绑定关系，且不在不可删除列表中
+  const protectedList = services?.codeBlockService.getProtectedList() || [];
+  if (!existBinds && !protectedList.includes(key)) {
+    // 无绑定关系，且不在受保护列表中
     services?.codeBlockService.deleteCodeDslByIds([key]);
   } else {
     if (typeof props.customError === 'function') {
-      props.customError(key, existBinds ? CodeDeleteErrorType.BIND : CodeDeleteErrorType.UNDELETEABLE);
+      props.customError(key, existBinds ? CodeDeleteErrorType.BIND : CodeDeleteErrorType.PROTECTED);
     } else {
       elMessage.error('代码块删除失败');
     }

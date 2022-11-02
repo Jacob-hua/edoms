@@ -18,7 +18,7 @@ export default defineConfig({
 
   root: './',
 
-  base: '/edoms/playground/runtime',
+  base: '/edoms-playground/runtime',
 
   publicDir: 'public',
 

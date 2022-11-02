@@ -318,8 +318,8 @@ export type CodeState = {
   mode: CodeEditorMode;
   /** list模式下左侧展示的代码列表 */
   combineIds: string[];
-  /** 为业务逻辑预留的不可删除的代码块列表，由业务逻辑维护（如代码块上线后不可删除） */
-  undeletableList: string[];
+  /** 为业务逻辑预留的受保护的代码块列表，由业务逻辑维护（如代码块上线后不可删除） */
+  protectedList: string[];
 };
 
 export type CodeRelation = {
@@ -359,8 +359,8 @@ export interface ListRelationState extends ListState {
 }
 
 export enum CodeDeleteErrorType {
-  /** 代码块存在于不可删除列表中 */
-  UNDELETEABLE = 'undeleteable',
+  /** 代码块存在于受保护列表中 */
+  PROTECTED = 'protected',
   /** 代码块存在绑定关系 */
   BIND = 'bind',
 }

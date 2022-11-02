@@ -63,12 +63,12 @@ export default defineConfig(({ mode }) => {
             return path.replace(/\/api/, '');
           },
         },
-        '^/edoms/playground/runtime': {
+        '^/edoms-playground/runtime': {
           target: 'http://localhost:8078',
           changeOrigin: true,
           prependPath: false,
         },
-        '^/edoms/playground/entry': {
+        '^/edoms-playground/entry': {
           target: 'http://localhost:8078',
           changeOrigin: true,
           prependPath: false,
