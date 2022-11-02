@@ -55,7 +55,7 @@ export default defineConfig({
     port: 8098,
     strictPort: true,
     proxy: {
-      '^/edoms/playground/runtime': {
+      '^/edoms-playground/runtime': {
         target: 'http://127.0.0.1:8078',
         changeOrigin: true,
         prependPath: false,
