@@ -17,7 +17,6 @@ import type { MContainer } from '@edoms/schema';
 
 import EdomsUiComponent from '../../Component.vue';
 import useApp from '../../useApp';
-import useCommonMethod from '../../useCommonMethod';
 
 const props = defineProps<{
   config: MContainer;
@@ -38,6 +37,5 @@ const display = () => {
 
 defineExpose({
   display,
-  ...useCommonMethod(props),
 });
 </script>
