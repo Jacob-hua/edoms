@@ -32,7 +32,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const app = useApp(props);
+    const { app } = useApp(props);
 
     return {
       style: computed(() => app?.transformStyle(props.config.style || {})),

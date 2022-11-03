@@ -23,7 +23,7 @@ const props = defineProps<{
   config: MContainer;
 }>();
 
-const app = useApp(props);
+const { app } = useApp(props);
 
 const style = computed(() => app?.transformStyle(props.config.style || {}));
 

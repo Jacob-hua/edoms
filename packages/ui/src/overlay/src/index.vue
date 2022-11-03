@@ -7,7 +7,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import Core from '@edoms/core';
 import type { MNode } from '@edoms/schema';
 
 import useApp from '../../useApp';
@@ -24,10 +23,10 @@ export default defineComponent({
       default: () => ({}),
     },
   },
-
+  expose: ['openOverlay', 'closeOverlay'],
   setup(props) {
     const visible = ref(false);
-    const app: Core | undefined = useApp(props);
+    const { app, provideMethod } = useApp(props);
     const node = app?.page?.getNode(props.config.id);
 
     const openOverlay = () => {
@@ -51,6 +50,9 @@ export default defineComponent({
         closeOverlay();
       }
     });
+
+    provideMethod('openOverlay', openOverlay);
+    provideMethod('closeOverlay', closeOverlay);
 
     return {
       visible,

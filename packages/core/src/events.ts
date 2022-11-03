@@ -75,15 +75,15 @@ export const triggerCommonMethod = (methodName: string, node: Node) => {
 
   switch (methodName.replace(COMMON_METHOD_PREFIX, '')) {
     case CommonMethod.SHOW:
-      instance.show();
+      instance?.methods?.show();
       break;
 
     case CommonMethod.HIDE:
-      instance.hide();
+      instance?.methods?.hide();
       break;
 
     case CommonMethod.SCROLL_TO_VIEW:
-      instance.$el.scrollIntoView({ behavior: 'smooth' });
+      instance?.$el?.scrollIntoView({ behavior: 'smooth' });
       break;
 
     case CommonMethod.SCROLL_TO_TOP:

@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 
 import { isEmpty } from 'lodash-es';
 
-import type { EventItemConfig, MComponent, MContainer, MPage } from '@edoms/schema';
+import type { EventItemConfig, MComponent, MContainer, MNodeInstance, MPage } from '@edoms/schema';
 
 import type App from './App';
 import type Page from './Page';
@@ -20,7 +20,7 @@ class Node extends EventEmitter {
     [key: string]: any;
   };
   public events?: EventItemConfig[];
-  public instance?: any;
+  public instance?: MNodeInstance;
   public page?: Page;
   public parent?: Node;
   public app: App;
@@ -38,7 +38,7 @@ class Node extends EventEmitter {
     this.listenLifeSafe();
 
     this.once('destroy', () => {
-      this.instance = null;
+      this.instance = undefined;
       if (typeof this.data.destroy === 'function') {
         this.data.destroy(this);
       }
@@ -48,12 +48,12 @@ class Node extends EventEmitter {
   }
 
   private listenLifeSafe() {
-    this.once('created', async (instance: any) => {
+    this.once('created', async (instance: MNodeInstance) => {
       this.instance = instance;
       await this.runCodeBlock('created');
     });
 
-    this.once('mounted', async (instance: any) => {
+    this.once('mounted', async (instance: MNodeInstance) => {
       this.instance = instance;
 
       const eventConfigQueue = this.app.eventQueueMap[this.data.id] || [];

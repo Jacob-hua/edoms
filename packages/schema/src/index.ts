@@ -90,3 +90,12 @@ export interface PastePosition {
 }
 
 export type MNode = MComponent | MContainer | MPage | MApp;
+
+export interface Callback {
+  (...args: any[]): any;
+}
+
+export interface MNodeInstance {
+  methods?: Record<string, Callback>;
+  $el?: HTMLElement;
+}
