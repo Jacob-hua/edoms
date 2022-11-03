@@ -9,39 +9,32 @@
   ></component>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, getCurrentInstance, inject, provide } from 'vue';
+<script lang="ts" setup>
+import { computed, getCurrentInstance, inject, provide } from 'vue';
 
 import Core from '@edoms/core';
+import { MNode } from '@edoms/schema';
 import { toLine } from '@edoms/utils';
 
-export default defineComponent({
-  props: {
-    config: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
+const props = defineProps<{
+  config: MNode;
+}>();
 
-  setup(props) {
-    const vm = getCurrentInstance()?.proxy;
-    const app: Core | undefined = inject('app');
+const app = inject<Core | undefined>('app');
 
-    provide('hoc', vm);
+const tagName = computed(() => `edoms-ui-${toLine(props.config.type)}`);
 
-    return {
-      tagName: computed(() => `edoms-ui-${toLine(props.config.type)}`),
-      style: computed(() => app?.transformStyle(props.config.style)),
+const style = computed(() => app?.transformStyle(props.config.style ?? ''));
 
-      display: () => {
-        const displayCfg = props.config?.display;
+const display = () => {
+  const displayCfg = props.config?.display;
 
-        if (typeof displayCfg === 'function') {
-          return displayCfg(app);
-        }
-        return displayCfg !== false;
-      },
-    };
-  },
-});
+  if (typeof displayCfg === 'function') {
+    return displayCfg(app);
+  }
+  return displayCfg !== false;
+};
+
+const vm = getCurrentInstance()?.proxy;
+provide('hoc', vm);
 </script>
