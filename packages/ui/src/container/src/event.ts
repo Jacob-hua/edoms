@@ -1,11 +1,11 @@
 export default {
   methods: [
     {
-      label: '显示按钮',
+      label: '显示',
       value: 'show',
     },
     {
-      label: '隐藏按钮',
+      label: '隐藏',
       value: 'hide',
     },
   ],
