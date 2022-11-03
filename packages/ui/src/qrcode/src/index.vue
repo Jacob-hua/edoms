@@ -9,22 +9,32 @@ import QRCode from 'qrcode';
 import { MQrcode } from '../../types';
 import useApp from '../../useApp';
 
+interface SetQrcodeProps {
+  url: string;
+}
+
 const props = defineProps<{
   config: MQrcode;
 }>();
 
-useApp(props);
+const { provideMethod } = useApp(props);
 
-const imgUrl = ref();
+const imgUrl = ref(props.config.url);
 
-watch(
-  () => props.config.url,
-  (url = '') => {
+const setQrcode = provideMethod(
+  'setQrcode',
+  ({ url = '' }: SetQrcodeProps) => {
     QRCode.toDataURL(url, (e: any, url: string) => {
       if (e) console.error(e);
       imgUrl.value = url;
     });
   },
+  ['url']
+);
+
+watch(
+  () => props.config.url,
+  (url = '') => setQrcode({ url }),
   {
     immediate: true,
   }

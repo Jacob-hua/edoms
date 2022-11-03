@@ -8,7 +8,9 @@ import { ref, watch } from 'vue';
 import { MImg } from '../../types';
 import useApp from '../../useApp';
 
-import { SetSrcProps } from './type';
+interface SetSrcProps {
+  src: string;
+}
 
 const props = defineProps<{
   config: MImg;
