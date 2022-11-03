@@ -4,62 +4,44 @@
   </edoms-ui-container>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-import type { MNode } from '@edoms/schema';
+import type { MContainer, MNode } from '@edoms/schema';
 
 import useApp from '../../useApp';
 
-export default defineComponent({
-  props: {
-    config: {
-      type: Object,
-      default: () => ({}),
-    },
+const props = defineProps<{
+  config: MContainer;
+}>();
 
-    model: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  expose: ['openOverlay', 'closeOverlay'],
-  setup(props) {
-    const visible = ref(false);
-    const { app, provideMethod } = useApp(props);
-    const node = app?.page?.getNode(props.config.id);
+const visible = ref(false);
+const { app, provideMethod } = useApp(props);
+const node = app?.page?.getNode(props.config.id);
 
-    const openOverlay = () => {
-      visible.value = true;
-      if (app) {
-        app.emit('overlay:open', node);
-      }
-    };
+const openOverlay = () => {
+  visible.value = true;
+  if (app) {
+    app.emit('overlay:open', node);
+  }
+};
 
-    const closeOverlay = () => {
-      visible.value = false;
-      if (app) {
-        app.emit('overlay:close', node);
-      }
-    };
+provideMethod('openOverlay', openOverlay);
 
-    app?.on('editor:select', (info, path) => {
-      if (path.find((node: MNode) => node.id === props.config.id)) {
-        openOverlay();
-      } else {
-        closeOverlay();
-      }
-    });
+const closeOverlay = () => {
+  visible.value = false;
+  if (app) {
+    app.emit('overlay:close', node);
+  }
+};
 
-    provideMethod('openOverlay', openOverlay);
-    provideMethod('closeOverlay', closeOverlay);
+provideMethod('closeOverlay', closeOverlay);
 
-    return {
-      visible,
-
-      openOverlay,
-      closeOverlay,
-    };
-  },
+app?.on('editor:select', (info, path) => {
+  if (path.find((node: MNode) => node.id === props.config.id)) {
+    openOverlay();
+  } else {
+    closeOverlay();
+  }
 });
 </script>
