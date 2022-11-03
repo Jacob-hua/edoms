@@ -10,43 +10,34 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+<script lang="ts" setup>
+import { computed } from 'vue';
 
 import type { MContainer } from '@edoms/schema';
 
-import Component from '../../Component.vue';
+import EdomsUiComponent from '../../Component.vue';
 import useApp from '../../useApp';
 import useCommonMethod from '../../useCommonMethod';
 
-export default defineComponent({
-  components: {
-    'edoms-ui-component': Component,
-  },
+const props = defineProps<{
+  config: MContainer;
+}>();
 
-  props: {
-    config: {
-      type: Object as PropType<MContainer>,
-      default: () => ({}),
-    },
-  },
+const app = useApp(props);
 
-  setup(props) {
-    const app = useApp(props);
+const style = computed(() => app?.transformStyle(props.config.style || {}));
 
-    return {
-      style: computed(() => app?.transformStyle(props.config.style || {})),
+const display = () => {
+  const displayCfg = props.config?.display;
 
-      display: () => {
-        const displayCfg = props.config?.display;
+  if (typeof displayCfg === 'function') {
+    return displayCfg(app);
+  }
+  return displayCfg !== false;
+};
 
-        if (typeof displayCfg === 'function') {
-          return displayCfg(app);
-        }
-        return displayCfg !== false;
-      },
-      ...useCommonMethod(props),
-    };
-  },
+defineExpose({
+  display,
+  ...useCommonMethod(props),
 });
 </script>
