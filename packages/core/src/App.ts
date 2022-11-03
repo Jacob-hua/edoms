@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 
-import type { CodeBlockDSL, EventItemConfig, Id, MApp } from '@edoms/schema';
+import type { Callback, CodeBlockDSL, EventArgs, EventItemConfig, Id, MApp } from '@edoms/schema';
 
 import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
@@ -21,7 +21,7 @@ interface AppOptionsConfig {
 interface EventCache {
   eventConfig: EventItemConfig;
   fromCpt: any;
-  args: any[];
+  args?: EventArgs;
 }
 
 class App extends EventEmitter {
@@ -178,22 +178,22 @@ class App extends EventEmitter {
 
   public bindEvent(event: EventItemConfig, id: string) {
     const { name } = event;
-    this.on(`${name}_${id}`, (fromCpt: Node, ...args) => {
+    this.on(`${name}_${id}`, (fromCpt: Node, args?: EventArgs) => {
       this.eventHandler(event, fromCpt, args);
     });
   }
 
-  public emit(name: string | symbol, node: any, ...args: any[]): boolean {
+  public emit(name: string | symbol, node: any, args?: EventArgs): boolean {
     if (node?.data?.id) {
-      return super.emit(`${String(name)}_${node.data.id}`, node, ...args);
+      return super.emit(`${String(name)}_${node.data.id}`, node, args);
     }
-    return super.emit(name, node, ...args);
+    return super.emit(name, node, args);
   }
 
-  public eventHandler(eventConfig: EventItemConfig, fromCpt: any, args: any[]) {
+  public eventHandler(eventConfig: EventItemConfig, fromCpt: any, args?: EventArgs) {
     if (!this.page) throw new Error('当前没有页面');
 
-    const { method: methodName, to } = eventConfig;
+    const { method: methodName, to, mappings } = eventConfig;
 
     const toNode = this.page.getNode(to);
     if (!toNode) throw `ID为${to}的组件不存在`;
@@ -201,11 +201,12 @@ class App extends EventEmitter {
     if (isCommonMethod(methodName)) {
       return triggerCommonMethod(methodName, toNode);
     }
-    console.log('方法', methodName, toNode.instance);
 
     if (toNode.instance && toNode.instance.methods) {
       if (typeof toNode.instance.methods[methodName] === 'function') {
-        toNode.instance.methods[methodName](fromCpt, ...args);
+        const method = toNode.instance.methods[methodName] as Callback;
+        console.log(method.__depends__, mappings, fromCpt);
+        method(fromCpt, args);
       }
     } else {
       this.addEventToMap({

@@ -25,6 +25,8 @@ export interface MappingStruct {
   defaultExpression?: string;
 }
 
+export type EventArgs = Record<string | number | symbol, any>;
+
 export interface EventItemConfig {
   /** 被选中组件ID */
   to: Id;
