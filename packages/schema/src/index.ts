@@ -93,6 +93,7 @@ export type MNode = MComponent | MContainer | MPage | MApp;
 
 export interface Callback {
   (...args: any[]): any;
+  __depends__?: string[];
 }
 
 export interface MNodeInstance {
