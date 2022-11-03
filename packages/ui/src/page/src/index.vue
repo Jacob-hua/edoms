@@ -11,36 +11,24 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+<script lang="ts" setup>
+import { computed } from 'vue';
 
 import type { MPage } from '@edoms/schema';
 
-import Component from '../../Component.vue';
+import EdomsUiComponent from '../../Component.vue';
 import useApp from '../../useApp';
 
-export default defineComponent({
-  components: {
-    'edoms-ui-component': Component,
-  },
+const props = defineProps<{
+  config: MPage;
+}>();
 
-  props: {
-    config: {
-      type: Object as PropType<MPage>,
-      default: () => ({}),
-    },
-  },
+const { app, provideMethod } = useApp(props);
 
-  setup(props) {
-    const { app } = useApp(props);
+const style = computed(() => app?.transformStyle(props.config.style || {}));
 
-    return {
-      style: computed(() => app?.transformStyle(props.config.style || {})),
-
-      refresh() {
-        window.location.reload();
-      },
-    };
-  },
-});
+const refresh = () => {
+  window.location.reload();
+};
+provideMethod('refresh', refresh);
 </script>
