@@ -151,9 +151,7 @@ class App extends EventEmitter {
 
     this.page = page;
 
-    if (this.platform !== 'edoms') {
-      this.bindEvents();
-    }
+    this.bindEvents();
   }
 
   public registerComponent(type: string, Component: any) {
@@ -203,10 +201,11 @@ class App extends EventEmitter {
     if (isCommonMethod(methodName)) {
       return triggerCommonMethod(methodName, toNode);
     }
+    console.log('方法', methodName, toNode.instance);
 
-    if (toNode.instance) {
-      if (typeof toNode.instance[methodName] === 'function') {
-        toNode.instance[methodName](fromCpt, ...args);
+    if (toNode.instance && toNode.instance.methods) {
+      if (typeof toNode.instance.methods[methodName] === 'function') {
+        toNode.instance.methods[methodName](fromCpt, ...args);
       }
     } else {
       this.addEventToMap({

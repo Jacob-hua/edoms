@@ -11,6 +11,7 @@ import { defineComponent, ref } from 'vue';
 
 import { editorService } from '@edoms/editor';
 import type StageCore from '@edoms/stage';
+import { RuntimeWindow } from '@edoms/stage';
 
 enum DeviceType {
   Phone = 'phone',
@@ -50,8 +51,9 @@ export default defineComponent({
   setup(props, { emit }) {
     const calcFontsize = (width: number) => {
       const { iframe } = editorService.get<StageCore>('stage').renderer;
-      if (!iframe?.contentWindow) return;
-      iframe.contentWindow.appInstance.designWidth = width;
+      const contentWindow: RuntimeWindow = iframe?.contentWindow as RuntimeWindow;
+      if (!contentWindow) return;
+      contentWindow.appInstance.designWidth = width;
     };
 
     const viewerDevice = ref(DeviceType.Phone);
