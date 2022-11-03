@@ -12,6 +12,7 @@ export const enum VariableSpace {
   APP = 'app',
   CONST = 'const',
   EXPRESSION = 'expression',
+  EVENT = 'event',
 }
 
 export interface MappingStruct {
