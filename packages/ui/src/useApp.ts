@@ -9,11 +9,7 @@ export default (props: any) => {
   const app: Core | undefined = inject('app');
   const node = app?.page?.getNode(props.config.id);
 
-  const instance: MNodeInstance = {
-    methods: {
-      ...useCommonMethod(props),
-    },
-  };
+  const instance: MNodeInstance = {};
 
   node?.emit('created', instance);
 
@@ -25,8 +21,17 @@ export default (props: any) => {
     node?.emit('destroy');
   });
 
-  const provideMethod = (method: string, callback: Callback): void => {
-    instance.methods[method] = callback;
+  const provideMethod = (methodName: string, callback: Callback, depends?: string[] | undefined): Callback => {
+    if (!instance.methods) {
+      instance.methods = {
+        ...useCommonMethod(props),
+      };
+    }
+    if (depends) {
+      callback.__depends__ = depends;
+    }
+    instance.methods[methodName] = callback;
+    return callback;
   };
 
   return {

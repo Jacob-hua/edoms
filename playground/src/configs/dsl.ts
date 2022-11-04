@@ -74,6 +74,45 @@ export default {
           created: ['code_5316'],
         },
         {
+          type: 'button',
+          id: 'button_43o',
+          style: {
+            position: 'absolute',
+            width: '270',
+            height: '37.5',
+            border: 0,
+            backgroundColor: '#fb6f00',
+            top: '147',
+            left: '59',
+            right: '',
+            bottom: '',
+            backgroundImage: '',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: '100% 100%',
+            color: '',
+            fontSize: '',
+            fontWeight: '',
+          },
+          name: '按钮',
+          text: '更新二维码',
+          multiple: true,
+          events: [
+            {
+              name: 'edoms:common:events:click',
+              to: 'qrcode_4738',
+              method: 'setQrcode',
+              mappings: [
+                {
+                  target: 'url',
+                  const: 'E-DOMS',
+                  sourceSpace: 'const',
+                },
+              ],
+            },
+          ],
+          created: [],
+        },
+        {
           type: 'qrcode',
           id: 'qrcode_4738',
           style: {

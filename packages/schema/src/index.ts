@@ -12,17 +12,23 @@ export const enum VariableSpace {
   APP = 'app',
   CONST = 'const',
   EXPRESSION = 'expression',
+  EVENT = 'event',
 }
 
 export interface MappingStruct {
   target: string;
   ignore?: boolean;
   source?: string;
-  sourceSpace?: VariableSpace;
+  sourceSpace: VariableSpace;
   const?: string;
   defaultValue?: string;
+  expression?: string;
   defaultExpression?: string;
 }
+
+export type EventArgs = Record<string | number | symbol, any>;
+
+export type MethodProps = EventArgs;
 
 export interface EventItemConfig {
   /** 被选中组件ID */
@@ -93,6 +99,7 @@ export type MNode = MComponent | MContainer | MPage | MApp;
 
 export interface Callback {
   (...args: any[]): any;
+  __depends__?: string[];
 }
 
 export interface MNodeInstance {

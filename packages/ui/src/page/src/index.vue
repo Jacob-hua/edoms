@@ -27,8 +27,7 @@ const { app, provideMethod } = useApp(props);
 
 const style = computed(() => app?.transformStyle(props.config.style || {}));
 
-const refresh = () => {
+provideMethod('refresh', () => {
   window.location.reload();
-};
-provideMethod('refresh', refresh);
+});
 </script>
