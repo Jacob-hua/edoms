@@ -1,4 +1,4 @@
-import { getCurrentInstance, inject, onMounted, onUnmounted } from 'vue';
+import { getCurrentInstance, inject, onMounted, onUnmounted, onUpdated } from 'vue';
 
 import Core from '@edoms/core';
 import { Callback, MNodeInstance } from '@edoms/schema';
@@ -19,6 +19,10 @@ export default (props: any) => {
       instance.$el = vm.$el;
     }
     node?.emit('mounted', instance);
+  });
+
+  onUpdated(() => {
+    node?.emit('updated', instance);
   });
 
   onUnmounted(() => {

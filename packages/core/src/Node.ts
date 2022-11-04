@@ -39,6 +39,7 @@ class Node extends EventEmitter {
 
     this.once('destroy', () => {
       this.instance = undefined;
+      this.off('updated', this.updateInstance);
       if (typeof this.data.destroy === 'function') {
         this.data.destroy(this);
       }
@@ -64,6 +65,12 @@ class Node extends EventEmitter {
 
       await this.runCodeBlock('mounted');
     });
+
+    this.on('updated', this.updateInstance);
+  }
+
+  public updateInstance(instance?: MNodeInstance) {
+    this.instance = instance;
   }
 
   private async runCodeBlock(hook: string) {
