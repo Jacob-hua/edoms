@@ -59,7 +59,7 @@ class Node extends EventEmitter {
       const eventConfigQueue = this.app.eventQueueMap[this.data.id] || [];
 
       for (let eventConfig = eventConfigQueue.shift(); eventConfig; eventConfig = eventConfigQueue.shift()) {
-        this.app.eventHandler(eventConfig.eventConfig, eventConfig.fromCpt, eventConfig.args);
+        this.app.eventHandler(eventConfig.eventConfig, eventConfig.fromCpt, eventConfig.props);
       }
 
       await this.runCodeBlock('mounted');

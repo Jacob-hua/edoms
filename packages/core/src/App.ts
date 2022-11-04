@@ -189,8 +189,35 @@ class App extends EventEmitter {
   public bindEvent(event: EventItemConfig, id: string) {
     const { name } = event;
     this.on(`${name}_${id}`, (fromCpt: Node, args?: EventArgs) => {
-      this.eventHandler(event, fromCpt, args);
+      this.eventHandler(event, fromCpt, this.calculateMethodProps(event, args));
     });
+  }
+
+  private calculateMethodProps(eventConfig: EventItemConfig, eventArgs?: EventArgs): MethodProps {
+    const { mappings } = eventConfig;
+    if (!mappings) {
+      return {};
+    }
+
+    return mappings.reduce(
+      (props, mapping: MappingStruct) => ({ ...props, [mapping.target]: computeTarge(mapping, eventArgs) }),
+      {} as MethodProps
+    );
+
+    function computeTarge(mapping: MappingStruct, eventArgs?: EventArgs): any {
+      const mappingClassify = {
+        [VariableSpace.APP]: () => {},
+        [VariableSpace.PAGE]: () => {},
+        [VariableSpace.COMPONENT]: () => {},
+        [VariableSpace.CONST]: () => mapping.const,
+        [VariableSpace.EVENT]: () => mapping?.source && eventArgs?.[mapping?.source],
+        [VariableSpace.EXPRESSION]: () => eval(mapping.expression ?? mapping.defaultExpression ?? ''),
+      };
+      if (!mappingClassify[mapping.sourceSpace] || !mappingClassify[mapping.sourceSpace]) {
+        return mapping.defaultValue;
+      }
+      return mappingClassify[mapping.sourceSpace]();
+    }
   }
 
   public emit(name: string | symbol, node: any, args?: EventArgs): boolean {
@@ -200,7 +227,7 @@ class App extends EventEmitter {
     return super.emit(name, node, args);
   }
 
-  public eventHandler(eventConfig: EventItemConfig, fromCpt: any, eventArgs?: EventArgs) {
+  public eventHandler(eventConfig: EventItemConfig, fromCpt: any, props?: MethodProps) {
     if (!this.page) throw new Error('当前没有页面');
 
     const { method: methodName, to } = eventConfig;
@@ -212,51 +239,22 @@ class App extends EventEmitter {
       return triggerCommonMethod(methodName, toNode);
     }
 
-    const methodProps = calculateMethodProps(eventConfig, eventArgs);
-
     if (!toNode.instance) {
       this.addEventToMap({
         eventConfig,
         fromCpt,
-        props: methodProps,
+        props,
       });
     } else if (toNode.instance.methods && typeof toNode.instance.methods[methodName] === 'function') {
       const method = toNode.instance.methods[methodName] as Callback;
-      let props: MethodProps = { fromCpt };
+      let methodProps: MethodProps = { fromCpt };
       if (method.__depends__) {
-        props = method.__depends__.reduce((props, dependKey: string) => {
-          props[dependKey] = methodProps[dependKey];
-          return props;
-        }, props);
+        methodProps = method.__depends__.reduce(
+          (methodProps, dependKey: string) => ({ ...methodProps, [dependKey]: props?.[dependKey] }),
+          methodProps
+        );
       }
-      method(props);
-    }
-
-    function calculateMethodProps(eventConfig: EventItemConfig, eventArgs?: EventArgs): MethodProps {
-      const { mappings } = eventConfig;
-      if (!mappings) {
-        return {};
-      }
-
-      return mappings.reduce(
-        (props, mapping: MappingStruct) => ({ ...props, [mapping.target]: computeTarge(mapping, eventArgs) }),
-        {} as MethodProps
-      );
-    }
-
-    function computeTarge(mapping: MappingStruct, eventArgs?: EventArgs): any {
-      const mappingClassify = {
-        [VariableSpace.APP]: () => {},
-        [VariableSpace.PAGE]: () => {},
-        [VariableSpace.COMPONENT]: () => {},
-        [VariableSpace.CONST]: () => mapping.const,
-        [VariableSpace.EVENT]: () => mapping?.source && eventArgs?.[mapping?.source],
-        [VariableSpace.EXPRESSION]: () => eval(mapping.expression ?? mapping.defaultExpression ?? ''),
-      };
-      if (!mappingClassify[mapping.sourceSpace]) {
-        return;
-      }
-      return mappingClassify[mapping.sourceSpace]() ?? mapping.defaultValue;
+      method(methodProps);
     }
   }
 
