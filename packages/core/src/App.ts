@@ -16,6 +16,7 @@ import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
 import type Node from './Node';
 import Page from './Page';
+import Store from './Store';
 import { fillBackgroundImage, isNumber, style2Obj } from './utils';
 
 interface AppOptionsConfig {
@@ -48,6 +49,8 @@ class App extends EventEmitter {
   public components = new Map();
 
   public eventQueueMap: Record<string, EventCache[]> = {};
+
+  public store = new Store();
 
   constructor(options: AppOptionsConfig) {
     super();
