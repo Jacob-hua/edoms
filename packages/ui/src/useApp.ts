@@ -1,4 +1,4 @@
-import { inject, onMounted, onUnmounted } from 'vue';
+import { getCurrentInstance, inject, onMounted, onUnmounted } from 'vue';
 
 import Core from '@edoms/core';
 import { Callback, MNodeInstance } from '@edoms/schema';
@@ -14,6 +14,10 @@ export default (props: any) => {
   node?.emit('created', instance);
 
   onMounted(() => {
+    const vm = getCurrentInstance()?.proxy;
+    if (vm) {
+      instance.$el = vm.$el;
+    }
     node?.emit('mounted', instance);
   });
 
