@@ -13,6 +13,7 @@ export const enum VariableSpace {
   CONST = 'const',
   EXPRESSION = 'expression',
   EVENT = 'event',
+  TEMPLATE = 'template',
 }
 
 export interface MappingStruct {
@@ -24,6 +25,7 @@ export interface MappingStruct {
   defaultValue?: string;
   expression?: string;
   defaultExpression?: string;
+  template?: string;
 }
 
 export type EventArgs = Record<string | number | symbol, any>;
