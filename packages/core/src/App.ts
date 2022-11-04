@@ -1,6 +1,16 @@
 import { EventEmitter } from 'events';
 
-import type { Callback, CodeBlockDSL, EventArgs, EventItemConfig, Id, MApp } from '@edoms/schema';
+import {
+  Callback,
+  CodeBlockDSL,
+  EventArgs,
+  EventItemConfig,
+  Id,
+  MApp,
+  MappingStruct,
+  MethodProps,
+  VariableSpace,
+} from '@edoms/schema';
 
 import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
@@ -21,7 +31,7 @@ interface AppOptionsConfig {
 interface EventCache {
   eventConfig: EventItemConfig;
   fromCpt: any;
-  args?: EventArgs;
+  props?: MethodProps;
 }
 
 class App extends EventEmitter {
@@ -190,10 +200,10 @@ class App extends EventEmitter {
     return super.emit(name, node, args);
   }
 
-  public eventHandler(eventConfig: EventItemConfig, fromCpt: any, args?: EventArgs) {
+  public eventHandler(eventConfig: EventItemConfig, fromCpt: any, eventArgs?: EventArgs) {
     if (!this.page) throw new Error('当前没有页面');
 
-    const { method: methodName, to, mappings } = eventConfig;
+    const { method: methodName, to } = eventConfig;
 
     const toNode = this.page.getNode(to);
     if (!toNode) throw `ID为${to}的组件不存在`;
@@ -202,18 +212,51 @@ class App extends EventEmitter {
       return triggerCommonMethod(methodName, toNode);
     }
 
-    if (toNode.instance && toNode.instance.methods) {
-      if (typeof toNode.instance.methods[methodName] === 'function') {
-        const method = toNode.instance.methods[methodName] as Callback;
-        console.log(method.__depends__, mappings, fromCpt);
-        method(fromCpt, args);
-      }
-    } else {
+    const methodProps = calculateMethodProps(eventConfig, eventArgs);
+
+    if (!toNode.instance) {
       this.addEventToMap({
         eventConfig,
         fromCpt,
-        args,
+        props: methodProps,
       });
+    } else if (toNode.instance.methods && typeof toNode.instance.methods[methodName] === 'function') {
+      const method = toNode.instance.methods[methodName] as Callback;
+      let props: MethodProps = { fromCpt };
+      if (method.__depends__) {
+        props = method.__depends__.reduce((props, dependKey: string) => {
+          props[dependKey] = methodProps[dependKey];
+          return props;
+        }, props);
+      }
+      method(props);
+    }
+
+    function calculateMethodProps(eventConfig: EventItemConfig, eventArgs?: EventArgs): MethodProps {
+      const { mappings } = eventConfig;
+      if (!mappings) {
+        return {};
+      }
+
+      return mappings.reduce(
+        (props, mapping: MappingStruct) => ({ ...props, [mapping.target]: computeTarge(mapping, eventArgs) }),
+        {} as MethodProps
+      );
+    }
+
+    function computeTarge(mapping: MappingStruct, eventArgs?: EventArgs): any {
+      const mappingClassify = {
+        [VariableSpace.APP]: () => {},
+        [VariableSpace.PAGE]: () => {},
+        [VariableSpace.COMPONENT]: () => {},
+        [VariableSpace.CONST]: () => mapping.const,
+        [VariableSpace.EVENT]: () => mapping?.source && eventArgs?.[mapping?.source],
+        [VariableSpace.EXPRESSION]: () => eval(mapping.expression ?? mapping.defaultExpression ?? ''),
+      };
+      if (!mappingClassify[mapping.sourceSpace]) {
+        return;
+      }
+      return mappingClassify[mapping.sourceSpace]() ?? mapping.defaultValue;
     }
   }
 

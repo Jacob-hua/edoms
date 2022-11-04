@@ -105,6 +105,7 @@ export default {
                 {
                   target: 'url',
                   const: 'E-DOMS',
+                  sourceSpace: 'const',
                 },
               ],
             },
