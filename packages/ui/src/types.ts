@@ -169,8 +169,8 @@ export type MTabsInstance =
 
 /* text */
 export interface MText extends MComponent {
-  text?: string | ((p1: any, p2: any) => string);
-  disabledText?: string | ((p1: any, p2: any) => string);
+  text?: string;
+  disabledText?: string;
   multiple?: boolean;
 }
 export interface MTextProps {
@@ -178,23 +178,13 @@ export interface MTextProps {
   model: Object;
   vars: Object;
 }
-export type MTextInstance =
-  | ComponentPublicInstance<
-      MTextProps,
-      {},
-      {
-        [propName: string]: any;
-      }
-    >
-  | null
-  | undefined;
 
 /* button */
 export interface MButton extends MComponent {
   preAction?: (p1: any, p2: any) => string;
   postAction?: (p1: any, p2: any) => string;
-  text?: string | ((p1: any, p2: any) => string);
-  disabledText?: string | ((p1: any, p2: any) => string);
+  text?: string;
+  disabledText?: string;
 }
 export interface MButtonProps {
   config: MButton;
