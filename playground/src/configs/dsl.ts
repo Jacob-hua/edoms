@@ -110,6 +110,14 @@ export default {
               ],
             },
           ],
+          stores: [
+            {
+              variable: 'url',
+              type: 'app',
+              valueType: 'variable',
+              value: 'url',
+            },
+          ],
           created: [],
         },
         {
