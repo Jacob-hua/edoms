@@ -12,6 +12,11 @@ interface ImportMeta {
 
 declare module 'serialize-javascript';
 
+declare module 'vue3-json-viewer' {
+  const gyf: any;
+  export default gyf;
+}
+
 declare module '*.vue' {
   import type { DefineComponent } from 'vue';
 

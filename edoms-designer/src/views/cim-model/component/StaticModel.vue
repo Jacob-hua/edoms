@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="static-container">
     <GridList
       ref="gridList"
       class="grid-list"
@@ -15,6 +15,9 @@
         <div></div>
       </template>
     </GridList>
+    <div class="right-section">
+      <StaticModelTable />
+    </div>
   </div>
 </template>
 
@@ -24,13 +27,15 @@ import { useRoute } from 'vue-router';
 
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 
+import StaticModelTable from './StaticModelTable.vue';
+
 const route = useRoute();
 console.log(route.query.applicationId);
 const gridList = ref(null);
 const loadData: RequestFunc<{ name: string }> = async () => {
   const dataSource = [
     {
-      name: '模型表1',
+      name: `模型表1`,
     },
     {
       name: '模型表2',
@@ -51,15 +56,21 @@ const loadData: RequestFunc<{ name: string }> = async () => {
 
 <style lang="scss" scoped>
 .item {
+  cursor: pointer;
   border-bottom: 1px solid #e1e1e1;
 }
-.container {
+.static-container {
+  display: flex;
   .grid-list {
-    height: 800px;
-    width: 300px;
+    height: 700px;
+    width: 15%;
+    border-right: 1px solid #e1e1e1;
     div {
       text-align: left;
     }
+  }
+  .right-section {
+    width: 85%;
   }
 }
 </style>

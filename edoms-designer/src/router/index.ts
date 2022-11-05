@@ -29,7 +29,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/model',
         name: 'Model',
-        component: () => import('@/views/model/index.vue'),
+        component: () => import('@/views/cim-model/index.vue'),
       },
     ],
   },
@@ -48,6 +48,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/:catchAll(.*)',
     redirect: '/404',
+  },
+  {
+    path: '/test',
+    component: () => import('../views/cim-model/component/testTable.vue'),
   },
 ];
 

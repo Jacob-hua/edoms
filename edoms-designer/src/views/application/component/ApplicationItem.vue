@@ -1,7 +1,13 @@
 <template>
   <div class="app-wrapper">
     <div class="app-box">
-      <img alt="" :src="application.imgUrl" />
+      <el-image :src="application.imgUrl">
+        <template #error>
+          <div class="image-slot">
+            <img alt="" :src="NoData" />
+          </div>
+        </template>
+      </el-image>
       <div class="pop-menu">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
@@ -23,6 +29,7 @@
 import { useRouter } from 'vue-router';
 
 import { ApplicationInfo } from '@/api/application/type';
+import NoData from '@/assets/img/no_data.png';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
@@ -77,6 +84,10 @@ const handleMenuClick = (value: string | number) => {
 </script>
 
 <style lang="scss" scoped>
+.el-image {
+  width: 195px;
+  height: 195px;
+}
 .pop-menu-item {
   display: flex;
   align-items: center;
