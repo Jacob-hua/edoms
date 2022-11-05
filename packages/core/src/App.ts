@@ -1,23 +1,13 @@
 import { EventEmitter } from 'events';
 
-import {
-  Callback,
-  CodeBlockDSL,
-  EventArgs,
-  EventItemConfig,
-  Id,
-  MApp,
-  MappingStruct,
-  MethodProps,
-  ValueSpace,
-} from '@edoms/schema';
+import { Callback, CodeBlockDSL, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
 
 import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
 import type Node from './Node';
 import Page from './Page';
 import Store from './Store';
-import { fillBackgroundImage, isNumber, style2Obj } from './utils';
+import { calculateMethodProps, fillBackgroundImage, isNumber, style2Obj } from './utils';
 
 interface AppOptionsConfig {
   ua?: string;
@@ -192,46 +182,8 @@ class App extends EventEmitter {
   public bindEvent(event: EventItemConfig, id: string) {
     const { name } = event;
     this.on(`${name}_${id}`, (fromCpt: Node, args?: EventArgs) => {
-      this.eventHandler(event, fromCpt, this.calculateMethodProps(fromCpt, event, args));
+      this.eventHandler(event, fromCpt, calculateMethodProps(fromCpt, event, args));
     });
-  }
-
-  private calculateMethodProps(fromCpt: Node, eventConfig: EventItemConfig, eventArgs?: EventArgs): MethodProps {
-    const { mappings } = eventConfig;
-    if (!mappings) {
-      return {};
-    }
-
-    return mappings.reduce(
-      (props, mapping: MappingStruct) => ({ ...props, [mapping.target]: computeTarge(fromCpt, mapping, eventArgs) }),
-      {} as MethodProps
-    );
-
-    function computeTarge(fromCpt: Node, mapping: MappingStruct, eventArgs?: EventArgs): any {
-      const mappingClassify = {
-        [ValueSpace.APP]: ({ source }: MappingStruct) => source && fromCpt.app.store.get(source),
-        [ValueSpace.PAGE]: ({ source }: MappingStruct) => source && fromCpt.page?.store.get(source),
-        [ValueSpace.COMPONENT]: ({ source }: MappingStruct) => source && fromCpt.store.get(source),
-        [ValueSpace.CONST]: () => mapping.const,
-        [ValueSpace.EVENT]: ({ source }: MappingStruct) => source && eventArgs?.[source],
-        [ValueSpace.EXPRESSION]: ({ expression, defaultExpression }: MappingStruct) =>
-          eval(expression ?? defaultExpression ?? ''),
-        [ValueSpace.TEMPLATE]: () => {
-          // 处理模板
-          // if (Object.prototype.toString.call(vars) === '[object Object]') {
-          //   const tmp: string = text;
-          //   Object.entries(vars).forEach(([key, value]) => {
-          //     tmp.value = tmp.value.replace(new RegExp(`{{${key}}}`, 'g'), value);
-          //   });
-          //   return tmp;
-          // }
-        },
-      };
-      if (!mappingClassify[mapping.sourceSpace] || !mappingClassify[mapping.sourceSpace]) {
-        return mapping.defaultValue;
-      }
-      return mappingClassify[mapping.sourceSpace](mapping);
-    }
   }
 
   public emit(name: string | symbol, node: any, args?: EventArgs): boolean {

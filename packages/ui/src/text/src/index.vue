@@ -40,8 +40,8 @@ const displayText = computed(() => {
 
 provideMethod(
   'setText',
-  ({ text }) => {
-    props.config.text = text;
+  ({ text: value }) => {
+    text.value = value;
   },
   ['text']
 );

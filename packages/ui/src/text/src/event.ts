@@ -8,5 +8,9 @@ export default {
       label: '隐藏',
       value: 'hide',
     },
+    {
+      label: '设置文本',
+      value: 'setText',
+    },
   ],
 };
