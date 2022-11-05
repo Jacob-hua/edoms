@@ -8,4 +8,8 @@ export default class Store {
   public get(key: string) {
     return this.data[key];
   }
+
+  public keys() {
+    return Object.keys(this.data);
+  }
 }

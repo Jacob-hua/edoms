@@ -2,6 +2,7 @@ import type { Id, MComponent, MContainer, MPage } from '@edoms/schema';
 
 import type App from './App';
 import Node from './Node';
+import Store from './Store';
 interface ConfigOptions {
   config: MPage;
   app: App;
@@ -9,6 +10,8 @@ interface ConfigOptions {
 
 class Page extends Node {
   public nodes = new Map<Id, Node>();
+
+  public store = new Store();
 
   constructor(options: ConfigOptions) {
     super(options);

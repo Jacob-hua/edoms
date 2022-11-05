@@ -13,6 +13,7 @@ export const enum VariableSpace {
   CONST = 'const',
   EXPRESSION = 'expression',
   EVENT = 'event',
+  TEMPLATE = 'template',
 }
 
 export interface MappingStruct {
@@ -24,6 +25,7 @@ export interface MappingStruct {
   defaultValue?: string;
   expression?: string;
   defaultExpression?: string;
+  template?: string;
 }
 
 export type EventArgs = Record<string | number | symbol, any>;
@@ -40,6 +42,25 @@ export interface EventItemConfig {
   mappings?: MappingStruct[];
 }
 
+export const enum StoreType {
+  APP = 'app',
+  PAGE = 'page',
+  COMPONENT = 'component',
+}
+
+export const enum StoreValueType {
+  CONST = 'const',
+  EXPRESSION = 'expression',
+  VARIABLE = 'variable',
+}
+
+export interface StoreItemConfig {
+  variable: string;
+  type: StoreType;
+  valueType: StoreValueType;
+  value: string;
+}
+
 export interface MComponent {
   /** 组件ID，默认为${type}_${number}}形式, 如：page_123 */
   id: Id;
@@ -51,6 +72,8 @@ export interface MComponent {
   className?: string;
   /* 关联事件集合 */
   events?: EventItemConfig[];
+  /** 值存储集合 */
+  stores?: StoreItemConfig[];
   /** 组件根Dom的style */
   style?: {
     [key: string]: any;

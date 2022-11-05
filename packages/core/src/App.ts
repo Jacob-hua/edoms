@@ -16,6 +16,7 @@ import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
 import type Node from './Node';
 import Page from './Page';
+import Store from './Store';
 import { fillBackgroundImage, isNumber, style2Obj } from './utils';
 
 interface AppOptionsConfig {
@@ -48,6 +49,8 @@ class App extends EventEmitter {
   public components = new Map();
 
   public eventQueueMap: Record<string, EventCache[]> = {};
+
+  public store = new Store();
 
   constructor(options: AppOptionsConfig) {
     super();
@@ -212,7 +215,16 @@ class App extends EventEmitter {
         [VariableSpace.CONST]: () => mapping.const,
         [VariableSpace.EVENT]: () => mapping?.source && eventArgs?.[mapping?.source],
         [VariableSpace.EXPRESSION]: () => eval(mapping.expression ?? mapping.defaultExpression ?? ''),
+        [VariableSpace.TEMPLATE]: () => {},
       };
+      // 处理模板
+      // if (Object.prototype.toString.call(vars) === '[object Object]') {
+      //   const tmp: string = text;
+      //   Object.entries(vars).forEach(([key, value]) => {
+      //     tmp.value = tmp.value.replace(new RegExp(`{{${key}}}`, 'g'), value);
+      //   });
+      //   return tmp;
+      // }
       if (!mappingClassify[mapping.sourceSpace] || !mappingClassify[mapping.sourceSpace]) {
         return mapping.defaultValue;
       }
