@@ -1,11 +1,5 @@
 <template>
   <div class="container">
-    <div class="container-left">
-      <div class="user-info">
-        <img alt="" src="" />
-        <LongText :content-style="{ marginBottom: '20px' }" effect="dark" content="王麻子"></LongText>
-      </div>
-    </div>
     <div class="container-right">
       <GridList
         ref="gridList"
@@ -39,7 +33,6 @@ import { ref } from 'vue';
 import { listApplications } from '@/api/application';
 import { ApplicationInfo, ListApplicationsRes } from '@/api/application/type';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
-import LongText from '@/components/LongText.vue';
 
 import ApplicationItem from './component/ApplicationItem.vue';
 import NewApplication from './component/NewApplication.vue';
@@ -93,7 +86,7 @@ const handleAppCreated = () => {
     }
   }
   .container-right {
-    width: 75%;
+    width: 100%;
     .grid-list {
       height: 760px;
     }
