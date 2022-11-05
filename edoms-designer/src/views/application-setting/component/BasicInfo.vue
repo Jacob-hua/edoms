@@ -32,7 +32,13 @@
           <el-icon><Plus /></el-icon>
           <template #file="{ file }">
             <div>
-              <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+              <el-image :src="file.url">
+                <template #error>
+                  <div class="image-slot">
+                    <img alt="" :src="NoData" />
+                  </div>
+                </template>
+              </el-image>
               <span class="el-upload-list__item-actions">
                 <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
                   <el-icon><ZoomIn /></el-icon>
@@ -45,7 +51,13 @@
           </template>
         </el-upload>
         <el-dialog v-model="dialogVisible">
-          <img :src="dialogImageUrl" alt="Preview Image" />
+          <el-image :src="dialogImageUrl">
+            <template #error>
+              <div class="image-slot">
+                <img alt="" :src="NoData" />
+              </div>
+            </template>
+          </el-image>
         </el-dialog>
       </el-form-item>
     </el-form>
@@ -60,8 +72,8 @@ import { ElMessage, FormInstance } from 'element-plus';
 import { updateApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
 import { AppForm } from '@/api/application/type';
+import NoData from '@/assets/img/no_data.png';
 import { useUpload } from '@/views/application/component/useUpload';
-
 const emit = defineEmits<{
   (event: 'back'): void;
 }>();
@@ -131,6 +143,15 @@ const update = async (appInfo: AppForm) => {
 </script>
 
 <style lang="scss" scoped>
+.el-image {
+  width: 160px;
+  height: 160px;
+  .image-slot {
+    img {
+      width: 160px;
+    }
+  }
+}
 .appInfo {
   width: 1000px;
   margin: auto;

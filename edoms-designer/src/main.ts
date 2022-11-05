@@ -10,15 +10,17 @@ import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
 import EdomsForm from '@edoms/form';
 
 console.log('EdomsElementPlusAdapter');
+import JsonViewer from 'vue3-json-viewer';
+
 import App from './App.vue';
 import router from './router';
 
 import './assets/style/main.css';
 import 'element-plus/theme-chalk/index.css';
 import '@edoms/editor/src/theme/index.scss';
-
+import 'vue3-json-viewer/dist/index.css';
 const app = createApp(App);
-
+app.use(JsonViewer);
 app.use(createPinia());
 app.use(router);
 app.use(ElementPlus, {

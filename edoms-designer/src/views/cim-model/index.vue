@@ -25,7 +25,7 @@
     <section class="model-main">
       <el-tabs v-model="tabActive" class="demo-tabs">
         <el-tab-pane v-for="{ value, text, component } in tabPanels" :key="value" :label="text" :name="value">
-          <component :is="component"></component>
+          <component v-if="tabActive === value" :is="component"></component>
         </el-tab-pane>
       </el-tabs>
     </section>
