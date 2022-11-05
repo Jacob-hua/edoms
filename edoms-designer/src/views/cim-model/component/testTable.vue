@@ -5,7 +5,6 @@
     border
     :columns="column"
     :request="getData"
-    :readonly="true"
     :selection-change="selectChange"
     fixed="right"
   >
