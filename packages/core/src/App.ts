@@ -9,7 +9,7 @@ import {
   MApp,
   MappingStruct,
   MethodProps,
-  VariableSpace,
+  ValueSpace,
 } from '@edoms/schema';
 
 import Env from './Env';
@@ -192,43 +192,45 @@ class App extends EventEmitter {
   public bindEvent(event: EventItemConfig, id: string) {
     const { name } = event;
     this.on(`${name}_${id}`, (fromCpt: Node, args?: EventArgs) => {
-      this.eventHandler(event, fromCpt, this.calculateMethodProps(event, args));
+      this.eventHandler(event, fromCpt, this.calculateMethodProps(fromCpt, event, args));
     });
   }
 
-  private calculateMethodProps(eventConfig: EventItemConfig, eventArgs?: EventArgs): MethodProps {
+  private calculateMethodProps(fromCpt: Node, eventConfig: EventItemConfig, eventArgs?: EventArgs): MethodProps {
     const { mappings } = eventConfig;
     if (!mappings) {
       return {};
     }
 
     return mappings.reduce(
-      (props, mapping: MappingStruct) => ({ ...props, [mapping.target]: computeTarge(mapping, eventArgs) }),
+      (props, mapping: MappingStruct) => ({ ...props, [mapping.target]: computeTarge(fromCpt, mapping, eventArgs) }),
       {} as MethodProps
     );
 
-    function computeTarge(mapping: MappingStruct, eventArgs?: EventArgs): any {
+    function computeTarge(fromCpt: Node, mapping: MappingStruct, eventArgs?: EventArgs): any {
       const mappingClassify = {
-        [VariableSpace.APP]: () => {},
-        [VariableSpace.PAGE]: () => {},
-        [VariableSpace.COMPONENT]: () => {},
-        [VariableSpace.CONST]: () => mapping.const,
-        [VariableSpace.EVENT]: () => mapping?.source && eventArgs?.[mapping?.source],
-        [VariableSpace.EXPRESSION]: () => eval(mapping.expression ?? mapping.defaultExpression ?? ''),
-        [VariableSpace.TEMPLATE]: () => {},
+        [ValueSpace.APP]: ({ source }: MappingStruct) => source && fromCpt.app.store.get(source),
+        [ValueSpace.PAGE]: ({ source }: MappingStruct) => source && fromCpt.page?.store.get(source),
+        [ValueSpace.COMPONENT]: ({ source }: MappingStruct) => source && fromCpt.store.get(source),
+        [ValueSpace.CONST]: () => mapping.const,
+        [ValueSpace.EVENT]: ({ source }: MappingStruct) => source && eventArgs?.[source],
+        [ValueSpace.EXPRESSION]: ({ expression, defaultExpression }: MappingStruct) =>
+          eval(expression ?? defaultExpression ?? ''),
+        [ValueSpace.TEMPLATE]: () => {
+          // 处理模板
+          // if (Object.prototype.toString.call(vars) === '[object Object]') {
+          //   const tmp: string = text;
+          //   Object.entries(vars).forEach(([key, value]) => {
+          //     tmp.value = tmp.value.replace(new RegExp(`{{${key}}}`, 'g'), value);
+          //   });
+          //   return tmp;
+          // }
+        },
       };
-      // 处理模板
-      // if (Object.prototype.toString.call(vars) === '[object Object]') {
-      //   const tmp: string = text;
-      //   Object.entries(vars).forEach(([key, value]) => {
-      //     tmp.value = tmp.value.replace(new RegExp(`{{${key}}}`, 'g'), value);
-      //   });
-      //   return tmp;
-      // }
       if (!mappingClassify[mapping.sourceSpace] || !mappingClassify[mapping.sourceSpace]) {
         return mapping.defaultValue;
       }
-      return mappingClassify[mapping.sourceSpace]();
+      return mappingClassify[mapping.sourceSpace](mapping);
     }
   }
 
