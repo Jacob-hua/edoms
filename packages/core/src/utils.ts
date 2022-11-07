@@ -70,13 +70,8 @@ export const calculateMethodProps = (
       [ValueSpace.COMPONENT]: ({ source }: MappingStruct) => source && fromCpt.store.get(source),
       [ValueSpace.CONST]: () => mapping.const,
       [ValueSpace.EVENT]: ({ source }: MappingStruct) => source && eventArgs?.[source],
-      [ValueSpace.EXPRESSION]: ({ expression, defaultExpression }: MappingStruct) =>
-        new Function('app, page, cpt, event', `return ${expression ?? defaultExpression ?? ''}`)(
-          appStore,
-          pageStore,
-          cptStore,
-          eventArgs
-        ),
+      [ValueSpace.EXPRESSION]: ({ expression }: MappingStruct) =>
+        new Function('app, page, cpt, event', `return ${expression ?? ''}`)(appStore, pageStore, cptStore, eventArgs),
       [ValueSpace.TEMPLATE]: ({ template }: MappingStruct) =>
         dots.template(template ?? '')({
           app: appStore,
