@@ -1,6 +1,7 @@
 <template>
   <el-popover
     :placement="placement"
+    :width="width"
     :trigger="trigger"
     :disabled="disabled"
     @show="handlePopShow"
@@ -43,6 +44,7 @@ const props = withDefaults(
     reference?: string;
     trigger?: string;
     placement?: string;
+    width?: string | number;
   }>(),
   {
     disabled: () => false,
@@ -50,6 +52,8 @@ const props = withDefaults(
     reference: () => 'More',
     trigger: () => 'click',
     placement: () => 'bottom',
+    popperClass: () => '',
+    width: () => 150,
   }
 );
 

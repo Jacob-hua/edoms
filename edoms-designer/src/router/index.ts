@@ -31,6 +31,11 @@ const routes: RouteRecordRaw[] = [
         name: 'Model',
         component: () => import('@/views/cim-model/index.vue'),
       },
+      {
+        path: '/page',
+        name: 'Page',
+        component: () => import('@/views/page/index.vue'),
+      },
     ],
   },
   {

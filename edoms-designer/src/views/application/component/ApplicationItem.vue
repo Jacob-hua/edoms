@@ -1,10 +1,10 @@
 <template>
   <div class="app-wrapper">
     <div class="app-box">
-      <el-image :src="application.imgUrl">
+      <el-image :src="application.imgUrl" @click="handleGoPage">
         <template #error>
           <div class="image-slot">
-            <img alt="" :src="NoData" />
+            <img alt="" :src="NoData" @click="handleGoPage" />
           </div>
         </template>
       </el-image>
@@ -62,24 +62,19 @@ const menus = [
       });
     },
   },
-  {
-    name: 'model',
-    label: 'CIM模型',
-    icon: 'Setting',
-    action: () => {
-      router.push({
-        path: '/model',
-        query: {
-          applicationId: props.application.applicationId,
-        },
-      });
-    },
-  },
 ];
 
 const handleMenuClick = (value: string | number) => {
   const menu = menus.find(({ name }) => name === value);
   menu?.action();
+};
+const handleGoPage = () => {
+  router.push({
+    path: '/page',
+    query: {
+      applicationId: props.application.applicationId,
+    },
+  });
 };
 </script>
 
@@ -107,6 +102,7 @@ const handleMenuClick = (value: string | number) => {
   width: 200px;
   height: 200px;
   border: 1px solid #000;
+  cursor: pointer;
   img {
     width: 198px;
     height: 198px;
