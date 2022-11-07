@@ -66,7 +66,7 @@
 <script lang="ts" setup>
 import { onUnmounted, provide, reactive, toRaw, watch } from 'vue';
 
-import { EventOption } from '@edoms/core';
+import { EventOption, MethodOption } from '@edoms/core';
 import type { FormConfig } from '@edoms/form';
 import type { MApp, MNode } from '@edoms/schema';
 import type StageCore from '@edoms/stage';
@@ -191,7 +191,7 @@ watch(
   () => props.eventMethodList,
   (eventMethodList) => {
     const eventsList: Record<string, EventOption[]> = {};
-    const methodsList: Record<string, EventOption[]> = {};
+    const methodsList: Record<string, MethodOption[]> = {};
 
     Object.keys(eventMethodList).forEach((type: string) => {
       eventsList[type] = eventMethodList[type].events;

@@ -10,6 +10,10 @@ export interface EventOption {
   value: string;
 }
 
+export interface MethodOption extends EventOption {
+  props: string[] | undefined;
+}
+
 const COMMON_EVENT_PREFIX = 'edoms:common:events:';
 const COMMON_METHOD_PREFIX = 'edoms:common:actions:';
 const CommonMethod = {
@@ -21,7 +25,7 @@ const CommonMethod = {
 
 export const DEFAULT_EVENTS: EventOption[] = [{ label: '点击', value: `${COMMON_EVENT_PREFIX}click` }];
 
-export const DEFAULT_METHODS: EventOption[] = [];
+export const DEFAULT_METHODS: MethodOption[] = [];
 
 export const getCommonEventName = (commonEventName: string) => {
   if (commonEventName.startsWith(COMMON_EVENT_PREFIX)) return commonEventName;

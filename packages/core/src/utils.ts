@@ -85,7 +85,7 @@ export const calculateMethodProps = (
           event: eventArgs,
         }),
     };
-    if (!mappingClassify[mapping.sourceSpace] || !mappingClassify[mapping.sourceSpace]) {
+    if (mapping.ignore || !mappingClassify[mapping.sourceSpace] || !mappingClassify[mapping.sourceSpace]) {
       return mapping.defaultValue;
     }
     return mappingClassify[mapping.sourceSpace](mapping);

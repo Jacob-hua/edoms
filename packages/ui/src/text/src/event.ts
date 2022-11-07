@@ -11,6 +11,7 @@ export default {
     {
       label: '设置文本',
       value: 'setText',
+      props: ['text'],
     },
   ],
 };

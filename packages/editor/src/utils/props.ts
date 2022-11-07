@@ -199,7 +199,24 @@ export const fillConfig = (config: FormConfig = []) => [
                   return eventsService.getMethod(node.type).map((option) => ({
                     text: option.label,
                     value: option.value,
+                    props: option.props,
                   }));
+                },
+                onChange: (mForm: FormState, value: any, { model, config }: any) => {
+                  const selectedOption = config
+                    .options(mForm, { model })
+                    .find(({ value: _v }: { value: string }) => _v === value);
+                  const props = selectedOption.props ?? [];
+                  model.mappings = props.reduce(
+                    (mappings: any[], prop: string) => [
+                      ...mappings,
+                      {
+                        target: prop,
+                        ignore: true,
+                      },
+                    ],
+                    []
+                  );
                 },
               },
               {
@@ -210,6 +227,16 @@ export const fillConfig = (config: FormConfig = []) => [
                 movable: false,
                 titleKey: 'target',
                 deletable: false,
+                addable: false,
+                display: (mForm: FormState, { model }: any) => {
+                  const node = editorService.getNodeById(model.to);
+                  if (!node?.type) return false;
+                  const selectedMethodOption = eventsService
+                    .getMethod(node.type)
+                    .find(({ value }) => value === model.method);
+
+                  return selectedMethodOption?.props;
+                },
                 items: [
                   {
                     text: '参数',
@@ -224,7 +251,6 @@ export const fillConfig = (config: FormConfig = []) => [
                     text: '忽略配置',
                     name: 'ignore',
                     type: 'switch',
-                    defaultValue: true,
                   },
                   {
                     text: '取值空间',
