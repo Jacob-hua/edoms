@@ -105,7 +105,7 @@ export default {
                 {
                   target: 'text',
                   sourceSpace: 'expression',
-                  expression: 'new Date()',
+                  expression: 'app.name + new Date()',
                 },
               ],
             },

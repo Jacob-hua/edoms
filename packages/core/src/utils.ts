@@ -60,6 +60,10 @@ export const calculateMethodProps = (
   );
 
   function computeTarge(fromCpt: Node, mapping: MappingStruct, eventArgs?: EventArgs): any {
+    const appStore = fromCpt.app.store;
+    const pageStore = fromCpt.page?.store ?? {};
+    const cptStore = fromCpt.store;
+
     const mappingClassify = {
       [ValueSpace.APP]: ({ source }: MappingStruct) => source && fromCpt.app.store.get(source),
       [ValueSpace.PAGE]: ({ source }: MappingStruct) => source && fromCpt.page?.store.get(source),
@@ -67,12 +71,18 @@ export const calculateMethodProps = (
       [ValueSpace.CONST]: () => mapping.const,
       [ValueSpace.EVENT]: ({ source }: MappingStruct) => source && eventArgs?.[source],
       [ValueSpace.EXPRESSION]: ({ expression, defaultExpression }: MappingStruct) =>
-        eval(expression ?? defaultExpression ?? ''),
+        new Function('app, page, cpt, event', `return ${expression ?? defaultExpression ?? ''}`)(
+          appStore,
+          pageStore,
+          cptStore,
+          eventArgs
+        ),
       [ValueSpace.TEMPLATE]: ({ template }: MappingStruct) =>
         dots.template(template ?? '')({
-          cpt: fromCpt.store,
-          page: fromCpt.page?.store ?? {},
-          app: fromCpt.app.store,
+          app: appStore,
+          page: pageStore,
+          cpt: cptStore,
+          event: eventArgs,
         }),
     };
     if (!mappingClassify[mapping.sourceSpace] || !mappingClassify[mapping.sourceSpace]) {
