@@ -169,8 +169,24 @@ export const fillConfig = (config: FormConfig = []) => [
             type: 'groupList',
             name: 'events',
             title: (model: any, index: number | string, formValue: any) => {
-              const selectedOption = eventsService.getEvent(formValue.type).find(({ value }) => value === model.name);
-              return `事件【${index}】-${selectedOption?.label ?? ''}`;
+              const selectedEventOption = eventsService
+                .getEvent(formValue.type)
+                .find(({ value }) => value === model.name);
+              const node = editorService.getNodeById(model.to);
+              const selectedMethodOption = eventsService
+                .getMethod(node?.type ?? '')
+                .find(({ value }) => value === model.method);
+              let title = `【${index}】`;
+              if (selectedEventOption?.label) {
+                title = `${title} ${selectedEventOption?.label}`;
+              }
+              if (model.to) {
+                title = `${title} ${model.to}`;
+              }
+              if (selectedMethodOption?.label) {
+                title = `${title} ${selectedMethodOption.label}`;
+              }
+              return title;
             },
             items: [
               {
