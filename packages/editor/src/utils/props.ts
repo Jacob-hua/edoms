@@ -207,7 +207,7 @@ export const fillConfig = (config: FormConfig = []) => [
                   {
                     text: '参数',
                     name: 'target',
-                    type: 'text',
+                    type: 'display',
                   },
                   {
                     text: '忽略',
