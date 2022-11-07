@@ -215,7 +215,6 @@ export const fillConfig = (config: FormConfig = []) => [
                     text: '参数',
                     name: 'target',
                     type: 'display',
-                    defaultValue: 'dddd',
                   },
                   {
                     text: '默认值',
