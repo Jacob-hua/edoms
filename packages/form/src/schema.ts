@@ -624,7 +624,7 @@ export interface GroupListConfig extends FormItem {
   itemExtra?: string | FilterFunction;
   addable?: (mForm: FormState | undefined, data: any) => boolean | 'undefined' | boolean;
   defaultAdd?: (mForm: FormState | undefined, data: any) => any;
-  delete?: (model: any, index: number | string | symbol, values: any) => boolean | boolean;
+  deletable?: (model: any, index: number | string | symbol, values: any) => boolean | boolean;
   movable?: (
     mForm: FormState | undefined,
     index: number | string | symbol,

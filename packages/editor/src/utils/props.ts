@@ -171,7 +171,7 @@ export const fillConfig = (config: FormConfig = []) => [
             items: [
               {
                 name: 'name',
-                text: '事件名',
+                text: '监听事件',
                 type: 'select',
                 options: (mForm: FormState, { formValue }: any) =>
                   eventsService.getEvent(formValue.type).map((option) => ({
@@ -186,7 +186,7 @@ export const fillConfig = (config: FormConfig = []) => [
               },
               {
                 name: 'method',
-                text: '动作',
+                text: '组件动作',
                 type: 'select',
                 options: (mForm: FormState, { model }: any) => {
                   const node = editorService.getNodeById(model.to);
@@ -201,16 +201,24 @@ export const fillConfig = (config: FormConfig = []) => [
               {
                 type: 'groupList',
                 name: 'mappings',
-                text: '参数配置',
+                text: '动作参数',
                 labelWidth: '80px',
+                movable: false,
+                titleKey: 'target',
+                deletable: false,
                 items: [
                   {
                     text: '参数',
                     name: 'target',
                     type: 'display',
+                    defaultValue: 'dddd',
                   },
                   {
-                    text: '忽略',
+                    text: '默认值',
+                    name: 'defaultValue',
+                  },
+                  {
+                    text: '忽略配置',
                     name: 'ignore',
                     type: 'switch',
                     defaultValue: true,
@@ -254,12 +262,6 @@ export const fillConfig = (config: FormConfig = []) => [
                   {
                     text: '取值',
                     name: 'source',
-                    display: (_: any, { model }: any) =>
-                      !model.ignore && !['const', 'expression', 'template'].includes(model.sourceSpace),
-                  },
-                  {
-                    text: '默认值',
-                    name: 'defaultValue',
                     display: (_: any, { model }: any) =>
                       !model.ignore && !['const', 'expression', 'template'].includes(model.sourceSpace),
                   },

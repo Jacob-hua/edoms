@@ -1,28 +1,30 @@
 <template>
   <div class="m-fields-group-list-item">
-    <div>
+    <div class="reference">
       <ElIcon style="margin-right: 7px" @click="expandHandler"
         ><CaretBottom v-if="expand" /><CaretRight v-else
       /></ElIcon>
 
       <ElButton text @click="expandHandler">{{ title }}</ElButton>
 
-      <ElButton
-        v-show="showDelete(parseInt(String(index)))"
-        text
-        :icon="Delete"
-        style="color: #f56c6c"
-        @click="removeHandler"
-      ></ElButton>
+      <div>
+        <ElButton
+          v-show="showDelete(parseInt(String(index)))"
+          text
+          :icon="Delete"
+          style="color: #f56c6c"
+          @click="removeHandler"
+        ></ElButton>
 
-      <template v-if="movable()">
-        <ElButton v-show="index !== 0" text size="small" @click="changeOrder(-1)"
-          >上移<ElIcon><CaretTop /></ElIcon
-        ></ElButton>
-        <ElButton v-show="index !== length - 1" text size="small" @click="changeOrder(1)"
-          >下移<ElIcon><CaretBottom /></ElIcon
-        ></ElButton>
-      </template>
+        <template v-if="movable()">
+          <ElButton v-show="index !== 0" text size="small" @click="changeOrder(-1)"
+            >上移<ElIcon><CaretTop /></ElIcon
+          ></ElButton>
+          <ElButton v-show="index !== length - 1" text size="small" @click="changeOrder(1)"
+            >下移<ElIcon><CaretBottom /></ElIcon
+          ></ElButton>
+        </template>
+      </div>
 
       <span v-if="itemExtra" class="m-form-tip" v-html="itemExtra"></span>
     </div>
@@ -99,11 +101,14 @@ const expandHandler = () => {
 
 // 希望支持单行可控制是否显示删除按钮，不会影响现有逻辑
 const showDelete = (index: number) => {
-  const deleteFunc = props.config.delete;
-  if (deleteFunc && typeof deleteFunc === 'function') {
-    return deleteFunc(props.model, index, mForm?.values);
+  const deletableFunc = props.config.deletable;
+  if (deletableFunc === undefined) {
+    return true;
   }
-  return true;
+  if (deletableFunc && typeof deletableFunc === 'function') {
+    return deletableFunc(props.model, index, mForm?.values);
+  }
+  return deletableFunc;
 };
 
 // 调换顺序

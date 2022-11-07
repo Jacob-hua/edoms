@@ -1,4 +1,6 @@
 .m-fields-group-list {
+  width: 100%;
+
   .el-button--text {
     padding: 0;
     margin-bottom: 7px;
@@ -15,6 +17,21 @@
   .m-fields-group-list-item {
     border-bottom: 1px solid #ebeef5;
     margin-bottom: 7px;
+
+    .reference {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      & > button {
+        flex-grow: 1;
+        justify-content: start;
+      }
+
+      & > div:last-of-type {
+        width: 190px;
+      }
+    }
 
     &:last-of-type {
       border-bottom: 0;
