@@ -11,6 +11,12 @@ export default {
     {
       label: '设置文本',
       value: 'setText',
+      props: ['text'],
+    },
+    {
+      label: '设置不可用文本',
+      value: 'setDisabledText',
+      props: ['disabledText'],
     },
   ],
 };

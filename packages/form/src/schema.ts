@@ -621,10 +621,11 @@ export interface GroupListConfig extends FormItem {
   groupItems?: FormConfig;
   tableItems?: FormConfig;
   titleKey?: string;
+  title?: (model: any, index: number | string | symbol, mForm: FormValue | undefined) => string | string;
   itemExtra?: string | FilterFunction;
   addable?: (mForm: FormState | undefined, data: any) => boolean | 'undefined' | boolean;
   defaultAdd?: (mForm: FormState | undefined, data: any) => any;
-  delete?: (model: any, index: number | string | symbol, values: any) => boolean | boolean;
+  deletable?: (model: any, index: number | string | symbol, values: any) => boolean | boolean;
   movable?: (
     mForm: FormState | undefined,
     index: number | string | symbol,

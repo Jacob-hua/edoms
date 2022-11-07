@@ -96,20 +96,6 @@ export default {
           name: '按钮',
           text: '设置文本',
           multiple: true,
-          events: [
-            {
-              name: 'edoms:common:events:click',
-              to: 'text_9027',
-              method: 'setText',
-              mappings: [
-                {
-                  target: 'text',
-                  sourceSpace: 'expression',
-                  expression: 'app.name + new Date()',
-                },
-              ],
-            },
-          ],
           stores: [
             {
               variable: 'url',
