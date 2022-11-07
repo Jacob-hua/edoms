@@ -321,11 +321,6 @@ export const fillConfig = (config: FormConfig = []) => [
                     display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'expression',
                   },
                   {
-                    text: '默认表达式',
-                    name: 'defaultExpression',
-                    display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'expression',
-                  },
-                  {
                     text: '模板',
                     name: 'template',
                     display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'template',

@@ -24,7 +24,6 @@ export interface MappingStruct {
   const?: string;
   defaultValue?: string;
   expression?: string;
-  defaultExpression?: string;
   template?: string;
 }
 
