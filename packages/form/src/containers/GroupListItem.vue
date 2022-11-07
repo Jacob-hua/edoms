@@ -80,10 +80,14 @@ const rowConfig = computed(() => ({
 }));
 
 const title = computed(() => {
-  if (props.config.titleKey && props.model[props.config.titleKey]) {
-    return props.model[props.config.titleKey];
+  const titleFunc = props.config.title;
+  const titleKey = props.config.titleKey;
+  if (typeof titleFunc === 'function') {
+    return titleFunc(props.model, props.index, mForm?.values);
   }
-
+  if (titleKey && props.model[titleKey]) {
+    return props.model[titleKey];
+  }
   return `组 ${String(props.index)}`;
 });
 

@@ -168,6 +168,10 @@ export const fillConfig = (config: FormConfig = []) => [
           {
             type: 'groupList',
             name: 'events',
+            title: (model: any, index: number | string, formValue: any) => {
+              const selectedOption = eventsService.getEvent(formValue.type).find(({ value }) => value === model.name);
+              return `事件【${index}】-${selectedOption?.label ?? ''}`;
+            },
             items: [
               {
                 name: 'name',
