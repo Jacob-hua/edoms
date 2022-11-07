@@ -163,14 +163,15 @@ export const fillConfig = (config: FormConfig = []) => [
       },
       {
         title: '事件',
+        labelWidth: '80px',
         items: [
           {
-            type: 'table',
+            type: 'groupList',
             name: 'events',
             items: [
               {
                 name: 'name',
-                label: '事件名',
+                text: '事件名',
                 type: 'select',
                 options: (mForm: FormState, { formValue }: any) =>
                   eventsService.getEvent(formValue.type).map((option) => ({
@@ -180,12 +181,12 @@ export const fillConfig = (config: FormConfig = []) => [
               },
               {
                 name: 'to',
-                label: '联动组件',
+                text: '联动组件',
                 type: 'ui-select',
               },
               {
                 name: 'method',
-                label: '动作',
+                text: '动作',
                 type: 'select',
                 options: (mForm: FormState, { model }: any) => {
                   const node = editorService.getNodeById(model.to);
@@ -196,6 +197,93 @@ export const fillConfig = (config: FormConfig = []) => [
                     value: option.value,
                   }));
                 },
+              },
+              {
+                type: 'groupList',
+                name: 'mappings',
+                text: '参数配置',
+                labelWidth: '80px',
+                items: [
+                  {
+                    text: '参数',
+                    name: 'target',
+                    type: 'text',
+                  },
+                  {
+                    text: '忽略',
+                    name: 'ignore',
+                    type: 'switch',
+                    defaultValue: true,
+                  },
+                  {
+                    text: '取值空间',
+                    name: 'sourceSpace',
+                    type: 'select',
+                    display: (_: any, { model }: any) => !model.ignore,
+                    options: [
+                      {
+                        text: '事件',
+                        value: 'event',
+                      },
+                      {
+                        text: '应用',
+                        value: 'app',
+                      },
+                      {
+                        text: '页面',
+                        value: 'page',
+                      },
+                      {
+                        text: '组件',
+                        value: 'component',
+                      },
+                      {
+                        text: '表达式',
+                        value: 'expression',
+                      },
+                      {
+                        text: '模板',
+                        value: 'template',
+                      },
+                      {
+                        text: '常量',
+                        value: 'const',
+                      },
+                    ],
+                  },
+                  {
+                    text: '取值',
+                    name: 'source',
+                    display: (_: any, { model }: any) =>
+                      !model.ignore && !['const', 'expression', 'template'].includes(model.sourceSpace),
+                  },
+                  {
+                    text: '默认值',
+                    name: 'defaultValue',
+                    display: (_: any, { model }: any) =>
+                      !model.ignore && !['const', 'expression', 'template'].includes(model.sourceSpace),
+                  },
+                  {
+                    text: '常量',
+                    name: 'const',
+                    display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'const',
+                  },
+                  {
+                    text: '表达式',
+                    name: 'expression',
+                    display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'expression',
+                  },
+                  {
+                    text: '默认表达式',
+                    name: 'defaultExpression',
+                    display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'expression',
+                  },
+                  {
+                    text: '模板',
+                    name: 'template',
+                    display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'template',
+                  },
+                ],
               },
             ],
           },
