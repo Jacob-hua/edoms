@@ -308,7 +308,7 @@ export const fillConfig = (config: FormConfig = []) => [
                     text: '取值',
                     name: 'source',
                     display: (_: any, { model }: any) =>
-                      !model.ignore && !['const', 'expression', 'template'].includes(model.sourceSpace),
+                      !model.ignore && ['event', 'app', 'page', 'component'].includes(model.sourceSpace),
                   },
                   {
                     text: '常量',
