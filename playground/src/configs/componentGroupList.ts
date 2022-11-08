@@ -86,7 +86,7 @@ export default [
       {
         icon: Tickets,
         text: '动环监测',
-        type: 'dynamicMonitoring',
+        type: 'dynamic-monitoring',
       },
     ],
   },

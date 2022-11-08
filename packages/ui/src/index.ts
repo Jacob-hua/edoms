@@ -1,5 +1,6 @@
 import Button from './button';
 import Container from './container';
+import DynamicMonitoring from './dynamic-monitoring';
 import Img from './img';
 import Overlay from './overlay';
 import Page from './page';
@@ -14,6 +15,7 @@ const ui: Record<string, any> = {
   img: Img,
   qrcode: Qrcode,
   overlay: Overlay,
+  dynamicMonitoring: DynamicMonitoring,
 };
 
 export default ui;
