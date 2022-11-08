@@ -3,8 +3,10 @@ coverage
 node_modules
 dest
 types
+lib
 public/entry
 public/runtime
+.edoms/
 
 comp-entry.ts
 config-entry.ts
