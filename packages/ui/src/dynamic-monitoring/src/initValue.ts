@@ -1,9 +1,7 @@
 export default {
-  type: 'text',
-  text: '请输入文本内容',
-  multiple: true,
+  type: 'dynamic-monitoring',
   style: {
-    width: '100',
-    height: 'auto',
+    // width: '100',
+    // height: 'auto',
   },
 };
