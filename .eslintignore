@@ -3,15 +3,9 @@ coverage
 node_modules
 dest
 types
-**/*/public/entry
-**/*/public/runtime
-**/*/lib
+public/entry
+public/runtime
 
 comp-entry.ts
 config-entry.ts
-value-entry.types
-
-*.mjs
-*.mjs.map
-*.umd.js
-*.umd.js.map
+value-entry.ts
