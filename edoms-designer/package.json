@@ -19,6 +19,7 @@
     "@element-plus/icons-vue": "^2.0.9",
     "element-plus": "^2.2.15",
     "pinia": "^2.0.17",
+    "screenfull": "^6.0.2",
     "serialize-javascript": "^6.0.0",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3",

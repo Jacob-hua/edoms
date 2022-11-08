@@ -47,9 +47,31 @@
         </template>
       </GridList>
     </section>
-    <section class="right-section"></section>
+    <section class="right-section">
+      <div class="right-top-bar">
+        <el-button type="primary" size="large">编辑</el-button>
+        <div class="pop-menu-wrapper">
+          <PopMenu :width="350" @menu-click="handleTopMenuClick">
+            <template #reference>
+              <el-icon :size="28"><Menu /></el-icon>
+            </template>
+            <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
+              <div class="pop-menu-item">
+                <span>{{ menu.label }}</span>
+              </div>
+            </PopMenuOption>
+            <div class="createInfo">
+              <p>张三创建于2022-09-12</p>
+              <p>张三最近更新于 2022-09-12</p>
+              <p>编辑者: 张三</p>
+            </div>
+          </PopMenu>
+        </div>
+      </div>
+      <div ref="editWrapper" class="edit"></div>
+    </section>
   </div>
-  <el-dialog v-model="newPageVisible" title="Tips" width="30%">
+  <el-dialog v-model="newPageVisible" title="新增页面" width="30%" @close="handleClose">
     <span>
       <el-form ref="form" :model="page" :rules="rules">
         <el-form-item label="应用页名称" prop="name">
@@ -64,12 +86,28 @@
       </span>
     </template>
   </el-dialog>
+  <el-dialog v-model="versionVisible" title="保存为版本" width="30%" @close="handleVersionClose">
+    <span>
+      <el-form ref="versionForm" :model="version" :rules="versionRules">
+        <el-form-item label="版本名称" prop="name">
+          <el-input v-model="version.name"></el-input>
+        </el-form-item>
+      </el-form>
+    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="versionVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleVersionConfirm"> 确认 </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { FormInstance } from 'element-plus';
+import screenFull from 'screenfull';
 
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
@@ -82,22 +120,22 @@ const loadData: RequestFunc<{ name: string }> = async () => {
   const dataSource = [
     {
       id: Math.random(),
-      name: `模型表1`,
+      name: `页面1`,
       isShowText: true,
     },
     {
       id: Math.random(),
-      name: '模型表2',
+      name: '页面2',
       isShowText: true,
     },
     {
       id: Math.random(),
-      name: '模型表3',
+      name: '页面3',
       isShowText: true,
     },
     {
       id: Math.random(),
-      name: '模型表4',
+      name: '页面4',
       isShowText: true,
     },
   ];
@@ -110,6 +148,37 @@ const loadData: RequestFunc<{ name: string }> = async () => {
 const goBack = () => {
   router.go(-1);
 };
+
+const editWrapper = ref();
+
+const topMenus = [
+  {
+    name: 'fullScroll',
+    label: '全屏',
+    action: () => {
+      if (screenFull.isEnabled && editWrapper.value) {
+        screenFull.toggle(editWrapper.value);
+      }
+    },
+  },
+  {
+    name: 'history',
+    label: '历史版本',
+    action: () => {},
+  },
+  {
+    name: 'saveVersion',
+    label: '保存为版本',
+    action: () => {
+      versionVisible.value = true;
+    },
+  },
+  {
+    name: 'delete',
+    label: '删除',
+    action: () => {},
+  },
+];
 
 const menus = [
   {
@@ -137,7 +206,10 @@ const handleMenuClick = (value: string | number, model: any) => {
   const menu = menus.find(({ name }) => name === value);
   menu?.action(model);
 };
-
+const handleTopMenuClick = (value: string | number) => {
+  const menu = topMenus.find(({ name }) => name === value);
+  menu?.action();
+};
 const handleChangeName = (model: any) => {
   model.isShowText = true;
 };
@@ -163,18 +235,40 @@ const rules = {
   name: [
     {
       required: true,
-      message: '请输入应用名称',
+      message: '请输入页面名称',
       trigger: 'blur',
     },
     {
       min: 1,
       max: 10,
-      message: '应用名称长度1-10字符',
+      message: '页面名称长度1-10字符',
+      trigger: 'blur',
+    },
+  ],
+};
+const versionRules = {
+  name: [
+    {
+      required: true,
+      message: '请输入版本名称',
+      trigger: 'blur',
+    },
+    {
+      min: 1,
+      max: 20,
+      message: '版本名称长度1-20字符',
       trigger: 'blur',
     },
   ],
 };
 const form = ref<FormInstance>();
+
+const version = ref({
+  name: '',
+});
+
+const versionVisible = ref(false);
+const versionForm = ref<FormInstance>();
 const handleNewPage = () => {
   newPageVisible.value = true;
 };
@@ -184,13 +278,43 @@ const handleConfirm = async () => {
   try {
     await form.value?.validate();
     newPageVisible.value = false;
+    form.value?.resetFields();
   } catch (e) {
     console.log(e);
   }
 };
+const handleVersionConfirm = async () => {
+  if (!versionForm.value) return;
+  try {
+    await versionForm.value?.validate();
+    versionVisible.value = false;
+    versionForm.value?.resetFields();
+  } catch (e) {
+    console.log(e);
+  }
+};
+const handleClose = () => {
+  form.value?.resetFields();
+};
+const handleVersionClose = () => {
+  versionForm.value?.resetFields();
+};
 </script>
 
 <style lang="scss">
+.pop-menu-wrapper {
+  position: relative;
+}
+.pop-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  span {
+    margin-left: 15px;
+    width: 100%;
+  }
+}
 .search-wrapper {
   padding: 10px;
 }
@@ -243,7 +367,7 @@ const handleConfirm = async () => {
   display: flex;
   .grid-list {
     margin-top: 10px;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 180px);
     overflow-y: auto;
     div {
       text-align: left;
@@ -251,6 +375,25 @@ const handleConfirm = async () => {
   }
   .right-section {
     width: 82%;
+    .right-top-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-top: 10px;
+      .el-icon {
+        margin: 0 30px;
+        cursor: pointer;
+      }
+    }
+    .edit {
+      background-color: #409eff;
+      height: calc(100% - 75px);
+    }
+  }
+}
+.createInfo {
+  p {
+    margin-top: 10px;
   }
 }
 </style>
