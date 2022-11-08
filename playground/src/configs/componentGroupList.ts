@@ -80,4 +80,14 @@ export default [
       },
     ],
   },
+  {
+    title: '业务组件',
+    items: [
+      {
+        icon: Tickets,
+        text: '动环监测',
+        type: 'dynamicMonitoring',
+      },
+    ],
+  },
 ];
