@@ -43,8 +43,6 @@
         <workspace @runtime-ready="$emit('runtime-ready')">
           <template #stage><slot name="stage"></slot></template>
           <template #workspace-content><slot name="workspace-content" :editor-service="editorService"></slot></template>
-          <template #page-bar-title="{ page }"><slot name="page-bar-title" :page="page"></slot></template>
-          <template #page-bar-popover="{ page }"><slot name="page-bar-popover" :page="page"></slot></template>
         </workspace>
       </slot>
     </template>
