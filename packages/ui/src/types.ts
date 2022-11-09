@@ -1,5 +1,3 @@
-import { ComponentPublicInstance } from 'vue';
-
 /* style */
 export type PartCSSStyle = {
   [key in keyof CSSStyleDeclaration]?: string | number;
@@ -47,17 +45,6 @@ export interface MComponentProps {
   config: MComponent;
   model: Object;
 }
-export type MComponentInstance =
-  | ComponentPublicInstance<
-      MComponentProps,
-      {},
-      {
-        [propName: string]: any;
-        disabled: boolean;
-      }
-    >
-  | null
-  | undefined;
 
 /* container */
 export interface MContainer extends MComponent {
@@ -67,16 +54,6 @@ export interface MContainerProps {
   config: MContainer;
   model: Object;
 }
-export type MContainerInstance =
-  | ComponentPublicInstance<
-      MContainerProps,
-      {},
-      {
-        [propName: string]: any;
-      }
-    >
-  | null
-  | undefined;
 
 /* page */
 export interface MPage extends MContainer {
@@ -86,16 +63,6 @@ export interface MPage extends MContainer {
 export interface MPageProps {
   config: MPage;
 }
-export type MPageInstance =
-  | ComponentPublicInstance<
-      MPageProps,
-      {},
-      {
-        [propName: string]: any;
-      }
-    >
-  | null
-  | undefined;
 
 /* pop */
 export interface MPop extends MContainer {
@@ -106,23 +73,11 @@ export interface MPopProps {
   config: MPop;
   model: Object;
   fillWithSlot: boolean;
-  beforeOpen: (p1: MPopInstance, p2: any) => boolean;
-  beforeClose: (p1: MPopInstance) => boolean;
 }
 export interface MPopObj {
   name: string;
   options: object;
 }
-export type MPopInstance =
-  | ComponentPublicInstance<
-      MPopProps,
-      {},
-      {
-        [propName: string]: any;
-      }
-    >
-  | null
-  | undefined;
 
 /* app */
 export interface MApp extends MComponent {
@@ -138,17 +93,6 @@ export enum MAppElementType {
   components = 'components',
   pops = 'pops',
 }
-export type MAppInstance =
-  | ComponentPublicInstance<
-      MAppProps,
-      {},
-      {
-        [propName: string]: any;
-      }
-    >
-  | null
-  | undefined;
-export type MCommonInstance = MContainerInstance | MPageInstance | MComponentInstance | MPopInstance;
 
 /* tabs */
 export type MTabs = MContainer;
@@ -156,16 +100,6 @@ export interface MTabsProps {
   config: MTabs;
   model: Object;
 }
-export type MTabsInstance =
-  | ComponentPublicInstance<
-      MTabsProps,
-      {},
-      {
-        [propName: string]: any;
-      }
-    >
-  | null
-  | undefined;
 
 /* text */
 export interface MText extends MComponent {
@@ -190,16 +124,6 @@ export interface MButtonProps {
   config: MButton;
   model: Object;
 }
-export type MButtonInstance =
-  | ComponentPublicInstance<
-      MButtonProps,
-      {},
-      {
-        [propName: string]: any;
-      }
-    >
-  | null
-  | undefined;
 
 export type ArrayOneOrMore = { 0: string } & string[];
 
@@ -217,3 +141,38 @@ export interface MQrcode {
 //   closeButtonStyle?: any;
 //   closeButton?: boolean;
 // }
+
+export enum MEnvironmentIndicator {
+  /** 温度 */
+  TEMPERATURE = 'temperature',
+  /** 湿度 */
+  MOISTURE = 'moisture',
+  /** 液体深度 */
+  LIQUID_DEPTH = 'liquidDepth',
+  /** 气体 */
+  GAS = 'GAS',
+}
+
+export interface MIndicatorItemConfig {
+  /** 监测指标 */
+  type: MEnvironmentIndicator;
+  /** 标签 */
+  label: string;
+  /** 设备 */
+  equipment: string;
+  /** 点位 */
+  point: string;
+  /** 预期最大阈值 */
+  expectedMax: number;
+  /** 预期最小阈值 */
+  expectedMin: number;
+  /** 目标最大阈值 */
+  targetMax: number;
+  /** 目标最小阈值 */
+  targetMin: number;
+}
+
+export interface MDynamicMonitoring extends MComponent {
+  visibleNumber: number;
+  indicators: MIndicatorItemConfig[];
+}
