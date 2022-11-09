@@ -150,7 +150,7 @@ export enum MEnvironmentIndicator {
   /** 液体深度 */
   LIQUID_DEPTH = 'liquidDepth',
   /** 气体 */
-  GAS = 'GAS',
+  GAS = 'gas',
 }
 
 export interface MIndicatorItemConfig {

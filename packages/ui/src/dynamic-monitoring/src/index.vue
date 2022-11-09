@@ -3,11 +3,11 @@
 </template>
 
 <script lang="ts" setup>
-import { MText } from '../../../src/types';
+import { MDynamicMonitoring } from '../../../src/types';
 import useApp from '../../useApp';
 
 const props = defineProps<{
-  config: MText;
+  config: MDynamicMonitoring;
 }>();
 
 useApp(props);
