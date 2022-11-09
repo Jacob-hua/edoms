@@ -168,6 +168,7 @@ export const fillConfig = (config: FormConfig = []) => [
           {
             type: 'groupList',
             name: 'events',
+            addButtonText: '添加事件',
             title: (model: any, index: number | string, formValue: any) => {
               const selectedEventOption = eventsService
                 .getEvent(formValue.type)
