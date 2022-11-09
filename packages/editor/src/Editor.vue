@@ -83,15 +83,7 @@ import historyService from './services/history';
 import propsService from './services/props';
 import storageService from './services/storage';
 import uiService from './services/ui';
-import type {
-  ComponentGroup,
-  MenuBarData,
-  MenuButton,
-  MenuComponent,
-  RequestFunc,
-  Services,
-  SideBarData,
-} from './type';
+import type { ComponentGroup, MenuBarData, MenuButton, MenuComponent, Request, Services, SideBarData } from './type';
 
 const props = withDefaults(
   defineProps<{
@@ -122,7 +114,7 @@ const props = withDefaults(
         };
     codeOptions?: Record<string | number | symbol, any>;
     updateDragEl?: (el: HTMLDivElement, target: HTMLElement) => void;
-    requestFunc?: RequestFunc;
+    requestFunc?: <D, R>() => Request<D, R>;
   }>(),
   {
     componentGroupList: () => [],

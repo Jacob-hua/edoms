@@ -462,6 +462,7 @@ importers:
     specifiers:
       '@edoms/core': workspace:^0.0.1
       '@edoms/design': workspace:^0.0.1
+      '@edoms/editor': workspace:^0.0.1
       '@edoms/schema': workspace:^0.0.1
       '@edoms/utils': workspace:^0.0.1
       '@testing-library/vue': ^6.4.2
@@ -475,6 +476,7 @@ importers:
     dependencies:
       '@edoms/core': link:../core
       '@edoms/design': link:../design
+      '@edoms/editor': link:../editor
       '@edoms/schema': link:../schema
       '@edoms/utils': link:../utils
       delegate: 3.2.0

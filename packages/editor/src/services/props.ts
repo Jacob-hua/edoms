@@ -5,7 +5,7 @@ import type { FormConfig } from '@edoms/form';
 import type { MComponent, MNode } from '@edoms/schema';
 import { toLine } from '@edoms/utils';
 
-import type { PropsState, RequestFunc } from '../type';
+import type { PropsState, Request } from '../type';
 import { fillConfig } from '../utils/props';
 
 import BaseService from './BaseService';
@@ -29,7 +29,7 @@ export class PropsService extends BaseService {
     ]);
   }
 
-  public setPropsConfigs(configs: Record<string, FormConfig>, requestFunc?: RequestFunc) {
+  public setPropsConfigs(configs: Record<string, FormConfig>, requestFunc?: <D, R>() => Request<D, R>) {
     Object.keys(configs).forEach((type: string) => {
       this.setPropsConfig(toLine(type), configs[type], requestFunc);
     });
@@ -47,8 +47,8 @@ export class PropsService extends BaseService {
    */
   public async setPropsConfig(
     type: string,
-    config: FormConfig | ((requestFunc: RequestFunc | undefined) => Promise<FormConfig> | FormConfig),
-    requestFunc?: RequestFunc
+    config: FormConfig | ((requestFunc: (<D, R>() => Request<D, R>) | undefined) => Promise<FormConfig> | FormConfig),
+    requestFunc?: <D, R>() => Request<D, R>
   ) {
     let componentConfig = [];
     if (typeof config === 'function') {

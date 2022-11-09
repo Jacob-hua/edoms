@@ -381,8 +381,10 @@ export interface EditorRequestConfig<T> extends RequestConfig {
   data?: T;
 }
 
-export interface RequestFunc<D = any, R = any> {
-  (config: EditorRequestConfig<D>): Promise<R>;
+export interface EdomsResponse<T = any> {
+  result?: T;
 }
 
-// export type RequestFunc<D, R> = (config: EditorRequestConfig<D>) => Promise<R>;
+export interface Request<D = any, R = any> {
+  (config: EditorRequestConfig<D>): Promise<EdomsResponse<R>>;
+}
