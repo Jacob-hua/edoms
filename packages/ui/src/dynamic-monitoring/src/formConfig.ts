@@ -31,7 +31,7 @@ const properties = [
   },
 ];
 
-export default [
+export default () => [
   {
     text: '展示指标数',
     name: 'visibleNumber',
