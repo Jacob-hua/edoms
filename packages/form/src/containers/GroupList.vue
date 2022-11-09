@@ -21,7 +21,7 @@
       @change="changeHandler"
     ></MFieldsGroupListItem>
 
-    <ElButton v-if="addable" size="small" @click="addHandler">添加组</ElButton>
+    <ElButton v-if="addable" size="small" @click="addHandler">{{ addButtonText }}</ElButton>
 
     <ElButton v-if="config.enableToggleMode" :icon="Grid" size="small" @click="toggleMode">切换为表格</ElButton>
   </div>
@@ -50,6 +50,13 @@ const props = defineProps<{
 const emit = defineEmits(['change']);
 
 const mForm = inject<FormState | undefined>('mForm');
+
+const addButtonText = computed(() => {
+  if (props.config.addButtonText) {
+    return props.config.addButtonText;
+  }
+  return '添加组';
+});
 
 const addable = computed(() => {
   if (!props.name) return false;
