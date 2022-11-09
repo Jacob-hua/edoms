@@ -4,6 +4,7 @@ import type { FormConfig } from '@edoms/form';
 import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
 import type StageCore from '@edoms/stage';
 import type { ContainerHighlightType, MoveableOptions } from '@edoms/stage';
+import type { RequestConfig, RequestMethod } from '@edoms/utils';
 
 import type { CodeBlockService } from './services/codeBlock';
 import type { ComponentListService } from './services/componentList';
@@ -373,3 +374,15 @@ export enum CodeSelectOp {
   /** 单选修改 */
   CHANGE = 'change',
 }
+
+export interface EditorRequestConfig<T> extends RequestConfig {
+  method: RequestMethod;
+  loading?: boolean;
+  data?: T;
+}
+
+export interface RequestFunc<D = any, R = any> {
+  (config: EditorRequestConfig<D>): Promise<R>;
+}
+
+// export type RequestFunc<D, R> = (config: EditorRequestConfig<D>) => Promise<R>;

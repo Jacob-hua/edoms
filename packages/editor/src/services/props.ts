@@ -5,7 +5,7 @@ import type { FormConfig } from '@edoms/form';
 import type { MComponent, MNode } from '@edoms/schema';
 import { toLine } from '@edoms/utils';
 
-import type { PropsState } from '../type';
+import type { PropsState, RequestFunc } from '../type';
 import { fillConfig } from '../utils/props';
 
 import BaseService from './BaseService';
@@ -29,9 +29,9 @@ export class PropsService extends BaseService {
     ]);
   }
 
-  public setPropsConfigs(configs: Record<string, FormConfig>) {
+  public setPropsConfigs(configs: Record<string, FormConfig>, requestFunc?: RequestFunc) {
     Object.keys(configs).forEach((type: string) => {
-      this.setPropsConfig(toLine(type), configs[type]);
+      this.setPropsConfig(toLine(type), configs[type], requestFunc);
     });
     this.emit('props-configs-change');
   }
@@ -45,10 +45,14 @@ export class PropsService extends BaseService {
    * @param type 组件类型
    * @param config 组件属性表单配置
    */
-  public async setPropsConfig(type: string, config: FormConfig | (() => Promise<FormConfig> | FormConfig)) {
+  public async setPropsConfig(
+    type: string,
+    config: FormConfig | ((requestFunc: RequestFunc | undefined) => Promise<FormConfig> | FormConfig),
+    requestFunc?: RequestFunc
+  ) {
     let componentConfig = [];
     if (typeof config === 'function') {
-      componentConfig = await config();
+      componentConfig = await config(requestFunc);
     } else {
       componentConfig = Array.isArray(config) ? config : [config];
     }

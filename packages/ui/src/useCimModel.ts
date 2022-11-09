@@ -1,7 +1,5 @@
 import { RequestMethod } from '@edoms/utils';
 
-import { request } from './request';
-
 interface Instance {
   label: string;
   code: string;
@@ -28,7 +26,7 @@ interface ListPropertiesRes {
   properties: Property[];
 }
 
-export default () => {
+export default (request) => {
   const listInstance = async (): Promise<ListInstanceRes> => {
     try {
       const { result } = await request<any, ListInstanceRes>({

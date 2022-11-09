@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onUnmounted, provide, reactive, toRaw, watch } from 'vue';
+import { onUnmounted, provide, reactive, toRaw, watch, watchEffect } from 'vue';
 
 import { EventOption, MethodOption } from '@edoms/core';
 import type { FormConfig } from '@edoms/form';
@@ -83,7 +83,15 @@ import historyService from './services/history';
 import propsService from './services/props';
 import storageService from './services/storage';
 import uiService from './services/ui';
-import type { ComponentGroup, MenuBarData, MenuButton, MenuComponent, Services, SideBarData } from './type';
+import type {
+  ComponentGroup,
+  MenuBarData,
+  MenuButton,
+  MenuComponent,
+  RequestFunc,
+  Services,
+  SideBarData,
+} from './type';
 
 const props = withDefaults(
   defineProps<{
@@ -114,6 +122,7 @@ const props = withDefaults(
         };
     codeOptions?: Record<string | number | symbol, any>;
     updateDragEl?: (el: HTMLDivElement, target: HTMLElement) => void;
+    requestFunc?: RequestFunc;
   }>(),
   {
     componentGroupList: () => [],
@@ -169,13 +178,9 @@ watch(
   }
 );
 
-watch(
-  () => props.propsConfigs,
-  (configs) => propsService.setPropsConfigs(configs),
-  {
-    immediate: true,
-  }
-);
+watchEffect(() => {
+  propsService.setPropsConfigs(props.propsConfigs, props.requestFunc);
+});
 
 watch(
   () => props.propsValues,
