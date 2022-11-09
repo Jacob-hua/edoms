@@ -177,7 +177,7 @@ export const fillConfig = (config: FormConfig = []) => [
               const selectedMethodOption = eventsService
                 .getMethod(node?.type ?? '')
                 .find(({ value }) => value === model.method);
-              let title = `【${index}】`;
+              let title = `# ${index}`;
               if (selectedEventOption?.label) {
                 title = `${title} ${selectedEventOption?.label}`;
               }

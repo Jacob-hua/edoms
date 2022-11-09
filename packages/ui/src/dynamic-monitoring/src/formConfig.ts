@@ -17,14 +17,14 @@ const indicatorTypes = [
   },
 ];
 
-const equipments = [
+const instances = [
   {
     text: '空调',
     value: 'kt-001',
   },
 ];
 
-const points = [
+const properties = [
   {
     text: '0001',
     value: '0001',
@@ -44,7 +44,7 @@ export default [
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加指标',
-    title: (model: any, index: number | string) => `【${index}】 ${model.label ?? ''}`,
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
         name: 'type',
@@ -59,16 +59,16 @@ export default [
         trim: true,
       },
       {
-        name: 'equipment',
-        text: '设备',
+        name: 'instance',
+        text: '实例',
         type: 'select',
-        options: equipments,
+        options: instances,
       },
       {
-        name: 'point',
-        text: '点位',
+        name: 'property',
+        text: '属性',
         type: 'select',
-        options: points,
+        options: properties,
       },
       {
         name: 'expectedMax',

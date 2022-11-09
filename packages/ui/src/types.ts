@@ -158,10 +158,14 @@ export interface MIndicatorItemConfig {
   type: MEnvironmentIndicator;
   /** 标签 */
   label: string;
-  /** 设备 */
-  equipment: string;
-  /** 点位 */
-  point: string;
+  /** 实例类型 */
+  instanceType: string;
+  /** 实例 */
+  instance: string;
+  /** 属性类型 */
+  propertyType: string;
+  /** 属性 */
+  property: string;
   /** 预期最大阈值 */
   expectedMax: number;
   /** 预期最小阈值 */
