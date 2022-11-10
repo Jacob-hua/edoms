@@ -23,7 +23,7 @@ const indicatorTypes = [
 
 export default async (requestFunc?: (<D, R>() => Request<D, R>) | undefined) => {
   const { listInstance } = useCimModel(requestFunc);
-  const instances = await listInstance();
+  const { instances } = await listInstance();
   return [
     {
       text: '展示指标数',
