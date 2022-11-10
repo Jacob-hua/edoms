@@ -32,6 +32,7 @@ const service = new Request({
   withCredentials: true,
   headers: {
     'Content-Type': ContentType.JSON,
+    tenantId: 70,
   },
   interceptors: {
     requestInterceptors(config) {

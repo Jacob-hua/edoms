@@ -6,7 +6,7 @@ export enum NodeType {
 
 export type Id = string | number;
 
-export const enum VariableSpace {
+export const enum ValueSpace {
   COMPONENT = 'component',
   PAGE = 'page',
   APP = 'app',
@@ -20,11 +20,10 @@ export interface MappingStruct {
   target: string;
   ignore?: boolean;
   source?: string;
-  sourceSpace: VariableSpace;
+  sourceSpace: ValueSpace;
   const?: string;
   defaultValue?: string;
   expression?: string;
-  defaultExpression?: string;
   template?: string;
 }
 

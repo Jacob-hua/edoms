@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 import { cloneDeep } from 'lodash-es';
 
-import { DEFAULT_EVENTS, DEFAULT_METHODS, EventOption } from '@edoms/core';
+import { DEFAULT_EVENTS, DEFAULT_METHODS, EventOption, MethodOption } from '@edoms/core';
 import { toLine } from '@edoms/utils';
 
 import type { ComponentGroup } from '../type';
@@ -9,7 +9,7 @@ import type { ComponentGroup } from '../type';
 import BaseService from './BaseService';
 
 let eventMap: Record<string, EventOption[]> = reactive({});
-let methodMap: Record<string, EventOption[]> = reactive({});
+let methodMap: Record<string, MethodOption[]> = reactive({});
 
 export class EventsService extends BaseService {
   constructor() {
@@ -44,13 +44,13 @@ export class EventsService extends BaseService {
     return cloneDeep(eventMap[type] || DEFAULT_EVENTS);
   }
 
-  public setMethods(methods: Record<string, EventOption[]>) {
+  public setMethods(methods: Record<string, MethodOption[]>) {
     Object.keys(methods).forEach((type: string) => {
       this.setMethod(toLine(type), methods[type] || []);
     });
   }
 
-  public setMethod(type: string, method: EventOption[]) {
+  public setMethod(type: string, method: MethodOption[]) {
     methodMap[type] = [...DEFAULT_METHODS, ...method];
   }
 

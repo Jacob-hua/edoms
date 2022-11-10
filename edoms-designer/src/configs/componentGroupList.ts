@@ -1,23 +1,8 @@
-import { FolderOpened, Grid, PictureFilled, SwitchButton, Tickets } from '@element-plus/icons-vue';
+import { FolderOpened, Grid, PictureFilled, SwitchButton, Tickets, Umbrella } from '@element-plus/icons-vue';
 
 import { ComponentGroup } from '@edoms/editor';
 
 const componentGroupList: ComponentGroup[] = [
-  {
-    title: '基础容器',
-    items: [
-      {
-        icon: FolderOpened,
-        text: '组',
-        type: 'container',
-      },
-      {
-        icon: FolderOpened,
-        text: '蒙层',
-        type: 'overlay',
-      },
-    ],
-  },
   {
     title: '基础组件',
     items: [
@@ -44,12 +29,23 @@ const componentGroupList: ComponentGroup[] = [
     ],
   },
   {
-    title: '高阶组件',
+    title: '基础容器',
     items: [
+      {
+        icon: FolderOpened,
+        text: '组',
+        type: 'container',
+      },
+      {
+        icon: FolderOpened,
+        text: '蒙层',
+        type: 'overlay',
+      },
+      // 高阶组件
       {
         icon: Tickets,
         text: '弹窗',
-        type: 'popover',
+        type: '',
         data: {
           type: 'overlay',
           style: {
@@ -80,6 +76,16 @@ const componentGroupList: ComponentGroup[] = [
             },
           ],
         },
+      },
+    ],
+  },
+  {
+    title: '业务组件',
+    items: [
+      {
+        icon: Umbrella,
+        text: '动环监测',
+        type: 'dynamic-monitoring',
       },
     ],
   },

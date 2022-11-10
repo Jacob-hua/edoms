@@ -1,4 +1,4 @@
-export default [
+export default () => [
   {
     name: 'layout',
     text: '容器布局',

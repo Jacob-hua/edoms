@@ -94,22 +94,8 @@ export default {
             fontWeight: '',
           },
           name: '按钮',
-          text: '更新二维码',
+          text: '设置文本',
           multiple: true,
-          events: [
-            {
-              name: 'edoms:common:events:click',
-              to: 'qrcode_4738',
-              method: 'setQrcode',
-              mappings: [
-                {
-                  target: 'url',
-                  const: 'E-DOMS',
-                  sourceSpace: 'const',
-                },
-              ],
-            },
-          ],
           stores: [
             {
               variable: 'url',

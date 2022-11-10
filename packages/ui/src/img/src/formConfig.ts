@@ -1,4 +1,4 @@
-export default [
+export default () => [
   {
     text: '图片',
     name: 'src',

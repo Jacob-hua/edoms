@@ -163,14 +163,36 @@ export const fillConfig = (config: FormConfig = []) => [
       },
       {
         title: '事件',
+        labelWidth: '80px',
         items: [
           {
-            type: 'table',
+            type: 'groupList',
             name: 'events',
+            addButtonText: '添加事件',
+            title: (model: any, index: number | string, formValue: any) => {
+              const selectedEventOption = eventsService
+                .getEvent(formValue.type)
+                .find(({ value }) => value === model.name);
+              const node = editorService.getNodeById(model.to);
+              const selectedMethodOption = eventsService
+                .getMethod(node?.type ?? '')
+                .find(({ value }) => value === model.method);
+              let title = `# ${index}`;
+              if (selectedEventOption?.label) {
+                title = `${title} ${selectedEventOption?.label}`;
+              }
+              if (model.to) {
+                title = `${title} ${model.to}`;
+              }
+              if (selectedMethodOption?.label) {
+                title = `${title} ${selectedMethodOption.label}`;
+              }
+              return title;
+            },
             items: [
               {
                 name: 'name',
-                label: '事件名',
+                text: '监听事件',
                 type: 'select',
                 options: (mForm: FormState, { formValue }: any) =>
                   eventsService.getEvent(formValue.type).map((option) => ({
@@ -180,12 +202,12 @@ export const fillConfig = (config: FormConfig = []) => [
               },
               {
                 name: 'to',
-                label: '联动组件',
+                text: '联动组件',
                 type: 'ui-select',
               },
               {
                 name: 'method',
-                label: '动作',
+                text: '组件动作',
                 type: 'select',
                 options: (mForm: FormState, { model }: any) => {
                   const node = editorService.getNodeById(model.to);
@@ -194,8 +216,117 @@ export const fillConfig = (config: FormConfig = []) => [
                   return eventsService.getMethod(node.type).map((option) => ({
                     text: option.label,
                     value: option.value,
+                    props: option.props,
                   }));
                 },
+                onChange: (mForm: FormState, value: any, { model, config }: any) => {
+                  const selectedOption = config
+                    .options(mForm, { model })
+                    .find(({ value: _v }: { value: string }) => _v === value);
+                  const props = selectedOption.props ?? [];
+                  model.mappings = props.reduce(
+                    (mappings: any[], prop: string) => [
+                      ...mappings,
+                      {
+                        target: prop,
+                        ignore: true,
+                      },
+                    ],
+                    []
+                  );
+                },
+              },
+              {
+                type: 'groupList',
+                name: 'mappings',
+                text: '动作参数',
+                labelWidth: '80px',
+                movable: false,
+                titleKey: 'target',
+                deletable: false,
+                addable: false,
+                display: (mForm: FormState, { model }: any) => {
+                  const node = editorService.getNodeById(model.to);
+                  if (!node?.type) return false;
+                  const selectedMethodOption = eventsService
+                    .getMethod(node.type)
+                    .find(({ value }) => value === model.method);
+
+                  return selectedMethodOption?.props;
+                },
+                items: [
+                  {
+                    text: '参数',
+                    name: 'target',
+                    type: 'display',
+                  },
+                  {
+                    text: '默认值',
+                    name: 'defaultValue',
+                  },
+                  {
+                    text: '忽略配置',
+                    name: 'ignore',
+                    type: 'switch',
+                  },
+                  {
+                    text: '取值空间',
+                    name: 'sourceSpace',
+                    type: 'select',
+                    display: (_: any, { model }: any) => !model.ignore,
+                    options: [
+                      {
+                        text: '事件',
+                        value: 'event',
+                      },
+                      {
+                        text: '应用',
+                        value: 'app',
+                      },
+                      {
+                        text: '页面',
+                        value: 'page',
+                      },
+                      {
+                        text: '组件',
+                        value: 'component',
+                      },
+                      {
+                        text: '表达式',
+                        value: 'expression',
+                      },
+                      {
+                        text: '模板',
+                        value: 'template',
+                      },
+                      {
+                        text: '常量',
+                        value: 'const',
+                      },
+                    ],
+                  },
+                  {
+                    text: '取值',
+                    name: 'source',
+                    display: (_: any, { model }: any) =>
+                      !model.ignore && ['event', 'app', 'page', 'component'].includes(model.sourceSpace),
+                  },
+                  {
+                    text: '常量',
+                    name: 'const',
+                    display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'const',
+                  },
+                  {
+                    text: '表达式',
+                    name: 'expression',
+                    display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'expression',
+                  },
+                  {
+                    text: '模板',
+                    name: 'template',
+                    display: (_: any, { model }: any) => !model.ignore && model.sourceSpace === 'template',
+                  },
+                ],
               },
             ],
           },

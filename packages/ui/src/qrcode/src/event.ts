@@ -8,5 +8,10 @@ export default {
       label: '隐藏',
       value: 'hide',
     },
+    {
+      label: '设置二维码',
+      value: 'setQrcode',
+      props: ['url'],
+    },
   ],
 };
