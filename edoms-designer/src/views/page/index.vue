@@ -18,6 +18,7 @@
         class="grid-list"
         column-gap="20px"
         row-gap="20px"
+        :page-size="999999"
         item-min-width="200px"
         :request="loadData"
       >
@@ -105,43 +106,45 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { FormInstance } from 'element-plus';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage, FormInstance } from 'element-plus';
 import screenFull from 'screenfull';
 
+import { createPage, deletePage, listPages, updatePage } from '@/api/page';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
-
+const route = useRoute();
 const router = useRouter();
+const gridList = ref();
 
-const gridList = ref(null);
-const loadData: RequestFunc<{ name: string }> = async () => {
-  const dataSource = [
-    {
-      id: Math.random(),
-      name: `页面1`,
-      isShowText: true,
-    },
-    {
-      id: Math.random(),
-      name: '页面2',
-      isShowText: true,
-    },
-    {
-      id: Math.random(),
-      name: '页面3',
-      isShowText: true,
-    },
-    {
-      id: Math.random(),
-      name: '页面4',
-      isShowText: true,
-    },
-  ];
+interface Page {
+  pageId: bigint;
+  name: string;
+  createBy: string;
+  createTime: bigint;
+  publishContentId: string;
+  editContentId: string;
+  description: string;
+  updateBy: string;
+  updateTime: bigint;
+  applicationId: string;
+  isShowText: boolean;
+}
+
+const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
+  const { dataList = [], count } = await listPages({
+    page: current,
+    limit: pageSize,
+    applicationId: route.query.applicationId as string,
+    name: searchText.value,
+  });
+  dataList.forEach((item: any) => {
+    item.isShowText = true;
+  });
   return {
-    data: dataSource,
-    total: dataSource.length,
+    data: dataList,
+    total: Number(count),
   };
 };
 
@@ -153,7 +156,7 @@ const editWrapper = ref();
 
 const topMenus = [
   {
-    name: 'fullScroll',
+    name: 'fullScreen',
     label: '全屏',
     action: () => {
       if (screenFull.isEnabled && editWrapper.value) {
@@ -203,7 +206,13 @@ const menus = [
     name: 'delete',
     label: '删除',
     icon: 'Delete',
-    action: () => {},
+    action: async ({ pageId }: Page) => {
+      await deletePage({
+        pageIds: [BigInt(pageId)],
+      });
+      ElMessage.success('删除成功');
+      gridList.value?.reload();
+    },
   },
 ];
 const handleMenuClick = (value: string | number, model: any) => {
@@ -214,11 +223,17 @@ const handleTopMenuClick = (value: string | number) => {
   const menu = topMenus.find(({ name }) => name === value);
   menu?.action();
 };
-const handleChangeName = (model: any) => {
+const handleChangeName = async (model: Page) => {
+  await updatePage({
+    pageId: Number(model.pageId),
+    name: model.name,
+    applicationId: model.applicationId,
+  });
   model.isShowText = true;
+  gridList.value?.reload();
 };
 
-const searchText = ref<string>('');
+const searchText = ref<string | null>(null);
 const isSearch = ref<boolean>(false);
 
 const handleShowSearchInput = () => {
@@ -227,7 +242,7 @@ const handleShowSearchInput = () => {
 };
 
 const search = () => {
-  console.log('搜索', searchText.value);
+  gridList.value?.reload();
   isSearch.value = false;
 };
 
@@ -281,8 +296,14 @@ const handleConfirm = async () => {
   if (!form.value) return;
   try {
     await form.value?.validate();
+    await createPage({
+      name: page.value?.name,
+      applicationId: route.query.applicationId as string,
+    });
+    ElMessage.success('页面创建成功');
     newPageVisible.value = false;
     form.value?.resetFields();
+    gridList.value?.reload();
   } catch (e) {
     console.log(e);
   }
