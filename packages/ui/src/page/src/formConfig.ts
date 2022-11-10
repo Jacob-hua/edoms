@@ -1,4 +1,4 @@
-export default [
+export default () => [
   {
     text: '页面标识',
     name: 'name',

@@ -168,6 +168,7 @@ export const fillConfig = (config: FormConfig = []) => [
           {
             type: 'groupList',
             name: 'events',
+            addButtonText: '添加事件',
             title: (model: any, index: number | string, formValue: any) => {
               const selectedEventOption = eventsService
                 .getEvent(formValue.type)
@@ -176,7 +177,7 @@ export const fillConfig = (config: FormConfig = []) => [
               const selectedMethodOption = eventsService
                 .getMethod(node?.type ?? '')
                 .find(({ value }) => value === model.method);
-              let title = `【${index}】`;
+              let title = `# ${index}`;
               if (selectedEventOption?.label) {
                 title = `${title} ${selectedEventOption?.label}`;
               }
@@ -308,7 +309,7 @@ export const fillConfig = (config: FormConfig = []) => [
                     text: '取值',
                     name: 'source',
                     display: (_: any, { model }: any) =>
-                      !model.ignore && !['const', 'expression', 'template'].includes(model.sourceSpace),
+                      !model.ignore && ['event', 'app', 'page', 'component'].includes(model.sourceSpace),
                   },
                   {
                     text: '常量',

@@ -43,8 +43,6 @@
         <workspace @runtime-ready="$emit('runtime-ready')">
           <template #stage><slot name="stage"></slot></template>
           <template #workspace-content><slot name="workspace-content" :editor-service="editorService"></slot></template>
-          <template #page-bar-title="{ page }"><slot name="page-bar-title" :page="page"></slot></template>
-          <template #page-bar-popover="{ page }"><slot name="page-bar-popover" :page="page"></slot></template>
         </workspace>
       </slot>
     </template>
@@ -85,7 +83,7 @@ import historyService from './services/history';
 import propsService from './services/props';
 import storageService from './services/storage';
 import uiService from './services/ui';
-import type { ComponentGroup, MenuBarData, MenuButton, MenuComponent, Services, SideBarData } from './type';
+import type { ComponentGroup, MenuBarData, MenuButton, MenuComponent, Request, Services, SideBarData } from './type';
 
 const props = withDefaults(
   defineProps<{
@@ -116,6 +114,7 @@ const props = withDefaults(
         };
     codeOptions?: Record<string | number | symbol, any>;
     updateDragEl?: (el: HTMLDivElement, target: HTMLElement) => void;
+    request?: Request;
   }>(),
   {
     componentGroupList: () => [],
@@ -172,8 +171,8 @@ watch(
 );
 
 watch(
-  () => props.propsConfigs,
-  (configs) => propsService.setPropsConfigs(configs),
+  () => ({ configs: props.propsConfigs, request: props.request }),
+  ({ configs, request }) => propsService.setPropsConfigs(configs, request),
   {
     immediate: true,
   }

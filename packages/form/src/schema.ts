@@ -620,6 +620,7 @@ export interface GroupListConfig extends FormItem {
   items: FormConfig;
   groupItems?: FormConfig;
   tableItems?: FormConfig;
+  addButtonText?: string;
   titleKey?: string;
   title?: (model: any, index: number | string | symbol, mForm: FormValue | undefined) => string | string;
   itemExtra?: string | FilterFunction;

@@ -1,7 +1,7 @@
 import { createApp, defineAsyncComponent } from 'vue';
 
 import Core from '@edoms/core';
-import { getUrlParam } from '@edoms/utils';
+import { getUrlParam, toLine } from '@edoms/utils';
 
 import components from '../.edoms/async-comp-entry';
 import plugins from '../.edoms/plugin-entry';
@@ -16,7 +16,7 @@ edomsApp.use(request);
 
 Object.entries(components).forEach(([type, component]: [string, any]) => {
   edomsApp.component(
-    `edoms-ui-${type}`,
+    `edoms-ui-${toLine(type)}`,
     defineAsyncComponent(() => component)
   );
 });
