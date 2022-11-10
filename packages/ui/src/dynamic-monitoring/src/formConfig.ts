@@ -1,3 +1,5 @@
+import { Request } from '@edoms/editor';
+
 const indicatorTypes = [
   {
     text: '温度',
@@ -17,7 +19,10 @@ const indicatorTypes = [
   },
 ];
 
-export default async () => {
+export default async (request?: Request) => {
+  if (request) {
+    console.log(request('dynamic-monitoring'));
+  }
   const instances = [] as any[];
   return [
     {

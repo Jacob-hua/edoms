@@ -1,6 +1,6 @@
 import type { Component } from 'vue';
 
-import type { FormConfig } from '@edoms/form';
+import type { FormConfig, FormValue } from '@edoms/form';
 import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
 import type StageCore from '@edoms/stage';
 import type { ContainerHighlightType, MoveableOptions } from '@edoms/stage';
@@ -13,6 +13,8 @@ import type { HistoryService } from './services/history';
 import type { PropsService } from './services/props';
 import type { StorageService } from './services/storage';
 import type { UiService } from './services/ui';
+
+export type Request = (nodeType: string, formValue?: FormValue) => Promise<any> | any;
 
 export type BeforeAdd = (config: MNode, parent: MContainer) => Promise<MNode> | MNode;
 export type GetConfig = (config: FormConfig) => Promise<FormConfig> | FormConfig;

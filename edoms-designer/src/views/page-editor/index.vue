@@ -13,6 +13,7 @@
       :moveable-options="moveableOptions"
       :auto-scroll-into-view="true"
       :stage-rect="stageRect"
+      :request="loadData"
       @runtime-ready="handleRuntimeReady"
     >
     </edoms-editor>
@@ -45,6 +46,12 @@ import componentGroupList from '@/configs/componentGroupList';
 import dsl from '@/configs/dsl';
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
+
+const loadData = async (nodeType: string) => {
+  console.log('nodeType', nodeType);
+
+  return 'dddd';
+};
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
 const editor = ref<InstanceType<typeof EdomsEditor>>();
