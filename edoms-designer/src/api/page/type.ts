@@ -7,6 +7,7 @@ export interface PageInfo {
 }
 
 export interface ListPageInfosReq {
+  name: string | null;
   page: number;
   limit: number;
   applicationId: string;
@@ -17,4 +18,35 @@ export interface ListPageInfosRes {
   limit: string;
   page: string;
   dataList: PageInfo[];
+}
+
+export interface CreatePageReq {
+  name: string;
+  applicationId: string;
+  description?: string;
+}
+
+export interface CreatePageRes {
+  result: {
+    pageId: string | null;
+  };
+}
+
+export interface UpdatePageReq {
+  pageId: number;
+  name: string;
+  description?: string;
+  applicationId: string;
+}
+
+export interface UpdatePageRes {
+  result: string;
+}
+
+export interface DeletePageReq {
+  pageIds: bigint[];
+}
+
+export interface DeletePageRes {
+  result: string;
 }
