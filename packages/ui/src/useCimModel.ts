@@ -2,13 +2,11 @@ import { Request } from '@edoms/editor';
 import { RequestMethod } from '@edoms/utils';
 
 interface Instance {
-  label: string;
-  code: string;
+  label?: string;
+  value?: string;
+  insCode?: string;
+  insName?: string;
   children: Instance[];
-}
-
-interface ListInstanceRes {
-  instances: Instance[];
 }
 
 interface Property {
@@ -28,25 +26,47 @@ interface ListPropertiesRes {
 }
 
 export default (requestFunc?: <D, R>() => Request<D, R>) => {
-  const listInstance = async (): Promise<ListInstanceRes> => {
+  const listInstance = async (): Promise<Instance[]> => {
     try {
       if (!requestFunc) {
         throw new Error();
       }
-      const request = requestFunc<any, ListInstanceRes>();
+      const request = requestFunc<any, Instance[]>();
       const { result } = await request({
-        url: '',
-        method: RequestMethod.GET,
+        url: '/common/cimEnergy/system-device-tree',
+        method: RequestMethod.POST,
+        data: {
+          virtual: 'mixed',
+          deviceCode: '',
+          isQueryDevice: true,
+        },
       });
-      return (
-        result ?? {
-          instances: [],
-        }
+      const instances = result ?? [];
+      console.log(
+        '~~~~~',
+        instances.map((instance) => handleInstanceTree(instance))
       );
+
+      return instances;
     } catch (error) {
-      return {
-        instances: [],
+      return [];
+    }
+
+    function handleInstanceTree(instance: Instance) {
+      const result = {
+        label: instance.insName,
+        value: instance.insCode,
+      } as {
+        label: string;
+        value: string;
+        children?: any[];
       };
+
+      if (instance.children) {
+        result.children = instance.children.map((item) => handleInstanceTree(item));
+      }
+
+      return result;
     }
   };
 

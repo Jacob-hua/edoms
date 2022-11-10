@@ -23,7 +23,7 @@ const indicatorTypes = [
 
 export default async (requestFunc?: (<D, R>() => Request<D, R>) | undefined) => {
   const { listInstance } = useCimModel(requestFunc);
-  const { instances } = await listInstance();
+  const instances = await listInstance();
   return [
     {
       text: '展示指标数',
@@ -54,7 +54,7 @@ export default async (requestFunc?: (<D, R>() => Request<D, R>) | undefined) => 
         {
           name: 'instance',
           text: '实例',
-          type: 'select',
+          type: 'cascader',
           options: instances,
         },
         {
