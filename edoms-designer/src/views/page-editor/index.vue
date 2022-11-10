@@ -44,13 +44,14 @@ import { asyncLoadJs } from '@edoms/utils';
 
 import componentGroupList from '@/configs/componentGroupList';
 import dsl from '@/configs/dsl';
+import useInstance from '@/hooks/useInstance';
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
 
-const loadData = async (nodeType: string) => {
-  console.log('nodeType', nodeType);
-
-  return 'dddd';
+const loadData = async () => {
+  return {
+    instanceOptions: await useInstance(),
+  };
 };
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;

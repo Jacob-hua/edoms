@@ -20,10 +20,12 @@ const indicatorTypes = [
 ];
 
 export default async (request?: Request) => {
+  let instances = [];
   if (request) {
-    console.log(request('dynamic-monitoring'));
+    const { instanceOptions } = await request('dynamic-monitoring');
+    instances = instanceOptions;
   }
-  const instances = [] as any[];
+
   return [
     {
       text: '展示指标数',
