@@ -1,6 +1,8 @@
 import { FolderOpened, Grid, PictureFilled, SwitchButton, Tickets, Umbrella } from '@element-plus/icons-vue';
 
-export default [
+import { ComponentGroup } from '@edoms/editor';
+
+const componentGroupList: ComponentGroup[] = [
   {
     title: '基础组件',
     items: [
@@ -43,6 +45,7 @@ export default [
       {
         icon: Tickets,
         text: '弹窗',
+        type: '',
         data: {
           type: 'overlay',
           style: {
@@ -87,3 +90,5 @@ export default [
     ],
   },
 ];
+
+export default componentGroupList;
