@@ -1,7 +1,3 @@
-import { Request } from '@edoms/editor';
-
-import useCimModel from '../../useCimModel';
-
 const indicatorTypes = [
   {
     text: '温度',
@@ -21,9 +17,8 @@ const indicatorTypes = [
   },
 ];
 
-export default async (requestFunc?: (<D, R>() => Request<D, R>) | undefined) => {
-  const { listInstance } = useCimModel(requestFunc);
-  const instances = await listInstance();
+export default async () => {
+  const instances = [] as any[];
   return [
     {
       text: '展示指标数',

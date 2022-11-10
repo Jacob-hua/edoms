@@ -13,7 +13,6 @@
       :moveable-options="moveableOptions"
       :auto-scroll-into-view="true"
       :stage-rect="stageRect"
-      :request-func="requestFunc"
       @runtime-ready="handleRuntimeReady"
     >
     </edoms-editor>
@@ -44,11 +43,8 @@ import { asyncLoadJs } from '@edoms/utils';
 
 import componentGroupList from '@/configs/componentGroupList';
 import dsl from '@/configs/dsl';
-import { request } from '@/util/request';
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
-
-const requestFunc = () => request;
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
 const editor = ref<InstanceType<typeof EdomsEditor>>();

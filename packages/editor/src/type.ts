@@ -4,7 +4,6 @@ import type { FormConfig } from '@edoms/form';
 import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
 import type StageCore from '@edoms/stage';
 import type { ContainerHighlightType, MoveableOptions } from '@edoms/stage';
-import type { RequestConfig, RequestMethod } from '@edoms/utils';
 
 import type { CodeBlockService } from './services/codeBlock';
 import type { ComponentListService } from './services/componentList';
@@ -373,18 +372,4 @@ export enum CodeSelectOp {
   DELETE = 'delete',
   /** 单选修改 */
   CHANGE = 'change',
-}
-
-export interface EditorRequestConfig<T> extends RequestConfig {
-  method: RequestMethod;
-  loading?: boolean;
-  data?: T;
-}
-
-export interface EdomsResponse<T = any> {
-  result?: T;
-}
-
-export interface Request<D = any, R = any> {
-  (config: EditorRequestConfig<D>): Promise<EdomsResponse<R>>;
 }
