@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onUnmounted, provide, reactive, toRaw, watch, watchEffect } from 'vue';
+import { onUnmounted, provide, reactive, toRaw, watch } from 'vue';
 
 import { EventOption, MethodOption } from '@edoms/core';
 import type { FormConfig } from '@edoms/form';
@@ -170,9 +170,13 @@ watch(
   }
 );
 
-watchEffect(() => {
-  propsService.setPropsConfigs(props.propsConfigs, props.requestFunc);
-});
+watch(
+  () => ({ configs: props.propsConfigs, requestFunc: props.requestFunc }),
+  ({ configs, requestFunc }) => propsService.setPropsConfigs(configs, requestFunc),
+  {
+    immediate: true,
+  }
+);
 
 watch(
   () => props.propsValues,
