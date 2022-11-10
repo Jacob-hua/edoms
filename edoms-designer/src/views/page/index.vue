@@ -164,7 +164,11 @@ const topMenus = [
   {
     name: 'history',
     label: '历史版本',
-    action: () => {},
+    action: () => {
+      router.push({
+        path: '/version',
+      });
+    },
   },
   {
     name: 'saveVersion',
