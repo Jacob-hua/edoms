@@ -69,7 +69,7 @@
           </PopMenu>
         </div>
       </div>
-      <div ref="editWrapper" class="edit"></div>
+      <div ref="editWrapper" class="edit">页面预览</div>
     </section>
   </div>
   <el-dialog v-model="newPageVisible" title="新增页面" width="30%" @close="handleClose">
