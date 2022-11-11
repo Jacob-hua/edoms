@@ -69,7 +69,7 @@
           </PopMenu>
         </div>
       </div>
-      <div ref="editWrapper" class="edit"></div>
+      <div ref="editWrapper" class="edit"><h1>页面预览</h1></div>
     </section>
   </div>
   <el-dialog v-model="newPageVisible" title="新增页面" width="30%" @close="handleClose">
@@ -417,7 +417,14 @@ const goEdit = () => {
       }
     }
     .edit {
+      text-align: center;
       height: calc(100% - 75px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      h1 {
+        font-size: 30px;
+      }
     }
   }
 }
