@@ -23,7 +23,7 @@
                 <span>高级设置</span>
               </span>
             </template>
-            <AdvancedSetting />
+            <AdvancedSetting :app-info="appInfo" />
           </el-tab-pane>
         </el-tabs>
       </div>
