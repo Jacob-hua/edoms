@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAlive" class="infinite-list-wrapper" style="overflow: auto">
     <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
-      <slot name="operation"></slot>
+      <div><slot name="operation"></slot></div>
       <div v-for="(item, index) in data" :key="index">
         <slot :item="item" :index="index">
           {{ item }}
@@ -109,9 +109,14 @@ defineExpose({
 
   .list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(v-bind(itemMinWidth), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(v-bind(itemMinWidth), 1fr));
     column-gap: v-bind(columnGap);
     row-gap: v-bind(rowGap);
+
+    div:first-of-type {
+      grid-column-start: 1;
+      grid-column-end: 1;
+    }
   }
 }
 </style>
