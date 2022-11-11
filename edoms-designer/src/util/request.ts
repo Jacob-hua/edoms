@@ -59,7 +59,7 @@ const requestInterceptorsCatch = (error: EdomsError) => {
   return Promise.reject(error);
 };
 
-const responseInterceptors = <T>(response: T) => {
+const responseInterceptors = (response: any) => {
   const { data } = response as EdomsResponse;
   if (data.errorInfo && data.errorInfo.errorCode) {
     ElMessage({
