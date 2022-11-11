@@ -1,9 +1,9 @@
 import { RequestMethod } from '@edoms/utils';
 
 import { DeleteApplicationReq } from '@/api/application-setting/type';
-import { EdomsResponse, request } from '@/util/request';
+import { request } from '@/util/request';
 
-export const deleteApplication = async (data: DeleteApplicationReq): Promise<EdomsResponse<string>> => {
+export const deleteApplication = async (data: DeleteApplicationReq): Promise<any> => {
   try {
     return await request<DeleteApplicationReq, string>({
       url: '/application/delete',

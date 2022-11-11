@@ -11,7 +11,7 @@
                   <el-avatar>
                     <el-icon :size="20"><Avatar /></el-icon>
                   </el-avatar>
-                  <span>王麻子</span>
+                  <span>李四</span>
                 </div>
               </template>
               <div class="top-bar">
@@ -20,7 +20,7 @@
                     <el-icon :size="20"><Avatar /></el-icon>
                   </el-avatar>
                   <div>
-                    <span>王麻子 -{{ tenantName }}</span>
+                    <span>李四 -{{ tenantName }}</span>
                     <p><span>应用数:</span> 25 <span>发布数:</span> 16</p>
                   </div>
                 </div>

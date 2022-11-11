@@ -50,7 +50,7 @@
     </section>
     <section class="right-section">
       <div class="right-top-bar">
-        <el-button type="primary" size="large">编辑</el-button>
+        <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
         <div class="pop-menu-wrapper">
           <PopMenu :width="350" @menu-click="handleTopMenuClick">
             <template #reference>
@@ -324,6 +324,12 @@ const handleClose = () => {
 const handleVersionClose = () => {
   versionForm.value?.resetFields();
 };
+
+const goEdit = () => {
+  router.push({
+    path: '/editor',
+  });
+};
 </script>
 
 <style lang="scss">
@@ -411,7 +417,6 @@ const handleVersionClose = () => {
       }
     }
     .edit {
-      background-color: #409eff;
       height: calc(100% - 75px);
     }
   }
