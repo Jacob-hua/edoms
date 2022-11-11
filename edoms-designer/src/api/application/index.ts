@@ -1,6 +1,6 @@
 import { RequestMethod } from '@edoms/utils';
 
-import { EdomsResponse, request } from '@/util/request';
+import { request } from '@/util/request';
 
 import {
   AppForm,
@@ -59,7 +59,7 @@ export const fileUpload = async (data: FormData): Promise<FileUploadRes> => {
     };
   }
 };
-export const updateApplication = async (data: AppForm): Promise<EdomsResponse<string>> => {
+export const updateApplication = async (data: AppForm): Promise<any> => {
   try {
     return await request<AppForm, string>({
       url: '/application/update',
@@ -76,7 +76,7 @@ export const updateApplication = async (data: AppForm): Promise<EdomsResponse<st
     };
   }
 };
-export const getAppInfo = async (data: { applicationId: string }): Promise<EdomsResponse<ApplicationInfo>> => {
+export const getAppInfo = async (data: { applicationId: string }): Promise<any> => {
   try {
     return await request<{ applicationId: string }, ApplicationInfo>({
       url: 'application/applicationInfo',
