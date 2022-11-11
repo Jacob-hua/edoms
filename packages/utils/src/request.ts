@@ -72,7 +72,7 @@ export class Request {
           }
         });
       },
-      (err: any) => {
+      async (err: any) => {
         const { config }: { config: RequestConfig } = err;
         if (!config || !config.retry) {
           return Promise.reject(err);
@@ -90,7 +90,8 @@ export class Request {
           }, config.retryDelay ?? 1);
         });
 
-        return backoff.then(() => this.request(config));
+        await backoff;
+        return await this.request(config);
       }
     );
   }
