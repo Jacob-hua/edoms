@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-wrapper">
     <BaseLayout>
       <template #header>
         <div class="describe">
@@ -123,6 +123,9 @@ const handleLevel = (levelId: number, name: string) => {
 </script>
 
 <style lang="scss" scoped>
+.app-wrapper {
+  width: 100%;
+}
 .top-bar {
   .avatar {
     display: flex;
