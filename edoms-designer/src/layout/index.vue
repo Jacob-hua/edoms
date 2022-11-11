@@ -105,7 +105,7 @@ const levelList = ref([
 ]);
 const level = ref<boolean>(false);
 
-const tenantName = ref<string>('');
+const tenantName = ref<string>('陕汽');
 
 const handleShowLevel = (name: string) => {
   if (name === menus[0].name) {
