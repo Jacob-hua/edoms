@@ -27,10 +27,8 @@ export const getModelType = async (): Promise<GetModelTypeRes> => {
     return result;
   } catch (e) {
     return {
-      result: {
-        modelTypeId: null,
-        modelType: null,
-      },
+      modelTypeId: null,
+      modelType: null,
     };
   }
 };

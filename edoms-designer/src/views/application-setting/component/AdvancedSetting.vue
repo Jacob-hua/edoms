@@ -55,14 +55,10 @@ const handleDelete = () => {
   confirmText.value = appInfo.value.secret;
 };
 const handleConfirm = async () => {
-  const { errorInfo } = await deleteApplication({
+  await deleteApplication({
     applicationId: appInfo.value.applicationId,
     secret: inputText.value,
   });
-  if (errorInfo.errorCode) {
-    ElMessage.error('删除失败');
-    return;
-  }
   deleteVisible.value = false;
   ElMessage.success('删除成功');
   router.go(-1);
