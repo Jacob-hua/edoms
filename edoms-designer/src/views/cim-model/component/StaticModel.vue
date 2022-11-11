@@ -5,6 +5,7 @@
       class="grid-list"
       column-gap="20px"
       row-gap="20px"
+      :page-size="9999999"
       item-min-width="200px"
       :request="loadData"
     >
@@ -23,33 +24,24 @@
 
 <script lang="ts" setup name="StaticModel">
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
 
-import GridList, { RequestFunc } from '@/components/GridList.vue';
+import { getDicData } from '@/api/cim-model';
+import GridList from '@/components/GridList.vue';
 
 import StaticModelTable from './StaticModelTable.vue';
 
-const route = useRoute();
-console.log(route.query.applicationId);
+enum Mark {
+  CIM_TABLE = 'cim_table',
+  CIM_URL = 'cim_url',
+}
 const gridList = ref(null);
-const loadData: RequestFunc<{ name: string }> = async () => {
-  const dataSource = [
-    {
-      name: `模型表1`,
-    },
-    {
-      name: '模型表2',
-    },
-    {
-      name: '模型表3',
-    },
-    {
-      name: '模型表4',
-    },
-  ];
+const loadData = async () => {
+  const result: any = await getDicData({
+    mark: Mark.CIM_TABLE as string,
+  });
   return {
-    data: dataSource,
-    total: dataSource.length,
+    data: result,
+    total: result.length,
   };
 };
 </script>

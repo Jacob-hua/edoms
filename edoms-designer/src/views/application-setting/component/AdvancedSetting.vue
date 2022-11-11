@@ -13,7 +13,7 @@
   </div>
   <el-dialog v-model="deleteVisible" title="删除应用" width="40%" :before-close="handleClose" center>
     <div class="modal-container">
-      <p>正在删除{{ applicationName }}应用，应用数据将被清空。请输入下面内容后确认删除！</p>
+      <p>正在删除 “{{ appInfo.name }}” 应用，应用数据将被清空。请输入下面内容后确认删除！</p>
       <p class="confirm">请在输入框输入"{{ confirmText }}" 以确认此操作</p>
       <el-input v-model="inputText"></el-input>
     </div>
@@ -26,7 +26,12 @@
 </template>
 
 <script lang="ts" setup name="advancedSetting">
-import { ref } from 'vue';
+import { ref, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
+
+import { ApplicationInfo } from '@/api/application/type';
+import { deleteApplication } from '@/api/application-setting';
 
 interface AdvanceItem {
   name: string;
@@ -35,15 +40,32 @@ interface AdvanceItem {
   action: (...args: any[]) => void;
 }
 
+const props = defineProps<{
+  appInfo: ApplicationInfo;
+}>();
+
+const router = useRouter();
+
+const { appInfo } = toRefs(props);
 const deleteVisible = ref<boolean>(false);
-const applicationName = ref<string>('北七家');
-const confirmText = ref<string>('beiqijia');
+const confirmText = ref<string>('');
 const inputText = ref<string>('');
 const handleDelete = () => {
   deleteVisible.value = true;
+  confirmText.value = appInfo.value.secret;
 };
-const handleConfirm = () => {
+const handleConfirm = async () => {
+  const { errorInfo } = await deleteApplication({
+    applicationId: appInfo.value.applicationId,
+    secret: inputText.value,
+  });
+  if (errorInfo.errorCode) {
+    ElMessage.error('删除失败');
+    return;
+  }
   deleteVisible.value = false;
+  ElMessage.success('删除成功');
+  router.go(-1);
 };
 const handleExportApplication = () => {};
 const handleClose = () => {

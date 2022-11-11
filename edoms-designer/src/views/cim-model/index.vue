@@ -33,16 +33,16 @@
 </template>
 
 <script lang="ts" setup name="Model">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { getModelType } from '@/api/cim-model';
 import { ModelType } from '@/const/model-type';
 
 import DynamicModel from './component/DynamicModel.vue';
 import StaticModel from './component/StaticModel.vue';
 
 const { go } = useRouter();
-
 const modelTypeConfig = {
   [ModelType.STATIC]: {
     value: ModelType.STATIC,
@@ -65,6 +65,13 @@ const tabPanels = computed(() => Object.values(modelTypeConfig));
 
 const tabActive = ref<ModelType>(tabPanels.value[0].value);
 
+const loadModelType = async () => {
+  const { modelType } = await getModelType();
+  useType.value = Number(modelType);
+};
+onMounted(() => {
+  loadModelType();
+});
 const goBack = () => {
   go(-1);
 };
