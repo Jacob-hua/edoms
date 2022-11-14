@@ -1,5 +1,3 @@
-import path from 'path';
-
 import { defineConfig } from 'vite';
 import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
@@ -33,9 +31,7 @@ export default defineConfig(({ mode }) => {
   if (['page', 'playground', 'page:admin', 'playground:admin'].includes(mode)) {
     const [type, isAdmin] = mode.split(':');
     const base = isAdmin ? `/edoms-runtime-dev/runtime/${type}/` : `/edoms-playground/runtime/${type}`;
-    const outDir = isAdmin
-      ? path.resolve(process.cwd(), `./dist/runtime/${type}`)
-      : path.resolve(process.cwd(), `./public/runtime/${type}`);
+    const outDir = isAdmin ? `./dist/runtime/${type}` : `./public/runtime/${type}`;
     return {
       plugins: [
         vue(),
