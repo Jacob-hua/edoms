@@ -40,7 +40,7 @@ import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps 
 import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
-import { asyncLoadJs } from '@edoms/utils';
+import { asyncLoadJs, getByPath } from '@edoms/utils';
 
 import componentGroupList from '@/configs/componentGroupList';
 import dsl from '@/configs/dsl';
@@ -58,7 +58,16 @@ const loadData = async (props?: RequestProps) => {
     return await requestInstances();
   }
   if (props.resourceId === 'dynamic-monitoring:point') {
+    const prop = props.prop ?? '';
+    const pathLastIndex = prop.lastIndexOf('.');
+    const domainPath = prop.substring(0, pathLastIndex);
+    const instanceId = getByPath(props.formValue ?? {}, domainPath, '');
+    console.log(instanceId);
+
     return [];
+    // return await requestPoints({
+    //   insId: instanceId[0],
+    // });
   }
   return;
 };
