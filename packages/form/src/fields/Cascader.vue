@@ -36,7 +36,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['change']);
 
-const mForm = inject<FormState | null>('mForm');
+const mForm = inject<FormState | undefined>('mForm');
 
 useAddField(props.prop);
 
@@ -84,9 +84,10 @@ const setRemoteOptions = async function () {
 
 // 初始化
 if (typeof props.config.options === 'function' && props.model && mForm) {
-  watchEffect(
-    () => (options.value = (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values }))
-  );
+  watchEffect(async () => {
+    options.value = await (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values });
+    console.log(options, '~~~~~~~');
+  });
 } else if (!props.config.options || !props.config.options.length || props.config.remote) {
   Promise.resolve(setRemoteOptions());
 }

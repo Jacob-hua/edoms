@@ -481,9 +481,9 @@ export interface CascaderConfig extends FormItem, Input {
         mForm: FormState | undefined,
         data: {
           model: Record<any, any>;
-          formValues: Record<any, any>;
+          formValues?: Record<any, any>;
         }
-      ) => CascaderOption[])
+      ) => CascaderOption[] | Promise<CascaderOption[]>)
     | CascaderOption[];
   option?: {
     url: string;

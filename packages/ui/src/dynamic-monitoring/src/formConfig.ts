@@ -66,13 +66,13 @@ export default async (request: Request) => [
         name: 'property',
         text: '属性',
         type: 'select',
-        options: (mForm: any, { formValue, prop }: any) => {
-          console.log('===', formValue, prop);
-
+        options: async (mForm: any, { formValue, prop }: any) => {
           return (
-            request({
+            (await request({
               resourceId: 'dynamic-monitoring:point',
-            }) ?? []
+              formValue,
+              prop,
+            })) ?? []
           );
         },
       },
