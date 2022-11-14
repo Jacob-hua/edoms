@@ -24,4 +24,5 @@ export interface ListPointReq {
   insId: string;
   codeType: ModelCodeType;
   propType: ModelPropType;
+  propName?: string;
 }
