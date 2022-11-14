@@ -86,7 +86,6 @@ const setRemoteOptions = async function () {
 if (typeof props.config.options === 'function' && props.model && mForm) {
   watchEffect(async () => {
     options.value = await (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values });
-    console.log(options, '~~~~~~~');
   });
 } else if (!props.config.options || !props.config.options.length || props.config.remote) {
   Promise.resolve(setRemoteOptions());
