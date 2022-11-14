@@ -44,13 +44,15 @@ import { asyncLoadJs } from '@edoms/utils';
 
 import componentGroupList from '@/configs/componentGroupList';
 import dsl from '@/configs/dsl';
-import useInstance from '@/hooks/useInstance';
+import useModel from '@/hooks/useModel';
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
 
+const { requestInstances } = useModel();
+
 const loadData = async () => {
   return {
-    instanceOptions: await useInstance(),
+    instanceOptions: await requestInstances(),
   };
 };
 
