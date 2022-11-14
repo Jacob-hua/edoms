@@ -474,6 +474,8 @@ export interface CascaderConfig extends FormItem, Input {
   type: 'cascader';
   remote?: boolean;
   multiple?: boolean;
+  filterable?: boolean;
+  checkStrictly?: boolean;
   options?:
     | ((
         mForm: FormState | undefined,
