@@ -5,11 +5,12 @@
       class="grid-list"
       column-gap="20px"
       row-gap="20px"
+      :page-size="9999999"
       item-min-width="200px"
       :request="loadData"
     >
       <template #default="{ item }">
-        <div class="item">{{ item.name }}</div>
+        <div class="item" @click="handleChangeName(item)">{{ item.name }}</div>
       </template>
       <template #noMore>
         <div></div>
@@ -17,10 +18,10 @@
     </GridList>
     <div class="right-section">
       <div class="section-top">
-        <span class="name">模型API-测试</span>
+        <span class="name">{{ firstData.name }}</span>
         <div>
-          <el-button type="primary" size="large">保存</el-button>
-          <el-button type="primary" size="large">测试</el-button>
+          <el-button type="primary" size="large" @click="handleSave">保存</el-button>
+          <el-button type="primary" size="large" @click="handleSimulation">测试</el-button>
         </div>
       </div>
       <el-input v-model="path" placeholder="请输入请求路径" class="input-with-select" size="large">
@@ -32,28 +33,19 @@
       </el-input>
       <p class="title">请求参数</p>
       <el-tabs v-model="tabActive" class="demo-tabs">
-        <el-tab-pane label="Params" name="Params"></el-tab-pane>
-        <el-tab-pane label="Body" name="Body"></el-tab-pane>
-        <el-tab-pane label="Header" name="Header"></el-tab-pane>
-        <el-tab-pane label="Cookie" name="Cookie"></el-tab-pane>
+        <el-tab-pane v-for="({ name, tableData }, index) in parameterData" :key="index" :label="name" :name="name">
+          <EditorTable ref="table" border :ignore="['el-input']" :columns="column" :data="tableData">
+            <template #operate="scope">
+              <el-button type="primary" @click="handleEditClick(scope)"> {{ scope.operate.row.btnText }}</el-button>
+              <el-button type="danger" @click="handleDelete(scope)"> 删除</el-button>
+            </template>
+            <template #bottom>
+              <div class="bottom" @click="handleAdd(name)">+新增</div>
+            </template>
+          </EditorTable>
+        </el-tab-pane>
       </el-tabs>
-      <EditorTable
-        ref="table"
-        v-model:tableKey="tableKey"
-        border
-        :ignore="['el-input']"
-        :columns="column"
-        :data="data"
-        @selection-change="handleSelectionChange"
-      >
-        <template #operate="scope">
-          <el-button type="primary" @click="handleEditClick(scope)"> {{ scope.operate.row.btnText }}</el-button>
-          <el-button type="danger" @click="handleDelete(scope)"> 删除</el-button>
-        </template>
-        <template #bottom>
-          <div class="bottom" @click="handleAdd">+新增</div>
-        </template>
-      </EditorTable>
+
       <json-viewer class="json" :value="jsonData" copyable boxed sort />
     </div>
   </div>
@@ -64,17 +56,13 @@ import { onMounted, ref } from 'vue';
 
 import { RequestMethod } from '@edoms/utils';
 
-import GridList, { RequestFunc } from '@/components/GridList.vue';
+import { getDicData, getTableApi, saveApi, simulation } from '@/api/cim-model';
+import GridList from '@/components/GridList.vue';
+import { Mark } from '@/const/model-mark';
 
 import EditorTable from './Table.vue';
-const jsonData = ref({
-  name: '就是的', //字符串
-  age: 18, //数组
-  isMan: false, //布尔值
-  date: new Date(),
-  fn: () => {},
-  arr: [1, 2, 5],
-});
+
+const jsonData = ref({});
 const path = ref<string>('');
 const method = ref<string>('');
 
@@ -85,7 +73,6 @@ onMounted(() => {
     table.value.showTable = true;
   }
 });
-const tableKey = ref(Math.random());
 enum OperateType {
   EDIT = 'edit',
   SAVE = 'save',
@@ -96,36 +83,36 @@ const operateType = {
   [OperateType.SAVE]: '保存',
   [OperateType.DELETE]: '删除',
 };
-const data = ref([
+const parameterData = ref([
   {
-    id: Math.random(),
-    key: 'userName',
-    value: 'town',
-    operate: false,
-    isEdit: false,
-    readOnly: true,
-    btnText: operateType[OperateType.EDIT],
+    name: 'Params',
+    tableData: [] as any[],
   },
   {
-    id: Math.random(),
-    key: 'password',
-    value: 'town',
-    operate: false,
-    isEdit: false,
-    readOnly: true,
-    btnText: operateType[OperateType.EDIT],
+    name: 'Body',
+    tableData: [] as any[],
+  },
+  {
+    name: 'Header',
+    tableData: [] as any[],
+  },
+  {
+    name: 'Cookie',
+    tableData: [] as any[],
   },
 ]);
-const handleAdd = () => {
-  data.value.push({
-    id: Math.random(),
-    key: 'password',
-    operate: false,
-    value: 'town',
-    isEdit: false,
-    readOnly: true,
-    btnText: operateType[OperateType.EDIT],
-  });
+const handleAdd = (type: string) => {
+  parameterData.value
+    .find(({ name }) => name === type)
+    ?.tableData.push({
+      id: Math.random(),
+      key: '',
+      isUse: false,
+      value: '',
+      isEdit: true,
+      readOnly: false,
+      btnText: operateType[OperateType.SAVE],
+    });
   table.value.showTable = true;
 };
 const column = ref([
@@ -142,22 +129,9 @@ const column = ref([
       label: 'key',
     },
     component: {
-      name: 'el-select',
+      name: 'el-input',
       compProps: {
         placeholder: '请输入key',
-      },
-      child: {
-        name: 'el-option',
-        options: () => [
-          {
-            label: '选项一',
-            value: 1,
-          },
-          {
-            label: '选项二',
-            value: 2,
-          },
-        ],
       },
     },
   },
@@ -175,7 +149,7 @@ const column = ref([
   },
   {
     colAttr: {
-      prop: 'operate',
+      prop: 'isUse',
       label: '是否可用',
     },
     component: {
@@ -200,13 +174,11 @@ const handleEditClick = ({ operate }: any) => {
   table.value.showTable = true;
 };
 const handleDelete = ({ operate: { row } }: any) => {
-  data.value.splice(
-    data.value.findIndex(({ id }) => row.id === id),
+  const data = parameterData.value.find(({ name }) => name === tabActive.value)?.tableData;
+  data?.splice(
+    data.findIndex(({ id }) => row.id === id),
     1
   );
-};
-const handleSelectionChange = (data: any) => {
-  console.log('选择了', data);
 };
 
 const requestMethods = [
@@ -218,41 +190,95 @@ const requestMethods = [
     label: RequestMethod.POST,
     value: RequestMethod.POST,
   },
-  {
-    label: RequestMethod.DELETE,
-    value: RequestMethod.DELETE,
-  },
-  {
-    label: RequestMethod.PUT,
-    value: RequestMethod.PUT,
-  },
-  {
-    label: RequestMethod.PATCH,
-    value: RequestMethod.PATCH,
-  },
 ];
 
-const loadData: RequestFunc<{ name: string }> = async () => {
-  const dataSource = [
-    {
-      name: '模型api-1',
-    },
-    {
-      name: '模型api-2',
-    },
-    {
-      name: '模型api-3',
-    },
-    {
-      name: '模型api-4',
-    },
-  ];
+const gridList = ref(null);
+const firstData = ref({
+  name: '',
+  id: null,
+});
+const loadData = async () => {
+  const result: any = await getDicData({
+    mark: Mark.CIM_URL as string,
+  });
+  firstData.value = result[0];
+  await getApiInfo();
   return {
-    data: dataSource,
-    total: dataSource.length,
+    data: result,
+    total: result.length,
   };
 };
-const gridList = ref(null);
+const convertData = (data: any) => {
+  return {
+    ...data,
+    isEdit: false,
+    readOnly: true,
+    btnText: operateType[OperateType.EDIT],
+  };
+};
+const getApiInfo = async () => {
+  const result = await getTableApi({
+    dicCimId: Number(firstData.value.id),
+  });
+  console.log(result);
+  path.value = result?.path ?? '';
+  method.value = result?.method ?? '';
+  parameterData.value[0].tableData = result.params?.map(convertData) ?? [];
+  parameterData.value[1].tableData = result.body?.map(convertData) ?? [];
+  parameterData.value[2].tableData = result.header?.map(convertData) ?? [];
+  parameterData.value[3].tableData = result.cookie?.map(convertData) ?? [];
+};
+const handleChangeName = (model: any) => {
+  firstData.value = model;
+  jsonData.value = {};
+  getApiInfo();
+};
+
+const handleSave = async () => {
+  const copyData = [...parameterData.value];
+  copyData.forEach((parameter) => {
+    parameter.tableData.forEach((data) => {
+      delete data.id;
+      delete data.btnText;
+      delete data.isEdit;
+      delete data.readOnly;
+    });
+  });
+  const { result } = await saveApi({
+    body: copyData[1].tableData,
+    cookie: copyData[3].tableData,
+    dicCimId: firstData.value.id!,
+    header: copyData[2].tableData,
+    params: copyData[0].tableData,
+    path: path.value,
+    method: method.value,
+  });
+  console.log(result);
+};
+const handleSimulation = async () => {
+  const copyData = [...parameterData.value];
+  copyData.forEach((parameter) => {
+    parameter.tableData.forEach((data) => {
+      delete data.id;
+      delete data.btnText;
+      delete data.isEdit;
+      delete data.readOnly;
+    });
+  });
+  try {
+    const { result } = await simulation({
+      body: copyData[1].tableData,
+      cookie: copyData[3].tableData,
+      header: copyData[2].tableData,
+      params: copyData[0].tableData,
+      path: path.value,
+      method: method.value,
+    });
+    jsonData.value = result ?? {};
+  } catch (e) {
+    console.log(e, '-----------');
+  }
+};
 </script>
 
 <style lang="scss" scoped>

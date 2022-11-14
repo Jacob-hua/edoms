@@ -31,7 +31,6 @@ export default (
       loading.value = false;
     }
   };
-
   return {
     execute,
     loading,

@@ -5,7 +5,7 @@ export default () => {
     if (typeof time === 'number') {
       time = `${time}`;
     } else if (typeof time === 'string' && isNumber(time)) {
-      time = new Date(time);
+      time = new Date(Number(time));
     }
     return dateFormat(time, '-', format);
   };
