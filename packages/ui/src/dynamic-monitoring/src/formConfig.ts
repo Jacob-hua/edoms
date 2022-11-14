@@ -57,6 +57,8 @@ export default async (request?: Request) => {
           name: 'instance',
           text: '实例',
           type: 'cascader',
+          filterable: true,
+          checkStrictly: true,
           options: instances,
         },
         {

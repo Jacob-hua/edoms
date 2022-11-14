@@ -4,18 +4,18 @@
     v-model="model[name]"
     style="width: 100%"
     clearable
-    filterable
+    :filterable="filterable"
     :size="size"
     :placeholder="config.placeholder"
     :disabled="disabled"
     :options="options"
-    :props="{ multiple: config.multiple }"
+    :props="{ multiple: config.multiple, checkStrictly: config.checkStrictly }"
     @change="changeHandler"
   ></ElCascader>
 </template>
 
 <script setup lang="ts">
-import { inject, ref, watchEffect } from 'vue';
+import { computed, inject, ref, watchEffect } from 'vue';
 
 import { ElCascader } from '@edoms/design';
 
@@ -46,6 +46,8 @@ const edomsCascader = ref<InstanceType<typeof ElCascader>>();
 
 const options = Array.isArray(props.config.options) ? ref(props.config.options) : ref([]);
 const remoteData = ref<any>(null);
+
+const filterable = computed(() => props.config.filterable ?? false);
 
 const setRemoteOptions = async function () {
   const { config } = props;
@@ -96,3 +98,5 @@ const changeHandler = (value: any) => {
   emit('change', value);
 };
 </script>
+
+<style lang="scss"></style>

@@ -1,4 +1,4 @@
-import { InstanceItem, listInstance } from '@/api/model';
+import { InstanceItem, listInstance, ListInstanceReq } from '@/api/model';
 
 export interface InstanceOption {
   label: string;
@@ -28,11 +28,19 @@ function handleInstanceTree(instance: InstanceItem): InstanceOption {
   return result;
 }
 
-export default async (): Promise<InstanceOption[]> => {
-  const instances = await listInstance({
-    virtual: 'mixed',
-    deviceCode: '',
-    isQueryDevice: true,
-  });
-  return instances.filter((instance) => instance.disable).map((instance) => handleInstanceTree(instance));
+export default () => {
+  const requestInstances = async (
+    data: ListInstanceReq = {
+      virtual: 'mixed',
+      deviceCode: '',
+      isQueryDevice: true,
+    }
+  ): Promise<InstanceOption[]> => {
+    const instances = await listInstance(data);
+    return instances.filter((instance) => instance.disable).map((instance) => handleInstanceTree(instance));
+  };
+
+  return {
+    requestInstances,
+  };
 };
