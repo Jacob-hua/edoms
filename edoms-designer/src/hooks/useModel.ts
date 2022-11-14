@@ -1,4 +1,4 @@
-import { InstanceItem, listInstance, ListInstanceReq } from '@/api/model';
+import { InstanceItem, listInstance, ListInstanceReq, listPointCode, ListPointReq } from '@/api/model';
 
 export interface InstanceOption {
   label: string;
@@ -40,7 +40,13 @@ export default () => {
     return instances.filter((instance) => instance.disable).map((instance) => handleInstanceTree(instance));
   };
 
+  const requestPoints = async (data: ListPointReq) => {
+    const pointCodes = await listPointCode(data);
+    console.log(pointCodes);
+  };
+
   return {
     requestInstances,
+    requestPoints,
   };
 };

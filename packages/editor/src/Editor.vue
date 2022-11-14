@@ -130,6 +130,7 @@ const props = withDefaults(
     containerHighlightDuration: () => 800,
     containerHighlightType: () => ContainerHighlightType.DEFAULT,
     codeOptions: () => ({}),
+    request: () => () => {},
   }
 );
 

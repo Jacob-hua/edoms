@@ -36,7 +36,7 @@ import { Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
-import { editorService, EdomsEditor, MenuBarData, MoveableOptions } from '@edoms/editor';
+import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps } from '@edoms/editor';
 import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
@@ -50,10 +50,17 @@ const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
 
 const { requestInstances } = useModel();
 
-const loadData = async () => {
-  return {
-    instanceOptions: await requestInstances(),
-  };
+const loadData = async (props?: RequestProps) => {
+  if (!props) {
+    return;
+  }
+  if (props.resourceId === 'dynamic-monitoring:instance') {
+    return await requestInstances();
+  }
+  if (props.resourceId === 'dynamic-monitoring:point') {
+    return [];
+  }
+  return;
 };
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
