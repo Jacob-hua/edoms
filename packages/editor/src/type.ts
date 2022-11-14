@@ -14,7 +14,11 @@ import type { PropsService } from './services/props';
 import type { StorageService } from './services/storage';
 import type { UiService } from './services/ui';
 
-export type Request = (nodeType: string, formValue?: FormValue) => Promise<any> | any;
+export type Request = (
+  nodeType: string,
+  formValue?: FormValue,
+  data?: Record<string | symbol | number, any>
+) => Promise<any> | any;
 
 export type BeforeAdd = (config: MNode, parent: MContainer) => Promise<MNode> | MNode;
 export type GetConfig = (config: FormConfig) => Promise<FormConfig> | FormConfig;
