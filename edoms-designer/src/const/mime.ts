@@ -15,4 +15,5 @@ export const enum MimeType {
   ECMASCRIPT = 'application/ecmascript',
   /** office */
   EXCEL = 'application/vnb.ms-excel',
+  CSV = 'application/x-csv',
 }

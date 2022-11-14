@@ -10,14 +10,14 @@
       :request="loadData"
     >
       <template #default="{ item }">
-        <div class="item">{{ item.name }}</div>
+        <div class="item" @click="handleLoadTableData(item)">{{ item.name }}</div>
       </template>
       <template #noMore>
         <div></div>
       </template>
     </GridList>
     <div class="right-section">
-      <StaticModelTable />
+      <StaticModelTable v-if="staticFlag" :data="data" />
     </div>
   </div>
 </template>
@@ -27,22 +27,28 @@ import { ref } from 'vue';
 
 import { getDicData } from '@/api/cim-model';
 import GridList from '@/components/GridList.vue';
+import { Mark } from '@/const/model-mark';
 
 import StaticModelTable from './StaticModelTable.vue';
 
-enum Mark {
-  CIM_TABLE = 'cim_table',
-  CIM_URL = 'cim_url',
-}
 const gridList = ref(null);
+const data = ref(null);
 const loadData = async () => {
   const result: any = await getDicData({
     mark: Mark.CIM_TABLE as string,
   });
+  data.value = result[0];
+  staticFlag.value = true;
   return {
     data: result,
     total: result.length,
   };
+};
+
+const staticFlag = ref(false);
+
+const handleLoadTableData = (model: any) => {
+  data.value = model;
 };
 </script>
 

@@ -208,7 +208,7 @@ const menus = [
     icon: 'Delete',
     action: async ({ pageId }: Page) => {
       await deletePage({
-        pageIds: [BigInt(pageId)],
+        pageIds: [pageId],
       });
       ElMessage.success('删除成功');
       gridList.value?.reload();
