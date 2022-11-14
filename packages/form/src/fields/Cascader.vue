@@ -91,10 +91,20 @@ if (typeof props.config.options === 'function' && props.model && mForm) {
   Promise.resolve(setRemoteOptions());
 }
 
+const getSelectedOption = (valuePath: string[], options: any[]): any => {
+  let selectedOption;
+  valuePath.forEach((value: string) => {
+    selectedOption = options.find(({ value: optV }: any) => optV === value);
+    options = selectedOption.children;
+  });
+  return selectedOption;
+};
+
 const changeHandler = (value: any) => {
   if (!edomsCascader.value) return;
   edomsCascader.value.setQuery('');
   edomsCascader.value.setPreviousQuery(null);
+  props.config.selectedOption = getSelectedOption(value, options.value);
   emit('change', value);
 };
 </script>

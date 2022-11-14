@@ -499,6 +499,7 @@ export interface CascaderConfig extends FormItem, Input {
       body?: Record<string, any>;
     };
   };
+  [key: string]: any;
 }
 
 export interface DynamicFieldConfig extends FormItem {

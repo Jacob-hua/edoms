@@ -58,18 +58,9 @@ export default async (request: Request) => {
           filterable: true,
           checkStrictly: true,
           options: instances,
-          onChange: (mForm: any, value: string[], { model, config }: any) => {
-            const getSelectedOption = (valuePath: string[], options: any[]): any => {
-              let selectedOption;
-              valuePath.forEach((value: string) => {
-                selectedOption = options.find(({ value: optV }: any) => optV === value);
-                options = selectedOption.children;
-              });
-              return selectedOption;
-            };
-            const selectedOption = getSelectedOption(value, config.options);
-            if (selectedOption) {
-              model.instanceType = selectedOption.type;
+          onChange: (mForm: any, value: any, { config, model }: any) => {
+            if (config.selectedOption) {
+              model.instanceType = config.selectedOption.type;
             }
           },
         },
