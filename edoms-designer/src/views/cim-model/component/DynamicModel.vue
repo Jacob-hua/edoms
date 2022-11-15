@@ -262,7 +262,6 @@ const handleSimulation = async () => {
   copyData.forEach((parameter) => {
     parameter.tableData.forEach((data) => {
       data.mark && delete data.mark;
-      data.btnText && delete data.btnText;
       data.isEdit && delete data.isEdit;
       data.readOnly && delete data.readOnly;
     });
