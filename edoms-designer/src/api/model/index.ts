@@ -9,7 +9,7 @@ export * from './type';
 export const listInstance = async (data: ListInstanceReq): Promise<InstanceItem[]> => {
   try {
     const { result } = await request<ListInstanceReq, InstanceItem[]>({
-      url: '/common/cimEnergy/system-device-tree',
+      url: '/common/cim-energy/system-device-tree',
       method: RequestMethod.POST,
       data,
     });

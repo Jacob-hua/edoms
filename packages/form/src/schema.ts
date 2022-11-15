@@ -481,9 +481,9 @@ export interface CascaderConfig extends FormItem, Input {
         mForm: FormState | undefined,
         data: {
           model: Record<any, any>;
-          formValues: Record<any, any>;
+          formValues?: Record<any, any>;
         }
-      ) => CascaderOption[])
+      ) => CascaderOption[] | Promise<CascaderOption[]>)
     | CascaderOption[];
   option?: {
     url: string;
@@ -499,6 +499,7 @@ export interface CascaderConfig extends FormItem, Input {
       body?: Record<string, any>;
     };
   };
+  [key: string]: any;
 }
 
 export interface DynamicFieldConfig extends FormItem {

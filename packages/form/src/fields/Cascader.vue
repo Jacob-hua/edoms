@@ -36,7 +36,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['change']);
 
-const mForm = inject<FormState | null>('mForm');
+const mForm = inject<FormState | undefined>('mForm');
 
 useAddField(props.prop);
 
@@ -84,17 +84,27 @@ const setRemoteOptions = async function () {
 
 // 初始化
 if (typeof props.config.options === 'function' && props.model && mForm) {
-  watchEffect(
-    () => (options.value = (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values }))
-  );
+  watchEffect(async () => {
+    options.value = await (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values });
+  });
 } else if (!props.config.options || !props.config.options.length || props.config.remote) {
   Promise.resolve(setRemoteOptions());
 }
+
+const getSelectedOption = (valuePath: string[], options: any[]): any => {
+  let selectedOption;
+  valuePath.forEach((value: string) => {
+    selectedOption = options.find(({ value: optV }: any) => optV === value);
+    options = selectedOption.children;
+  });
+  return selectedOption;
+};
 
 const changeHandler = (value: any) => {
   if (!edomsCascader.value) return;
   edomsCascader.value.setQuery('');
   edomsCascader.value.setPreviousQuery(null);
+  props.config.selectedOption = getSelectedOption(value, options.value);
   emit('change', value);
 };
 </script>

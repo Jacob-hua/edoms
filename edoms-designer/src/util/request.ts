@@ -1,12 +1,12 @@
 import { ElLoading, ElMessage } from 'element-plus';
 
 import {
-  AxiosError,
   AxiosRequestConfig,
   AxiosResponse,
   ContentType,
   Request,
   RequestConfig,
+  RequestError,
   RequestMethod,
 } from '@edoms/utils';
 
@@ -26,9 +26,11 @@ export interface ResponseData<T> {
   result: T;
 }
 
-export interface EdomsResponse<T = any> extends AxiosResponse<ResponseData<T>, any> {}
+export interface EdomsResponse<T = any> extends AxiosResponse<ResponseData<T>, any> {
+  [key: string]: any;
+}
 
-export interface EdomsError extends AxiosError<any, any> {
+export interface EdomsError extends RequestError {
   config: EdomsRequestConfig;
   response?: EdomsResponse;
 }
@@ -74,21 +76,7 @@ const responseInterceptors = (response: any) => {
 };
 
 const responseInterceptorsCatch = (error: EdomsError) => {
-  const { code = '', response, config } = error;
-
-  if (['ECONNABORTED'].includes(code)) {
-    if (config.__retryCount == config.retry) {
-      ElMessage({
-        type: 'error',
-        message: '请求超时',
-      });
-      if (loadingService) {
-        loadingService.close();
-      }
-      return Promise.reject(error);
-    }
-    return Promise.reject(error);
-  }
+  const { response } = error;
 
   if (response) {
     if (response.status === 404) {

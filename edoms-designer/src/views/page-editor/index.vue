@@ -40,7 +40,7 @@ import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps 
 import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
-import { asyncLoadJs } from '@edoms/utils';
+import { asyncLoadJs, getByPath } from '@edoms/utils';
 
 import componentGroupList from '@/configs/componentGroupList';
 import dsl from '@/configs/dsl';
@@ -48,7 +48,7 @@ import useModel from '@/hooks/useModel';
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
 
-const { requestInstances } = useModel();
+const { requestInstances, requestPoints } = useModel();
 
 const loadData = async (props?: RequestProps) => {
   if (!props) {
@@ -58,6 +58,18 @@ const loadData = async (props?: RequestProps) => {
     return await requestInstances();
   }
   if (props.resourceId === 'dynamic-monitoring:point') {
+    const prop = props.prop ?? '';
+    const pathLastIndex = prop.lastIndexOf('.');
+    const domainPath = prop.substring(0, pathLastIndex);
+    const model = getByPath(props.formValue ?? {}, domainPath, '');
+
+    if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
+      await requestPoints({
+        insId: model.instance[model.instance.length - 1],
+        codeType: model.instanceType,
+        propType: model.propertyTy,
+      });
+    }
     return [];
   }
   return;
