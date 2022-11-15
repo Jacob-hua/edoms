@@ -431,6 +431,7 @@ export interface SelectConfig extends FormItem, Input {
     value: string | SelectOptionValueFunction;
     text: string | SelectOptionTextFunction;
   };
+  [key: string]: any;
 }
 
 /**

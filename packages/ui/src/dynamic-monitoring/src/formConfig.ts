@@ -59,9 +59,7 @@ export default async (request: Request) => {
           checkStrictly: true,
           options: instances,
           onChange: (mForm: any, value: any, { config, model }: any) => {
-            if (config.selectedOption) {
-              model.instanceType = config.selectedOption.type;
-            }
+            model.instanceType = config.selectedOption?.type;
           },
         },
         {
@@ -101,11 +99,20 @@ export default async (request: Request) => {
               })) ?? []
             );
           },
+          onChange: (mForm: any, value: any, { config, model }: any) => {
+            model.unit = config.selectedOption?.unit;
+          },
+        },
+        {
+          name: 'unit',
+          text: '单位',
+          type: 'text',
         },
         {
           name: 'expectedMax',
           text: '预期最大值',
           type: 'number',
+          append: '公斤',
         },
         {
           name: 'expectedMin',
