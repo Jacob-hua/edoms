@@ -105,7 +105,7 @@ const DSL: MApp = {
           style: {
             position: 'absolute',
             left: '95.91',
-            width: '176',
+            width: '494',
             height: '176',
             top: '325.71',
             right: '',
@@ -119,7 +119,7 @@ const DSL: MApp = {
             fontWeight: '',
           },
           name: '图片',
-          src: 'https://vfiles.gtimg.cn/vupload/20210811/388ed01628667545737.png',
+          src: 'https://nwzimg.wezhan.cn/contents/sitefiles2043/10219937/images/18714985.png',
           url: '',
           events: [],
           created: [],
