@@ -70,6 +70,25 @@ export default async (request: Request) => {
           type: 'hidden',
         },
         {
+          name: 'propertyType',
+          text: '属性类型',
+          type: 'radio-group',
+          options: [
+            {
+              text: '固有属性',
+              value: 'inherent',
+            },
+            {
+              text: '采集属性',
+              value: 'gather',
+            },
+            {
+              text: '计算属性',
+              value: 'calculate',
+            },
+          ],
+        },
+        {
           name: 'property',
           text: '属性',
           type: 'select',
