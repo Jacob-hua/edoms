@@ -1,6 +1,6 @@
 import { Request } from '@edoms/editor';
 
-import useBusinessConfig from '../../useBusinessConfig';
+import useInstanceConfig from '../../useInstanceConfig';
 
 const indicatorTypes = [
   {
@@ -49,7 +49,7 @@ export default async (request: Request) => [
         trim: true,
       },
       /** 注入业务组件的共通字段 */
-      ...(await useBusinessConfig(request)),
+      ...(await useInstanceConfig(request)),
       {
         name: 'expectedMax',
         text: '预期最大值',
