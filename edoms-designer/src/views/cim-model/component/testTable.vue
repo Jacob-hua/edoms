@@ -1,15 +1,7 @@
 <template>
-  <Table
-    ref="table"
-    :page-info="pageInfo"
-    border
-    :columns="column"
-    :request="getData"
-    :selection-change="selectChange"
-    fixed="right"
-  >
-    <template #operate="scope">
-      <el-button type="primary" @click="handleEdit(scope)"> 编辑</el-button>
+  <Table ref="table" :page-info="pageInfo" border :columns="column" :request="getData" fixed="right">
+    <template #operate="operate">
+      <el-button type="primary" :size="operate">编辑</el-button>
       <el-button type="danger"> 删除</el-button>
     </template>
   </Table>
