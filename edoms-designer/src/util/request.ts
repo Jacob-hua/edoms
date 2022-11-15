@@ -84,17 +84,18 @@ const responseInterceptorsCatch = (error: EdomsError) => {
         type: 'error',
         message: '请求地址不存在',
       });
+    } else if (response.data) {
+      const res = response.data as ResponseData<any>;
+      if (res.errorInfo && res.errorInfo.errorCode) {
+        ElMessage({
+          type: 'error',
+          message: res.errorInfo.errorMsg,
+        });
+      }
     } else {
       ElMessage({
         type: 'error',
         message: '请求异常',
-      });
-    }
-    const res = response.data as ResponseData<any>;
-    if (res.errorInfo && res.errorInfo.errorCode) {
-      ElMessage({
-        type: 'error',
-        message: res.errorInfo.errorMsg,
       });
     }
   }
