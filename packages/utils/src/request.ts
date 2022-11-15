@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export * from 'axios';
 
@@ -33,6 +33,10 @@ export interface RequestConfig extends AxiosRequestConfig {
   retry?: number;
   retryDelay?: number;
   __retryCount?: number;
+}
+
+export interface RequestError extends AxiosError<any, any> {
+  config: RequestConfig;
 }
 
 export class Request {
@@ -72,9 +76,9 @@ export class Request {
           }
         });
       },
-      async (err: any) => {
-        const { config }: { config: RequestConfig } = err;
-        if (!config || !config.retry) {
+      async (err: RequestError) => {
+        const { code = '', config } = err;
+        if (!config || !config.retry || !['ECONNABORTED'].includes(code)) {
           return Promise.reject(err);
         }
         config.__retryCount = config.__retryCount ?? 0;
