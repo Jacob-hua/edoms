@@ -1,23 +1,24 @@
 import { Request } from '@edoms/editor';
 
+import { MEnvironmentIndicator } from '../../types';
 import useInstanceConfig from '../../useInstanceConfig';
 
 const indicatorTypes = [
   {
     text: '温度',
-    value: 'temperature',
+    value: MEnvironmentIndicator.TEMPERATURE,
   },
   {
     text: '湿度',
-    value: 'moisture',
+    value: MEnvironmentIndicator.MOISTURE,
   },
   {
     text: '液体深度',
-    value: 'liquidDepth',
+    value: MEnvironmentIndicator.LIQUID_DEPTH,
   },
   {
     text: '气体',
-    value: 'gas',
+    value: MEnvironmentIndicator.GAS,
   },
 ];
 
