@@ -1,5 +1,3 @@
-import { RequestMethod } from '@edoms/utils';
-
 import { request } from '@/util/request';
 
 import {
@@ -10,12 +8,12 @@ import {
   ListApplicationsReq,
   ListApplicationsRes,
 } from './type';
-
+// TODO 重新划分调整
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
     const { result } = await request<ListApplicationsReq, ListApplicationsRes>({
       url: '/application/page',
-      method: RequestMethod.POST,
+      method: 'POST',
       data,
     });
     return result;
@@ -33,7 +31,7 @@ export const createApplication = async (data: AppForm): Promise<CreateAppRes> =>
   try {
     const { result } = await request<AppForm, CreateAppRes>({
       url: '/application/create',
-      method: RequestMethod.POST,
+      method: 'POST',
       data,
     });
     return result;
@@ -48,10 +46,9 @@ export const fileUpload = async (data: FormData): Promise<FileUploadRes> => {
   try {
     const { result } = await request<FormData, FileUploadRes>({
       url: '/file/upload',
-      method: RequestMethod.POST,
+      method: 'POST',
       data,
     });
-
     return result;
   } catch (error) {
     return {
@@ -63,7 +60,7 @@ export const updateApplication = async (data: AppForm): Promise<any> => {
   try {
     return await request<AppForm, string>({
       url: '/application/update',
-      method: RequestMethod.PUT,
+      method: 'PUT',
       data,
     });
   } catch (error) {
@@ -80,7 +77,7 @@ export const getAppInfo = async (data: { applicationId: string }): Promise<any> 
   try {
     return await request<{ applicationId: string }, ApplicationInfo>({
       url: 'application/applicationInfo',
-      method: RequestMethod.GET,
+      method: 'GET',
       data,
     });
   } catch (error) {

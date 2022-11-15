@@ -5,37 +5,40 @@
         <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
         <span>历史版本</span>
       </div>
-      <GridList
-        ref="gridList"
-        class="grid-list"
-        column-gap="20px"
-        row-gap="20px"
-        item-min-width="200px"
-        :request="loadData"
-      >
-        <template #default="{ item }">
-          <div class="item">
-            <p class="icon-wrapper">
-              <span v-show="item.isShowText">{{ item.name }}</span>
-              <el-input v-show="!item.isShowText" v-model="item.name"></el-input>
-              <span>
-                <el-icon v-show="item.isShowText" :size="20" @click="showInput(item)"><EditPen /></el-icon>
-                <el-icon v-show="item.isShowText" :size="20" @click="handleDelete(item)"><Delete /></el-icon>
-                <el-icon v-show="!item.isShowText" :size="22" @click="handleHideInput(item)"><Check /></el-icon>
-              </span>
-            </p>
-            <p>2022-09-10 12:33:33</p>
-            <p>王麻子</p>
-          </div>
-        </template>
-        <template #noMore>
-          <div></div>
-        </template>
-      </GridList>
+      <div>
+        <GridList
+          ref="gridList"
+          class="grid-list"
+          column-gap="20px"
+          row-gap="20px"
+          :page-size="99999999"
+          item-min-width="200px"
+          :request="loadData"
+        >
+          <template #default="{ item }">
+            <div class="item">
+              <p class="icon-wrapper">
+                <span v-show="item.isShowText" @click="handleActive(item)">{{ item.name }}</span>
+                <el-input v-show="!item.isShowText" v-model="item.name"></el-input>
+                <span>
+                  <el-icon v-show="item.isShowText" :size="20" @click="showInput(item)"><EditPen /></el-icon>
+                  <el-icon v-show="item.isShowText" :size="20" @click="handleDelete(item)"><Delete /></el-icon>
+                  <el-icon v-show="!item.isShowText" :size="22" @click="handleHideInput(item)"><Check /></el-icon>
+                </span>
+              </p>
+              <p>2022-09-10 12:33:33</p>
+              <p>王麻子</p>
+            </div>
+          </template>
+          <template #noMore>
+            <div></div>
+          </template>
+        </GridList>
+      </div>
     </section>
     <div class="version-right">
       <div class="top-bar">
-        <el-button type="primary" size="large">应用此版本</el-button>
+        <el-button type="primary" size="large" @click="handleApply">应用此版本</el-button>
         <el-button type="primary" size="large">编辑</el-button>
       </div>
       <div class="wrapper"></div>
@@ -45,39 +48,29 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
-import GridList, { RequestFunc } from '@/components/GridList.vue';
-
+import { deleteVersion, getVersionList, recoveryVersion, updateVersion } from '@/api/version';
+import GridList from '@/components/GridList.vue';
+const route = useRoute();
 const router = useRouter();
 const gridList = ref();
 
-const loadData: RequestFunc<{ name: string }> = async () => {
-  const dataSource = [
-    {
-      id: Math.random(),
-      name: `版本V1.0.1`,
-      isShowText: true,
-    },
-    {
-      id: Math.random(),
-      name: '版本V1.0.2',
-      isShowText: true,
-    },
-    {
-      id: Math.random(),
-      name: '版本V1.0.3',
-      isShowText: true,
-    },
-    {
-      id: Math.random(),
-      name: '版本V1.0.4',
-      isShowText: true,
-    },
-  ];
+const loadData = async ({ pageSize, current }: { pageSize: number; current: number }) => {
+  const { dataList } = await getVersionList({
+    page: current,
+    limit: pageSize,
+    pageId: Number(route.query.pageId),
+  });
+  active.value = dataList[0];
+  dataList.forEach((data: any) => {
+    data.isShowText = true;
+  });
+
   return {
-    data: dataSource,
-    total: dataSource.length,
+    data: dataList,
+    total: dataList.length,
   };
 };
 
@@ -89,12 +82,40 @@ const showInput = (model: any) => {
   model.isShowText = false;
 };
 
-const handleHideInput = (model: any) => {
+const handleHideInput = async (model: any) => {
   model.isShowText = true;
+  await updateVersion({
+    versionId: model.versionId,
+    name: model.name,
+    pageId: Number(route.query.pageId),
+  });
+  ElMessage.success('更新成功');
+  gridList.value?.reload();
 };
 
-const handleDelete = (model: any) => {
-  console.log('删除了', model);
+const handleDelete = async (model: any) => {
+  await deleteVersion({
+    versionIds: [model.versionId],
+  });
+  ElMessage.success('删除成功');
+  gridList.value?.reload();
+};
+const active = ref();
+const handleActive = (model: any) => {
+  active.value = model;
+};
+
+const handleApply = async () => {
+  await recoveryVersion({
+    versionId: Number(active.value.versionId),
+  });
+  ElMessage.success('应用版本成功');
+  router.push({
+    path: '/page',
+    query: {
+      applicationId: route.query.applicationId,
+    },
+  });
 };
 </script>
 

@@ -62,6 +62,7 @@ export interface ImportFile {
 }
 
 export interface SaveApiReq {
+  id?: string | null;
   path: string;
   method: string;
   dicCimId?: number;

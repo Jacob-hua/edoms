@@ -1,5 +1,3 @@
-import { RequestMethod } from '@edoms/utils';
-
 import { request } from '@/util/request';
 
 import {
@@ -17,7 +15,7 @@ export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRe
   try {
     const { result } = await request<ListPageInfosReq, ListPageInfosRes>({
       url: '/page/list',
-      method: RequestMethod.POST,
+      method: 'POST',
       data,
     });
     return result;
@@ -35,7 +33,7 @@ export const createPage = async (data: CreatePageReq): Promise<CreatePageRes> =>
   try {
     const { result } = await request<CreatePageReq, CreatePageRes>({
       url: '/page/create',
-      method: RequestMethod.POST,
+      method: 'POST',
       data,
     });
     return result;
@@ -52,7 +50,7 @@ export const updatePage = async (data: UpdatePageReq): Promise<UpdatePageRes> =>
   try {
     const { result } = await request<UpdatePageReq, UpdatePageRes>({
       url: '/page/update',
-      method: RequestMethod.PUT,
+      method: 'POST',
       data,
     });
     return result;
@@ -67,7 +65,7 @@ export const deletePage = async (data: DeletePageReq): Promise<DeletePageRes> =>
   try {
     const { result } = await request<DeletePageReq, DeletePageRes>({
       url: '/page/delete',
-      method: RequestMethod.DELETE,
+      method: 'DELETE',
       data,
     });
     return result;
