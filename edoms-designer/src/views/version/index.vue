@@ -26,8 +26,8 @@
                   <el-icon v-show="!item.isShowText" :size="22" @click="handleHideInput(item)"><Check /></el-icon>
                 </span>
               </p>
-              <p>2022-09-10 12:33:33</p>
-              <p>王麻子</p>
+              <p>{{ formatTime(item.createTime) }}</p>
+              <p>{{ item.createBy }}</p>
             </div>
           </template>
           <template #noMore>
@@ -53,6 +53,8 @@ import { ElMessage } from 'element-plus';
 
 import { deleteVersion, getVersionList, recoveryVersion, updateVersion } from '@/api/version';
 import GridList from '@/components/GridList.vue';
+import useDate from '@/hooks/useDate';
+const { formatTime } = useDate();
 const route = useRoute();
 const router = useRouter();
 const gridList = ref();
