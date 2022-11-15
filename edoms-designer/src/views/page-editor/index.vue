@@ -64,10 +64,11 @@ const loadData = async (props?: RequestProps) => {
     const model = getByPath(props.formValue ?? {}, domainPath, '');
 
     if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
-      await requestPoints({
-        insId: model.instance[model.instance.length - 1],
+      return await requestPoints({
+        insId: '1926',
+        // insId: model.instance[model.instance.length - 1],
         codeType: model.instanceType,
-        propType: model.propertyTy,
+        propType: model.propertyType,
       });
     }
     return [];
