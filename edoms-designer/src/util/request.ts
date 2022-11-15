@@ -1,17 +1,9 @@
 import { ElLoading, ElMessage } from 'element-plus';
 
-import {
-  AxiosRequestConfig,
-  AxiosResponse,
-  ContentType,
-  Request,
-  RequestConfig,
-  RequestError,
-  RequestMethod,
-} from '@edoms/utils';
+import { AxiosResponse, ContentType, Method, Request, RequestConfig, RequestError } from '@edoms/utils';
 
 export interface EdomsRequestConfig<T = any> extends RequestConfig {
-  method: RequestMethod;
+  method?: Method;
   loading?: boolean;
   data?: T;
 }
@@ -42,7 +34,7 @@ export interface LoadingService {
 
 let loadingService: LoadingService;
 
-const requestInterceptors = (config: AxiosRequestConfig) => {
+const requestInterceptors = (config: EdomsRequestConfig) => {
   if (loadingService) {
     loadingService.close();
   }
@@ -126,8 +118,8 @@ const service = new Request({
 });
 
 export const request = <D, R>(config: EdomsRequestConfig<D>) => {
-  const { method = RequestMethod.GET } = config;
-  if (method === RequestMethod.GET) {
+  const { method = 'GET' } = config;
+  if (method === 'GET') {
     config.params = config.data;
   }
   return service.request<ResponseData<R>>(config);

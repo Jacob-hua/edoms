@@ -2,14 +2,6 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } f
 
 export * from 'axios';
 
-export const enum RequestMethod {
-  GET = 'GET',
-  POST = 'POST',
-  PATCH = 'PATCH',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
-}
-
 export const enum ContentType {
   // json
   JSON = 'application/json;charset=UTF-8',
