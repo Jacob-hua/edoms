@@ -1,4 +1,4 @@
-import { InstanceItem, listInstance, ListInstanceReq, listPointCode, ListPointReq } from '@/api/model';
+import { InstanceItem, listInstance, ListInstanceReq, listPointCode, ListPointReq, PointItem } from '@/api/model';
 
 export interface InstanceOption {
   label: string;
@@ -42,7 +42,7 @@ export default () => {
 
   const requestPoints = async (data: ListPointReq) => {
     const pointCodes = await listPointCode(data);
-    console.log(pointCodes);
+    return pointCodes.map(({ label, value, unit }: PointItem) => ({ text: label, value, unit }));
   };
 
   return {

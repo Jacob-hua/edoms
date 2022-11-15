@@ -17,7 +17,8 @@ export interface ListInstanceReq {
 
 export interface PointItem {
   label: string;
-  code: string;
+  value: string;
+  unit: string;
 }
 
 export interface ListPointReq {
