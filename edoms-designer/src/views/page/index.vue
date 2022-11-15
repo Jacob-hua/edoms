@@ -18,13 +18,13 @@
         class="grid-list"
         column-gap="20px"
         row-gap="20px"
-        :page-size="999999"
+        :page-size="99999999"
         item-min-width="200px"
         :request="loadData"
       >
         <template #default="{ item }">
           <div class="item">
-            <p v-if="item.isShowText">{{ item.name }}</p>
+            <p v-if="item.isShowText" @click="handleActive(item)">{{ item.name }}</p>
             <el-input v-if="!item.isShowText" v-model="item.name"></el-input>
             <div v-if="item.isShowText" class="pop-menu-wrapper">
               <PopMenu @menu-click="(value) => handleMenuClick(value, item)">
@@ -111,6 +111,7 @@ import { ElMessage, FormInstance } from 'element-plus';
 import screenFull from 'screenfull';
 
 import { createPage, deletePage, listPages, updatePage } from '@/api/page';
+import { saveWithVersion } from '@/api/version';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
@@ -131,7 +132,6 @@ interface Page {
   applicationId: string;
   isShowText: boolean;
 }
-
 const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
   const { dataList = [], count } = await listPages({
     page: current,
@@ -139,6 +139,7 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
     applicationId: route.query.applicationId as string,
     name: searchText.value,
   });
+  active.value = dataList[0];
   dataList.forEach((item: any) => {
     item.isShowText = true;
   });
@@ -153,6 +154,10 @@ const goBack = () => {
 };
 
 const editWrapper = ref();
+const active = ref();
+const handleActive = (item: any) => {
+  active.value = item;
+};
 
 const topMenus = [
   {
@@ -170,13 +175,17 @@ const topMenus = [
     action: () => {
       router.push({
         path: '/version',
+        query: {
+          pageId: active.value.pageId,
+          applicationId: route.query.applicationId,
+        },
       });
     },
   },
   {
     name: 'saveVersion',
     label: '保存为版本',
-    action: () => {
+    action: async () => {
       versionVisible.value = true;
     },
   },
@@ -312,6 +321,13 @@ const handleVersionConfirm = async () => {
   if (!versionForm.value) return;
   try {
     await versionForm.value?.validate();
+    await saveWithVersion({
+      pageId: active.value.pageId,
+      contentId: 1014433136007553024,
+      name: version.value.name,
+      description: active.value.description,
+    });
+    ElMessage.success('保存版本成功');
     versionVisible.value = false;
     versionForm.value?.resetFields();
   } catch (e) {
@@ -398,7 +414,7 @@ const goEdit = () => {
   display: flex;
   .grid-list {
     margin-top: 10px;
-    height: calc(100vh - 180px);
+    height: calc(100vh);
     overflow-y: auto;
     div {
       text-align: left;

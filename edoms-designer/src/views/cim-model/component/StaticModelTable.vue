@@ -50,7 +50,7 @@
 
 <script lang="ts" setup name="StaticModelTable">
 import { ref, watch } from 'vue';
-import { UploadFile } from 'element-plus';
+import { ElMessage, UploadFile } from 'element-plus';
 
 import { clearTable, exportOperationRecord, exportTable, getTableHistory, importFile } from '@/api/cim-model';
 import { MimeType } from '@/const/mime';
@@ -92,7 +92,6 @@ const { execute: handleExportRecord, loading: recordLoading } = useExport(
   '操作记录.excel',
   MimeType.EXCEL
 );
-console.log(props.data);
 const historyData = ref<any>([]);
 
 watch(
@@ -116,10 +115,8 @@ const loadTableHistory = async () => {
     tableId: props.data.id,
   });
   dataList.forEach((item) => {
-    console.log(item.createTime);
     item.createTime = formatTime(item.createTime);
   });
-  console.log(dataList);
   pageInfo.value.total = Number(count);
   historyData.value = dataList;
 };
@@ -130,20 +127,19 @@ const onPageChange = (value: number) => {
 };
 
 const handleClearTable = async () => {
-  const { result } = await clearTable({
+  await clearTable({
     tableId: Number(props.data.id),
   });
-  console.log(result);
+  ElMessage.success('清空成功');
 };
 
 const handleFileChange = async (uploadFile: UploadFile) => {
   const formData = new FormData();
-  console.log(uploadFile);
   formData.set('file', uploadFile.raw!);
   formData.set('tableId', props.data.id!);
   formData.set('fileName', uploadFile.name);
-  const { result } = await importFile(formData);
-  console.log(result);
+  await importFile(formData);
+  ElMessage.success('导入成功');
   loadTableHistory();
 };
 </script>

@@ -45,7 +45,6 @@
           </EditorTable>
         </el-tab-pane>
       </el-tabs>
-
       <json-viewer class="json" :value="jsonData" copyable boxed sort />
     </div>
   </div>
@@ -53,8 +52,7 @@
 
 <script lang="ts" setup name="DynamicModel">
 import { onMounted, ref } from 'vue';
-
-import { RequestMethod } from '@edoms/utils';
+import { ElMessage } from 'element-plus';
 
 import { getDicData, getTableApi, saveApi, simulation } from '@/api/cim-model';
 import GridList from '@/components/GridList.vue';
@@ -105,7 +103,7 @@ const handleAdd = (type: string) => {
   parameterData.value
     .find(({ name }) => name === type)
     ?.tableData.push({
-      id: Math.random(),
+      mark: Math.random(),
       key: '',
       isUse: false,
       value: '',
@@ -155,7 +153,10 @@ const column = ref([
     component: {
       name: 'el-switch',
       compProps: {
+        // 添加 表格插入的组件属性 defaultProps 属性
         placeholder: '',
+        activeValue: '1',
+        inactiveValue: '0',
       },
     },
   },
@@ -176,19 +177,19 @@ const handleEditClick = ({ operate }: any) => {
 const handleDelete = ({ operate: { row } }: any) => {
   const data = parameterData.value.find(({ name }) => name === tabActive.value)?.tableData;
   data?.splice(
-    data.findIndex(({ id }) => row.id === id),
+    data.findIndex(({ mark }) => row.mark === mark),
     1
   );
 };
 
 const requestMethods = [
   {
-    label: RequestMethod.GET,
-    value: RequestMethod.GET,
+    label: 'GET',
+    value: 'GET',
   },
   {
-    label: RequestMethod.POST,
-    value: RequestMethod.POST,
+    label: 'POST',
+    value: 'POST',
   },
 ];
 
@@ -216,11 +217,12 @@ const convertData = (data: any) => {
     btnText: operateType[OperateType.EDIT],
   };
 };
+const apiInfo = ref();
 const getApiInfo = async () => {
   const result = await getTableApi({
     dicCimId: Number(firstData.value.id),
   });
-  console.log(result);
+  apiInfo.value = result;
   path.value = result?.path ?? '';
   method.value = result?.method ?? '';
   parameterData.value[0].tableData = result.params?.map(convertData) ?? [];
@@ -238,13 +240,13 @@ const handleSave = async () => {
   const copyData = [...parameterData.value];
   copyData.forEach((parameter) => {
     parameter.tableData.forEach((data) => {
-      delete data.id;
       delete data.btnText;
       delete data.isEdit;
       delete data.readOnly;
     });
   });
-  const { result } = await saveApi({
+  await saveApi({
+    id: apiInfo.value.id,
     body: copyData[1].tableData,
     cookie: copyData[3].tableData,
     dicCimId: firstData.value.id!,
@@ -253,16 +255,16 @@ const handleSave = async () => {
     path: path.value,
     method: method.value,
   });
-  console.log(result);
+  ElMessage.success('保存成功');
 };
 const handleSimulation = async () => {
   const copyData = [...parameterData.value];
   copyData.forEach((parameter) => {
     parameter.tableData.forEach((data) => {
-      delete data.id;
-      delete data.btnText;
-      delete data.isEdit;
-      delete data.readOnly;
+      data.mark && delete data.mark;
+      data.btnText && delete data.btnText;
+      data.isEdit && delete data.isEdit;
+      data.readOnly && delete data.readOnly;
     });
   });
   try {

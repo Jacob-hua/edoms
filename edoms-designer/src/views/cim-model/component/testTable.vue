@@ -70,11 +70,4 @@ const getData = async ({ page, limit }: { page: number; limit: number }) => {
   });
   return dataList;
 };
-const handleEdit = (scope: any) => {
-  console.log(scope);
-};
-const selectChange = (data: any) => {
-  console.log('选中了');
-  console.log(data);
-};
 </script>

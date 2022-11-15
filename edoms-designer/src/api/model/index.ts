@@ -1,5 +1,3 @@
-import { RequestMethod } from '@edoms/utils';
-
 import { request } from '@/util/request';
 
 import { InstanceItem, ListInstanceReq, ListPointReq, PointItem } from './type';
@@ -10,7 +8,7 @@ export const listInstance = async (data: ListInstanceReq): Promise<InstanceItem[
   try {
     const { result } = await request<ListInstanceReq, InstanceItem[]>({
       url: '/common/cim-energy/system-device-tree',
-      method: RequestMethod.POST,
+      method: 'POST',
       data,
     });
     return result;
@@ -23,7 +21,7 @@ export const listPointCode = async (data: ListPointReq): Promise<PointItem[]> =>
   try {
     const { result } = await request<ListPointReq, PointItem[]>({
       url: '/common/model/point-code-list',
-      method: RequestMethod.POST,
+      method: 'POST',
       data,
     });
     return result;
