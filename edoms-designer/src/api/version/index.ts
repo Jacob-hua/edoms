@@ -29,7 +29,7 @@ export const getVersionList = async (data: VersionReq): Promise<VersionRes> => {
 export const updateVersion = async (data: UpdateVersionReq): Promise<void> => {
   await request<UpdateVersionReq, void>({
     url: '/page/version/update',
-    method: 'POST',
+    method: 'PUT',
     data,
   });
 };
