@@ -267,7 +267,7 @@ const handleSimulation = async () => {
     });
   });
   try {
-    const { result } = await simulation({
+    const responseData = await simulation({
       body: copyData[1].tableData,
       cookie: copyData[3].tableData,
       header: copyData[2].tableData,
@@ -275,9 +275,9 @@ const handleSimulation = async () => {
       path: path.value,
       method: method.value,
     });
-    jsonData.value = result ?? {};
+    jsonData.value = responseData ?? {};
   } catch (e) {
-    console.log(e, '-----------');
+    jsonData.value = {};
   }
 };
 </script>

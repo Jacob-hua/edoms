@@ -1,15 +1,6 @@
 import { request } from '@/util/request';
 
-import {
-  CreatePageReq,
-  CreatePageRes,
-  DeletePageReq,
-  DeletePageRes,
-  ListPageInfosReq,
-  ListPageInfosRes,
-  UpdatePageReq,
-  UpdatePageRes,
-} from './type';
+import { CreatePageReq, CreatePageRes, DeletePageReq, ListPageInfosReq, ListPageInfosRes, UpdatePageReq } from './type';
 
 export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRes> => {
   try {
@@ -46,32 +37,18 @@ export const createPage = async (data: CreatePageReq): Promise<CreatePageRes> =>
   }
 };
 
-export const updatePage = async (data: UpdatePageReq): Promise<UpdatePageRes> => {
-  try {
-    const { result } = await request<UpdatePageReq, UpdatePageRes>({
-      url: '/page/update',
-      method: 'PUT',
-      data,
-    });
-    return result;
-  } catch (e) {
-    return {
-      result: '',
-    };
-  }
+export const updatePage = async (data: UpdatePageReq) => {
+  await request<UpdatePageReq, void>({
+    url: '/page/update',
+    method: 'PUT',
+    data,
+  });
 };
 
-export const deletePage = async (data: DeletePageReq): Promise<DeletePageRes> => {
-  try {
-    const { result } = await request<DeletePageReq, DeletePageRes>({
-      url: '/page/delete',
-      method: 'DELETE',
-      data,
-    });
-    return result;
-  } catch (e) {
-    return {
-      result: '',
-    };
-  }
+export const deletePage = async (data: DeletePageReq) => {
+  await request<DeletePageReq, void>({
+    url: '/page/delete',
+    method: 'DELETE',
+    data,
+  });
 };

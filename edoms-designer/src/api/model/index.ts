@@ -1,12 +1,10 @@
-import { request } from '@/util/request';
+import { request, ResponseData } from '@/util/request';
 
 import {
   ClearTableReq,
   ClearTableRes,
   ExportOperationRecordReq,
-  ExportOperationRecordRes,
   ExportTableReq,
-  ExportTableRes,
   GetDicReq,
   GetDicRes,
   GetModelTypeRes,
@@ -107,59 +105,36 @@ export const clearTable = async (data: ClearTableReq) => {
   });
 };
 
-export const exportTable = async (data: ExportTableReq): Promise<ExportTableRes | any> => {
-  try {
-    return await request<ExportTableReq, ExportTableRes>({
-      url: `/cim-model/table/export`,
-      method: 'GET',
-      data,
-      responseType: 'blob',
-    });
-  } catch (e) {
-    return {
-      result: null,
-    };
-  }
+export const exportTable = async (data: ExportTableReq) => {
+  await request<ExportTableReq, void>({
+    url: `/cim-model/table/export`,
+    method: 'GET',
+    data,
+    responseType: 'blob',
+  });
 };
-export const importFile = async (data: FormData): Promise<ImportFile> => {
-  try {
-    const { result } = await request<FormData, ImportFile>({
-      url: '/cim-model/table/import',
-      method: 'POST',
-      data,
-    });
-    return result;
-  } catch (error) {
-    return {
-      result: null,
-    };
-  }
+export const importFile = async (data: FormData) => {
+  await request<FormData, ImportFile>({
+    url: '/cim-model/table/import',
+    method: 'POST',
+    data,
+  });
 };
-
 export const saveApi = async (data: SaveApiReq) => {
-  await request<SaveApiReq, SaveApiRes>({
+  await request<SaveApiReq, void>({
     url: '/cim-model/table/save',
     method: 'POST',
     data,
   });
 };
 
-export const exportOperationRecord = async (
-  data: ExportOperationRecordReq
-): Promise<ExportOperationRecordRes | any> => {
-  try {
-    const result = await request<ExportOperationRecordReq, ExportOperationRecordRes>({
-      url: `/cim-model/table/history-export`,
-      method: 'POST',
-      data,
-      responseType: 'blob',
-    });
-    return result;
-  } catch (e) {
-    return {
-      result: null,
-    };
-  }
+export const exportOperationRecord = async (data: ExportOperationRecordReq) => {
+  await request<ExportOperationRecordReq, void>({
+    url: `/cim-model/table/history-export`,
+    method: 'POST',
+    data,
+    responseType: 'blob',
+  });
 };
 
 export const getTableApi = async (data: GetTableApiReq): Promise<GetTableApiRes> => {
@@ -184,17 +159,10 @@ export const getTableApi = async (data: GetTableApiReq): Promise<GetTableApiRes>
   }
 };
 
-export const simulation = async (data: SaveApiReq): Promise<SaveApiRes> => {
-  try {
-    const { result } = await request<SaveApiReq, SaveApiRes>({
-      url: '/cim-model/table/simulation',
-      method: 'POST',
-      data,
-    });
-    return result;
-  } catch (error) {
-    return {
-      result: null,
-    };
-  }
+export const simulation = async (data: SaveApiReq): Promise<ResponseData<any>> => {
+  return await request<SaveApiReq, SaveApiRes>({
+    url: '/cim-model/table/simulation',
+    method: 'POST',
+    data,
+  });
 };
