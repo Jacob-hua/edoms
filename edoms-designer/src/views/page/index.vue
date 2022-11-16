@@ -119,10 +119,10 @@ import { saveWithVersion } from '@/api/version';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
+import useDate from '@/hooks/useDate';
 const route = useRoute();
 const router = useRouter();
 const gridList = ref();
-import useDate from '@/hooks/useDate';
 const { formatTime } = useDate();
 interface Page {
   pageId: bigint;
