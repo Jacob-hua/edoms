@@ -73,6 +73,7 @@ const handleGoPage = () => {
     path: '/page',
     query: {
       applicationId: props.application.applicationId,
+      name: props.application.name,
     },
   });
 };

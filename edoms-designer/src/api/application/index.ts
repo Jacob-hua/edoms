@@ -8,7 +8,6 @@ import {
   ListApplicationsReq,
   ListApplicationsRes,
 } from './type';
-// TODO 重新划分调整
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
     const { result } = await request<ListApplicationsReq, ListApplicationsRes>({

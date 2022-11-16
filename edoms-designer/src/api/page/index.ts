@@ -50,7 +50,7 @@ export const updatePage = async (data: UpdatePageReq): Promise<UpdatePageRes> =>
   try {
     const { result } = await request<UpdatePageReq, UpdatePageRes>({
       url: '/page/update',
-      method: 'POST',
+      method: 'PUT',
       data,
     });
     return result;

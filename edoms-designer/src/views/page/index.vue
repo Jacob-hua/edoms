@@ -3,7 +3,7 @@
     <section class="left-section">
       <div class="header-top" @click="goBack">
         <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
-        <span>陕汽冷站</span>
+        <span>{{ name }}</span>
       </div>
       <div class="top-search">
         <p>页面列表</p>
@@ -62,14 +62,16 @@
               </div>
             </PopMenuOption>
             <div class="createInfo">
-              <p>张三创建于2022-09-12</p>
-              <p>张三最近更新于 2022-09-12</p>
-              <p>编辑者: 张三</p>
+              <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
+              <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
+              <p>编辑者: {{ active?.updateBy }}</p>
             </div>
           </PopMenu>
         </div>
       </div>
-      <div ref="editWrapper" class="edit"><h1>页面预览</h1></div>
+      <div ref="editWrapper" class="edit">
+        <iframe v-if="previewVisible" width="100%" :height="stageRect && stageRect.height" :src="previewUrl"></iframe>
+      </div>
     </section>
   </div>
   <el-dialog v-model="newPageVisible" title="新增页面" width="30%" @close="handleClose">
@@ -105,10 +107,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, FormInstance } from 'element-plus';
 import screenFull from 'screenfull';
+
+import { EdomsEditor } from '@edoms/editor';
 
 import { createPage, deletePage, listPages, updatePage } from '@/api/page';
 import { saveWithVersion } from '@/api/version';
@@ -118,7 +122,8 @@ import PopMenuOption from '@/components/PopMenuOption.vue';
 const route = useRoute();
 const router = useRouter();
 const gridList = ref();
-
+import useDate from '@/hooks/useDate';
+const { formatTime } = useDate();
 interface Page {
   pageId: bigint;
   name: string;
@@ -132,6 +137,17 @@ interface Page {
   applicationId: string;
   isShowText: boolean;
 }
+const name = route.query.name;
+const editor = ref<InstanceType<typeof EdomsEditor>>();
+const { VITE_RUNTIME_PATH } = import.meta.env;
+const previewVisible = ref(true);
+const stageRect = ref({
+  width: 1200,
+  height: 950,
+});
+const previewUrl = computed(
+  () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
+);
 const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
   const { dataList = [], count } = await listPages({
     page: current,
