@@ -36,7 +36,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { getModelType } from '@/api/cim-model';
+import { getModelType } from '@/api/model';
 import { ModelType } from '@/const/model-type';
 
 import DynamicModel from './component/DynamicModel.vue';

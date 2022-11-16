@@ -1,13 +1,7 @@
 import { request } from '@/util/request';
 
-import {
-  AppForm,
-  ApplicationInfo,
-  CreateAppRes,
-  FileUploadRes,
-  ListApplicationsReq,
-  ListApplicationsRes,
-} from './type';
+import { AppForm, ApplicationInfo, CreateAppRes, ListApplicationsReq, ListApplicationsRes } from './type';
+import { DeleteApplicationReq } from './type';
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
     const { result } = await request<ListApplicationsReq, ListApplicationsRes>({
@@ -41,60 +35,38 @@ export const createApplication = async (data: AppForm): Promise<CreateAppRes> =>
   }
 };
 
-export const fileUpload = async (data: FormData): Promise<FileUploadRes> => {
+export const updateApplication = async (data: AppForm) => {
+  await request<AppForm, void>({
+    url: '/application/update',
+    method: 'PUT',
+    data,
+  });
+};
+export const getAppInfo = async (data: { applicationId: string }): Promise<ApplicationInfo> => {
   try {
-    const { result } = await request<FormData, FileUploadRes>({
-      url: '/file/upload',
-      method: 'POST',
+    const { result } = await request<{ applicationId: string }, ApplicationInfo>({
+      url: 'application/applicationInfo',
+      method: 'GET',
       data,
     });
     return result;
   } catch (error) {
     return {
-      contentId: null,
+      applicationId: '',
+      createBy: '',
+      createTime: '',
+      description: '',
+      name: '',
+      serviceAddress: '',
+      tenantId: '',
+      thumbnailId: '',
     };
   }
 };
-export const updateApplication = async (data: AppForm): Promise<any> => {
-  try {
-    return await request<AppForm, string>({
-      url: '/application/update',
-      method: 'PUT',
-      data,
-    });
-  } catch (error) {
-    return {
-      errorInfo: {
-        errorCode: '',
-        errorMsg: '',
-      },
-      result: '',
-    };
-  }
-};
-export const getAppInfo = async (data: { applicationId: string }): Promise<any> => {
-  try {
-    return await request<{ applicationId: string }, ApplicationInfo>({
-      url: 'application/applicationInfo',
-      method: 'GET',
-      data,
-    });
-  } catch (error) {
-    return {
-      errorInfo: {
-        errorCode: '',
-        errorMsg: '',
-      },
-      result: {
-        applicationId: '',
-        createBy: '',
-        createTime: '',
-        description: '',
-        name: '',
-        serviceAddress: '',
-        tenantId: '',
-        thumbnailId: '',
-      },
-    };
-  }
+export const deleteApplication = async (data: DeleteApplicationReq) => {
+  await request<DeleteApplicationReq, string>({
+    url: '/application/delete',
+    method: 'DELETE',
+    data,
+  });
 };

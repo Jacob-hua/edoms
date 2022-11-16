@@ -34,6 +34,7 @@ export interface CreateAppRes {
   applicationId: number | null;
 }
 
-export interface FileUploadRes {
-  contentId: string | null;
+export interface DeleteApplicationReq {
+  applicationId: string;
+  secret: string;
 }
