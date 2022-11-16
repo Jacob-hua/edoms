@@ -1,11 +1,13 @@
 <template>
   <div ref="wrapper" class="business-wrapper">
-    <div class="business-header">
-      <span>{{ title }}</span>
-      <span>{{ subtitle }}</span>
-      <slot name="operation"></slot>
+    <div class="business-wrapper-header">
+      <span class="title">{{ title }}</span>
+      <span class="subtitle">{{ subtitle }}</span>
+      <div class="operation">
+        <slot name="operation"></slot>
+      </div>
     </div>
-    <div class="business-body">
+    <div class="body">
       <slot></slot>
     </div>
   </div>
@@ -86,10 +88,12 @@ const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
   const [wrapperEntry] = entries;
   const widthScale = (wrapperEntry.contentRect.width * 1.0) / (minWidth.value ?? 1);
   const heightScale = (wrapperEntry.contentRect.height * 1.0) / (minHeight.value ?? 1);
-  elementAddStyle(wrapperEntry.target, `aspect-ratio:${scale.value};height: auto;`);
+  const style = `aspect-ratio:${scale.value};height: auto;`;
+  const originStyle = wrapperEntry.target.getAttribute('style');
+  wrapperEntry.target.setAttribute('style', originStyle ? `${originStyle};${style}` : style);
   Array.from(wrapperEntry.target.children).forEach((element: Element) => {
-    elementAddStyle(
-      element,
+    element.setAttribute(
+      'style',
       `
       transform:scale(${Math.min(widthScale, heightScale)});
       transform-origin: top left;
@@ -111,24 +115,43 @@ onUnmounted(() => {
   }
   resizeObserver.unobserve(wrapper.value);
 });
-
-function elementAddStyle(element: Element, style: string) {
-  const originStyle = element.getAttribute('style');
-  element.setAttribute('style', `${originStyle};${style}`);
-}
 </script>
 
 <style lang="scss">
 .business-wrapper {
   display: flex;
   flex-direction: column;
-  border: 1px solid #313131;
+  border: 3px solid #313131;
   border-radius: 3px;
   background-color: #2c2c2c;
   min-width: v-bind(cssMinWidth);
   min-height: v-bind(cssMinHeight);
   max-width: v-bind(cssMaxWidth);
   max-height: v-bind(cssMaxHeight);
-  color: #fff;
+  color: #ffffff85;
+}
+.business-wrapper-header {
+  display: grid;
+  grid-template-columns: auto 3fr 1fr;
+  column-gap: 1px;
+  align-items: center;
+  grid-template-areas: 'title subtitle operation';
+  padding: 3px;
+
+  & > .title {
+    grid-area: title;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  & > .subtitle {
+    grid-area: subtitle;
+    color: #ffffff45;
+    font-size: 10px;
+  }
+
+  & > .operation {
+    grid-area: operation;
+  }
 }
 </style>
