@@ -37,6 +37,8 @@ const minWidth = computed<number | undefined>(() => {
   return undefined;
 });
 
+const cssMinWidth = computed<string>(() => (minWidth.value ? `${minWidth.value}px` : 'auto'));
+
 const minHeight = computed<number | undefined>(() => {
   if (typeof props.minHeight === 'number') {
     return props.minHeight;
@@ -46,6 +48,8 @@ const minHeight = computed<number | undefined>(() => {
   }
   return undefined;
 });
+
+const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.value}px` : 'auto'));
 
 const scale = computed<number>(() => {
   if (!minWidth.value || !minHeight.value) {
@@ -64,6 +68,8 @@ const maxWidth = computed<number | undefined>(() => {
   return undefined;
 });
 
+const cssMaxWidth = computed<string>(() => (maxWidth.value ? `${maxWidth.value}px` : 'auto'));
+
 const maxHeight = computed<number | undefined>(() => {
   if (!props.maxHeight && props.maxWidth && typeof props.maxWidth === 'string' && isNumber(props.maxWidth)) {
     return Number(props.maxWidth) / scale.value;
@@ -73,6 +79,8 @@ const maxHeight = computed<number | undefined>(() => {
   }
   return undefined;
 });
+
+const cssMaxHeight = computed<string>(() => (maxHeight.value ? `${maxHeight.value}px` : 'auto'));
 
 const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
   const [wrapperEntry] = entries;
@@ -117,9 +125,10 @@ function elementAddStyle(element: Element, style: string) {
   border: 1px solid #313131;
   border-radius: 3px;
   background-color: #2c2c2c;
-  min-width: v-bind(minWidth) px;
-  min-height: v-bind(minHeight) px;
-  max-width: v-bind(maxWidth) px;
-  max-height: v-bind(maxHeight) px;
+  min-width: v-bind(cssMinWidth);
+  min-height: v-bind(cssMinHeight);
+  max-width: v-bind(cssMaxWidth);
+  max-height: v-bind(cssMaxHeight);
+  color: #fff;
 }
 </style>
