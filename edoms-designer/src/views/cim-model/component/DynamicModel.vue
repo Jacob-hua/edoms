@@ -54,7 +54,7 @@
 import { onMounted, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 
-import { getDicData, getTableApi, saveApi, simulation } from '@/api/cim-model';
+import { getDicData, getTableApi, saveApi, simulation } from '@/api/model';
 import GridList from '@/components/GridList.vue';
 import { Mark } from '@/const/model-mark';
 
@@ -262,7 +262,6 @@ const handleSimulation = async () => {
   copyData.forEach((parameter) => {
     parameter.tableData.forEach((data) => {
       data.mark && delete data.mark;
-      data.btnText && delete data.btnText;
       data.isEdit && delete data.isEdit;
       data.readOnly && delete data.readOnly;
     });

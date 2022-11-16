@@ -52,7 +52,7 @@
 import { ref, watch } from 'vue';
 import { ElMessage, UploadFile } from 'element-plus';
 
-import { clearTable, exportOperationRecord, exportTable, getTableHistory, importFile } from '@/api/cim-model';
+import { clearTable, exportOperationRecord, exportTable, getTableHistory, importFile } from '@/api/model';
 import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
 import useExport from '@/hooks/useExport';

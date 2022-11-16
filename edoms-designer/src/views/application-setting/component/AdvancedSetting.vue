@@ -30,8 +30,8 @@ import { ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
+import { deleteApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
-import { deleteApplication } from '@/api/application-setting';
 
 interface AdvanceItem {
   name: string;

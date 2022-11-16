@@ -26,8 +26,8 @@
                   <el-icon v-show="!item.isShowText" :size="22" @click="handleHideInput(item)"><Check /></el-icon>
                 </span>
               </p>
-              <p>2022-09-10 12:33:33</p>
-              <p>王麻子</p>
+              <p>{{ formatTime(item.createTime) }}</p>
+              <p>{{ item.createBy }}</p>
             </div>
           </template>
           <template #noMore>
@@ -39,23 +39,40 @@
     <div class="version-right">
       <div class="top-bar">
         <el-button type="primary" size="large" @click="handleApply">应用此版本</el-button>
-        <el-button type="primary" size="large">编辑</el-button>
+        <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
       </div>
-      <div class="wrapper"></div>
+      <div class="wrapper">
+        <iframe v-if="previewVisible" width="100%" :height="stageRect && stageRect.height" :src="previewUrl"></iframe>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
+import { EdomsEditor } from '@edoms/editor';
+
 import { deleteVersion, getVersionList, recoveryVersion, updateVersion } from '@/api/version';
 import GridList from '@/components/GridList.vue';
+import useDate from '@/hooks/useDate';
+const { formatTime } = useDate();
 const route = useRoute();
 const router = useRouter();
 const gridList = ref();
+
+const editor = ref<InstanceType<typeof EdomsEditor>>();
+const { VITE_RUNTIME_PATH } = import.meta.env;
+const previewVisible = ref(true);
+const stageRect = ref({
+  width: 1200,
+  height: 950,
+});
+const previewUrl = computed(
+  () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
+);
 
 const loadData = async ({ pageSize, current }: { pageSize: number; current: number }) => {
   const { dataList } = await getVersionList({
@@ -115,6 +132,12 @@ const handleApply = async () => {
     query: {
       applicationId: route.query.applicationId,
     },
+  });
+};
+
+const goEdit = () => {
+  router.push({
+    path: '/editor',
   });
 };
 </script>

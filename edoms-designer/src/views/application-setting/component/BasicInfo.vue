@@ -117,17 +117,13 @@ const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, ha
 
 const formRef = ref<FormInstance>();
 const updateApp = async ({ applicationId, name, description, thumbnailId, serviceAddress }: AppForm) => {
-  const { errorInfo } = await updateApplication({
+  await updateApplication({
     applicationId,
     name,
     description,
     thumbnailId,
     serviceAddress,
   });
-  if (errorInfo.errorCode) {
-    ElMessage.error(errorInfo.errorMsg);
-    return;
-  }
   ElMessage.success('更新成功');
 };
 const update = async (appInfo: AppForm) => {

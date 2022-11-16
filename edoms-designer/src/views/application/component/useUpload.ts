@@ -1,8 +1,8 @@
 import { type Ref, isRef, ref } from 'vue';
 import { ElMessage, UploadFile, UploadFiles } from 'element-plus';
 
-import { fileUpload } from '@/api/application';
 import { AppForm } from '@/api/application/type';
+import { fileUpload } from '@/api/file';
 interface UploadParameter {
   fileLimit: number;
   fileSize: number;
@@ -69,6 +69,7 @@ export const useUpload = (
     }
     return true;
   };
+  // TODO  上传upload 提成 回调
   const upload = async (uploadFile: UploadFile) => {
     const formData = new FormData();
     formData.set('file', uploadFile.raw!);
