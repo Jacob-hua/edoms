@@ -25,7 +25,7 @@
 <script lang="ts" setup name="StaticModel">
 import { ref } from 'vue';
 
-import { getDicData } from '@/api/cim-model';
+import { getDicData } from '@/api/model';
 import GridList from '@/components/GridList.vue';
 import { Mark } from '@/const/model-mark';
 

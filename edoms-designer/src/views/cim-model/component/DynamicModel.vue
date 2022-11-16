@@ -54,7 +54,7 @@
 import { onMounted, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 
-import { getDicData, getTableApi, saveApi, simulation } from '@/api/cim-model';
+import { getDicData, getTableApi, saveApi, simulation } from '@/api/model';
 import GridList from '@/components/GridList.vue';
 import { Mark } from '@/const/model-mark';
 

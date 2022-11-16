@@ -35,7 +35,6 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { LocationQueryValue } from 'vue-router';
-import { ElMessage } from 'element-plus';
 
 import { getAppInfo } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
@@ -55,11 +54,8 @@ const appInfo = ref<ApplicationInfo>({
   thumbnailId: '',
 });
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
-  const { result, errorInfo } = await getAppInfo({ applicationId } as { applicationId: string });
-  if (errorInfo.errorCode) {
-    ElMessage.error(errorInfo.errorMsg);
-    return;
-  }
+  const result = await getAppInfo({ applicationId } as { applicationId: string });
+  console.log(result);
   appInfoVisible.value = true;
   appInfo.value = result;
 };

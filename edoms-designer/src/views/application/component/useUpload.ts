@@ -1,8 +1,8 @@
 import { type Ref, isRef, ref } from 'vue';
 import { ElMessage, UploadFile, UploadFiles } from 'element-plus';
 
-import { fileUpload } from '@/api/application';
 import { AppForm } from '@/api/application/type';
+import { fileUpload } from '@/api/file';
 interface UploadParameter {
   fileLimit: number;
   fileSize: number;
