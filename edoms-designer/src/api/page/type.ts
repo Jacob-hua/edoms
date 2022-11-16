@@ -38,15 +38,6 @@ export interface UpdatePageReq {
   description?: string;
   applicationId: string;
 }
-
-export interface UpdatePageRes {
-  result: string;
-}
-
 export interface DeletePageReq {
   pageIds: bigint[];
-}
-
-export interface DeletePageRes {
-  result: string;
 }
