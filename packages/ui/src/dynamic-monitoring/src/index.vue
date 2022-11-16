@@ -1,26 +1,39 @@
 <template>
-  <div>
-    <div>动环监测</div>
-    <div>></div>
-    <div>
-      <div v-for="({ icon, label }, index) in indicators" :key="index">
-        <img :src="icon" />
-        <div>{{ label }}</div>
+  <div class="business-card">
+    <section class="header">
+      <div class="title">动环监测</div>
+      <div class="subtitle">DYNAMIC MONITORING</div>
+      <div class="operation">></div>
+    </section>
+    <section class="body">
+      <div class="dynamic-monitoring">
+        <div v-for="({ icon, parameter, label }, index) in indicators" :key="index">
+          <img :src="icon" />
+          <div>{{ parameter }}</div>
+          <div>{{ label }}</div>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { ref, watchEffect } from 'vue';
 
-import { MDynamicMonitoring, MEnvironmentIndicator } from '../../types';
+import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from '../../types';
 import useApp from '../../useApp';
 
 import GasImg from './assets/gas.png';
 import LiquidDepthImg from './assets/liquidDepth.png';
 import MoistureImg from './assets/moisture.png';
 import TemperatureImg from './assets/temperature.png';
+
+interface Indicator {
+  icon: string;
+  parameter: string;
+  label: string;
+  config: MIndicatorItemConfig;
+}
 
 const props = defineProps<{
   config: MDynamicMonitoring;
@@ -38,10 +51,39 @@ const getIconByIndicatorType = (type: MEnvironmentIndicator) => {
   return iconClassify[type];
 };
 
-const indicators = computed(() =>
-  props.config.indicators?.reduce(
-    (indicators, { type, label }) => [...indicators, { label, icon: getIconByIndicatorType(type) }],
-    [] as any[]
-  )
-);
+const indicators = ref<Indicator[]>([]);
+
+watchEffect(() => {
+  indicators.value = props.config.indicators?.reduce(
+    (indicators, config) => [
+      ...indicators,
+      { label: config.label, parameter: '-', icon: getIconByIndicatorType(config.type), config },
+    ],
+    [] as Indicator[]
+  );
+});
 </script>
+
+<style lang="scss" scoped>
+.business-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  min-height: 130px;
+}
+
+.header {
+  height: 20px;
+  display: flex;
+}
+
+.dynamic-monitoring {
+  display: flex;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+</style>
