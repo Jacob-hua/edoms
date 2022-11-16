@@ -1,20 +1,20 @@
 <template>
-  <div>
-    <div>动环监测</div>
-    <div>></div>
-    <div>
-      <div v-for="({ icon, label }, index) in indicators" :key="index">
+  <BusinessCard title="动环监测" subtitle="DYNAMIC MONITORING" min-width="400" min-height="200">
+    <div class="dynamic-monitoring">
+      <div v-for="({ icon, parameter, label }, index) in indicators" :key="index">
         <img :src="icon" />
+        <div>{{ parameter }}</div>
         <div>{{ label }}</div>
       </div>
     </div>
-  </div>
+  </BusinessCard>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { ref, watchEffect } from 'vue';
 
-import { MDynamicMonitoring, MEnvironmentIndicator } from '../../types';
+import BusinessCard from '../../BusinessCard.vue';
+import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from '../../types';
 import useApp from '../../useApp';
 
 import GasImg from './assets/gas.png';
@@ -22,13 +22,32 @@ import LiquidDepthImg from './assets/liquidDepth.png';
 import MoistureImg from './assets/moisture.png';
 import TemperatureImg from './assets/temperature.png';
 
+interface Indicator {
+  icon: string;
+  parameter: string;
+  label: string;
+  config: MIndicatorItemConfig;
+}
+
 const props = defineProps<{
   config: MDynamicMonitoring;
 }>();
 
 useApp(props);
 
-const getIconByIndicatorType = (type: MEnvironmentIndicator) => {
+const indicators = ref<Indicator[]>([]);
+
+watchEffect(() => {
+  indicators.value = props.config.indicators?.reduce(
+    (indicators, config) => [
+      ...indicators,
+      { label: config.label, parameter: '-', icon: getIconByIndicatorType(config.type), config },
+    ],
+    [] as Indicator[]
+  );
+});
+
+function getIconByIndicatorType(type: MEnvironmentIndicator) {
   const iconClassify = {
     [MEnvironmentIndicator.GAS]: GasImg,
     [MEnvironmentIndicator.LIQUID_DEPTH]: LiquidDepthImg,
@@ -36,12 +55,17 @@ const getIconByIndicatorType = (type: MEnvironmentIndicator) => {
     [MEnvironmentIndicator.TEMPERATURE]: TemperatureImg,
   };
   return iconClassify[type];
-};
-
-const indicators = computed(() =>
-  props.config.indicators?.reduce(
-    (indicators, { type, label }) => [...indicators, { label, icon: getIconByIndicatorType(type) }],
-    [] as any[]
-  )
-);
+}
 </script>
+
+<style lang="scss" scoped>
+.dynamic-monitoring {
+  display: flex;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+</style>
