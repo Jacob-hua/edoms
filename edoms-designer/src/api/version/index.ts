@@ -26,7 +26,7 @@ export const getVersionList = async (data: VersionReq): Promise<VersionRes> => {
   }
 };
 
-export const updateVersion = async (data: UpdateVersionReq): Promise<void> => {
+export const updateVersion = async (data: UpdateVersionReq) => {
   await request<UpdateVersionReq, void>({
     url: '/page/version/update',
     method: 'PUT',
@@ -34,7 +34,7 @@ export const updateVersion = async (data: UpdateVersionReq): Promise<void> => {
   });
 };
 
-export const saveWithVersion = async (data: SaveVersionReq): Promise<void> => {
+export const saveWithVersion = async (data: SaveVersionReq) => {
   await request<SaveVersionReq, void>({
     url: '/page/version/save-with-version',
     method: 'POST',
@@ -42,7 +42,7 @@ export const saveWithVersion = async (data: SaveVersionReq): Promise<void> => {
   });
 };
 
-export const recoveryVersion = async (data: RecoveryReq): Promise<void> => {
+export const recoveryVersion = async (data: RecoveryReq) => {
   await request<RecoveryReq, void>({
     url: 'page/version/version-recovery',
     method: 'POST',
@@ -50,7 +50,7 @@ export const recoveryVersion = async (data: RecoveryReq): Promise<void> => {
   });
 };
 
-export const deleteVersion = async (data: DeleteVersion): Promise<void> => {
+export const deleteVersion = async (data: DeleteVersion) => {
   await request<DeleteVersion, void>({
     url: '/page/version/delete',
     method: 'DELETE',

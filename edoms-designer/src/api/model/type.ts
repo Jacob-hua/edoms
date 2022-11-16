@@ -105,17 +105,10 @@ export interface SaveApiRes {
   result: any;
 }
 
-export interface OperationRecordReq {
-  dicCimId: number;
-}
-
 export interface ExportOperationRecordReq {
   dicCimId: number;
 }
 
-export interface ExportOperationRecordRes {
-  result: any;
-}
 export interface GetTableApiReq {
   applicationId?: number;
   dicCimId: number;
