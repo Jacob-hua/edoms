@@ -91,7 +91,7 @@ const { execute: handleExportRecord, loading: recordLoading } = useExport(
     return result;
   },
   () => {
-    return `${props.data.name}.xsl`;
+    return `${props.data.name}.xls`;
   },
   MimeType.EXCEL
 );
