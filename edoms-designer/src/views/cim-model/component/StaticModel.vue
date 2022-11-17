@@ -10,7 +10,7 @@
       :request="loadData"
     >
       <template #default="{ item }">
-        <div :class="['item', item.id === data.id ? 'active item' : '']" @click="handleLoadTableData(item)">
+        <div :class="['item', data.id && item.id === data?.id ? 'active item' : '']" @click="handleLoadTableData(item)">
           {{ item.name }}
         </div>
       </template>
@@ -34,7 +34,9 @@ import { Mark } from '@/const/model-mark';
 import StaticModelTable from './StaticModelTable.vue';
 
 const gridList = ref(null);
-const data = ref(null);
+const data = ref({
+  id: '',
+});
 const loadData = async () => {
   const result: any = await getDicData({
     mark: Mark.CIM_TABLE as string,

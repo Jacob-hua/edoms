@@ -90,7 +90,9 @@ const { execute: handleExportRecord, loading: recordLoading } = useExport(
     });
     return result;
   },
-  '操作记录.excel',
+  () => {
+    return `${props.data.name}.xsl`;
+  },
   MimeType.EXCEL
 );
 const historyData = ref<any>([]);
