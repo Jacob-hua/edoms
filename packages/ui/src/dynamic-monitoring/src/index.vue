@@ -1,5 +1,8 @@
 <template>
-  <BusinessCard title="动环监测" subtitle="DYNAMIC MONITORING" min-width="400" min-height="200">
+  <BusinessCard title="动环监测" subtitle="DYNAMIC MONITORING" min-width="500" min-height="200">
+    <template #operation>
+      <div class="operation" @click="handleTrigger">展开</div>
+    </template>
     <div class="dynamic-monitoring">
       <div v-for="({ icon, parameter, label }, index) in indicators" :key="index">
         <img :src="icon" />
@@ -46,6 +49,10 @@ watchEffect(() => {
     [] as Indicator[]
   );
 });
+
+const handleTrigger = () => {
+  console.log('展开卡片');
+};
 
 function getIconByIndicatorType(type: MEnvironmentIndicator) {
   const iconClassify = {

@@ -132,7 +132,7 @@ onUnmounted(() => {
 }
 .business-wrapper-header {
   display: grid;
-  grid-template-columns: auto 3fr 1fr;
+  grid-template-columns: auto 3fr auto;
   column-gap: 1px;
   align-items: center;
   grid-template-areas: 'title subtitle operation';
@@ -152,6 +152,7 @@ onUnmounted(() => {
 
   & > .operation {
     grid-area: operation;
+    cursor: pointer;
   }
 }
 </style>
