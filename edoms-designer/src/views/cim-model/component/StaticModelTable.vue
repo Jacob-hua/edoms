@@ -79,7 +79,7 @@ const { execute, loading } = useExport(
       return [];
     }
   },
-  'cim_device_gather.csv',
+  () => `${props.data.name}-${formatTime(new Date(), 'YYYY-MM-DD')}.csv`,
   MimeType.CSV
 );
 
@@ -90,9 +90,7 @@ const { execute: handleExportRecord, loading: recordLoading } = useExport(
     });
     return result;
   },
-  () => {
-    return `${props.data.name}.xls`;
-  },
+  () => `${props.data.name}的操作记录-${formatTime(new Date(), 'YYYY-MM-DD')}.xls`,
   MimeType.EXCEL
 );
 const historyData = ref<any>([]);
