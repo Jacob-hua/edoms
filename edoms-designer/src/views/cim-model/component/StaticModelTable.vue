@@ -85,9 +85,10 @@ const { execute, loading } = useExport(
 
 const { execute: handleExportRecord, loading: recordLoading } = useExport(
   async () => {
-    return await exportOperationRecord({
+    const result = await exportOperationRecord({
       dicCimId: props.data.id,
     });
+    return result;
   },
   '操作记录.excel',
   MimeType.EXCEL

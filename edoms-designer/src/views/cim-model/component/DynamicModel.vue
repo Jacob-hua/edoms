@@ -10,7 +10,9 @@
       :request="loadData"
     >
       <template #default="{ item }">
-        <div class="item" @click="handleChangeName(item)">{{ item.name }}</div>
+        <div :class="['item', item.id === firstData.id ? 'active' : '']" @click="handleChangeName(item)">
+          {{ item.name }}
+        </div>
       </template>
       <template #noMore>
         <div></div>
@@ -283,6 +285,9 @@ const handleSimulation = async () => {
 </script>
 
 <style lang="scss" scoped>
+.active {
+  background-color: #409eff;
+}
 .json {
   background-color: #e0e0e0;
   margin-top: 20px;

@@ -14,8 +14,12 @@
   <el-dialog v-model="deleteVisible" title="删除应用" width="40%" :before-close="handleClose" center>
     <div class="modal-container">
       <p>正在删除 “{{ appInfo.name }}” 应用，应用数据将被清空。请输入下面内容后确认删除！</p>
-      <p class="confirm">请在输入框输入"{{ confirmText }}" 以确认此操作</p>
-      <el-input v-model="inputText"></el-input>
+      <p class="confirm">请在输入框输入"{{ confirmText }}" 以确认此操作。</p>
+      <el-form ref="form" :model="confirmForm" :rules="rules">
+        <el-form-item prop="inputText">
+          <el-input v-model="confirmForm.inputText"></el-input>
+        </el-form-item>
+      </el-form>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -28,7 +32,7 @@
 <script lang="ts" setup name="advancedSetting">
 import { ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { ElMessage, FormInstance } from 'element-plus';
 
 import { deleteApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
@@ -49,15 +53,31 @@ const router = useRouter();
 const { appInfo } = toRefs(props);
 const deleteVisible = ref<boolean>(false);
 const confirmText = ref<string>('');
-const inputText = ref<string>('');
+const form = ref<FormInstance>();
+
 const handleDelete = () => {
   deleteVisible.value = true;
   confirmText.value = appInfo.value.secret;
 };
+
+const rules = {
+  inputText: [
+    {
+      required: true,
+      message: '请输入确认信息',
+      trigger: 'blur',
+    },
+  ],
+};
+const confirmForm = ref({
+  inputText: '',
+});
 const handleConfirm = async () => {
+  if (!form.value) return;
+  await form.value?.validate();
   await deleteApplication({
     applicationId: appInfo.value.applicationId,
-    secret: inputText.value,
+    secret: confirmForm.value.inputText,
   });
   deleteVisible.value = false;
   ElMessage.success('删除成功');
