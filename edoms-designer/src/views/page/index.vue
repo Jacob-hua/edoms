@@ -112,7 +112,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, FormInstance } from 'element-plus';
 import screenFull from 'screenfull';
 
-import { EdomsEditor } from '@edoms/editor';
+import { EdomsEditor } from '@edoms/editor/types';
 
 import { createPage, deletePage, listPages, updatePage } from '@/api/page';
 import { saveWithVersion } from '@/api/version';
@@ -208,7 +208,13 @@ const topMenus = [
   {
     name: 'delete',
     label: '删除',
-    action: () => {},
+    action: async () => {
+      await deletePage({
+        pageIds: [active.value.pageId],
+      });
+      ElMessage.success('删除成功');
+      gridList.value?.reload();
+    },
   },
 ];
 
