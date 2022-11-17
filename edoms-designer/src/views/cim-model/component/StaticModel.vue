@@ -10,7 +10,9 @@
       :request="loadData"
     >
       <template #default="{ item }">
-        <div class="item" @click="handleLoadTableData(item)">{{ item.name }}</div>
+        <div :class="['item', item.id === data.id ? 'active item' : '']" @click="handleLoadTableData(item)">
+          {{ item.name }}
+        </div>
       </template>
       <template #noMore>
         <div></div>
@@ -53,6 +55,9 @@ const handleLoadTableData = (model: any) => {
 </script>
 
 <style lang="scss" scoped>
+.active {
+  background-color: #409eff;
+}
 .item {
   cursor: pointer;
   border-bottom: 1px solid #e1e1e1;

@@ -23,7 +23,7 @@
         :request="loadData"
       >
         <template #default="{ item }">
-          <div class="item">
+          <div :class="['item', item.pageId === active.pageId ? 'active' : '']">
             <p v-if="item.isShowText" @click="handleActive(item)">{{ item.name }}</p>
             <el-input v-if="!item.isShowText" v-model="item.name"></el-input>
             <div v-if="item.isShowText" class="pop-menu-wrapper">
@@ -54,7 +54,7 @@
         <div class="pop-menu-wrapper">
           <PopMenu :width="350" @menu-click="handleTopMenuClick">
             <template #reference>
-              <el-icon :size="28"><Menu /></el-icon>
+              <el-button type="primary" size="large">菜单</el-button>
             </template>
             <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
               <div class="pop-menu-item">
@@ -365,6 +365,9 @@ const goEdit = () => {
 </script>
 
 <style lang="scss">
+.active {
+  background-color: #409eff;
+}
 .pop-menu-wrapper {
   position: relative;
 }
