@@ -33,8 +33,11 @@ export interface ListPageInfosRes {
 }
 
 export interface CreatePageReq {
+  /** 页面名称 */
   name: string;
+  /** 应用Id */
   applicationId: string;
+  /** 页面说明 */
   description?: string;
 }
 
