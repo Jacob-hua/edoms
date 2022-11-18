@@ -31,7 +31,7 @@
         >
           <el-icon><Plus /></el-icon>
           <template #file="{ file }">
-            <div>
+            <div class="modal">
               <el-image :src="file.url">
                 <template #error>
                   <div class="image-slot">
@@ -50,15 +50,17 @@
             </div>
           </template>
         </el-upload>
-        <el-dialog v-model="dialogVisible">
-          <el-image :src="dialogImageUrl">
-            <template #error>
-              <div class="image-slot">
-                <img alt="" :src="NoData" />
-              </div>
-            </template>
-          </el-image>
-        </el-dialog>
+        <div class="preview-wrapper">
+          <el-dialog v-model="dialogVisible">
+            <el-image :src="dialogImageUrl">
+              <template #error>
+                <div class="image-slot">
+                  <img alt="" :src="NoData" />
+                </div>
+              </template>
+            </el-image>
+          </el-dialog>
+        </div>
       </el-form-item>
     </el-form>
     <div class="updateBtn" @click="update(appInfo)">更新</div>
@@ -74,6 +76,7 @@ import { ApplicationInfo } from '@/api/application/type';
 import { AppForm } from '@/api/application/type';
 import NoData from '@/assets/img/no_data.png';
 import { useUpload } from '@/views/application/component/useUpload';
+
 const emit = defineEmits<{
   (event: 'back'): void;
 }>();
@@ -112,7 +115,11 @@ const rules = {
 const { appInfo } = toRefs(props);
 const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } =
   useUpload(appInfo.value, [
-    { url: `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${appInfo.value?.thumbnailId}&isPreview=true` },
+    {
+      url: appInfo.value.thumbnailId
+        ? `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${appInfo.value?.thumbnailId}&isPreview=true`
+        : NoData,
+    },
   ]);
 
 const formRef = ref<FormInstance>();
@@ -139,12 +146,24 @@ const update = async (appInfo: AppForm) => {
 </script>
 
 <style lang="scss" scoped>
-.el-image {
-  width: 160px;
-  height: 160px;
-  .image-slot {
-    img {
-      width: 160px;
+.preview-wrapper {
+  :deep(.el-icon) {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    svg {
+      width: 1.5em !important;
+      height: 1.5em !important;
+    }
+  }
+}
+.modal {
+  .el-image {
+    width: 160px;
+    height: 160px;
+    .image-slot {
+      img {
+        width: 160px;
+      }
     }
   }
 }
