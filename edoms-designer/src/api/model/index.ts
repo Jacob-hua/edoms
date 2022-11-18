@@ -162,7 +162,7 @@ export const getApi = async (data: GetApiReq): Promise<GetApiRes> => {
   }
 };
 
-export const simulation = async (data: SimulationApiReq): Promise<ResponseData<any>> => {
+export const simulationApi = async (data: SimulationApiReq): Promise<ResponseData<any>> => {
   return await request<SimulationApiReq, ResponseData<any>>({
     url: '/cim-model/table/simulation',
     method: 'POST',
