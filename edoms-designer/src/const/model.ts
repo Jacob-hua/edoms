@@ -20,3 +20,8 @@ export const enum ModelPropType {
   /** 计算属性 */
   CALCULATE = 'calculate',
 }
+
+export const enum ModelMark {
+  CIM_TABLE = 'cim_table',
+  CIM_URL = 'cim_url',
+}
