@@ -73,7 +73,7 @@ import { ElMessage, FormInstance } from 'element-plus';
 
 import { updateApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
-import { AppForm } from '@/api/application/type';
+import { UpdateApplicationReq } from '@/api/application/type';
 import NoData from '@/assets/img/no_data.png';
 import { useUpload } from '@/views/application/component/useUpload';
 
@@ -123,7 +123,7 @@ const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, ha
   ]);
 
 const formRef = ref<FormInstance>();
-const updateApp = async ({ applicationId, name, description, thumbnailId, serviceAddress }: AppForm) => {
+const updateApp = async ({ applicationId, name, description, thumbnailId, serviceAddress }: UpdateApplicationReq) => {
   await updateApplication({
     applicationId,
     name,
@@ -133,7 +133,7 @@ const updateApp = async ({ applicationId, name, description, thumbnailId, servic
   });
   ElMessage.success('更新成功');
 };
-const update = async (appInfo: AppForm) => {
+const update = async (appInfo: UpdateApplicationReq) => {
   if (!formRef.value) return;
   try {
     await formRef.value?.validate();
