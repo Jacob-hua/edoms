@@ -23,7 +23,7 @@
         :request="loadData"
       >
         <template #default="{ item }">
-          <div class="item">
+          <div :class="['item', item.pageId === active.pageId ? 'active' : '']">
             <p v-if="item.isShowText" @click="handleActive(item)">{{ item.name }}</p>
             <el-input v-if="!item.isShowText" v-model="item.name"></el-input>
             <div v-if="item.isShowText" class="pop-menu-wrapper">
@@ -54,7 +54,7 @@
         <div class="pop-menu-wrapper">
           <PopMenu :width="350" @menu-click="handleTopMenuClick">
             <template #reference>
-              <el-icon :size="28"><Menu /></el-icon>
+              <el-button type="primary" size="large">菜单</el-button>
             </template>
             <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
               <div class="pop-menu-item">
@@ -112,7 +112,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, FormInstance } from 'element-plus';
 import screenFull from 'screenfull';
 
-import { EdomsEditor } from '@edoms/editor';
+import { EdomsEditor } from '@edoms/editor/types';
 
 import { createPage, deletePage, listPages, updatePage } from '@/api/page';
 import { saveWithVersion } from '@/api/version';
@@ -208,7 +208,13 @@ const topMenus = [
   {
     name: 'delete',
     label: '删除',
-    action: () => {},
+    action: async () => {
+      await deletePage({
+        pageIds: [active.value.pageId],
+      });
+      ElMessage.success('删除成功');
+      gridList.value?.reload();
+    },
   },
 ];
 
@@ -365,6 +371,9 @@ const goEdit = () => {
 </script>
 
 <style lang="scss">
+.active {
+  background-color: #409eff;
+}
 .pop-menu-wrapper {
   position: relative;
 }

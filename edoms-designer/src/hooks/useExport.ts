@@ -4,9 +4,11 @@ import { MimeType } from '@/const/mime';
 
 export type ExportData = Record<string | number | symbol, any>;
 
+type Func = (...args: any[]) => string;
+
 export default (
   requestFunc: (data: ExportData) => string | Promise<string>,
-  fileName: string = 'edoms-download',
+  fileName: string | Func = 'edoms-download',
   mime: MimeType = MimeType.HTML,
   charset: string = 'utf-8'
 ) => {
@@ -22,7 +24,11 @@ export default (
       const blob = new Blob([res], { type: `${mime};charset=${charset}` });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.download = fileName;
+      if (typeof fileName === 'string') {
+        link.download = fileName;
+      } else {
+        link.download = fileName();
+      }
       link.click();
       window.URL.revokeObjectURL(link.href);
     } catch (error: any) {

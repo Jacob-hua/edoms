@@ -105,8 +105,8 @@ export const clearTable = async (data: ClearTableReq) => {
   });
 };
 
-export const exportTable = async (data: ExportTableReq) => {
-  await request<ExportTableReq, void>({
+export const exportTable = async (data: ExportTableReq): Promise<any> => {
+  return await request<ExportTableReq, void>({
     url: `/cim-model/table/export`,
     method: 'GET',
     data,
@@ -128,8 +128,8 @@ export const saveApi = async (data: SaveApiReq) => {
   });
 };
 
-export const exportOperationRecord = async (data: ExportOperationRecordReq) => {
-  await request<ExportOperationRecordReq, void>({
+export const exportOperationRecord = async (data: ExportOperationRecordReq): Promise<any> => {
+  return await request<ExportOperationRecordReq, void>({
     url: `/cim-model/table/history-export`,
     method: 'POST',
     data,

@@ -79,17 +79,18 @@ const { execute, loading } = useExport(
       return [];
     }
   },
-  'cim_device_gather.csv',
+  () => `${props.data.name}-${formatTime(new Date(), 'YYYY-MM-DD')}.csv`,
   MimeType.CSV
 );
 
 const { execute: handleExportRecord, loading: recordLoading } = useExport(
   async () => {
-    return await exportOperationRecord({
+    const result = await exportOperationRecord({
       dicCimId: props.data.id,
     });
+    return result;
   },
-  '操作记录.excel',
+  () => `${props.data.name}的操作记录-${formatTime(new Date(), 'YYYY-MM-DD')}.xls`,
   MimeType.EXCEL
 );
 const historyData = ref<any>([]);

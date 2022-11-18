@@ -32,6 +32,7 @@ import { ref } from 'vue';
 
 import { listApplications } from '@/api/application';
 import { ApplicationInfo, ListApplicationsRes } from '@/api/application/type';
+import NoData from '@/assets/img/no_data.png';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 
 import ApplicationItem from './component/ApplicationItem.vue';
@@ -44,7 +45,11 @@ const loadData: RequestFunc<ApplicationInfo> = async ({ pageSize, current }) => 
     limit: pageSize,
   });
   dataList.forEach((item: ApplicationInfo) => {
-    item.imgUrl = `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${item.thumbnailId}&isPreview=true`;
+    if (item.thumbnailId) {
+      item.imgUrl = `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${item.thumbnailId}&isPreview=true`;
+    } else {
+      item.imgUrl = NoData;
+    }
   });
   return {
     data: dataList,

@@ -16,9 +16,9 @@
           :request="loadData"
         >
           <template #default="{ item }">
-            <div class="item">
+            <div :class="['item', item.versionId === active.versionId ? 'active' : '']" @click="handleActive(item)">
               <p class="icon-wrapper">
-                <span v-show="item.isShowText" @click="handleActive(item)">{{ item.name }}</span>
+                <span v-show="item.isShowText">{{ item.name }}</span>
                 <el-input v-show="!item.isShowText" v-model="item.name"></el-input>
                 <span>
                   <el-icon v-show="item.isShowText" :size="20" @click="showInput(item)"><EditPen /></el-icon>
@@ -143,8 +143,12 @@ const goEdit = () => {
 </script>
 
 <style lang="scss" scoped>
+.active {
+  background-color: #409eff;
+}
 .version-container {
   .item {
+    cursor: pointer;
     width: 100%;
     height: 100px;
     padding-left: 10px;

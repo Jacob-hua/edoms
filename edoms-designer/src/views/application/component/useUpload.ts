@@ -71,11 +71,11 @@ export const useUpload = (
   };
   // TODO  上传upload 提成 回调
   const upload = async (uploadFile: UploadFile) => {
-    const formData = new FormData();
-    formData.set('file', uploadFile.raw!);
-    formData.set('fileType', uploadFile.raw?.type!);
-    formData.set('fileName', uploadFile.name);
-    const { contentId } = await fileUpload(formData);
+    const { contentId } = await fileUpload({
+      file: uploadFile.raw!,
+      fileType: uploadFile.raw?.type!,
+      fileName: uploadFile.name,
+    });
     if (isRef(dynamicValidateForm)) {
       dynamicValidateForm.value.thumbnailId = contentId!;
       return;
