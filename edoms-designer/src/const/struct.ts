@@ -7,6 +7,7 @@ export interface KVStruct {
   isUse: boolean;
   /** 备注 */
   remark: string;
+  [key: string]: any;
 }
 
 export interface PageStruct<T> {

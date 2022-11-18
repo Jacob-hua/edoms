@@ -55,7 +55,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 
 import { EdomsEditor } from '@edoms/editor/types';
 
-import { deleteVersion, getVersionList, recoveryVersion, updateVersion } from '@/api/version';
+import { deleteVersion, listVersions, recoveryVersion, updateVersion } from '@/api/version';
 import GridList from '@/components/GridList.vue';
 import useDate from '@/hooks/useDate';
 const { formatTime } = useDate();
@@ -75,7 +75,7 @@ const previewUrl = computed(
 );
 
 const loadData = async ({ pageSize, current }: { pageSize: number; current: number }) => {
-  const { dataList } = await getVersionList({
+  const { dataList } = await listVersions({
     page: current,
     limit: pageSize,
     pageId: Number(route.query.pageId),
@@ -132,7 +132,7 @@ const handleActive = (model: any) => {
 
 const handleApply = async () => {
   await recoveryVersion({
-    versionId: Number(active.value.versionId),
+    versionId: active.value.versionId,
   });
   ElMessage.success('应用版本成功');
   router.push({

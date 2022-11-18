@@ -54,11 +54,12 @@
 
 <script lang="ts" setup name="DynamicModel">
 import { onMounted, ref } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
-import { getDicData, getTableApi, saveApi, simulation } from '@/api/model';
+import { getApi, getDicData, saveApi, simulationApi } from '@/api/model';
 import GridList from '@/components/GridList.vue';
-import { Mark } from '@/const/model-mark';
+import { ModelMark } from '@/const/model';
+import { KVStruct } from '@/const/struct';
 
 import EditorTable from './Table.vue';
 
@@ -83,29 +84,30 @@ const operateType = {
   [OperateType.SAVE]: '保存',
   [OperateType.DELETE]: '删除',
 };
+type KeyType = 'params' | 'body' | 'header' | 'cookie';
 const parameterData = ref([
   {
     name: 'Params',
-    tableData: [] as any[],
+    tableData: [] as KVStruct[],
   },
   {
     name: 'Body',
-    tableData: [] as any[],
+    tableData: [] as KVStruct[],
   },
   {
     name: 'Header',
-    tableData: [] as any[],
+    tableData: [] as KVStruct[],
   },
   {
     name: 'Cookie',
-    tableData: [] as any[],
+    tableData: [] as KVStruct[],
   },
 ]);
 const handleAdd = (type: string) => {
   parameterData.value
     .find(({ name }) => name === type)
     ?.tableData.push({
-      mark: Math.random(),
+      remark: String(Math.random()),
       key: '',
       isUse: false,
       value: '',
@@ -177,11 +179,19 @@ const handleEditClick = ({ operate }: any) => {
   table.value.showTable = true;
 };
 const handleDelete = ({ operate: { row } }: any) => {
-  const data = parameterData.value.find(({ name }) => name === tabActive.value)?.tableData;
-  data?.splice(
-    data.findIndex(({ mark }) => row.mark === mark),
-    1
-  );
+  ElMessageBox.confirm('此操作将永久删除此行记录, 是否继续?', '提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
+      const data = parameterData.value.find(({ name }) => name === tabActive.value)?.tableData;
+      data?.splice(
+        data.findIndex(({ mark }) => row.mark === mark),
+        1
+      );
+    })
+    .catch(() => {});
 };
 
 const requestMethods = [
@@ -202,7 +212,7 @@ const firstData = ref({
 });
 const loadData = async () => {
   const result: any = await getDicData({
-    mark: Mark.CIM_URL as string,
+    mark: ModelMark.CIM_URL as string,
   });
   firstData.value = result[0];
   await getApiInfo();
@@ -220,17 +230,20 @@ const convertData = (data: any) => {
   };
 };
 const apiInfo = ref();
+const initialToLowerCase = (name: string): string => {
+  return `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
+};
 const getApiInfo = async () => {
-  const result = await getTableApi({
+  const result = await getApi({
     dicCimId: Number(firstData.value.id),
   });
   apiInfo.value = result;
   path.value = result?.path ?? '';
   method.value = result?.method ?? '';
-  parameterData.value[0].tableData = result.params?.map(convertData) ?? [];
-  parameterData.value[1].tableData = result.body?.map(convertData) ?? [];
-  parameterData.value[2].tableData = result.header?.map(convertData) ?? [];
-  parameterData.value[3].tableData = result.cookie?.map(convertData) ?? [];
+  parameterData.value.forEach((parameter) => {
+    const key: KeyType = initialToLowerCase(parameter.name) as KeyType;
+    parameter.tableData = result[key]?.map(convertData) ?? [];
+  });
 };
 const handleChangeName = (model: any) => {
   firstData.value = model;
@@ -269,7 +282,7 @@ const handleSimulation = async () => {
     });
   });
   try {
-    const responseData = await simulation({
+    const responseData = await simulationApi({
       body: copyData[1].tableData,
       cookie: copyData[3].tableData,
       header: copyData[2].tableData,

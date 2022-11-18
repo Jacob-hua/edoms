@@ -19,6 +19,7 @@
           :active-value="switchActive.value"
           :active-text="switchActive.text"
           size="large"
+          @change="handleTypeChange"
         ></el-switch>
       </div>
     </div>
@@ -35,9 +36,10 @@
 <script lang="ts" setup name="Model">
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
-import { getModelType } from '@/api/model';
-import { ModelType } from '@/const/model-type';
+import { getModelType, updateModelType } from '@/api/model';
+import { ModelType } from '@/const/model';
 
 import DynamicModel from './component/DynamicModel.vue';
 import StaticModel from './component/StaticModel.vue';
@@ -72,6 +74,13 @@ const loadModelType = async () => {
 onMounted(() => {
   loadModelType();
 });
+const handleTypeChange = async (value: number) => {
+  await updateModelType({
+    modelType: String(value),
+    modelTypeId: 1,
+  });
+  ElMessage.success('更新成功');
+};
 const goBack = () => {
   go(-1);
 };
