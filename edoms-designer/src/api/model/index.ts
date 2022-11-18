@@ -125,7 +125,7 @@ export const getTableHistory = async (data: TableHistoryReq): Promise<TableHisto
 };
 
 export const exportTableHistory = async (data: ExportTableHistoryReq): Promise<any> => {
-  return await request<ExportTableHistoryReq, void>({
+  return await request<ExportTableHistoryReq, any>({
     url: `/cim-model/table/history-export`,
     method: 'POST',
     data,
