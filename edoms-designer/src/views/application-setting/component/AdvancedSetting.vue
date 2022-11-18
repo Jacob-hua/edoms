@@ -17,7 +17,7 @@
       <p class="confirm">请在输入框输入"{{ confirmText }}" 以确认此操作。</p>
       <el-form ref="form" :model="confirmForm" :rules="rules">
         <el-form-item prop="inputText">
-          <el-input v-model="confirmForm.inputText"></el-input>
+          <el-input v-model="confirmForm.inputText" clearable></el-input>
         </el-form-item>
       </el-form>
     </div>
