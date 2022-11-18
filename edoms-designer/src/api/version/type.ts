@@ -1,4 +1,6 @@
-export interface VersionReq {
+import { PageStruct } from '@/const/struct';
+
+export interface ListVersionsReq {
   /** 页码 */
   page: number;
   /** 页面大小 */
@@ -28,16 +30,7 @@ export interface Version {
   updateTime: number;
 }
 
-export interface VersionRes {
-  /** 页码 */
-  page: number;
-  /** 页面大小 */
-  limit: number;
-  /** 记录总数 */
-  count: number;
-  /** 数据列表 */
-  dataList: Version[];
-}
+export type ListVersionsRes = PageStruct<Version>;
 
 export interface UpdateVersionReq {
   /** 版本ID */

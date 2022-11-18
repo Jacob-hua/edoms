@@ -1,6 +1,7 @@
 import { UploadRawFile } from 'element-plus';
 
-import type { ModelCodeType, ModelPropType } from '@/const/model';
+import type { ModelCodeType, ModelPropType, ModelTableActionType } from '@/const/model';
+import { KVStruct, PageStruct } from '@/const/struct';
 
 export interface ListInstanceReq {
   virtual: string;
@@ -20,7 +21,7 @@ export interface InstanceItem {
   /** 是否可用 */
   disable: boolean;
   /** 实例类型 */
-  type: string;
+  type: ModelCodeType;
   [key: string]: any;
 }
 
@@ -92,7 +93,7 @@ export interface TableHistory {
   /** 文件名称 */
   fileName: string;
   /** 操作类型 */
-  action: string;
+  action: ModelTableActionType;
   /** 模型表ID */
   dicCimId: string;
   /** 操作人 */
@@ -101,16 +102,7 @@ export interface TableHistory {
   createTime: string;
 }
 
-export interface TableHistoryRes {
-  /** 页码 */
-  page: string;
-  /** 页面大小 */
-  limit: string;
-  /** 记录总数 */
-  count: string;
-  /** 数据列表 */
-  dataList: TableHistory[];
-}
+export type TableHistoryRes = PageStruct<TableHistory>;
 
 export interface ClearTableReq {
   /** 表ID */
@@ -129,17 +121,6 @@ export interface ImportTableReq {
   fileType: string;
   /** 文件名称 */
   fileName: string;
-}
-
-export interface KVStruct {
-  /** 键名 */
-  key: string;
-  /** 值 */
-  value: string;
-  /** 是否可以用 */
-  isUse: boolean;
-  /** 备注 */
-  remark: string;
 }
 
 export interface ApiStruct {

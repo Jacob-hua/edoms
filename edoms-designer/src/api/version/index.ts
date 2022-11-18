@@ -1,18 +1,18 @@
 import {
   DeleteVersion,
+  ListVersionsReq,
+  ListVersionsRes,
   RecoveryVersionReq,
   SaveWithVersionReq,
   UpdateVersionReq,
-  VersionReq,
-  VersionRes,
 } from '@/api/version/type';
 import { request } from '@/util/request';
 
 export * from './type';
 
-export const getVersionList = async (data: VersionReq): Promise<VersionRes> => {
+export const listVersions = async (data: ListVersionsReq): Promise<ListVersionsRes> => {
   try {
-    const { result } = await request<VersionReq, VersionRes>({
+    const { result } = await request<ListVersionsReq, ListVersionsRes>({
       url: '/page/version/list',
       method: 'POST',
       data,

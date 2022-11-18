@@ -116,9 +116,9 @@ export const getTableHistory = async (data: TableHistoryReq): Promise<TableHisto
     return result;
   } catch (e) {
     return {
-      page: '',
-      limit: '',
-      count: '',
+      page: 0,
+      limit: 0,
+      count: 0,
       dataList: [],
     };
   }

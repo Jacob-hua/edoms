@@ -23,9 +23,9 @@ export const listApplications = async (data: ListApplicationsReq): Promise<ListA
     return result;
   } catch (error) {
     return {
-      count: '0',
-      limit: '0',
-      page: '0',
+      count: 0,
+      limit: 0,
+      page: 0,
       dataList: [],
     };
   }

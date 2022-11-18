@@ -1,3 +1,5 @@
+import { PageStruct } from '@/const/struct';
+
 export interface PageInfo {
   /** 页面ID */
   pageId: number;
@@ -21,16 +23,7 @@ export interface ListPageInfosReq {
   limit: number;
 }
 
-export interface ListPageInfosRes {
-  /** 总记录数 */
-  count: string;
-  /** 页面大小 */
-  limit: string;
-  /** 页码 */
-  page: string;
-  /** 数据列表 */
-  dataList: PageInfo[];
-}
+export type ListPageInfosRes = PageStruct<PageInfo>;
 
 export interface CreatePageReq {
   /** 页面名称 */
@@ -56,6 +49,7 @@ export interface UpdatePageReq {
   /** 页面简介 */
   description?: string;
 }
+
 export interface DeletePageReq {
   /** 应用ID集合 */
   pageIds: number[];
