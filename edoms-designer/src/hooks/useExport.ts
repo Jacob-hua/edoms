@@ -16,7 +16,7 @@ export default (
 
   const error = ref(null);
 
-  const execute = async (data: ExportData) => {
+  const execute = async (data: ExportData): Promise<void> => {
     loading.value = true;
     error.value = null;
     try {
