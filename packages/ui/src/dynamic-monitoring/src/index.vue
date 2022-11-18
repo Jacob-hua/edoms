@@ -1,5 +1,11 @@
 <template>
-  <BusinessCard title="动环监测" subtitle="DYNAMIC MONITORING" min-width="500" min-height="200">
+  <BusinessCard
+    title="动环监测"
+    :class="wrapperClassName"
+    subtitle="DYNAMIC MONITORING"
+    min-width="500"
+    min-height="200"
+  >
     <template #operation>
       <div class="operation" @click="handleTrigger">展开</div>
     </template>
@@ -39,6 +45,7 @@ const props = defineProps<{
 useApp(props);
 
 const indicators = ref<Indicator[]>([]);
+const wrapperClassName = ref<string>('');
 
 watchEffect(() => {
   indicators.value = props.config.indicators?.reduce(
@@ -51,7 +58,7 @@ watchEffect(() => {
 });
 
 const handleTrigger = () => {
-  console.log('展开卡片');
+  wrapperClassName.value = wrapperClassName.value === '' ? 'open-wrapper' : '';
 };
 
 function getIconByIndicatorType(type: MEnvironmentIndicator) {
@@ -74,5 +81,10 @@ function getIconByIndicatorType(type: MEnvironmentIndicator) {
     flex-direction: column;
     align-items: center;
   }
+}
+.open-wrapper {
+  background-color: red;
+  width: auto !important;
+  overflow: auto !important;
 }
 </style>

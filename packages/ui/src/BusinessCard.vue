@@ -7,7 +7,7 @@
         <slot name="operation"></slot>
       </div>
     </div>
-    <div class="body">
+    <div class="business-wrapper-body">
       <slot></slot>
     </div>
   </div>
@@ -154,5 +154,8 @@ onUnmounted(() => {
     grid-area: operation;
     cursor: pointer;
   }
+}
+.business-wrapper-body {
+  overflow: hidden;
 }
 </style>
