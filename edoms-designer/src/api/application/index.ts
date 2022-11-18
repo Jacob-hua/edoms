@@ -46,7 +46,7 @@ export const createApplication = async (data: CreateApplicationReq): Promise<Cre
   }
 };
 
-export const updateApplication = async (data: UpdateApplicationReq) => {
+export const updateApplication = async (data: UpdateApplicationReq): Promise<void> => {
   await request<CreateApplicationReq, void>({
     url: '/application/update',
     method: 'PUT',
@@ -76,7 +76,7 @@ export const getApplicationInfo = async (data: GetApplicationInfoReq): Promise<G
   }
 };
 
-export const deleteApplication = async (data: DeleteApplicationReq) => {
+export const deleteApplication = async (data: DeleteApplicationReq): Promise<void> => {
   await request<DeleteApplicationReq, void>({
     url: '/application/delete',
     method: 'DELETE',
