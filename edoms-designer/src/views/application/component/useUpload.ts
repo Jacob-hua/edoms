@@ -1,7 +1,7 @@
 import { type Ref, isRef, ref } from 'vue';
 import { ElMessage, UploadFile, UploadFiles } from 'element-plus';
 
-import { ApplicationInfo } from '@/api/application';
+import { ApplicationInfo, CreateApplicationReq } from '@/api/application';
 import { uploadFile } from '@/api/file';
 interface UploadParameter {
   fileLimit: number;
@@ -13,10 +13,10 @@ interface CheckParameter {
   deleteCount: number;
 }
 export const useUpload = (
-  dynamicValidateForm: ApplicationInfo | Ref<ApplicationInfo>,
+  dynamicValidateForm: ApplicationInfo | Ref<ApplicationInfo> | CreateApplicationReq,
   files: { url: string; uid?: string }[] = [],
   { fileLimit, fileSize }: UploadParameter = { fileLimit: 1, fileSize: 100 },
-  acceptType = '.png, .jpg, .jpeg, .gif, .webp, .PNG, .JPG, .JPEG .GIF, .WEBP'
+  acceptType: string = '.png, .jpg, .jpeg, .gif, .webp, .PNG, .JPG, .JPEG .GIF, .WEBP'
 ) => {
   const { length } = files;
   const dialogImageUrl = ref<string>('');

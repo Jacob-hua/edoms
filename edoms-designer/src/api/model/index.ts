@@ -18,6 +18,7 @@ import {
   SimulationApiReq,
   TableHistoryReq,
   TableHistoryRes,
+  UpdateModelTypeReq,
 } from './type';
 
 export * from './type';
@@ -96,7 +97,7 @@ export const exportTable = async (data: ExportTableReq): Promise<any> => {
 export const importFile = async (data: ImportTableReq): Promise<void> => {
   const formData = new FormData();
   formData.set('file', data.file!);
-  formData.set('fileType', data.fileType);
+  formData.set('tableId', data.tableId);
   formData.set('fileName', data.fileName);
 
   await request<FormData, void>({
@@ -166,6 +167,14 @@ export const simulationApi = async (data: SimulationApiReq): Promise<ResponseDat
   return await request<SimulationApiReq, ResponseData<any>>({
     url: '/cim-model/table/simulation',
     method: 'POST',
+    data,
+  });
+};
+
+export const updateModelType = async (data: UpdateModelTypeReq): Promise<void> => {
+  await request<UpdateModelTypeReq, void>({
+    url: '/cim-model/table/model-type/update',
+    method: 'PUT',
     data,
   });
 };

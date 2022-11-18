@@ -52,7 +52,7 @@
 import { ref, watch } from 'vue';
 import { ElMessage, UploadFile } from 'element-plus';
 
-import { clearTable, exportOperationRecord, exportTable, getTableHistory, importFile } from '@/api/model';
+import { clearTable, exportTable, exportTableHistory, getTableHistory, importFile } from '@/api/model';
 import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
 import useExport from '@/hooks/useExport';
@@ -85,9 +85,10 @@ const { execute, loading } = useExport(
 
 const { execute: handleExportRecord, loading: recordLoading } = useExport(
   async () => {
-    const result = await exportOperationRecord({
+    const result = await exportTableHistory({
       dicCimId: props.data.id,
     });
+    loadTableHistory();
     return result;
   },
   () => `${props.data.name}的操作记录-${formatTime(new Date(), 'YYYY-MM-DD')}.xls`,
@@ -111,12 +112,12 @@ const pageInfo = ref({
 });
 const loadTableHistory = async () => {
   const { dataList, count } = await getTableHistory({
-    page: 1,
-    limit: 10,
+    page: pageInfo.value.page,
+    limit: pageInfo.value.limit,
     tableId: props.data.id,
   });
   dataList.forEach((item) => {
-    item.createTime = formatTime(item.createTime);
+    item.createTime = formatTime(item.createTime) as string;
   });
   pageInfo.value.total = Number(count);
   historyData.value = dataList;
@@ -139,7 +140,11 @@ const handleFileChange = async (uploadFile: UploadFile) => {
   formData.set('file', uploadFile.raw!);
   formData.set('tableId', props.data.id!);
   formData.set('fileName', uploadFile.name);
-  await importFile(formData);
+  await importFile({
+    file: uploadFile.raw!,
+    tableId: props.data.id!,
+    fileName: uploadFile.name,
+  });
   ElMessage.success('导入成功');
   loadTableHistory();
 };

@@ -1,52 +1,54 @@
 <template>
-  <el-dialog v-model="dialogVisible" title="新建应用" width="40%" center>
-    <el-form ref="formRef" :model="applicationForm" :rules="formRules" label-width="80px" class="demo-dynamic">
-      <el-form-item label="名称" prop="name">
-        <el-input v-model="applicationForm.name" placeholder="请输入应用名称"></el-input>
-      </el-form-item>
-      <el-form-item label="简介" prop="description">
-        <el-input
-          v-model="applicationForm.description"
-          type="textarea"
-          placeholder="请输入应用简介内容"
-          min="0"
-          max="40"
-          :rows="6"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="封面" prop="thumbnailId">
-        <el-upload
-          v-model:file-list="fileList"
-          action="#"
-          :accept="accept"
-          list-type="picture-card"
-          :auto-upload="false"
-          :on-change="imgChange"
-        >
-          <el-icon><Plus /></el-icon>
-          <template #file="{ file }">
-            <div>
-              <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-              <span class="el-upload-list__item-actions">
-                <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                  <el-icon><ZoomIn /></el-icon>
+  <div class="new-wrapper">
+    <el-dialog v-model="dialogVisible" title="新建应用" width="40%" center>
+      <el-form ref="formRef" :model="applicationForm" :rules="formRules" label-width="80px" class="demo-dynamic">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="applicationForm.name" placeholder="请输入应用名称"></el-input>
+        </el-form-item>
+        <el-form-item label="简介" prop="description">
+          <el-input
+            v-model="applicationForm.description"
+            type="textarea"
+            placeholder="请输入应用简介内容"
+            min="0"
+            max="40"
+            :rows="6"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="封面" prop="thumbnailId">
+          <el-upload
+            v-model:file-list="fileList"
+            action="#"
+            :accept="accept"
+            list-type="picture-card"
+            :auto-upload="false"
+            :on-change="imgChange"
+          >
+            <el-icon><Plus /></el-icon>
+            <template #file="{ file }">
+              <div>
+                <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+                <span class="el-upload-list__item-actions">
+                  <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                    <el-icon><ZoomIn /></el-icon>
+                  </span>
+                  <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
+                    <el-icon><Delete /></el-icon>
+                  </span>
                 </span>
-                <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-                  <el-icon><Delete /></el-icon>
-                </span>
-              </span>
-            </div>
-          </template>
-        </el-upload>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="handleFormCancel">取消</el-button>
-        <el-button type="primary" @click="handleFormSubmit">确认</el-button>
-      </span>
-    </template>
-  </el-dialog>
+              </div>
+            </template>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="handleFormCancel">取消</el-button>
+          <el-button type="primary" @click="handleFormSubmit">确认</el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
 <script lang="ts" setup name="newApp">
@@ -54,8 +56,8 @@ import { computed, reactive, ref } from 'vue';
 import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import { createApplication } from '@/api/application';
-import { AppForm } from '@/api/application/type';
+import { createApplication, CreateApplicationReq } from '@/api/application';
+import NoData from '@/assets/img/no_data.png';
 import { useUpload } from '@/views/application/component/useUpload';
 
 const props = withDefaults(
@@ -84,7 +86,7 @@ const dialogVisible = computed<boolean>({
   },
 });
 
-const applicationForm = reactive<AppForm>({
+const applicationForm = reactive<CreateApplicationReq>({
   name: '',
   description: '',
   thumbnailId: '',
@@ -114,6 +116,7 @@ const handleFormSubmit = async () => {
     if (applicationId) {
       ElMessage.success('创建成功');
       dialogVisible.value = false;
+      dialogVisible.value = false;
       emit('submitted');
     }
   } catch (e: any) {
@@ -121,10 +124,24 @@ const handleFormSubmit = async () => {
   }
 };
 
-const { disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } = useUpload(applicationForm);
+const { disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } = useUpload(applicationForm, [
+  {
+    url: NoData,
+  },
+]);
 </script>
 
 <style scoped lang="scss">
+.new-wrapper {
+  :deep(.el-icon) {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    svg {
+      width: 1.5em !important;
+      height: 1.5em !important;
+    }
+  }
+}
 .dialog-footer button:first-child {
   margin-right: 10px;
 }

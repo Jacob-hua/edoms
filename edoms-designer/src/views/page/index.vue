@@ -8,11 +8,13 @@
       <div class="top-search">
         <p>页面列表</p>
         <div>
-          <el-icon class="header-icon" :size="19" @click="handleShowSearchInput"><Search /></el-icon>
           <el-icon class="header-icon" :size="20" @click="handleNewPage"><Plus /></el-icon>
         </div>
       </div>
-      <div class="search-wrapper"><el-input v-if="isSearch" v-model="searchText" @keyup.enter="search"></el-input></div>
+      <div class="search-wrapper">
+        <el-input v-model="searchText" clearable @keyup.enter="search" @clear="handleClearInput"></el-input>
+        <el-icon class="header-icon" :size="21" @click="handleShowSearchInput"><Search /></el-icon>
+      </div>
       <GridList
         ref="gridList"
         class="grid-list"
@@ -25,7 +27,7 @@
         <template #default="{ item }">
           <div :class="['item', item.pageId === active.pageId ? 'active' : '']">
             <p v-if="item.isShowText" @click="handleActive(item)">{{ item.name }}</p>
-            <el-input v-if="!item.isShowText" v-model="item.name"></el-input>
+            <el-input v-if="!item.isShowText" v-model="item.name" clearable></el-input>
             <div v-if="item.isShowText" class="pop-menu-wrapper">
               <PopMenu @menu-click="(value) => handleMenuClick(value, item)">
                 <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
@@ -74,45 +76,47 @@
       </div>
     </section>
   </div>
-  <el-dialog v-model="newPageVisible" title="新增页面" width="30%" @close="handleClose">
-    <span>
-      <el-form ref="form" :model="page" :rules="rules">
-        <el-form-item label="应用页名称" prop="name">
-          <el-input v-model="page.name"></el-input>
-        </el-form-item>
-      </el-form>
-    </span>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="newPageVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
+  <div class="page-wrapper">
+    <el-dialog v-model="newPageVisible" title="新增页面" width="30%" @close="handleClose">
+      <span>
+        <el-form ref="form" :model="page" :rules="rules">
+          <el-form-item label="应用页名称" prop="name">
+            <el-input v-model="page.name" clearable></el-input>
+          </el-form-item>
+        </el-form>
       </span>
-    </template>
-  </el-dialog>
-  <el-dialog v-model="versionVisible" title="保存为版本" width="30%" @close="handleVersionClose">
-    <span>
-      <el-form ref="versionForm" :model="version" :rules="versionRules">
-        <el-form-item label="版本名称" prop="name">
-          <el-input v-model="version.name"></el-input>
-        </el-form-item>
-      </el-form>
-    </span>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="versionVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleVersionConfirm"> 确认 </el-button>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="newPageVisible = false">取消</el-button>
+          <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
+        </span>
+      </template>
+    </el-dialog>
+    <el-dialog v-model="versionVisible" title="保存为版本" width="30%" @close="handleVersionClose">
+      <span>
+        <el-form ref="versionForm" :model="version" :rules="versionRules">
+          <el-form-item label="版本名称" prop="name">
+            <el-input v-model="version.name" clearable></el-input>
+          </el-form-item>
+        </el-form>
       </span>
-    </template>
-  </el-dialog>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="versionVisible = false">取消</el-button>
+          <el-button type="primary" @click="handleVersionConfirm"> 确认 </el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ElMessage, FormInstance } from 'element-plus';
+import { ElMessage, ElMessageBox, FormInstance } from 'element-plus';
 import screenFull from 'screenfull';
 
-import { EdomsEditor } from '@edoms/editor/types';
+import { EdomsEditor } from '@edoms/editor';
 
 import { createPage, deletePage, listPages, updatePage } from '@/api/page';
 import { saveWithVersion } from '@/api/version';
@@ -125,7 +129,7 @@ const router = useRouter();
 const gridList = ref();
 const { formatTime } = useDate();
 interface Page {
-  pageId: bigint;
+  pageId: number;
   name: string;
   createBy: string;
   createTime: bigint;
@@ -208,12 +212,20 @@ const topMenus = [
   {
     name: 'delete',
     label: '删除',
-    action: async () => {
-      await deletePage({
-        pageIds: [active.value.pageId],
-      });
-      ElMessage.success('删除成功');
-      gridList.value?.reload();
+    action: () => {
+      ElMessageBox.confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          await deletePage({
+            pageIds: [active.value.pageId],
+          });
+          ElMessage.success('删除成功');
+          gridList.value?.reload();
+        })
+        .catch(() => {});
     },
   },
 ];
@@ -231,18 +243,30 @@ const menus = [
     name: 'edit',
     label: '编辑页面',
     icon: 'Edit',
-    action: () => {},
+    action: () => {
+      router.push({
+        path: '/editor',
+      });
+    },
   },
   {
     name: 'delete',
     label: '删除',
     icon: 'Delete',
-    action: async ({ pageId }: Page) => {
-      await deletePage({
-        pageIds: [pageId],
-      });
-      ElMessage.success('删除成功');
-      gridList.value?.reload();
+    action: ({ pageId }: Page) => {
+      ElMessageBox.confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          await deletePage({
+            pageIds: [pageId],
+          });
+          ElMessage.success('删除成功');
+          gridList.value?.reload();
+        })
+        .catch(() => {});
     },
   },
 ];
@@ -268,8 +292,8 @@ const searchText = ref<string | null>(null);
 const isSearch = ref<boolean>(false);
 
 const handleShowSearchInput = () => {
-  searchText.value = '';
   isSearch.value = true;
+  search();
 };
 
 const search = () => {
@@ -368,9 +392,24 @@ const goEdit = () => {
     path: '/editor',
   });
 };
+
+const handleClearInput = () => {
+  search();
+};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.page-wrapper {
+  :deep(.el-icon) {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    svg {
+      width: 1.5em !important;
+      height: 1.5em !important;
+    }
+  }
+}
+
 .active {
   background-color: #409eff;
 }
@@ -388,6 +427,8 @@ const goEdit = () => {
   }
 }
 .search-wrapper {
+  display: flex;
+  align-items: center;
   padding: 10px;
 }
 .item {

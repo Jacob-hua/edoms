@@ -104,6 +104,13 @@ export interface TableHistory {
 
 export type TableHistoryRes = PageStruct<TableHistory>;
 
+export interface UpdateModelTypeReq {
+  /** 记录ID **/
+  modelTypeId: number;
+  /** 模型类型 **/
+  modelType: string;
+}
+
 export interface ClearTableReq {
   /** 表ID */
   tableId: number;
@@ -117,15 +124,17 @@ export interface ExportTableReq {
 export interface ImportTableReq {
   /** 文件流 */
   file: UploadRawFile;
-  /** 文件类型 */
-  fileType: string;
+  /** 表id */
+  tableId: string;
   /** 文件名称 */
   fileName: string;
 }
 
 export interface ApiStruct {
+  /** 更新api详情记录ID **/
+  id?: number;
   /** API字典表ID */
-  dicCimId: number;
+  dicCimId?: number;
   /** API路径 */
   path: string;
   /** API方法 */
