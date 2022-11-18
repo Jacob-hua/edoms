@@ -1,14 +1,17 @@
 import { request } from '@/util/request';
 
-import { FileUploadData, FileUploadRes } from './type';
+import { UploadFileReq, UploadFileRes } from './type';
 
-export const fileUpload = async (data: FileUploadData): Promise<FileUploadRes> => {
+export * from './type';
+
+export const uploadFile = async (data: UploadFileReq): Promise<UploadFileRes> => {
   try {
     const formData = new FormData();
     formData.set('file', data.file!);
     formData.set('fileType', data.fileType);
     formData.set('fileName', data.fileName);
-    const { result } = await request<FormData, FileUploadRes>({
+
+    const { result } = await request<FormData, UploadFileRes>({
       url: '/file/upload',
       method: 'POST',
       data: formData,

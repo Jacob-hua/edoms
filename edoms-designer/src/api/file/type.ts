@@ -1,10 +1,10 @@
 import { UploadRawFile } from 'element-plus';
 
-export interface FileUploadRes {
+export interface UploadFileRes {
   contentId: string | null;
 }
 
-export interface FileUploadData {
+export interface UploadFileReq {
   file: UploadRawFile;
   fileType: string;
   fileName: string;

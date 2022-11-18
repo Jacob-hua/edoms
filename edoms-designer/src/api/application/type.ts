@@ -1,7 +1,7 @@
 export interface ApplicationInfo {
   applicationId: string;
   name: string;
-  thumbnailId: string;
+  thumbnailId?: string;
   description: string;
   serviceAddress: string;
   tenantId: string;
