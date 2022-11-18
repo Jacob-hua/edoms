@@ -1,12 +1,12 @@
 export interface ApplicationInfo {
   applicationId: string;
   name: string;
-  createBy: string;
+  thumbnailId: string;
   description: string;
   serviceAddress: string;
-  createTime: string;
-  thumbnailId: string;
   tenantId: string;
+  createBy: string;
+  createTime: string;
   [key: string]: any;
 }
 
@@ -22,16 +22,30 @@ export interface ListApplicationsRes {
   dataList: ApplicationInfo[];
 }
 
-export interface AppForm {
-  applicationId?: string;
+export interface CreateApplicationReq {
+  name: string;
+  description: string;
+  thumbnailId?: string | null;
+}
+
+export interface CreateApplicationRes {
+  applicationId: number | null;
+}
+
+export interface UpdateApplicationReq {
+  applicationId: string;
   name: string;
   description: string;
   thumbnailId?: string | null;
   serviceAddress?: string | null;
 }
 
-export interface CreateAppRes {
-  applicationId: number | null;
+export interface GetApplicationInfoReq {
+  applicationId: string;
+}
+
+export interface GetApplicationInfoRes extends ApplicationInfo {
+  [key: string]: any;
 }
 
 export interface DeleteApplicationReq {
