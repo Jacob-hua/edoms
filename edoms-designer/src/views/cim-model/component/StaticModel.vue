@@ -19,7 +19,7 @@
       </template>
     </GridList>
     <div class="right-section">
-      <StaticModelTable v-if="staticFlag" :data="data" />
+      <StaticModelTable v-if="staticFlag" :key="tableKey" :data="data" />
     </div>
   </div>
 </template>
@@ -37,11 +37,13 @@ const gridList = ref(null);
 const data = ref({
   id: '',
 });
+const tableKey = ref();
 const loadData = async () => {
   const result: any = await getDicData({
     mark: Mark.CIM_TABLE as string,
   });
   data.value = result[0];
+  tableKey.value = data.value.id;
   staticFlag.value = true;
   return {
     data: result,
@@ -53,6 +55,7 @@ const staticFlag = ref(false);
 
 const handleLoadTableData = (model: any) => {
   data.value = model;
+  tableKey.value = model.id;
 };
 </script>
 

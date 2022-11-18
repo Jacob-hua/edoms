@@ -88,6 +88,7 @@ const { execute: handleExportRecord, loading: recordLoading } = useExport(
     const result = await exportOperationRecord({
       dicCimId: props.data.id,
     });
+    loadTableHistory();
     return result;
   },
   () => `${props.data.name}的操作记录-${formatTime(new Date(), 'YYYY-MM-DD')}.xls`,
@@ -111,8 +112,8 @@ const pageInfo = ref({
 });
 const loadTableHistory = async () => {
   const { dataList, count } = await getTableHistory({
-    page: 1,
-    limit: 10,
+    page: pageInfo.value.page,
+    limit: pageInfo.value.limit,
     tableId: props.data.id,
   });
   dataList.forEach((item) => {

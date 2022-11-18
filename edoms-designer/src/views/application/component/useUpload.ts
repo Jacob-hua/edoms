@@ -16,7 +16,7 @@ export const useUpload = (
   dynamicValidateForm: AppForm | Ref<AppForm>,
   files: { url: string; uid?: string }[] = [],
   { fileLimit, fileSize }: UploadParameter = { fileLimit: 1, fileSize: 100 },
-  acceptType = '.png, .jpg, .jpeg, .gif, .webp, .PNG, .JPG, .JPEG .GIF, .WEBP'
+  acceptType: string = '.png, .jpg, .jpeg, .gif, .webp, .PNG, .JPG, .JPEG .GIF, .WEBP'
 ) => {
   const { length } = files;
   const dialogImageUrl = ref<string>('');
