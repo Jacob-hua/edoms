@@ -51,9 +51,9 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
-import { EdomsEditor } from '@edoms/editor';
+import { EdomsEditor } from '@edoms/editor/types';
 
 import { deleteVersion, getVersionList, recoveryVersion, updateVersion } from '@/api/version';
 import GridList from '@/components/GridList.vue';
@@ -111,11 +111,19 @@ const handleHideInput = async (model: any) => {
 };
 
 const handleDelete = async (model: any) => {
-  await deleteVersion({
-    versionIds: [model.versionId],
-  });
-  ElMessage.success('删除成功');
-  gridList.value?.reload();
+  ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      await deleteVersion({
+        versionIds: [model.versionId],
+      });
+      ElMessage.success('删除成功');
+      gridList.value?.reload();
+    })
+    .catch(() => {});
 };
 const active = ref();
 const handleActive = (model: any) => {
