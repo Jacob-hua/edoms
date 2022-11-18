@@ -23,11 +23,11 @@ export interface ListPageInfosReq {
 
 export interface ListPageInfosRes {
   /** 总记录数 */
-  count: number;
+  count: string;
   /** 页面大小 */
-  limit: number;
+  limit: string;
   /** 页码 */
-  page: number;
+  page: string;
   /** 数据列表 */
   dataList: PageInfo[];
 }
