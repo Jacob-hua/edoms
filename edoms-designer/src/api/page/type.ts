@@ -1,43 +1,56 @@
+import { PageStruct } from '@/const/struct';
+
 export interface PageInfo {
+  /** 页面ID */
   pageId: number;
+  /** 页面名称 */
   name: string;
+  /** 创建者 */
   createBy: string;
+  /** 创建事件 */
   createTime: string;
   label: number;
 }
 
 export interface ListPageInfosReq {
+  /** 页面名称 */
   name: string | null;
-  page: number;
-  limit: number;
+  /** 应用ID */
   applicationId: string;
+  /** 页码 */
+  page: number;
+  /** 页面大小 */
+  limit: number;
 }
 
-export interface ListPageInfosRes {
-  count: string;
-  limit: string;
-  page: string;
-  dataList: PageInfo[];
-}
+export type ListPageInfosRes = PageStruct<PageInfo>;
 
 export interface CreatePageReq {
+  /** 页面名称 */
   name: string;
+  /** 应用Id */
   applicationId: string;
+  /** 页面说明 */
   description?: string;
 }
 
 export interface CreatePageRes {
-  result: {
-    pageId: string | null;
-  };
+  /** 页面ID */
+  pageId: number;
 }
 
 export interface UpdatePageReq {
+  /** 页面ID */
   pageId: number;
+  /** 页面名称 */
   name: string;
-  description?: string;
+  /** 应用ID */
   applicationId: string;
+  /** 页面简介 */
+  description?: string;
 }
+
 export interface DeletePageReq {
-  pageIds: bigint[];
+  /** 应用ID集合 */
+  pageIds: number[];
 }

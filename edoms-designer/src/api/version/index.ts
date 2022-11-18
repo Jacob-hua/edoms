@@ -1,16 +1,18 @@
 import {
   DeleteVersion,
-  RecoveryReq,
-  SaveVersionReq,
+  ListVersionsReq,
+  ListVersionsRes,
+  RecoveryVersionReq,
+  SaveWithVersionReq,
   UpdateVersionReq,
-  VersionReq,
-  VersionRes,
 } from '@/api/version/type';
 import { request } from '@/util/request';
 
-export const getVersionList = async (data: VersionReq): Promise<VersionRes> => {
+export * from './type';
+
+export const listVersions = async (data: ListVersionsReq): Promise<ListVersionsRes> => {
   try {
-    const { result } = await request<VersionReq, VersionRes>({
+    const { result } = await request<ListVersionsReq, ListVersionsRes>({
       url: '/page/version/list',
       method: 'POST',
       data,
@@ -18,15 +20,15 @@ export const getVersionList = async (data: VersionReq): Promise<VersionRes> => {
     return result;
   } catch (e) {
     return {
-      count: 1,
-      limit: '',
+      count: 0,
+      limit: 0,
+      page: 0,
       dataList: [],
-      page: '',
     };
   }
 };
 
-export const updateVersion = async (data: UpdateVersionReq) => {
+export const updateVersion = async (data: UpdateVersionReq): Promise<void> => {
   await request<UpdateVersionReq, void>({
     url: '/page/version/update',
     method: 'PUT',
@@ -34,23 +36,23 @@ export const updateVersion = async (data: UpdateVersionReq) => {
   });
 };
 
-export const saveWithVersion = async (data: SaveVersionReq) => {
-  await request<SaveVersionReq, void>({
+export const saveWithVersion = async (data: SaveWithVersionReq): Promise<void> => {
+  await request<SaveWithVersionReq, void>({
     url: '/page/version/save-with-version',
     method: 'POST',
     data,
   });
 };
 
-export const recoveryVersion = async (data: RecoveryReq) => {
-  await request<RecoveryReq, void>({
+export const recoveryVersion = async (data: RecoveryVersionReq): Promise<void> => {
+  await request<RecoveryVersionReq, void>({
     url: 'page/version/version-recovery',
     method: 'POST',
     data,
   });
 };
 
-export const deleteVersion = async (data: DeleteVersion) => {
+export const deleteVersion = async (data: DeleteVersion): Promise<void> => {
   await request<DeleteVersion, void>({
     url: '/page/version/delete',
     method: 'DELETE',

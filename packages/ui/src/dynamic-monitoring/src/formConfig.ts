@@ -28,6 +28,7 @@ export default async (request: Request) => [
     name: 'visibleNumber',
     type: 'number',
     min: 0,
+    max: 10,
   },
   {
     text: '监测指标',
@@ -35,6 +36,7 @@ export default async (request: Request) => [
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加指标',
+    maxItems: 10,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {

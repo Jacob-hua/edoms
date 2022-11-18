@@ -1,7 +1,18 @@
 import { request } from '@/util/request';
 
-import { AppForm, ApplicationInfo, CreateAppRes, ListApplicationsReq, ListApplicationsRes } from './type';
+import {
+  CreateApplicationReq,
+  CreateApplicationRes,
+  GetApplicationInfoReq,
+  GetApplicationInfoRes,
+  ListApplicationsReq,
+  ListApplicationsRes,
+  UpdateApplicationReq,
+} from './type';
 import { DeleteApplicationReq } from './type';
+
+export * from './type';
+
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
     const { result } = await request<ListApplicationsReq, ListApplicationsRes>({
@@ -12,17 +23,17 @@ export const listApplications = async (data: ListApplicationsReq): Promise<ListA
     return result;
   } catch (error) {
     return {
-      count: '0',
-      limit: '0',
-      page: '0',
+      count: 0,
+      limit: 0,
+      page: 0,
       dataList: [],
     };
   }
 };
 
-export const createApplication = async (data: AppForm): Promise<CreateAppRes> => {
+export const createApplication = async (data: CreateApplicationReq): Promise<CreateApplicationRes> => {
   try {
-    const { result } = await request<AppForm, CreateAppRes>({
+    const { result } = await request<CreateApplicationReq, CreateApplicationRes>({
       url: '/application/create',
       method: 'POST',
       data,
@@ -35,16 +46,17 @@ export const createApplication = async (data: AppForm): Promise<CreateAppRes> =>
   }
 };
 
-export const updateApplication = async (data: AppForm) => {
-  await request<AppForm, void>({
+export const updateApplication = async (data: UpdateApplicationReq): Promise<void> => {
+  await request<CreateApplicationReq, void>({
     url: '/application/update',
     method: 'PUT',
     data,
   });
 };
-export const getAppInfo = async (data: { applicationId: string }): Promise<ApplicationInfo> => {
+
+export const getApplicationInfo = async (data: GetApplicationInfoReq): Promise<GetApplicationInfoRes> => {
   try {
-    const { result } = await request<{ applicationId: string }, ApplicationInfo>({
+    const { result } = await request<GetApplicationInfoReq, GetApplicationInfoRes>({
       url: 'application/applicationInfo',
       method: 'GET',
       data,
@@ -63,8 +75,9 @@ export const getAppInfo = async (data: { applicationId: string }): Promise<Appli
     };
   }
 };
-export const deleteApplication = async (data: DeleteApplicationReq) => {
-  await request<DeleteApplicationReq, string>({
+
+export const deleteApplication = async (data: DeleteApplicationReq): Promise<void> => {
+  await request<DeleteApplicationReq, void>({
     url: '/application/delete',
     method: 'DELETE',
     data,
