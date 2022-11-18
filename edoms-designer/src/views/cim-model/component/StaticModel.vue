@@ -29,7 +29,7 @@ import { ref } from 'vue';
 
 import { getDicData } from '@/api/model';
 import GridList from '@/components/GridList.vue';
-import { Mark } from '@/const/model-mark';
+import { ModelMark } from '@/const/model';
 
 import StaticModelTable from './StaticModelTable.vue';
 
@@ -40,7 +40,7 @@ const data = ref({
 const tableKey = ref();
 const loadData = async () => {
   const result: any = await getDicData({
-    mark: Mark.CIM_TABLE as string,
+    mark: ModelMark.CIM_TABLE as string,
   });
   data.value = result[0];
   tableKey.value = data.value.id;

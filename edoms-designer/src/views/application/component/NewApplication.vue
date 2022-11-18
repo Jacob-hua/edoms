@@ -56,8 +56,7 @@ import { computed, reactive, ref } from 'vue';
 import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import { createApplication } from '@/api/application';
-import { AppForm } from '@/api/application/type';
+import { createApplication, CreateApplicationReq } from '@/api/application';
 import NoData from '@/assets/img/no_data.png';
 import { useUpload } from '@/views/application/component/useUpload';
 
@@ -87,7 +86,7 @@ const dialogVisible = computed<boolean>({
   },
 });
 
-const applicationForm = reactive<AppForm>({
+const applicationForm = reactive<CreateApplicationReq>({
   name: '',
   description: '',
   thumbnailId: '',

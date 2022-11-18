@@ -1,8 +1,8 @@
 import { type Ref, isRef, ref } from 'vue';
 import { ElMessage, UploadFile, UploadFiles } from 'element-plus';
 
-import { AppForm } from '@/api/application/type';
-import { fileUpload } from '@/api/file';
+import { ApplicationInfo, CreateApplicationReq } from '@/api/application';
+import { uploadFile } from '@/api/file';
 interface UploadParameter {
   fileLimit: number;
   fileSize: number;
@@ -13,7 +13,7 @@ interface CheckParameter {
   deleteCount: number;
 }
 export const useUpload = (
-  dynamicValidateForm: AppForm | Ref<AppForm>,
+  dynamicValidateForm: ApplicationInfo | Ref<ApplicationInfo> | CreateApplicationReq,
   files: { url: string; uid?: string }[] = [],
   { fileLimit, fileSize }: UploadParameter = { fileLimit: 1, fileSize: 100 },
   acceptType: string = '.png, .jpg, .jpeg, .gif, .webp, .PNG, .JPG, .JPEG .GIF, .WEBP'
@@ -70,11 +70,11 @@ export const useUpload = (
     return true;
   };
   // TODO  上传upload 提成 回调
-  const upload = async (uploadFile: UploadFile) => {
-    const { contentId } = await fileUpload({
-      file: uploadFile.raw!,
-      fileType: uploadFile.raw?.type!,
-      fileName: uploadFile.name,
+  const upload = async (file: UploadFile) => {
+    const { contentId } = await uploadFile({
+      file: file.raw!,
+      fileType: file.raw?.type!,
+      fileName: file.name,
     });
     if (isRef(dynamicValidateForm)) {
       dynamicValidateForm.value.thumbnailId = contentId!;
@@ -95,10 +95,10 @@ export const useUpload = (
       deleteCount
     );
     if (isRef(dynamicValidateForm)) {
-      dynamicValidateForm.value.thumbnailId = null;
+      dynamicValidateForm.value.thumbnailId = undefined;
       return;
     }
-    dynamicValidateForm.thumbnailId = null;
+    dynamicValidateForm.thumbnailId = undefined;
   };
 
   const handlePictureCardPreview = (file: UploadFile) => {

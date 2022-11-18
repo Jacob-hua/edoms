@@ -1,5 +1,14 @@
 <template>
-  <BusinessCard title="动环监测" subtitle="DYNAMIC MONITORING" min-width="400" min-height="200">
+  <BusinessCard
+    title="动环监测"
+    :class="wrapperClassName"
+    subtitle="DYNAMIC MONITORING"
+    min-width="500"
+    min-height="200"
+  >
+    <template #operation>
+      <div class="operation" @click="handleTrigger">展开</div>
+    </template>
     <div class="dynamic-monitoring">
       <div v-for="({ icon, parameter, label }, index) in indicators" :key="index">
         <img :src="icon" />
@@ -36,6 +45,7 @@ const props = defineProps<{
 useApp(props);
 
 const indicators = ref<Indicator[]>([]);
+const wrapperClassName = ref<string>('');
 
 watchEffect(() => {
   indicators.value = props.config.indicators?.reduce(
@@ -46,6 +56,10 @@ watchEffect(() => {
     [] as Indicator[]
   );
 });
+
+const handleTrigger = () => {
+  wrapperClassName.value = wrapperClassName.value === '' ? 'open-wrapper' : '';
+};
 
 function getIconByIndicatorType(type: MEnvironmentIndicator) {
   const iconClassify = {
@@ -67,5 +81,10 @@ function getIconByIndicatorType(type: MEnvironmentIndicator) {
     flex-direction: column;
     align-items: center;
   }
+}
+.open-wrapper {
+  background-color: red;
+  width: auto !important;
+  overflow: auto !important;
 }
 </style>

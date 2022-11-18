@@ -1,14 +1,13 @@
 import { defineStore } from 'pinia';
 
-import { AppForm } from '@/api/application/type';
+import { CreateApplicationReq } from '@/api/application/type';
 
 export const useAppInfoStore = defineStore('appInfo', {
-  state: (): { appInfo: AppForm } => ({
+  state: (): { appInfo: CreateApplicationReq } => ({
     appInfo: {
       name: '',
       description: '',
       thumbnailId: '',
-      serviceAddress: null,
     },
   }),
   actions: {},

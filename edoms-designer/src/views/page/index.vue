@@ -129,7 +129,7 @@ const router = useRouter();
 const gridList = ref();
 const { formatTime } = useDate();
 interface Page {
-  pageId: bigint;
+  pageId: number;
   name: string;
   createBy: string;
   createTime: bigint;
@@ -213,7 +213,7 @@ const topMenus = [
     name: 'delete',
     label: '删除',
     action: () => {
-      ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      ElMessageBox.confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning',

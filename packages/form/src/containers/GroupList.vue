@@ -61,6 +61,14 @@ const addButtonText = computed(() => {
 const addable = computed(() => {
   if (!props.name) return false;
 
+  if (
+    props.config.maxItems &&
+    props.model[props.name].length &&
+    props.config.maxItems <= props.model[props.name].length
+  ) {
+    return false;
+  }
+
   if (typeof props.config.addable === 'function') {
     return props.config.addable(mForm, {
       model: props.model[props.name],
