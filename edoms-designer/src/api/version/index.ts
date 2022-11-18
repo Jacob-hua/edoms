@@ -1,12 +1,14 @@
 import {
   DeleteVersion,
-  RecoveryReq,
-  SaveVersionReq,
+  RecoveryVersionReq,
+  SaveWithVersionReq,
   UpdateVersionReq,
   VersionReq,
   VersionRes,
 } from '@/api/version/type';
 import { request } from '@/util/request';
+
+export * from './type';
 
 export const getVersionList = async (data: VersionReq): Promise<VersionRes> => {
   try {
@@ -18,15 +20,15 @@ export const getVersionList = async (data: VersionReq): Promise<VersionRes> => {
     return result;
   } catch (e) {
     return {
-      count: 1,
-      limit: '',
+      count: 0,
+      limit: 0,
+      page: 0,
       dataList: [],
-      page: '',
     };
   }
 };
 
-export const updateVersion = async (data: UpdateVersionReq) => {
+export const updateVersion = async (data: UpdateVersionReq): Promise<void> => {
   await request<UpdateVersionReq, void>({
     url: '/page/version/update',
     method: 'PUT',
@@ -34,16 +36,16 @@ export const updateVersion = async (data: UpdateVersionReq) => {
   });
 };
 
-export const saveWithVersion = async (data: SaveVersionReq) => {
-  await request<SaveVersionReq, void>({
+export const saveWithVersion = async (data: SaveWithVersionReq) => {
+  await request<SaveWithVersionReq, void>({
     url: '/page/version/save-with-version',
     method: 'POST',
     data,
   });
 };
 
-export const recoveryVersion = async (data: RecoveryReq) => {
-  await request<RecoveryReq, void>({
+export const recoveryVersion = async (data: RecoveryVersionReq) => {
+  await request<RecoveryVersionReq, void>({
     url: 'page/version/version-recovery',
     method: 'POST',
     data,
