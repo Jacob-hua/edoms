@@ -1,9 +1,11 @@
 <template>
   <div ref="wrapper" class="business-wrapper">
     <div class="business-wrapper-header">
-      <span class="title">{{ title }}</span>
-      <span class="subtitle">{{ subtitle }}</span>
-      <div class="operation">
+      <div class="title-wrapper">
+        <span class="title">{{ title }}</span>
+        <span class="subtitle">{{ subtitle }}</span>
+      </div>
+      <div class="operation-wrapper">
         <slot name="operation"></slot>
       </div>
     </div>
@@ -131,27 +133,26 @@ onUnmounted(() => {
   color: #ffffff85;
 }
 .business-wrapper-header {
-  display: grid;
-  grid-template-columns: auto 3fr auto;
-  column-gap: 1px;
+  display: flex;
   align-items: center;
-  grid-template-areas: 'title subtitle operation';
+  flex-direction: row;
+  justify-content: space-between;
   padding: 3px;
 
-  & > .title {
-    grid-area: title;
-    font-size: 16px;
-    font-weight: 400;
+  & > .title-wrapper {
+    display: flex;
+    .title {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .subtitle {
+      color: #ffffff45;
+      font-size: 10px;
+    }
   }
 
-  & > .subtitle {
-    grid-area: subtitle;
-    color: #ffffff45;
-    font-size: 10px;
-  }
-
-  & > .operation {
-    grid-area: operation;
+  & > .operation-wrapper {
     cursor: pointer;
   }
 }
