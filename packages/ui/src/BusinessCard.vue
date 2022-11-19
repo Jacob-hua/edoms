@@ -1,15 +1,15 @@
 <template>
   <div ref="wrapper" class="business-wrapper">
     <div class="business-wrapper-header">
-      <div class="title-wrapper" need-zoom>
+      <div class="title-wrapper" need-zoom="top;left">
         <span class="title">{{ title }}</span>
         <span class="subtitle">{{ subtitle }}</span>
       </div>
-      <div class="operation-wrapper" need-zoom>
+      <div class="operation-wrapper" need-zoom="top;right">
         <slot name="operation"></slot>
       </div>
     </div>
-    <div class="business-wrapper-body" need-zoom>
+    <div class="business-wrapper-body" need-zoom="top;left">
       <slot></slot>
     </div>
   </div>
@@ -95,11 +95,13 @@ const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
   styleObj['height'] = 'auto';
   wrapperEntry.target.setAttribute('style', styleObj2Str(styleObj));
   wrapperEntry.target.querySelectorAll('[need-zoom]').forEach((element: Element) => {
+    const origin = element.getAttribute('need-zoom') ?? 'top;left';
+
     element.setAttribute(
       'style',
       `
       transform:scale(${Math.min(widthScale, heightScale)});
-      transform-origin: top left;
+      transform-origin: ${origin.replace(';', ' ')};
       `
     );
   });
@@ -131,6 +133,7 @@ onUnmounted(() => {
   max-width: v-bind(cssMaxWidth);
   max-height: v-bind(cssMaxHeight);
   color: #ffffff85;
+  padding: 12px;
 }
 .business-wrapper-header {
   display: flex;
