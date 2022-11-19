@@ -47,7 +47,7 @@ const classNames = computed(() =>
 .pop-menu-option {
   cursor: pointer;
   border-bottom: 1px solid #333;
-  padding: 10px 0;
+  padding: 12px;
 
   &:hover {
     background-color: rgb(119, 118, 118);
