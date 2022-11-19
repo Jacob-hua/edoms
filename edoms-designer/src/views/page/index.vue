@@ -54,7 +54,7 @@
       <div class="right-top-bar">
         <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
         <div class="pop-menu-wrapper">
-          <PopMenu :width="350" @menu-click="handleTopMenuClick">
+          <PopMenu :width="330" @menu-click="handleTopMenuClick">
             <template #reference>
               <el-button type="primary" size="large">菜单</el-button>
             </template>
