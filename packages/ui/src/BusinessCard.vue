@@ -124,7 +124,6 @@ onUnmounted(() => {
 .business-wrapper {
   display: flex;
   flex-direction: column;
-  border: 3px solid #313131;
   border-radius: 3px;
   background-color: #2c2c2c;
   min-width: v-bind(cssMinWidth);
