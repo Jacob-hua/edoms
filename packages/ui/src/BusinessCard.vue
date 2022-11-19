@@ -1,11 +1,11 @@
 <template>
   <div ref="wrapper" class="business-wrapper">
     <div class="business-wrapper-header">
-      <div class="title-wrapper">
+      <div class="title-wrapper" need-zoom>
         <span class="title">{{ title }}</span>
         <span class="subtitle">{{ subtitle }}</span>
       </div>
-      <div class="operation-wrapper">
+      <div class="operation-wrapper" need-zoom>
         <slot name="operation"></slot>
       </div>
     </div>
@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 
-import { isNumber } from '@edoms/utils';
+import { isNumber, style2Obj, styleObj2Str } from '@edoms/utils';
 
 const props = defineProps<{
   title?: string;
@@ -90,10 +90,11 @@ const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
   const [wrapperEntry] = entries;
   const widthScale = (wrapperEntry.contentRect.width * 1.0) / (minWidth.value ?? 1);
   const heightScale = (wrapperEntry.contentRect.height * 1.0) / (minHeight.value ?? 1);
-  const style = `aspect-ratio:${scale.value};height: auto;`;
-  const originStyle = wrapperEntry.target.getAttribute('style');
-  wrapperEntry.target.setAttribute('style', originStyle ? `${originStyle};${style}` : style);
-  Array.from(wrapperEntry.target.children).forEach((element: Element) => {
+  const styleObj = style2Obj(wrapperEntry.target.getAttribute('style') ?? '');
+  styleObj['aspect-ratio'] = scale.value;
+  styleObj['height'] = 'auto';
+  wrapperEntry.target.setAttribute('style', styleObj2Str(styleObj));
+  wrapperEntry.target.querySelectorAll('[need-zoom]').forEach((element: Element) => {
     element.setAttribute(
       'style',
       `
