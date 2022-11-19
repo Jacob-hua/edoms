@@ -9,7 +9,7 @@
         <slot name="operation"></slot>
       </div>
     </div>
-    <div class="business-wrapper-body">
+    <div class="business-wrapper-body" need-zoom>
       <slot></slot>
     </div>
   </div>
