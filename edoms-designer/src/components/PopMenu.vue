@@ -1,5 +1,6 @@
 <template>
   <el-popover
+    popper-class="popper"
     :placement="placement"
     :width="width"
     :trigger="trigger"
@@ -82,7 +83,10 @@ provide<PopMenuProvide>('popMenu', {
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.el-popover.popper {
+  padding: 12px 0;
+}
 .reference {
   display: inline-block;
   cursor: pointer;

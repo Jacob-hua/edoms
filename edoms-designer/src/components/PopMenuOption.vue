@@ -48,6 +48,10 @@ const classNames = computed(() =>
   cursor: pointer;
   border-bottom: 1px solid #333;
   padding: 10px 0;
+
+  &:hover {
+    background-color: rgb(119, 118, 118);
+  }
 }
 
 .pop-menu-option-disabled {
