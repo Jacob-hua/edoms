@@ -11,3 +11,10 @@ export interface UploadFileReq {
   /** 文件名称 */
   fileName: string;
 }
+
+export interface DownloadFileReq {
+  /** 文件Id **/
+  contentId: string;
+  /** 是否是预览 **/
+  isPreview: boolean;
+}

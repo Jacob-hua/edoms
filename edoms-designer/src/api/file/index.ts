@@ -1,6 +1,6 @@
 import { request } from '@/util/request';
 
-import { UploadFileReq, UploadFileRes } from './type';
+import { DownloadFileReq, UploadFileReq, UploadFileRes } from './type';
 
 export * from './type';
 
@@ -22,4 +22,12 @@ export const uploadFile = async (data: UploadFileReq): Promise<UploadFileRes> =>
       contentId: null,
     };
   }
+};
+export const downloadFile = async (data: DownloadFileReq): Promise<any> => {
+  return await request<DownloadFileReq, any>({
+    url: '/file/download',
+    method: 'POST',
+    data,
+    responseType: 'blob',
+  });
 };

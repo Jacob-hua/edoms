@@ -30,7 +30,14 @@
         <el-table-column type="index" label="序号" width="100"></el-table-column>
         <el-table-column prop="action" label="操作"></el-table-column>
         <el-table-column prop="createBy" label="操作人"></el-table-column>
-        <el-table-column prop="fileName" label="文件名称"></el-table-column>
+        <el-table-column prop="fileName" label="文件名称">
+          <template #default="scope">
+            <span v-if="scope.row.fileName" class="file" @click="handleFileDownload(scope.row)">
+              {{ scope.row.fileName }}
+            </span>
+            <span v-else> - </span>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="操作时间"></el-table-column>
       </el-table>
       <div class="pagination">
@@ -52,6 +59,7 @@
 import { ref, watch } from 'vue';
 import { ElMessage, UploadFile } from 'element-plus';
 
+import { downloadFile } from '@/api/file';
 import { clearTable, exportTable, exportTableHistory, getTableHistory, importFile } from '@/api/model';
 import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
@@ -64,7 +72,7 @@ const props = withDefaults(
     data: any;
   }>(),
   {
-    data: () => {},
+    data: () => ({}),
   }
 );
 
@@ -80,7 +88,7 @@ const { execute, loading } = useExport(
       return [];
     }
   },
-  () => `${props.data.name}-${formatTime(new Date(), 'YYYY-MM-DD')}.csv`,
+  () => `${props.data.name}.csv`,
   MimeType.CSV
 );
 
@@ -92,7 +100,7 @@ const { execute: handleExportRecord, loading: recordLoading } = useExport(
     loadTableHistory();
     return result;
   },
-  () => `${props.data.name}的操作记录-${formatTime(new Date(), 'YYYY-MM-DD')}.xls`,
+  () => `${props.data.name}的操作记录.xls`,
   MimeType.EXCEL
 );
 const historyData = ref<any>([]);
@@ -137,10 +145,6 @@ const handleClearTable = async () => {
 };
 
 const handleFileChange = async (uploadFile: UploadFile) => {
-  const formData = new FormData();
-  formData.set('file', uploadFile.raw!);
-  formData.set('tableId', props.data.id!);
-  formData.set('fileName', uploadFile.name);
   await importFile({
     file: uploadFile.raw!,
     tableId: props.data.id!,
@@ -149,9 +153,28 @@ const handleFileChange = async (uploadFile: UploadFile) => {
   ElMessage.success('导入成功');
   loadTableHistory();
 };
+const { execute: handleFileDownload } = useExport(
+  async (data: any) => {
+    try {
+      const result = await downloadFile({
+        contentId: data.contentId,
+        isPreview: false,
+      });
+      return result;
+    } catch (e) {
+      return [];
+    }
+  },
+  () => `${props.data.name}.csv`,
+  MimeType.CSV
+);
 </script>
 
 <style lang="scss" scoped>
+.file {
+  color: #409eff;
+  cursor: pointer;
+}
 .table-container {
   .top-wrapper-right {
     display: flex;
