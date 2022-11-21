@@ -74,6 +74,7 @@ const { execute, loading } = useExport(
       const result = await exportTable({
         tableId: props.data.id,
       });
+      loadTableHistory();
       return result;
     } catch (e) {
       return [];
