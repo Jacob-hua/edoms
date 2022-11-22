@@ -70,7 +70,7 @@ const resultData = computed(() => {
   return data.value.filter((_: any, index: number) => !newIndexes.has(index));
 });
 
-const updateFormModel = (data: any[], isInit: boolean = false) => {
+const synchronizeFormModel = (data: any[], isInit: boolean = false) => {
   formModel.value.model = deepClone(data).map((row: any, index: number): FormModelItem => {
     if (index >= formModel.value.model.length) {
       return { data: { ...row }, isEditing: !isInit, isNew: !isInit };
@@ -81,12 +81,12 @@ const updateFormModel = (data: any[], isInit: boolean = false) => {
 };
 
 watchEffect(() => {
-  updateFormModel(data.value);
+  synchronizeFormModel(data.value);
 });
 
 onMounted(async () => {
   const result = await Promise.resolve(props.request());
-  updateFormModel([...data.value, ...result], true);
+  synchronizeFormModel([...data.value, ...result], true);
   data.value.push(...result);
 });
 
@@ -101,8 +101,8 @@ const deleteRow = (index: number) => {
   data.value = data.value.splice(index, 1);
 };
 
-const addRow = () => {
-  data.value.push({});
+const addRow = (row: any = {}) => {
+  data.value.push(row);
 };
 
 const cancelEditable = (index: number) => {

@@ -72,7 +72,10 @@ const handleAdd = () => {
   if (!editTable.value) {
     return;
   }
-  editTable.value.editActions.addRow();
+  editTable.value.editActions.addRow({
+    name: '测试',
+    age: 1212,
+  });
 };
 const handleNewData = () => {
   if (!editTable.value) {
