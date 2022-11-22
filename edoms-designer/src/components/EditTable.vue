@@ -28,10 +28,10 @@ export type RequestFunc<T> = (pagination: Pagination) => Promise<RequestResult<T
 export interface EditTableProvide {}
 
 export interface EditActions {
-  startEditable: (row: any) => void;
-  deleteRow: (row: any) => void;
-  cancelEditable: (row: any) => void;
-  saveEditable: (row: any) => void;
+  startEditable: (index: number) => void;
+  deleteRow: (index: number) => void;
+  cancelEditable: (index: number) => void;
+  saveEditable: (index: number) => void;
 }
 
 export interface FormModelItem {
