@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>可编辑表格测试</div>
-    <EditTable :data-source="data">
+    <EditTable ref="editTable" :data-source="data">
       <EditTableColumn prop="name" label="姓名" :rules="[{ required: true, message: '请输入姓名', trigger: 'blur' }]">
         <template #edit="{ row }">
           <el-input v-model="row.name" />
@@ -23,10 +23,15 @@
         </template>
       </EditTableColumn>
     </EditTable>
+    <el-button @click="handleAdd">新增</el-button>
+    <el-button @click="handleNewData">获取新数据</el-button>
+    {{ resultData }}
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
+
 import EditTable from '@/components/EditTable.vue';
 import EditTableColumn from '@/components/EditTableColumn.vue';
 
@@ -43,6 +48,10 @@ const data = [
   },
 ];
 
+const editTable = ref<any | null>(null);
+
+const resultData = ref<any[]>([]);
+
 const handleEdit = (actions: any, index: number) => {
   actions.startEditable(index);
 };
@@ -54,5 +63,17 @@ const handleCancel = (actions: any, index: number) => {
 };
 const handleSave = (actions: any, index: number) => {
   actions.saveEditable(index);
+};
+const handleAdd = () => {
+  if (!editTable.value) {
+    return;
+  }
+  editTable.value.editActions.addRow();
+};
+const handleNewData = () => {
+  if (!editTable.value) {
+    return;
+  }
+  resultData.value = editTable.value.resultData;
 };
 </script>

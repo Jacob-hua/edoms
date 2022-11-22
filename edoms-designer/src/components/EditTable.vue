@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { provide, Ref, ref, watchEffect } from 'vue';
+import { computed, provide, Ref, ref, watchEffect } from 'vue';
 
 import { deepClone } from '@edoms/utils';
 
@@ -28,14 +28,16 @@ export type RequestFunc<T> = (pagination: Pagination) => Promise<RequestResult<T
 export interface EditTableProvide {}
 
 export interface EditActions {
-  startEditable: (index: number) => void;
+  addRow: () => void;
   deleteRow: (index: number) => void;
+  startEditable: (index: number) => void;
   cancelEditable: (index: number) => void;
   saveEditable: (index: number) => void;
 }
 
 export interface FormModelItem {
   isEditing: boolean;
+  isNew: boolean;
   data: Record<string | number | symbol, any>;
 }
 
@@ -62,22 +64,35 @@ const props = withDefaults(
 const data = ref<any[]>(props.dataSource);
 
 const formModel = ref<FormModel>({
-  model: [],
+  model: data.value,
 });
 
 const form = ref<any | null>(null);
 
 const formProps = ref<FormProps>(new Set());
 
+const resultData = computed(() => {
+  const newIndexes = formModel.value.model.reduce((newIndexes: Set<number>, model: FormModelItem, index: number) => {
+    if (model.isNew) {
+      newIndexes.add(index);
+    }
+    return newIndexes;
+  }, new Set<number>());
+  return data.value.filter((_: any, index: number) => !newIndexes.has(index));
+});
+
 watchEffect(() => {
   formModel.value.model = deepClone(data.value).map((row: any, index: number): FormModelItem => {
-    if (!formModel.value.model[index]) {
-      return { data: { ...row }, isEditing: false };
+    if (index >= formModel.value.model.length) {
+      return { data: { ...row }, isEditing: true, isNew: true };
     }
     const formModelItem = formModel.value.model[index];
     return formModelItem;
   });
 });
+
+const generateValidateFields = (index: number) =>
+  Array.from(formProps.value).map((prop) => `model.${index}.data.${prop}`);
 
 const startEditable = (index: number) => {
   formModel.value.model[index].isEditing = true;
@@ -87,14 +102,22 @@ const deleteRow = (index: number) => {
   data.value = data.value.splice(index, 1);
 };
 
+const addRow = () => {
+  data.value.push({});
+};
+
 const cancelEditable = (index: number) => {
   if (!form.value) {
     return;
   }
 
-  const validateFields = Array.from(formProps.value).map((prop) => `model.${index}.data.${prop}`);
-  form.value.resetFields && form.value.resetFields(validateFields);
-  formModel.value.model[index].isEditing = false;
+  form.value.resetFields && form.value.resetFields(generateValidateFields(index));
+  const formModelItem = formModel.value.model[index];
+  if (formModelItem.isNew) {
+    data.value.splice(index, 1);
+  } else {
+    formModelItem.isEditing = false;
+  }
 };
 
 const saveEditable = (index: number) => {
@@ -102,30 +125,34 @@ const saveEditable = (index: number) => {
     return;
   }
 
-  const validateFields = Array.from(formProps.value).map((prop) => `model.${index}.data.${prop}`);
   form.value.validateField &&
-    form.value.validateField(validateFields, (validated: boolean) => {
+    form.value.validateField(generateValidateFields(index), (validated: boolean) => {
       if (!validated) {
         return;
       }
       const formModelItem = formModel.value.model[index];
       data.value.splice(index, 1, formModelItem.data);
       formModelItem.isEditing = false;
+      formModelItem.isNew = false;
     });
+};
+
+const editActions: EditActions = {
+  addRow,
+  deleteRow,
+  startEditable,
+  cancelEditable,
+  saveEditable,
 };
 
 provide<Ref<FormModel>>('formModel', formModel);
 
 provide<Ref<FormProps>>('formProps', formProps);
 
-provide<EditActions>('editActions', {
-  startEditable,
-  deleteRow,
-  cancelEditable,
-  saveEditable,
-});
+provide<EditActions>('editActions', editActions);
 
 defineExpose({
-  data,
+  resultData,
+  editActions,
 });
 </script>
