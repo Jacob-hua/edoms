@@ -13,13 +13,13 @@
         </template>
       </EditTableColumn>
       <EditTableColumn label="操作">
-        <template #default="{ actions, row }">
-          <el-button type="primary" @click="handleEdit(actions, row)">编辑</el-button>
-          <el-button type="primary" @click="handleDelete(actions, row)">删除</el-button>
+        <template #default="{ actions, $index }">
+          <el-button type="primary" @click="handleEdit(actions, $index)">编辑</el-button>
+          <el-button type="primary" @click="handleDelete(actions, $index)">删除</el-button>
         </template>
-        <template #edit="{ row, actions }">
-          <el-button type="primary" @click="handleSave(actions, row)">保存</el-button>
-          <el-button type="primary" @click="handleCancel(actions, row)">取消</el-button>
+        <template #edit="{ $index, actions }">
+          <el-button type="primary" @click="handleSave(actions, $index)">保存</el-button>
+          <el-button type="primary" @click="handleCancel(actions, $index)">取消</el-button>
         </template>
       </EditTableColumn>
     </EditTable>
@@ -43,16 +43,16 @@ const data = [
   },
 ];
 
-const handleEdit = (actions: any, row: any) => {
-  actions.startEditable(row);
+const handleEdit = (actions: any, index: number) => {
+  actions.startEditable(index);
 };
-const handleDelete = (actions: any, row: any) => {
-  actions.deleteRow(row);
+const handleDelete = (actions: any, index: number) => {
+  actions.deleteRow(index);
 };
-const handleCancel = (actions: any, row: any) => {
-  actions.cancelEditable(row);
+const handleCancel = (actions: any, index: number) => {
+  actions.cancelEditable(index);
 };
-const handleSave = (actions: any, row: any) => {
-  actions.saveEditable(row);
+const handleSave = (actions: any, index: number) => {
+  actions.saveEditable(index);
 };
 </script>

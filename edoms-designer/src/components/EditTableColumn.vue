@@ -1,7 +1,7 @@
 <template>
   <el-table-column :prop="prop" :label="label" :width="width">
     <template #default="scope">
-      <el-form-item v-if="isEditing(scope.row)" :prop="`data.${scope.$index}.${prop}`" :rules="rules">
+      <el-form-item v-if="isEditing(scope.$index)" :prop="`model.${scope.$index}.data.${prop}`" :rules="rules">
         <slot
           name="edit"
           :$index="scope.$index"
@@ -24,7 +24,7 @@ import { inject, Ref, watchEffect } from 'vue';
 
 import { getByPath } from '@edoms/utils';
 
-import { EditActions, EditingData, FormModel, FormProps } from './EditTable.vue';
+import { EditActions, FormModel, FormModelItem, FormProps } from './EditTable.vue';
 
 export interface Rule {}
 
@@ -50,8 +50,6 @@ const props = withDefaults(
 
 const editActions = inject<EditActions | undefined>('editActions');
 
-const editingData = inject<Ref<EditingData | undefined>>('editingData');
-
 const formModel = inject<Ref<FormModel | undefined>>('formModel');
 
 const formProps = inject<Ref<FormProps | undefined>>('formProps');
@@ -62,11 +60,11 @@ watchEffect(() => {
   }
 });
 
-const getEditRow = (index: number) => getByPath(formModel?.value ?? {}, `data.${index}`, {});
+const getEditModel = (index: number): FormModelItem => getByPath(formModel?.value ?? {}, `model.${index}`, {});
 
-const isEditing = (row: any): boolean => {
-  return editingData?.value?.has(row.id) ?? false;
-};
+const getEditRow = (index: number): any => getEditModel(index).data;
+
+const isEditing = (index: number): boolean => getEditModel(index).isEditing ?? false;
 
 const calculateColumnDefaultValue = (scope: ColumnScope) => {
   return scope.row?.[props.prop];

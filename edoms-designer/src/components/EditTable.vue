@@ -34,10 +34,13 @@ export interface EditActions {
   saveEditable: (row: any) => void;
 }
 
-export type EditingData = Set<any>;
+export interface FormModelItem {
+  isEditing: boolean;
+  data: Record<string | number | symbol, any>;
+}
 
 export interface FormModel {
-  data: any[];
+  model: FormModelItem[];
 }
 
 export type FormProps = Set<string>;
@@ -59,55 +62,61 @@ const props = withDefaults(
 const data = ref<any[]>(props.dataSource);
 
 const formModel = ref<FormModel>({
-  data: [],
+  model: [],
 });
 
 const form = ref<any | null>(null);
 
 const formProps = ref<FormProps>(new Set());
 
-const editingData = ref<EditingData>(new Set());
-
 watchEffect(() => {
-  formModel.value.data = deepClone(data.value);
+  formModel.value.model = deepClone(data.value).map((row: any, index: number): FormModelItem => {
+    if (!formModel.value.model[index]) {
+      return { data: { ...row }, isEditing: false };
+    }
+    const formModelItem = formModel.value.model[index];
+    return formModelItem;
+  });
 });
 
-const startEditable = (row: any) => {
-  const result = data.value.find((item) => item.id === row.id);
-  editingData.value.add(result.id);
+const startEditable = (index: number) => {
+  formModel.value.model[index].isEditing = true;
 };
 
-const deleteRow = (row: any) => {
-  data.value = data.value.filter(({ id }) => id !== row.id);
+const deleteRow = (index: number) => {
+  data.value = data.value.splice(index, 1);
 };
 
-const cancelEditable = (row: any) => {
-  formModel.value.data = deepClone(data.value);
-  editingData.value.delete(row.id);
-};
-
-const saveEditable = (row: any) => {
+const cancelEditable = (index: number) => {
   if (!form.value) {
     return;
   }
 
-  const index = data.value.findIndex(({ id }) => id === row.id);
-  const validateFields = Array.from(formProps.value).map((prop) => `data.${index}.${prop}`);
+  const validateFields = Array.from(formProps.value).map((prop) => `model.${index}.data.${prop}`);
+  form.value.resetFields && form.value.resetFields(validateFields);
+  formModel.value.model[index].isEditing = false;
+};
+
+const saveEditable = (index: number) => {
+  if (!form.value) {
+    return;
+  }
+
+  const validateFields = Array.from(formProps.value).map((prop) => `model.${index}.data.${prop}`);
   form.value.validateField &&
     form.value.validateField(validateFields, (validated: boolean) => {
       if (!validated) {
         return;
       }
-      data.value.splice(index, 1, formModel.value.data[index]);
-      cancelEditable(row);
+      const formModelItem = formModel.value.model[index];
+      data.value.splice(index, 1, formModelItem.data);
+      formModelItem.isEditing = false;
     });
 };
 
 provide<Ref<FormModel>>('formModel', formModel);
 
 provide<Ref<FormProps>>('formProps', formProps);
-
-provide<Ref<EditingData>>('editingData', editingData);
 
 provide<EditActions>('editActions', {
   startEditable,
