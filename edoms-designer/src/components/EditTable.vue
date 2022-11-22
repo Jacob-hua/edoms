@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form ref="form" :model="formModel">
-      <el-table :data="data">
+      <el-table :data="tableData">
         <slot> </slot>
       </el-table>
     </el-form>
@@ -9,9 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, provide, Ref, ref, watchEffect } from 'vue';
-
-import { deepClone } from '@edoms/utils';
+import { computed, onMounted, provide, Ref, ref } from 'vue';
 
 export type RequestResult<T> = T[];
 
@@ -50,44 +48,37 @@ const props = withDefaults(
   }
 );
 
-const data = ref<any[]>(props.dataSource);
-
 const formModel = ref<FormModel>({
-  model: data.value,
+  model: props.dataSource,
 });
 
 const form = ref<any | null>(null);
 
 const formProps = ref<FormProps>(new Set());
 
+const tableData = computed(() => formModel.value.model.map(({ data }) => data));
+
 const resultData = computed(() => {
-  const newIndexes = formModel.value.model.reduce((newIndexes: Set<number>, model: FormModelItem, index: number) => {
+  return formModel.value.model.reduce((resultData: any[], model: FormModelItem) => {
     if (model.isNew) {
-      newIndexes.add(index);
+      return resultData;
     }
-    return newIndexes;
-  }, new Set<number>());
-  return data.value.filter((_: any, index: number) => !newIndexes.has(index));
-});
-
-const synchronizeFormModel = (data: any[], isInit: boolean = false) => {
-  formModel.value.model = deepClone(data).map((row: any, index: number): FormModelItem => {
-    if (index >= formModel.value.model.length) {
-      return { data: { ...row }, isEditing: !isInit, isNew: !isInit };
-    }
-    const formModelItem = formModel.value.model[index];
-    return formModelItem;
-  });
-};
-
-watchEffect(() => {
-  synchronizeFormModel(data.value);
+    resultData.push({
+      ...model.data,
+    });
+    return resultData;
+  }, []);
 });
 
 onMounted(async () => {
   const result = await Promise.resolve(props.request());
-  synchronizeFormModel([...data.value, ...result], true);
-  data.value.push(...result);
+  formModel.value.model = result.map(
+    (row: any): FormModelItem => ({
+      data: { ...row },
+      isEditing: false,
+      isNew: false,
+    })
+  );
 });
 
 const generateValidateFields = (index: number) =>
@@ -98,11 +89,15 @@ const startEditable = (index: number) => {
 };
 
 const deleteRow = (index: number) => {
-  data.value = data.value.splice(index, 1);
+  formModel.value.model.splice(index, 1);
 };
 
 const addRow = (row: Record<any, any> = {}) => {
-  data.value.push(row);
+  formModel.value.model.push({
+    data: row,
+    isEditing: true,
+    isNew: true,
+  });
 };
 
 const cancelEditable = (index: number) => {
@@ -113,7 +108,7 @@ const cancelEditable = (index: number) => {
   form.value.resetFields && form.value.resetFields(generateValidateFields(index));
   const formModelItem = formModel.value.model[index];
   if (formModelItem.isNew) {
-    data.value.splice(index, 1);
+    formModel.value.model.splice(index, 1);
   } else {
     formModelItem.isEditing = false;
   }
@@ -130,7 +125,6 @@ const saveEditable = (index: number) => {
         return;
       }
       const formModelItem = formModel.value.model[index];
-      data.value.splice(index, 1, formModelItem.data);
       formModelItem.isEditing = false;
       formModelItem.isNew = false;
     });
