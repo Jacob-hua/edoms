@@ -20,7 +20,7 @@ export type RequestFunc<T> = () => Promise<RequestResult<T>> | RequestResult<T>;
 export interface EditTableProvide {}
 
 export interface EditActions {
-  addRow: () => void;
+  addRow: (row?: Record<any, any>) => void;
   deleteRow: (index: number) => void;
   startEditable: (index: number) => void;
   cancelEditable: (index: number) => void;
@@ -101,7 +101,7 @@ const deleteRow = (index: number) => {
   data.value = data.value.splice(index, 1);
 };
 
-const addRow = (row: any = {}) => {
+const addRow = (row: Record<any, any> = {}) => {
   data.value.push(row);
 };
 
