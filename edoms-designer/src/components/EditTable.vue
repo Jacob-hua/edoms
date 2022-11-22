@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, provide, Ref, ref } from 'vue';
+import { computed, onMounted, provide, Ref, ref, watch } from 'vue';
 
 export type RequestResult<T> = T[];
 
@@ -29,6 +29,7 @@ export interface FormModelItem {
   isEditing: boolean;
   isNew: boolean;
   data: Record<string | number | symbol, any>;
+  formData: Record<string | number | symbol, any>;
 }
 
 export interface FormModel {
@@ -49,7 +50,7 @@ const props = withDefaults(
 );
 
 const formModel = ref<FormModel>({
-  model: props.dataSource,
+  model: [],
 });
 
 const form = ref<any | null>(null);
@@ -70,15 +71,29 @@ const resultData = computed(() => {
   }, []);
 });
 
-onMounted(async () => {
-  const result = await Promise.resolve(props.request());
-  formModel.value.model = result.map(
+const convertFormModel = (data: any[]): FormModelItem[] =>
+  data.map(
     (row: any): FormModelItem => ({
       data: { ...row },
+      formData: { ...row },
       isEditing: false,
       isNew: false,
     })
   );
+
+watch(
+  () => props.dataSource,
+  (dataSource) => {
+    formModel.value.model = convertFormModel(dataSource ?? []);
+  },
+  {
+    immediate: true,
+  }
+);
+
+onMounted(async () => {
+  const result = await Promise.resolve(props.request());
+  formModel.value.model = convertFormModel(result ?? []);
 });
 
 const generateValidateFields = (index: number) =>
@@ -94,7 +109,8 @@ const deleteRow = (index: number) => {
 
 const addRow = (row: Record<any, any> = {}) => {
   formModel.value.model.push({
-    data: row,
+    data: { ...row },
+    formData: { ...row },
     isEditing: true,
     isNew: true,
   });
@@ -107,6 +123,7 @@ const cancelEditable = (index: number) => {
 
   form.value.resetFields && form.value.resetFields(generateValidateFields(index));
   const formModelItem = formModel.value.model[index];
+  formModelItem.formData = { ...formModelItem.data };
   if (formModelItem.isNew) {
     formModel.value.model.splice(index, 1);
   } else {
@@ -125,6 +142,7 @@ const saveEditable = (index: number) => {
         return;
       }
       const formModelItem = formModel.value.model[index];
+      formModelItem.data = { ...formModelItem.formData };
       formModelItem.isEditing = false;
       formModelItem.isNew = false;
     });

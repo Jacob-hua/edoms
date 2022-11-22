@@ -20,6 +20,7 @@
         <template #edit="{ $index, actions }">
           <el-button type="primary" @click="handleSave(actions, $index)">保存</el-button>
           <el-button type="primary" @click="handleCancel(actions, $index)">取消</el-button>
+          <el-button type="primary" @click="handleDelete(actions, $index)">删除</el-button>
         </template>
       </EditTableColumn>
     </EditTable>

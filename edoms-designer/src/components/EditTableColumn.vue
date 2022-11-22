@@ -1,7 +1,7 @@
 <template>
   <el-table-column :prop="prop" :label="label" :width="width">
     <template #default="scope">
-      <el-form-item v-if="isEditing(scope.$index)" :prop="`model.${scope.$index}.data.${prop}`" :rules="rules">
+      <el-form-item v-if="isEditing(scope.$index)" :prop="`model.${scope.$index}.formData.${prop}`" :rules="rules">
         <slot
           name="edit"
           :$index="scope.$index"
@@ -62,7 +62,7 @@ watchEffect(() => {
 
 const getEditModel = (index: number): FormModelItem => getByPath(formModel?.value ?? {}, `model.${index}`, {});
 
-const getEditRow = (index: number): any => getEditModel(index).data;
+const getEditRow = (index: number): any => getEditModel(index).formData;
 
 const isEditing = (index: number): boolean => getEditModel(index).isEditing ?? false;
 
