@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form ref="form" :model="formModel">
-      <el-table :data="formModel.data">
+      <el-table :data="data">
         <slot> </slot>
       </el-table>
     </el-form>
@@ -9,7 +9,9 @@
 </template>
 
 <script lang="ts" setup>
-import { provide, reactive, Ref, ref } from 'vue';
+import { provide, Ref, ref, watchEffect } from 'vue';
+
+import { deepClone } from '@edoms/utils';
 
 export interface Pagination {
   pageSize: number;
@@ -32,7 +34,11 @@ export interface EditActions {
   saveEditable: (row: any) => void;
 }
 
-export type EditingData = Map<any, any>;
+export type EditingData = Set<any>;
+
+export interface FormModel {
+  data: any[];
+}
 
 export type FormProps = Set<string>;
 
@@ -50,26 +56,33 @@ const props = withDefaults(
   }
 );
 
-const formModel = reactive({
-  data: props.dataSource,
+const data = ref<any[]>(props.dataSource);
+
+const formModel = ref<FormModel>({
+  data: [],
 });
 
 const form = ref<any | null>(null);
 
 const formProps = ref<FormProps>(new Set());
 
-const editingData = ref<EditingData>(new Map());
+const editingData = ref<EditingData>(new Set());
+
+watchEffect(() => {
+  formModel.value.data = deepClone(data.value);
+});
 
 const startEditable = (row: any) => {
-  const result = formModel.data.find((item) => item.id === row.id);
-  editingData.value.set(row.id, result);
+  const result = data.value.find((item) => item.id === row.id);
+  editingData.value.add(result.id);
 };
 
 const deleteRow = (row: any) => {
-  formModel.data = formModel.data.filter(({ id }) => id !== row.id);
+  data.value = data.value.filter(({ id }) => id !== row.id);
 };
 
 const cancelEditable = (row: any) => {
+  formModel.value.data = deepClone(data.value);
   editingData.value.delete(row.id);
 };
 
@@ -78,16 +91,19 @@ const saveEditable = (row: any) => {
     return;
   }
 
-  const index = formModel.data.findIndex(({ id }) => id === row.id);
+  const index = data.value.findIndex(({ id }) => id === row.id);
   const validateFields = Array.from(formProps.value).map((prop) => `data.${index}.${prop}`);
   form.value.validateField &&
     form.value.validateField(validateFields, (validated: boolean) => {
       if (!validated) {
         return;
       }
+      data.value.splice(index, 1, formModel.value.data[index]);
       cancelEditable(row);
     });
 };
+
+provide<Ref<FormModel>>('formModel', formModel);
 
 provide<Ref<FormProps>>('formProps', formProps);
 
@@ -98,5 +114,9 @@ provide<EditActions>('editActions', {
   deleteRow,
   cancelEditable,
   saveEditable,
+});
+
+defineExpose({
+  data,
 });
 </script>
