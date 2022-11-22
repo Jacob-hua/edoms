@@ -108,3 +108,21 @@ export const createDiv = ({ className, cssText }: { className: string; cssText: 
   el.style.cssText = cssText;
   return el;
 };
+
+export const style2Obj = (style: string) => {
+  return style.split(';').reduce((styleObj, attr) => {
+    if (attr.split(':').length !== 2) {
+      return styleObj;
+    }
+    const key = attr.split(':')[0].trim();
+    const value = attr.split(':')[1].trim();
+    styleObj[key] = value;
+    return styleObj;
+  }, {} as any);
+};
+
+export const styleObj2Str = (styleObj: Record<string, any>) => {
+  return Object.entries(styleObj).reduce((str, [key, value]) => {
+    return `${str};${key}:${value}`;
+  }, '');
+};

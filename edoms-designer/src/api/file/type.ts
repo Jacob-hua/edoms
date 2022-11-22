@@ -1,8 +1,3 @@
-export interface UploadFileRes {
-  /** 文件标识ID */
-  contentId: string | null;
-}
-
 export interface UploadFileReq {
   /** 文件 */
   file: File;

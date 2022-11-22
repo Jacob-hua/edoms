@@ -61,7 +61,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/test',
-    component: () => import('../views/cim-model/component/testTable.vue'),
+    component: () => import('../views/TestTable.vue'),
   },
 ];
 

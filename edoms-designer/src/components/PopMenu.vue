@@ -1,5 +1,6 @@
 <template>
   <el-popover
+    popper-class="popper"
     :placement="placement"
     :width="width"
     :trigger="trigger"
@@ -34,13 +35,15 @@ import { computed, provide } from 'vue';
 import { throttle } from '@edoms/utils';
 
 export interface PopMenuProvide {
-  handleClick?: (selectedValue: string | number) => void;
+  handleClick?: (value: string | number) => void;
+  handleHover?: (value: string | number) => void;
 }
 
 const props = withDefaults(
   defineProps<{
     disabled?: boolean;
     clickDelay?: number;
+    hoverDelay?: number;
     reference?: string;
     trigger?: string;
     placement?: string;
@@ -49,6 +52,7 @@ const props = withDefaults(
   {
     disabled: () => false,
     clickDelay: () => 0,
+    hoverDelay: () => 0,
     reference: () => 'More',
     trigger: () => 'click',
     placement: () => 'bottom',
@@ -58,15 +62,20 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (event: 'menuClick', selectedValue: string | number): void;
+  (event: 'menuClick', value: string | number): void;
+  (event: 'menuHover', value: string | number): void;
   (event: 'show'): void;
   (event: 'hide'): void;
 }>();
 
 const referenceClass = computed(() => (props.disabled ? ['reference', 'reference-disabled'] : ['reference']));
 
-const handleClick = (selectedValue: string | number) => {
-  emit('menuClick', selectedValue);
+const handleClick = (value: string | number) => {
+  emit('menuClick', value);
+};
+
+const handleHover = (value: string | number) => {
+  emit('menuHover', value);
 };
 
 const handlePopShow = () => {
@@ -79,10 +88,14 @@ const handlePopHide = () => {
 
 provide<PopMenuProvide>('popMenu', {
   handleClick: throttle(handleClick, props.clickDelay),
+  handleHover: throttle(handleHover, props.hoverDelay),
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.el-popover.popper {
+  padding: 12px 0;
+}
 .reference {
   display: inline-block;
   cursor: pointer;

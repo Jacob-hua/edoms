@@ -1,5 +1,5 @@
 <template>
-  <div :class="classNames" @click.stop="handleClick">
+  <div :class="classNames" @click.stop="handleClick" @mouseenter="handleHover">
     <slot :item="{ label, disabled }">
       <span>{{ label }}</span>
     </slot>
@@ -38,6 +38,18 @@ const handleClick = () => {
   }
 };
 
+const handleHover = () => {
+  if (props.disabled) {
+    return;
+  }
+  if (popMenuOptGroup?.disabled) {
+    return;
+  }
+  if (popMenu && typeof popMenu.handleHover === 'function') {
+    popMenu.handleHover(props.value);
+  }
+};
+
 const classNames = computed(() =>
   props.disabled || popMenuOptGroup?.disabled ? ['pop-menu-option', 'pop-menu-option-disabled'] : ['pop-menu-option']
 );
@@ -47,12 +59,17 @@ const classNames = computed(() =>
 .pop-menu-option {
   cursor: pointer;
   border-bottom: 1px solid #333;
-  padding: 10px 0;
+  padding: 12px;
+
+  &:hover {
+    background-color: rgb(119, 118, 118);
+  }
 }
 
 .pop-menu-option-disabled {
   cursor: auto;
   color: aliceblue;
   background-color: azure;
+  pointer-events: none;
 }
 </style>
