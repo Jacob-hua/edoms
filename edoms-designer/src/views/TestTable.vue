@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>可编辑表格测试</div>
-    <EditTable ref="editTable" :data-source="data">
+    <EditTable ref="editTable" :request="loadData">
       <EditTableColumn prop="name" label="姓名" :rules="[{ required: true, message: '请输入姓名', trigger: 'blur' }]">
         <template #edit="{ row }">
           <el-input v-model="row.name" />
@@ -47,6 +47,10 @@ const data = [
     age: 12333,
   },
 ];
+
+const loadData = async () => {
+  return data;
+};
 
 const editTable = ref<any | null>(null);
 

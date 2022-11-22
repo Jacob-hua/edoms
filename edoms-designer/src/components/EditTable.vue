@@ -9,21 +9,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, provide, Ref, ref, watchEffect } from 'vue';
+import { computed, onMounted, provide, Ref, ref, watchEffect } from 'vue';
 
 import { deepClone } from '@edoms/utils';
 
-export interface Pagination {
-  pageSize: number;
-  current: number;
-}
+export type RequestResult<T> = T[];
 
-export interface RequestResult<T> {
-  data: T[];
-  total: number;
-}
-
-export type RequestFunc<T> = (pagination: Pagination) => Promise<RequestResult<T>> | RequestResult<T>;
+export type RequestFunc<T> = () => Promise<RequestResult<T>> | RequestResult<T>;
 
 export interface EditTableProvide {}
 
@@ -54,10 +46,7 @@ const props = withDefaults(
   }>(),
   {
     dataSource: () => [],
-    request: () => ({
-      data: [],
-      total: 0,
-    }),
+    request: () => [],
   }
 );
 
@@ -81,14 +70,24 @@ const resultData = computed(() => {
   return data.value.filter((_: any, index: number) => !newIndexes.has(index));
 });
 
-watchEffect(() => {
-  formModel.value.model = deepClone(data.value).map((row: any, index: number): FormModelItem => {
+const updateFormModel = (data: any[], isInit: boolean = false) => {
+  formModel.value.model = deepClone(data).map((row: any, index: number): FormModelItem => {
     if (index >= formModel.value.model.length) {
-      return { data: { ...row }, isEditing: true, isNew: true };
+      return { data: { ...row }, isEditing: !isInit, isNew: !isInit };
     }
     const formModelItem = formModel.value.model[index];
     return formModelItem;
   });
+};
+
+watchEffect(() => {
+  updateFormModel(data.value);
+});
+
+onMounted(async () => {
+  const result = await Promise.resolve(props.request());
+  updateFormModel([...data.value, ...result], true);
+  data.value.push(...result);
 });
 
 const generateValidateFields = (index: number) =>
