@@ -97,7 +97,7 @@ onMounted(async () => {
 });
 
 const generateValidateFields = (index: number) =>
-  Array.from(formProps.value).map((prop) => `model.${index}.data.${prop}`);
+  Array.from(formProps.value).map((prop) => `model.${index}.formData.${prop}`);
 
 const startEditable = (index: number) => {
   formModel.value.model[index].isEditing = true;
