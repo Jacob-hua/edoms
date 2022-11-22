@@ -46,7 +46,7 @@ const loadData: RequestFunc<ApplicationInfo> = async ({ pageSize, current }) => 
   });
   dataList.forEach((item: ApplicationInfo) => {
     if (item.thumbnailId) {
-      item.imgUrl = `${import.meta.env.VITE_BASE_API}/file/download/?contentId=${item.thumbnailId}&isPreview=true`;
+      item.imgUrl = `${import.meta.env.VITE_BASE_API}/file/preview/?contentId=${item.thumbnailId}`;
     } else {
       item.imgUrl = NoData;
     }

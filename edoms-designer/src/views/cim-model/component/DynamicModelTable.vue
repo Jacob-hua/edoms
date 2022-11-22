@@ -205,7 +205,6 @@ const handleEditClick = ({ operate }: any) => {
   table.value.showTable = true;
 };
 const handleDelete = ({ operate: { row } }: any) => {
-  console.log(row);
   ElMessageBox.confirm('此操作将永久删除此行记录, 是否继续?', '提示', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
