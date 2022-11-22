@@ -94,7 +94,7 @@ export const exportTable = async (data: ExportTableReq): Promise<any> => {
   });
 };
 
-export const importFile = async (data: ImportTableReq): Promise<void> => {
+export const importTable = async (data: ImportTableReq): Promise<void> => {
   const formData = new FormData();
   formData.set('file', data.file!);
   formData.set('tableId', data.tableId);

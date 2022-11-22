@@ -7,13 +7,7 @@
       </div>
       <div class="top-wrapper-right">
         <el-button type="danger" size="large" @click="handleClearTable">清空</el-button>
-        <el-upload
-          class="upload-demo"
-          :auto-upload="false"
-          :limit="1"
-          :show-file-list="false"
-          :on-change="handleFileChange"
-        >
+        <el-upload class="upload-demo" :auto-upload="false" :show-file-list="false" :on-change="handleFileChange">
           <el-button size="large" type="primary">导入</el-button>
         </el-upload>
         <el-button :loading="loading" type="primary" size="large" @click="execute">导出</el-button>
@@ -60,7 +54,7 @@ import { ref, watch } from 'vue';
 import { ElMessage, UploadFile } from 'element-plus';
 
 import { downloadFile } from '@/api/file';
-import { clearTable, exportTable, exportTableHistory, getTableHistory, importFile } from '@/api/model';
+import { clearTable, exportTable, exportTableHistory, getTableHistory, importTable } from '@/api/model';
 import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
 import useExport from '@/hooks/useExport';
@@ -141,11 +135,12 @@ const handleClearTable = async () => {
   await clearTable({
     tableId: Number(props.data.id),
   });
+  loadTableHistory();
   ElMessage.success('清空成功');
 };
 
 const handleFileChange = async (uploadFile: UploadFile) => {
-  await importFile({
+  await importTable({
     file: uploadFile.raw!,
     tableId: props.data.id!,
     fileName: uploadFile.name,
@@ -158,7 +153,6 @@ const { execute: handleFileDownload } = useExport(
     try {
       const result = await downloadFile({
         contentId: data.contentId,
-        isPreview: false,
       });
       return result;
     } catch (e) {
