@@ -7,14 +7,9 @@ export interface UploadFileReq {
   fileName: string;
 }
 
-export interface UploadFileRes {
-  /** 文件标识ID */
-  contentId: string | null;
-}
-
 export interface DownloadFileReq {
-  /** 文件标识ID */
+  /** 文件Id **/
   contentId: string;
-  /** 是否预览 */
+  /** 是否是预览 **/
   isPreview: boolean;
 }

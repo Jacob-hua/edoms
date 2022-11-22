@@ -23,10 +23,9 @@ export const uploadFile = async (data: UploadFileReq): Promise<UploadFileRes> =>
     };
   }
 };
-
 export const downloadFile = async (data: DownloadFileReq): Promise<any> => {
   return await request<DownloadFileReq, any>({
-    url: 'file/download',
+    url: '/file/download',
     method: 'POST',
     data,
     responseType: 'blob',

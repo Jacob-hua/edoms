@@ -117,7 +117,7 @@ const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, ha
   useUpload(appInfo.value, [
     {
       url: appInfo.value.thumbnailId
-        ? `${import.meta.env.VITE_BASE_API}/file/download/?fileId=${appInfo.value?.thumbnailId}&isPreview=true`
+        ? `${import.meta.env.VITE_BASE_API}/file/download/?contentId=${appInfo.value?.thumbnailId}&isPreview=true`
         : NoData,
     },
   ]);
