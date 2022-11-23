@@ -1,46 +1,50 @@
 import path from 'path';
 
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 
-export default defineConfig({
-  plugins: [vue(), vueJsx()],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
 
-  resolve: {
-    alias: [
-      { find: /^vue$/, replacement: path.join(__dirname, 'node_modules/vue/dist/vue.esm-bundler.js') },
-      { find: /^@edoms\/utils/, replacement: path.join(__dirname, '../packages/utils/src/index.ts') },
-      { find: /^@edoms\/core/, replacement: path.join(__dirname, '../packages/core/src/index.ts') },
-      { find: /^@edoms\/schema/, replacement: path.join(__dirname, '../packages/schema/src/index.ts') },
-    ],
-  },
+  return {
+    plugins: [vue(), vueJsx()],
 
-  root: './',
+    resolve: {
+      alias: [
+        { find: /^vue$/, replacement: path.join(__dirname, 'node_modules/vue/dist/vue.esm-bundler.js') },
+        { find: /^@edoms\/utils/, replacement: path.join(__dirname, '../packages/utils/src/index.ts') },
+        { find: /^@edoms\/core/, replacement: path.join(__dirname, '../packages/core/src/index.ts') },
+        { find: /^@edoms\/schema/, replacement: path.join(__dirname, '../packages/schema/src/index.ts') },
+      ],
+    },
 
-  base: '/edoms-playground/runtime',
+    root: './',
 
-  publicDir: 'public',
+    base: env.VITE_BASE_URL,
 
-  server: {
-    host: '0.0.0.0',
-    port: 8078,
-    strictPort: true,
-  },
+    publicDir: './public',
 
-  build: {
-    sourcemap: true,
+    server: {
+      host: '0.0.0.0',
+      port: 8078,
+      strictPort: true,
+    },
 
-    cssCodeSplit: false,
+    build: {
+      sourcemap: true,
 
-    rollupOptions: {
-      input: {
-        page: './page/index.html',
-        playground: './playground/index.html',
-      },
-      output: {
-        entryFileNames: 'assets/[name].js',
+      cssCodeSplit: false,
+
+      rollupOptions: {
+        input: {
+          page: './page/index.html',
+          playground: './playground/index.html',
+        },
+        output: {
+          entryFileNames: 'assets/[name].js',
+        },
       },
     },
-  },
+  };
 });
