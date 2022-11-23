@@ -23,3 +23,7 @@ export interface IndicatorDataItem {
 }
 
 export type FetchEnvMonitoringRes = IndicatorDataItem[];
+
+export interface Apis {
+  fetchIndicatorData: (data: FetchEnvMonitoringReq) => Promise<FetchEnvMonitoringRes>;
+}

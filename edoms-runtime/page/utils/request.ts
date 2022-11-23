@@ -1,6 +1,6 @@
 import { App } from 'vue';
 
-import { ContentType, EdomsRequestConfig, EdomsResponseData, Request } from '@edoms/utils';
+import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, Request } from '@edoms/utils';
 
 const service = new Request({
   baseURL: import.meta.env.VITE_BASE_API,
@@ -24,6 +24,6 @@ const request = <D, R>(config: EdomsRequestConfig<D>): Promise<EdomsResponseData
 
 export default {
   install(app: App) {
-    app.provide('request', request);
+    app.provide<EdomsRequestFunc>('request', request);
   },
 };
