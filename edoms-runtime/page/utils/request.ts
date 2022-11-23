@@ -39,7 +39,7 @@ const service = new Request({
   },
 });
 
-const request = <D, R>(config: EdomsRequestConfig<D>) => {
+const request = <D, R>(config: EdomsRequestConfig<D>): Promise<ResponseData<R>> => {
   const { method = 'GET' } = config;
   if (method === 'GET') {
     config.params = config.data;

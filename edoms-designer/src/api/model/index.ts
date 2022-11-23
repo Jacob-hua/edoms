@@ -1,4 +1,4 @@
-import { request, ResponseData } from '@/util/request';
+import { EdomsResponseData, request } from '@/util/request';
 
 import {
   ClearTableReq,
@@ -163,8 +163,8 @@ export const getApi = async (data: GetApiReq): Promise<GetApiRes> => {
   }
 };
 
-export const simulationApi = async (data: SimulationApiReq): Promise<ResponseData<any>> => {
-  return await request<SimulationApiReq, ResponseData<any>>({
+export const simulationApi = async (data: SimulationApiReq): Promise<EdomsResponseData<any>> => {
+  return await request<SimulationApiReq, EdomsResponseData<any>>({
     url: '/cim-model/table/simulation',
     method: 'POST',
     data,

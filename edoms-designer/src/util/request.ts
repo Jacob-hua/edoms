@@ -13,12 +13,12 @@ export interface ErrorInfo {
   errorMsg?: string;
 }
 
-export interface ResponseData<T> {
+export interface EdomsResponseData<T> {
   errorInfo: ErrorInfo;
   result: T;
 }
 
-export interface EdomsResponse<T = any> extends AxiosResponse<ResponseData<T>, any> {
+export interface EdomsResponse<T = any> extends AxiosResponse<EdomsResponseData<T>, any> {
   [key: string]: any;
 }
 
@@ -77,7 +77,7 @@ const responseInterceptorsCatch = (error: EdomsError) => {
         message: '请求地址不存在',
       });
     } else if (response.data) {
-      const res = response.data as ResponseData<any>;
+      const res = response.data as EdomsResponseData<any>;
       if (res.errorInfo && res.errorInfo.errorCode) {
         ElMessage({
           type: 'error',
@@ -117,10 +117,10 @@ const service = new Request({
   },
 });
 
-export const request = <D, R>(config: EdomsRequestConfig<D>) => {
+export const request = <D, R>(config: EdomsRequestConfig<D>): Promise<EdomsResponseData<R>> => {
   const { method = 'GET' } = config;
   if (method === 'GET') {
     config.params = config.data;
   }
-  return service.request<ResponseData<R>>(config);
+  return service.request<EdomsResponseData<R>>(config);
 };
