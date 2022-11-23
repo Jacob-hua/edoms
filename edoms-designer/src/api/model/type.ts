@@ -1,5 +1,3 @@
-import { UploadRawFile } from 'element-plus';
-
 import type { ModelCodeType, ModelPropType, ModelTableActionType } from '@/const/model';
 import { KVStruct, PageStruct } from '@/const/struct';
 
@@ -123,7 +121,7 @@ export interface ExportTableReq {
 
 export interface ImportTableReq {
   /** 文件流 */
-  file: UploadRawFile;
+  file: File;
   /** 表id */
   tableId: string;
   /** 文件名称 */
