@@ -16,29 +16,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="封面" prop="thumbnailId">
-          <el-upload
-            v-model:file-list="fileList"
-            action="#"
-            :accept="accept"
-            list-type="picture-card"
-            :auto-upload="false"
-            :on-change="imgChange"
-          >
-            <el-icon><Plus /></el-icon>
-            <template #file="{ file }">
-              <div>
-                <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                <span class="el-upload-list__item-actions">
-                  <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                    <el-icon><ZoomIn /></el-icon>
-                  </span>
-                  <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-                    <el-icon><Delete /></el-icon>
-                  </span>
-                </span>
-              </div>
-            </template>
-          </el-upload>
+          <ImageUpload @get-content-id="getContentId"></ImageUpload>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -53,13 +31,10 @@
 
 <script lang="ts" setup name="newApp">
 import { computed, reactive, ref } from 'vue';
-import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
 import { createApplication, CreateApplicationReq } from '@/api/application';
-import NoData from '@/assets/img/no_data.png';
-import { useUpload } from '@/views/application/component/useUpload';
-
+import ImageUpload from '@/components/ImageUpload.vue';
 const props = withDefaults(
   defineProps<{
     visible?: boolean;
@@ -103,6 +78,9 @@ const formRules = {
   ],
 };
 
+const getContentId = (contentId: string) => {
+  applicationForm.thumbnailId = contentId;
+};
 const handleFormCancel = () => {
   dialogVisible.value = false;
 };
@@ -123,12 +101,12 @@ const handleFormSubmit = async () => {
     console.log(e);
   }
 };
-
-const { disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } = useUpload(applicationForm, [
-  {
-    url: NoData,
-  },
-]);
+//
+// const { disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } = useUpload(applicationForm, [
+//   {
+//     url: NoData,
+//   },
+// ]);
 </script>
 
 <style scoped lang="scss">

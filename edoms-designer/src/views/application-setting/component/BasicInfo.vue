@@ -44,8 +44,8 @@ import { ElMessage, FormInstance } from 'element-plus';
 import { updateApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
 import { UpdateApplicationReq } from '@/api/application/type';
+import PreviewImage from '@/components/ImagePreview.vue';
 import ImageUpload from '@/components/ImageUpload.vue';
-import PreviewImage from '@/components/PreviewImage.vue';
 
 const emit = defineEmits<{
   (event: 'back'): void;

@@ -8,7 +8,7 @@
 <script lang="ts" setup name="ImageUpload">
 import { onMounted, ref } from 'vue';
 
-import PreviewImage from '@/components/PreviewImage.vue';
+import PreviewImage from '@/components/ImagePreview.vue';
 import useSelectUpload from '@/hooks/useSelectUpload';
 const defaultProps = withDefaults(
   defineProps<{

@@ -23,9 +23,9 @@
 import { useRouter } from 'vue-router';
 
 import { ApplicationInfo } from '@/api/application/type';
+import PreviewImage from '@/components/ImagePreview.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
-import PreviewImage from '@/components/PreviewImage.vue';
 
 const props = withDefaults(
   defineProps<{
