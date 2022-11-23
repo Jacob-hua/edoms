@@ -1,31 +1,6 @@
 import { App } from 'vue';
 
-import { AxiosResponse, ContentType, Method, Request, RequestConfig, RequestError } from '@edoms/utils';
-
-export interface EdomsRequestConfig<T = any> extends RequestConfig {
-  method?: Method;
-  loading?: boolean;
-  data?: T;
-}
-
-export interface ErrorInfo {
-  errorCode?: string | number;
-  errorMsg?: string;
-}
-
-export interface ResponseData<T> {
-  errorInfo: ErrorInfo;
-  result: T;
-}
-
-export interface EdomsResponse<T = any> extends AxiosResponse<ResponseData<T>, any> {
-  [key: string]: any;
-}
-
-export interface EdomsError extends RequestError {
-  config: EdomsRequestConfig;
-  response?: EdomsResponse;
-}
+import { ContentType, EdomsRequestConfig, EdomsResponseData, Request } from '@edoms/utils';
 
 const service = new Request({
   baseURL: import.meta.env.VITE_BASE_API,
@@ -39,12 +14,12 @@ const service = new Request({
   },
 });
 
-const request = <D, R>(config: EdomsRequestConfig<D>): Promise<ResponseData<R>> => {
+const request = <D, R>(config: EdomsRequestConfig<D>): Promise<EdomsResponseData<R>> => {
   const { method = 'GET' } = config;
   if (method === 'GET') {
     config.params = config.data;
   }
-  return service.request<ResponseData<R>>(config);
+  return service.request<EdomsResponseData<R>>(config);
 };
 
 export default {
