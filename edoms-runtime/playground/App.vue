@@ -32,6 +32,16 @@ export default defineComponent({
       designWidth,
       config: root.value,
       platform: 'editor',
+      requestConfig: {
+        baseURL: '',
+        timeout: 1000 * 10,
+        retry: 2,
+        retryDelay: 1000,
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      },
     });
 
     window.appInstance = app;

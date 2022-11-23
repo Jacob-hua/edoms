@@ -31,6 +31,16 @@ const app = new Core({
   designWidth,
   config: ((getUrlParam('localPreview') ? getLocalConfig() : window.edomsDSL) || [])[0] || {},
   curPage: getUrlParam('page'),
+  requestConfig: {
+    baseURL: '',
+    timeout: 1000 * 10,
+    retry: 2,
+    retryDelay: 1000,
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+  },
 });
 
 edomsApp.config.globalProperties.app = app;

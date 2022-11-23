@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@edoms/schema": "workspace:^0.0.1",
+    "@edoms/utils": "workspace:^0.0.1",
     "dot": "2.0.0-beta.1",
     "events": "^3.3.0",
     "lodash-es": "^4.17.21"

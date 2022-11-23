@@ -1,11 +1,13 @@
 import { EventEmitter } from 'events';
 
 import { Callback, CodeBlockDSL, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
+import { RequestConfig } from '@edoms/utils';
 
 import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
 import type Node from './Node';
 import Page from './Page';
+import useRequest, { RequestFunc } from './request';
 import Store from './Store';
 import { calculateMethodProps, fillBackgroundImage, isNumber, style2Obj } from './utils';
 
@@ -17,6 +19,7 @@ interface AppOptionsConfig {
   designWidth?: number;
   curPage?: Id;
   transformStyle?: (style: Record<string, any>) => Record<string, any>;
+  requestConfig?: RequestConfig;
 }
 
 interface EventCache {
@@ -36,6 +39,8 @@ class App extends EventEmitter {
   public jsEngine = 'browser';
   public designWidth = 375;
 
+  public requestFunc: RequestFunc;
+
   public components = new Map();
 
   public eventQueueMap: Record<string, EventCache[]> = {};
@@ -51,6 +56,8 @@ class App extends EventEmitter {
     options.platform && (this.platform = options.platform);
     options.jsEngine && (this.jsEngine = options.jsEngine);
     options.designWidth && (this.designWidth = options.designWidth);
+
+    this.requestFunc = useRequest(options.requestConfig);
 
     // 根据屏幕大小计算出跟节点的font-size，用于rem样式的适配
     if (this.platform === 'mobile' || this.platform === 'editor') {
