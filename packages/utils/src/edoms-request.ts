@@ -24,3 +24,5 @@ export interface EdomsError extends RequestError {
   config: EdomsRequestConfig;
   response?: EdomsResponse;
 }
+
+export type EdomsRequestFunc = <D, R>(config: EdomsRequestConfig<D>) => Promise<EdomsResponseData<R>>;
