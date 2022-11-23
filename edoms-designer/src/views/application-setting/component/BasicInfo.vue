@@ -21,44 +21,14 @@
         </div>
       </el-form-item>
       <el-form-item label="封面">
-        <el-upload
-          v-model:file-list="fileList"
-          action="#"
-          :accept="accept"
-          list-type="picture-card"
-          :auto-upload="false"
-          :on-change="imgChange"
-        >
-          <el-icon><Plus /></el-icon>
-          <template #file="{ file }">
-            <div class="modal">
-              <el-image :src="file.url">
-                <template #error>
-                  <div class="image-slot">
-                    <img alt="" :src="NoData" />
-                  </div>
-                </template>
-              </el-image>
-              <span class="el-upload-list__item-actions">
-                <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                  <el-icon><ZoomIn /></el-icon>
-                </span>
-                <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-                  <el-icon><Delete /></el-icon>
-                </span>
-              </span>
-            </div>
-          </template>
-        </el-upload>
+        <ImageUpload
+          :thumbnail-id="appInfo.thumbnailId"
+          @get-content-id="getContentId"
+          @preview="handlePreview"
+        ></ImageUpload>
         <div class="preview-wrapper">
           <el-dialog v-model="dialogVisible">
-            <el-image :src="dialogImageUrl">
-              <template #error>
-                <div class="image-slot">
-                  <img alt="" :src="NoData" />
-                </div>
-              </template>
-            </el-image>
+            <preview-image :content-id="appInfo.thumbnailId"></preview-image>
           </el-dialog>
         </div>
       </el-form-item>
@@ -74,8 +44,8 @@ import { ElMessage, FormInstance } from 'element-plus';
 import { updateApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
 import { UpdateApplicationReq } from '@/api/application/type';
-import NoData from '@/assets/img/no_data.png';
-import { useUpload } from '@/views/application/component/useUpload';
+import PreviewImage from '@/components/ImagePreview.vue';
+import ImageUpload from '@/components/ImageUpload.vue';
 
 const emit = defineEmits<{
   (event: 'back'): void;
@@ -113,16 +83,17 @@ const rules = {
   serviceAddress: [],
 };
 const { appInfo } = toRefs(props);
-const { dialogImageUrl, dialogVisible, disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } =
-  useUpload(appInfo.value, [
-    {
-      url: appInfo.value.thumbnailId
-        ? `${import.meta.env.VITE_BASE_API}/file/preview/?contentId=${appInfo.value.thumbnailId}`
-        : NoData,
-    },
-  ]);
+const dialogVisible = ref<boolean>(false);
 
 const formRef = ref<FormInstance>();
+
+const getContentId = (contentId: string) => {
+  appInfo.value.thumbnailId = contentId;
+};
+const handlePreview = () => {
+  dialogVisible.value = true;
+};
+
 const updateApp = async ({ applicationId, name, description, thumbnailId, serviceAddress }: UpdateApplicationReq) => {
   await updateApplication({
     applicationId,

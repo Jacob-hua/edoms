@@ -32,24 +32,17 @@ import { ref } from 'vue';
 
 import { listApplications } from '@/api/application';
 import { ApplicationInfo, ListApplicationsRes } from '@/api/application/type';
-import NoData from '@/assets/img/no_data.png';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 
 import ApplicationItem from './component/ApplicationItem.vue';
 import NewApplication from './component/NewApplication.vue';
 const gridList = ref();
 const visible = ref<boolean>(false);
+
 const loadData: RequestFunc<ApplicationInfo> = async ({ pageSize, current }) => {
   const { dataList, count }: ListApplicationsRes = await listApplications({
     page: current,
     limit: pageSize,
-  });
-  dataList.forEach((item: ApplicationInfo) => {
-    if (item.thumbnailId) {
-      item.imgUrl = `${import.meta.env.VITE_BASE_API}/file/preview/?contentId=${item.thumbnailId}`;
-    } else {
-      item.imgUrl = NoData;
-    }
   });
   return {
     data: dataList,
