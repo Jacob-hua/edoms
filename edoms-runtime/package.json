@@ -29,7 +29,6 @@
     "@edoms/utils": "workspace:^0.0.1",
     "@vitejs/plugin-legacy": "^2.2.0",
     "@vitejs/plugin-vue-jsx": "^1.3.10",
-    "axios": "^0.25.0",
     "terser": "^5.14.2",
     "vue": "^3.2.37"
   },
