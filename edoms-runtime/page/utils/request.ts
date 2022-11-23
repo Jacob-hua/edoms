@@ -1,3 +1,5 @@
+import { App } from 'vue';
+
 import { AxiosResponse, ContentType, Method, Request, RequestConfig, RequestError } from '@edoms/utils';
 
 export interface EdomsRequestConfig<T = any> extends RequestConfig {
@@ -25,30 +27,28 @@ export interface EdomsError extends RequestError {
   response?: EdomsResponse;
 }
 
-export type RequestFunc = <D, R>(config: EdomsRequestConfig<D>) => Promise<ResponseData<R>>;
-
-const defaultConfig: RequestConfig = {
-  baseURL: '',
+const service = new Request({
+  baseURL: import.meta.env.VITE_BASE_API,
   timeout: 1000 * 10,
+  retry: 2,
+  retryDelay: 1000,
   withCredentials: true,
   headers: {
     'Content-Type': ContentType.JSON,
+    tenantId: 70,
   },
+});
+
+const request = <D, R>(config: EdomsRequestConfig<D>) => {
+  const { method = 'GET' } = config;
+  if (method === 'GET') {
+    config.params = config.data;
+  }
+  return service.request<ResponseData<R>>(config);
 };
 
-export default (config?: RequestConfig): RequestFunc => {
-  const service = new Request({
-    ...defaultConfig,
-    ...config,
-  });
-
-  const request: RequestFunc = <D, R>(config: EdomsRequestConfig<D>): Promise<ResponseData<R>> => {
-    const { method = 'GET' } = config;
-    if (method === 'GET') {
-      config.params = config.data;
-    }
-    return service.request<ResponseData<R>>(config);
-  };
-
-  return request;
+export default {
+  install(app: App) {
+    app.provide('request', request);
+  },
 };
