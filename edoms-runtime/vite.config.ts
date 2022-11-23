@@ -48,7 +48,7 @@ export default defineConfig(({ mode }) => {
 
       root: `./${type}/`,
 
-      publicDir: '../public',
+      publicDir: './public',
 
       base,
 
