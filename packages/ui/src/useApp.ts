@@ -2,12 +2,14 @@ import { getCurrentInstance, inject, onMounted, onUnmounted, onUpdated } from 'v
 
 import Core from '@edoms/core';
 import { Callback, MNodeInstance } from '@edoms/schema';
+import { EdomsRequestFunc } from '@edoms/utils';
 
 import useCommonMethod from './useCommonMethod';
 
 export default (props: any) => {
   const app: Core | undefined = inject('app');
   const node = app?.page?.getNode(props.config.id);
+  const request = inject<EdomsRequestFunc | undefined>('request');
 
   const instance: MNodeInstance = {};
 
@@ -45,5 +47,6 @@ export default (props: any) => {
   return {
     app,
     provideMethod,
+    request,
   };
 };

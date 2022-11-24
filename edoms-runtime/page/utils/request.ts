@@ -1,24 +1,29 @@
 import { App } from 'vue';
-import axios, { AxiosResponse } from 'axios';
 
-const service = axios.create({
+import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, Request } from '@edoms/utils';
+
+const service = new Request({
+  baseURL: import.meta.env.VITE_BASE_API,
+  timeout: 1000 * 10,
+  retry: 2,
+  retryDelay: 1000,
   withCredentials: true,
-  timeout: 7000,
+  headers: {
+    'Content-Type': ContentType.JSON,
+    tenantId: 70,
+  },
 });
 
-const requestHandler = function (config: Record<any, any>) {
-  return config;
+const request = <D, R>(config: EdomsRequestConfig<D>): Promise<EdomsResponseData<R>> => {
+  const { method = 'GET' } = config;
+  if (method === 'GET') {
+    config.params = config.data;
+  }
+  return service.request<EdomsResponseData<R>>(config);
 };
-
-const responseHandler = function (response: AxiosResponse) {
-  return response;
-};
-
-service.interceptors.request.use(requestHandler);
-service.interceptors.response.use(responseHandler);
 
 export default {
   install(app: App) {
-    app.provide('request', service);
+    app.provide<EdomsRequestFunc>('request', request);
   },
 };

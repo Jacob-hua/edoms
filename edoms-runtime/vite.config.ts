@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
@@ -8,8 +8,10 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import externalGlobals from 'rollup-plugin-external-globals';
 
 export default defineConfig(({ mode }) => {
+  const [type, isAdmin] = mode.split(':');
+  const env = loadEnv(isAdmin ? 'admin' : 'development', process.cwd(), '');
+
   if (['value', 'config', 'event', 'value:admin', 'config:admin', 'event:admin'].includes(mode)) {
-    const [type, isAdmin] = mode.split(':');
     const capitalToken = type.charAt(0).toUpperCase() + type.slice(1);
     return {
       publicDir: './.edoms/public',
@@ -18,7 +20,7 @@ export default defineConfig(({ mode }) => {
         sourcemap: true,
         minify: false,
         target: 'esnext',
-        outDir: isAdmin ? `./dist/entry/${type}` : `./public/entry/${type}`,
+        outDir: `${env.VITE_ENTRY_OUT_DIR}/${type}`,
 
         lib: {
           entry: `.edoms/${type}-entry.ts`,
@@ -31,11 +33,8 @@ export default defineConfig(({ mode }) => {
   }
 
   if (['page', 'playground', 'page:admin', 'playground:admin'].includes(mode)) {
-    const [type, isAdmin] = mode.split(':');
-    const base = isAdmin ? `/edoms-runtime-dev/runtime/${type}/` : `/edoms-playground/runtime/${type}`;
-    const outDir = isAdmin
-      ? path.resolve(process.cwd(), `./dist/runtime/${type}`)
-      : path.resolve(process.cwd(), `./public/runtime/${type}`);
+    const base = `${env.VITE_BASE_URL}/${type}/`;
+    const outDir = path.resolve(process.cwd(), `${env.VITE_OUT_DIR}/${type}`);
     return {
       plugins: [
         vue(),
@@ -48,7 +47,7 @@ export default defineConfig(({ mode }) => {
 
       root: `./${type}/`,
 
-      publicDir: '../public',
+      publicDir: './public',
 
       base,
 

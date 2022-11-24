@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from '../../types';
@@ -30,6 +30,7 @@ import GasImg from './assets/gas.png';
 import LiquidDepthImg from './assets/liquidDepth.png';
 import MoistureImg from './assets/moisture.png';
 import TemperatureImg from './assets/temperature.png';
+import apiFactory from './api';
 
 interface Indicator {
   icon: string;
@@ -42,7 +43,18 @@ const props = defineProps<{
   config: MDynamicMonitoring;
 }>();
 
-useApp(props);
+const { request } = useApp(props);
+
+const apis = apiFactory(request);
+
+onMounted(() => {
+  apis
+    .fetchIndicatorData({
+      sysInsCode: '',
+      dataList: [],
+    })
+    .then((res) => console.log('====', res));
+});
 
 const indicators = ref<Indicator[]>([]);
 const wrapperClassName = ref<string>('');

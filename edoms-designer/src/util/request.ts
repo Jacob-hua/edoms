@@ -1,31 +1,6 @@
 import { ElLoading, ElMessage } from 'element-plus';
 
-import { AxiosResponse, ContentType, Method, Request, RequestConfig, RequestError } from '@edoms/utils';
-
-export interface EdomsRequestConfig<T = any> extends RequestConfig {
-  method?: Method;
-  loading?: boolean;
-  data?: T;
-}
-
-export interface ErrorInfo {
-  errorCode?: string | number;
-  errorMsg?: string;
-}
-
-export interface ResponseData<T> {
-  errorInfo: ErrorInfo;
-  result: T;
-}
-
-export interface EdomsResponse<T = any> extends AxiosResponse<ResponseData<T>, any> {
-  [key: string]: any;
-}
-
-export interface EdomsError extends RequestError {
-  config: EdomsRequestConfig;
-  response?: EdomsResponse;
-}
+import { ContentType, EdomsError, EdomsRequestConfig, EdomsResponse, EdomsResponseData, Request } from '@edoms/utils';
 
 export interface LoadingService {
   close: () => void;
@@ -77,7 +52,7 @@ const responseInterceptorsCatch = (error: EdomsError) => {
         message: '请求地址不存在',
       });
     } else if (response.data) {
-      const res = response.data as ResponseData<any>;
+      const res = response.data as EdomsResponseData<any>;
       if (res.errorInfo && res.errorInfo.errorCode) {
         ElMessage({
           type: 'error',
@@ -117,10 +92,10 @@ const service = new Request({
   },
 });
 
-export const request = <D, R>(config: EdomsRequestConfig<D>) => {
+export const request = <D, R>(config: EdomsRequestConfig<D>): Promise<EdomsResponseData<R>> => {
   const { method = 'GET' } = config;
   if (method === 'GET') {
     config.params = config.data;
   }
-  return service.request<ResponseData<R>>(config);
+  return service.request<EdomsResponseData<R>>(config);
 };

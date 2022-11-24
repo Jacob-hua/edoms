@@ -5,6 +5,8 @@ export * from './dom';
 
 export * from './request';
 
+export * from './edoms-request';
+
 export * from './date';
 
 export * from './url';
