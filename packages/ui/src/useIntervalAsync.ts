@@ -1,6 +1,7 @@
 import { ref, watchEffect } from 'vue';
 
 export default <R = unknown>(callback: () => Promise<R>, delay: number) => {
+  // 是否存在正在执行的任务
   const runningCount = ref<number>(0);
   const timeout = ref<number | null>(null);
   const mounted = ref<boolean>(false);
