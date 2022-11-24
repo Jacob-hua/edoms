@@ -1,4 +1,6 @@
-import { EdomsResponseData, request } from '@/util/request';
+import { EdomsResponseData } from '@edoms/utils';
+
+import { request } from '@/util/request';
 
 import {
   ClearTableReq,
