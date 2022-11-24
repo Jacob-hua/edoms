@@ -55,7 +55,6 @@ const appInfo = ref<ApplicationInfo>({
 });
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
   const result = await getApplicationInfo({ applicationId } as { applicationId: string });
-  console.log(result);
   appInfoVisible.value = true;
   appInfo.value = result;
 };

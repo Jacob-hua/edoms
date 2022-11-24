@@ -1,13 +1,7 @@
 <template>
   <div class="app-wrapper">
     <div class="app-box">
-      <el-image :src="application.imgUrl" @click="handleGoPage">
-        <template #error>
-          <div class="image-slot">
-            <img alt="" :src="NoData" @click="handleGoPage" />
-          </div>
-        </template>
-      </el-image>
+      <PreviewImage :content-id="application.thumbnailId" @image-click="handleGoPage" />
       <div class="pop-menu">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
@@ -29,7 +23,7 @@
 import { useRouter } from 'vue-router';
 
 import { ApplicationInfo } from '@/api/application/type';
-import NoData from '@/assets/img/no_data.png';
+import PreviewImage from '@/components/ImagePreview.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 

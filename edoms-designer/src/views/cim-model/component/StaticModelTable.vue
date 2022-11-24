@@ -7,9 +7,7 @@
       </div>
       <div class="top-wrapper-right">
         <el-button type="danger" size="large" @click="handleClearTable">清空</el-button>
-        <el-upload class="upload-demo" :auto-upload="false" :show-file-list="false" :on-change="handleFileChange">
-          <el-button size="large" type="primary">导入</el-button>
-        </el-upload>
+        <el-button :loading="fileLoading" size="large" type="primary" @click="handleFileChange">导入</el-button>
         <el-button :loading="loading" type="primary" size="large" @click="execute">导出</el-button>
       </div>
     </div>
@@ -51,15 +49,16 @@
 
 <script lang="ts" setup name="StaticModelTable">
 import { ref, watch } from 'vue';
-import { ElMessage, UploadFile } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 import { downloadFile } from '@/api/file';
 import { clearTable, exportTable, exportTableHistory, getTableHistory, importTable } from '@/api/model';
 import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
 import useExport from '@/hooks/useExport';
-
+import useSelectFile from '@/hooks/useSelectFile';
 const { formatTime } = useDate();
+const { execute: selectFile, loading: fileLoading } = useSelectFile(['.csv']);
 
 const props = withDefaults(
   defineProps<{
@@ -139,14 +138,23 @@ const handleClearTable = async () => {
   ElMessage.success('清空成功');
 };
 
-const handleFileChange = async (uploadFile: UploadFile) => {
-  await importTable({
-    file: uploadFile.raw!,
-    tableId: props.data.id!,
-    fileName: uploadFile.name,
-  });
-  ElMessage.success('导入成功');
-  loadTableHistory();
+const handleFileChange = async () => {
+  ElMessageBox.confirm('此操作将清空上次导入表数据, 是否继续?', '提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      const file = (await selectFile())?.[0]!;
+      await importTable({
+        file,
+        tableId: props.data.id!,
+        fileName: file.name,
+      });
+      ElMessage.success('导入成功');
+      loadTableHistory();
+    })
+    .catch(() => {});
 };
 const { execute: handleFileDownload } = useExport(
   async (data: any) => {
