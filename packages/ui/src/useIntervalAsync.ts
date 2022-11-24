@@ -1,23 +1,19 @@
 import { ref, watchEffect } from 'vue';
 
-export default <R = unknown>(callback: () => Promise<R>, delay: number) => {
-  // 是否存在正在执行的任务
-  const runningCount = ref<number>(0);
+export type Callback = (...args: any[]) => any;
+
+export default (callback: Callback, delay: number) => {
+  const running = ref<boolean>(false);
   const timeout = ref<number | null>(null);
   const mounted = ref<boolean>(false);
 
-  const next = (handler: TimerHandler) => {
-    if (mounted.value && runningCount.value === 0) {
-      timeout.value = globalThis.setTimeout(handler, delay);
-    }
-  };
-
-  const run = async () => {
-    runningCount.value += 1;
+  const run: TimerHandler = async () => {
+    running.value = true;
     const result = await callback();
-    runningCount.value -= 1;
-
-    next(run);
+    running.value = false;
+    if (mounted.value && running.value === false) {
+      timeout.value = globalThis.setTimeout(run, delay);
+    }
     return result;
   };
 
@@ -32,6 +28,7 @@ export default <R = unknown>(callback: () => Promise<R>, delay: number) => {
 
   const flush = () => {
     timeout.value && globalThis.clearTimeout(timeout.value);
+    running.value = false;
     return run();
   };
 

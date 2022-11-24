@@ -38,6 +38,8 @@ export default defineComponent({
 
     provide('app', app);
 
+    provide('request', undefined);
+
     watch(pageConfig, async () => {
       await nextTick();
       const page = document.querySelector<HTMLElement>('.edoms-ui-page');
