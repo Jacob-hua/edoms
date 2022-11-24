@@ -20,11 +20,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from '../../types';
 import useApp from '../../useApp';
+import useIntervalAsync from '../../useIntervalAsync';
 
 import GasImg from './assets/gas.png';
 import LiquidDepthImg from './assets/liquidDepth.png';
@@ -45,19 +46,25 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const apis = apiFactory(request);
-
-onMounted(() => {
-  apis
-    .fetchIndicatorData({
-      sysInsCode: '',
-      dataList: [],
-    })
-    .then((res) => console.log('====', res));
-});
+const { fetchIndicatorData } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
 const wrapperClassName = ref<string>('');
+
+const updateIndicatorsData = async () => {
+  const result = await fetchIndicatorData({
+    sysInsCode: '',
+    dataList: [],
+  });
+  result.forEach(({ dataValue, deviceCode, propCode }) => {
+    const targetIndicator = indicators.value.find(
+      (indicator) => indicator.config.instance === deviceCode && indicator.config.property === propCode
+    );
+    targetIndicator && (targetIndicator.parameter = `${dataValue}`);
+  });
+};
+
+useIntervalAsync(updateIndicatorsData, 3000);
 
 watchEffect(() => {
   indicators.value = props.config.indicators?.reduce(
