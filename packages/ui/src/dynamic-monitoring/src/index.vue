@@ -90,10 +90,13 @@ const updateIndicatorsData = async () => {
     const targetIndex = indicatorConfigs.value.findIndex(
       ({ instance, property }) => instance[instance.length - 1] === deviceCode && property === propCode
     );
-    const precision = indicatorConfigs.value[targetIndex].precision;
-    if (targetIndex > -1) {
-      indicators.value[targetIndex].parameter = String(formatPrecision(dataValue, precision));
+    if (targetIndex < 0) {
+      return;
     }
+    const indicatorConfig = indicatorConfigs.value[targetIndex];
+    indicators.value[targetIndex].parameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
+      indicatorConfig.unit
+    }`;
   });
 };
 

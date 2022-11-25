@@ -176,6 +176,8 @@ export interface MIndicatorItemConfig {
   targetMin: number;
   /** 精度 */
   precision: string;
+  /** 单位 */
+  unit: string;
 }
 
 export interface MDynamicMonitoring extends MComponent {
