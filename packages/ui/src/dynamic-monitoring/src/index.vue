@@ -3,7 +3,7 @@
     title="动环监测"
     :class="wrapperClassName"
     subtitle="DYNAMIC MONITORING"
-    min-width="500"
+    min-width="480"
     min-height="200"
   >
     <template #operation>

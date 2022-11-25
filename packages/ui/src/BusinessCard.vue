@@ -91,7 +91,7 @@ const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
   const widthScale = (wrapperEntry.contentRect.width * 1.0) / (minWidth.value ?? 1);
   const heightScale = (wrapperEntry.contentRect.height * 1.0) / (minHeight.value ?? 1);
   const styleObj = style2Obj(wrapperEntry.target.getAttribute('style') ?? '');
-  styleObj['aspect-ratio'] = scale.value;
+  // styleObj['aspect-ratio'] = scale.value;
   styleObj['height'] = 'auto';
   wrapperEntry.target.setAttribute('style', styleObj2Str(styleObj));
   wrapperEntry.target.querySelectorAll('[need-zoom]').forEach((element: Element) => {

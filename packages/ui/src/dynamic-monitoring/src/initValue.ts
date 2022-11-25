@@ -2,7 +2,7 @@ export default {
   type: 'dynamic-monitoring',
   visibleNumber: 5,
   style: {
-    width: '100',
+    width: '480',
     height: 'auto',
   },
 };
