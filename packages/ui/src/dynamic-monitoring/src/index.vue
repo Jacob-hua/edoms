@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onUpdated, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { formatPrecision } from '@edoms/utils';
 
@@ -100,9 +100,7 @@ const updateIndicatorsData = async () => {
   });
 };
 
-const { cancel } = useIntervalAsync(updateIndicatorsData, intervalDelay.value);
-
-onUpdated(cancel);
+useIntervalAsync(updateIndicatorsData, intervalDelay.value);
 
 const handleTrigger = () => {
   wrapperClassName.value = wrapperClassName.value === '' ? 'open-wrapper' : '';

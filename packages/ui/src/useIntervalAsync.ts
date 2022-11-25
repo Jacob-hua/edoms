@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 
 export type Callback = (...args: any[]) => any;
 
@@ -26,6 +26,10 @@ export default (callback: Callback, delay: number) => {
     timeout.value && globalThis.clearTimeout(timeout.value);
     mounted.value = false;
   };
+
+  onUnmounted(() => {
+    cancel();
+  });
 
   return {
     flush,
