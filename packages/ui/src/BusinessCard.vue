@@ -161,5 +161,8 @@ onUnmounted(() => {
 }
 .business-wrapper-body {
   overflow: hidden;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
 }
 </style>

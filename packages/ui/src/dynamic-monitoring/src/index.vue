@@ -142,6 +142,8 @@ function calculateParameterClassName(indicator: Indicator, config: MIndicatorIte
 <style lang="scss" scoped>
 .dynamic-monitoring {
   display: flex;
+  align-items: center;
+  align-self: center;
 
   & > div {
     display: flex;
