@@ -7,7 +7,7 @@ import { EdomsRequestFunc } from '@edoms/utils';
 import useCommonMethod from './useCommonMethod';
 
 export default (props: any) => {
-  const app: Core | undefined = inject('app');
+  const app = inject<Core | undefined>('app');
   const node = app?.page?.getNode(props.config.id);
   const request = inject<EdomsRequestFunc | undefined>('request');
 

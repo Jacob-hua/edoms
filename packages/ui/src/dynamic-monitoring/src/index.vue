@@ -3,40 +3,44 @@
     title="动环监测"
     :class="wrapperClassName"
     subtitle="DYNAMIC MONITORING"
-    min-width="500"
+    min-width="480"
     min-height="200"
   >
     <template #operation>
       <div class="operation" @click="handleTrigger">展开</div>
     </template>
     <div class="dynamic-monitoring">
-      <div v-for="({ icon, parameter, label }, index) in indicators" :key="index">
+      <div v-for="({ icon, displayParameter, parameterClass, label }, index) in indicators" :key="index">
         <img :src="icon" />
-        <div>{{ parameter }}</div>
-        <div>{{ label }}</div>
+        <div :class="parameterClass">{{ displayParameter }}</div>
+        <div class="label">{{ label }}</div>
       </div>
     </div>
   </BusinessCard>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watchEffect } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+import { formatPrecision } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from '../../types';
 import useApp from '../../useApp';
+import useIntervalAsync from '../../useIntervalAsync';
 
 import GasImg from './assets/gas.png';
 import LiquidDepthImg from './assets/liquidDepth.png';
 import MoistureImg from './assets/moisture.png';
 import TemperatureImg from './assets/temperature.png';
-import apiFactory from './api';
+import apiFactory, { ParameterItem } from './api';
 
 interface Indicator {
   icon: string;
   parameter: string;
+  displayParameter: string;
+  parameterClass: string[];
   label: string;
-  config: MIndicatorItemConfig;
 }
 
 const props = defineProps<{
@@ -45,29 +49,66 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const apis = apiFactory(request);
-
-onMounted(() => {
-  apis
-    .fetchIndicatorData({
-      sysInsCode: '',
-      dataList: [],
-    })
-    .then((res) => console.log('====', res));
-});
+const { fetchIndicatorData } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
 const wrapperClassName = ref<string>('');
 
-watchEffect(() => {
-  indicators.value = props.config.indicators?.reduce(
-    (indicators, config) => [
-      ...indicators,
-      { label: config.label, parameter: '-', icon: getIconByIndicatorType(config.type), config },
-    ],
-    [] as Indicator[]
-  );
+const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
+const intervalDelay = computed<number>(() => {
+  if (typeof props.config.intervalDelay !== 'number') {
+    return 1000;
+  }
+  return props.config.intervalDelay;
 });
+
+watch(
+  () => indicatorConfigs.value,
+  (indicatorConfigs) => {
+    indicators.value = indicatorConfigs.map(({ label, type }) => ({
+      label,
+      parameter: '',
+      displayParameter: '',
+      parameterClass: ['parameter'],
+      icon: getIconByIndicatorType(type),
+    }));
+  },
+  {
+    immediate: true,
+  }
+);
+
+const updateIndicatorsData = async () => {
+  const dataList: ParameterItem[] = indicatorConfigs.value.map(
+    ({ instance, property }): ParameterItem => ({
+      deviceCode: instance[instance.length - 1],
+      propCodeList: [property],
+    })
+  );
+
+  if (dataList.length === 0) {
+    return;
+  }
+
+  const result = await fetchIndicatorData({ dataList });
+  result.forEach(({ dataValue, deviceCode, propCode }) => {
+    const targetIndex = indicatorConfigs.value.findIndex(
+      ({ instance, property }) => instance[instance.length - 1] === deviceCode && property === propCode
+    );
+    if (targetIndex < 0) {
+      return;
+    }
+    const indicatorConfig = indicatorConfigs.value[targetIndex];
+    const indicator = indicators.value[targetIndex];
+    indicator.parameter = dataValue + '';
+    indicator.displayParameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
+      indicatorConfig.unit
+    }`;
+    indicator.parameterClass = calculateParameterClassName(indicator, indicatorConfig);
+  });
+};
+
+useIntervalAsync(updateIndicatorsData, intervalDelay.value);
 
 const handleTrigger = () => {
   wrapperClassName.value = wrapperClassName.value === '' ? 'open-wrapper' : '';
@@ -82,6 +123,20 @@ function getIconByIndicatorType(type: MEnvironmentIndicator) {
   };
   return iconClassify[type];
 }
+
+function calculateParameterClassName(indicator: Indicator, config: MIndicatorItemConfig) {
+  const { expectedMax, expectedMin, targetMax, targetMin } = config;
+  const parameter = Number(indicator.parameter);
+  const result = ['parameter'];
+  if (parameter >= expectedMin && parameter <= expectedMax) {
+    result.push('parameter-normal');
+  } else if (parameter >= targetMin && parameter <= targetMax) {
+    result.push('parameter-warn');
+  } else {
+    result.push('parameter-danger');
+  }
+  return result;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -92,10 +147,25 @@ function getIconByIndicatorType(type: MEnvironmentIndicator) {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .parameter {
+      font-size: 14px;
+    }
+
+    .parameter-normal {
+      color: #00ff00;
+    }
+
+    .parameter-warn {
+      color: #ff9b00;
+    }
+
+    .parameter-danger {
+      color: #ff4700;
+    }
   }
 }
 .open-wrapper {
-  background-color: red;
   width: auto !important;
   overflow: auto !important;
 }

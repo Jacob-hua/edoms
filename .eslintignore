@@ -7,6 +7,8 @@ lib
 public/entry
 public/runtime
 .edoms/
+edoms-runtime/public/entry
+edoms-runtime/public/runtime
 
 comp-entry.ts
 config-entry.ts

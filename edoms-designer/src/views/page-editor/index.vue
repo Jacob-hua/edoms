@@ -65,8 +65,7 @@ const loadData = async (props?: RequestProps) => {
 
     if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
       return await requestPoints({
-        insId: '1926',
-        // insId: model.instance[model.instance.length - 1],
+        insId: model.instance[model.instance.length - 1],
         codeType: model.instanceType,
         propType: model.propertyType,
       });

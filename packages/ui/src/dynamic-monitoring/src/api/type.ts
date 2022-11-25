@@ -6,9 +6,6 @@ export interface ParameterItem {
 }
 
 export interface FetchEnvMonitoringReq {
-  /** 系统实例code */
-  // TODO! 删除该字段
-  sysInsCode: string;
   /** 属性数据 */
   dataList: ParameterItem[];
 }

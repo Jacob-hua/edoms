@@ -24,6 +24,14 @@ const indicatorTypes = [
 
 export default async (request: Request) => [
   {
+    text: '轮询间隔',
+    name: 'intervalDelay',
+    type: 'number',
+    min: 1000,
+    step: 1000,
+    defaultValue: 10000,
+  },
+  {
     text: '展示指标数',
     name: 'visibleNumber',
     type: 'number',
@@ -58,21 +66,25 @@ export default async (request: Request) => [
         text: '预期最大值',
         type: 'number',
         append: '公斤',
+        defaultValue: undefined,
       },
       {
         name: 'expectedMin',
         text: '预期最小值',
         type: 'number',
+        defaultValue: undefined,
       },
       {
         name: 'targetMax',
         text: '目标最大值',
         type: 'number',
+        defaultValue: undefined,
       },
       {
         name: 'targetMin',
         text: '目标最小值',
         type: 'number',
+        defaultValue: undefined,
       },
     ],
   },
