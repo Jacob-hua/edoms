@@ -37,12 +37,12 @@ export default () => {
     }
   ): Promise<InstanceOption[]> => {
     const instances = await listInstance(data);
-    return instances.filter((instance) => instance.disable).map((instance) => handleInstanceTree(instance));
+    return instances?.filter((instance) => instance.disable).map((instance) => handleInstanceTree(instance));
   };
 
   const requestPoints = async (data: ListPointReq) => {
     const pointCodes = await listPointCode(data);
-    return pointCodes.map(({ label, value, unit }: PointItem) => ({ text: label, value, unit }));
+    return pointCodes?.map(({ label, value, unit }: PointItem) => ({ text: label, value, unit }));
   };
 
   return {
