@@ -2,7 +2,6 @@ import { App } from 'vue';
 
 import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, Request } from '@edoms/utils';
 
-console.log('------', import.meta.env.VITE_BASE_API);
 const service = new Request({
   baseURL: import.meta.env.VITE_BASE_API,
   timeout: 1000 * 10,
