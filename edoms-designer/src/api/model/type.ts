@@ -145,6 +145,7 @@ export interface ApiStruct {
   header: KVStruct[];
   /** 请求cookie */
   cookie: KVStruct[];
+  [key: string]: any;
 }
 
 export type SaveApiReq = ApiStruct;

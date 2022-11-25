@@ -4,7 +4,7 @@ export interface KVStruct {
   /** 值 */
   value: string;
   /** 是否可以用 */
-  isUse: boolean;
+  isUse: string;
   /** 备注 */
   remark: string;
   [key: string]: any;
