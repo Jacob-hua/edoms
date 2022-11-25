@@ -131,11 +131,19 @@ const onPageChange = (value: number) => {
 };
 
 const handleClearTable = async () => {
-  await clearTable({
-    tableId: Number(props.data.id),
-  });
-  loadTableHistory();
-  ElMessage.success('清空成功');
+  ElMessageBox.confirm('此操作将清空上次导入表数据, 是否继续?', '提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      await clearTable({
+        tableId: Number(props.data.id),
+      });
+      loadTableHistory();
+      ElMessage.success('清空成功');
+    })
+    .catch(() => {});
 };
 
 const handleFileChange = async () => {
