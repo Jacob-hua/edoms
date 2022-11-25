@@ -3,29 +3,64 @@
     <div class="section-top">
       <span class="name">{{ data.name }}</span>
       <div>
-        <el-button type="primary" size="large" @click="handleSave">保存</el-button>
+        <el-button type="primary" size="large" @click="handleSaveApi">保存</el-button>
         <el-button type="primary" size="large" @click="handleSimulation">测试</el-button>
       </div>
     </div>
-    <el-input v-model="path" placeholder="请输入请求路径" class="input-with-select" size="large">
+    <el-input v-model="apiInfo.path" placeholder="请输入请求路径" class="input-with-select" size="large">
       <template #prepend>
-        <el-select v-model="method" placeholder="请求方式" class="select" size="large">
+        <el-select v-model="apiInfo.method" placeholder="请求方式" class="select" size="large">
           <el-option v-for="{ label, value } in requestMethods" :key="value" :label="label" :value="value" />
         </el-select>
       </template>
     </el-input>
     <p class="title">请求参数</p>
     <el-tabs v-model="tabActive" class="demo-tabs">
-      <el-tab-pane v-for="({ name, tableData }, index) in parameterData" :key="index" :label="name" :name="name">
-        <EditorTable ref="table" border :ignore="['el-input']" :columns="column" :data="tableData">
-          <template #operate="scope">
-            <el-button type="primary" @click="handleEditClick(scope)"> {{ scope.operate.row.btnText }}</el-button>
-            <el-button type="danger" @click="handleDelete(scope)"> 删除</el-button>
-          </template>
-          <template #bottom>
-            <div class="bottom" @click="handleAdd(name)">+新增</div>
-          </template>
-        </EditorTable>
+      <el-tab-pane
+        v-for="({ name, tableData, instanceKey }, index) in parameterData"
+        :key="index"
+        :label="name"
+        :name="name"
+      >
+        <EditTable :ref="(el) => setRef(el, instanceKey)" :data-source="tableData">
+          <EditTableColumn
+            prop="key"
+            label="key"
+            :rules="[{ required: true, message: '请输入key值', trigger: 'blur' }]"
+          >
+            <template #edit="{ row }">
+              <el-input v-model="row.key" />
+            </template>
+          </EditTableColumn>
+          <EditTableColumn
+            prop="value"
+            label="value"
+            :rules="[{ required: true, message: '请输入value值', trigger: 'blur' }]"
+          >
+            <template #edit="{ row }">
+              <el-input v-model="row.value" />
+            </template>
+          </EditTableColumn>
+          <EditTableColumn prop="isUse" label="是否可用" :rules="[]">
+            <template #edit="{ row }">
+              <el-switch v-model="row.isUse" inactive-value="0" active-value="1" />
+            </template>
+            <template #default="{ row }">
+              <el-switch v-model="row.isUse" inactive-value="0" active-value="1" disabled />
+            </template>
+          </EditTableColumn>
+          <EditTableColumn label="操作">
+            <template #default="{ actions, $index }">
+              <el-button type="primary" @click="handleEdit(actions, $index)">编辑</el-button>
+              <el-button type="danger" @click="handleDelete(actions, $index)">删除</el-button>
+            </template>
+            <template #edit="{ $index, actions }">
+              <el-button type="primary" @click="handleSave(actions, $index)">保存</el-button>
+              <el-button type="danger" @click="handleCancel(actions, $index)">取消</el-button>
+            </template>
+          </EditTableColumn>
+        </EditTable>
+        <div class="bottom" @click="handleAdd(instanceKey)">新增</div>
       </el-tab-pane>
     </el-tabs>
     <json-viewer class="json" :value="jsonData" copyable boxed sort />
@@ -37,42 +72,13 @@ import { onMounted, ref, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 import { ApiStruct, Dic, getApi, saveApi, simulationApi } from '@/api/model';
+import EditTable from '@/components/EditTable.vue';
+import EditTableColumn from '@/components/EditTableColumn.vue';
 import { KVStruct } from '@/const/struct';
-
-import EditorTable from './Table.vue';
 
 const props = defineProps<{
   data: Dic;
 }>();
-
-type KeyType = 'params' | 'body' | 'header' | 'cookie';
-enum OperateType {
-  EDIT = 'edit',
-  SAVE = 'save',
-  DELETE = 'delete',
-}
-const operateType = {
-  [OperateType.EDIT]: '编辑',
-  [OperateType.SAVE]: '保存',
-  [OperateType.DELETE]: '删除',
-};
-
-const { data } = toRefs(props);
-const jsonData = ref({});
-const path = ref<string>('');
-const method = ref<string>('');
-
-const tabActive = ref<string>('Params');
-const table = ref();
-const apiInfo = ref();
-
-onMounted(() => {
-  if (table.value) {
-    table.value.showTable = true;
-    getApiInfo();
-  }
-});
-
 const requestMethods = [
   {
     label: 'GET',
@@ -86,172 +92,92 @@ const requestMethods = [
 const parameterData = ref([
   {
     name: 'Params',
+    instanceKey: 'params',
     tableData: [] as KVStruct[],
   },
   {
     name: 'Body',
+    instanceKey: 'body',
     tableData: [] as KVStruct[],
   },
   {
     name: 'Header',
+    instanceKey: 'header',
     tableData: [] as KVStruct[],
   },
   {
     name: 'Cookie',
+    instanceKey: 'cookie',
     tableData: [] as KVStruct[],
   },
 ]);
-
-const column = ref([
-  {
-    colAttr: {
-      type: 'index',
-      width: '100',
-      label: '序号',
-    },
-  },
-  {
-    colAttr: {
-      prop: 'key',
-      label: 'key',
-    },
-    component: {
-      name: 'el-input',
-      compProps: {
-        placeholder: '请输入key',
-      },
-    },
-  },
-  {
-    colAttr: {
-      prop: 'value',
-      label: 'value',
-    },
-    component: {
-      name: 'el-input',
-      compProps: {
-        placeholder: '请输入value',
-      },
-    },
-  },
-  {
-    colAttr: {
-      prop: 'isUse',
-      label: '是否可用',
-    },
-    component: {
-      name: 'el-switch',
-      compProps: {
-        // 添加 表格插入的组件属性 defaultProps 属性
-        placeholder: '',
-        activeValue: '1',
-        inactiveValue: '0',
-      },
-    },
-  },
-]);
-
-const initialToLowerCase = (name: string): string => {
-  return `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
+const tabActive = ref<string>('Params');
+const tableInstance: Record<string, any> = {};
+const setRef = (el: any, instanceKey: string) => {
+  tableInstance[instanceKey] = el;
 };
 
-const convertData = (data: any) => {
-  return {
-    ...data,
-    isEdit: false,
-    readOnly: true,
-    btnText: operateType[OperateType.EDIT],
-  };
+const handleEdit = (actions: any, index: number) => {
+  actions.startEditable(index);
 };
-
-const getApiInfo = async () => {
-  const result = await getApi({
-    dicCimId: data.value.id,
-  });
-  apiInfo.value = result;
-  path.value = result?.path ?? '';
-  method.value = result?.method ?? '';
-  parameterData.value.forEach((parameter) => {
-    const key: KeyType = initialToLowerCase(parameter.name) as KeyType;
-    parameter.tableData = result[key]?.map(convertData) ?? [];
-  });
-};
-
-const handleAdd = (type: string) => {
-  parameterData.value
-    .find(({ name }) => name === type)
-    ?.tableData.push({
-      remark: String(Math.random()),
-      key: '',
-      isUse: false,
-      value: '',
-      isEdit: true,
-      readOnly: false,
-      btnText: operateType[OperateType.SAVE],
-    });
-  table.value.showTable = true;
-};
-
-const handleEditClick = ({ operate }: any) => {
-  operate.row.readOnly = false;
-  if (operate.row.btnText === operateType[OperateType.EDIT]) {
-    operate.row.isEdit = true;
-    operate.row.btnText = operateType[OperateType.SAVE];
-  } else {
-    operate.row.btnText = operateType[OperateType.EDIT];
-    operate.row.isEdit = false;
-    operate.row.readOnly = true;
-  }
-  table.value.showTable = true;
-};
-const handleDelete = ({ operate: { row } }: any) => {
+const handleDelete = (actions: any, index: number) => {
   ElMessageBox.confirm('此操作将永久删除此行记录, 是否继续?', '提示', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
     type: 'warning',
   })
     .then(() => {
-      const data = parameterData.value.find(({ name }) => name === tabActive.value)?.tableData;
-      data?.splice(
-        data.findIndex(({ remark }) => row.remark === remark),
-        1
-      );
+      actions.deleteRow(index);
     })
     .catch(() => {});
 };
-
-const deleteKeys = (table: any, isDeleteBtnText = true) => {
-  if (isDeleteBtnText) {
-    delete table.btnText;
+const handleCancel = (actions: any, index: number) => {
+  actions.cancelEditable(index);
+};
+const handleSave = (actions: any, index: number) => {
+  actions.saveEditable(index);
+};
+const handleAdd = (instanceKey: any) => {
+  if (!tableInstance[instanceKey]) {
+    return;
   }
-  delete table.isEdit;
-  delete table.readOnly;
-  delete table.mark;
-  return table;
+  tableInstance[instanceKey].editActions.addRow({
+    key: '',
+    value: '',
+    isUse: '0',
+  });
+};
+const jsonData = ref({});
+const apiInfo = ref<ApiStruct>({
+  body: [],
+  cookie: [],
+  dicCimId: 0,
+  header: [],
+  id: 0,
+  method: '',
+  params: [],
+  path: '',
+});
+const { data } = toRefs(props);
+const assignment = (metaData: typeof parameterData, api: typeof apiInfo) => {
+  metaData.value.forEach((parameter: any) => {
+    parameter.tableData = api.value?.[parameter.instanceKey];
+  });
 };
 
-const parameterFactory = (paramsData: any[], isDeleteBtnText = true) => {
-  const parameter = paramsData.reduce((parameter: ApiStruct, metaData) => {
-    const key: KeyType = initialToLowerCase(metaData.name) as KeyType;
-    parameter[key] = metaData.tableData.map((table: any) => deleteKeys(table, isDeleteBtnText));
-    return parameter;
+const parameterFactory = (paramsData: any[], isSimulation = true, { id, dicCimId, method, path } = apiInfo.value) => {
+  return paramsData.reduce((parameter: ApiStruct, metaData) => {
+    parameter[metaData.instanceKey] = metaData.tableData ?? [];
+    return isSimulation
+      ? { ...parameter, id, dicCimId, method, path }
+      : {
+          ...parameter,
+          method,
+          path,
+        };
   }, {});
-  if (isDeleteBtnText) {
-    return {
-      id: apiInfo.value.id,
-      dicCimId: data.value.id!,
-      method: method.value,
-      path: path.value,
-      ...parameter,
-    };
-  }
-  return {
-    method: method.value,
-    path: path.value,
-    ...parameter,
-  };
 };
-const handleSave = async () => {
+const handleSaveApi = async () => {
   await saveApi(parameterFactory([...parameterData.value]));
   ElMessage.success('保存成功');
 };
@@ -262,6 +188,13 @@ const handleSimulation = async () => {
     jsonData.value = {};
   }
 };
+
+onMounted(async () => {
+  apiInfo.value = await getApi({
+    dicCimId: data.value.id,
+  });
+  assignment(parameterData, apiInfo);
+});
 </script>
 
 <style lang="scss" scoped>
