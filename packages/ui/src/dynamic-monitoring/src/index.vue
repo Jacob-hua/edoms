@@ -66,7 +66,7 @@ const updateIndicatorsData = async () => {
 
 useIntervalAsync(() => {
   updateIndicatorsData();
-}, 10000);
+}, 30000);
 
 watchEffect(() => {
   indicators.value = props.config.indicators?.reduce(

@@ -63,6 +63,14 @@ export default defineConfig(({ mode }) => {
             return path.replace(/\/api/, '');
           },
         },
+        '/runtime-api': {
+          target: 'http://192.100.4.25:8062',
+          // target: 'http://k8s.isiact.com/edoms-runtime-service-dev',
+          changeOrigin: true,
+          rewrite(path) {
+            return path.replace(/\/runtime-api/, '');
+          },
+        },
         '^/edoms-playground/runtime': {
           target: 'http://localhost:8078',
           changeOrigin: true,
