@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
   const [type, isProduction] = mode.split(':');
   const env = loadEnv(isProduction ? 'production' : 'development', process.cwd(), '');
 
-  if (['value', 'config', 'event', 'value:pro', 'config:pro', 'event:pro'].includes(mode)) {
+  if (['value', 'config', 'event', 'value:production', 'config:production', 'event:production'].includes(mode)) {
     const capitalToken = type.charAt(0).toUpperCase() + type.slice(1);
     return {
       publicDir: './.edoms/public',
@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
     };
   }
 
-  if (['page', 'playground', 'page:pro', 'playground:pro'].includes(mode)) {
+  if (['page', 'playground', 'page:production', 'playground:production'].includes(mode)) {
     const base = `${env.VITE_BASE_URL}/${type}/`;
     const outDir = path.resolve(process.cwd(), `${env.VITE_OUT_DIR}/${type}`);
     return {
