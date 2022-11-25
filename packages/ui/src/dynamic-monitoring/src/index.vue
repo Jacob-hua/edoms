@@ -22,6 +22,8 @@
 <script lang="ts" setup>
 import { computed, onUpdated, ref, watch } from 'vue';
 
+import { formatPrecision } from '@edoms/utils';
+
 import BusinessCard from '../../BusinessCard.vue';
 import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from '../../types';
 import useApp from '../../useApp';
@@ -88,8 +90,9 @@ const updateIndicatorsData = async () => {
     const targetIndex = indicatorConfigs.value.findIndex(
       ({ instance, property }) => instance[instance.length - 1] === deviceCode && property === propCode
     );
+    const precision = indicatorConfigs.value[targetIndex].precision;
     if (targetIndex > -1) {
-      indicators.value[targetIndex].parameter = String(dataValue);
+      indicators.value[targetIndex].parameter = String(formatPrecision(dataValue, precision));
     }
   });
 };

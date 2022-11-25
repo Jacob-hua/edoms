@@ -174,6 +174,8 @@ export interface MIndicatorItemConfig {
   targetMax: number;
   /** 目标最小阈值 */
   targetMin: number;
+  /** 精度 */
+  precision: string;
 }
 
 export interface MDynamicMonitoring extends MComponent {

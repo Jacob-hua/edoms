@@ -68,3 +68,17 @@ export const isPage = (node: MNode | undefined): boolean => {
   if (!node) return false;
   return Boolean(node.type?.toLowerCase() === NodeType.PAGE);
 };
+
+export const formatPrecision = (num: number, precision: string | number) => {
+  if (typeof precision === 'number') {
+    precision = String(precision);
+  }
+  const [, s] = precision.split('.');
+  if (!s) {
+    return num;
+  }
+  const times = Math.pow(10, s.length);
+  let des = num * times + 0.5;
+  des = parseInt(`${des}`, 10) / times;
+  return des + '';
+};
