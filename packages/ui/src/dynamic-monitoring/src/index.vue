@@ -50,6 +50,12 @@ const { fetchIndicatorData } = apiFactory(request);
 const indicators = ref<Indicator[]>([]);
 const wrapperClassName = ref<string>('');
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
+const intervalDelay = computed<number>(() => {
+  if (typeof props.config.intervalDelay !== 'number') {
+    return 1000;
+  }
+  return props.config.intervalDelay;
+});
 
 watch(
   () => indicatorConfigs.value,
@@ -88,7 +94,7 @@ const updateIndicatorsData = async () => {
   });
 };
 
-const { cancel } = useIntervalAsync(updateIndicatorsData, 2000);
+const { cancel } = useIntervalAsync(updateIndicatorsData, intervalDelay.value);
 
 onUpdated(cancel);
 

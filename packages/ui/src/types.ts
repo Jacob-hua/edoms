@@ -178,5 +178,6 @@ export interface MIndicatorItemConfig {
 
 export interface MDynamicMonitoring extends MComponent {
   visibleNumber: number;
+  intervalDelay: number;
   indicators: MIndicatorItemConfig[];
 }

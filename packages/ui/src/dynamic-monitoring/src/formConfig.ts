@@ -24,6 +24,14 @@ const indicatorTypes = [
 
 export default async (request: Request) => [
   {
+    text: '轮询间隔',
+    name: 'intervalDelay',
+    type: 'number',
+    min: 1000,
+    step: 1000,
+    defaultValue: 10000,
+  },
+  {
     text: '展示指标数',
     name: 'visibleNumber',
     type: 'number',
