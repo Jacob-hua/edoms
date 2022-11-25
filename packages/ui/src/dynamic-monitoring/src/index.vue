@@ -10,10 +10,10 @@
       <div class="operation" @click="handleTrigger">展开</div>
     </template>
     <div class="dynamic-monitoring">
-      <div v-for="({ icon, parameter, label }, index) in indicators" :key="index">
+      <div v-for="({ icon, displayParameter, parameterClass, label }, index) in indicators" :key="index">
         <img :src="icon" />
-        <div>{{ parameter }}</div>
-        <div>{{ label }}</div>
+        <div :class="parameterClass">{{ displayParameter }}</div>
+        <div class="label">{{ label }}</div>
       </div>
     </div>
   </BusinessCard>
@@ -38,6 +38,8 @@ import apiFactory, { ParameterItem } from './api';
 interface Indicator {
   icon: string;
   parameter: string;
+  displayParameter: string;
+  parameterClass: string[];
   label: string;
 }
 
@@ -51,6 +53,7 @@ const { fetchIndicatorData } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
 const wrapperClassName = ref<string>('');
+
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -64,7 +67,9 @@ watch(
   (indicatorConfigs) => {
     indicators.value = indicatorConfigs.map(({ label, type }) => ({
       label,
-      parameter: '-',
+      parameter: '',
+      displayParameter: '',
+      parameterClass: ['parameter'],
       icon: getIconByIndicatorType(type),
     }));
   },
@@ -94,9 +99,12 @@ const updateIndicatorsData = async () => {
       return;
     }
     const indicatorConfig = indicatorConfigs.value[targetIndex];
-    indicators.value[targetIndex].parameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
+    const indicator = indicators.value[targetIndex];
+    indicator.parameter = dataValue + '';
+    indicator.displayParameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
       indicatorConfig.unit
     }`;
+    indicator.parameterClass = calculateParameterClassName(indicator, indicatorConfig);
   });
 };
 
@@ -115,6 +123,20 @@ function getIconByIndicatorType(type: MEnvironmentIndicator) {
   };
   return iconClassify[type];
 }
+
+function calculateParameterClassName(indicator: Indicator, config: MIndicatorItemConfig) {
+  const { expectedMax, expectedMin, targetMax, targetMin } = config;
+  const parameter = Number(indicator.parameter);
+  const result = ['parameter'];
+  if (parameter >= expectedMin && parameter <= expectedMax) {
+    result.push('parameter-normal');
+  } else if (parameter >= targetMin && parameter <= targetMax) {
+    result.push('parameter-warn');
+  } else {
+    result.push('parameter-danger');
+  }
+  return result;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -125,10 +147,25 @@ function getIconByIndicatorType(type: MEnvironmentIndicator) {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .parameter {
+      font-size: 14px;
+    }
+
+    .parameter-normal {
+      color: #00ff00;
+    }
+
+    .parameter-warn {
+      color: #ff9b00;
+    }
+
+    .parameter-danger {
+      color: #ff4700;
+    }
   }
 }
 .open-wrapper {
-  background-color: red;
   width: auto !important;
   overflow: auto !important;
 }
