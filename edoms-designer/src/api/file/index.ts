@@ -6,7 +6,7 @@ export * from './type';
 
 export const uploadFile = async (data: UploadFileReq): Promise<UploadFileRes> => {
   const formData = new FormData();
-  formData.set('file', data.file!);
+  formData.set('file', data.file);
   formData.set('fileType', data.fileType);
   formData.set('fileName', data.fileName);
 
@@ -17,6 +17,7 @@ export const uploadFile = async (data: UploadFileReq): Promise<UploadFileRes> =>
   });
   return result;
 };
+
 export const downloadFile = async (data: DownloadFileReq): Promise<any> => {
   return await request<DownloadFileReq, any>({
     url: '/file/download',
