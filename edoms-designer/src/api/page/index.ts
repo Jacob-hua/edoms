@@ -1,8 +1,26 @@
 import { request } from '@/util/request';
 
-import { CreatePageReq, CreatePageRes, DeletePageReq, ListPageInfosReq, ListPageInfosRes, UpdatePageReq } from './type';
+import {
+  CreatePageReq,
+  CreatePageRes,
+  DeletePageReq,
+  GetPageReq,
+  GetPageRes,
+  ListPageInfosReq,
+  ListPageInfosRes,
+  UpdatePageReq,
+} from './type';
 
 export * from './type';
+
+export const getPage = async (data: GetPageReq): Promise<GetPageRes> => {
+  const { result } = await request<GetPageReq, GetPageRes>({
+    url: '/page',
+    method: 'GET',
+    data,
+  });
+  return result;
+};
 
 export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRes> => {
   try {

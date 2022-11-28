@@ -57,7 +57,7 @@ export const updateApplication = async (data: UpdateApplicationReq): Promise<voi
 export const getApplicationInfo = async (data: GetApplicationInfoReq): Promise<GetApplicationInfoRes> => {
   try {
     const { result } = await request<GetApplicationInfoReq, GetApplicationInfoRes>({
-      url: 'application/applicationInfo',
+      url: '/application/applicationInfo',
       method: 'GET',
       data,
     });

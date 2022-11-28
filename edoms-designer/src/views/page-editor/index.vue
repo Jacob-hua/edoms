@@ -31,7 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRaw } from 'vue';
+import { computed, onMounted, ref, toRaw } from 'vue';
+import { useRoute } from 'vue-router';
 import { Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
@@ -42,11 +43,15 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { asyncLoadJs, getByPath } from '@edoms/utils';
 
+import { getPage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
-import dsl from '@/configs/dsl';
+import mockDSL from '@/configs/dsl';
 import useModel from '@/hooks/useModel';
+import useUpload from '@/hooks/useUpload';
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
+
+const route = useRoute();
 
 const { requestInstances, requestPoints } = useModel();
 
@@ -78,11 +83,12 @@ const loadData = async (props?: RequestProps) => {
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
 const editor = ref<InstanceType<typeof EdomsEditor>>();
 const previewVisible = ref(false);
-const value = ref<MApp>(dsl);
-const defaultSelected = ref(dsl.items[0].id);
+const value = ref<MApp>(mockDSL);
+const defaultSelected = ref(mockDSL.items[0].id);
 const propsValues = ref<Record<string, any>>({});
 const propsConfigs = ref<Record<string, any>>({});
 const eventMethodList = ref<Record<string, any>>({});
+
 const stageRect = ref({
   width: 1200,
   height: 950,
@@ -91,6 +97,17 @@ const stageRect = ref({
 const previewUrl = computed(
   () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
 );
+
+const fetchPageInfo = async () => {
+  const { pageId } = route.query;
+  getPage({
+    pageId: pageId as string,
+  });
+};
+
+onMounted(() => {
+  fetchPageInfo();
+});
 
 const menu: MenuBarData = {
   left: [
@@ -162,13 +179,12 @@ const moveableOptions = (core?: StageCore): MoveableOptions => {
 };
 
 const save = () => {
-  localStorage.setItem(
-    'edomsDSL',
-    serialize(toRaw(value.value), {
-      space: 2,
-      unsafe: true,
-    }).replace(/"(\w+)":\s/g, '$1: ')
-  );
+  const dsl = serialize(toRaw(value.value), {
+    space: 2,
+    unsafe: true,
+  }).replace(/"(\w+)":\s/g, '$1: ');
+  useUpload(dsl, 'runtimeDSL', 'text/javascript', 'utf-8').execute();
+  // localStorage.setItem('edomsDSL', dsl);
   editor.value?.editorService.resetModifiedNodeId();
 };
 
@@ -181,8 +197,6 @@ asyncLoadJs(`${VITE_ENTRY_PATH}/value/index.umd.js`).then(() => {
 asyncLoadJs(`${VITE_ENTRY_PATH}/event/index.umd.js`).then(() => {
   eventMethodList.value = (globalThis as any).edomsPresetEvents;
 });
-
-save();
 
 editorService.usePlugin({
   beforeDoAdd: (config: MNode, parent?: MContainer | null) => {
