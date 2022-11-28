@@ -101,12 +101,6 @@ const handleFormSubmit = async () => {
     console.log(e);
   }
 };
-//
-// const { disabled, accept, fileList, imgChange, handleRemove, handlePictureCardPreview } = useUpload(applicationForm, [
-//   {
-//     url: NoData,
-//   },
-// ]);
 </script>
 
 <style scoped lang="scss">
