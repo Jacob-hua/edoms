@@ -332,24 +332,24 @@ export const fillConfig = (config: FormConfig = []) => [
           },
         ],
       },
-      {
-        title: '高级',
-        lazy: true,
-        items: [
-          {
-            name: 'created',
-            text: 'created',
-            type: 'code-select',
-            labelWidth: '100px',
-          },
-          {
-            name: 'mounted',
-            text: 'mounted',
-            type: 'code-select',
-            labelWidth: '100px',
-          },
-        ],
-      },
+      // {
+      //   title: '高级',
+      //   lazy: true,
+      //   items: [
+      //     {
+      //       name: 'created',
+      //       text: 'created',
+      //       type: 'code-select',
+      //       labelWidth: '100px',
+      //     },
+      //     {
+      //       name: 'mounted',
+      //       text: 'mounted',
+      //       type: 'code-select',
+      //       labelWidth: '100px',
+      //     },
+      //   ],
+      // },
     ],
   },
 ];
