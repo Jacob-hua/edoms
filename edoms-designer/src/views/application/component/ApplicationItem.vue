@@ -1,7 +1,7 @@
 <template>
   <div class="app-wrapper">
     <div class="app-box">
-      <PreviewImage :content-id="application.thumbnailId" @image-click="handleGoPage" />
+      <PreviewImage :content-id="application.thumbnailId" @click="handleGoPage" />
       <div class="pop-menu">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">

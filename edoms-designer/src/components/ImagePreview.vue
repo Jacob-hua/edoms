@@ -8,7 +8,7 @@ import { computed } from 'vue';
 import NoData from '@/assets/img/no_data.png';
 
 const emits = defineEmits<{
-  (event: 'imageClick', ...args: any[]): void;
+  (event: 'click'): void;
 }>();
 
 const defaultProps = withDefaults(
@@ -23,7 +23,7 @@ const url = computed(() =>
   defaultProps.contentId ? `${import.meta.env.VITE_BASE_API}/file/preview/?contentId=${defaultProps.contentId}` : NoData
 );
 const handleImageClick = () => {
-  emits('imageClick');
+  emits('click');
 };
 </script>
 
