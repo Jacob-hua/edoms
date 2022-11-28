@@ -7,7 +7,22 @@
 </template>
 
 <script lang="ts" setup name="LongText">
-import { EffectType, PlacementType } from '@/components/type';
+export type EffectType = 'dark' | 'light';
+
+export type PlacementType =
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end';
+
 withDefaults(
   defineProps<{
     effect?: EffectType;

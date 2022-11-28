@@ -52,7 +52,15 @@ const props = withDefaults(
     data?: SideBarData;
   }>(),
   {
-    data: () => ({ type: 'tabs', status: '组件', items: ['component-list', 'layer', 'code-block'] }),
+    data: () => ({
+      type: 'tabs',
+      status: '组件',
+      items: [
+        'component-list',
+        'layer',
+        // 'code-block'
+      ],
+    }),
   }
 );
 
