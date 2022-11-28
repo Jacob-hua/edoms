@@ -6,7 +6,7 @@ export * from './type';
 
 export const uploadFile = async (data: UploadFileReq): Promise<UploadFileRes> => {
   const formData = new FormData();
-  formData.set('file', data.file!);
+  formData.set('file', data.file);
   formData.set('fileType', data.fileType);
   formData.set('fileName', data.fileName);
 
