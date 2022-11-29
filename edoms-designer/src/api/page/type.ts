@@ -7,11 +7,11 @@ export interface GetPageReq {
 
 export interface GetPageRes {
   /** 应用ID */
-  applicationId: string | number;
+  applicationId: string;
   /** 应用名称 */
   applicationName: string;
   /** 页面ID */
-  pageId: string | number;
+  pageId: string;
   /** 页面名称 */
   name: string;
   /** 编辑内容ID */
@@ -22,7 +22,7 @@ export interface ListPageReq {
   /** 页面名称 */
   name: string | null;
   /** 应用ID */
-  applicationId: string | number;
+  applicationId: string;
   /** 页码 */
   page: number;
   /** 页面大小 */

@@ -48,6 +48,7 @@ import componentGroupList from '@/configs/componentGroupList';
 import mockDSL from '@/configs/dsl';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
+import { generateDefaultDSL } from '@/util/dsl';
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
 
@@ -99,10 +100,18 @@ const previewUrl = computed(
 );
 
 const fetchPageInfo = async () => {
-  const { pageId } = route.query;
-  getPage({
-    pageId: pageId as string,
+  const { applicationId, applicationName, editContentId, pageId, name } = await getPage({
+    pageId: route.query.pageId as string,
   });
+  if (!editContentId) {
+    const dsl = generateDefaultDSL({
+      applicationId,
+      applicationName,
+      pageId,
+      pageName: name,
+    });
+    value.value = dsl;
+  }
 };
 
 onMounted(() => {
