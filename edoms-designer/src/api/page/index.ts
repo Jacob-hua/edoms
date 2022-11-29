@@ -6,8 +6,8 @@ import {
   DeletePageReq,
   GetPageReq,
   GetPageRes,
-  ListPageInfosReq,
-  ListPageInfosRes,
+  ListPageReq,
+  ListPageRes,
   UpdatePageReq,
 } from './type';
 
@@ -22,9 +22,9 @@ export const getPage = async (data: GetPageReq): Promise<GetPageRes> => {
   return result;
 };
 
-export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRes> => {
+export const listPages = async (data: ListPageReq): Promise<ListPageRes> => {
   try {
-    const { result } = await request<ListPageInfosReq, ListPageInfosRes>({
+    const { result } = await request<ListPageReq, ListPageRes>({
       url: '/page/list',
       method: 'POST',
       data,
@@ -32,6 +32,8 @@ export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRe
     return result;
   } catch (error) {
     return {
+      applicationId: '',
+      applicationName: '',
       count: 0,
       limit: 0,
       page: 0,

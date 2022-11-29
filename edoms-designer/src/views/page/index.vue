@@ -3,7 +3,7 @@
     <section class="left-section">
       <div class="header-top" @click="goBack">
         <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
-        <span>{{ name }}</span>
+        <span>{{ appName }}</span>
       </div>
       <div class="top-search">
         <p>页面列表</p>
@@ -124,6 +124,7 @@ import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useDate from '@/hooks/useDate';
+
 const route = useRoute();
 const router = useRouter();
 const gridList = ref();
@@ -141,7 +142,8 @@ interface Page {
   applicationId: string;
   isShowText: boolean;
 }
-const name = route.query.name;
+
+const appName = ref<string>('');
 const editor = ref<InstanceType<typeof EdomsEditor>>();
 const { VITE_RUNTIME_PATH } = import.meta.env;
 const previewVisible = ref(true);
@@ -153,12 +155,17 @@ const previewUrl = computed(
   () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
 );
 const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
-  const { dataList = [], count } = await listPages({
+  const {
+    dataList = [],
+    count,
+    applicationName,
+  } = await listPages({
     page: current,
     limit: pageSize,
     applicationId: route.query.applicationId as string,
     name: searchText.value,
   });
+  appName.value = applicationName;
   active.value = dataList[0];
   dataList.forEach((item: any) => {
     item.isShowText = true;

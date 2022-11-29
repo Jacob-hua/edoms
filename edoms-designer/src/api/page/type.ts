@@ -18,7 +18,7 @@ export interface GetPageRes {
   editContentId: string | null;
 }
 
-export interface ListPageInfosReq {
+export interface ListPageReq {
   /** 页面名称 */
   name: string | null;
   /** 应用ID */
@@ -29,20 +29,24 @@ export interface ListPageInfosReq {
   limit: number;
 }
 
-export type ListPageInfosRes = PageStruct<{
+export interface ListPageRes
+  extends PageStruct<{
+    /** 页面ID */
+    pageId: number;
+    /** 页面名称 */
+    name: string;
+    /** 页面内容ID */
+    pushContentId: string;
+    /** 创建者 */
+    createBy: string;
+    /** 创建时间 */
+    createTime: string;
+  }> {
+  /** 应用名称 */
+  applicationName: string;
   /** 应用ID */
-  applicationId: number;
-  /** 页面ID */
-  pageId: number;
-  /** 页面名称 */
-  name: string;
-  /** 页面内容ID */
-  pushContentId: string;
-  /** 创建者 */
-  createBy: string;
-  /** 创建时间 */
-  createTime: string;
-}>;
+  applicationId: string;
+}
 
 export interface CreatePageReq {
   /** 页面名称 */
