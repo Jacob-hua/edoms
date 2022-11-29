@@ -43,11 +43,12 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { asyncLoadJs, getByPath } from '@edoms/utils';
 
-import { getPage } from '@/api/page';
+import { downloadFile } from '@/api/file';
+import { getPage, savePage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
-import { generateDSL } from '@/util/dsl';
+import { generateEmptyAppDSL, generateEmptyPageDSL } from '@/util/dsl';
 
 const { VITE_RUNTIME_PATH } = import.meta.env;
 
@@ -87,6 +88,11 @@ const stageRect = ref({
 const previewUrl = computed(
   () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
 );
+
+const route = useRoute();
+const pageId = computed<string>(() => {
+  return route.query.pageId as string;
+});
 
 const menu: MenuBarData = {
   left: [
@@ -164,7 +170,7 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   return;
 };
 
-onBeforeMount(fetchPageInfo);
+onBeforeMount(calculateDSL);
 
 function handleRuntimeReady() {
   console.log('准备好了');
@@ -212,30 +218,49 @@ function moveableOptions(core?: StageCore): MoveableOptions {
   return options;
 }
 
-async function fetchPageInfo() {
-  const route = useRoute();
-  const { applicationId, applicationName, editContentId, pageId, pageName } = await getPage({
-    pageId: route.query.pageId as string,
+async function calculateDSL() {
+  const pageInfo = await getPage({
+    pageId: pageId.value,
   });
-  if (!editContentId) {
-    const dsl = generateDSL({
-      applicationId,
-      applicationName,
-      pageId,
-      pageName,
-    });
-    value.value = dsl;
-    defaultSelected.value = pageId;
+  const dsl = generateEmptyAppDSL({
+    applicationId: pageInfo.applicationId,
+    applicationName: pageInfo.applicationName,
+  });
+  if (pageInfo.editContentId) {
+    const result = (await downloadFile({
+      contentId: pageInfo.editContentId,
+    })) as Blob;
+    const text = await result.text();
+    const pageDSL = new Function(`return ${text ?? undefined}`)();
+    if (pageDSL) {
+      dsl.items.push(pageDSL);
+    }
+  } else {
+    dsl.items.push(
+      generateEmptyPageDSL({
+        pageId: pageInfo.pageId,
+        pageName: pageInfo.pageName,
+      })
+    );
   }
+  value.value = dsl;
+  defaultSelected.value = pageId.value;
 }
 
-function save() {
-  const dsl = serialize(toRaw(value.value), {
+async function save() {
+  const pageDSL = serialize(toRaw(value.value?.items?.[0]), {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
-  useUpload(dsl, 'runtimeDSL', 'text/javascript', 'utf-8').execute();
-  // localStorage.setItem('edomsDSL', dsl);
+
+  const { execute } = useUpload(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
+  const contentId = await execute();
+  if (contentId) {
+    await savePage({
+      pageId: pageId.value,
+      contentId,
+    });
+  }
   editor.value?.editorService.resetModifiedNodeId();
 }
 </script>

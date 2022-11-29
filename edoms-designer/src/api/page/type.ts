@@ -77,3 +77,10 @@ export interface DeletePageReq {
   /** 应用ID集合 */
   pageIds: number[];
 }
+
+export interface SavePageReq {
+  /** 页面ID */
+  pageId: string;
+  /** 内容ID */
+  contentId: string;
+}

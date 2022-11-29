@@ -8,6 +8,7 @@ import {
   GetPageRes,
   ListPageReq,
   ListPageRes,
+  SavePageReq,
   UpdatePageReq,
 } from './type';
 
@@ -63,6 +64,14 @@ export const deletePage = async (data: DeletePageReq): Promise<void> => {
   await request<DeletePageReq, void>({
     url: '/page/delete',
     method: 'DELETE',
+    data,
+  });
+};
+
+export const savePage = async (data: SavePageReq): Promise<void> => {
+  await request<SavePageReq, void>({
+    url: '/page/save',
+    method: 'POST',
     data,
   });
 };
