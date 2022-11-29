@@ -178,15 +178,22 @@ const parameterFactory = (paramsData: any[], isSimulation = true, { id, dicCimId
   }, {});
 };
 const handleSaveApi = async () => {
-  await saveApi(parameterFactory([...parameterData.value]));
+  await saveApi(parameterFactory(getNewResult([...parameterData.value])));
   ElMessage.success('保存成功');
 };
 const handleSimulation = async () => {
   try {
-    jsonData.value = (await simulationApi(parameterFactory([...parameterData.value], false))) ?? {};
+    jsonData.value = (await simulationApi(parameterFactory(getNewResult([...parameterData.value]), false))) ?? {};
   } catch (e) {
     jsonData.value = {};
   }
+};
+
+const getNewResult = (metaData: any[]) => {
+  return metaData.reduce((result: any, newData) => {
+    newData.tableData = tableInstance[newData.instanceKey].resultData;
+    return [newData, ...result];
+  }, []);
 };
 
 onMounted(async () => {
