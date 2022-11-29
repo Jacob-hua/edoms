@@ -36,7 +36,7 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { LocationQueryValue } from 'vue-router';
 
-import { getApplicationInfo } from '@/api/application';
+import { getApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
@@ -54,7 +54,7 @@ const appInfo = ref<ApplicationInfo>({
   thumbnailId: '',
 });
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
-  const result = await getApplicationInfo({ applicationId } as { applicationId: string });
+  const result = await getApplication({ applicationId } as { applicationId: string });
   appInfoVisible.value = true;
   appInfo.value = result;
 };
