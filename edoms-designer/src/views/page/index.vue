@@ -5,15 +5,10 @@
         <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
         <span>{{ appName }}</span>
       </div>
-      <div class="top-search">
-        <p>页面列表</p>
-        <div>
-          <el-icon class="header-icon" :size="20" @click="handleNewPage"><Plus /></el-icon>
-        </div>
-      </div>
       <div class="search-wrapper">
         <el-input v-model="searchText" clearable @keyup.enter="search" @clear="handleClearInput"></el-input>
         <el-icon class="header-icon" :size="21" @click="handleShowSearchInput"><Search /></el-icon>
+        <el-icon class="header-icon" :size="20" @click="handleNewPage"><Plus /></el-icon>
       </div>
       <GridList
         ref="gridList"
@@ -52,23 +47,26 @@
     </section>
     <section class="right-section">
       <div class="right-top-bar">
-        <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
-        <div class="pop-menu-wrapper">
-          <PopMenu :width="330" @menu-click="handleTopMenuClick">
-            <template #reference>
-              <el-button type="primary" size="large">菜单</el-button>
-            </template>
-            <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
-              <div class="pop-menu-item">
-                <span>{{ menu.label }}</span>
+        <span>{{ active.name }}</span>
+        <div>
+          <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
+          <div class="pop-menu-wrapper">
+            <PopMenu :width="330" @menu-click="handleTopMenuClick">
+              <template #reference>
+                <el-button type="primary" size="large">菜单</el-button>
+              </template>
+              <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
+                <div class="pop-menu-item">
+                  <span>{{ menu.label }}</span>
+                </div>
+              </PopMenuOption>
+              <div class="createInfo">
+                <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
+                <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
+                <p>编辑者: {{ active?.updateBy }}</p>
               </div>
-            </PopMenuOption>
-            <div class="createInfo">
-              <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
-              <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
-              <p>编辑者: {{ active?.updateBy }}</p>
-            </div>
-          </PopMenu>
+            </PopMenu>
+          </div>
         </div>
       </div>
       <div ref="editWrapper" class="edit">
@@ -497,9 +495,16 @@ const handleClearInput = () => {
     width: 82%;
     .right-top-bar {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
       padding-top: 10px;
+      & > span {
+        font-size: 25px;
+      }
+      & > div {
+        display: flex;
+        align-items: center;
+      }
       .el-icon {
         margin: 0 30px;
         cursor: pointer;
