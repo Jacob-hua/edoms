@@ -16,7 +16,7 @@ export * from './type';
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
     const { result } = await request<ListApplicationsReq, ListApplicationsRes>({
-      url: '/application/page',
+      url: '/application/list',
       method: 'POST',
       data,
     });
