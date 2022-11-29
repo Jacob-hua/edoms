@@ -249,9 +249,7 @@ const menus = [
     label: '编辑页面',
     icon: 'Edit',
     action: () => {
-      router.push({
-        path: '/editor',
-      });
+      goEdit();
     },
   },
   {
@@ -395,6 +393,9 @@ const handleVersionClose = () => {
 const goEdit = () => {
   router.push({
     path: '/editor',
+    query: {
+      pageId: active.value?.pageId,
+    },
   });
 };
 
