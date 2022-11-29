@@ -47,7 +47,7 @@
     </section>
     <section class="right-section">
       <div class="right-top-bar">
-        <span>{{ active.name }}</span>
+        <span>{{ active?.name }}</span>
         <div>
           <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
           <div class="pop-menu-wrapper">
