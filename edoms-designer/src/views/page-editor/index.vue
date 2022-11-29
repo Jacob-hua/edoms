@@ -45,10 +45,9 @@ import { asyncLoadJs, getByPath } from '@edoms/utils';
 
 import { getPage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
-import mockDSL from '@/configs/dsl';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
-import { generateDefaultDSL } from '@/util/dsl';
+import { generateDefaultAppDSL, generateDefaultPageDSL } from '@/util/dsl';
 
 const { VITE_RUNTIME_PATH } = import.meta.env;
 
@@ -74,9 +73,9 @@ const editor = ref<InstanceType<typeof EdomsEditor>>();
 
 const previewVisible = ref(false);
 
-const value = ref<MApp>(mockDSL);
+const value = ref<MApp | undefined>();
 
-const defaultSelected = ref(mockDSL.items[0].id);
+const defaultSelected = ref();
 
 const { propsConfigs, propsValues, eventMethodList } = loadUiScript();
 
@@ -219,15 +218,20 @@ async function fetchPageInfo() {
     pageId: route.query.pageId as string,
   });
   if (!editContentId) {
-    const dsl = generateDefaultDSL({
+    const dsl = generateDefaultAppDSL({
       applicationId,
       applicationName,
-      pageId,
-      pageName,
     });
+    dsl.items.push(
+      generateDefaultPageDSL({
+        pageId,
+        pageName,
+      })
+    );
+    // editor.value?.editorService.update(dsl);
     value.value = dsl;
-    editor.value?.editorService.set('root', dsl);
-    editor.value?.editorService.select(pageId);
+    defaultSelected.value = pageId;
+    // editor.value?.editorService.set('root', dsl);
   }
 }
 
