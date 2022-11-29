@@ -55,10 +55,8 @@ export default defineConfig(({ mode }) => {
         emptyOutDir: true,
         sourcemap: true,
         rollupOptions: {
-          input: {
-            page: path.resolve(process.cwd(), `./page/index.html`),
-            playground: path.resolve(process.cwd(), `./playground/index.html`),
-          },
+          external: ['vue'],
+          input: path.resolve(process.cwd(), `./${type}/index.html`),
         },
         outDir,
       },
