@@ -3,17 +3,12 @@
     <section class="left-section">
       <div class="header-top" @click="goBack">
         <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
-        <span>{{ name }}</span>
-      </div>
-      <div class="top-search">
-        <p>页面列表</p>
-        <div>
-          <el-icon class="header-icon" :size="20" @click="handleNewPage"><Plus /></el-icon>
-        </div>
+        <span>{{ appName }}</span>
       </div>
       <div class="search-wrapper">
         <el-input v-model="searchText" clearable @keyup.enter="search" @clear="handleClearInput"></el-input>
         <el-icon class="header-icon" :size="21" @click="handleShowSearchInput"><Search /></el-icon>
+        <el-icon class="header-icon" :size="20" @click="handleNewPage"><Plus /></el-icon>
       </div>
       <GridList
         ref="gridList"
@@ -52,23 +47,26 @@
     </section>
     <section class="right-section">
       <div class="right-top-bar">
-        <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
-        <div class="pop-menu-wrapper">
-          <PopMenu :width="330" @menu-click="handleTopMenuClick">
-            <template #reference>
-              <el-button type="primary" size="large">菜单</el-button>
-            </template>
-            <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
-              <div class="pop-menu-item">
-                <span>{{ menu.label }}</span>
+        <span>{{ active?.name }}</span>
+        <div>
+          <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
+          <div class="pop-menu-wrapper">
+            <PopMenu :width="330" @menu-click="handleTopMenuClick">
+              <template #reference>
+                <el-button type="primary" size="large">菜单</el-button>
+              </template>
+              <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
+                <div class="pop-menu-item">
+                  <span>{{ menu.label }}</span>
+                </div>
+              </PopMenuOption>
+              <div class="createInfo">
+                <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
+                <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
+                <p>编辑者: {{ active?.updateBy }}</p>
               </div>
-            </PopMenuOption>
-            <div class="createInfo">
-              <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
-              <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
-              <p>编辑者: {{ active?.updateBy }}</p>
-            </div>
-          </PopMenu>
+            </PopMenu>
+          </div>
         </div>
       </div>
       <div ref="editWrapper" class="edit">
@@ -124,6 +122,7 @@ import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useDate from '@/hooks/useDate';
+
 const route = useRoute();
 const router = useRouter();
 const gridList = ref();
@@ -141,7 +140,8 @@ interface Page {
   applicationId: string;
   isShowText: boolean;
 }
-const name = route.query.name;
+
+const appName = ref<string>('');
 const editor = ref<InstanceType<typeof EdomsEditor>>();
 const { VITE_RUNTIME_PATH } = import.meta.env;
 const previewVisible = ref(true);
@@ -153,12 +153,17 @@ const previewUrl = computed(
   () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
 );
 const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
-  const { dataList = [], count } = await listPages({
+  const {
+    dataList = [],
+    count,
+    applicationName,
+  } = await listPages({
     page: current,
     limit: pageSize,
     applicationId: route.query.applicationId as string,
     name: searchText.value,
   });
+  appName.value = applicationName;
   active.value = dataList[0];
   dataList.forEach((item: any) => {
     item.isShowText = true;
@@ -244,9 +249,7 @@ const menus = [
     label: '编辑页面',
     icon: 'Edit',
     action: () => {
-      router.push({
-        path: '/editor',
-      });
+      goEdit();
     },
   },
   {
@@ -390,6 +393,9 @@ const handleVersionClose = () => {
 const goEdit = () => {
   router.push({
     path: '/editor',
+    query: {
+      pageId: active.value?.pageId,
+    },
   });
 };
 
@@ -490,9 +496,16 @@ const handleClearInput = () => {
     width: 82%;
     .right-top-bar {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
       padding-top: 10px;
+      & > span {
+        font-size: 25px;
+      }
+      & > div {
+        display: flex;
+        align-items: center;
+      }
       .el-icon {
         margin: 0 30px;
         cursor: pointer;

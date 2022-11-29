@@ -3,8 +3,8 @@ import { request } from '@/util/request';
 import {
   CreateApplicationReq,
   CreateApplicationRes,
-  GetApplicationInfoReq,
-  GetApplicationInfoRes,
+  GetApplicationReq,
+  GetApplicationRes,
   ListApplicationsReq,
   ListApplicationsRes,
   UpdateApplicationReq,
@@ -16,7 +16,7 @@ export * from './type';
 export const listApplications = async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
   try {
     const { result } = await request<ListApplicationsReq, ListApplicationsRes>({
-      url: '/application/page',
+      url: '/application/list',
       method: 'POST',
       data,
     });
@@ -54,10 +54,10 @@ export const updateApplication = async (data: UpdateApplicationReq): Promise<voi
   });
 };
 
-export const getApplicationInfo = async (data: GetApplicationInfoReq): Promise<GetApplicationInfoRes> => {
+export const getApplication = async (data: GetApplicationReq): Promise<GetApplicationRes> => {
   try {
-    const { result } = await request<GetApplicationInfoReq, GetApplicationInfoRes>({
-      url: 'application/applicationInfo',
+    const { result } = await request<GetApplicationReq, GetApplicationRes>({
+      url: '/application',
       method: 'GET',
       data,
     });

@@ -1,6 +1,6 @@
 export interface UploadFileReq {
   /** 文件 */
-  file: File;
+  file: File | Blob;
   /** 文件类型 */
   fileType: string;
   /** 文件名称 */

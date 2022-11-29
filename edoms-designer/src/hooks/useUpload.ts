@@ -2,18 +2,21 @@ import { ref } from 'vue';
 
 import { uploadFile } from '@/api/file';
 
-export default (file: File) => {
+export default (content: File | Blob | string, fileName: string, fileType: string, charset?: string) => {
   const loading = ref<boolean>(false);
 
   const error = ref<any>(null);
 
   const execute = async (): Promise<string | null | undefined> => {
     try {
+      if (typeof content === 'string') {
+        content = new Blob([content], { type: `${fileType};charset=${charset}` });
+      }
       loading.value = true;
       const { contentId } = await uploadFile({
-        file: file,
-        fileName: file.name,
-        fileType: file.type,
+        file: content,
+        fileName,
+        fileType,
       });
       return contentId;
     } catch (e) {

@@ -25,7 +25,7 @@ export default (accepts: string[]) => {
         loading.value = false;
         throw new Error('Cancel select file!');
       }
-      const { error: uploadError, execute: uploadExecute } = useUpload(file);
+      const { error: uploadError, execute: uploadExecute } = useUpload(file, file.name, file.type);
       watch(
         () => uploadError,
         (e) => {

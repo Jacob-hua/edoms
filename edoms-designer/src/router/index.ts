@@ -41,16 +41,9 @@ const routes: RouteRecordRaw[] = [
         name: 'Version',
         component: () => import('@/views/version/index.vue'),
       },
-    ],
-  },
-  {
-    path: '/editor',
-    name: 'editor',
-    component: () => import('@/layout/EditorLayout.vue'),
-    children: [
       {
-        path: '',
-        name: 'PageEditor',
+        path: '/editor',
+        name: 'Editor',
         component: () => import('@/views/page-editor/index.vue'),
       },
     ],

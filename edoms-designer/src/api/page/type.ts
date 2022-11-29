@@ -1,18 +1,24 @@
 import { PageStruct } from '@/const/struct';
 
-export interface PageInfo {
+export interface GetPageReq {
   /** 页面ID */
-  pageId: number;
-  /** 页面名称 */
-  name: string;
-  /** 创建者 */
-  createBy: string;
-  /** 创建事件 */
-  createTime: string;
-  label: number;
+  pageId: string;
 }
 
-export interface ListPageInfosReq {
+export interface GetPageRes {
+  /** 应用ID */
+  applicationId: string;
+  /** 应用名称 */
+  applicationName: string;
+  /** 页面ID */
+  pageId: string;
+  /** 页面名称 */
+  pageName: string;
+  /** 编辑内容ID */
+  editContentId: string | null;
+}
+
+export interface ListPageReq {
   /** 页面名称 */
   name: string | null;
   /** 应用ID */
@@ -23,7 +29,24 @@ export interface ListPageInfosReq {
   limit: number;
 }
 
-export type ListPageInfosRes = PageStruct<PageInfo>;
+export interface ListPageRes
+  extends PageStruct<{
+    /** 页面ID */
+    pageId: number;
+    /** 页面名称 */
+    name: string;
+    /** 页面内容ID */
+    pushContentId: string;
+    /** 创建者 */
+    createBy: string;
+    /** 创建时间 */
+    createTime: string;
+  }> {
+  /** 应用名称 */
+  applicationName: string;
+  /** 应用ID */
+  applicationId: string;
+}
 
 export interface CreatePageReq {
   /** 页面名称 */
@@ -53,4 +76,11 @@ export interface UpdatePageReq {
 export interface DeletePageReq {
   /** 应用ID集合 */
   pageIds: number[];
+}
+
+export interface SavePageReq {
+  /** 页面ID */
+  pageId: string;
+  /** 内容ID */
+  contentId: string;
 }

@@ -31,7 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRaw } from 'vue';
+import { computed, onBeforeMount, ref, toRaw } from 'vue';
+import { useRoute } from 'vue-router';
 import { Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
@@ -42,47 +43,43 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { asyncLoadJs, getByPath } from '@edoms/utils';
 
+import { downloadFile } from '@/api/file';
+import { getPage, savePage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
-import dsl from '@/configs/dsl';
 import useModel from '@/hooks/useModel';
+import useUpload from '@/hooks/useUpload';
+import { generateEmptyAppDSL, generateEmptyPageDSL } from '@/util/dsl';
 
-const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
+const { VITE_RUNTIME_PATH } = import.meta.env;
 
-const { requestInstances, requestPoints } = useModel();
+editorService.usePlugin({
+  beforeDoAdd: (config: MNode, parent?: MContainer | null) => {
+    if (config.type === 'overlay') {
+      config.style = {
+        ...config.style,
+        left: 0,
+        top: 0,
+      };
 
-const loadData = async (props?: RequestProps) => {
-  if (!props) {
-    return;
-  }
-  if (props.resourceId === 'dynamic-monitoring:instance') {
-    return await requestInstances();
-  }
-  if (props.resourceId === 'dynamic-monitoring:point') {
-    const prop = props.prop ?? '';
-    const pathLastIndex = prop.lastIndexOf('.');
-    const domainPath = prop.substring(0, pathLastIndex);
-    const model = getByPath(props.formValue ?? {}, domainPath, '');
-
-    if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
-      return await requestPoints({
-        insId: model.instance[model.instance.length - 1],
-        codeType: model.instanceType,
-        propType: model.propertyType,
-      });
+      return [config, editorService.get('page')];
     }
-    return [];
-  }
-  return;
-};
+
+    return [config, parent];
+  },
+});
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
+
 const editor = ref<InstanceType<typeof EdomsEditor>>();
+
 const previewVisible = ref(false);
-const value = ref<MApp>(dsl);
-const defaultSelected = ref(dsl.items[0].id);
-const propsValues = ref<Record<string, any>>({});
-const propsConfigs = ref<Record<string, any>>({});
-const eventMethodList = ref<Record<string, any>>({});
+
+const value = ref<MApp | undefined>();
+
+const defaultSelected = ref();
+
+const { propsConfigs, propsValues, eventMethodList } = loadUiScript();
+
 const stageRect = ref({
   width: 1200,
   height: 950,
@@ -91,6 +88,11 @@ const stageRect = ref({
 const previewUrl = computed(
   () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
 );
+
+const route = useRoute();
+const pageId = computed<string>(() => {
+  return route.query.pageId as string;
+});
 
 const menu: MenuBarData = {
   left: [
@@ -142,7 +144,62 @@ const menu: MenuBarData = {
   ],
 };
 
-const moveableOptions = (core?: StageCore): MoveableOptions => {
+const loadData = async (props?: RequestProps): Promise<any> => {
+  const { requestInstances, requestPoints } = useModel();
+  if (!props) {
+    return;
+  }
+  if (props.resourceId === 'dynamic-monitoring:instance') {
+    return await requestInstances();
+  }
+  if (props.resourceId === 'dynamic-monitoring:point') {
+    const prop = props.prop ?? '';
+    const pathLastIndex = prop.lastIndexOf('.');
+    const domainPath = prop.substring(0, pathLastIndex);
+    const model = getByPath(props.formValue ?? {}, domainPath, '');
+
+    if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
+      return await requestPoints({
+        insId: model.instance[model.instance.length - 1],
+        codeType: model.instanceType,
+        propType: model.propertyType,
+      });
+    }
+    return [];
+  }
+  return;
+};
+
+onBeforeMount(calculateDSL);
+
+function handleRuntimeReady() {
+  console.log('准备好了');
+}
+
+function loadUiScript() {
+  const propsValues = ref<Record<string, any>>({});
+  const propsConfigs = ref<Record<string, any>>({});
+  const eventMethodList = ref<Record<string, any>>({});
+
+  const { VITE_ENTRY_PATH } = import.meta.env;
+  asyncLoadJs(`${VITE_ENTRY_PATH}/config/index.umd.js`).then(() => {
+    propsConfigs.value = (globalThis as any).edomsPresetConfigs;
+  });
+  asyncLoadJs(`${VITE_ENTRY_PATH}/value/index.umd.js`).then(() => {
+    propsValues.value = (globalThis as any).edomsPresetValues;
+  });
+  asyncLoadJs(`${VITE_ENTRY_PATH}/event/index.umd.js`).then(() => {
+    eventMethodList.value = (globalThis as any).edomsPresetEvents;
+  });
+
+  return {
+    propsValues,
+    propsConfigs,
+    eventMethodList,
+  };
+}
+
+function moveableOptions(core?: StageCore): MoveableOptions {
   const options: MoveableOptions = {};
   const id = core?.dr?.target?.id;
 
@@ -159,50 +216,53 @@ const moveableOptions = (core?: StageCore): MoveableOptions => {
   options.rotatable = !isPage;
 
   return options;
-};
+}
 
-const save = () => {
-  localStorage.setItem(
-    'edomsDSL',
-    serialize(toRaw(value.value), {
-      space: 2,
-      unsafe: true,
-    }).replace(/"(\w+)":\s/g, '$1: ')
-  );
-  editor.value?.editorService.resetModifiedNodeId();
-};
-
-asyncLoadJs(`${VITE_ENTRY_PATH}/config/index.umd.js`).then(() => {
-  propsConfigs.value = (globalThis as any).edomsPresetConfigs;
-});
-asyncLoadJs(`${VITE_ENTRY_PATH}/value/index.umd.js`).then(() => {
-  propsValues.value = (globalThis as any).edomsPresetValues;
-});
-asyncLoadJs(`${VITE_ENTRY_PATH}/event/index.umd.js`).then(() => {
-  eventMethodList.value = (globalThis as any).edomsPresetEvents;
-});
-
-save();
-
-editorService.usePlugin({
-  beforeDoAdd: (config: MNode, parent?: MContainer | null) => {
-    if (config.type === 'overlay') {
-      config.style = {
-        ...config.style,
-        left: 0,
-        top: 0,
-      };
-
-      return [config, editorService.get('page')];
+async function calculateDSL() {
+  const pageInfo = await getPage({
+    pageId: pageId.value,
+  });
+  const dsl = generateEmptyAppDSL({
+    applicationId: pageInfo.applicationId,
+    applicationName: pageInfo.applicationName,
+  });
+  if (pageInfo.editContentId) {
+    const result = (await downloadFile({
+      contentId: pageInfo.editContentId,
+    })) as Blob;
+    const text = await result.text();
+    const pageDSL = new Function(`return ${text ?? undefined}`)();
+    if (pageDSL) {
+      dsl.items.push(pageDSL);
     }
+  } else {
+    dsl.items.push(
+      generateEmptyPageDSL({
+        pageId: pageInfo.pageId,
+        pageName: pageInfo.pageName,
+      })
+    );
+  }
+  value.value = dsl;
+  defaultSelected.value = pageId.value;
+}
 
-    return [config, parent];
-  },
-});
+async function save() {
+  const pageDSL = serialize(toRaw(value.value?.items?.[0]), {
+    space: 2,
+    unsafe: true,
+  }).replace(/"(\w+)":\s/g, '$1: ');
 
-const handleRuntimeReady = () => {
-  console.log('准备好了');
-};
+  const { execute } = useUpload(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
+  const contentId = await execute();
+  if (contentId) {
+    await savePage({
+      pageId: pageId.value,
+      contentId,
+    });
+  }
+  editor.value?.editorService.resetModifiedNodeId();
+}
 </script>
 
 <style lang="scss">

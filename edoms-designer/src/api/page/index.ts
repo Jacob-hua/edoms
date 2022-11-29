@@ -1,12 +1,31 @@
 import { request } from '@/util/request';
 
-import { CreatePageReq, CreatePageRes, DeletePageReq, ListPageInfosReq, ListPageInfosRes, UpdatePageReq } from './type';
+import {
+  CreatePageReq,
+  CreatePageRes,
+  DeletePageReq,
+  GetPageReq,
+  GetPageRes,
+  ListPageReq,
+  ListPageRes,
+  SavePageReq,
+  UpdatePageReq,
+} from './type';
 
 export * from './type';
 
-export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRes> => {
+export const getPage = async (data: GetPageReq): Promise<GetPageRes> => {
+  const { result } = await request<GetPageReq, GetPageRes>({
+    url: '/page',
+    method: 'GET',
+    data,
+  });
+  return result;
+};
+
+export const listPages = async (data: ListPageReq): Promise<ListPageRes> => {
   try {
-    const { result } = await request<ListPageInfosReq, ListPageInfosRes>({
+    const { result } = await request<ListPageReq, ListPageRes>({
       url: '/page/list',
       method: 'POST',
       data,
@@ -14,6 +33,8 @@ export const listPages = async (data: ListPageInfosReq): Promise<ListPageInfosRe
     return result;
   } catch (error) {
     return {
+      applicationId: '',
+      applicationName: '',
       count: 0,
       limit: 0,
       page: 0,
@@ -43,6 +64,14 @@ export const deletePage = async (data: DeletePageReq): Promise<void> => {
   await request<DeletePageReq, void>({
     url: '/page/delete',
     method: 'DELETE',
+    data,
+  });
+};
+
+export const savePage = async (data: SavePageReq): Promise<void> => {
+  await request<SavePageReq, void>({
+    url: '/page/save',
+    method: 'POST',
     data,
   });
 };

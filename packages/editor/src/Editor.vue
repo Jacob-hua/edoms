@@ -87,7 +87,7 @@ import type { ComponentGroup, MenuBarData, MenuButton, MenuComponent, Request, S
 
 const props = withDefaults(
   defineProps<{
-    modelValue: MApp;
+    modelValue: MApp | undefined;
     componentGroupList?: ComponentGroup[];
     sidebar?: SideBarData;
     layerContentMenu?: (MenuButton | MenuComponent)[];
@@ -154,8 +154,11 @@ editorService.on('root-change', (value) => {
 
 // 初始值变化，重新设置节点信息
 watch(
-  () => props.modelValue,
-  (modelValue) => {
+  () => ({ modelValue: props.modelValue, defaultSelected: props.defaultSelected }),
+  ({ modelValue, defaultSelected }) => {
+    if (!modelValue || !defaultSelected) {
+      return;
+    }
     editorService.set('root', modelValue);
   },
   {
@@ -201,14 +204,6 @@ watch(
     eventsService.setEvents(eventsList);
     eventsService.setMethods(methodsList);
   },
-  {
-    immediate: true,
-  }
-);
-
-watch(
-  () => props.defaultSelected,
-  (defaultSelected) => defaultSelected && editorService.select(defaultSelected),
   {
     immediate: true,
   }

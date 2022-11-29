@@ -56,12 +56,12 @@ export interface UpdateApplicationReq {
   serviceAddress?: string | null;
 }
 
-export interface GetApplicationInfoReq {
+export interface GetApplicationReq {
   /** 应用ID */
   applicationId: string;
 }
 
-export type GetApplicationInfoRes = ApplicationInfo;
+export type GetApplicationRes = ApplicationInfo;
 
 export interface DeleteApplicationReq {
   /** 应用ID */
