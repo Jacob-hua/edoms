@@ -100,7 +100,7 @@ const previewUrl = computed(
 );
 
 const fetchPageInfo = async () => {
-  const { applicationId, applicationName, editContentId, pageId, name } = await getPage({
+  const { applicationId, applicationName, editContentId, pageId, pageName } = await getPage({
     pageId: route.query.pageId as string,
   });
   if (!editContentId) {
@@ -108,9 +108,11 @@ const fetchPageInfo = async () => {
       applicationId,
       applicationName,
       pageId,
-      pageName: name,
+      pageName,
     });
     value.value = dsl;
+    editor.value?.editorService.set('root', dsl);
+    editor.value?.editorService.select(pageId);
   }
 };
 

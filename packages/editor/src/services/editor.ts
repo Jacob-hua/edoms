@@ -104,7 +104,7 @@ export class EditorService extends BaseService {
    * @param {boolean} raw 是否使用toRaw
    * @returns {EditorNodeInfo}
    */
-  public getNodeInfo(id: Id, raw = true): EditorNodeInfo {
+  public getNodeInfo(id: Id, raw: boolean = true): EditorNodeInfo {
     let root = this.get<MApp | null>('root');
     if (raw) {
       root = toRaw(root);
@@ -141,7 +141,7 @@ export class EditorService extends BaseService {
    * @param {boolean} raw 是否使用toRaw
    * @returns 组件节点配置
    */
-  public getNodeById(id: Id, raw = true): MNode | undefined {
+  public getNodeById(id: Id, raw: boolean = true): MNode | undefined {
     const { node } = this.getNodeInfo(id, raw);
     return node;
   }
@@ -152,7 +152,7 @@ export class EditorService extends BaseService {
    * @param {boolean} raw 是否使用toRaw
    * @returns 指点组件的父节点配置
    */
-  public getParentById(id: Id, raw = true): MContainer | undefined {
+  public getParentById(id: Id, raw: boolean = true): MContainer | undefined {
     if (!this.get<MApp | null>('root')) return;
     const { parent } = this.getNodeInfo(id, raw);
     return parent;

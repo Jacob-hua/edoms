@@ -2,7 +2,7 @@ import { PageStruct } from '@/const/struct';
 
 export interface GetPageReq {
   /** 页面ID */
-  pageId: string | number;
+  pageId: string;
 }
 
 export interface GetPageRes {
@@ -13,7 +13,7 @@ export interface GetPageRes {
   /** 页面ID */
   pageId: string;
   /** 页面名称 */
-  name: string;
+  pageName: string;
   /** 编辑内容ID */
   editContentId: string | null;
 }
