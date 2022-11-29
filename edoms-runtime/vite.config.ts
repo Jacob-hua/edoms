@@ -5,7 +5,7 @@ import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 // @ts-ignore
-import externalGlobals from 'rollup-plugin-external-globals';
+// import externalGlobals from 'rollup-plugin-external-globals';
 
 export default defineConfig(({ mode }) => {
   const [type, isProduction] = mode.split(':');
@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
         legacy({
           targets: ['defaults', 'not IE 11'],
         }),
-        externalGlobals({ vue: 'Vue' }, { exclude: [`./${type}/index.html`] }),
+        // externalGlobals({ vue: 'Vue' }, { exclude: [`./${type}/index.html`] }),
       ],
 
       root: `./${type}/`,
@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => {
         emptyOutDir: true,
         sourcemap: true,
         rollupOptions: {
-          external: ['vue'],
+          // external: ['vue'],
           input: path.resolve(process.cwd(), `./${type}/index.html`),
         },
         outDir,
