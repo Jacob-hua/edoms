@@ -10,6 +10,9 @@ export interface LoadingService {
 let loadingService: LoadingService;
 
 const requestInterceptors = (config: EdomsRequestConfig) => {
+  if (!config.loading) {
+    return config;
+  }
   if (loadingService) {
     loadingService.close();
   }
