@@ -50,45 +50,39 @@ import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
 import { generateDefaultDSL } from '@/util/dsl';
 
-const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH } = import.meta.env;
+const { VITE_RUNTIME_PATH } = import.meta.env;
+
+editorService.usePlugin({
+  beforeDoAdd: (config: MNode, parent?: MContainer | null) => {
+    if (config.type === 'overlay') {
+      config.style = {
+        ...config.style,
+        left: 0,
+        top: 0,
+      };
+
+      return [config, editorService.get('page')];
+    }
+
+    return [config, parent];
+  },
+});
 
 const route = useRoute();
 
 const { requestInstances, requestPoints } = useModel();
 
-const loadData = async (props?: RequestProps) => {
-  if (!props) {
-    return;
-  }
-  if (props.resourceId === 'dynamic-monitoring:instance') {
-    return await requestInstances();
-  }
-  if (props.resourceId === 'dynamic-monitoring:point') {
-    const prop = props.prop ?? '';
-    const pathLastIndex = prop.lastIndexOf('.');
-    const domainPath = prop.substring(0, pathLastIndex);
-    const model = getByPath(props.formValue ?? {}, domainPath, '');
-
-    if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
-      return await requestPoints({
-        insId: model.instance[model.instance.length - 1],
-        codeType: model.instanceType,
-        propType: model.propertyType,
-      });
-    }
-    return [];
-  }
-  return;
-};
-
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
+
 const editor = ref<InstanceType<typeof EdomsEditor>>();
+
 const previewVisible = ref(false);
+
 const value = ref<MApp>(mockDSL);
+
 const defaultSelected = ref(mockDSL.items[0].id);
-const propsValues = ref<Record<string, any>>({});
-const propsConfigs = ref<Record<string, any>>({});
-const eventMethodList = ref<Record<string, any>>({});
+
+const { propsConfigs, propsValues, eventMethodList } = loadUiScript();
 
 const stageRect = ref({
   width: 1200,
@@ -98,27 +92,6 @@ const stageRect = ref({
 const previewUrl = computed(
   () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
 );
-
-const fetchPageInfo = async () => {
-  const { applicationId, applicationName, editContentId, pageId, pageName } = await getPage({
-    pageId: route.query.pageId as string,
-  });
-  if (!editContentId) {
-    const dsl = generateDefaultDSL({
-      applicationId,
-      applicationName,
-      pageId,
-      pageName,
-    });
-    value.value = dsl;
-    editor.value?.editorService.set('root', dsl);
-    editor.value?.editorService.select(pageId);
-  }
-};
-
-onMounted(() => {
-  fetchPageInfo();
-});
 
 const menu: MenuBarData = {
   left: [
@@ -170,7 +143,63 @@ const menu: MenuBarData = {
   ],
 };
 
-const moveableOptions = (core?: StageCore): MoveableOptions => {
+onMounted(() => {
+  fetchPageInfo();
+});
+
+function handleRuntimeReady() {
+  console.log('准备好了');
+}
+
+function loadUiScript() {
+  const propsValues = ref<Record<string, any>>({});
+  const propsConfigs = ref<Record<string, any>>({});
+  const eventMethodList = ref<Record<string, any>>({});
+
+  const { VITE_ENTRY_PATH } = import.meta.env;
+  asyncLoadJs(`${VITE_ENTRY_PATH}/config/index.umd.js`).then(() => {
+    propsConfigs.value = (globalThis as any).edomsPresetConfigs;
+  });
+  asyncLoadJs(`${VITE_ENTRY_PATH}/value/index.umd.js`).then(() => {
+    propsValues.value = (globalThis as any).edomsPresetValues;
+  });
+  asyncLoadJs(`${VITE_ENTRY_PATH}/event/index.umd.js`).then(() => {
+    eventMethodList.value = (globalThis as any).edomsPresetEvents;
+  });
+
+  return {
+    propsValues,
+    propsConfigs,
+    eventMethodList,
+  };
+}
+
+async function loadData(props?: RequestProps): Promise<any> {
+  if (!props) {
+    return;
+  }
+  if (props.resourceId === 'dynamic-monitoring:instance') {
+    return await requestInstances();
+  }
+  if (props.resourceId === 'dynamic-monitoring:point') {
+    const prop = props.prop ?? '';
+    const pathLastIndex = prop.lastIndexOf('.');
+    const domainPath = prop.substring(0, pathLastIndex);
+    const model = getByPath(props.formValue ?? {}, domainPath, '');
+
+    if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
+      return await requestPoints({
+        insId: model.instance[model.instance.length - 1],
+        codeType: model.instanceType,
+        propType: model.propertyType,
+      });
+    }
+    return [];
+  }
+  return;
+}
+
+function moveableOptions(core?: StageCore): MoveableOptions {
   const options: MoveableOptions = {};
   const id = core?.dr?.target?.id;
 
@@ -187,9 +216,26 @@ const moveableOptions = (core?: StageCore): MoveableOptions => {
   options.rotatable = !isPage;
 
   return options;
-};
+}
 
-const save = () => {
+async function fetchPageInfo() {
+  const { applicationId, applicationName, editContentId, pageId, pageName } = await getPage({
+    pageId: route.query.pageId as string,
+  });
+  if (!editContentId) {
+    const dsl = generateDefaultDSL({
+      applicationId,
+      applicationName,
+      pageId,
+      pageName,
+    });
+    value.value = dsl;
+    editor.value?.editorService.set('root', dsl);
+    editor.value?.editorService.select(pageId);
+  }
+}
+
+function save() {
   const dsl = serialize(toRaw(value.value), {
     space: 2,
     unsafe: true,
@@ -197,37 +243,7 @@ const save = () => {
   useUpload(dsl, 'runtimeDSL', 'text/javascript', 'utf-8').execute();
   // localStorage.setItem('edomsDSL', dsl);
   editor.value?.editorService.resetModifiedNodeId();
-};
-
-asyncLoadJs(`${VITE_ENTRY_PATH}/config/index.umd.js`).then(() => {
-  propsConfigs.value = (globalThis as any).edomsPresetConfigs;
-});
-asyncLoadJs(`${VITE_ENTRY_PATH}/value/index.umd.js`).then(() => {
-  propsValues.value = (globalThis as any).edomsPresetValues;
-});
-asyncLoadJs(`${VITE_ENTRY_PATH}/event/index.umd.js`).then(() => {
-  eventMethodList.value = (globalThis as any).edomsPresetEvents;
-});
-
-editorService.usePlugin({
-  beforeDoAdd: (config: MNode, parent?: MContainer | null) => {
-    if (config.type === 'overlay') {
-      config.style = {
-        ...config.style,
-        left: 0,
-        top: 0,
-      };
-
-      return [config, editorService.get('page')];
-    }
-
-    return [config, parent];
-  },
-});
-
-const handleRuntimeReady = () => {
-  console.log('准备好了');
-};
+}
 </script>
 
 <style lang="scss">
