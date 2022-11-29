@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, toRaw } from 'vue';
+import { computed, onBeforeMount, ref, toRaw } from 'vue';
 import { useRoute } from 'vue-router';
 import { Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -67,10 +67,6 @@ editorService.usePlugin({
     return [config, parent];
   },
 });
-
-const route = useRoute();
-
-const { requestInstances, requestPoints } = useModel();
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
 
@@ -143,9 +139,33 @@ const menu: MenuBarData = {
   ],
 };
 
-onMounted(() => {
-  fetchPageInfo();
-});
+const loadData = async (props?: RequestProps): Promise<any> => {
+  const { requestInstances, requestPoints } = useModel();
+  if (!props) {
+    return;
+  }
+  if (props.resourceId === 'dynamic-monitoring:instance') {
+    return await requestInstances();
+  }
+  if (props.resourceId === 'dynamic-monitoring:point') {
+    const prop = props.prop ?? '';
+    const pathLastIndex = prop.lastIndexOf('.');
+    const domainPath = prop.substring(0, pathLastIndex);
+    const model = getByPath(props.formValue ?? {}, domainPath, '');
+
+    if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
+      return await requestPoints({
+        insId: model.instance[model.instance.length - 1],
+        codeType: model.instanceType,
+        propType: model.propertyType,
+      });
+    }
+    return [];
+  }
+  return;
+};
+
+onBeforeMount(fetchPageInfo);
 
 function handleRuntimeReady() {
   console.log('准备好了');
@@ -174,31 +194,6 @@ function loadUiScript() {
   };
 }
 
-async function loadData(props?: RequestProps): Promise<any> {
-  if (!props) {
-    return;
-  }
-  if (props.resourceId === 'dynamic-monitoring:instance') {
-    return await requestInstances();
-  }
-  if (props.resourceId === 'dynamic-monitoring:point') {
-    const prop = props.prop ?? '';
-    const pathLastIndex = prop.lastIndexOf('.');
-    const domainPath = prop.substring(0, pathLastIndex);
-    const model = getByPath(props.formValue ?? {}, domainPath, '');
-
-    if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
-      return await requestPoints({
-        insId: model.instance[model.instance.length - 1],
-        codeType: model.instanceType,
-        propType: model.propertyType,
-      });
-    }
-    return [];
-  }
-  return;
-}
-
 function moveableOptions(core?: StageCore): MoveableOptions {
   const options: MoveableOptions = {};
   const id = core?.dr?.target?.id;
@@ -219,6 +214,7 @@ function moveableOptions(core?: StageCore): MoveableOptions {
 }
 
 async function fetchPageInfo() {
+  const route = useRoute();
   const { applicationId, applicationName, editContentId, pageId, pageName } = await getPage({
     pageId: route.query.pageId as string,
   });
