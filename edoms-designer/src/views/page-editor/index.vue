@@ -47,7 +47,7 @@ import { getPage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
-import { generateDefaultAppDSL, generateDefaultPageDSL } from '@/util/dsl';
+import { generateDSL } from '@/util/dsl';
 
 const { VITE_RUNTIME_PATH } = import.meta.env;
 
@@ -218,20 +218,14 @@ async function fetchPageInfo() {
     pageId: route.query.pageId as string,
   });
   if (!editContentId) {
-    const dsl = generateDefaultAppDSL({
+    const dsl = generateDSL({
       applicationId,
       applicationName,
+      pageId,
+      pageName,
     });
-    dsl.items.push(
-      generateDefaultPageDSL({
-        pageId,
-        pageName,
-      })
-    );
-    // editor.value?.editorService.update(dsl);
     value.value = dsl;
     defaultSelected.value = pageId;
-    // editor.value?.editorService.set('root', dsl);
   }
 }
 
