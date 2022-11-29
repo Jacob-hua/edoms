@@ -154,9 +154,9 @@ editorService.on('root-change', (value) => {
 
 // 初始值变化，重新设置节点信息
 watch(
-  () => props.modelValue,
-  (modelValue) => {
-    if (!modelValue) {
+  () => ({ modelValue: props.modelValue, defaultSelected: props.defaultSelected }),
+  ({ modelValue, defaultSelected }) => {
+    if (!modelValue || !defaultSelected) {
       return;
     }
     editorService.set('root', modelValue);
