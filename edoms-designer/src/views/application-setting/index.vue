@@ -14,7 +14,7 @@
                 <span>应用信息</span>
               </span>
             </template>
-            <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @back="goBack" />
+            <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @success="goBack" />
           </el-tab-pane>
           <el-tab-pane>
             <template #label>

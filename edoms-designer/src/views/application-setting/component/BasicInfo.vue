@@ -21,16 +21,7 @@
         </div>
       </el-form-item>
       <el-form-item label="封面">
-        <ImageUpload
-          :thumbnail-id="appInfo.thumbnailId"
-          @get-content-id="getContentId"
-          @preview="handlePreview"
-        ></ImageUpload>
-        <div class="preview-wrapper">
-          <el-dialog v-model="dialogVisible">
-            <preview-image :content-id="appInfo.thumbnailId"></preview-image>
-          </el-dialog>
-        </div>
+        <ImageUpload :thumbnail-id="appInfo.thumbnailId" @success="getContentId"></ImageUpload>
       </el-form-item>
     </el-form>
     <div class="updateBtn" @click="update(appInfo)">更新</div>
@@ -44,11 +35,10 @@ import { ElMessage, FormInstance } from 'element-plus';
 import { updateApplication } from '@/api/application';
 import { ApplicationInfo } from '@/api/application/type';
 import { UpdateApplicationReq } from '@/api/application/type';
-import PreviewImage from '@/components/ImagePreview.vue';
 import ImageUpload from '@/components/ImageUpload.vue';
 
 const emit = defineEmits<{
-  (event: 'back'): void;
+  (event: 'success'): void;
 }>();
 const props = defineProps<{
   appInfo: ApplicationInfo;
@@ -83,33 +73,26 @@ const rules = {
   serviceAddress: [],
 };
 const { appInfo } = toRefs(props);
-const dialogVisible = ref<boolean>(false);
 
 const formRef = ref<FormInstance>();
 
 const getContentId = (contentId: string) => {
   appInfo.value.thumbnailId = contentId;
 };
-const handlePreview = () => {
-  dialogVisible.value = true;
-};
 
-const updateApp = async ({ applicationId, name, description, thumbnailId, serviceAddress }: UpdateApplicationReq) => {
-  await updateApplication({
-    applicationId,
-    name,
-    description,
-    thumbnailId,
-    serviceAddress,
-  });
-  ElMessage.success('更新成功');
-};
-const update = async (appInfo: UpdateApplicationReq) => {
+const update = async ({ applicationId, name, description, thumbnailId, serviceAddress }: UpdateApplicationReq) => {
   if (!formRef.value) return;
   try {
     await formRef.value?.validate();
-    await updateApp(appInfo);
-    emit('back');
+    await updateApplication({
+      applicationId,
+      name,
+      description,
+      thumbnailId,
+      serviceAddress,
+    });
+    ElMessage.success('更新成功');
+    emit('success');
   } catch (e: any) {
     console.log(e);
   }
