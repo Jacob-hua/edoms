@@ -261,6 +261,14 @@ async function save() {
       contentId,
     });
   }
+  /** TODO: 随后删除 */
+  localStorage.setItem(
+    'edomsDSL',
+    serialize(toRaw(value.value), {
+      space: 2,
+      unsafe: true,
+    }).replace(/"(\w+)":\s/g, '$1: ')
+  );
   editor.value?.editorService.resetModifiedNodeId();
 }
 </script>
