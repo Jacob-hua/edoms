@@ -232,12 +232,14 @@ async function calculateDSL(pageId: string): Promise<MApp> {
     return dsl;
   }
 
-  return dsl.item.push(
+  dsl.item.push(
     generateEmptyPageDSL({
       pageId: pageInfo.pageId,
       pageName: pageInfo.pageName,
     })
   );
+
+  return dsl;
 }
 
 async function save() {
