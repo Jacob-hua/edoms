@@ -23,12 +23,15 @@
   "dependencies": {
     "@edoms/cli": "workspace:^0.0.1",
     "@edoms/core": "workspace:^0.0.1",
+    "@edoms/editor": "workspace:^0.0.1",
+    "@edoms/element-plus-adapter": "workspace:^0.0.1",
     "@edoms/schema": "workspace:^0.0.1",
     "@edoms/stage": "workspace:^0.0.1",
     "@edoms/ui": "workspace:^0.0.1",
     "@edoms/utils": "workspace:^0.0.1",
     "@vitejs/plugin-legacy": "^2.2.0",
     "@vitejs/plugin-vue-jsx": "^1.3.10",
+    "element-plus": "^2.2.25",
     "terser": "^5.14.2",
     "vue": "^3.2.37"
   },
