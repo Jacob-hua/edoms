@@ -38,14 +38,14 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
 import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps } from '@edoms/editor';
-import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
+import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { asyncLoadJs, getByPath } from '@edoms/utils';
 
-import { downloadFile } from '@/api/file';
 import { getPage, savePage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
+import useDSL from '@/hooks/useDSL';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
 import { generateEmptyAppDSL, generateEmptyPageDSL } from '@/util/dsl';
@@ -226,25 +226,29 @@ async function calculateDSL() {
     applicationId: pageInfo.applicationId,
     applicationName: pageInfo.applicationName,
   });
-  if (pageInfo.editContentId) {
-    const result = (await downloadFile({
-      contentId: pageInfo.editContentId,
-    })) as Blob;
-    const text = await result.text();
-    const pageDSL = new Function(`return ${text ?? undefined}`)();
-    if (pageDSL) {
-      dsl.items.push(pageDSL);
-    }
-  } else {
-    dsl.items.push(
-      generateEmptyPageDSL({
-        pageId: pageInfo.pageId,
-        pageName: pageInfo.pageName,
-      })
-    );
-  }
+  dsl.items.push(await calculatePageDSL({ ...pageInfo }));
   value.value = dsl;
   defaultSelected.value = pageId.value;
+}
+
+async function calculatePageDSL({
+  pageId,
+  pageName,
+  editContentId,
+}: {
+  pageId: string;
+  pageName: string;
+  editContentId: string | undefined | null;
+}): Promise<MPage> {
+  if (editContentId) {
+    const { execute } = useDSL(editContentId);
+    const pageDSL = await execute();
+    return pageDSL;
+  }
+  return generateEmptyPageDSL({
+    pageId,
+    pageName,
+  });
 }
 
 async function save() {
