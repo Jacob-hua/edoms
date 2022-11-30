@@ -18,20 +18,19 @@
     >
     </edoms-editor>
 
-    <el-dialog
-      v-model="previewVisible"
-      destroy-on-close
-      class="pre-viewer"
-      title="预览"
-      :width="stageRect && stageRect.width"
-    >
-      <iframe v-if="previewVisible" width="100%" :height="stageRect && stageRect.height" :src="previewUrl"></iframe>
-    </el-dialog>
+    <DSLPreviewDialog
+      v-model:visible="previewDialogVisible"
+      :stage-rect="stageRect"
+      :application-id="pageInfo?.applicationId"
+      :application-name="pageInfo?.applicationName"
+      :page-id="pageInfo?.pageId"
+      :content-id="pageInfo?.editContentId"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRaw } from 'vue';
+import { computed, ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -43,13 +42,15 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath } from '@edoms/utils';
 
-import { getPage, savePage } from '@/api/page';
+import { getPage, GetPageRes, savePage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
-import useDSL from '@/hooks/useDSL';
+import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
 import { generateEmptyAppDSL, generateEmptyPageDSL } from '@/util/dsl';
+
+import DSLPreviewDialog from './component/DSLPreviewDialog.vue';
 
 const { VITE_RUNTIME_PATH } = import.meta.env;
 
@@ -69,11 +70,16 @@ editorService.usePlugin({
   },
 });
 
+const stageRect = ref({
+  width: 1200,
+  height: 950,
+});
+
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
 
 const editor = ref<InstanceType<typeof EdomsEditor>>();
 
-const previewVisible = ref(false);
+const previewDialogVisible = ref(false);
 
 const value = ref<MApp | undefined>();
 
@@ -99,15 +105,6 @@ useAsyncLoadJS(
     eventMethodList.value = (globalThis as any).edomsPresetEvents;
   }
 ).execute();
-
-const stageRect = ref({
-  width: 1200,
-  height: 950,
-});
-
-const previewUrl = computed(
-  () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
-);
 
 const menu: MenuBarData = {
   left: [
@@ -137,7 +134,7 @@ const menu: MenuBarData = {
             console.error(e);
           }
         }
-        previewVisible.value = true;
+        previewDialogVisible.value = true;
       },
     },
     {
@@ -204,30 +201,41 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   return;
 };
 
+const pageInfo = ref<GetPageRes | undefined>();
+
 const pageId = computed<string>(() => {
   const route = useRoute();
   return route.query.pageId as string;
 });
 
-calculateDSL(pageId.value).then((dsl: MApp) => {
-  value.value = dsl;
-  defaultSelected.value = pageId.value;
-});
+watch(
+  () => pageId.value,
+  async (pageId) => {
+    if (!pageId) {
+      return;
+    }
+    pageInfo.value = await getPage({ pageId });
+    const dsl = await calculateDSL(pageInfo.value);
+    value.value = dsl;
+    defaultSelected.value = pageId;
+  },
+  {
+    immediate: true,
+  }
+);
 
 const handleRuntimeReady = () => {
   console.log('准备好了');
 };
 
-async function calculateDSL(pageId: string): Promise<MApp> {
-  const pageInfo = await getPage({ pageId });
-
+async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
   const dsl = generateEmptyAppDSL({
     applicationId: pageInfo.applicationId,
     applicationName: pageInfo.applicationName,
   });
 
   if (pageInfo.editContentId) {
-    const { execute } = useDSL(pageInfo.editContentId);
+    const { execute } = useDownloadDSL(pageInfo.editContentId);
     dsl.items.push(await execute());
     return dsl;
   }
@@ -251,19 +259,12 @@ async function save() {
   const { execute } = useUpload(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
   const contentId = await execute();
   if (contentId) {
+    pageInfo.value && (pageInfo.value.editContentId = contentId);
     await savePage({
       pageId: pageId.value,
       contentId,
     });
   }
-  /** TODO: 随后删除 */
-  localStorage.setItem(
-    'edomsDSL',
-    serialize(toRaw(value.value), {
-      space: 2,
-      unsafe: true,
-    }).replace(/"(\w+)":\s/g, '$1: ')
-  );
   editor.value?.editorService.resetModifiedNodeId();
 }
 </script>

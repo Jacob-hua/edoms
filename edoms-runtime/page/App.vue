@@ -2,21 +2,20 @@
   <edoms-ui-page :config="pageConfig"></edoms-ui-page>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, reactive } from 'vue';
+<script lang="ts" setup>
+import { inject, ref } from 'vue';
 
 import Core from '@edoms/core';
+import { getUrlParam } from '@edoms/utils';
 
-export default defineComponent({
-  name: 'App',
+const app = inject<Core | undefined>('app');
+const pageConfig = ref(app?.page?.data || {});
 
-  setup() {
-    const app = inject<Core | undefined>('app');
-    const pageConfig = reactive(app?.page?.data || {});
-
-    return {
-      pageConfig,
-    };
-  },
+window.addEventListener('message', ({ data }) => {
+  if (!app) {
+    return;
+  }
+  app.setConfig(data, getUrlParam('page'));
+  pageConfig.value = app.page?.data || {};
 });
 </script>

@@ -5,14 +5,13 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Core from '@edoms/core';
 import ElDesign from '@edoms/design';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
-import { getUrlParam, toLine } from '@edoms/utils';
+import { toLine } from '@edoms/utils';
 
 import components from '../.edoms/async-comp-entry';
 import plugins from '../.edoms/plugin-entry';
 
 import request from './utils/request';
 import AppComponent from './App.vue';
-import { getLocalConfig } from './utils';
 
 import 'element-plus/theme-chalk/index.css';
 
@@ -40,8 +39,6 @@ const designWidth = document.documentElement.getBoundingClientRect().width;
 
 const app = new Core({
   designWidth,
-  config: ((getUrlParam('localPreview') ? getLocalConfig() : window.edomsDSL) || [])[0] || {},
-  curPage: getUrlParam('page'),
 });
 
 edomsApp.config.globalProperties.app = app;

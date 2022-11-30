@@ -1,6 +1,12 @@
 <template>
-  <el-dialog v-model="dialogVisible" destroy-on-close class="pre-viewer" title="预览" :width="width">
-    <DSLPreview :height="stageRect.height" application-id="1" :content-id="contentId" />
+  <el-dialog v-model="dialogVisible" destroy-on-close class="pre-viewer" title="预览" :width="stageRect.width">
+    <DSLPreview
+      :height="stageRect.height"
+      :application-id="applicationId"
+      :application-name="applicationName"
+      :content-id="contentId"
+      :page-id="pageId"
+    />
   </el-dialog>
 </template>
 
@@ -12,20 +18,25 @@ import DSLPreview from '@/components/DSLPreview.vue';
 const props = withDefaults(
   defineProps<{
     visible: boolean;
-    contentId: string;
+    applicationId?: string;
+    applicationName?: string;
+    pageId?: string;
+    contentId?: string | null | undefined;
     stageRect: {
       width: number;
       height: number;
     };
-    width?: string;
   }>(),
   {
+    applicationId: '',
+    applicationName: '',
+    pageId: '',
     width: '100%',
   }
 );
 
 const emit = defineEmits<{
-  (emit: 'update:visible', visible: boolean): void;
+  (emit: 'update:visible', value: boolean): void;
 }>();
 
 const dialogVisible = computed<boolean>({
