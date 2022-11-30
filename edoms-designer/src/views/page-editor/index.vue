@@ -31,20 +31,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref, toRaw } from 'vue';
+import { computed, ref, toRaw } from 'vue';
 import { useRoute } from 'vue-router';
 import { Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
 import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps } from '@edoms/editor';
-import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
+import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
-import { asyncLoadJs, getByPath } from '@edoms/utils';
+import { getByPath } from '@edoms/utils';
 
 import { getPage, savePage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
+import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
 import useDSL from '@/hooks/useDSL';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
@@ -78,7 +79,26 @@ const value = ref<MApp | undefined>();
 
 const defaultSelected = ref();
 
-const { propsConfigs, propsValues, eventMethodList } = loadUiScript();
+const propsValues = ref<Record<string, any>>({});
+
+const propsConfigs = ref<Record<string, any>>({});
+
+const eventMethodList = ref<Record<string, any>>({});
+
+const { VITE_ENTRY_PATH } = import.meta.env;
+
+useAsyncLoadJS(
+  [
+    `${VITE_ENTRY_PATH}/config/index.umd.js`,
+    `${VITE_ENTRY_PATH}/value/index.umd.js`,
+    `${VITE_ENTRY_PATH}/event/index.umd.js`,
+  ],
+  () => {
+    propsConfigs.value = (globalThis as any).edomsPresetConfigs;
+    propsValues.value = (globalThis as any).edomsPresetValues;
+    eventMethodList.value = (globalThis as any).edomsPresetEvents;
+  }
+).execute();
 
 const stageRect = ref({
   width: 1200,
@@ -88,11 +108,6 @@ const stageRect = ref({
 const previewUrl = computed(
   () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
 );
-
-const route = useRoute();
-const pageId = computed<string>(() => {
-  return route.query.pageId as string;
-});
 
 const menu: MenuBarData = {
   left: [
@@ -144,6 +159,25 @@ const menu: MenuBarData = {
   ],
 };
 
+const moveableOptions = (core?: StageCore): MoveableOptions => {
+  const options: MoveableOptions = {};
+  const id = core?.dr?.target?.id;
+
+  if (!id || !editor.value) return options;
+
+  const node = editor.value.editorService.getNodeById(id);
+
+  if (!node) return options;
+
+  const isPage = node.type === NodeType.PAGE;
+
+  options.draggable = !isPage;
+  options.resizable = !isPage;
+  options.rotatable = !isPage;
+
+  return options;
+};
+
 const loadData = async (props?: RequestProps): Promise<any> => {
   const { requestInstances, requestPoints } = useModel();
   if (!props) {
@@ -170,85 +204,42 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   return;
 };
 
-onBeforeMount(calculateDSL);
+const pageId = computed<string>(() => {
+  const route = useRoute();
+  return route.query.pageId as string;
+});
 
-function handleRuntimeReady() {
+calculateDSL(pageId.value).then((dsl: MApp) => {
+  value.value = dsl;
+  defaultSelected.value = pageId.value;
+});
+
+const handleRuntimeReady = () => {
   console.log('准备好了');
-}
+};
 
-function loadUiScript() {
-  const propsValues = ref<Record<string, any>>({});
-  const propsConfigs = ref<Record<string, any>>({});
-  const eventMethodList = ref<Record<string, any>>({});
+async function calculateDSL(pageId: string): Promise<MApp> {
+  const pageInfo = await getPage({ pageId });
 
-  const { VITE_ENTRY_PATH } = import.meta.env;
-  asyncLoadJs(`${VITE_ENTRY_PATH}/config/index.umd.js`).then(() => {
-    propsConfigs.value = (globalThis as any).edomsPresetConfigs;
-  });
-  asyncLoadJs(`${VITE_ENTRY_PATH}/value/index.umd.js`).then(() => {
-    propsValues.value = (globalThis as any).edomsPresetValues;
-  });
-  asyncLoadJs(`${VITE_ENTRY_PATH}/event/index.umd.js`).then(() => {
-    eventMethodList.value = (globalThis as any).edomsPresetEvents;
-  });
-
-  return {
-    propsValues,
-    propsConfigs,
-    eventMethodList,
-  };
-}
-
-function moveableOptions(core?: StageCore): MoveableOptions {
-  const options: MoveableOptions = {};
-  const id = core?.dr?.target?.id;
-
-  if (!id || !editor.value) return options;
-
-  const node = editor.value.editorService.getNodeById(id);
-
-  if (!node) return options;
-
-  const isPage = node.type === NodeType.PAGE;
-
-  options.draggable = !isPage;
-  options.resizable = !isPage;
-  options.rotatable = !isPage;
-
-  return options;
-}
-
-async function calculateDSL() {
-  const pageInfo = await getPage({
-    pageId: pageId.value,
-  });
   const dsl = generateEmptyAppDSL({
     applicationId: pageInfo.applicationId,
     applicationName: pageInfo.applicationName,
   });
-  dsl.items.push(await calculatePageDSL({ ...pageInfo }));
-  value.value = dsl;
-  defaultSelected.value = pageId.value;
-}
 
-async function calculatePageDSL({
-  pageId,
-  pageName,
-  editContentId,
-}: {
-  pageId: string;
-  pageName: string;
-  editContentId: string | undefined | null;
-}): Promise<MPage> {
-  if (editContentId) {
-    const { execute } = useDSL(editContentId);
-    const pageDSL = await execute();
-    return pageDSL;
+  if (pageInfo.editContentId) {
+    const { execute } = useDSL(pageInfo.editContentId);
+    dsl.items.push(await execute());
+    return dsl;
   }
-  return generateEmptyPageDSL({
-    pageId,
-    pageName,
-  });
+
+  dsl.item.push(
+    generateEmptyPageDSL({
+      pageId: pageInfo.pageId,
+      pageName: pageInfo.pageName,
+    })
+  );
+
+  return dsl;
 }
 
 async function save() {
