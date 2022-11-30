@@ -1,4 +1,4 @@
-import { FolderOpened, Grid, PictureFilled, SwitchButton, Tickets, Umbrella } from '@element-plus/icons-vue';
+import { FolderOpened, Grid, PictureFilled, Setting, SwitchButton, Tickets, Umbrella } from '@element-plus/icons-vue';
 
 import { ComponentGroup } from '@edoms/editor';
 
@@ -86,6 +86,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: Umbrella,
         text: '动环监测',
         type: 'dynamic-monitoring',
+      },
+      {
+        icon: Setting,
+        text: '设定参数',
+        type: 'setting-parameter',
       },
     ],
   },

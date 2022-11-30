@@ -14,6 +14,8 @@ import request from './utils/request';
 import AppComponent from './App.vue';
 import { getLocalConfig } from './utils';
 
+import 'element-plus/theme-chalk/index.css';
+
 const edomsApp = createApp(AppComponent);
 
 edomsApp.use(request);
