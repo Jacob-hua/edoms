@@ -36,6 +36,10 @@ Object.values(plugins).forEach((plugin: any) => {
 
 const designWidth = document.documentElement.getBoundingClientRect().width;
 
+window.addEventListener('message', (event) => {
+  console.log('我收到了', event);
+});
+
 const app = new Core({
   designWidth,
   config: ((getUrlParam('localPreview') ? getLocalConfig() : window.edomsDSL) || [])[0] || {},
