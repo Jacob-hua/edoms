@@ -259,19 +259,12 @@ async function save() {
   const { execute } = useUpload(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
   const contentId = await execute();
   if (contentId) {
+    pageInfo.value && (pageInfo.value.editContentId = contentId);
     await savePage({
       pageId: pageId.value,
       contentId,
     });
   }
-  /** TODO: 随后删除 */
-  localStorage.setItem(
-    'edomsDSL',
-    serialize(toRaw(value.value), {
-      space: 2,
-      unsafe: true,
-    }).replace(/"(\w+)":\s/g, '$1: ')
-  );
   editor.value?.editorService.resetModifiedNodeId();
 }
 </script>
