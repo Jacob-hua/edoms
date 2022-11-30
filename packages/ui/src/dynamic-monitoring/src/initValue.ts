@@ -3,6 +3,6 @@ export default {
   visibleNumber: 5,
   style: {
     width: '480',
-    height: 'auto',
+    height: '600',
   },
 };

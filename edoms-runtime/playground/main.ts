@@ -8,6 +8,8 @@ import { toLine } from '@edoms/utils';
 
 import App from './App.vue';
 
+import 'element-plus/theme-chalk/index.css';
+
 Promise.all([import('../.edoms/comp-entry'), import('../.edoms/plugin-entry')]).then(([components, plugins]) => {
   const edomsApp = createApp(App);
 
