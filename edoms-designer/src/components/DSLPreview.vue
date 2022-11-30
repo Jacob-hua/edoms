@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import { computed, watchEffect } from 'vue';
 
-import useDSL from '@/hooks/useDSL';
+import useDSL from '@/hooks/useDownloadDSL';
 
 const props = withDefaults(
   defineProps<{

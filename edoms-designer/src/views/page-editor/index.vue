@@ -46,7 +46,7 @@ import { getByPath } from '@edoms/utils';
 import { getPage, savePage } from '@/api/page';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
-import useDSL from '@/hooks/useDSL';
+import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
 import { generateEmptyAppDSL, generateEmptyPageDSL } from '@/util/dsl';
@@ -227,7 +227,7 @@ async function calculateDSL(pageId: string): Promise<MApp> {
   });
 
   if (pageInfo.editContentId) {
-    const { execute } = useDSL(pageInfo.editContentId);
+    const { execute } = useDownloadDSL(pageInfo.editContentId);
     dsl.items.push(await execute());
     return dsl;
   }
