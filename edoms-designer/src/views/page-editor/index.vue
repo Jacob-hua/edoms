@@ -18,15 +18,14 @@
     >
     </edoms-editor>
 
-    <el-dialog
-      v-model="previewVisible"
-      destroy-on-close
-      class="pre-viewer"
-      title="预览"
-      :width="stageRect && stageRect.width"
-    >
-      <iframe v-if="previewVisible" width="100%" :height="stageRect && stageRect.height" :src="previewUrl"></iframe>
-    </el-dialog>
+    <DSLPreviewDialog
+      v-model:visible="previewDialogVisible"
+      :stage-rect="stageRect"
+      :application-id="pageInfo?.applicationId"
+      :application-name="pageInfo?.applicationName"
+      :page-id="pageInfo?.pageId"
+      :content-id="pageInfo?.editContentId"
+    />
   </div>
 </template>
 
@@ -50,6 +49,8 @@ import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
 import { generateEmptyAppDSL, generateEmptyPageDSL } from '@/util/dsl';
+
+import DSLPreviewDialog from './component/DSLPreviewDialog.vue';
 
 const { VITE_RUNTIME_PATH } = import.meta.env;
 
@@ -78,7 +79,7 @@ const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
 
 const editor = ref<InstanceType<typeof EdomsEditor>>();
 
-const previewVisible = ref(false);
+const previewDialogVisible = ref(false);
 
 const value = ref<MApp | undefined>();
 
@@ -104,10 +105,6 @@ useAsyncLoadJS(
     eventMethodList.value = (globalThis as any).edomsPresetEvents;
   }
 ).execute();
-
-const previewUrl = computed(
-  () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
-);
 
 const menu: MenuBarData = {
   left: [
@@ -137,7 +134,7 @@ const menu: MenuBarData = {
             console.error(e);
           }
         }
-        previewVisible.value = true;
+        previewDialogVisible.value = true;
       },
     },
     {

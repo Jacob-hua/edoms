@@ -10,14 +10,16 @@ import { generateEmptyAppDSL } from '@/util/dsl';
 
 const props = withDefaults(
   defineProps<{
-    contentId: string;
-    applicationId: string;
-    applicationName: string;
+    contentId?: string | null | undefined;
+    applicationId?: string;
+    applicationName?: string;
     pageId?: string;
     width?: string | number;
     height?: string | number;
   }>(),
   {
+    applicationId: () => '',
+    applicationName: () => '',
     width: () => '100%',
     height: () => 'auto',
   }
@@ -30,7 +32,7 @@ const runtimeIframe = ref<HTMLIFrameElement | null>(null);
 const previewUrl = computed(() => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${props.pageId}`);
 
 watchEffect(async () => {
-  if (!runtimeIframe.value) {
+  if (!runtimeIframe.value || !props.contentId) {
     return;
   }
   const dsl = generateEmptyAppDSL({
