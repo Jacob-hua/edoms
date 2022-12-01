@@ -27,15 +27,21 @@ export const selectFile = (accepts: string[] = ['.xml'], multiple: boolean = fal
     inputElem.setAttribute('multiple', 'true');
   }
   inputElem.click();
+  let cancel = true;
   return new Promise((resolve, reject) => {
     globalThis.addEventListener(
       'focus',
       () => {
-        reject('canceled select');
+        setTimeout(() => {
+          if (cancel) {
+            reject('canceled select');
+          }
+        }, 1000);
       },
       { once: true }
     );
     inputElem.addEventListener('change', () => {
+      cancel = false;
       if (!inputElem.files || inputElem.files?.length == 0) {
         reject();
       } else {
