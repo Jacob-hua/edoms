@@ -229,7 +229,7 @@ const handleRuntimeReady = () => {
 };
 
 async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
-  const dsl = generateEmptyAppDSL({
+  const dsl: MApp = generateEmptyAppDSL({
     applicationId: pageInfo.applicationId,
     applicationName: pageInfo.applicationName,
   });
@@ -240,7 +240,7 @@ async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
     return dsl;
   }
 
-  dsl.item.push(
+  dsl.items.push(
     generateEmptyPageDSL({
       pageId: pageInfo.pageId,
       pageName: pageInfo.pageName,
