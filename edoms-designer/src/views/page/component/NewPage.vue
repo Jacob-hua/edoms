@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="newPageVisible" title="新增页面" width="30%" @close="handleClose">
+  <el-dialog v-model="newPageVisible" title="新增页面" width="30%">
     <span>
       <el-form ref="form" :model="page" :rules="rules">
         <el-form-item label="应用页名称" prop="name">
