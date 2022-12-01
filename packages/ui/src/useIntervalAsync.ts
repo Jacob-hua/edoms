@@ -1,30 +1,40 @@
 import { onUnmounted, ref } from 'vue';
 
-export type Callback = (...args: any[]) => any;
+export type Cleanup = () => any;
+
+type CallbackReturn = void | Cleanup;
+
+export type Callback = (...args: any[]) => CallbackReturn | Promise<CallbackReturn>;
 
 export default (callback: Callback, delay: number) => {
   const timeout = ref<number | null>(null);
-  const mounted = ref<boolean>(false);
+  const canceled = ref<boolean>(false);
+  const cleanup = ref<Cleanup | void>();
 
   const run: TimerHandler = async () => {
-    const result = await callback();
-    if (mounted.value) {
-      timeout.value = globalThis.setTimeout(run, delay);
+    if (canceled.value) {
+      return;
     }
-    return result;
+    if (typeof cleanup.value === 'function') {
+      cleanup.value();
+    }
+    cleanup.value = await Promise.resolve(callback());
+    timeout.value = globalThis.setTimeout(run, delay);
   };
 
-  mounted.value = true;
   run();
 
   const flush = () => {
     timeout.value && globalThis.clearTimeout(timeout.value);
-    return run();
+    run();
   };
 
   const cancel = () => {
     timeout.value && globalThis.clearTimeout(timeout.value);
-    mounted.value = false;
+    canceled.value = true;
+    if (typeof cleanup.value === 'function') {
+      cleanup.value();
+    }
   };
 
   onUnmounted(() => {

@@ -25,6 +25,13 @@ const routes: RouteRecordRaw[] = [
         path: '/application/setting',
         name: 'ApplicationSetting',
         component: () => import('@/views/application-setting/index.vue'),
+        beforeEnter: (to, from, next) => {
+          if (Object.prototype.hasOwnProperty.call(to.query, 'applicationId')) {
+            next();
+          } else {
+            next('/application');
+          }
+        },
       },
       {
         path: '/model',
@@ -35,6 +42,13 @@ const routes: RouteRecordRaw[] = [
         path: '/page',
         name: 'Page',
         component: () => import('@/views/page/index.vue'),
+        beforeEnter: (to, from, next) => {
+          if (Object.prototype.hasOwnProperty.call(to.query, 'applicationId')) {
+            next();
+          } else {
+            next('/application');
+          }
+        },
       },
       {
         path: '/version',
@@ -45,6 +59,13 @@ const routes: RouteRecordRaw[] = [
         path: '/editor',
         name: 'Editor',
         component: () => import('@/views/page-editor/index.vue'),
+        beforeEnter: (to, from, next) => {
+          if (Object.prototype.hasOwnProperty.call(to.query, 'pageId')) {
+            next();
+          } else {
+            next('/application');
+          }
+        },
       },
     ],
   },
