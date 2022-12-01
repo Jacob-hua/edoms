@@ -10,6 +10,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, provide, Ref, ref, watch } from 'vue';
+import { FormInstance } from 'element-plus';
 
 export type RequestResult<T> = T[];
 
@@ -53,7 +54,7 @@ const formModel = ref<FormModel>({
   model: [],
 });
 
-const form = ref<any | null>(null);
+const form = ref<FormInstance>();
 
 const formProps = ref<FormProps>(new Set());
 
