@@ -2,7 +2,9 @@ import { onUnmounted, ref } from 'vue';
 
 export type Cleanup = () => any;
 
-export type Callback = (...args: any[]) => void | Cleanup;
+type CallbackReturn = void | Cleanup;
+
+export type Callback = (...args: any[]) => CallbackReturn | Promise<CallbackReturn>;
 
 export default (callback: Callback, delay: number) => {
   const timeout = ref<number | null>(null);
@@ -30,6 +32,9 @@ export default (callback: Callback, delay: number) => {
   const cancel = () => {
     timeout.value && globalThis.clearTimeout(timeout.value);
     canceled.value = true;
+    if (typeof cleanup.value === 'function') {
+      cleanup.value();
+    }
   };
 
   onUnmounted(() => {
