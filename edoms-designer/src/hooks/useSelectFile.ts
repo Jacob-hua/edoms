@@ -9,6 +9,7 @@ export default (accepts: string[], multiple?: boolean) => {
 
   const execute = async (): Promise<File[] | undefined> => {
     try {
+      loading.value = true;
       return await selectFile(accepts, multiple);
     } catch (e) {
       error.value = e;
