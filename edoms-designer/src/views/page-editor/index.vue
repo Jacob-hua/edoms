@@ -106,11 +106,13 @@ useAsyncLoadJS(
   }
 ).execute();
 
-const menu: MenuBarData = {
+const pageInfo = ref<GetPageRes | undefined>();
+
+const menu = computed<MenuBarData>(() => ({
   left: [
     {
       type: 'text',
-      text: '页面名称',
+      text: pageInfo.value?.pageName ?? '',
     },
   ],
   center: ['delete', 'undo', 'redo', 'guides', 'rule', 'zoom'],
@@ -154,7 +156,7 @@ const menu: MenuBarData = {
       handler: (service) => service?.uiService.set('showSrc', !service?.uiService.get('showSrc')),
     },
   ],
-};
+}));
 
 const moveableOptions = (core?: StageCore): MoveableOptions => {
   const options: MoveableOptions = {};
@@ -200,8 +202,6 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   }
   return;
 };
-
-const pageInfo = ref<GetPageRes | undefined>();
 
 const pageId = computed<string>(() => {
   const route = useRoute();
