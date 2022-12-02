@@ -41,7 +41,7 @@ const config = ref([
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve('https://www.baidu.com/img/flexible/logo/pc/index_gray.png');
-        }, 1000);
+        }, 9000);
       });
     },
   },

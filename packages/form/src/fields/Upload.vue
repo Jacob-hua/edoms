@@ -1,16 +1,20 @@
 <template>
   <div>
-    <ElButton :loading="selectLoading" @click="handleFileSelect">选择文件</ElButton>
-    <div v-for="([, { fileName, status, url }], index) in files" :key="index">
-      <div v-if="config.listType === 'picture'" class="picture-file">
-        <img v-loading="status === 'uploading'" :src="url" class="picture" />
-        <div class="tool">
-          <ElIcon @click="handleDeleteFile(fileName)">
-            <Delete />
-          </ElIcon>
+    <ElButton class="select-file" :loading="selectLoading" @click="handleFileSelect">选择文件</ElButton>
+    <div v-if="config.listType === 'picture'" class="picture-file-list">
+      <div v-for="([, { fileName, status, url }], index) in files" :key="index">
+        <div v-loading="status === 'uploading'" class="picture-file">
+          <img :src="url" class="picture" />
+          <div class="tool">
+            <ElIcon class="item-delete" @click="handleDeleteFile(fileName)">
+              <Delete />
+            </ElIcon>
+          </div>
         </div>
       </div>
-      <div v-else class="text-file">
+    </div>
+    <div v-else>
+      <div v-for="([, { fileName, status }], index) in files" :key="index" class="text-file">
         <ElButton :loading="status === 'uploading'" text>{{ fileName }}</ElButton>
         <ElButton text :icon="Delete" style="color: #f56c6c" @click="handleDeleteFile(fileName)"></ElButton>
       </div>
@@ -88,6 +92,14 @@ const uploadFile = async (file: File) => {
 </script>
 
 <style lang="scss" scoped>
+.select-file {
+  cursor: pointer;
+}
+.picture-file-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 .picture-file {
   overflow: hidden;
   width: 148px;
@@ -116,9 +128,18 @@ const uploadFile = async (file: File) => {
     &:hover {
       opacity: 1;
     }
+
+    .item-delete {
+      cursor: pointer;
+      position: static;
+      font-size: inherit;
+      color: inherit;
+    }
   }
 }
 .text-file {
   display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
 </style>
