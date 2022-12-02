@@ -6,8 +6,8 @@ import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
 import SettingParameter from './setting-parameter';
+import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
-
 const ui: Record<string, any> = {
   page: Page,
   container: Container,
@@ -18,6 +18,7 @@ const ui: Record<string, any> = {
   overlay: Overlay,
   dynamicMonitoring: DynamicMonitoring,
   settingParameter: SettingParameter,
+  systemOperatingParameters: SystemOperatingParameters,
 };
 
 export default ui;
