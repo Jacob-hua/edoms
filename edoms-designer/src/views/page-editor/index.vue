@@ -205,7 +205,7 @@ const loadData = async (props?: RequestProps): Promise<any> => {
 
 const pageId = computed<string>(() => {
   const route = useRoute();
-  return route.query.pageId as string;
+  return route?.query?.pageId as string;
 });
 
 watch(

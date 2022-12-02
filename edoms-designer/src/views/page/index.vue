@@ -20,25 +20,7 @@
         :request="loadData"
       >
         <template #default="{ item }">
-          <div :class="['item', item.pageId === active.pageId ? 'active' : '']">
-            <p v-if="item.isShowText" @click="handleActive(item)">{{ item.name }}</p>
-            <el-input v-if="!item.isShowText" v-model="item.name" clearable></el-input>
-            <div v-if="item.isShowText" class="pop-menu-wrapper">
-              <PopMenu @menu-click="(value) => handleMenuClick(value, item)">
-                <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
-                  <div class="pop-menu-item">
-                    <el-icon :size="20">
-                      <component :is="menu.icon" />
-                    </el-icon>
-                    <span>{{ menu.label }}</span>
-                  </div>
-                </PopMenuOption>
-              </PopMenu>
-            </div>
-            <div v-if="!item.isShowText" style="display: flex; padding: 0 10px">
-              <el-icon :size="20" @click="handleChangeName(item)"><Check /></el-icon>
-            </div>
-          </div>
+          <PageItem :item="item" :active="active" @success="handleReload" @change-active="changeActive" />
         </template>
         <template #noMore>
           <div></div>
@@ -46,7 +28,7 @@
       </GridList>
     </section>
     <section class="right-section">
-      <div class="right-top-bar">
+      <div v-if="totalCount" class="right-top-bar">
         <span>{{ active?.name }}</span>
         <div>
           <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
@@ -70,88 +52,51 @@
         </div>
       </div>
       <div ref="editWrapper" class="edit">
-        <iframe v-if="previewVisible" width="100%" :height="stageRect && stageRect.height" :src="previewUrl"></iframe>
+        <DSLPreview
+          v-if="previewVisible"
+          :height="stageRect.height"
+          :application-id="applicationId"
+          :application-name="appName"
+          :content-id="active.pushContentId"
+          :page-id="active.pageId"
+        />
       </div>
     </section>
   </div>
-  <div class="page-wrapper">
-    <el-dialog v-model="newPageVisible" title="新增页面" width="30%" @close="handleClose">
-      <span>
-        <el-form ref="form" :model="page" :rules="rules">
-          <el-form-item label="应用页名称" prop="name">
-            <el-input v-model="page.name" clearable></el-input>
-          </el-form-item>
-        </el-form>
-      </span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="newPageVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
-        </span>
-      </template>
-    </el-dialog>
-    <el-dialog v-model="versionVisible" title="保存为版本" width="30%" @close="handleVersionClose">
-      <span>
-        <el-form ref="versionForm" :model="version" :rules="versionRules">
-          <el-form-item label="版本名称" prop="name">
-            <el-input v-model="version.name" clearable></el-input>
-          </el-form-item>
-        </el-form>
-      </span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="versionVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleVersionConfirm"> 确认 </el-button>
-        </span>
-      </template>
-    </el-dialog>
-  </div>
+  <NewPage v-if="newPageVisible" v-model:visible="newPageVisible" @success="handleReload" />
+  <SaveVersion v-if="versionVisible" v-model:visible="versionVisible" :active="active" />
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ElMessage, ElMessageBox, FormInstance } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import screenFull from 'screenfull';
 
-import { EdomsEditor } from '@edoms/editor';
-
-import { createPage, deletePage, listPages, updatePage } from '@/api/page';
-import { saveWithVersion } from '@/api/version';
+import { deletePage, listPages } from '@/api/page';
+import DSLPreview from '@/components/DSLPreview.vue';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useDate from '@/hooks/useDate';
 
+import NewPage from './component/NewPage.vue';
+import PageItem from './component/PageItem.vue';
+import SaveVersion from './component/SaveVersion.vue';
+
 const route = useRoute();
 const router = useRouter();
-const gridList = ref();
 const { formatTime } = useDate();
-interface Page {
-  pageId: number;
-  name: string;
-  createBy: string;
-  createTime: bigint;
-  publishContentId: string;
-  editContentId: string;
-  description: string;
-  updateBy: string;
-  updateTime: bigint;
-  applicationId: string;
-  isShowText: boolean;
-}
-
+const gridList = ref();
 const appName = ref<string>('');
-const editor = ref<InstanceType<typeof EdomsEditor>>();
-const { VITE_RUNTIME_PATH } = import.meta.env;
-const previewVisible = ref(true);
+const previewVisible = ref(false);
 const stageRect = ref({
   width: 1200,
   height: 950,
 });
-const previewUrl = computed(
-  () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
-);
+const totalCount = ref<number>();
+const active = ref();
+const applicationId = ref<string>();
 const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
   const {
     dataList = [],
@@ -163,8 +108,13 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
     applicationId: route.query.applicationId as string,
     name: searchText.value,
   });
+  totalCount.value = Number(count);
   appName.value = applicationName;
-  active.value = dataList[0];
+  applicationId.value = route.query.applicationId as string;
+  active.value = dataList[0] ?? { pushContentId: null };
+  if (totalCount.value) {
+    previewVisible.value = true;
+  }
   dataList.forEach((item: any) => {
     item.isShowText = true;
   });
@@ -173,16 +123,14 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
     total: Number(count),
   };
 };
-
 const goBack = () => {
-  router.go(-1);
+  router.push('/');
 };
-
+const handleReload = () => {
+  gridList.value?.reload();
+};
+const versionVisible = ref<boolean>(false);
 const editWrapper = ref();
-const active = ref();
-const handleActive = (item: any) => {
-  active.value = item;
-};
 
 const topMenus = [
   {
@@ -234,65 +182,14 @@ const topMenus = [
     },
   },
 ];
-
-const menus = [
-  {
-    name: 'rename',
-    label: '重命名',
-    icon: 'Operation',
-    action: (item: any) => {
-      item.isShowText = false;
-    },
-  },
-  {
-    name: 'edit',
-    label: '编辑页面',
-    icon: 'Edit',
-    action: () => {
-      goEdit();
-    },
-  },
-  {
-    name: 'delete',
-    label: '删除',
-    icon: 'Delete',
-    action: ({ pageId }: Page) => {
-      ElMessageBox.confirm('此操作将永久删除, 是否继续?', '提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(async () => {
-          await deletePage({
-            pageIds: [pageId],
-          });
-          ElMessage.success('删除成功');
-          gridList.value?.reload();
-        })
-        .catch(() => {});
-    },
-  },
-];
-const handleMenuClick = (value: string | number, model: any) => {
-  const menu = menus.find(({ name }) => name === value);
-  menu?.action(model);
-};
 const handleTopMenuClick = (value: string | number) => {
   const menu = topMenus.find(({ name }) => name === value);
   menu?.action();
 };
-const handleChangeName = async (model: Page) => {
-  await updatePage({
-    pageId: Number(model.pageId),
-    name: model.name,
-    applicationId: model.applicationId,
-  });
-  model.isShowText = true;
-  gridList.value?.reload();
-};
 
 const searchText = ref<string | null>(null);
 const isSearch = ref<boolean>(false);
+const newPageVisible = ref<boolean>(false);
 
 const handleShowSearchInput = () => {
   isSearch.value = true;
@@ -304,121 +201,29 @@ const search = () => {
   isSearch.value = false;
 };
 
-const newPageVisible = ref<boolean>(false);
-const page = ref({
-  name: '',
-});
-const rules = {
-  name: [
-    {
-      required: true,
-      message: '请输入页面名称',
-      trigger: 'blur',
-    },
-    {
-      min: 1,
-      max: 10,
-      message: '页面名称长度1-10字符',
-      trigger: 'blur',
-    },
-  ],
-};
-const versionRules = {
-  name: [
-    {
-      required: true,
-      message: '请输入版本名称',
-      trigger: 'blur',
-    },
-    {
-      min: 1,
-      max: 20,
-      message: '版本名称长度1-20字符',
-      trigger: 'blur',
-    },
-  ],
-};
-const form = ref<FormInstance>();
-
-const version = ref({
-  name: '',
-});
-
-const versionVisible = ref(false);
-const versionForm = ref<FormInstance>();
 const handleNewPage = () => {
   newPageVisible.value = true;
 };
 
-const handleConfirm = async () => {
-  if (!form.value) return;
-  try {
-    await form.value?.validate();
-    await createPage({
-      name: page.value?.name,
-      applicationId: route.query.applicationId as string,
-    });
-    ElMessage.success('页面创建成功');
-    newPageVisible.value = false;
-    form.value?.resetFields();
-    gridList.value?.reload();
-  } catch (e) {
-    console.log(e);
-  }
+const handleClearInput = () => {
+  search();
 };
-const handleVersionConfirm = async () => {
-  if (!versionForm.value) return;
-  try {
-    await versionForm.value?.validate();
-    await saveWithVersion({
-      pageId: active.value.pageId,
-      contentId: 1014433136007553024,
-      name: version.value.name,
-      description: active.value.description,
-    });
-    ElMessage.success('保存版本成功');
-    versionVisible.value = false;
-    versionForm.value?.resetFields();
-  } catch (e) {
-    console.log(e);
-  }
-};
-const handleClose = () => {
-  form.value?.resetFields();
-};
-const handleVersionClose = () => {
-  versionForm.value?.resetFields();
+
+const changeActive = (item: any) => {
+  active.value = item;
 };
 
 const goEdit = () => {
   router.push({
     path: '/editor',
     query: {
-      pageId: active.value?.pageId,
+      pageId: active.value.pageId,
     },
   });
-};
-
-const handleClearInput = () => {
-  search();
 };
 </script>
 
 <style lang="scss" scoped>
-.page-wrapper {
-  :deep(.el-icon) {
-    width: 1.5em !important;
-    height: 1.5em !important;
-    svg {
-      width: 1.5em !important;
-      height: 1.5em !important;
-    }
-  }
-}
-
-.active {
-  background-color: #409eff;
-}
 .pop-menu-wrapper {
   position: relative;
 }

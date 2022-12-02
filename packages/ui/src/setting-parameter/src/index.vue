@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script lang="ts" setup name="SettingParameter">
+<script lang="ts" setup>
 import { ref, watch } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
@@ -71,7 +71,6 @@ const handleShowMore = () => {
       align-items: center;
       width: 20%;
       .value-wrapper {
-        margin-bottom: 10px;
         .value {
           font-weight: 500;
           font-size: 18px;
@@ -80,6 +79,8 @@ const handleShowMore = () => {
         }
       }
       .label {
+        margin: 0;
+        padding: 0;
         width: 80px;
         font-size: 16px;
         text-align: center;

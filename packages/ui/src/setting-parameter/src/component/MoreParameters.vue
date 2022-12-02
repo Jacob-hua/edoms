@@ -82,6 +82,10 @@ const handleCurrentChange = (value: string) => {
 </script>
 
 <style lang="scss" scoped>
+* {
+  margin: 0;
+  padding: 0;
+}
 .container {
   position: relative;
   height: 400px;
