@@ -1,4 +1,13 @@
-import { FolderOpened, Grid, PictureFilled, Setting, SwitchButton, Tickets, Umbrella } from '@element-plus/icons-vue';
+import {
+  FolderOpened,
+  Grid,
+  Operation,
+  PictureFilled,
+  Setting,
+  SwitchButton,
+  Tickets,
+  Umbrella,
+} from '@element-plus/icons-vue';
 
 import { ComponentGroup } from '@edoms/editor';
 
@@ -91,6 +100,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: Setting,
         text: '设定参数',
         type: 'setting-parameter',
+      },
+      {
+        icon: Operation,
+        text: '系统运行参数',
+        type: 'system-operating-parameters',
       },
     ],
   },
