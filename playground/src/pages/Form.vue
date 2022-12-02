@@ -36,11 +36,12 @@ const config = ref([
     name: 'file',
     type: 'upload',
     multiple: true,
+    listType: 'picture',
     upload: () => {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve('https://www.baidu.com/img/flexible/logo/pc/index_gray.png');
-        }, 10000);
+        }, 1000);
       });
     },
   },

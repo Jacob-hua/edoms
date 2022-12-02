@@ -1,9 +1,16 @@
 <template>
   <div>
     <ElButton :loading="selectLoading" @click="handleFileSelect">选择文件</ElButton>
-    <div v-for="([, { fileName, status }], index) in files" :key="index">
-      <div v-if="config.listType === 'picture'"></div>
-      <div v-else class="text-file-list">
+    <div v-for="([, { fileName, status, url }], index) in files" :key="index">
+      <div v-if="config.listType === 'picture'" class="picture-file">
+        <img v-loading="status === 'uploading'" :src="url" class="picture" />
+        <div class="tool">
+          <ElIcon @click="handleDeleteFile(fileName)">
+            <Delete />
+          </ElIcon>
+        </div>
+      </div>
+      <div v-else class="text-file">
         <ElButton :loading="status === 'uploading'" text>{{ fileName }}</ElButton>
         <ElButton text :icon="Delete" style="color: #f56c6c" @click="handleDeleteFile(fileName)"></ElButton>
       </div>
@@ -15,7 +22,7 @@
 import { ref } from 'vue';
 import { Delete } from '@element-plus/icons-vue';
 
-import { ElButton } from '@edoms/design';
+import { ElButton, ElIcon } from '@edoms/design';
 
 import { FileStruct, UploadConfig } from '../schema';
 import { useAddField } from '../utils/useAddField';
@@ -81,10 +88,37 @@ const uploadFile = async (file: File) => {
 </script>
 
 <style lang="scss" scoped>
-.circular {
-  width: 20px;
+.picture-file {
+  overflow: hidden;
+  width: 148px;
+  height: 148px;
+  display: inline-flex;
+
+  .picture {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .tool {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 148px;
+    height: 148px;
+    cursor: default;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    opacity: 0;
+    font-size: 20px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
-.text-file-list {
+.text-file {
   display: flex;
 }
 </style>
