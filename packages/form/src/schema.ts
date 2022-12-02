@@ -659,6 +659,25 @@ export interface ComponentConfig extends FormItem {
   display: any;
 }
 
+/**
+ * 上传组件
+ */
+export interface UploadConfig extends FormItem {
+  type: 'upload';
+  /** 接受上传的文件类型 */
+  accepts?: string[];
+  /** 是否支持多选 */
+  multiple?: boolean;
+  /** 是否显示已上传文件列表 */
+  showFileList?: boolean;
+  /** 是否禁用上传 */
+  disabled?: boolean;
+  /** 允许上传文件的最大数量 */
+  limit?: number;
+  /** 文件列表类型 */
+  listType?: 'text' | 'picture';
+}
+
 export type ChildConfig =
   | FormItem
   | TabConfig
@@ -685,7 +704,8 @@ export type ChildConfig =
   | RadioGroupConfig
   | TextareaConfig
   | DynamicFieldConfig
-  | ComponentConfig;
+  | ComponentConfig
+  | UploadConfig;
 
 export type FormConfig = (ChildConfig & { [key: string]: any })[];
 

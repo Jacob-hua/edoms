@@ -26,6 +26,7 @@ import Switch from './fields/Switch.vue';
 import Text from './fields/Text.vue';
 import Textarea from './fields/Textarea.vue';
 import Time from './fields/Time.vue';
+import Upload from './fields/Upload.vue';
 import { setConfig } from './utils/config';
 import Form from './Form.vue';
 import FormDialog from './FormDialog.vue';
@@ -63,6 +64,7 @@ export { default as MLink } from './fields/Link.vue';
 export { default as MSelect } from './fields/Select.vue';
 export { default as MCascader } from './fields/Cascader.vue';
 export { default as MDynamicField } from './fields/DynamicField.vue';
+export { default as MUpload } from './fields/Upload.vue';
 
 const defaultInstallOpt = {};
 
@@ -101,6 +103,7 @@ const install = (app: App, opt: any) => {
   app.component('MFieldsSelect', Select);
   app.component('MFieldsCascader', Cascader);
   app.component('MFieldsDynamicField', DynamicField);
+  app.component('MFieldsUpload', Upload);
 };
 
 export default {

@@ -32,6 +32,12 @@ const form = ref<InstanceType<typeof MForm>>();
 
 const config = ref([
   {
+    text: '上传',
+    name: 'file',
+    type: 'upload',
+    multiple: true,
+  },
+  {
     text: '文本',
     name: 'text',
     tooltip: (vm: any, { model }: any) => model.text,
