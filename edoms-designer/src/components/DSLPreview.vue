@@ -5,6 +5,8 @@
 <script lang="ts" setup>
 import { computed, ref, watchEffect } from 'vue';
 
+import { MApp, NodeType } from '@edoms/schema';
+
 import useDownloadDSL from '@/hooks/useDownloadDSL';
 import { generateEmptyAppDSL } from '@/util/dsl';
 
@@ -27,23 +29,46 @@ const props = withDefaults(
 
 const { VITE_RUNTIME_PATH } = import.meta.env;
 
+const runtimeUrl = `${VITE_RUNTIME_PATH}/page/index.html`;
+
+const previewUrl = computed(() => `${runtimeUrl}?localPreview=1&page=${props.pageId}`);
+
 const runtimeIframe = ref<HTMLIFrameElement | null>(null);
 
-const previewUrl = computed(() => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${props.pageId}`);
+const dsl = ref<MApp | undefined>();
 
 watchEffect(async () => {
   if (!runtimeIframe.value || !props.contentId) {
     return;
   }
-  const dsl = generateEmptyAppDSL({
-    applicationId: props.applicationId,
-    applicationName: props.applicationName,
-  });
-  const { execute } = useDownloadDSL(props.contentId);
-  const pageDsl = await execute();
-  dsl.items.push(pageDsl);
-  runtimeIframe.value.addEventListener('load', () => {
-    runtimeIframe.value?.contentWindow?.postMessage(dsl, `${VITE_RUNTIME_PATH}/page/index.html`);
+  await updateDsl(props.contentId);
+  runtimeIframe.value.addEventListener('load', handleIframeLoad, {
+    once: true,
   });
 });
+
+async function updateDsl(contentId: string) {
+  const { execute } = useDownloadDSL(contentId);
+  const remoteDsl = await execute();
+  if (!remoteDsl) {
+    return;
+  }
+  if (remoteDsl.type === NodeType.ROOT) {
+    dsl.value = remoteDsl;
+  } else {
+    const appDsl = generateEmptyAppDSL({
+      applicationId: props.applicationId,
+      applicationName: props.applicationName,
+    });
+    appDsl.items.push(remoteDsl);
+    dsl.value = appDsl;
+  }
+}
+
+function handleIframeLoad() {
+  if (!dsl.value) {
+    return;
+  }
+  runtimeIframe.value?.contentWindow?.postMessage(dsl.value, runtimeUrl);
+}
 </script>
