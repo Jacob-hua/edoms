@@ -1,14 +1,10 @@
 <template>
   <div>
     <ElButton :loading="selectLoading" @click="handleFileSelect">选择文件</ElButton>
-    <div v-for="([, { fileName, status, percentage }], index) in files" :key="index">
+    <div v-for="([, { fileName, status }], index) in files" :key="index">
       <div v-if="config.listType === 'picture'"></div>
       <div v-else class="text-file-list">
-        <span>{{ fileName }}</span>
-        <el-progress
-          :percentage="percentage"
-          :status="status === 'done' ? 'success' : status === 'error' ? 'exception' : ''"
-        />
+        <ElButton :loading="status === 'uploading'" text>{{ fileName }}</ElButton>
         <ElButton text :icon="Delete" style="color: #f56c6c" @click="handleDeleteFile(fileName)"></ElButton>
       </div>
     </div>
@@ -69,38 +65,25 @@ const uploadFile = async (file: File) => {
     fileType: file.type,
     status: 'uploading',
     url: '',
-    percentage: 0,
   });
   const fileStruct = files.value.get(file.name);
   if (!fileStruct) {
     files.value.delete(file.name);
     return;
   }
-  const intervalId = setInterval(() => {
-    if (['done', 'error'].includes(fileStruct.status)) {
-      fileStruct.percentage = 100;
-      clearInterval(intervalId);
-      return;
-    }
-    if (fileStruct.percentage >= 90 && fileStruct.status === 'uploading') {
-      clearInterval(intervalId);
-      return;
-    }
-    fileStruct.percentage = (fileStruct.percentage % 100) + 10;
-  }, 500);
   try {
     fileStruct.url = await props.config.upload(file);
     fileStruct.status = 'done';
   } catch (error) {
     fileStruct.status = 'error';
-  } finally {
-    fileStruct.percentage = 100;
-    clearInterval(intervalId);
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.circular {
+  width: 20px;
+}
 .text-file-list {
   display: flex;
 }

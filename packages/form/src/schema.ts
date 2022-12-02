@@ -668,8 +668,6 @@ export interface FileStruct {
   status: 'done' | 'uploading' | 'error';
   /** 文件url */
   url: string;
-  /** 上传进度 */
-  percentage: number;
 }
 
 /**
