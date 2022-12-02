@@ -233,19 +233,23 @@ async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
     applicationId: pageInfo.applicationId,
     applicationName: pageInfo.applicationName,
   });
-
+  const emptyPageDsl: MPage = generateEmptyPageDSL({
+    pageId: pageInfo.pageId,
+    pageName: pageInfo.pageName,
+  });
   if (pageInfo.editContentId) {
     const { execute } = useDownloadDSL(pageInfo.editContentId);
-    dsl.items.push((await execute()) as MPage);
-    return dsl;
+    const remoteDsl = await execute();
+    if (!remoteDsl) {
+      dsl.items.push(emptyPageDsl);
+    } else if (remoteDsl.type === NodeType.PAGE) {
+      dsl.items.push(remoteDsl);
+    } else {
+      return remoteDsl;
+    }
+  } else {
+    dsl.items.push(emptyPageDsl);
   }
-
-  dsl.items.push(
-    generateEmptyPageDSL({
-      pageId: pageInfo.pageId,
-      pageName: pageInfo.pageName,
-    })
-  );
 
   return dsl;
 }
