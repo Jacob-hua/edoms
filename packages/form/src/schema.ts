@@ -659,6 +659,19 @@ export interface ComponentConfig extends FormItem {
   display: any;
 }
 
+export interface FileStruct {
+  /** 文件名称 */
+  fileName: string;
+  /** 文件类型 */
+  fileType: string;
+  /** 文件状态 */
+  status: 'done' | 'uploading' | 'error';
+  /** 文件url */
+  url: string;
+  /** 上传进度 */
+  percentage: number;
+}
+
 /**
  * 上传组件
  */
@@ -676,6 +689,8 @@ export interface UploadConfig extends FormItem {
   limit?: number;
   /** 文件列表类型 */
   listType?: 'text' | 'picture';
+  /** 上传处理 */
+  upload?: (file: File) => Promise<string>;
 }
 
 export type ChildConfig =
