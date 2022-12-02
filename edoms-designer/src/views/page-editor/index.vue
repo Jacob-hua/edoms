@@ -37,7 +37,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
 import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps } from '@edoms/editor';
-import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
+import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath } from '@edoms/utils';
@@ -233,19 +233,23 @@ async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
     applicationId: pageInfo.applicationId,
     applicationName: pageInfo.applicationName,
   });
-
+  const emptyPageDsl: MPage = generateEmptyPageDSL({
+    pageId: pageInfo.pageId,
+    pageName: pageInfo.pageName,
+  });
   if (pageInfo.editContentId) {
     const { execute } = useDownloadDSL(pageInfo.editContentId);
-    dsl.items.push(await execute());
-    return dsl;
+    const remoteDsl = await execute();
+    if (!remoteDsl) {
+      dsl.items.push(emptyPageDsl);
+    } else if (remoteDsl.type === NodeType.PAGE) {
+      dsl.items.push(remoteDsl);
+    } else {
+      return remoteDsl;
+    }
+  } else {
+    dsl.items.push(emptyPageDsl);
   }
-
-  dsl.items.push(
-    generateEmptyPageDSL({
-      pageId: pageInfo.pageId,
-      pageName: pageInfo.pageName,
-    })
-  );
 
   return dsl;
 }
