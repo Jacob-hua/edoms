@@ -111,7 +111,7 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
   totalCount.value = Number(count);
   appName.value = applicationName;
   applicationId.value = route.query.applicationId as string;
-  active.value = dataList[0];
+  active.value = dataList[0] ?? { pushContentId: null };
   if (totalCount.value) {
     previewVisible.value = true;
   }
@@ -124,7 +124,7 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
   };
 };
 const goBack = () => {
-  router.go(-1);
+  router.push('/');
 };
 const handleReload = () => {
   gridList.value?.reload();
