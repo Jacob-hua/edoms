@@ -42,7 +42,7 @@ watchEffect(async () => {
     return;
   }
   await updateDsl(props.contentId);
-  runtimeIframe.value.addEventListener('load', handleIframeLoad, { once: true });
+  runtimeIframe.value.addEventListener('load', handleIframeLoad);
 });
 
 const { execute: downloadDslExecute } = useDownloadDSL();
