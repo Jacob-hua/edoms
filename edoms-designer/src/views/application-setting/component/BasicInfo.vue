@@ -21,7 +21,7 @@
         </div>
       </el-form-item>
       <el-form-item label="封面">
-        <ImageUpload :thumbnail-id="appInfo.thumbnailId" @success="getContentId"></ImageUpload>
+        <ImageUpload :thumbnail-id="appInfo.thumbnailId" @success="handleUploadSuccess"></ImageUpload>
       </el-form-item>
     </el-form>
     <div class="updateBtn" @click="update(appInfo)">更新</div>
@@ -76,8 +76,8 @@ const { appInfo } = toRefs(props);
 
 const formRef = ref<FormInstance>();
 
-const getContentId = (contentId: string) => {
-  appInfo.value.thumbnailId = contentId;
+const handleUploadSuccess = (contentId: string | null) => {
+  appInfo.value.thumbnailId = contentId ?? undefined;
 };
 
 const update = async ({ applicationId, name, description, thumbnailId, serviceAddress }: UpdateApplicationReq) => {
