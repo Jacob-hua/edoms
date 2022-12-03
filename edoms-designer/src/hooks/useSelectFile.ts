@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
 
 import { selectFile } from '@edoms/utils';
 
@@ -11,7 +12,10 @@ export default () => {
     try {
       loading.value = true;
       return await selectFile(accepts, multiple);
-    } catch (e) {
+    } catch (e: any) {
+      if (e.type === 'WrongFormat') {
+        ElMessage.error(`请选择${e.accepts}文件`);
+      }
       error.value = e;
     } finally {
       loading.value = false;

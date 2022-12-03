@@ -9,8 +9,7 @@
 </template>
 
 <script lang="ts" setup name="ImageUpload">
-import { onMounted, ref, watch } from 'vue';
-import { ElMessage } from 'element-plus';
+import { onMounted, ref } from 'vue';
 
 import PreviewImage from '@/components/ImagePreview.vue';
 import useSelectUpload from '@/hooks/useSelectUpload';
@@ -28,20 +27,11 @@ const emits = defineEmits<{
   (event: 'success', contentId: string | null): void;
 }>();
 
-const { execute: selectUploadExecute, loading: selectUploadLoading, error: selectUploadError } = useSelectUpload();
+const { execute: selectUploadExecute, loading: selectUploadLoading } = useSelectUpload();
 
 const contentId = ref<string | null>(null);
 
 const dialogVisible = ref<boolean>(false);
-
-watch(
-  () => selectUploadError.value,
-  (selectUploadError) => {
-    if (selectUploadError.type === 'WrongFormat') {
-      ElMessage.error(`请选择${selectUploadError.accepts}文件`);
-    }
-  }
-);
 
 onMounted(() => {
   contentId.value = props.thumbnailId;

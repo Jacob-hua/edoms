@@ -4,12 +4,12 @@ import { MApp, MPage, NodeType } from '@edoms/schema';
 
 import { downloadFile } from '@/api/file';
 
-export default (contentId: string) => {
+export default () => {
   const loading = ref<boolean>(false);
 
   const error = ref<any>(null);
 
-  const execute = async (): Promise<MApp | MPage | undefined> => {
+  const execute = async (contentId: string): Promise<MApp | MPage | undefined> => {
     try {
       loading.value = true;
       const contentStream = (await downloadFile({ contentId })) as Blob;

@@ -47,9 +47,10 @@ watchEffect(async () => {
   });
 });
 
+const { execute: downloadDslExecute } = useDownloadDSL();
+
 async function updateDsl(contentId: string) {
-  const { execute } = useDownloadDSL(contentId);
-  const remoteDsl = await execute();
+  const remoteDsl = await downloadDslExecute(contentId);
   if (!remoteDsl) {
     return;
   }

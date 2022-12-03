@@ -228,6 +228,8 @@ const handleRuntimeReady = () => {
   console.log('准备好了');
 };
 
+const { execute: downloadDslExecute } = useDownloadDSL();
+
 async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
   const dsl: MApp = generateEmptyAppDSL({
     applicationId: pageInfo.applicationId,
@@ -238,8 +240,7 @@ async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
     pageName: pageInfo.pageName,
   });
   if (pageInfo.editContentId) {
-    const { execute } = useDownloadDSL(pageInfo.editContentId);
-    const remoteDsl = await execute();
+    const remoteDsl = await downloadDslExecute(pageInfo.editContentId);
     if (!remoteDsl) {
       dsl.items.push(emptyPageDsl);
     } else if (remoteDsl.type === NodeType.PAGE) {
