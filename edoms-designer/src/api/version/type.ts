@@ -43,9 +43,9 @@ export interface UpdateVersionReq {
 
 export interface SaveWithVersionReq {
   /** 页面ID */
-  pageId: number;
+  pageId: string;
   /** 内容ID */
-  contentId: number;
+  contentId: string;
   /** 版本名称 */
   name: string;
   /** 版本简介 */

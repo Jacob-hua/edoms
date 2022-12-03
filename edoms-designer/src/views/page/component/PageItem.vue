@@ -24,7 +24,7 @@
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
-import { deletePage, updatePage } from '@/api/page';
+import pageApi from '@/api/page';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 interface Page {
@@ -80,7 +80,7 @@ const menus = [
         type: 'warning',
       })
         .then(async () => {
-          await deletePage({
+          await pageApi.deletePage({
             pageIds: [pageId],
           });
           ElMessage.success('删除成功');
@@ -98,7 +98,7 @@ const handleMenuClick = (value: string | number, model: any) => {
   menu?.action(model);
 };
 const handleChangeName = async (model: Page) => {
-  await updatePage({
+  await pageApi.updatePage({
     pageId: Number(model.pageId),
     name: model.name,
     applicationId: route.query.applicationId as string,

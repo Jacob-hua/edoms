@@ -22,7 +22,7 @@
 import { computed, ref } from 'vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import { saveWithVersion } from '@/api/version';
+import versionApi from '@/api/version';
 
 const props = defineProps<{
   visible: boolean;
@@ -68,7 +68,7 @@ const handleVersionConfirm = async () => {
   if (!versionForm.value) return;
   try {
     await versionForm.value?.validate();
-    await saveWithVersion({
+    await versionApi.saveWithVersion({
       pageId: props.active.pageId,
       contentId: props.active.pushContentId,
       name: version.value.name,

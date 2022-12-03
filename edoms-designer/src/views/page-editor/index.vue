@@ -32,7 +32,7 @@
 <script lang="ts" setup>
 import { computed, ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { Coin, Connection, Document } from '@element-plus/icons-vue';
+import { Coin, Connection, Document, PriceTag } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
@@ -42,7 +42,8 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath } from '@edoms/utils';
 
-import { getPage, GetPageRes, savePage } from '@/api/page';
+import pageApi, { GetPageRes } from '@/api/page';
+import versionApi from '@/api/version';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
 import useDownloadDSL from '@/hooks/useDownloadDSL';
@@ -148,6 +149,27 @@ const menu = computed<MenuBarData>(() => ({
         ElMessage.success('保存成功');
       },
     },
+    {
+      type: 'button',
+      text: '保存版本',
+      icon: PriceTag,
+      handler: () => {
+        ElMessageBox.prompt('请输入版本名称', '保存版本', {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          inputErrorMessage: '请输入版本名称',
+          inputValidator: (value) => {
+            if (!value || value.trim().length < 1) {
+              return false;
+            }
+            return true;
+          },
+        }).then(({ value }) => {
+          saveWithVersion(value.trim());
+          ElMessage.success('保存成功');
+        });
+      },
+    },
     '/',
     {
       type: 'button',
@@ -214,7 +236,7 @@ watch(
     if (!pageId) {
       return;
     }
-    pageInfo.value = await getPage({ pageId });
+    pageInfo.value = await pageApi.getPage({ pageId });
     const dsl = await calculateDSL(pageInfo.value);
     value.value = dsl;
     defaultSelected.value = pageId;
@@ -257,21 +279,39 @@ async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
 
 const { execute: uploadExecute } = useUpload();
 
-async function save() {
+async function uploadDsl(): Promise<string | null | undefined> {
   const pageDSL = serialize(toRaw(value.value?.items?.[0]), {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
 
-  const contentId = await uploadExecute(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
-  if (contentId) {
-    pageInfo.value && (pageInfo.value.editContentId = contentId);
-    await savePage({
-      pageId: pageId.value,
-      contentId,
-    });
+  return await uploadExecute(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
+}
+
+async function save() {
+  const contentId = await uploadDsl();
+  if (!contentId) {
+    return;
   }
+  pageInfo.value && (pageInfo.value.editContentId = contentId);
+  await pageApi.savePage({
+    pageId: pageId.value,
+    contentId,
+  });
   editor.value?.editorService.resetModifiedNodeId();
+}
+
+async function saveWithVersion(version: string) {
+  const contentId = await uploadDsl();
+  if (!contentId) {
+    return;
+  }
+  await versionApi.saveWithVersion({
+    pageId: pageId.value,
+    contentId,
+    name: version,
+    description: '',
+  });
 }
 </script>
 

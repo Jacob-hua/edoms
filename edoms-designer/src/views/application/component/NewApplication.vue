@@ -33,7 +33,7 @@
 import { computed, reactive, ref } from 'vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import { createApplication, CreateApplicationReq } from '@/api/application';
+import applicationApi, { CreateApplicationReq } from '@/api/application';
 import ImageUpload from '@/components/ImageUpload.vue';
 const props = withDefaults(
   defineProps<{
@@ -90,7 +90,7 @@ const handleFormSubmit = async () => {
   try {
     await formRef.value?.validate();
     // 提交表单操作
-    const { applicationId } = await createApplication(applicationForm);
+    const { applicationId } = await applicationApi.createApplication(applicationForm);
     if (applicationId) {
       ElMessage.success('创建成功');
       dialogVisible.value = false;

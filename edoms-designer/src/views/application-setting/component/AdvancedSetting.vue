@@ -34,8 +34,7 @@ import { ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import { deleteApplication } from '@/api/application';
-import { ApplicationInfo } from '@/api/application/type';
+import applicationApi, { ApplicationInfo } from '@/api/application';
 
 interface AdvanceItem {
   name: string;
@@ -75,7 +74,7 @@ const confirmForm = ref({
 const handleConfirm = async () => {
   if (!form.value) return;
   await form.value?.validate();
-  await deleteApplication({
+  await applicationApi.deleteApplication({
     applicationId: appInfo.value.applicationId,
     secret: confirmForm.value.inputText,
   });

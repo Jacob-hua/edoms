@@ -2,7 +2,7 @@ import { ref } from 'vue';
 
 import { MApp, MPage, NodeType } from '@edoms/schema';
 
-import { downloadFile } from '@/api/file';
+import fileApi from '@/api/file';
 
 export default () => {
   const loading = ref<boolean>(false);
@@ -12,7 +12,7 @@ export default () => {
   const execute = async (contentId: string): Promise<MApp | MPage | undefined> => {
     try {
       loading.value = true;
-      const contentStream = (await downloadFile({ contentId })) as Blob;
+      const contentStream = (await fileApi.downloadFile({ contentId })) as Blob;
       const text = await contentStream.text();
       const result = new Function(`return ${text ?? undefined}`)();
       if (

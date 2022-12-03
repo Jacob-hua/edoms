@@ -32,9 +32,7 @@
 import { ref, toRefs } from 'vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import { updateApplication } from '@/api/application';
-import { ApplicationInfo } from '@/api/application/type';
-import { UpdateApplicationReq } from '@/api/application/type';
+import applicationApi, { ApplicationInfo, UpdateApplicationReq } from '@/api/application';
 import ImageUpload from '@/components/ImageUpload.vue';
 
 const emit = defineEmits<{
@@ -84,7 +82,7 @@ const update = async ({ applicationId, name, description, thumbnailId, serviceAd
   if (!formRef.value) return;
   try {
     await formRef.value?.validate();
-    await updateApplication({
+    await applicationApi.updateApplication({
       applicationId,
       name,
       description,
