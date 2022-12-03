@@ -1,17 +1,21 @@
 import { ref } from 'vue';
 
+import { elMessage } from '@edoms/design';
 import { selectFile } from '@edoms/utils';
 
-export default (accepts: string[], multiple?: boolean) => {
+export default () => {
   const loading = ref<boolean>(false);
 
   const error = ref<any>(null);
 
-  const execute = async (): Promise<File[] | undefined> => {
+  const execute = async (accepts: string[], multiple?: boolean): Promise<File[] | undefined> => {
     try {
       loading.value = true;
       return await selectFile(accepts, multiple);
-    } catch (e) {
+    } catch (e: any) {
+      if (e.type === 'WrongFormat') {
+        elMessage.error(`请选择${e.accepts}文件`);
+      }
       error.value = e;
     } finally {
       loading.value = false;

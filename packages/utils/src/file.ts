@@ -13,7 +13,7 @@ export const getFileExtension = (fileName: string): string => {
  * @param multiple
  * @returns
  */
-export const selectFile = (accepts: string[] = ['.xml'], multiple: boolean = false): Promise<File[]> => {
+export const selectFile = (accepts: string[] = ['*'], multiple: boolean = false): Promise<File[]> => {
   if (!globalThis.document || !(globalThis.document instanceof Document)) {
     throw new Error('This is not a browser environment');
   }
@@ -33,7 +33,9 @@ export const selectFile = (accepts: string[] = ['.xml'], multiple: boolean = fal
       () => {
         setTimeout(() => {
           if (!inputElem.files || inputElem.files?.length == 0) {
-            reject('canceled select');
+            reject({
+              type: 'CancelSelect',
+            });
           }
         }, 1000);
       },
@@ -41,9 +43,19 @@ export const selectFile = (accepts: string[] = ['.xml'], multiple: boolean = fal
     );
     inputElem.addEventListener('change', () => {
       if (!inputElem.files || inputElem.files?.length == 0) {
-        reject();
+        reject({
+          type: 'CancelSelect',
+        });
       } else {
-        resolve(Array.from(inputElem.files));
+        const fileList = Array.from(inputElem.files);
+        if (fileList.some(({ name }) => !accepts.includes(`.${name.split('.').pop()}`))) {
+          reject({
+            message: `Please select files in ${accepts} format`,
+            type: 'WrongFormat',
+            accepts,
+          });
+        }
+        resolve(fileList);
       }
     });
   });

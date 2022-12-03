@@ -228,6 +228,8 @@ const handleRuntimeReady = () => {
   console.log('准备好了');
 };
 
+const { execute: downloadDslExecute } = useDownloadDSL();
+
 async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
   const dsl: MApp = generateEmptyAppDSL({
     applicationId: pageInfo.applicationId,
@@ -238,8 +240,7 @@ async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
     pageName: pageInfo.pageName,
   });
   if (pageInfo.editContentId) {
-    const { execute } = useDownloadDSL(pageInfo.editContentId);
-    const remoteDsl = await execute();
+    const remoteDsl = await downloadDslExecute(pageInfo.editContentId);
     if (!remoteDsl) {
       dsl.items.push(emptyPageDsl);
     } else if (remoteDsl.type === NodeType.PAGE) {
@@ -254,14 +255,15 @@ async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
   return dsl;
 }
 
+const { execute: uploadExecute } = useUpload();
+
 async function save() {
   const pageDSL = serialize(toRaw(value.value?.items?.[0]), {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
 
-  const { execute } = useUpload(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
-  const contentId = await execute();
+  const contentId = await uploadExecute(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
   if (contentId) {
     pageInfo.value && (pageInfo.value.editContentId = contentId);
     await savePage({

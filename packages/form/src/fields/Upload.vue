@@ -48,10 +48,7 @@ defineEmits<{
 
 useAddField(props.prop);
 
-const { loading: selectLoading, execute: selectExecute } = useSelectFile(
-  props.config.accepts ?? ['*'],
-  props.config.multiple
-);
+const { loading: selectLoading, execute: selectExecute } = useSelectFile();
 
 const files = ref<Map<string, FileStruct>>(new Map());
 
@@ -60,7 +57,7 @@ const handleDeleteFile = (fileName: string) => {
 };
 
 const handleFileSelect = async () => {
-  const selectedFiles = await selectExecute();
+  const selectedFiles = await selectExecute(props.config.accepts ?? ['*'], props.config.multiple);
   if (!selectedFiles) {
     return;
   }

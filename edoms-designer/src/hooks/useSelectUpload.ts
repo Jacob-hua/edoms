@@ -3,12 +3,12 @@ import { ref, watch } from 'vue';
 import useSelectFile from './useSelectFile';
 import useUpload from './useUpload';
 
-export default (accepts: string[]) => {
+export default () => {
   const loading = ref<boolean>(false);
 
   const error = ref<any>(null);
 
-  const { error: selectError, execute: selectExecute } = useSelectFile(accepts);
+  const { error: selectError, execute: selectExecute } = useSelectFile();
 
   watch(
     () => selectError,
@@ -17,22 +17,22 @@ export default (accepts: string[]) => {
     }
   );
 
-  const execute = async () => {
+  const execute = async (accepts: string[]): Promise<string | undefined | null> => {
     try {
       loading.value = true;
-      const [file] = (await selectExecute()) ?? [];
+      const [file] = (await selectExecute(accepts)) ?? [];
       if (!file) {
         loading.value = false;
-        throw new Error('Cancel select file!');
+        throw selectError.value;
       }
-      const { error: uploadError, execute: uploadExecute } = useUpload(file, file.name, file.type);
+      const { error: uploadError, execute: uploadExecute } = useUpload();
       watch(
         () => uploadError,
         (e) => {
           error.value = e;
         }
       );
-      return await uploadExecute();
+      return await uploadExecute(file, file.name, file.type);
     } catch (e) {
       error.value = e;
     } finally {

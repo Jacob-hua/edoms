@@ -7,7 +7,7 @@
       </div>
       <div class="top-wrapper-right">
         <el-button type="danger" size="large" @click="handleClearTable">清空</el-button>
-        <el-button :loading="fileLoading" size="large" type="primary" @click="handleFileChange">导入</el-button>
+        <el-button :loading="selectFileLoading" size="large" type="primary" @click="handleFileChange">导入</el-button>
         <el-button :loading="loading" type="primary" size="large" @click="execute">导出</el-button>
       </div>
     </div>
@@ -57,8 +57,10 @@ import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
 import useExport from '@/hooks/useExport';
 import useSelectFile from '@/hooks/useSelectFile';
+
 const { formatTime } = useDate();
-const { execute: selectFile, loading: fileLoading } = useSelectFile(['.csv']);
+
+const { execute: selectFileExecute, loading: selectFileLoading } = useSelectFile();
 
 const props = withDefaults(
   defineProps<{
@@ -107,6 +109,7 @@ watch(
     immediate: false,
   }
 );
+
 const pageInfo = ref({
   page: 1,
   limit: 10,
@@ -153,7 +156,7 @@ const handleFileChange = async () => {
     type: 'warning',
   })
     .then(async () => {
-      const file = (await selectFile())?.[0]!;
+      const file = (await selectFileExecute(['.csv']))?.[0]!;
       await importTable({
         file,
         tableId: props.data.id!,
