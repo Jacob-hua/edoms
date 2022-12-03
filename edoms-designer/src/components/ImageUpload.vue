@@ -1,7 +1,7 @@
 <template>
   <div class="upload-wrapper">
     <div class="image-wrapper" @click="handlePreview"><PreviewImage :content-id="contentId" /></div>
-    <el-button type="primary" :loading="loading" @click="handleUpload">上传图片</el-button>
+    <el-button type="primary" :loading="selectUploadLoading" @click="handleUpload">上传图片</el-button>
     <el-dialog v-model="dialogVisible">
       <preview-image :content-id="contentId"></preview-image>
     </el-dialog>
@@ -9,11 +9,13 @@
 </template>
 
 <script lang="ts" setup name="ImageUpload">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { ElMessage } from 'element-plus';
 
 import PreviewImage from '@/components/ImagePreview.vue';
 import useSelectUpload from '@/hooks/useSelectUpload';
-const defaultProps = withDefaults(
+
+const props = withDefaults(
   defineProps<{
     thumbnailId?: string;
   }>(),
@@ -23,27 +25,31 @@ const defaultProps = withDefaults(
 );
 
 const emits = defineEmits<{
-  (event: 'success', contentId: string): void;
+  (event: 'success', contentId: string | null): void;
 }>();
-const { execute, loading } = useSelectUpload([
-  '.png',
-  '.jpg',
-  '.jpeg',
-  '.gif',
-  '.webp',
-  '.PNG',
-  '.JPG',
-  '.JPEG',
-  '.GIF',
-  '.WEBP',
-]);
-const contentId = ref<string>('');
+
+const { execute: selectUploadExecute, loading: selectUploadLoading, error: selectUploadError } = useSelectUpload();
+
+const contentId = ref<string | null>(null);
+
 const dialogVisible = ref<boolean>(false);
+
+watch(
+  () => selectUploadError.value,
+  (selectUploadError) => {
+    if (selectUploadError.type === 'WrongFormat') {
+      ElMessage.error(`请选择${selectUploadError.accepts}文件`);
+    }
+  }
+);
+
 onMounted(() => {
-  contentId.value = defaultProps.thumbnailId;
+  contentId.value = props.thumbnailId;
 });
+
 const handleUpload = async () => {
-  contentId.value = (await execute()) as string;
+  const imgFormat = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP'];
+  contentId.value = (await selectUploadExecute(imgFormat)) ?? null;
   emits('success', contentId.value);
 };
 const handlePreview = () => {
