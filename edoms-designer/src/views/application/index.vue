@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { listApplications } from '@/api/application';
+import applicationApi from '@/api/application';
 import { ApplicationInfo, ListApplicationsRes } from '@/api/application/type';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 
@@ -40,7 +40,7 @@ const gridList = ref();
 const visible = ref<boolean>(false);
 
 const loadData: RequestFunc<ApplicationInfo> = async ({ pageSize, current }) => {
-  const { dataList, count }: ListApplicationsRes = await listApplications({
+  const { dataList, count }: ListApplicationsRes = await applicationApi.listApplications({
     page: current,
     limit: pageSize,
   });

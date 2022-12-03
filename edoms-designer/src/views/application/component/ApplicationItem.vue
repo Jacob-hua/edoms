@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 
-import { ApplicationInfo } from '@/api/application/type';
+import { ApplicationInfo } from '@/api/application';
 import PreviewImage from '@/components/ImagePreview.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
