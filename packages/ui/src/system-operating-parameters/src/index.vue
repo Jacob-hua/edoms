@@ -94,7 +94,6 @@ watch(
     deep: true,
   }
 );
-updateParameters();
 useIntervalAsync(updateParameters, props.config.intervalDelay);
 
 const handleShowMore = () => {
