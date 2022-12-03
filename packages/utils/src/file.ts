@@ -13,7 +13,7 @@ export const getFileExtension = (fileName: string): string => {
  * @param multiple
  * @returns
  */
-export const selectFile = (accepts: string[] = ['.xml'], multiple: boolean = false): Promise<File[]> => {
+export const selectFile = (accepts: string[] = ['*'], multiple: boolean = false): Promise<File[]> => {
   if (!globalThis.document || !(globalThis.document instanceof Document)) {
     throw new Error('This is not a browser environment');
   }
