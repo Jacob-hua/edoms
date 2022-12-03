@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watchEffect } from 'vue';
+import { computed, ref, toRaw, watchEffect } from 'vue';
 
 import { MApp, NodeType } from '@edoms/schema';
 
@@ -42,9 +42,7 @@ watchEffect(async () => {
     return;
   }
   await updateDsl(props.contentId);
-  runtimeIframe.value.addEventListener('load', handleIframeLoad, {
-    once: true,
-  });
+  runtimeIframe.value.addEventListener('load', handleIframeLoad);
 });
 
 const { execute: downloadDslExecute } = useDownloadDSL();
@@ -70,6 +68,6 @@ function handleIframeLoad() {
   if (!dsl.value) {
     return;
   }
-  runtimeIframe.value?.contentWindow?.postMessage(dsl.value, runtimeUrl);
+  runtimeIframe.value?.contentWindow?.postMessage(toRaw(dsl.value), `${VITE_RUNTIME_PATH}/page/index.html`);
 }
 </script>
