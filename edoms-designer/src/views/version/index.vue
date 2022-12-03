@@ -55,7 +55,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 
 import { EdomsEditor } from '@edoms/editor/types';
 
-import { deleteVersion, listVersions, recoveryVersion, updateVersion } from '@/api/version';
+import versionApi from '@/api/version';
 import GridList from '@/components/GridList.vue';
 import useDate from '@/hooks/useDate';
 const { formatTime } = useDate();
@@ -75,7 +75,7 @@ const previewUrl = computed(
 );
 
 const loadData = async ({ pageSize, current }: { pageSize: number; current: number }) => {
-  const { dataList } = await listVersions({
+  const { dataList } = await versionApi.listVersions({
     page: current,
     limit: pageSize,
     pageId: Number(route.query.pageId),
@@ -101,7 +101,7 @@ const showInput = (model: any) => {
 
 const handleHideInput = async (model: any) => {
   model.isShowText = true;
-  await updateVersion({
+  await versionApi.updateVersion({
     versionId: model.versionId,
     name: model.name,
     pageId: Number(route.query.pageId),
@@ -117,7 +117,7 @@ const handleDelete = async (model: any) => {
     type: 'warning',
   })
     .then(async () => {
-      await deleteVersion({
+      await versionApi.deleteVersion({
         versionIds: [model.versionId],
       });
       ElMessage.success('删除成功');
@@ -131,7 +131,7 @@ const handleActive = (model: any) => {
 };
 
 const handleApply = async () => {
-  await recoveryVersion({
+  await versionApi.recoveryVersion({
     versionId: active.value.versionId,
   });
   ElMessage.success('应用版本成功');
