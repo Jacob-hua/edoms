@@ -51,7 +51,7 @@
 import { ref, watch } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
-import { downloadFile } from '@/api/file';
+import fileApi from '@/api/file';
 import { clearTable, exportTable, exportTableHistory, getTableHistory, importTable } from '@/api/model';
 import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
@@ -170,7 +170,7 @@ const handleFileChange = async () => {
 const { execute: handleFileDownload } = useExport(
   async (data: any) => {
     try {
-      const result = await downloadFile({
+      const result = await fileApi.downloadFile({
         contentId: data.contentId,
       });
       return result;

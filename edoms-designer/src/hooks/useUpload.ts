@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-import { uploadFile } from '@/api/file';
+import fileApi from '@/api/file';
 
 export default () => {
   const loading = ref<boolean>(false);
@@ -18,7 +18,7 @@ export default () => {
         content = new Blob([content], { type: `${fileType};charset=${charset}` });
       }
       loading.value = true;
-      const { contentId } = await uploadFile({
+      const { contentId } = await fileApi.uploadFile({
         file: content,
         fileName,
         fileType,
