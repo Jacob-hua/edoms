@@ -73,7 +73,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import screenFull from 'screenfull';
 
-import { deletePage, listPages } from '@/api/page';
+import pageApi from '@/api/page';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
@@ -102,7 +102,7 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
     dataList = [],
     count,
     applicationName,
-  } = await listPages({
+  } = await pageApi.listPages({
     page: current,
     limit: pageSize,
     applicationId: route.query.applicationId as string,
@@ -172,7 +172,7 @@ const topMenus = [
         type: 'warning',
       })
         .then(async () => {
-          await deletePage({
+          await pageApi.deletePage({
             pageIds: [active.value.pageId],
           });
           ElMessage.success('删除成功');

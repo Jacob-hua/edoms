@@ -42,7 +42,7 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath } from '@edoms/utils';
 
-import { getPage, GetPageRes, savePage } from '@/api/page';
+import pageApi, { GetPageRes } from '@/api/page';
 import versionApi from '@/api/version';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
@@ -236,7 +236,7 @@ watch(
     if (!pageId) {
       return;
     }
-    pageInfo.value = await getPage({ pageId });
+    pageInfo.value = await pageApi.getPage({ pageId });
     const dsl = await calculateDSL(pageInfo.value);
     value.value = dsl;
     defaultSelected.value = pageId;
@@ -294,7 +294,7 @@ async function save() {
     return;
   }
   pageInfo.value && (pageInfo.value.editContentId = contentId);
-  await savePage({
+  await pageApi.savePage({
     pageId: pageId.value,
     contentId,
   });

@@ -21,7 +21,7 @@ import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import { createPage } from '@/api/page';
+import pageApi from '@/api/page';
 
 const route = useRoute();
 const props = defineProps<{
@@ -66,7 +66,7 @@ const handleConfirm = async () => {
   if (!form.value) return;
   try {
     await form.value?.validate();
-    await createPage({
+    await pageApi.createPage({
       name: page.value?.name,
       applicationId: route.query.applicationId as string,
     });
