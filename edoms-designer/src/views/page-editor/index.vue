@@ -254,14 +254,15 @@ async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
   return dsl;
 }
 
+const { execute: uploadExecute } = useUpload();
+
 async function save() {
   const pageDSL = serialize(toRaw(value.value?.items?.[0]), {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
 
-  const { execute } = useUpload(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
-  const contentId = await execute();
+  const contentId = await uploadExecute(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
   if (contentId) {
     pageInfo.value && (pageInfo.value.editContentId = contentId);
     await savePage({

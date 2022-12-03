@@ -25,14 +25,14 @@ export default () => {
         loading.value = false;
         throw selectError.value;
       }
-      const { error: uploadError, execute: uploadExecute } = useUpload(file, file.name, file.type);
+      const { error: uploadError, execute: uploadExecute } = useUpload();
       watch(
         () => uploadError,
         (e) => {
           error.value = e;
         }
       );
-      return await uploadExecute();
+      return await uploadExecute(file, file.name, file.type);
     } catch (e) {
       error.value = e;
     } finally {
