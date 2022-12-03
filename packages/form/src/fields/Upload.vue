@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Delete } from '@element-plus/icons-vue';
 
 import { ElButton, ElIcon } from '@edoms/design';
@@ -42,7 +42,7 @@ const props = defineProps<{
   size: 'mini' | 'small' | 'medium';
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (emit: 'change', value: any): void;
 }>();
 
@@ -51,6 +51,18 @@ useAddField(props.prop);
 const { loading: selectLoading, execute: selectExecute } = useSelectFile();
 
 const files = ref<Map<string, FileStruct>>(new Map());
+
+watch(
+  () => Array.from(files.value.values()).filter(({ status }) => status === 'done'),
+  (filesValue) => {
+    if (filesValue.length < 1) {
+      return;
+    }
+    props.model[props.prop] = filesValue;
+    emit('change', filesValue);
+  },
+  { immediate: true }
+);
 
 const handleDeleteFile = (fileName: string) => {
   files.value.delete(fileName);
