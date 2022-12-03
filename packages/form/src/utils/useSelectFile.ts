@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 
+import { elMessage } from '@edoms/design';
 import { selectFile } from '@edoms/utils';
 
 export default () => {
@@ -11,7 +12,10 @@ export default () => {
     try {
       loading.value = true;
       return await selectFile(accepts, multiple);
-    } catch (e) {
+    } catch (e: any) {
+      if (e.type === 'WrongFormat') {
+        elMessage.error(`请选择${e.accepts}文件`);
+      }
       error.value = e;
     } finally {
       loading.value = false;
