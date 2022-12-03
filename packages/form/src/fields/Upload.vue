@@ -23,10 +23,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Delete } from '@element-plus/icons-vue';
 
-import { ElButton, ElIcon } from '@edoms/design';
+import { ElButton, ElIcon, elMessage } from '@edoms/design';
 
 import { FileStruct, UploadConfig } from '../schema';
 import { useAddField } from '../utils/useAddField';
@@ -48,19 +48,25 @@ defineEmits<{
 
 useAddField(props.prop);
 
-const { loading: selectLoading, execute: selectExecute } = useSelectFile(
-  props.config.accepts ?? ['*'],
-  props.config.multiple
-);
+const { loading: selectLoading, execute: selectExecute, error: selectError } = useSelectFile();
 
 const files = ref<Map<string, FileStruct>>(new Map());
+
+watch(
+  () => selectError.value,
+  (selectError) => {
+    if (selectError.type === 'WrongFormat') {
+      elMessage.error(`请选择${selectError.accepts}文件`);
+    }
+  }
+);
 
 const handleDeleteFile = (fileName: string) => {
   files.value.delete(fileName);
 };
 
 const handleFileSelect = async () => {
-  const selectedFiles = await selectExecute();
+  const selectedFiles = await selectExecute(props.config.accepts ?? ['*'], props.config.multiple);
   if (!selectedFiles) {
     return;
   }

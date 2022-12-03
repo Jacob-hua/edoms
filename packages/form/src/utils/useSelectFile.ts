@@ -2,12 +2,12 @@ import { ref } from 'vue';
 
 import { selectFile } from '@edoms/utils';
 
-export default (accepts: string[], multiple?: boolean) => {
+export default () => {
   const loading = ref<boolean>(false);
 
   const error = ref<any>(null);
 
-  const execute = async (): Promise<File[] | undefined> => {
+  const execute = async (accepts: string[], multiple?: boolean): Promise<File[] | undefined> => {
     try {
       loading.value = true;
       return await selectFile(accepts, multiple);

@@ -37,6 +37,7 @@ const config = ref([
     type: 'upload',
     multiple: true,
     listType: 'picture',
+    accepts: ['.png', '.jpg'],
     upload: () => {
       return new Promise((resolve) => {
         setTimeout(() => {
