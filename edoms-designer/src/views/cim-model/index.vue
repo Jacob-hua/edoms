@@ -38,7 +38,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
-import { getModelType, updateModelType } from '@/api/model';
+import modelApi from '@/api/model';
 import { ModelType } from '@/const/model';
 
 import DynamicModel from './component/DynamicModel.vue';
@@ -68,14 +68,14 @@ const tabPanels = computed(() => Object.values(modelTypeConfig));
 const tabActive = ref<ModelType>(tabPanels.value[0].value);
 
 const loadModelType = async () => {
-  const { modelType } = await getModelType();
+  const { modelType } = await modelApi.getModelType();
   useType.value = Number(modelType);
 };
 onMounted(() => {
   loadModelType();
 });
 const handleTypeChange = async (value: number) => {
-  await updateModelType({
+  await modelApi.updateModelType({
     modelType: String(value),
     modelTypeId: 1,
   });

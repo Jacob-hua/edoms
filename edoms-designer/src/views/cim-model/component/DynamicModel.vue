@@ -25,7 +25,7 @@
 <script lang="ts" setup name="DynamicModel">
 import { ref } from 'vue';
 
-import { getDicData } from '@/api/model';
+import modelApi from '@/api/model';
 import GridList from '@/components/GridList.vue';
 import { ModelMark } from '@/const/model';
 
@@ -35,7 +35,7 @@ const tableData = ref();
 const isShow = ref<boolean>(false);
 
 const loadData = async () => {
-  const result: any = await getDicData({
+  const result: any = await modelApi.getDicData({
     mark: ModelMark.CIM_URL as string,
   });
   tableData.value = result[0];

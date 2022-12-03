@@ -71,7 +71,7 @@
 import { onMounted, ref, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
-import { ApiStruct, Dic, getApi, saveApi, simulationApi } from '@/api/model';
+import modelApi, { ApiStruct, Dic } from '@/api/model';
 import EditTable from '@/components/EditTable.vue';
 import EditTableColumn from '@/components/EditTableColumn.vue';
 import { KVStruct } from '@/const/struct';
@@ -178,12 +178,13 @@ const parameterFactory = (paramsData: any[], isSimulation = true, { id, dicCimId
   }, {});
 };
 const handleSaveApi = async () => {
-  await saveApi(parameterFactory(getNewResult([...parameterData.value])));
+  await modelApi.saveApi(parameterFactory(getNewResult([...parameterData.value])));
   ElMessage.success('保存成功');
 };
 const handleSimulation = async () => {
   try {
-    jsonData.value = (await simulationApi(parameterFactory(getNewResult([...parameterData.value]), false))) ?? {};
+    jsonData.value =
+      (await modelApi.simulationApi(parameterFactory(getNewResult([...parameterData.value]), false))) ?? {};
   } catch (e) {
     jsonData.value = {};
   }
@@ -197,7 +198,7 @@ const getNewResult = (metaData: any[]) => {
 };
 
 onMounted(async () => {
-  apiInfo.value = await getApi({
+  apiInfo.value = await modelApi.getApi({
     dicCimId: data.value.id,
   });
   assignment(parameterData, apiInfo);

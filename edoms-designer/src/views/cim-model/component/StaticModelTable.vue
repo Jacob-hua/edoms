@@ -52,7 +52,7 @@ import { ref, watch } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 import fileApi from '@/api/file';
-import { clearTable, exportTable, exportTableHistory, getTableHistory, importTable } from '@/api/model';
+import modelApi from '@/api/model';
 import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
 import useExport from '@/hooks/useExport';
@@ -74,7 +74,7 @@ const props = withDefaults(
 const { execute, loading } = useExport(
   async () => {
     try {
-      const result = await exportTable({
+      const result = await modelApi.exportTable({
         tableId: props.data.id,
       });
       loadTableHistory();
@@ -89,7 +89,7 @@ const { execute, loading } = useExport(
 
 const { execute: handleExportRecord, loading: recordLoading } = useExport(
   async () => {
-    const result = await exportTableHistory({
+    const result = await modelApi.exportTableHistory({
       dicCimId: props.data.id,
     });
     loadTableHistory();
@@ -116,7 +116,7 @@ const pageInfo = ref({
   total: 0,
 });
 const loadTableHistory = async () => {
-  const { dataList, count } = await getTableHistory({
+  const { dataList, count } = await modelApi.getTableHistory({
     page: pageInfo.value.page,
     limit: pageInfo.value.limit,
     tableId: props.data.id,
@@ -140,7 +140,7 @@ const handleClearTable = async () => {
     type: 'warning',
   })
     .then(async () => {
-      await clearTable({
+      await modelApi.clearTable({
         tableId: Number(props.data.id),
       });
       loadTableHistory();
@@ -157,7 +157,7 @@ const handleFileChange = async () => {
   })
     .then(async () => {
       const file = (await selectFileExecute(['.csv']))?.[0]!;
-      await importTable({
+      await modelApi.importTable({
         file,
         tableId: props.data.id!,
         fileName: file.name,

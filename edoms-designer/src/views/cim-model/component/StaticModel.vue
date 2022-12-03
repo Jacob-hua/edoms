@@ -27,7 +27,7 @@
 <script lang="ts" setup name="StaticModel">
 import { ref } from 'vue';
 
-import { getDicData } from '@/api/model';
+import modelApi from '@/api/model';
 import GridList from '@/components/GridList.vue';
 import { ModelMark } from '@/const/model';
 
@@ -39,7 +39,7 @@ const data = ref({
 });
 const tableKey = ref();
 const loadData = async () => {
-  const result: any = await getDicData({
+  const result: any = await modelApi.getDicData({
     mark: ModelMark.CIM_TABLE as string,
   });
   data.value = result[0];
