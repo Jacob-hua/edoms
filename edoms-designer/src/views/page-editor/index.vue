@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, toRaw, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Coin, Connection, Document, Finished, PriceTag } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
@@ -70,6 +70,8 @@ editorService.usePlugin({
     return [config, parent];
   },
 });
+
+const router = useRouter();
 
 const stageRect = ref({
   width: 1200,
@@ -324,7 +326,17 @@ async function saveWithVersion(version: string) {
 }
 
 async function publish() {
-  console.log('=====');
+  const contentId = await uploadDsl();
+  if (!contentId) {
+    return;
+  }
+  pageInfo.value && (pageInfo.value.editContentId = contentId);
+  await pageApi.publishPage({
+    pageId: pageId.value,
+    contentId,
+  });
+  editor.value?.editorService.resetModifiedNodeId();
+  router.go(-1);
 }
 </script>
 

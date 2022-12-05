@@ -8,6 +8,7 @@ import {
   GetPageRes,
   ListPageReq,
   ListPageRes,
+  PublishPageReq,
   SavePageReq,
   UpdatePageReq,
 } from './type';
@@ -42,13 +43,6 @@ export default {
       };
     }
   },
-  publishPage: async (data: any): Promise<void> => {
-    await request<any, any>({
-      url: '/page/publish',
-      method: 'POST',
-      data,
-    });
-  },
   createPage: async (data: CreatePageReq): Promise<CreatePageRes> => {
     const { result } = await request<CreatePageReq, CreatePageRes>({
       url: '/page/create',
@@ -74,6 +68,13 @@ export default {
   savePage: async (data: SavePageReq): Promise<void> => {
     await request<SavePageReq, void>({
       url: '/page/save',
+      method: 'POST',
+      data,
+    });
+  },
+  publishPage: async (data: PublishPageReq): Promise<void> => {
+    await request<PublishPageReq, any>({
+      url: '/page/publish',
       method: 'POST',
       data,
     });
