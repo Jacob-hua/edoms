@@ -8,7 +8,7 @@
       </el-form>
     </span>
     <template #footer>
-      <span class="dialog-footer">
+      <span>
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
       </span>

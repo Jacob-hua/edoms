@@ -20,7 +20,14 @@
         :request="loadData"
       >
         <template #default="{ item }">
-          <PageItem :item="item" :active="active" @success="handleReload" @change-active="changeActive" />
+          <PageListItem
+            :application-id="applicationId"
+            :data="item"
+            :is-active="item.pageId === active.pageId"
+            @rename-success="handleReload"
+            @delete-success="handleReload"
+            @change-active="changeActive"
+          />
         </template>
         <template #noMore>
           <div></div>
@@ -87,21 +94,31 @@ import PopMenuOption from '@/components/PopMenuOption.vue';
 import useDate from '@/hooks/useDate';
 
 import NewPageDialog from './component/NewPageDialog.vue';
-import PageItem from './component/PageItem.vue';
+import PageListItem from './component/PageListItem.vue';
 
 const route = useRoute();
+
 const router = useRouter();
+
 const { formatTime } = useDate();
+
 const gridList = ref();
+
 const appName = ref<string>('');
+
 const previewVisible = ref(false);
+
 const stageRect = ref({
   width: 1200,
   height: 950,
 });
+
 const totalCount = ref<number>();
+
 const active = ref();
+
 const applicationId = ref<string>(route.query.applicationId as string);
+
 const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
   const {
     dataList = [],
@@ -128,12 +145,15 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
     total: Number(count),
   };
 };
+
 const goBack = () => {
   router.push('/');
 };
+
 const handleReload = () => {
   gridList.value?.reload();
 };
+
 const editWrapper = ref();
 
 const topMenus = [
@@ -179,13 +199,16 @@ const topMenus = [
     },
   },
 ];
+
 const handleTopMenuClick = (value: string | number) => {
   const menu = topMenus.find(({ name }) => name === value);
   menu?.action();
 };
 
 const searchText = ref<string | null>(null);
+
 const isSearch = ref<boolean>(false);
+
 const newPageVisible = ref<boolean>(false);
 
 const handleShowSearchInput = () => {
