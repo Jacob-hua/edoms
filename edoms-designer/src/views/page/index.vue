@@ -127,14 +127,10 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
   });
   totalCount.value = Number(count);
   appName.value = applicationName;
-  applicationId.value = route.query.applicationId as string;
   active.value = dataList[0] ?? { pushContentId: null };
   if (totalCount.value) {
     previewVisible.value = true;
   }
-  dataList.forEach((item: any) => {
-    item.isShowText = true;
-  });
   return {
     data: dataList,
     total: Number(count),
