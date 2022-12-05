@@ -63,7 +63,7 @@
       <div ref="editWrapper" class="edit">
         <DSLPreview
           v-if="previewVisible"
-          :height="stageRect.height"
+          height="100%"
           :application-id="applicationId"
           :application-name="appName"
           :content-id="active.pushContentId"
@@ -107,11 +107,6 @@ const gridList = ref();
 const appName = ref<string>('');
 
 const previewVisible = ref(false);
-
-const stageRect = ref({
-  width: 1200,
-  height: 950,
-});
 
 const totalCount = ref<number>();
 
@@ -281,6 +276,7 @@ const goEdit = () => {
   }
 }
 .page-container {
+  display: flex;
   .left-section {
     border-right: 1px solid #e1e1e1;
     width: 20%;
@@ -308,10 +304,9 @@ const goEdit = () => {
       justify-content: space-between;
     }
   }
-  display: flex;
   .grid-list {
     margin-top: 10px;
-    height: calc(100vh);
+    height: calc(75vh);
     overflow-y: auto;
     div {
       text-align: left;
