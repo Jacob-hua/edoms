@@ -26,7 +26,7 @@
             :is-active="item.pageId === active.pageId"
             @rename-success="handleReload"
             @delete-success="handleReload"
-            @change-active="changeActive"
+            @click="clickPageListItem(item)"
           />
         </template>
         <template #noMore>
@@ -229,7 +229,7 @@ const handleClearInput = () => {
   search();
 };
 
-const changeActive = (item: any) => {
+const clickPageListItem = (item: any) => {
   active.value = item;
 };
 

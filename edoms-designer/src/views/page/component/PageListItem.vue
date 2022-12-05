@@ -1,5 +1,5 @@
 <template>
-  <div :class="['item', isActive ? 'active' : '']" @click="handleActive(data)">
+  <div :class="['item', isActive ? 'active' : '']">
     <template v-if="renameVisible">
       <el-form ref="formRef" :inline="true" :model="formModel" :rules="formRules">
         <el-form-item prop="pageName">
@@ -115,10 +115,6 @@ const menus = [
     },
   },
 ];
-
-const handleActive = (item: any) => {
-  emit('changeActive', item);
-};
 
 const handleMenuClick = (value: string | number) => {
   const menu = menus.find(({ name }) => name === value);
