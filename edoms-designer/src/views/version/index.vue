@@ -10,7 +10,6 @@
           ref="gridList"
           class="grid-list"
           column-gap="20px"
-          row-gap="20px"
           :page-size="99999999"
           item-min-width="200px"
           :request="loadData"
@@ -42,7 +41,13 @@
         <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
       </div>
       <div class="wrapper">
-        <iframe v-if="previewVisible" width="100%" :height="stageRect && stageRect.height" :src="previewUrl"></iframe>
+        <DSLPreview
+          v-if="previewVisible"
+          height="100%"
+          :application-id="applicationId"
+          :content-id="active.pushContentId"
+          :page-id="active.pageId"
+        />
       </div>
     </div>
   </div>
@@ -53,26 +58,24 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
-import { EdomsEditor } from '@edoms/editor/types';
-
 import versionApi from '@/api/version';
+import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
 import useDate from '@/hooks/useDate';
+
 const { formatTime } = useDate();
+
 const route = useRoute();
+
 const router = useRouter();
+
 const gridList = ref();
 
-const editor = ref<InstanceType<typeof EdomsEditor>>();
-const { VITE_RUNTIME_PATH } = import.meta.env;
-const previewVisible = ref(true);
-const stageRect = ref({
-  width: 1200,
-  height: 950,
-});
-const previewUrl = computed(
-  () => `${VITE_RUNTIME_PATH}/page/index.html?localPreview=1&page=${editor.value?.editorService.get('page').id}`
-);
+const active = ref();
+
+const previewVisible = ref(false);
+
+const applicationId = computed(() => route.query.applicationId as string);
 
 const loadData = async ({ pageSize, current }: { pageSize: number; current: number }) => {
   const { dataList } = await versionApi.listVersions({
@@ -84,7 +87,9 @@ const loadData = async ({ pageSize, current }: { pageSize: number; current: numb
   dataList.forEach((data: any) => {
     data.isShowText = true;
   });
-
+  if (dataList.length) {
+    previewVisible.value = true;
+  }
   return {
     data: dataList,
     total: dataList.length,
@@ -125,7 +130,7 @@ const handleDelete = async (model: any) => {
     })
     .catch(() => {});
 };
-const active = ref();
+
 const handleActive = (model: any) => {
   active.value = model;
 };
@@ -138,7 +143,7 @@ const handleApply = async () => {
   router.push({
     path: '/page',
     query: {
-      applicationId: route.query.applicationId,
+      applicationId: applicationId.value,
     },
   });
 };
@@ -153,6 +158,9 @@ const goEdit = () => {
 <style lang="scss" scoped>
 .active {
   background-color: #409eff;
+}
+.wrapper {
+  height: calc(100% - 75px);
 }
 .version-container {
   .item {
