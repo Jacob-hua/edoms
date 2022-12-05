@@ -1,13 +1,17 @@
 <template>
   <div :class="['item', isActive ? 'active' : '']" @click="handleActive(data)">
     <template v-if="renameVisible">
-      <el-input v-model="pageName" clearable></el-input>
+      <el-form ref="formRef" :inline="true" :model="formModel" :rules="formRules">
+        <el-form-item prop="pageName">
+          <el-input v-model="formModel.pageName"></el-input>
+        </el-form-item>
+      </el-form>
       <div style="display: flex; padding: 0 10px">
         <el-icon :size="20" @click="handleRename"><Check /></el-icon>
       </div>
     </template>
     <template v-else>
-      <p>{{ pageName }}</p>
+      <p>{{ formModel.pageName }}</p>
       <div class="pop-menu-wrapper">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
@@ -25,8 +29,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 import pageApi from '@/api/page';
@@ -49,7 +54,15 @@ const emit = defineEmits<{
   (event: 'changeActive', item: any): void;
 }>();
 
-const pageName = ref<string>(props.data.name);
+const formRef = ref<FormInstance>();
+
+const formModel = ref({
+  pageName: props.data.name,
+});
+
+const formRules = reactive<FormRules>({
+  pageName: [{ required: true, message: '请输入页面名称', trigger: 'blur' }],
+});
 
 const renameVisible = ref<boolean>(false);
 
@@ -108,9 +121,10 @@ const handleMenuClick = (value: string | number) => {
 
 const handleRename = async () => {
   try {
+    formRef.value && (await formRef.value.validate());
     await pageApi.updatePage({
       pageId: props.data.pageId,
-      name: pageName.value,
+      name: formModel.value.pageName,
       applicationId: props.applicationId,
     });
     renameVisible.value = false;
