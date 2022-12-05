@@ -32,7 +32,7 @@
 <script lang="ts" setup>
 import { computed, ref, toRaw, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Coin, Connection, Document, Finished, PriceTag } from '@element-plus/icons-vue';
+import { Back, Coin, Connection, Document, Finished, PriceTag } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
@@ -113,6 +113,14 @@ const pageInfo = ref<GetPageRes | undefined>();
 
 const menu = computed<MenuBarData>(() => ({
   left: [
+    {
+      type: 'button',
+      icon: Back,
+      handler: () => {
+        goBack();
+      },
+    },
+    '/',
     {
       type: 'text',
       text: pageInfo.value?.pageName ?? '',
@@ -261,6 +269,10 @@ const handleRuntimeReady = () => {
   console.log('准备好了');
 };
 
+function goBack() {
+  router.go(-1);
+}
+
 const { execute: downloadDslExecute } = useDownloadDSL();
 
 async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
@@ -336,7 +348,7 @@ async function publish() {
     contentId,
   });
   editor.value?.editorService.resetModifiedNodeId();
-  router.go(-1);
+  goBack();
 }
 </script>
 
