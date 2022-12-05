@@ -10,7 +10,6 @@
           ref="gridList"
           class="grid-list"
           column-gap="20px"
-          row-gap="20px"
           :page-size="99999999"
           item-min-width="200px"
           :request="loadData"

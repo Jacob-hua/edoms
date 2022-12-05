@@ -47,6 +47,7 @@ watchEffect(async () => {
   }
   await updateDsl(props.contentId);
   if (runtimeIframe.value) {
+    runtimeIframe.value.contentWindow.location.reload();
     runtimeIframe.value.addEventListener('load', handleIframeLoad);
   }
 });
