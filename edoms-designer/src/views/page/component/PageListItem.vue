@@ -149,6 +149,9 @@ const handleRename = async () => {
 </script>
 
 <style lang="scss" scoped>
+.el-form-item {
+  margin: 0;
+}
 .active {
   background-color: #409eff;
 }
