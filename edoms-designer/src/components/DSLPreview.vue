@@ -38,6 +38,8 @@ const runtimeIframe = ref<HTMLIFrameElement | null>(null);
 
 const dsl = ref<MApp | undefined>();
 
+const { execute: downloadDslExecute } = useDownloadDSL();
+
 watchEffect(async () => {
   if (!props.contentId) {
     dsl.value = undefined;
@@ -49,22 +51,24 @@ watchEffect(async () => {
   }
 });
 
-const { execute: downloadDslExecute } = useDownloadDSL();
-
 async function updateDsl(contentId: string) {
-  const remoteDsl = await downloadDslExecute(contentId);
-  if (!remoteDsl) {
-    return;
-  }
-  if (remoteDsl.type === NodeType.ROOT) {
-    dsl.value = remoteDsl;
-  } else {
-    const appDsl = generateEmptyAppDSL({
-      applicationId: props.applicationId,
-      applicationName: props.applicationName,
-    });
-    appDsl.items.push(remoteDsl);
-    dsl.value = appDsl;
+  try {
+    const remoteDsl = await downloadDslExecute(contentId);
+    if (!remoteDsl) {
+      return;
+    }
+    if (remoteDsl.type === NodeType.ROOT) {
+      dsl.value = remoteDsl;
+    } else {
+      const appDsl = generateEmptyAppDSL({
+        applicationId: props.applicationId,
+        applicationName: props.applicationName,
+      });
+      appDsl.items.push(remoteDsl);
+      dsl.value = appDsl;
+    }
+  } catch (error) {
+    console.log('eee', error);
   }
 }
 
