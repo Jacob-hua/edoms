@@ -7,11 +7,12 @@
         </el-form-item>
       </el-form>
       <div style="display: flex; padding: 0 10px">
+        <el-icon :size="20" @click="handleCancel"><Close /></el-icon>
         <el-icon :size="20" @click="handleRename"><Check /></el-icon>
       </div>
     </template>
     <template v-else>
-      <p>{{ formModel.pageName }}</p>
+      <p>{{ pageName }}</p>
       <div class="pop-menu-wrapper">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
@@ -54,9 +55,11 @@ const emit = defineEmits<{
   (event: 'changeActive', item: any): void;
 }>();
 
+const pageName = ref<string>(props.data.name);
+
 const formRef = ref<FormInstance>();
 
-const formModel = ref({
+const formModel = reactive({
   pageName: props.data.name,
 });
 
@@ -71,7 +74,10 @@ const menus = [
     name: 'rename',
     label: '重命名',
     icon: 'Operation',
-    action: () => (renameVisible.value = true),
+    action: () => {
+      formModel.pageName = props.data.name;
+      renameVisible.value = true;
+    },
   },
   {
     name: 'edit',
@@ -119,12 +125,18 @@ const handleMenuClick = (value: string | number) => {
   menu?.action();
 };
 
+const handleCancel = () => {
+  renameVisible.value = false;
+  formModel.pageName = pageName.value;
+};
+
 const handleRename = async () => {
   try {
     formRef.value && (await formRef.value.validate());
+    pageName.value = formModel.pageName;
     await pageApi.updatePage({
       pageId: props.data.pageId,
-      name: formModel.value.pageName,
+      name: formModel.pageName,
       applicationId: props.applicationId,
     });
     renameVisible.value = false;
