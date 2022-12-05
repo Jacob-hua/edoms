@@ -42,6 +42,13 @@ export default {
       };
     }
   },
+  publishPage: async (data: any): Promise<void> => {
+    await request<any, any>({
+      url: '/page/publish',
+      method: 'POST',
+      data,
+    });
+  },
   createPage: async (data: CreatePageReq): Promise<CreatePageRes> => {
     const { result } = await request<CreatePageReq, CreatePageRes>({
       url: '/page/create',

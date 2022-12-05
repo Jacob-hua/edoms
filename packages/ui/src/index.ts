@@ -1,6 +1,7 @@
 import Button from './button';
 import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
+import GlobalSchematic from './global-schematic';
 import Img from './img';
 import Overlay from './overlay';
 import Page from './page';
@@ -8,6 +9,7 @@ import Qrcode from './qrcode';
 import SettingParameter from './setting-parameter';
 import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
+
 const ui: Record<string, any> = {
   page: Page,
   container: Container,
@@ -19,6 +21,7 @@ const ui: Record<string, any> = {
   dynamicMonitoring: DynamicMonitoring,
   settingParameter: SettingParameter,
   systemOperatingParameters: SystemOperatingParameters,
+  globalSchematic: GlobalSchematic,
 };
 
 export default ui;

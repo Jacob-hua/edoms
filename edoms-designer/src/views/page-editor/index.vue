@@ -32,7 +32,7 @@
 <script lang="ts" setup>
 import { computed, ref, toRaw, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { Coin, Connection, Document, PriceTag } from '@element-plus/icons-vue';
+import { Coin, Connection, Document, Finished, PriceTag } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
@@ -147,6 +147,15 @@ const menu = computed<MenuBarData>(() => ({
       handler: () => {
         save();
         ElMessage.success('保存成功');
+      },
+    },
+    {
+      type: 'button',
+      text: '发布',
+      icon: Finished,
+      handler: () => {
+        publish();
+        ElMessage.success('发布成功');
       },
     },
     {
@@ -312,6 +321,10 @@ async function saveWithVersion(version: string) {
     name: version,
     description: '',
   });
+}
+
+async function publish() {
+  console.log('=====');
 }
 </script>
 
