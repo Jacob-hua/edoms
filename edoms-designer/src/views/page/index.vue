@@ -15,7 +15,7 @@
         class="grid-list"
         column-gap="20px"
         row-gap="20px"
-        :page-size="99999999"
+        :page-size="20"
         item-min-width="200px"
         :request="loadData"
       >
@@ -42,11 +42,13 @@
                   <span>{{ menu.label }}</span>
                 </div>
               </PopMenuOption>
-              <div class="createInfo">
-                <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
-                <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
-                <p>编辑者: {{ active?.updateBy }}</p>
-              </div>
+              <template #footer>
+                <div class="createInfo">
+                  <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
+                  <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
+                  <p>编辑者: {{ active?.updateBy }}</p>
+                </div>
+              </template>
             </PopMenu>
           </div>
         </div>
