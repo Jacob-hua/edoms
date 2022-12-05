@@ -65,8 +65,12 @@
       </div>
     </section>
   </div>
-  <NewPage v-if="newPageVisible" v-model:visible="newPageVisible" @success="handleReload" />
-  <SaveVersion v-if="versionVisible" v-model:visible="versionVisible" :active="active" />
+  <NewPageDialog
+    v-if="newPageVisible"
+    v-model:visible="newPageVisible"
+    :application-id="applicationId"
+    @success="handleReload"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -82,9 +86,8 @@ import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useDate from '@/hooks/useDate';
 
-import NewPage from './component/NewPage.vue';
+import NewPageDialog from './component/NewPageDialog.vue';
 import PageItem from './component/PageItem.vue';
-import SaveVersion from './component/SaveVersion.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -98,7 +101,7 @@ const stageRect = ref({
 });
 const totalCount = ref<number>();
 const active = ref();
-const applicationId = ref<string>();
+const applicationId = ref<string>(route.query.applicationId as string);
 const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
   const {
     dataList = [],
@@ -131,7 +134,6 @@ const goBack = () => {
 const handleReload = () => {
   gridList.value?.reload();
 };
-const versionVisible = ref<boolean>(false);
 const editWrapper = ref();
 
 const topMenus = [
@@ -155,13 +157,6 @@ const topMenus = [
           applicationId: route.query.applicationId,
         },
       });
-    },
-  },
-  {
-    name: 'saveVersion',
-    label: '保存为版本',
-    action: async () => {
-      versionVisible.value = true;
     },
   },
   {
