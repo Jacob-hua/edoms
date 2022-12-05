@@ -1,5 +1,6 @@
 <template>
-  <iframe ref="runtimeIframe" :width="width" :height="height" :src="previewUrl"></iframe>
+  <iframe v-if="dsl" ref="runtimeIframe" :width="width" :height="height" :src="previewUrl"></iframe>
+  <el-empty v-else></el-empty>
 </template>
 
 <script lang="ts" setup>
@@ -38,11 +39,14 @@ const runtimeIframe = ref<HTMLIFrameElement | null>(null);
 const dsl = ref<MApp | undefined>();
 
 watchEffect(async () => {
-  if (!runtimeIframe.value || !props.contentId) {
+  if (!props.contentId) {
+    dsl.value = undefined;
     return;
   }
   await updateDsl(props.contentId);
-  runtimeIframe.value.addEventListener('load', handleIframeLoad);
+  if (runtimeIframe.value) {
+    runtimeIframe.value.addEventListener('load', handleIframeLoad);
+  }
 });
 
 const { execute: downloadDslExecute } = useDownloadDSL();

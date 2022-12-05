@@ -84,3 +84,10 @@ export interface SavePageReq {
   /** 内容ID */
   contentId: string;
 }
+
+export interface PublishPageReq {
+  /** 页面ID */
+  pageId: string;
+  /** 内容ID */
+  contentId: string;
+}

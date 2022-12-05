@@ -1,15 +1,15 @@
 <template>
-  <el-dialog v-model="newPageVisible" title="新增页面" width="30%">
+  <el-dialog v-model="dialogVisible" title="新增页面" width="30%">
     <span>
-      <el-form ref="form" :model="page" :rules="rules">
+      <el-form ref="form" :model="formModel" :rules="formRules">
         <el-form-item label="应用页名称" prop="name">
-          <el-input v-model="page.name" clearable></el-input>
+          <el-input v-model="formModel.name" clearable></el-input>
         </el-form-item>
       </el-form>
     </span>
     <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="newPageVisible = false">取消</el-button>
+      <span>
+        <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
       </span>
     </template>
@@ -18,22 +18,22 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import { ElMessage, FormInstance } from 'element-plus';
 
 import pageApi from '@/api/page';
 
-const route = useRoute();
 const props = defineProps<{
   visible: boolean;
+  applicationId: string;
 }>();
 
 const emit = defineEmits<{
   (event: 'update:visible', value: boolean): void;
   (event: 'success'): void;
+  (event: 'error', value: any): void;
 }>();
 
-const newPageVisible = computed({
+const dialogVisible = computed({
   get: () => props.visible,
   set: (value: boolean) => {
     if (!value) {
@@ -44,10 +44,13 @@ const newPageVisible = computed({
 });
 
 const form = ref<FormInstance>();
-const page = ref({
+
+const formModel = ref({
+  applicationId: props.applicationId,
   name: '',
 });
-const rules = {
+
+const formRules = {
   name: [
     {
       required: true,
@@ -62,19 +65,19 @@ const rules = {
     },
   ],
 };
+
 const handleConfirm = async () => {
   if (!form.value) return;
   try {
     await form.value?.validate();
     await pageApi.createPage({
-      name: page.value?.name,
-      applicationId: route.query.applicationId as string,
+      ...formModel.value,
     });
     ElMessage.success('页面创建成功');
-    newPageVisible.value = false;
+    dialogVisible.value = false;
     emit('success');
   } catch (e) {
-    console.log(e);
+    emit('error', e);
   }
 };
 </script>

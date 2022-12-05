@@ -8,6 +8,7 @@ import {
   GetPageRes,
   ListPageReq,
   ListPageRes,
+  PublishPageReq,
   SavePageReq,
   UpdatePageReq,
 } from './type';
@@ -67,6 +68,13 @@ export default {
   savePage: async (data: SavePageReq): Promise<void> => {
     await request<SavePageReq, void>({
       url: '/page/save',
+      method: 'POST',
+      data,
+    });
+  },
+  publishPage: async (data: PublishPageReq): Promise<void> => {
+    await request<PublishPageReq, any>({
+      url: '/page/publish',
       method: 'POST',
       data,
     });

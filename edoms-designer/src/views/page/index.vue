@@ -15,12 +15,19 @@
         class="grid-list"
         column-gap="20px"
         row-gap="20px"
-        :page-size="99999999"
+        :page-size="20"
         item-min-width="200px"
         :request="loadData"
       >
         <template #default="{ item }">
-          <PageItem :item="item" :active="active" @success="handleReload" @change-active="changeActive" />
+          <PageListItem
+            :application-id="applicationId"
+            :data="item"
+            :is-active="item.pageId === active.pageId"
+            @rename-success="handleReload"
+            @delete-success="handleReload"
+            @click="clickPageListItem(item)"
+          />
         </template>
         <template #noMore>
           <div></div>
@@ -42,11 +49,13 @@
                   <span>{{ menu.label }}</span>
                 </div>
               </PopMenuOption>
-              <div class="createInfo">
-                <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
-                <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
-                <p>编辑者: {{ active?.updateBy }}</p>
-              </div>
+              <template #footer>
+                <div class="createInfo">
+                  <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
+                  <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
+                  <p>编辑者: {{ active?.updateBy }}</p>
+                </div>
+              </template>
             </PopMenu>
           </div>
         </div>
@@ -54,7 +63,7 @@
       <div ref="editWrapper" class="edit">
         <DSLPreview
           v-if="previewVisible"
-          :height="stageRect.height"
+          height="100%"
           :application-id="applicationId"
           :application-name="appName"
           :content-id="active.pushContentId"
@@ -63,8 +72,12 @@
       </div>
     </section>
   </div>
-  <NewPage v-if="newPageVisible" v-model:visible="newPageVisible" @success="handleReload" />
-  <SaveVersion v-if="versionVisible" v-model:visible="versionVisible" :active="active" />
+  <NewPageDialog
+    v-if="newPageVisible"
+    v-model:visible="newPageVisible"
+    :application-id="applicationId"
+    @success="handleReload"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -80,23 +93,27 @@ import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useDate from '@/hooks/useDate';
 
-import NewPage from './component/NewPage.vue';
-import PageItem from './component/PageItem.vue';
-import SaveVersion from './component/SaveVersion.vue';
+import NewPageDialog from './component/NewPageDialog.vue';
+import PageListItem from './component/PageListItem.vue';
 
 const route = useRoute();
+
 const router = useRouter();
+
 const { formatTime } = useDate();
+
 const gridList = ref();
+
 const appName = ref<string>('');
+
 const previewVisible = ref(false);
-const stageRect = ref({
-  width: 1200,
-  height: 950,
-});
+
 const totalCount = ref<number>();
+
 const active = ref();
-const applicationId = ref<string>();
+
+const applicationId = ref<string>(route.query.applicationId as string);
+
 const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
   const {
     dataList = [],
@@ -110,26 +127,24 @@ const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) =>
   });
   totalCount.value = Number(count);
   appName.value = applicationName;
-  applicationId.value = route.query.applicationId as string;
   active.value = dataList[0] ?? { pushContentId: null };
   if (totalCount.value) {
     previewVisible.value = true;
   }
-  dataList.forEach((item: any) => {
-    item.isShowText = true;
-  });
   return {
     data: dataList,
     total: Number(count),
   };
 };
+
 const goBack = () => {
   router.push('/');
 };
+
 const handleReload = () => {
   gridList.value?.reload();
 };
-const versionVisible = ref<boolean>(false);
+
 const editWrapper = ref();
 
 const topMenus = [
@@ -156,13 +171,6 @@ const topMenus = [
     },
   },
   {
-    name: 'saveVersion',
-    label: '保存为版本',
-    action: async () => {
-      versionVisible.value = true;
-    },
-  },
-  {
     name: 'delete',
     label: '删除',
     action: () => {
@@ -182,13 +190,16 @@ const topMenus = [
     },
   },
 ];
+
 const handleTopMenuClick = (value: string | number) => {
   const menu = topMenus.find(({ name }) => name === value);
   menu?.action();
 };
 
 const searchText = ref<string | null>(null);
+
 const isSearch = ref<boolean>(false);
+
 const newPageVisible = ref<boolean>(false);
 
 const handleShowSearchInput = () => {
@@ -209,7 +220,7 @@ const handleClearInput = () => {
   search();
 };
 
-const changeActive = (item: any) => {
+const clickPageListItem = (item: any) => {
   active.value = item;
 };
 
@@ -261,6 +272,7 @@ const goEdit = () => {
   }
 }
 .page-container {
+  display: flex;
   .left-section {
     border-right: 1px solid #e1e1e1;
     width: 20%;
@@ -288,10 +300,9 @@ const goEdit = () => {
       justify-content: space-between;
     }
   }
-  display: flex;
   .grid-list {
     margin-top: 10px;
-    height: calc(100vh);
+    height: calc(75vh);
     overflow-y: auto;
     div {
       text-align: left;

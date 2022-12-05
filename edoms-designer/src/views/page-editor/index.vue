@@ -31,8 +31,8 @@
 
 <script lang="ts" setup>
 import { computed, ref, toRaw, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { Coin, Connection, Document, PriceTag } from '@element-plus/icons-vue';
+import { useRoute, useRouter } from 'vue-router';
+import { Back, Coin, Connection, Document, Finished, PriceTag } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
@@ -70,6 +70,8 @@ editorService.usePlugin({
     return [config, parent];
   },
 });
+
+const router = useRouter();
 
 const stageRect = ref({
   width: 1200,
@@ -112,6 +114,14 @@ const pageInfo = ref<GetPageRes | undefined>();
 const menu = computed<MenuBarData>(() => ({
   left: [
     {
+      type: 'button',
+      icon: Back,
+      handler: () => {
+        goBack();
+      },
+    },
+    '/',
+    {
       type: 'text',
       text: pageInfo.value?.pageName ?? '',
     },
@@ -147,6 +157,15 @@ const menu = computed<MenuBarData>(() => ({
       handler: () => {
         save();
         ElMessage.success('保存成功');
+      },
+    },
+    {
+      type: 'button',
+      text: '发布',
+      icon: Finished,
+      handler: () => {
+        publish();
+        ElMessage.success('发布成功');
       },
     },
     {
@@ -250,6 +269,10 @@ const handleRuntimeReady = () => {
   console.log('准备好了');
 };
 
+function goBack() {
+  router.go(-1);
+}
+
 const { execute: downloadDslExecute } = useDownloadDSL();
 
 async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
@@ -312,6 +335,20 @@ async function saveWithVersion(version: string) {
     name: version,
     description: '',
   });
+}
+
+async function publish() {
+  const contentId = await uploadDsl();
+  if (!contentId) {
+    return;
+  }
+  pageInfo.value && (pageInfo.value.editContentId = contentId);
+  await pageApi.publishPage({
+    pageId: pageId.value,
+    contentId,
+  });
+  editor.value?.editorService.resetModifiedNodeId();
+  goBack();
 }
 </script>
 
