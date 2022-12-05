@@ -1,6 +1,6 @@
 <template>
-  <div :class="['item', item.pageId === active.pageId ? 'active' : '']">
-    <p v-if="item.isShowText" @click="handleActive(item)">{{ item.name }}</p>
+  <div :class="['item', item.pageId === active.pageId ? 'active' : '']" @click="handleActive(item)">
+    <p v-if="item.isShowText">{{ item.name }}</p>
     <el-input v-if="!item.isShowText" v-model="item.name" clearable></el-input>
     <div v-if="item.isShowText" class="pop-menu-wrapper">
       <PopMenu @menu-click="(value) => handleMenuClick(value, item)">
