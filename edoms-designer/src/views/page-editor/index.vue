@@ -228,11 +228,20 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   if (parameter === 'instance') {
     return await requestInstances();
   }
-  if (parameter === 'point' && ['dynamic-monitoring', 'system-operation-parameters'].includes(component)) {
+  if (parameter === 'point') {
     const prop = props.prop ?? '';
-    const pathLastIndex = prop.lastIndexOf('.');
-    const domainPath = prop.substring(0, pathLastIndex);
-    const model = getByPath(props.formValue ?? {}, domainPath, '');
+    let model: any = {
+      instance: [],
+      instanceType: undefined,
+      propertyType: undefined,
+    };
+    if (['dynamic-monitoring', 'system-operation-parameters'].includes(component)) {
+      const pathLastIndex = prop.lastIndexOf('.');
+      const domainPath = prop.substring(0, pathLastIndex);
+      model = getByPath(props.formValue ?? {}, domainPath, '');
+    } else if (['global-schematic'].includes(component)) {
+      model = props.formValue;
+    }
 
     if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
       return await requestPoints({
