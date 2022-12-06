@@ -6,14 +6,14 @@ export interface ListVersionsReq {
   /** 页面大小 */
   limit: number;
   /** 页面ID */
-  pageId: number;
+  pageId: string;
 }
 
 export interface Version {
   /** 版本ID */
   versionId: string;
   /** 页面ID */
-  pageId: number;
+  pageId: string;
   /** 版本名称 */
   name: string;
   /** 发布内容ID */
@@ -34,7 +34,7 @@ export type ListVersionsRes = PageStruct<Version>;
 
 export interface UpdateVersionReq {
   /** 版本ID */
-  versionId: number;
+  versionId: string;
   /** 版本名称 */
   name: string;
   /** 页面ID */

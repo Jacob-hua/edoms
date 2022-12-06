@@ -69,7 +69,7 @@ async function updateDsl(contentId: string) {
       dsl.value = appDsl;
     }
   } catch (error) {
-    console.log('eee', error);
+    console.error(error);
   }
 }
 
