@@ -15,7 +15,7 @@ import type { StorageService } from './services/storage';
 import type { UiService } from './services/ui';
 
 export interface RequestProps {
-  resourceId?: string;
+  resourceId: string;
   data?: Record<string | number | symbol, any>;
   formValue?: FormValue;
   prop?: string;

@@ -14,20 +14,8 @@
           item-min-width="200px"
           :request="loadData"
         >
-          <template #default="{ item }">
-            <div :class="['item', item.versionId === active.versionId ? 'active' : '']" @click="handleActive(item)">
-              <p class="icon-wrapper">
-                <span v-show="item.isShowText">{{ item.name }}</span>
-                <el-input v-show="!item.isShowText" v-model="item.name"></el-input>
-                <span>
-                  <el-icon v-show="item.isShowText" :size="20" @click="showInput(item)"><EditPen /></el-icon>
-                  <el-icon v-show="item.isShowText" :size="20" @click="handleDelete(item)"><Delete /></el-icon>
-                  <el-icon v-show="!item.isShowText" :size="22" @click="handleHideInput(item)"><Check /></el-icon>
-                </span>
-              </p>
-              <p>{{ formatTime(item.createTime) }}</p>
-              <p>{{ item.createBy }}</p>
-            </div>
+          <template #default="{ item }: { item: Version }">
+            <VersionListItem :data="item" :page-id="pageId" />
           </template>
           <template #noMore>
             <div></div>
@@ -40,13 +28,13 @@
         <el-button type="primary" size="large" @click="handleApply">应用此版本</el-button>
         <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
       </div>
-      <div class="wrapper">
+      <div class="preview-wrapper">
         <DSLPreview
           v-if="previewVisible"
           height="100%"
           :application-id="applicationId"
-          :content-id="active.pushContentId"
-          :page-id="active.pageId"
+          :content-id="active?.pushContentId"
+          :page-id="active?.pageId"
         />
       </div>
     </div>
@@ -56,14 +44,14 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
+import type { Version } from '@/api/version';
 import versionApi from '@/api/version';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
-import useDate from '@/hooks/useDate';
 
-const { formatTime } = useDate();
+import VersionListItem from './component/VersionListItem.vue';
 
 const route = useRoute();
 
@@ -71,17 +59,19 @@ const router = useRouter();
 
 const gridList = ref();
 
-const active = ref();
+const active = ref<Version>();
 
 const previewVisible = ref(false);
 
 const applicationId = computed(() => route.query.applicationId as string);
 
+const pageId = computed<string>(() => route.query.pageId as string);
+
 const loadData = async ({ pageSize, current }: { pageSize: number; current: number }) => {
   const { dataList } = await versionApi.listVersions({
     page: current,
     limit: pageSize,
-    pageId: Number(route.query.pageId),
+    pageId: pageId.value,
   });
   active.value = dataList[0];
   dataList.forEach((data: any) => {
@@ -100,42 +90,10 @@ const goBack = () => {
   router.go(-1);
 };
 
-const showInput = (model: any) => {
-  model.isShowText = false;
-};
-
-const handleHideInput = async (model: any) => {
-  model.isShowText = true;
-  await versionApi.updateVersion({
-    versionId: model.versionId,
-    name: model.name,
-    pageId: Number(route.query.pageId),
-  });
-  ElMessage.success('更新成功');
-  gridList.value?.reload();
-};
-
-const handleDelete = async (model: any) => {
-  ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    type: 'warning',
-  })
-    .then(async () => {
-      await versionApi.deleteVersion({
-        versionIds: [model.versionId],
-      });
-      ElMessage.success('删除成功');
-      gridList.value?.reload();
-    })
-    .catch(() => {});
-};
-
-const handleActive = (model: any) => {
-  active.value = model;
-};
-
 const handleApply = async () => {
+  if (!active.value?.versionId) {
+    return;
+  }
   await versionApi.recoveryVersion({
     versionId: active.value.versionId,
   });
@@ -159,7 +117,7 @@ const goEdit = () => {
 .active {
   background-color: #409eff;
 }
-.wrapper {
+.preview-wrapper {
   height: calc(100% - 75px);
 }
 .version-container {

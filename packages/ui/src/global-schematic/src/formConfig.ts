@@ -12,22 +12,17 @@ export default async (request: Request) => [
     defaultValue: 10000,
   },
   {
-    text: '监测指标',
-    name: 'indicators',
-    type: 'groupList',
-    labelWidth: '80px',
-    addButtonText: '添加指标',
-    maxItems: 10,
-    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
-    items: [
-      {
-        name: 'label',
-        text: '标签',
-        type: 'text',
-        trim: true,
-      },
-      /** 注入业务组件的共通字段 */
-      ...(await useInstanceConfig(request)),
-    ],
+    text: '图片资源',
+    name: 'src',
+    type: 'upload',
+    accepts: ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP'],
+    upload: async (value: any) => {
+      return await request({
+        resourceId: 'global-schematic:upload',
+        data: value,
+      });
+    },
   },
+  /** 注入业务组件的共通字段 */
+  ...(await useInstanceConfig(request, 'global-schematic')),
 ];
