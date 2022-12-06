@@ -48,7 +48,7 @@ export const selectFile = (accepts: string[] = ['*'], multiple: boolean = false)
         });
       } else {
         const fileList = Array.from(inputElem.files);
-        if (fileList.some(({ name }) => !accepts.includes(`.${name.split('.').pop()}`))) {
+        if (!accepts.includes('*') && fileList.some(({ name }) => !accepts.includes(`.${name.split('.').pop()}`))) {
           reject({
             message: `Please select files in ${accepts} format`,
             type: 'WrongFormat',
