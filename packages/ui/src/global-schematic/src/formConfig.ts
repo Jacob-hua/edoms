@@ -12,5 +12,5 @@ export default async (request: Request) => [
     defaultValue: 10000,
   },
   /** 注入业务组件的共通字段 */
-  ...(await useInstanceConfig(request)),
+  ...(await useInstanceConfig(request, 'global-schematic')),
 ];

@@ -1,9 +1,9 @@
 import { Request } from '@edoms/editor';
 
-export default async (request: Request) => {
+export default async (request: Request, componentName: string) => {
   const instances =
     (await request({
-      resourceId: 'dynamic-monitoring:instance',
+      resourceId: `${componentName}:instance`,
     })) ?? [];
 
   return [
@@ -49,7 +49,7 @@ export default async (request: Request) => {
       options: async (mForm: any, { formValue, prop }: any) => {
         return (
           (await request({
-            resourceId: 'dynamic-monitoring:point',
+            resourceId: `${componentName}:point`,
             formValue,
             prop,
           })) ?? []

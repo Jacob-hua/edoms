@@ -218,15 +218,17 @@ const moveableOptions = (core?: StageCore): MoveableOptions => {
   return options;
 };
 
+const { requestInstances, requestPoints } = useModel();
+
 const loadData = async (props?: RequestProps): Promise<any> => {
-  const { requestInstances, requestPoints } = useModel();
   if (!props) {
     return;
   }
-  if (props.resourceId === 'dynamic-monitoring:instance') {
+  const [component, parameter] = props.resourceId?.split(':');
+  if (parameter === 'instance') {
     return await requestInstances();
   }
-  if (props.resourceId === 'dynamic-monitoring:point') {
+  if (parameter === 'point' && ['dynamic-monitoring', 'system-operation-parameters'].includes(component)) {
     const prop = props.prop ?? '';
     const pathLastIndex = prop.lastIndexOf('.');
     const domainPath = prop.substring(0, pathLastIndex);
