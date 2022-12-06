@@ -252,6 +252,11 @@ const loadData = async (props?: RequestProps): Promise<any> => {
     }
     return [];
   }
+  if (parameter === 'upload') {
+    const { execute: fileUploadExecute } = useUpload();
+    const result = await fileUploadExecute(props.data as File, props.data?.name, props.data?.type);
+    return result;
+  }
   return;
 };
 
