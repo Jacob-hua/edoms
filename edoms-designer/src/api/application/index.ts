@@ -70,6 +70,7 @@ export default {
         serviceAddress: '',
         tenantId: '',
         thumbnailId: '',
+        secret: '',
       };
     }
   },

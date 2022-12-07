@@ -94,6 +94,7 @@ importers:
       '@vue/test-utils': ^2.0.2
       '@vue/tsconfig': ^0.1.3
       element-plus: ^2.2.15
+      monaco-editor: ^0.34.0
       npm-run-all: ^4.1.5
       pinia: ^2.0.17
       sass: ^1.54.8
@@ -116,6 +117,7 @@ importers:
       '@edoms/utils': link:../packages/utils
       '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue/2.0.10_vue@3.2.44
       element-plus: registry.npmmirror.com/element-plus/2.2.20_vue@3.2.44
+      monaco-editor: registry.npmmirror.com/monaco-editor/0.34.1
       pinia: registry.npmmirror.com/pinia/2.0.23_ppsgutk2eo3k2gkxui7gdcuyzu
       screenfull: registry.npmmirror.com/screenfull/6.0.2
       serialize-javascript: registry.npmmirror.com/serialize-javascript/6.0.0
@@ -1949,7 +1951,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: registry.npmmirror.com/vite/3.2.3_svlawd4gt46rjvvwyhhlknsdbq
+      vite: registry.npmmirror.com/vite/3.2.3_ine3jvitqo2wd63xsapbvgdjva
       vue: registry.npmmirror.com/vue/3.2.44
     dev: true
 

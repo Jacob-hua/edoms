@@ -22,14 +22,14 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 
-import { ApplicationInfo } from '@/api/application';
+import type { ListApplicationsResItem } from '@/api/application';
 import PreviewImage from '@/components/ImagePreview.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
 const props = withDefaults(
   defineProps<{
-    application: ApplicationInfo;
+    application: ListApplicationsResItem;
   }>(),
   {}
 );

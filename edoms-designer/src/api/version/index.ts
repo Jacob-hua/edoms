@@ -1,8 +1,12 @@
 import {
   DeleteVersion,
+  GetVersionReq,
+  GetVersionRes,
   ListVersionsReq,
   ListVersionsRes,
+  PublishVersionReq,
   RecoveryVersionReq,
+  SaveVersionReq,
   SaveWithVersionReq,
   UpdateVersionReq,
 } from '@/api/version/type';
@@ -28,6 +32,25 @@ export default {
       };
     }
   },
+  getVersion: async (data: GetVersionReq): Promise<GetVersionRes> => {
+    try {
+      const { result } = await request<GetVersionReq, GetVersionRes>({
+        url: '/page/version',
+        method: 'GET',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return {
+        versionId: '',
+        name: '',
+        pageId: '',
+        editContentId: '',
+        createBy: '',
+        createTime: -1,
+      };
+    }
+  },
   updateVersion: async (data: UpdateVersionReq): Promise<void> => {
     await request<UpdateVersionReq, void>({
       url: '/page/version/update',
@@ -44,7 +67,21 @@ export default {
   },
   recoveryVersion: async (data: RecoveryVersionReq): Promise<void> => {
     await request<RecoveryVersionReq, void>({
-      url: 'page/version/version-recovery',
+      url: '/page/version/version-recovery',
+      method: 'POST',
+      data,
+    });
+  },
+  saveVersion: async (data: SaveVersionReq): Promise<void> => {
+    await request<SaveVersionReq, void>({
+      url: '/page/version/save',
+      method: 'POST',
+      data,
+    });
+  },
+  publishVersion: async (data: PublishVersionReq): Promise<void> => {
+    await request<PublishVersionReq, void>({
+      url: '/page/version/publish',
       method: 'POST',
       data,
     });

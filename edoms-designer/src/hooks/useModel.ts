@@ -1,4 +1,4 @@
-import modelApi, { InstanceItem, ListInstanceReq, ListPointReq, PointItem } from '@/api/model';
+import modelApi, { ListInstanceReq, ListInstanceResItem, ListPointReq, ListPointResItem } from '@/api/model';
 
 export interface InstanceOption {
   label: string;
@@ -8,7 +8,7 @@ export interface InstanceOption {
   children?: InstanceOption[];
 }
 
-function handleInstanceTree(instance: InstanceItem): InstanceOption {
+function handleInstanceTree(instance: ListInstanceResItem): InstanceOption {
   const result = {
     label: instance.insName,
     value: instance.insCode,
@@ -42,7 +42,7 @@ export default () => {
 
   const requestPoints = async (data: ListPointReq) => {
     const pointCodes = await modelApi.listPointCode(data);
-    return pointCodes?.map(({ label, value, unit }: PointItem) => ({ text: label, value, unit }));
+    return pointCodes?.map(({ label, value, unit }: ListPointResItem) => ({ text: label, value, unit }));
   };
 
   return {
