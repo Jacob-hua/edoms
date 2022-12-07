@@ -16,7 +16,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="封面" prop="thumbnailId">
-          <ImageUpload @get-content-id="getContentId"></ImageUpload>
+          <ImageUpload @success="success"></ImageUpload>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -78,7 +78,7 @@ const formRules = {
   ],
 };
 
-const getContentId = (contentId: string) => {
+const success = (contentId: string) => {
   applicationForm.thumbnailId = contentId;
 };
 const handleFormCancel = () => {
