@@ -33,7 +33,7 @@
         <span>{{ active?.name }}</span>
         <div>
           <el-button type="primary" size="large" @click="handleApply">应用此版本</el-button>
-          <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
+          <el-button type="primary" size="large" @click="handleEdit">编辑</el-button>
         </div>
       </div>
       <div class="preview-wrapper">
@@ -118,9 +118,13 @@ const handleActive = async (item: Version) => {
   active.value = item;
 };
 
-const goEdit = () => {
+const handleEdit = () => {
   router.push({
     path: '/editor',
+    query: {
+      versionId: active.value?.versionId,
+      pageId: pageId.value,
+    },
   });
 };
 </script>

@@ -21,16 +21,16 @@
     <DSLPreviewDialog
       v-model:visible="previewDialogVisible"
       :stage-rect="stageRect"
-      :application-id="pageInfo?.applicationId"
-      :application-name="pageInfo?.applicationName"
-      :page-id="pageInfo?.pageId"
-      :content-id="pageInfo?.editContentId"
+      :application-id="contentState.applicationId"
+      :application-name="contentState.applicationName"
+      :page-id="contentState.pageId"
+      :content-id="contentState.contentId"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRaw, watch } from 'vue';
+import { computed, reactive, ref, toRaw, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Back, Coin, Connection, Document, Finished, PriceTag } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -42,7 +42,7 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath } from '@edoms/utils';
 
-import pageApi, { GetPageRes } from '@/api/page';
+import pageApi from '@/api/page';
 import versionApi from '@/api/version';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
@@ -72,6 +72,18 @@ editorService.usePlugin({
 });
 
 const router = useRouter();
+
+const route = useRoute();
+
+const contentState = reactive({
+  applicationId: '',
+  applicationName: '',
+  pageId: route.query?.pageId as string,
+  pageName: '',
+  versionId: route.query?.versionId as string,
+  versionName: '',
+  contentId: '',
+});
 
 const stageRect = ref({
   width: 1920,
@@ -109,8 +121,6 @@ useAsyncLoadJS(
   }
 ).execute();
 
-const pageInfo = ref<GetPageRes | undefined>();
-
 const menu = computed<MenuBarData>(() => ({
   left: [
     {
@@ -123,7 +133,7 @@ const menu = computed<MenuBarData>(() => ({
     '/',
     {
       type: 'text',
-      text: pageInfo.value?.pageName ?? '',
+      text: contentState.pageName || contentState.versionName,
     },
   ],
   center: ['delete', 'undo', 'redo', 'guides', 'rule', 'zoom'],
@@ -260,19 +270,24 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   return;
 };
 
-const pageId = computed<string>(() => {
-  const route = useRoute();
-  return route?.query?.pageId as string;
-});
-
 watch(
-  () => pageId.value,
-  async (pageId) => {
+  () => ({ pageId: contentState.pageId, versionId: contentState.versionId }),
+  async ({ pageId, versionId }) => {
     if (!pageId) {
       return;
     }
-    pageInfo.value = await pageApi.getPage({ pageId });
-    const dsl = await calculateDSL(pageInfo.value);
+    if (versionId) {
+      const versionInfo = await versionApi.getVersion({ versionId });
+      contentState.versionName = versionInfo.name;
+      contentState.contentId = versionInfo.editContentId;
+    } else {
+      const pageInfo = await pageApi.getPage({ pageId });
+      contentState.applicationId = pageInfo.applicationId;
+      contentState.applicationName = pageInfo.applicationName;
+      contentState.contentId = pageInfo.editContentId ?? '';
+      contentState.pageName = pageInfo.pageName;
+    }
+    const dsl = await calculateDSL();
     value.value = dsl;
     defaultSelected.value = pageId;
   },
@@ -291,17 +306,18 @@ function goBack() {
 
 const { execute: downloadDslExecute } = useDownloadDSL();
 
-async function calculateDSL(pageInfo: GetPageRes): Promise<MApp> {
+async function calculateDSL(): Promise<MApp> {
   const dsl: MApp = generateEmptyAppDSL({
-    applicationId: pageInfo.applicationId,
-    applicationName: pageInfo.applicationName,
+    applicationId: contentState.applicationId,
+    applicationName: contentState.applicationName,
   });
+
   const emptyPageDsl: MPage = generateEmptyPageDSL({
-    pageId: pageInfo.pageId,
-    pageName: pageInfo.pageName,
+    pageId: contentState.pageId,
+    pageName: contentState.pageName,
   });
-  if (pageInfo.editContentId) {
-    const remoteDsl = await downloadDslExecute(pageInfo.editContentId);
+  if (contentState.contentId) {
+    const remoteDsl = await downloadDslExecute(contentState.contentId);
     if (!remoteDsl) {
       dsl.items.push(emptyPageDsl);
     } else if (remoteDsl.type === NodeType.PAGE) {
@@ -332,9 +348,9 @@ async function save() {
   if (!contentId) {
     return;
   }
-  pageInfo.value && (pageInfo.value.editContentId = contentId);
+  contentState.contentId = contentId;
   await pageApi.savePage({
-    pageId: pageId.value,
+    pageId: contentState.pageId,
     contentId,
   });
   editor.value?.editorService.resetModifiedNodeId();
@@ -346,7 +362,7 @@ async function saveWithVersion(version: string) {
     return;
   }
   await versionApi.saveWithVersion({
-    pageId: pageId.value,
+    pageId: contentState.pageId,
     contentId,
     name: version,
     description: '',
@@ -358,9 +374,9 @@ async function publish() {
   if (!contentId) {
     return;
   }
-  pageInfo.value && (pageInfo.value.editContentId = contentId);
+  contentState.contentId = contentId;
   await pageApi.publishPage({
-    pageId: pageId.value,
+    pageId: contentState.pageId,
     contentId,
   });
   editor.value?.editorService.resetModifiedNodeId();

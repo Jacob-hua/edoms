@@ -1,5 +1,7 @@
 import {
   DeleteVersion,
+  GetVersionReq,
+  GetVersionRes,
   ListVersionsReq,
   ListVersionsRes,
   RecoveryVersionReq,
@@ -25,6 +27,25 @@ export default {
         limit: 0,
         page: 0,
         dataList: [],
+      };
+    }
+  },
+  getVersion: async (data: GetVersionReq): Promise<GetVersionRes> => {
+    try {
+      const { result } = await request<GetVersionReq, GetVersionRes>({
+        url: '/page/version',
+        method: 'GET',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return {
+        versionId: '',
+        name: '',
+        pageId: '',
+        editContentId: '',
+        createBy: '',
+        createTime: -1,
       };
     }
   },
