@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '/application/setting',
-        name: 'ApplicationSetting',
+        name: 'f',
         component: () => import('@/views/application-setting/index.vue'),
         beforeEnter: (to, from, next) => {
           if (Object.prototype.hasOwnProperty.call(to.query, 'applicationId')) {
@@ -76,6 +76,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/test',
     component: () => import('../views/TestTable.vue'),
+  },
+  {
+    path: '/scroll',
+    component: () => import('../views/scroll.vue'),
   },
 ];
 

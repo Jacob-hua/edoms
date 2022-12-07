@@ -8,6 +8,7 @@ import {
   SwitchButton,
   Tickets,
   Umbrella,
+  Warning,
 } from '@element-plus/icons-vue';
 
 import { ComponentGroup } from '@edoms/editor';
@@ -111,6 +112,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: Picture,
         text: '全局示意图',
         type: 'global-schematic',
+      },
+      {
+        icon: Warning,
+        text: '告警列表',
+        type: 'warning-running-list',
       },
     ],
   },
