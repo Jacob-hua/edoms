@@ -74,8 +74,8 @@ editorService.usePlugin({
 const router = useRouter();
 
 const stageRect = ref({
-  width: 1200,
-  height: 950,
+  width: 1920,
+  height: 1080,
 });
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
