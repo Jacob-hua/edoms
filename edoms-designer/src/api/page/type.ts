@@ -31,7 +31,7 @@ export interface ListPageReq {
 
 export interface ListPageResItem {
   /** 页面ID */
-  pageId: number;
+  pageId: string;
   /** 页面名称 */
   name: string;
   /** 页面内容ID */
@@ -40,6 +40,10 @@ export interface ListPageResItem {
   createBy: string;
   /** 创建时间 */
   createTime: string;
+  /** 更新者 */
+  updateBy: string;
+  /** 更新时间 */
+  updateTime: string;
 }
 
 export interface ListPageRes extends PageStruct<ListPageResItem> {
@@ -60,12 +64,12 @@ export interface CreatePageReq {
 
 export interface CreatePageRes {
   /** 页面ID */
-  pageId: number;
+  pageId: string;
 }
 
 export interface UpdatePageReq {
   /** 页面ID */
-  pageId: number;
+  pageId: string;
   /** 页面名称 */
   name: string;
   /** 应用ID */

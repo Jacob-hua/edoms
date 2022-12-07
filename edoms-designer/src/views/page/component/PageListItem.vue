@@ -31,21 +31,19 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
+import type { ListPageResItem } from '@/api/page';
 import pageApi from '@/api/page';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
 const props = defineProps<{
   applicationId: string;
-  data: any;
+  data: ListPageResItem;
   isActive: boolean;
 }>();
-
-const router = useRouter();
 
 const emit = defineEmits<{
   (event: 'renameSuccess'): void;
@@ -75,21 +73,8 @@ const menus = [
     label: '重命名',
     icon: 'Operation',
     action: () => {
-      formModel.pageName = props.data.name;
+      formModel.pageName = pageName.value;
       renameVisible.value = true;
-    },
-  },
-  {
-    name: 'edit',
-    label: '编辑页面',
-    icon: 'Edit',
-    action: () => {
-      router.push({
-        path: '/editor',
-        query: {
-          pageId: props.data.pageId,
-        },
-      });
     },
   },
   {
@@ -97,7 +82,7 @@ const menus = [
     label: '删除',
     icon: 'Delete',
     action: () => {
-      ElMessageBox.confirm('此操作将永久删除, 是否继续?', '提示', {
+      ElMessageBox.confirm(`此操作将永久删除${props.data.name}, 是否继续?`, '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning',
