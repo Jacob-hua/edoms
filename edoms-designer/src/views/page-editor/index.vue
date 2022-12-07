@@ -1,7 +1,7 @@
 <template>
   <div class="editor-app">
     <edoms-editor
-      ref="editor"
+      ref="editorRef"
       v-model="value"
       :menu="menu"
       :runtime-url="runtimeUrl"
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, toRaw, watch } from 'vue';
+import { computed, onMounted, reactive, ref, toRaw, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Back, Coin, Connection, Document, Finished, PriceTag } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -75,16 +75,6 @@ const router = useRouter();
 
 const route = useRoute();
 
-const contentState = reactive({
-  applicationId: '',
-  applicationName: '',
-  pageId: route.query?.pageId as string,
-  pageName: '',
-  versionId: route.query?.versionId as string,
-  versionName: '',
-  contentId: '',
-});
-
 const stageRect = ref({
   width: 1920,
   height: 1080,
@@ -92,7 +82,7 @@ const stageRect = ref({
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
 
-const editor = ref<InstanceType<typeof EdomsEditor>>();
+const editorRef = ref<InstanceType<typeof EdomsEditor>>();
 
 const previewDialogVisible = ref(false);
 
@@ -214,13 +204,53 @@ const menu = computed<MenuBarData>(() => ({
   ],
 }));
 
+const contentState = reactive({
+  applicationId: '',
+  applicationName: '',
+  pageId: route.query?.pageId as string,
+  pageName: '',
+  versionId: route.query?.versionId as string,
+  versionName: '',
+  contentId: '',
+});
+
+watch(
+  () => ({ pageId: contentState.pageId, versionId: contentState.versionId }),
+  async ({ pageId, versionId }) => {
+    if (!pageId) {
+      return;
+    }
+    if (versionId) {
+      const versionInfo = await versionApi.getVersion({ versionId });
+      contentState.versionName = versionInfo.name;
+      contentState.contentId = versionInfo.editContentId;
+    } else {
+      const pageInfo = await pageApi.getPage({ pageId });
+      contentState.applicationId = pageInfo.applicationId;
+      contentState.applicationName = pageInfo.applicationName;
+      contentState.contentId = pageInfo.editContentId ?? '';
+      contentState.pageName = pageInfo.pageName;
+    }
+    const dsl = await calculateDSL();
+    value.value = dsl;
+    defaultSelected.value = pageId;
+  },
+  {
+    immediate: true,
+  }
+);
+
+onMounted(() => {
+  editorRef.value?.uiService.set('showSrc', false);
+});
+
 const moveableOptions = (core?: StageCore): MoveableOptions => {
   const options: MoveableOptions = {};
   const id = core?.dr?.target?.id;
 
-  if (!id || !editor.value) return options;
+  if (!id || !editorRef.value) return options;
 
-  const node = editor.value.editorService.getNodeById(id);
+  const node = editorRef.value.editorService.getNodeById(id);
 
   if (!node) return options;
 
@@ -274,32 +304,6 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   }
   return;
 };
-
-watch(
-  () => ({ pageId: contentState.pageId, versionId: contentState.versionId }),
-  async ({ pageId, versionId }) => {
-    if (!pageId) {
-      return;
-    }
-    if (versionId) {
-      const versionInfo = await versionApi.getVersion({ versionId });
-      contentState.versionName = versionInfo.name;
-      contentState.contentId = versionInfo.editContentId;
-    } else {
-      const pageInfo = await pageApi.getPage({ pageId });
-      contentState.applicationId = pageInfo.applicationId;
-      contentState.applicationName = pageInfo.applicationName;
-      contentState.contentId = pageInfo.editContentId ?? '';
-      contentState.pageName = pageInfo.pageName;
-    }
-    const dsl = await calculateDSL();
-    value.value = dsl;
-    defaultSelected.value = pageId;
-  },
-  {
-    immediate: true,
-  }
-);
 
 const handleRuntimeReady = () => {
   console.log('准备好了');
@@ -365,7 +369,7 @@ async function save() {
       contentId,
     });
   }
-  editor.value?.editorService.resetModifiedNodeId();
+  editorRef.value?.editorService.resetModifiedNodeId();
 }
 
 async function saveWithVersion(version: string) {
@@ -398,7 +402,7 @@ async function publish() {
       contentId,
     });
   }
-  editor.value?.editorService.resetModifiedNodeId();
+  editorRef.value?.editorService.resetModifiedNodeId();
   goBack();
 }
 </script>
