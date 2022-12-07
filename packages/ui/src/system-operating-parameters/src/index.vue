@@ -108,6 +108,8 @@ const handleShowMore = () => {
   .open {
     font-size: 36px;
     cursor: pointer;
+    position: relative;
+    top: -14px;
   }
   .setting-wrapper {
     width: 100%;
