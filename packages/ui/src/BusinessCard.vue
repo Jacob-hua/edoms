@@ -127,7 +127,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   border-radius: 3px;
-  background-color: #2c2c2c;
+  background-color: rgba(31, 30, 29, 1);
   min-width: v-bind(cssMinWidth);
   min-height: v-bind(cssMinHeight);
   max-width: v-bind(cssMaxWidth);
@@ -144,6 +144,7 @@ onUnmounted(() => {
 
   & > .title-wrapper {
     display: flex;
+    align-items: center;
     .title {
       font-size: 16px;
       font-weight: 400;
