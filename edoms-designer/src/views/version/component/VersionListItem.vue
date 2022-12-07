@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div :class="['wrapper', isActive ? 'active' : '']">
     <div class="title">
       <div v-if="renameVisible" class="rename">
         <el-form ref="formRef" :inline="true" :model="formModel" :rules="formRules">
@@ -37,8 +37,9 @@ import useDate from '@/hooks/useDate';
 const { formatTime } = useDate();
 
 const props = defineProps<{
-  data: Version;
   pageId: string;
+  data: Version;
+  isActive: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -113,6 +114,8 @@ const handleDelete = async () => {
   margin: 0;
 }
 .wrapper {
+  cursor: pointer;
+  border-bottom: 1px solid #000000;
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-template-areas:
@@ -124,6 +127,9 @@ const handleDelete = async () => {
       visibility: visible;
     }
   }
+}
+.active {
+  background-color: #409eff;
 }
 .title {
   grid-area: title;

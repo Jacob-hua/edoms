@@ -15,7 +15,12 @@
           :request="loadData"
         >
           <template #default="{ item }: { item: Version }">
-            <VersionListItem :data="item" :page-id="pageId" />
+            <VersionListItem
+              :data="item"
+              :page-id="pageId"
+              :is-active="item.versionId === active?.versionId"
+              @click="handleActive(item)"
+            />
           </template>
           <template #noMore>
             <div></div>
@@ -24,9 +29,12 @@
       </div>
     </section>
     <div class="version-right">
-      <div class="top-bar">
-        <el-button type="primary" size="large" @click="handleApply">应用此版本</el-button>
-        <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
+      <div v-if="active" class="top-bar">
+        <span>{{ active?.name }}</span>
+        <div>
+          <el-button type="primary" size="large" @click="handleApply">应用此版本</el-button>
+          <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
+        </div>
       </div>
       <div class="preview-wrapper">
         <DSLPreview
@@ -106,6 +114,10 @@ const handleApply = async () => {
   });
 };
 
+const handleActive = async (item: Version) => {
+  active.value = item;
+};
+
 const goEdit = () => {
   router.push({
     path: '/editor',
@@ -121,74 +133,53 @@ const goEdit = () => {
   height: calc(100% - 75px);
 }
 .version-container {
-  .item {
-    cursor: pointer;
-    width: 100%;
-    height: 100px;
-    padding-left: 10px;
-    line-height: unset !important;
-    display: block !important;
-    border-bottom: 1px solid #e1e1e1;
-    p {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-    .icon-wrapper {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      span {
-        .el-icon {
-          margin-right: 10px;
-        }
-      }
-    }
-  }
   display: flex;
-  .grid-list {
-    margin-top: 10px;
-    height: calc(100vh - 180px);
-    overflow-y: auto;
-    div {
-      text-align: left;
+}
+.grid-list {
+  margin-top: 10px;
+  height: calc(100vh - 180px);
+  overflow-y: auto;
+  div {
+    text-align: left;
+  }
+}
+.left-section {
+  border-right: 1px solid #e1e1e1;
+  width: 20%;
+  height: calc(100vh - 60px);
+  .header-top {
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e1e1e1;
+    span {
+      font-size: 20px;
+      margin-left: 20px;
     }
   }
-  .left-section {
-    border-right: 1px solid #e1e1e1;
-    width: 20%;
-    height: calc(100vh - 60px);
-    .header-top {
-      padding: 15px 0;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #e1e1e1;
-      .header-icon {
-        cursor: pointer;
-      }
-      span {
-        font-size: 20px;
-        margin-left: 20px;
-      }
-    }
-    .top-search {
-      div {
-        cursor: pointer;
-      }
-      padding: 0 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+  .header-icon {
+    cursor: pointer;
   }
-  .version-right {
-    width: 80%;
-    .top-bar {
+}
+.version-right {
+  width: 80%;
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    & > span {
+      font-size: 25px;
+    }
+    & > div {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      padding-right: 15px;
-      padding-top: 15px;
+    }
+    .el-icon {
+      margin: 0 30px;
+      cursor: pointer;
     }
   }
 }
