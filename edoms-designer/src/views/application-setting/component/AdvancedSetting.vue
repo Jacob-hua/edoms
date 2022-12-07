@@ -34,7 +34,7 @@ import { ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import applicationApi, { ApplicationInfo } from '@/api/application';
+import applicationApi, { GetApplicationRes } from '@/api/application';
 
 interface AdvanceItem {
   name: string;
@@ -44,7 +44,7 @@ interface AdvanceItem {
 }
 
 const props = defineProps<{
-  appInfo: ApplicationInfo;
+  appInfo: GetApplicationRes;
 }>();
 
 const router = useRouter();

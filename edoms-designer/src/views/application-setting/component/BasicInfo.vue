@@ -32,15 +32,17 @@
 import { ref, toRefs } from 'vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import applicationApi, { ApplicationInfo, UpdateApplicationReq } from '@/api/application';
+import applicationApi, { GetApplicationRes, UpdateApplicationReq } from '@/api/application';
 import ImageUpload from '@/components/ImageUpload.vue';
+
+const props = defineProps<{
+  appInfo: GetApplicationRes;
+}>();
 
 const emit = defineEmits<{
   (event: 'success'): void;
 }>();
-const props = defineProps<{
-  appInfo: ApplicationInfo;
-}>();
+
 const rules = {
   name: [
     {
@@ -70,6 +72,7 @@ const rules = {
   ],
   serviceAddress: [],
 };
+
 const { appInfo } = toRefs(props);
 
 const formRef = ref<FormInstance>();

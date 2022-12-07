@@ -134,7 +134,7 @@ const menu = computed<MenuBarData>(() => ({
     {
       type: 'text',
       text: '历史版本:',
-      display: () => contentState.versionId,
+      display: () => Boolean(contentState.versionId),
     },
     {
       type: 'text',

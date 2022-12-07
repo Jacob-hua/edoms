@@ -1,6 +1,13 @@
 import { PageStruct } from '@/const/struct';
 
-export interface ApplicationInfo {
+export interface ListApplicationsReq {
+  /** 页码 */
+  page: number;
+  /** 页面大小 */
+  limit: number;
+}
+
+export interface ListApplicationsResItem {
   /** 应用ID */
   applicationId: string;
   /** 应用名称 */
@@ -20,14 +27,7 @@ export interface ApplicationInfo {
   [key: string]: any;
 }
 
-export interface ListApplicationsReq {
-  /** 页码 */
-  page: number;
-  /** 页面大小 */
-  limit: number;
-}
-
-export type ListApplicationsRes = PageStruct<ApplicationInfo>;
+export type ListApplicationsRes = PageStruct<ListApplicationsResItem>;
 
 export interface CreateApplicationReq {
   /** 应用名称 */
