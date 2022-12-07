@@ -9,13 +9,13 @@ export interface ListInstanceReq {
   isQueryDevice: boolean;
 }
 
-export interface InstanceItem {
+export interface ListInstanceResItem {
   /** 实例编号 */
   insCode: string;
   /** 实例名称 */
   insName: string;
   /** 子实例 */
-  children: InstanceItem[];
+  children: ListInstanceResItem[];
   /** 是否可用 */
   disable: boolean;
   /** 实例类型 */
@@ -23,7 +23,7 @@ export interface InstanceItem {
   [key: string]: any;
 }
 
-export type ListInstanceRes = InstanceItem[];
+export type ListInstanceRes = ListInstanceResItem[];
 
 export interface ListPointReq {
   /** 实例ID */
@@ -36,7 +36,7 @@ export interface ListPointReq {
   propName?: string;
 }
 
-export interface PointItem {
+export interface ListPointResItem {
   /** 点位标签 */
   label: string;
   /** 点位值 */
@@ -45,7 +45,7 @@ export interface PointItem {
   unit: string;
 }
 
-export type ListPointRes = PointItem[];
+export type ListPointRes = ListPointResItem[];
 
 export interface GetDicReq {
   /** 字典标识 */
