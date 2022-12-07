@@ -61,7 +61,26 @@ export interface GetApplicationReq {
   applicationId: string;
 }
 
-export type GetApplicationRes = ApplicationInfo;
+export interface GetApplicationRes {
+  /** 应用ID */
+  applicationId: string;
+  /** 应用名称 */
+  name: string;
+  /** 应用缩略图 */
+  thumbnailId?: string;
+  /** 应用简介 */
+  description: string;
+  /** 预览地址 */
+  serviceAddress: string;
+  /** 租户ID */
+  tenantId: string;
+  /** 创建者 */
+  createBy: string;
+  /** 创建时间 */
+  createTime: string;
+  /** 删除密钥 */
+  secret: string;
+}
 
 export interface DeleteApplicationReq {
   /** 应用ID */
