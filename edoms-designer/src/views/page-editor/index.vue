@@ -133,6 +133,11 @@ const menu = computed<MenuBarData>(() => ({
     '/',
     {
       type: 'text',
+      text: '历史版本:',
+      display: () => contentState.versionId,
+    },
+    {
+      type: 'text',
       text: contentState.pageName || contentState.versionName,
     },
   ],
@@ -349,10 +354,17 @@ async function save() {
     return;
   }
   contentState.contentId = contentId;
-  await pageApi.savePage({
-    pageId: contentState.pageId,
-    contentId,
-  });
+  if (contentState.versionId) {
+    await versionApi.saveVersion({
+      versionId: contentState.versionId,
+      contentId,
+    });
+  } else {
+    await pageApi.savePage({
+      pageId: contentState.pageId,
+      contentId,
+    });
+  }
   editor.value?.editorService.resetModifiedNodeId();
 }
 
@@ -375,10 +387,17 @@ async function publish() {
     return;
   }
   contentState.contentId = contentId;
-  await pageApi.publishPage({
-    pageId: contentState.pageId,
-    contentId,
-  });
+  if (contentState.versionId) {
+    await versionApi.publishVersion({
+      versionId: contentState.versionId,
+      contentId,
+    });
+  } else {
+    await pageApi.publishPage({
+      pageId: contentState.pageId,
+      contentId,
+    });
+  }
   editor.value?.editorService.resetModifiedNodeId();
   goBack();
 }

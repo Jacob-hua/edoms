@@ -75,6 +75,20 @@ export interface RecoveryVersionReq {
   versionId: string;
 }
 
+export interface SaveVersionReq {
+  /** 版本ID */
+  versionId: string;
+  /** 内容ID */
+  contentId: string;
+}
+
+export interface PublishVersionReq {
+  /** 版本ID */
+  versionId: string;
+  /** 内容ID */
+  contentId: string;
+}
+
 export interface DeleteVersion {
   /** 版本ID集合 */
   versionIds: string[];
