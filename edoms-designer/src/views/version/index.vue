@@ -32,8 +32,8 @@
       <div v-if="active" class="top-bar">
         <span>{{ active?.name }}</span>
         <div>
-          <el-button type="primary" size="large" @click="handleApply">应用此版本</el-button>
           <el-button type="primary" size="large" @click="handleEdit">编辑</el-button>
+          <el-button type="primary" size="large" @click="handleApply">应用此版本</el-button>
         </div>
       </div>
       <div class="preview-wrapper">
