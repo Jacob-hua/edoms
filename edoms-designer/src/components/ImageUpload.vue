@@ -24,12 +24,12 @@ const props = withDefaults(
 );
 
 const emits = defineEmits<{
-  (event: 'success', contentId: string | null): void;
+  (event: 'success', contentId: string): void;
 }>();
 
 const { execute: selectUploadExecute, loading: selectUploadLoading } = useSelectUpload();
 
-const contentId = ref<string | null>(null);
+const contentId = ref<string>('');
 
 const dialogVisible = ref<boolean>(false);
 
@@ -39,7 +39,7 @@ onMounted(() => {
 
 const handleUpload = async () => {
   const imgFormat = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP'];
-  contentId.value = (await selectUploadExecute(imgFormat)) ?? null;
+  contentId.value = (await selectUploadExecute(imgFormat)) ?? '';
   emits('success', contentId.value);
 };
 const handlePreview = () => {

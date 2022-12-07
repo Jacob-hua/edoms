@@ -20,11 +20,12 @@
 import { ref, watch } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
+import { MComponent } from '../../types';
 
 import MoreParameters from './component/MoreParameters.vue';
 import { Parameter } from './type';
 
-interface MParameterConfig {
+interface MParameterConfig extends MComponent {
   visibleNumber: number;
   parameters: Parameter[];
 }
@@ -59,6 +60,8 @@ const handleShowMore = () => {
   .open {
     font-size: 36px;
     cursor: pointer;
+    position: relative;
+    top: -14px;
   }
   .setting-wrapper {
     width: 100%;

@@ -7,7 +7,7 @@
     min-height="200"
   >
     <template #operation>
-      <div class="operation" @click="handleTrigger">展开</div>
+      <div class="operation" @click="handleTrigger">...</div>
     </template>
     <div class="dynamic-monitoring">
       <div v-for="({ icon, displayParameter, parameterClass, label }, index) in indicators" :key="index">
@@ -29,10 +29,10 @@ import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from 
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-import GasImg from './assets/gas.png';
-import LiquidDepthImg from './assets/liquidDepth.png';
-import MoistureImg from './assets/moisture.png';
-import TemperatureImg from './assets/temperature.png';
+import GasImg from './assets/gas.svg';
+import LiquidDepthImg from './assets/liquidDepth.svg';
+import MoistureImg from './assets/moisture.svg';
+import TemperatureImg from './assets/temperature.svg';
 import apiFactory, { ParameterItem } from './api';
 
 interface Indicator {
@@ -140,11 +140,18 @@ function calculateParameterClassName(indicator: Indicator, config: MIndicatorIte
 </script>
 
 <style lang="scss" scoped>
+.operation {
+  font-size: 36px;
+  cursor: pointer;
+  position: relative;
+  top: -14px;
+}
 .dynamic-monitoring {
   display: flex;
+  width: 100%;
+  justify-content: space-around;
   align-items: center;
   align-self: center;
-
   & > div {
     display: flex;
     flex-direction: column;
@@ -165,6 +172,10 @@ function calculateParameterClassName(indicator: Indicator, config: MIndicatorIte
     .parameter-danger {
       color: #ff4700;
     }
+  }
+  img {
+    width: 50px;
+    height: 100px;
   }
 }
 .open-wrapper {
