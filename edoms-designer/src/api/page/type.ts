@@ -29,19 +29,20 @@ export interface ListPageReq {
   limit: number;
 }
 
-export interface ListPageRes
-  extends PageStruct<{
-    /** 页面ID */
-    pageId: number;
-    /** 页面名称 */
-    name: string;
-    /** 页面内容ID */
-    pushContentId: string;
-    /** 创建者 */
-    createBy: string;
-    /** 创建时间 */
-    createTime: string;
-  }> {
+export interface ListPageResItem {
+  /** 页面ID */
+  pageId: number;
+  /** 页面名称 */
+  name: string;
+  /** 页面内容ID */
+  pushContentId: string;
+  /** 创建者 */
+  createBy: string;
+  /** 创建时间 */
+  createTime: string;
+}
+
+export interface ListPageRes extends PageStruct<ListPageResItem> {
   /** 应用名称 */
   applicationName: string;
   /** 应用ID */
@@ -75,7 +76,7 @@ export interface UpdatePageReq {
 
 export interface DeletePageReq {
   /** 应用ID集合 */
-  pageIds: number[];
+  pageIds: string[];
 }
 
 export interface SavePageReq {

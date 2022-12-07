@@ -19,7 +19,7 @@
         item-min-width="200px"
         :request="loadData"
       >
-        <template #default="{ item }">
+        <template #default="{ item }: { item: ListPageResItem }">
           <PageListItem
             :application-id="applicationId"
             :data="item"
@@ -86,7 +86,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import screenFull from 'screenfull';
 
-import pageApi from '@/api/page';
+import pageApi, { ListPageResItem } from '@/api/page';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
@@ -114,7 +114,7 @@ const active = ref();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
-const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
+const loadData: RequestFunc<ListPageResItem> = async ({ pageSize, current }) => {
   const {
     dataList = [],
     count,
