@@ -23,6 +23,23 @@ export default async (request: Request) => [
       });
     },
   },
-  /** 注入业务组件的共通字段 */
-  ...(await useInstanceConfig(request, 'global-schematic')),
+  {
+    text: '监测点位',
+    name: 'indicators',
+    type: 'groupList',
+    labelWidth: '80px',
+    addButtonText: '添加指标',
+    maxItems: 10,
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+    items: [
+      {
+        name: 'label',
+        text: '标签',
+        type: 'text',
+        trim: true,
+      },
+      /** 注入业务组件的共通字段 */
+      ...(await useInstanceConfig(request, 'global-schematic')),
+    ],
+  },
 ];
