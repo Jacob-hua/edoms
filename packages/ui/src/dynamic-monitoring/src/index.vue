@@ -148,6 +148,8 @@ function calculateParameterClassName(indicator: Indicator, config: MIndicatorIte
 }
 .dynamic-monitoring {
   display: flex;
+  width: 100%;
+  justify-content: space-around;
   align-items: center;
   align-self: center;
   & > div {
