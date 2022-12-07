@@ -9,7 +9,7 @@ export interface ListVersionsReq {
   pageId: string;
 }
 
-export interface Version {
+export interface ListVersionResItem {
   /** 版本ID */
   versionId: string;
   /** 页面ID */
@@ -28,7 +28,7 @@ export interface Version {
   updateTime: number;
 }
 
-export type ListVersionsRes = PageStruct<Version>;
+export type ListVersionsRes = PageStruct<ListVersionResItem>;
 
 export interface GetVersionReq {
   /** 版本Id */

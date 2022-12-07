@@ -30,7 +30,7 @@ import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
-import type { Version } from '@/api/version';
+import type { ListVersionResItem } from '@/api/version';
 import versionApi from '@/api/version';
 import useDate from '@/hooks/useDate';
 
@@ -38,7 +38,7 @@ const { formatTime } = useDate();
 
 const props = defineProps<{
   pageId: string;
-  data: Version;
+  data: ListVersionResItem;
   isActive: boolean;
 }>();
 

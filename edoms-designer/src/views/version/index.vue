@@ -14,7 +14,7 @@
           item-min-width="200px"
           :request="loadData"
         >
-          <template #default="{ item }: { item: Version }">
+          <template #default="{ item }: { item: ListVersionResItem }">
             <VersionListItem
               :data="item"
               :page-id="pageId"
@@ -54,7 +54,7 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
-import type { Version } from '@/api/version';
+import type { ListVersionResItem } from '@/api/version';
 import versionApi from '@/api/version';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
@@ -67,7 +67,7 @@ const router = useRouter();
 
 const gridList = ref();
 
-const active = ref<Version>();
+const active = ref<ListVersionResItem>();
 
 const previewVisible = ref(false);
 
@@ -114,7 +114,7 @@ const handleApply = async () => {
   });
 };
 
-const handleActive = async (item: Version) => {
+const handleActive = async (item: ListVersionResItem) => {
   active.value = item;
 };
 
