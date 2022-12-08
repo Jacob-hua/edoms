@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, Ref, watch } from 'vue';
+import { computed, inject, Ref } from 'vue';
 
 import { AlarmList } from '../api';
 import { ClassName } from '../type';
@@ -29,20 +29,16 @@ const alarmMap = {
   // 一般
   blue: commonAlarm as Ref<AlarmList>,
 };
-watch(
-  () => textColor,
-  (color) => {
-    console.log(color, 66666);
-  },
-  {
-    immediate: true,
-  }
-);
 const dataSource = computed(() => alarmMap[textColor.value]?.value?.list);
 </script>
 
 <style lang="scss" scoped>
 .warning-list-wrapper {
-  max-height: 800px;
+  max-height: 700px;
+  overflow: auto;
+  --webkit--scrollbar-width: none;
+}
+.warning-list-wrapper::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }
 </style>

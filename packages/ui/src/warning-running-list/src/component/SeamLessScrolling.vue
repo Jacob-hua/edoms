@@ -1,7 +1,7 @@
 <!--无缝滚动组件-->
 <template>
   <div class="list-container">
-    <div id="carList" :class="[config.isScroll ? 'marquee' : '']">
+    <div id="carList" :class="[config.isScroll ? 'animate' : '']">
       <slot v-for="(item, index) in data" :key="index" :item="item"></slot>
     </div>
   </div>
@@ -29,10 +29,12 @@ onMounted(() => {
   overflow: hidden;
   position: relative;
 }
+.animate {
+  animation: marquee v-bind(speed) linear infinite;
+}
 //无限滚动
 .marquee {
   animation-delay: -5s;
-  animation: marquee v-bind(speed) linear infinite;
 }
 .marquee:hover {
   animation-play-state: paused;
