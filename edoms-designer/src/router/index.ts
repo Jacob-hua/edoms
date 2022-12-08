@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '/application/setting',
-        name: 'f',
+        name: 'ApplicationSetting',
         component: () => import('@/views/application-setting/index.vue'),
         beforeEnter: (to, from, next) => {
           if (objectHasProperties(to.query, ['applicationId'])) {
