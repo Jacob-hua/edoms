@@ -3,25 +3,40 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+
+import { formatPrecision } from '@edoms/utils';
 
 import useApp from '../../useApp';
+import useIntervalAsync from '../../useIntervalAsync';
 
-import { MGlobalSchematic } from './type';
+import apiFactor from './api';
+import { IndicatorData, MGlobalSchematic, MIndicatorItemConfig, ParameterItem } from './type';
 
 const props = defineProps<{
   config: MGlobalSchematic;
 }>();
 
-useApp(props);
+const { request } = useApp(props);
 
-// const originUrl = window.location.origin;
+const { fetchIndicatorData } = apiFactor(request);
 
 const imgRef = ref<HTMLImageElement>();
 
 const imgSrc = ref(props.config.src);
 
 const imgFileUrl = ref<string>('');
+
+const indicatorData = ref<IndicatorData>({});
+
+const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
+
+const intervalDelay = computed<number>(() => {
+  if (typeof props.config.intervalDelay !== 'number') {
+    return 1000;
+  }
+  return props.config.intervalDelay;
+});
 
 watch(
   () => props.config.src,
@@ -36,10 +51,39 @@ watch(
     imgFileUrl.value = url;
     imgSrc.value = `${window.location.origin}/static/${url}${suffix}`;
   },
-  {
-    immediate: true,
-  }
+  { immediate: true }
 );
+
+const updateIndicatorsData = async () => {
+  const dataList: ParameterItem[] = indicatorConfigs.value.map(
+    ({ instance, property }): ParameterItem => ({
+      deviceCode: instance[instance.length - 1],
+      propCodeList: [property],
+    })
+  );
+
+  if (dataList.length === 0) {
+    return;
+  }
+
+  const result = await fetchIndicatorData({ dataList });
+  result.forEach(({ dataValue, deviceCode, propCode }) => {
+    const targetIndex = indicatorConfigs.value.findIndex(
+      ({ instance, property }) => instance[instance.length - 1] === deviceCode && property === propCode
+    );
+    if (targetIndex < 0) {
+      return;
+    }
+    const indicatorConfig = indicatorConfigs.value[targetIndex];
+    indicatorData.value[indicatorConfig.label] = {
+      dataValue: Number(formatPrecision(dataValue, indicatorConfig.precision)),
+      deviceCode,
+      propCode,
+    };
+  });
+};
+
+useIntervalAsync(updateIndicatorsData, intervalDelay.value);
 
 onMounted(() => {
   imgRef.value?.addEventListener('error', handleImgError);
