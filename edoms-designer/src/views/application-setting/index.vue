@@ -36,13 +36,15 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { LocationQueryValue } from 'vue-router';
 
-import applicationApi, { ApplicationInfo } from '@/api/application';
+import applicationApi, { GetApplicationRes } from '@/api/application';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
 import BasicInfo from './component/BasicInfo.vue';
+
 const { go } = useRouter();
 const appInfoVisible = ref<boolean>(false);
-const appInfo = ref<ApplicationInfo>({
+
+const appInfo = ref<GetApplicationRes>({
   applicationId: '',
   createBy: '',
   createTime: '',
@@ -51,7 +53,9 @@ const appInfo = ref<ApplicationInfo>({
   serviceAddress: '',
   tenantId: '',
   thumbnailId: '',
+  secret: '',
 });
+
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
   const result = await applicationApi.getApplication({ applicationId } as { applicationId: string });
   appInfoVisible.value = true;

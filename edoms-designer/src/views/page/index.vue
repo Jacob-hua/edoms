@@ -19,12 +19,11 @@
         item-min-width="200px"
         :request="loadData"
       >
-        <template #default="{ item }">
+        <template #default="{ item }: { item: ListPageResItem }">
           <PageListItem
             :application-id="applicationId"
             :data="item"
-            :is-active="item.pageId === active.pageId"
-            @rename-success="handleReload"
+            :is-active="item.pageId === active?.pageId"
             @delete-success="handleReload"
             @click="clickPageListItem(item)"
           />
@@ -35,7 +34,7 @@
       </GridList>
     </section>
     <section class="right-section">
-      <div v-if="totalCount" class="right-top-bar">
+      <div v-if="active" class="right-top-bar">
         <span>{{ active?.name }}</span>
         <div>
           <el-button type="primary" size="large" @click="goEdit">编辑</el-button>
@@ -51,8 +50,8 @@
               </PopMenuOption>
               <template #footer>
                 <div class="createInfo">
-                  <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime) }}</p>
-                  <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime) }}</p>
+                  <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime ?? '') }}</p>
+                  <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime ?? '') }}</p>
                   <p>编辑者: {{ active?.updateBy }}</p>
                 </div>
               </template>
@@ -66,8 +65,8 @@
           height="100%"
           :application-id="applicationId"
           :application-name="appName"
-          :content-id="active.pushContentId"
-          :page-id="active.pageId"
+          :content-id="active?.pushContentId"
+          :page-id="active?.pageId"
         />
       </div>
     </section>
@@ -86,6 +85,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import screenFull from 'screenfull';
 
+import type { ListPageResItem } from '@/api/page';
 import pageApi from '@/api/page';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
@@ -106,15 +106,15 @@ const gridList = ref();
 
 const appName = ref<string>('');
 
-const previewVisible = ref(false);
+const previewVisible = ref<boolean>(false);
 
 const totalCount = ref<number>();
 
-const active = ref();
+const active = ref<ListPageResItem>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
-const loadData: RequestFunc<{ name: string }> = async ({ pageSize, current }) => {
+const loadData: RequestFunc<ListPageResItem> = async ({ pageSize, current }) => {
   const {
     dataList = [],
     count,
@@ -164,7 +164,7 @@ const topMenus = [
       router.push({
         path: '/version',
         query: {
-          pageId: active.value.pageId,
+          pageId: active.value?.pageId,
           applicationId: route.query.applicationId,
         },
       });
@@ -174,12 +174,15 @@ const topMenus = [
     name: 'delete',
     label: '删除',
     action: () => {
-      ElMessageBox.confirm('此操作将永久删除, 是否继续?', '提示', {
+      ElMessageBox.confirm(`此操作将永久删除${active.value?.name}, 是否继续?`, '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning',
       })
         .then(async () => {
+          if (!active.value?.pageId) {
+            return;
+          }
           await pageApi.deletePage({
             pageIds: [active.value.pageId],
           });
@@ -228,7 +231,7 @@ const goEdit = () => {
   router.push({
     path: '/editor',
     query: {
-      pageId: active.value.pageId,
+      pageId: active.value?.pageId,
     },
   });
 };

@@ -18,7 +18,7 @@
             新建应用
           </div>
         </template>
-        <template #default="{ item }">
+        <template #default="{ item }: { item: ListApplicationsResItem }">
           <ApplicationItem :application="item"></ApplicationItem>
         </template>
       </GridList>
@@ -31,7 +31,7 @@
 import { ref } from 'vue';
 
 import applicationApi from '@/api/application';
-import { ApplicationInfo, ListApplicationsRes } from '@/api/application/type';
+import { ListApplicationsRes, ListApplicationsResItem } from '@/api/application/type';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 
 import ApplicationItem from './component/ApplicationItem.vue';
@@ -39,7 +39,7 @@ import NewApplication from './component/NewApplication.vue';
 const gridList = ref();
 const visible = ref<boolean>(false);
 
-const loadData: RequestFunc<ApplicationInfo> = async ({ pageSize, current }) => {
+const loadData: RequestFunc<ListApplicationsResItem> = async ({ pageSize, current }) => {
   const { dataList, count }: ListApplicationsRes = await applicationApi.listApplications({
     page: current,
     limit: pageSize,

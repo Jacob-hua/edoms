@@ -1,6 +1,13 @@
 import { PageStruct } from '@/const/struct';
 
-export interface ApplicationInfo {
+export interface ListApplicationsReq {
+  /** 页码 */
+  page: number;
+  /** 页面大小 */
+  limit: number;
+}
+
+export interface ListApplicationsResItem {
   /** 应用ID */
   applicationId: string;
   /** 应用名称 */
@@ -20,14 +27,7 @@ export interface ApplicationInfo {
   [key: string]: any;
 }
 
-export interface ListApplicationsReq {
-  /** 页码 */
-  page: number;
-  /** 页面大小 */
-  limit: number;
-}
-
-export type ListApplicationsRes = PageStruct<ApplicationInfo>;
+export type ListApplicationsRes = PageStruct<ListApplicationsResItem>;
 
 export interface CreateApplicationReq {
   /** 应用名称 */
@@ -61,7 +61,26 @@ export interface GetApplicationReq {
   applicationId: string;
 }
 
-export type GetApplicationRes = ApplicationInfo;
+export interface GetApplicationRes {
+  /** 应用ID */
+  applicationId: string;
+  /** 应用名称 */
+  name: string;
+  /** 应用缩略图 */
+  thumbnailId?: string;
+  /** 应用简介 */
+  description: string;
+  /** 预览地址 */
+  serviceAddress: string;
+  /** 租户ID */
+  tenantId: string;
+  /** 创建者 */
+  createBy: string;
+  /** 创建时间 */
+  createTime: string;
+  /** 删除密钥 */
+  secret: string;
+}
 
 export interface DeleteApplicationReq {
   /** 应用ID */

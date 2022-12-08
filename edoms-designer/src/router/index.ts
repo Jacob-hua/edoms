@@ -26,7 +26,7 @@ const routes: RouteRecordRaw[] = [
         name: 'f',
         component: () => import('@/views/application-setting/index.vue'),
         beforeEnter: (to, from, next) => {
-          if (Object.prototype.hasOwnProperty.call(to.query, 'applicationId')) {
+          if (objectHasProperties(to.query, ['applicationId'])) {
             next();
           } else {
             next('/application');
@@ -43,7 +43,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Page',
         component: () => import('@/views/page/index.vue'),
         beforeEnter: (to, from, next) => {
-          if (Object.prototype.hasOwnProperty.call(to.query, 'applicationId')) {
+          if (objectHasProperties(to.query, ['applicationId'])) {
             next();
           } else {
             next('/application');
@@ -60,7 +60,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Editor',
         component: () => import('@/views/page-editor/index.vue'),
         beforeEnter: (to, from, next) => {
-          if (Object.prototype.hasOwnProperty.call(to.query, 'pageId')) {
+          if (objectHasProperties(to.query, ['pageId', 'versionId'])) {
             next();
           } else {
             next('/application');
@@ -82,6 +82,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/scroll.vue'),
   },
 ];
+
+function objectHasProperties(object: Record<string | symbol | number, any>, properties: string[]): boolean {
+  return [...properties].some(Object.prototype.hasOwnProperty.bind(object));
+}
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_BASE_URL),

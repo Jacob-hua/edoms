@@ -9,7 +9,7 @@ export interface ListVersionsReq {
   pageId: string;
 }
 
-export interface Version {
+export interface ListVersionResItem {
   /** 版本ID */
   versionId: string;
   /** 页面ID */
@@ -18,8 +18,6 @@ export interface Version {
   name: string;
   /** 发布内容ID */
   pushContentId: string;
-  /** 编辑内容ID */
-  editContentId: string;
   /** 创建者 */
   createBy: string;
   /** 创建时间 */
@@ -30,7 +28,27 @@ export interface Version {
   updateTime: number;
 }
 
-export type ListVersionsRes = PageStruct<Version>;
+export type ListVersionsRes = PageStruct<ListVersionResItem>;
+
+export interface GetVersionReq {
+  /** 版本Id */
+  versionId: string;
+}
+
+export interface GetVersionRes {
+  /** 版本ID */
+  versionId: string;
+  /** 页面ID */
+  pageId: string;
+  /** 版本名称 */
+  name: string;
+  /** 编辑内容ID */
+  editContentId: string;
+  /** 创建者 */
+  createBy: string;
+  /** 创建时间 */
+  createTime: number;
+}
 
 export interface UpdateVersionReq {
   /** 版本ID */
@@ -55,6 +73,20 @@ export interface SaveWithVersionReq {
 export interface RecoveryVersionReq {
   /** 版本ID */
   versionId: string;
+}
+
+export interface SaveVersionReq {
+  /** 版本ID */
+  versionId: string;
+  /** 内容ID */
+  contentId: string;
+}
+
+export interface PublishVersionReq {
+  /** 版本ID */
+  versionId: string;
+  /** 内容ID */
+  contentId: string;
 }
 
 export interface DeleteVersion {
