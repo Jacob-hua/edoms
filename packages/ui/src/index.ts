@@ -10,7 +10,7 @@ import Qrcode from './qrcode';
 import SettingParameter from './setting-parameter';
 import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
-
+import WarningRunningList from './warning-running-list';
 const ui: Record<string, any> = {
   page: Page,
   container: Container,
@@ -24,6 +24,7 @@ const ui: Record<string, any> = {
   systemOperatingParameters: SystemOperatingParameters,
   globalSchematic: GlobalSchematic,
   indicatorLight: IndicatorLight,
+  warningRunningList: WarningRunningList,
 };
 
 export default ui;

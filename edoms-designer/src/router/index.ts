@@ -77,6 +77,10 @@ const routes: RouteRecordRaw[] = [
     path: '/test',
     component: () => import('../views/TestTable.vue'),
   },
+  {
+    path: '/scroll',
+    component: () => import('../views/scroll.vue'),
+  },
 ];
 
 function objectHasProperties(object: Record<string | symbol | number, any>, properties: string[]): boolean {
