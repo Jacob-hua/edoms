@@ -80,9 +80,13 @@ const uploadFile = async (file: File) => {
   if (typeof props.config.upload !== 'function') {
     return;
   }
+  if (!props.config.multiple && !files.value.keys().next().done) {
+    files.value.clear();
+  }
   files.value.set(file.name, {
     fileName: file.name,
     fileType: file.type,
+    fileSuffix: file.name.substring(file.name.lastIndexOf('.')),
     status: 'uploading',
     url: '',
   });

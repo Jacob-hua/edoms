@@ -280,12 +280,10 @@ const loadData = async (props?: RequestProps): Promise<any> => {
       instanceType: undefined,
       propertyType: undefined,
     };
-    if (['dynamic-monitoring', 'system-operation-parameters'].includes(component)) {
+    if (['dynamic-monitoring', 'system-operation-parameters', 'global-schematic'].includes(component)) {
       const pathLastIndex = prop.lastIndexOf('.');
       const domainPath = prop.substring(0, pathLastIndex);
       model = getByPath(props.formValue ?? {}, domainPath, '');
-    } else if (['global-schematic'].includes(component)) {
-      model = props.formValue;
     }
 
     if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
