@@ -86,6 +86,7 @@ const uploadFile = async (file: File) => {
   files.value.set(file.name, {
     fileName: file.name,
     fileType: file.type,
+    fileSuffix: file.name.substring(file.name.lastIndexOf('.')),
     status: 'uploading',
     url: '',
   });

@@ -664,6 +664,8 @@ export interface FileStruct {
   fileName: string;
   /** 文件类型 */
   fileType: string;
+  /** 文件后缀 */
+  fileSuffix: string;
   /** 文件状态 */
   status: 'done' | 'uploading' | 'error';
   /** 文件url */
