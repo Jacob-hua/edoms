@@ -1,5 +1,5 @@
 <template>
-  <div class="warning-item-wrapper">
+  <div :class="[item.status === 'unconfirm' ? 'animation' : '', 'warning-item-wrapper']">
     <p class="warning-item-top">
       <span>{{ item.date }}</span>
       <span class="type">{{ item.type }}</span>
@@ -67,25 +67,24 @@ const handleIgnore = () => {
 <style lang="scss" scoped>
 @keyframes animated-border {
   0% {
-    border-left-width: 10px;
     border-left-color: v-bind(textColor);
   }
   50% {
-    border-left-width: 2px;
     border-left-color: transparent;
   }
   100% {
-    border-left-width: 10px;
     border-left-color: v-bind(textColor);
   }
 }
 .type {
   color: v-bind(textColor);
 }
+.animation {
+  animation: animated-border 3.5s infinite;
+}
 .warning-item-wrapper {
   border: 1px solid #ffffff85;
   border-left: 10px solid v-bind(textColor);
-  animation: animated-border 3.5s infinite;
   padding: 15px 0;
   margin-bottom: 8px;
   p {

@@ -9,7 +9,7 @@
           @click="handleChangeWarningType(className)"
         >
           {{ name }}
-          <div :class="['circle', className]"></div>
+          <div v-if="alarmMap[activeClassName].confirmed === 'unconfirm'" :class="['circle', className]"></div>
         </div>
       </div>
       <!-- warningItem 组件 -->
@@ -21,13 +21,16 @@
 </template>
 
 <script lang="ts" setup>
-import { provide, Ref, ref, watch } from 'vue';
+import { nextTick, provide, Ref, ref, watch } from 'vue';
+
+import { stringToTimestamp, timeSubtract } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
+import useIntervalAsync from '../../useIntervalAsync';
 
 import WarningList from './component/WarningList.vue';
-import warningApi from './api';
+import warningApi, { Alarm, AlarmList, InitAlarmRes } from './api';
 import { ClassName } from './type';
 
 interface HeaderData {
@@ -50,14 +53,27 @@ const props = withDefaults(
     config: () => ({
       speed: 12,
       isScroll: true,
-      intervalDelay: 3000,
+      intervalDelay: 5000,
       instance: [],
       timeSpan: 1,
     }),
   }
 );
-const { request } = useApp(props);
-const { fetchInitAlarmList } = warningApi(request);
+const config = ref({
+  speed: 12,
+  isScroll: true,
+}) as Ref<MConfig>;
+
+watch(
+  () => props.config,
+  ({ speed, isScroll }) => {
+    config.value.speed = speed;
+    config.value.isScroll = isScroll;
+  },
+  {
+    immediate: true,
+  }
+);
 const headerData: HeaderData[] = [
   {
     name: '严重告警',
@@ -72,15 +88,13 @@ const headerData: HeaderData[] = [
     className: 'blue',
   },
 ];
-
+const { request } = useApp(props);
+const { fetchInitAlarmList, fetchNewAlarmList } = warningApi(request);
 const activeClassName = ref<ClassName>('red');
-const config = ref({
-  speed: 12,
-  isScroll: true,
-}) as Ref<MConfig>;
 const commonAlarm = ref();
 const importantAlarm = ref();
 const seriousAlarm = ref();
+
 const initAlarmList = async () => {
   const result = await fetchInitAlarmList({
     sysInsCode: props.config.instance.at(-1) as unknown as string,
@@ -89,24 +103,91 @@ const initAlarmList = async () => {
   commonAlarm.value = result.commonAlarm;
   importantAlarm.value = result.importantAlarm;
   seriousAlarm.value = result.seriousAlarm;
+  recordFailure({
+    commonAlarm: commonAlarm.value,
+    importantAlarm: importantAlarm.value,
+    seriousAlarm: seriousAlarm.value,
+  });
 };
-initAlarmList();
-watch(
-  () => props.config,
-  ({ speed, isScroll }) => {
-    config.value.speed = speed;
-    config.value.isScroll = isScroll;
-  },
-  {
-    immediate: true,
-  }
-);
+
+nextTick(async () => {
+  await initAlarmList();
+  await useIntervalAsync(updateAlarmList, props.config.intervalDelay);
+});
+
+const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmRes) => {
+  getFirstClearTime(commonAlarm);
+  getFirstClearTime(importantAlarm);
+  getFirstClearTime(seriousAlarm);
+};
+const calculateIncrement = (result: InitAlarmRes) => {
+  commonAlarm.value.confirmed =
+    result.commonAlarm.confirmed === 'confirmed' && commonAlarm.value.confirmed === 'confirmed'
+      ? 'confirmed'
+      : 'unconfirm';
+  commonAlarm.value.list = [...commonAlarm.value.list, ...result.commonAlarm.list];
+  importantAlarm.value.confirmed =
+    result.importantAlarm.confirmed === 'confirmed' && importantAlarm.value.confirmed === 'confirmed'
+      ? 'confirmed'
+      : 'unconfirm';
+  importantAlarm.value.list = [...importantAlarm.value.list, ...result.importantAlarm.list];
+  seriousAlarm.value.confirmed =
+    result.seriousAlarm.confirmed === 'confirmed' && seriousAlarm.value.confirmed === 'confirmed'
+      ? 'confirmed'
+      : 'unconfirm';
+  seriousAlarm.value.list = [...seriousAlarm.value.list, ...result.seriousAlarm.list];
+  config.value.speed = props.config.speed;
+};
+
+const updateAlarmList = async () => {
+  const result = await fetchNewAlarmList({
+    sysInsCode: props?.config?.instance?.at(-1) as unknown as string,
+  });
+  calculateIncrement(result);
+  recordFailure({
+    commonAlarm: commonAlarm.value,
+    importantAlarm: importantAlarm.value,
+    seriousAlarm: seriousAlarm.value,
+  });
+};
+
+const alarmMap = {
+  // 严重
+  red: seriousAlarm as Ref<AlarmList>,
+  // 重要
+  orange: importantAlarm as Ref<AlarmList>,
+  // 一般
+  blue: commonAlarm as Ref<AlarmList>,
+};
 
 const calculateClassName = (className: string) =>
   activeClassName.value === className ? ['list-item', 'active'] : ['list-item'];
 
 const handleChangeWarningType = (className: ClassName) => {
   activeClassName.value = className;
+};
+// 获取告警列表中最新最早要失效告警时间
+//设置清理
+const settingClear = (alarmList: AlarmList, result: Alarm) => {
+  setTimeout(() => {
+    if (~alarmList.list.findIndex(({ id }) => id === result?.id)) {
+      alarmList.list.splice(
+        alarmList.list.findIndex(({ id }) => id === result?.id),
+        1
+      );
+    }
+  }, stringToTimestamp(result?.date) - timeSubtract(new Date(), 1, 'hour'));
+};
+const getFirstClearTime = (alarmList: AlarmList) => {
+  const result = alarmList.list?.reduce((timeSpan = alarmList.list[0], alarm: Alarm) => {
+    // 找到当前所有项告警信息毫秒值最小的Alarm
+    if (stringToTimestamp(alarm.date) < stringToTimestamp(timeSpan.date)) {
+      timeSpan = alarm;
+    }
+    // 找到最早失效的告警信息
+    return timeSpan;
+  }, {} as Alarm);
+  settingClear(alarmList, result);
 };
 
 provide<Ref<ClassName>>('textColor', activeClassName);

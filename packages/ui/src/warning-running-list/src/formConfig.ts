@@ -11,7 +11,7 @@ export default async (request: Request) => {
       type: 'number',
       min: 1000,
       step: 1000,
-      defaultValue: 3000,
+      defaultValue: 5000,
     },
     {
       text: '滚屏速度',

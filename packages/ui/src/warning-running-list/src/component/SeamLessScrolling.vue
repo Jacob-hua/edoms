@@ -31,7 +31,7 @@ onMounted(() => {
 }
 //无限滚动
 .marquee {
-  //animation-delay: -5s;
+  animation-delay: -5s;
   animation: marquee v-bind(speed) linear infinite;
 }
 .marquee:hover {

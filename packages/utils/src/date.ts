@@ -1,4 +1,4 @@
-import dayjs, { ConfigType, Dayjs, OpUnitType } from 'dayjs';
+import dayjs, { ConfigType, Dayjs, ManipulateType, OpUnitType } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
@@ -126,4 +126,8 @@ export function daysInMonth(date: ConfigType) {
 
 export function daysInThisMonth() {
   return dayjs().daysInMonth();
+}
+
+export function timeSubtract(date: ConfigType, num: number, unitOfTime: ManipulateType) {
+  return dayjs(date).subtract(num, unitOfTime).valueOf();
 }

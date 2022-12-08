@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, Ref } from 'vue';
+import { computed, inject, Ref, watch } from 'vue';
 
 import { AlarmList } from '../api';
 import { ClassName } from '../type';
@@ -23,22 +23,26 @@ const seriousAlarm = inject('seriousAlarm');
 console.log({ commonAlarm, importantAlarm, seriousAlarm });
 const alarmMap = {
   // 严重
-  red: seriousAlarm as AlarmList,
+  red: seriousAlarm as Ref<AlarmList>,
   // 重要
-  orange: importantAlarm as AlarmList,
+  orange: importantAlarm as Ref<AlarmList>,
   // 一般
-  blue: commonAlarm as AlarmList,
+  blue: commonAlarm as Ref<AlarmList>,
 };
-// console.log(textColor.value);
-const data = alarmMap[textColor.value];
-// console.log(JSON.parse(JSON.stringify(data)));
-console.log(data);
-const dataSource = computed(() => alarmMap[textColor.value].list);
-
-console.log(dataSource);
+watch(
+  () => textColor,
+  (color) => {
+    console.log(color, 66666);
+  },
+  {
+    immediate: true,
+  }
+);
+const dataSource = computed(() => alarmMap[textColor.value]?.value?.list);
 </script>
 
 <style lang="scss" scoped>
 .warning-list-wrapper {
+  max-height: 800px;
 }
 </style>
