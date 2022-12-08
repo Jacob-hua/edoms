@@ -176,7 +176,7 @@ const settingClear = (alarmList: AlarmList, result: Alarm) => {
         1
       );
     }
-  }, stringToTimestamp(result?.date) - timeSubtract(new Date(), 1, 'hour'));
+  }, timeSubtract(new Date(), 1, 'hour') - stringToTimestamp(result?.date));
 };
 const getFirstClearTime = (alarmList: AlarmList) => {
   const result = alarmList.list?.reduce((timeSpan = alarmList.list[0], alarm: Alarm) => {
