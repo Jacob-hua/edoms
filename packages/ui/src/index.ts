@@ -3,6 +3,7 @@ import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
 import GlobalSchematic from './global-schematic';
 import Img from './img';
+import IndicatorLight from './indicator-light';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
@@ -22,6 +23,7 @@ const ui: Record<string, any> = {
   settingParameter: SettingParameter,
   systemOperatingParameters: SystemOperatingParameters,
   globalSchematic: GlobalSchematic,
+  indicatorLight: IndicatorLight,
 };
 
 export default ui;
