@@ -1,4 +1,5 @@
 import {
+  Check,
   FolderOpened,
   Grid,
   Operation,
@@ -37,6 +38,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: Grid,
         text: '二维码',
         type: 'qrcode',
+      },
+      {
+        icon: Check,
+        text: '多选框',
+        type: 'checkbox',
       },
     ],
   },
