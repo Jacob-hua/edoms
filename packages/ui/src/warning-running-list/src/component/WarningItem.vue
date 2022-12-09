@@ -12,7 +12,7 @@
       <span class="content">{{ item.content }}</span>
       <span class="button-container">
         <span class="button-wrapper">
-          <el-button type="primary">确认</el-button>
+          <el-button type="primary" @click="handleConfirm(item)">确认</el-button>
           <el-button type="paint" @click="handleIgnore">忽略</el-button>
         </span>
       </span>
@@ -25,9 +25,10 @@ import { inject, Ref, ref } from 'vue';
 
 import { ElButton } from '@edoms/design';
 
+import { Alarm } from '../api';
 import { ClassName } from '../type';
-const isShowBody = ref<boolean>(false);
 
+const isShowBody = ref<boolean>(false);
 export interface Warning {
   // 告警日期
   date: string;
@@ -40,6 +41,7 @@ export interface Warning {
   // 是否确认
   status: string;
 }
+
 withDefaults(
   defineProps<{
     item: Warning;
@@ -55,12 +57,19 @@ withDefaults(
     className: () => 'red',
   }
 );
+
 const textColor = inject<Ref<ClassName>>('textColor');
+const confirmedAlarmList = inject<Function>('confirmedAlarmList') as Function;
 const handleShowSurplus = () => {
   isShowBody.value = !isShowBody.value;
 };
 const handleIgnore = () => {
   isShowBody.value = false;
+};
+
+const handleConfirm = async (alarm: Alarm) => {
+  const result = await confirmedAlarmList();
+  result ? (alarm.status = 'confirmed') : (alarm.status = 'unconfirm');
 };
 </script>
 

@@ -9,7 +9,7 @@
           @click="handleChangeWarningType(className)"
         >
           {{ name }}
-          <div v-if="!confirmed" :class="['circle', className]"></div>
+          <div v-if="activeClassName === className && !confirmed" :class="['circle', className]"></div>
         </div>
       </div>
       <!-- warningItem 组件 -->
@@ -94,7 +94,7 @@ const headerData: HeaderData[] = [
   },
 ];
 const { request } = useApp(props);
-const { fetchInitAlarmList, fetchNewAlarmList } = warningApi(request);
+const { fetchInitAlarmList, fetchNewAlarmList, confirmedAlarmList } = warningApi(request);
 const activeClassName = ref<ClassName>('red');
 const commonAlarm = ref();
 const importantAlarm = ref();
@@ -189,6 +189,7 @@ provide<Ref<MConfig>>('config', config);
 provide('commonAlarm', commonAlarm);
 provide('importantAlarm', importantAlarm);
 provide('seriousAlarm', seriousAlarm);
+provide('confirmedAlarmList', confirmedAlarmList);
 </script>
 
 <style lang="scss" scoped>

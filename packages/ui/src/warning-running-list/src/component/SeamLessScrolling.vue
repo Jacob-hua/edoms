@@ -1,7 +1,7 @@
 <!--无缝滚动组件-->
 <template>
   <div class="list-container">
-    <div id="carList" :class="[config.isScroll ? 'animate' : '']">
+    <div id="carList" :class="[config.isScroll ? 'animate' : 'marquee']">
       <slot v-for="(item, index) in data" :key="index" :item="item"></slot>
     </div>
   </div>

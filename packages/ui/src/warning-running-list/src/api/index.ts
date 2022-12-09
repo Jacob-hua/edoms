@@ -51,27 +51,18 @@ export default (request?: EdomsRequestFunc) => ({
       };
     }
   },
-  confirmedAlarmList: async (data: Pick<InitAlarmReq, 'sysInsCode'>): Promise<InitAlarmRes> => {
+  confirmedAlarmList: async (): Promise<string> => {
     if (!request) {
-      return {
-        commonAlarm: { confirmed: '', list: [] },
-        seriousAlarm: { confirmed: '', list: [] },
-        importantAlarm: { confirmed: '', list: [] },
-      };
+      return '';
     }
     try {
-      const { result } = await request<Pick<InitAlarmReq, 'sysInsCode'>, InitAlarmRes>({
-        url: '/operation-monitor/new-alarm-list',
-        method: 'GET',
-        data,
+      const { result } = await request<void, string>({
+        url: '/operation-monitor/alarm-confirm',
+        method: 'put',
       });
       return result;
     } catch (error) {
-      return {
-        commonAlarm: { confirmed: '', list: [] },
-        seriousAlarm: { confirmed: '', list: [] },
-        importantAlarm: { confirmed: '', list: [] },
-      };
+      return '';
     }
   },
 });
