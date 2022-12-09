@@ -3,6 +3,33 @@ import { FormConfig, FormState } from '@edoms/form';
 import editorService from '../services/editor';
 import eventsService from '../services/events';
 
+const BorderStyleOptions = [
+  {
+    text: 'none',
+    value: 'none',
+  },
+  {
+    text: 'dotted',
+    value: 'dotted',
+  },
+  {
+    text: 'dashed',
+    value: 'dashed',
+  },
+  {
+    text: 'solid',
+    value: 'solid',
+  },
+  {
+    text: 'groove',
+    value: 'groove',
+  },
+  {
+    text: 'inset',
+    value: 'inset',
+  },
+];
+
 /**
  * 统一为组件属性表单加上事件、高级、样式配置
  * @param config 组件属性配置
@@ -87,6 +114,114 @@ export const fillConfig = (config: FormConfig = []) => [
                   {
                     name: 'height',
                     text: '高度',
+                  },
+                  {
+                    name: 'padding',
+                    text: 'padding',
+                  },
+                  {
+                    name: 'margin',
+                    text: 'margin',
+                  },
+                ],
+              },
+              {
+                type: 'fieldset',
+                legend: '上边框',
+                items: [
+                  {
+                    name: 'borderTopStyle',
+                    text: '样式',
+                    type: 'select',
+                    options: BorderStyleOptions,
+                  },
+                  {
+                    name: 'borderTopColor',
+                    text: '颜色',
+                    type: 'colorPicker',
+                  },
+                  {
+                    name: 'borderTopWidth',
+                    text: '宽度',
+                  },
+                  {
+                    name: 'borderTopLeftRadius',
+                    text: '左上圆角',
+                  },
+                  {
+                    name: 'borderTopRightRadius',
+                    text: '右上圆角',
+                  },
+                ],
+              },
+              {
+                type: 'fieldset',
+                legend: '右边框',
+                items: [
+                  {
+                    name: 'borderRightStyle',
+                    text: '样式',
+                    type: 'select',
+                    options: BorderStyleOptions,
+                  },
+                  {
+                    name: 'borderRightColor',
+                    text: '颜色',
+                    type: 'colorPicker',
+                  },
+                  {
+                    name: 'borderRightWidth',
+                    text: '宽度',
+                  },
+                ],
+              },
+              {
+                type: 'fieldset',
+                legend: '下边框',
+                items: [
+                  {
+                    name: 'borderBottomStyle',
+                    text: '样式',
+                    type: 'select',
+                    options: BorderStyleOptions,
+                  },
+                  {
+                    name: 'borderBottomColor',
+                    text: '颜色',
+                    type: 'colorPicker',
+                  },
+                  {
+                    name: 'borderBottomWidth',
+                    text: '宽度',
+                  },
+                  {
+                    name: 'borderBottomLeftRadius',
+                    text: '左下圆角',
+                  },
+                  {
+                    name: 'borderBottomRightRadius',
+                    text: '右下圆角',
+                  },
+                ],
+              },
+              {
+                type: 'fieldset',
+                legend: '左边框',
+                items: [
+                  {
+                    name: 'borderLeftStyle',
+                    text: '样式',
+                    type: 'select',
+                    options: BorderStyleOptions,
+                  },
+                  {
+                    name: 'borderLeftColor',
+                    text: '颜色',
+                    type: 'colorPicker',
+                  },
+                  {
+                    name: 'borderLeftWidth',
+                    text: '宽度',
                   },
                 ],
               },
