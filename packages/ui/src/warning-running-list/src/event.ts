@@ -1,3 +1,9 @@
 export default {
-  method: [],
+  method: [
+    {
+      label: '切换可见性',
+      value: 'triggerVisible',
+      props: ['visible'],
+    },
+  ],
 };
