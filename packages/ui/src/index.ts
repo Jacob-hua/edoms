@@ -1,4 +1,5 @@
 import Button from './button';
+import Checkbox from './checkbox';
 import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
 import GlobalSchematic from './global-schematic';
@@ -11,6 +12,7 @@ import SettingParameter from './setting-parameter';
 import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
 import WarningRunningList from './warning-running-list';
+
 const ui: Record<string, any> = {
   page: Page,
   container: Container,
@@ -18,6 +20,7 @@ const ui: Record<string, any> = {
   text: Text,
   img: Img,
   qrcode: Qrcode,
+  checkbox: Checkbox,
   overlay: Overlay,
   dynamicMonitoring: DynamicMonitoring,
   settingParameter: SettingParameter,
