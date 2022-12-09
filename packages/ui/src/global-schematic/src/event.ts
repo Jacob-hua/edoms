@@ -5,4 +5,11 @@ export default {
       value: 'global-schematic:flush',
     },
   ],
+  methods: [
+    {
+      label: '切换可见性',
+      value: 'triggerVisible',
+      props: ['visible'],
+    },
+  ],
 };

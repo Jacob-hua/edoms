@@ -1,12 +1,9 @@
 export default {
   methods: [
     {
-      label: '显示',
-      value: 'show',
-    },
-    {
-      label: '隐藏',
-      value: 'hide',
+      label: '切换可见性',
+      value: 'triggerVisible',
+      props: ['visible'],
     },
     {
       label: '设置文本',
