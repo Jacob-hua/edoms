@@ -11,7 +11,7 @@
     <p v-if="isShowBody" class="body">
       <span class="content">{{ item.content }}</span>
       <span class="button-container">
-        <span class="button-wrapper">
+        <span v-if="item.status === 'unconfirm'" class="button-wrapper">
           <el-button type="primary" @click="handleConfirm(item)">确认</el-button>
           <el-button type="paint" @click="handleIgnore">忽略</el-button>
         </span>
@@ -70,6 +70,7 @@ const handleIgnore = () => {
 const handleConfirm = async (alarm: Alarm) => {
   const result = await confirmedAlarmList();
   result ? (alarm.status = 'confirmed') : (alarm.status = 'unconfirm');
+  isShowBody.value = !isShowBody.value;
 };
 </script>
 
