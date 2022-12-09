@@ -17,7 +17,9 @@ const props = defineProps<{
   config: MGlobalSchematic;
 }>();
 
-const { request } = useApp(props);
+const { request, app } = useApp(props);
+
+const node = app?.page?.getNode(props.config.id);
 
 const { fetchIndicatorData } = apiFactor(request);
 
@@ -75,12 +77,9 @@ const updateIndicatorsData = async () => {
       return;
     }
     const indicatorConfig = indicatorConfigs.value[targetIndex];
-    indicatorData.value[indicatorConfig.label] = {
-      dataValue: Number(formatPrecision(dataValue, indicatorConfig.precision)),
-      deviceCode,
-      propCode,
-    };
+    indicatorData.value[indicatorConfig.label] = Number(formatPrecision(dataValue, indicatorConfig.precision));
   });
+  app?.emit('global-schematic:flush', node, indicatorData.value);
 };
 
 useIntervalAsync(updateIndicatorsData, intervalDelay.value);

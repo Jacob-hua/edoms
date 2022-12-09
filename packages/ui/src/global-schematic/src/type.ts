@@ -1,3 +1,5 @@
+import { MComponent } from '@edoms/schema';
+
 export interface MIndicatorItemConfig {
   /** 标签 */
   label: string;
@@ -15,7 +17,7 @@ export interface MIndicatorItemConfig {
   unit: string;
 }
 
-export interface MGlobalSchematic {
+export interface MGlobalSchematic extends MComponent {
   intervalDelay: number;
   src: string;
   indicators: MIndicatorItemConfig[];
@@ -48,4 +50,4 @@ export interface Apis {
   fetchIndicatorData: (data: FetchGlobSchematicReq) => Promise<FetchGlobSchematicRes>;
 }
 
-export type IndicatorData = Record<string, IndicatorDataItem>;
+export type IndicatorData = Record<string, number>;
