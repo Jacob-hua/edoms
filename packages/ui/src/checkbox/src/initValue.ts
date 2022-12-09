@@ -1,6 +1,6 @@
 export default {
   style: {
-    width: '50',
-    height: '20',
+    width: '85',
+    height: '33',
   },
 };
