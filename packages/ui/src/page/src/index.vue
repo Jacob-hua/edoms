@@ -14,10 +14,10 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import type { MPage } from '@edoms/schema';
-
 import EdomsUiComponent from '../../Component.vue';
 import useApp from '../../useApp';
+
+import { MPage } from './type';
 
 const props = defineProps<{
   config: MPage;

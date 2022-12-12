@@ -6,8 +6,9 @@
 import { ref, watch } from 'vue';
 import QRCode from 'qrcode';
 
-import { MQrcode } from '../../types';
 import useApp from '../../useApp';
+
+import { MQrcode } from './type';
 
 const props = defineProps<{
   config: MQrcode;

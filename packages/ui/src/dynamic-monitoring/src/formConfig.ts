@@ -1,7 +1,8 @@
 import { Request } from '@edoms/editor';
 
-import { MEnvironmentIndicator } from '../../types';
 import useInstanceConfig from '../../useInstanceConfig';
+
+import { MEnvironmentIndicator } from './type';
 
 const indicatorTypes = [
   {
