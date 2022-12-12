@@ -9,8 +9,10 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import { MButton, MText } from '../../../src/types';
+import { MText } from '../../text/src/type';
 import useApp from '../../useApp';
+
+import { MButton } from './type';
 
 const props = withDefaults(
   defineProps<{
@@ -25,6 +27,7 @@ const props = withDefaults(
 useApp(props);
 
 const textConfig = computed<MText>(() => ({
+  id: '',
   type: 'text',
   text: props.config?.text || '',
   disabledText: props.config?.disabledText || '',

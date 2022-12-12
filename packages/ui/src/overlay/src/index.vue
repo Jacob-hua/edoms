@@ -7,12 +7,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-import type { MContainer, MNode } from '@edoms/schema';
+import type { MNode } from '@edoms/schema';
 
 import useApp from '../../useApp';
 
+import { MOverlay } from './type';
+
 const props = defineProps<{
-  config: MContainer;
+  config: MOverlay;
 }>();
 
 const visible = ref(false);

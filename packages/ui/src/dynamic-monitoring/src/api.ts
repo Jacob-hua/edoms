@@ -2,8 +2,6 @@ import { EdomsRequestFunc } from '@edoms/utils';
 
 import { Apis, FetchEnvMonitoringReq, FetchEnvMonitoringRes } from './type';
 
-export * from './type';
-
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchIndicatorData: async (data: FetchEnvMonitoringReq): Promise<FetchEnvMonitoringRes> => {
     if (!request) {

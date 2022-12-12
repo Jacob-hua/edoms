@@ -3,10 +3,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { MComponentInstance, MText } from '../../../src/types';
 import useApp from '../../useApp';
+
+import { MText } from './type';
 
 const props = withDefaults(
   defineProps<{
@@ -19,8 +20,6 @@ const props = withDefaults(
 );
 
 const { provideMethod } = useApp(props);
-
-const hoc: MComponentInstance = inject('hoc');
 
 const className = computed(() =>
   props.config?.multiple ? 'edoms-ui-text' : 'edoms-ui-text edoms-ui-text--single-line'
@@ -64,7 +63,7 @@ watch(
 
 const displayText = computed(() => {
   let displayText = text.value;
-  if (hoc?.disabled && props.config?.disabledText) {
+  if (props.config?.disabledText) {
     displayText = disabledText.value;
   }
   return displayText || '';

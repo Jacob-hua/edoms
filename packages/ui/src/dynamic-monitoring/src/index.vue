@@ -25,7 +25,6 @@ import { computed, ref, watch } from 'vue';
 import { formatPrecision } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
-import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
@@ -33,7 +32,8 @@ import GasImg from './assets/gas.svg';
 import LiquidDepthImg from './assets/liquidDepth.svg';
 import MoistureImg from './assets/moisture.svg';
 import TemperatureImg from './assets/temperature.svg';
-import apiFactory, { ParameterItem } from './api';
+import apiFactory from './api';
+import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig, ParameterItem } from './type';
 
 interface Indicator {
   icon: string;

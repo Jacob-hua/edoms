@@ -1,4 +1,4 @@
-import { MComponent } from '../../types';
+import { MComponent } from '@edoms/schema';
 
 export interface MLightItem {
   color: string;
