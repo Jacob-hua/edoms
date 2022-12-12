@@ -32,8 +32,8 @@ import GasImg from './assets/gas.svg';
 import LiquidDepthImg from './assets/liquidDepth.svg';
 import MoistureImg from './assets/moisture.svg';
 import TemperatureImg from './assets/temperature.svg';
-import apiFactory, { ParameterItem } from './api';
-import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig } from './type';
+import apiFactory from './api';
+import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig, ParameterItem } from './type';
 
 interface Indicator {
   icon: string;
