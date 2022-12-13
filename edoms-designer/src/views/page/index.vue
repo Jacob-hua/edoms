@@ -25,6 +25,7 @@
             :data="item"
             :is-active="item.pageId === active?.pageId"
             @delete-success="handleReload"
+            @use-index-success="handleReload"
             @click="clickPageListItem(item)"
           />
         </template>

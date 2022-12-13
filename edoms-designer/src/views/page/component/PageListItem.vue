@@ -50,6 +50,8 @@ const emit = defineEmits<{
   (event: 'renameCatch', error: any): void;
   (event: 'deleteSuccess'): void;
   (event: 'deleteCatch', error: any): void;
+  (event: 'useIndexSuccess'): void;
+  (event: 'useIndexCatch', error: any): void;
   (event: 'changeActive', item: any): void;
 }>();
 
@@ -75,6 +77,29 @@ const menus = [
     action: () => {
       formModel.pageName = pageName.value;
       renameVisible.value = true;
+    },
+  },
+  {
+    name: 'setIndex',
+    label: '设置首页',
+    icon: 'Operation',
+    action: () => {
+      ElMessageBox.confirm(`是否将${props.data.name}设置为首页?`, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          await pageApi.useToIndex({
+            pageId: props.data.pageId,
+            applicationId: props.applicationId,
+          });
+          ElMessage.success('设置成功');
+          emit('useIndexSuccess');
+        })
+        .catch((e) => {
+          emit('useIndexCatch', e);
+        });
     },
   },
   {
