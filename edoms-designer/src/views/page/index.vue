@@ -62,7 +62,7 @@
       <div ref="editWrapper" class="edit">
         <DSLPreview
           v-if="previewVisible"
-          height="100%"
+          height="98%"
           :application-id="applicationId"
           :application-name="appName"
           :content-id="active?.pushContentId"

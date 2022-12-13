@@ -39,6 +39,7 @@ export const generateEmptyPageDSL = (config: PageDSLConfig): MPage => ({
     color: '',
     fontSize: '',
     fontWeight: '',
+    overflow: 'auto',
   },
   events: [],
   items: [],
