@@ -1,10 +1,32 @@
 import { Request } from '@edoms/editor';
 
+const fetchInstances = async (request: Request, componentName: string): Promise<any[]> =>
+  (await request({
+    resourceId: `${componentName}:instance`,
+  })) ?? [];
+
+const getSelectedInstance = (valuePath: string[], options: any[]): any => {
+  let selectedOption;
+  valuePath.forEach((value: string) => {
+    selectedOption = options.find(({ value: optV }: any) => optV === value);
+    options = selectedOption.children;
+  });
+  return selectedOption;
+};
+
+const fetchProperties = async (request: Request, componentName: string, formValue: any, prop: string): Promise<any[]> =>
+  (await request({
+    resourceId: `${componentName}:point`,
+    formValue,
+    prop,
+  })) ?? [];
+
+const getSelectedProperty = (value: string, options: any[]): any => {
+  return options.find((item) => item.value === value);
+};
+
 export default async (request: Request, componentName: string) => {
-  const instances =
-    (await request({
-      resourceId: `${componentName}:instance`,
-    })) ?? [];
+  const instances = await fetchInstances(request, componentName);
 
   return [
     {
@@ -14,8 +36,8 @@ export default async (request: Request, componentName: string) => {
       filterable: true,
       checkStrictly: true,
       options: instances,
-      onChange: (mForm: any, value: any, { config, model }: any) => {
-        model.instanceType = config.selectedOption?.type;
+      onChange: (mForm: any, value: any, { model }: any) => {
+        model.instanceType = getSelectedInstance(value, instances)?.type;
       },
     },
     {
@@ -47,16 +69,10 @@ export default async (request: Request, componentName: string) => {
       text: '属性',
       type: 'select',
       options: async (mForm: any, { formValue, prop }: any) => {
-        return (
-          (await request({
-            resourceId: `${componentName}:point`,
-            formValue,
-            prop,
-          })) ?? []
-        );
+        return fetchProperties(request, componentName, formValue, prop);
       },
-      onChange: (mForm: any, value: any, { config, model }: any) => {
-        model.unit = config.selectedOption?.unit;
+      onChange: async (mForm: any, value: any, { formValue, prop, model }: any) => {
+        model.unit = getSelectedProperty(value, await fetchProperties(request, componentName, formValue, prop))?.unit;
       },
     },
     {
