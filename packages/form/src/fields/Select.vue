@@ -314,26 +314,26 @@ props.config.remote &&
 const popperClass = mForm?.popperClass;
 
 const changeHandler = (value: any) => {
-  if (props.config.group) {
-    for (let i = 0; i < groupOptions.value.length; i++) {
-      const groupOption = groupOptions.value[i];
-      for (let j = 0; j < groupOption.options.length; j++) {
-        const option = groupOption.options[j];
-        if (option.value === value) {
-          props.config.selectedOption = option;
-          break;
-        }
-      }
-    }
-  } else {
-    for (let i = 0; i < itemOptions.value.length; i++) {
-      const option = itemOptions.value[i];
-      if (option.value === value) {
-        props.config.selectedOption = option;
-        break;
-      }
-    }
-  }
+  // if (props.config.group) {
+  //   for (let i = 0; i < groupOptions.value.length; i++) {
+  //     const groupOption = groupOptions.value[i];
+  //     for (let j = 0; j < groupOption.options.length; j++) {
+  //       const option = groupOption.options[j];
+  //       if (option.value === value) {
+  //         props.config.selectedOption = option;
+  //         break;
+  //       }
+  //     }
+  //   }
+  // } else {
+  //   for (let i = 0; i < itemOptions.value.length; i++) {
+  //     const option = itemOptions.value[i];
+  //     if (option.value === value) {
+  //       props.config.selectedOption = option;
+  //       break;
+  //     }
+  //   }
+  // }
   emit('change', value);
 };
 
