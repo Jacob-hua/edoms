@@ -96,3 +96,10 @@ export interface PublishPageReq {
   /** 内容ID */
   contentId: string;
 }
+
+export interface UseToIndexReq {
+  /** 应用ID */
+  applicationId: string;
+  /** 页面ID */
+  pageId: string;
+}

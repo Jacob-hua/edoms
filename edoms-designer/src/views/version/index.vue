@@ -19,7 +19,8 @@
               :data="item"
               :page-id="pageId"
               :is-active="item.versionId === active?.versionId"
-              @click="handleActive(item)"
+              @rename-success="handleRename"
+              @change-active="handleActive"
             />
           </template>
           <template #noMore>
@@ -114,8 +115,14 @@ const handleApply = async () => {
   });
 };
 
-const handleActive = async (item: ListVersionResItem) => {
-  active.value = item;
+const handleRename = (value: ListVersionResItem) => {
+  if (value.versionId === active.value?.versionId) {
+    active.value = value;
+  }
+};
+
+const handleActive = (value: ListVersionResItem) => {
+  active.value = value;
 };
 
 const handleEdit = () => {

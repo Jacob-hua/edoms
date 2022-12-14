@@ -11,6 +11,7 @@ import {
   PublishPageReq,
   SavePageReq,
   UpdatePageReq,
+  UseToIndexReq,
 } from './type';
 
 export * from './type';
@@ -75,6 +76,13 @@ export default {
   publishPage: async (data: PublishPageReq): Promise<void> => {
     await request<PublishPageReq, any>({
       url: '/page/publish',
+      method: 'POST',
+      data,
+    });
+  },
+  useToIndex: async (data: UseToIndexReq): Promise<void> => {
+    await request<UseToIndexReq, void>({
+      url: '/page/use-to-index',
       method: 'POST',
       data,
     });

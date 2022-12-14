@@ -1,10 +1,10 @@
 <template>
-  <div :class="['wrapper', isActive ? 'active' : '']">
+  <div :class="['wrapper', isActive ? 'active' : '']" @click="handleClick">
     <div class="title">
       <div v-if="renameVisible" class="rename">
         <el-form ref="formRef" :inline="true" :model="formModel" :rules="formRules">
-          <el-form-item prop="versionName">
-            <el-input v-model="formModel.versionName" />
+          <el-form-item prop="name">
+            <el-input v-model="formModel.name" />
           </el-form-item>
         </el-form>
         <div>
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div v-else>
-        {{ versionName }}
+        {{ formModel.name }}
       </div>
     </div>
     <div class="time">{{ formatTime(data.createTime) }}</div>
@@ -43,25 +43,23 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (emit: 'renameSuccess'): void;
+  (emit: 'renameSuccess', value: ListVersionResItem): void;
   (emit: 'renameCatch', error: any): void;
   (emit: 'deleteSuccess'): void;
   (emit: 'deleteCatch', error: any): void;
-  (emit: 'changeActive', item: any): void;
+  (emit: 'changeActive', value: ListVersionResItem): void;
 }>();
-
-const versionName = ref<string>(props.data.name);
 
 const renameVisible = ref<boolean>(false);
 
 const formRef = ref<FormInstance>();
 
 const formModel = reactive({
-  versionName: props.data.name,
+  ...props.data,
 });
 
 const formRules = reactive<FormRules>({
-  versionName: [{ required: true, message: '请输入版本名称', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入版本名称', trigger: 'blur' }],
 });
 
 const handleRenameVisible = () => {
@@ -69,21 +67,20 @@ const handleRenameVisible = () => {
 };
 
 const handleCancel = () => {
-  formModel.versionName = versionName.value;
   renameVisible.value = false;
+  formRef.value && formRef.value.resetFields();
 };
 
 const handleRename = async () => {
   try {
     formRef.value && (await formRef.value.validate());
-    versionName.value = formModel.versionName;
     await versionApi.updateVersion({
-      versionId: props.data.versionId,
-      name: formModel.versionName,
+      versionId: formModel.versionId,
+      name: formModel.name,
       pageId: Number(props.pageId),
     });
     ElMessage.success('更新成功');
-    emit('renameSuccess');
+    emit('renameSuccess', formModel);
     renameVisible.value = false;
   } catch (error) {
     emit('renameCatch', error);
@@ -91,14 +88,14 @@ const handleRename = async () => {
 };
 
 const handleDelete = async () => {
-  ElMessageBox.confirm(`此操作将删除${versionName.value}版本, 是否继续?`, '提示', {
+  ElMessageBox.confirm(`此操作将删除${formModel.name}版本, 是否继续?`, '提示', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
     type: 'warning',
   })
     .then(async () => {
       await versionApi.deleteVersion({
-        versionIds: [props.data.versionId],
+        versionIds: [formModel.versionId],
       });
       ElMessage.success('删除成功');
       emit('deleteSuccess');
@@ -106,6 +103,10 @@ const handleDelete = async () => {
     .catch((error) => {
       emit('deleteCatch', error);
     });
+};
+
+const handleClick = () => {
+  emit('changeActive', formModel);
 };
 </script>
 

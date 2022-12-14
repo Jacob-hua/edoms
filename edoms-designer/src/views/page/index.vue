@@ -25,7 +25,9 @@
             :data="item"
             :is-active="item.pageId === active?.pageId"
             @delete-success="handleReload"
-            @click="clickPageListItem(item)"
+            @use-index-success="handleReload"
+            @rename-success="handleRenameSuccess"
+            @change-active="handleChangeActive"
           />
         </template>
         <template #noMore>
@@ -62,7 +64,7 @@
       <div ref="editWrapper" class="edit">
         <DSLPreview
           v-if="previewVisible"
-          height="100%"
+          height="98%"
           :application-id="applicationId"
           :application-name="appName"
           :content-id="active?.pushContentId"
@@ -127,7 +129,7 @@ const loadData: RequestFunc<ListPageResItem> = async ({ pageSize, current }) => 
   });
   totalCount.value = Number(count);
   appName.value = applicationName;
-  active.value = dataList[0] ?? { pushContentId: null };
+  !active.value && (active.value = dataList[0] ?? { pushContentId: null });
   if (totalCount.value) {
     previewVisible.value = true;
   }
@@ -210,6 +212,12 @@ const handleShowSearchInput = () => {
   search();
 };
 
+const handleRenameSuccess = (value: ListPageResItem) => {
+  if (value.pageId === active.value?.pageId) {
+    active.value = value;
+  }
+};
+
 const search = () => {
   gridList.value?.reload();
   isSearch.value = false;
@@ -223,8 +231,8 @@ const handleClearInput = () => {
   search();
 };
 
-const clickPageListItem = (item: any) => {
-  active.value = item;
+const handleChangeActive = (value: ListPageResItem) => {
+  active.value = value;
 };
 
 const goEdit = () => {
