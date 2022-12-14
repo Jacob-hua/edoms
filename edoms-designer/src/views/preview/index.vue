@@ -6,18 +6,32 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import applicationApi from '@/api/application';
 import DSLPreview from '@/components/DSLPreview.vue';
 
 const route = useRoute();
 
+const router = useRouter();
+
 const contentId = ref<string>();
 watch(
   () => route.params.address as string,
   async (address: string) => {
-    contentId.value = await applicationApi.getReleaseId({ serviceAddress: address });
+    try {
+      contentId.value = await applicationApi.getReleaseId({ serviceAddress: address });
+      if (!contentId.value) {
+        router.push({
+          path: '/404',
+        });
+      }
+    } catch (error) {
+      console.log('====');
+      router.push({
+        path: '/404',
+      });
+    }
   },
   { immediate: true }
 );
