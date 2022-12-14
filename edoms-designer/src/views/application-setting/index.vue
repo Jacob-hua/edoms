@@ -54,6 +54,7 @@ const appInfo = ref<GetApplicationRes>({
   tenantId: '',
   thumbnailId: '',
   secret: '',
+  export: false,
 });
 
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
