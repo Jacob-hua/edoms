@@ -1,9 +1,9 @@
 <template>
-  <div :class="['item', isActive ? 'active' : '']">
+  <div :class="['item', isActive ? 'active' : '']" @click="handleClick">
     <template v-if="renameVisible">
       <el-form ref="formRef" :inline="true" :model="formModel" :rules="formRules">
-        <el-form-item prop="pageName">
-          <el-input v-model="formModel.pageName"></el-input>
+        <el-form-item prop="name">
+          <el-input v-model="formModel.name"></el-input>
         </el-form-item>
       </el-form>
       <div style="display: flex; padding: 0 10px">
@@ -12,7 +12,7 @@
       </div>
     </template>
     <template v-else>
-      <p>{{ pageName }}</p>
+      <p>{{ formModel.name }}</p>
       <div class="pop-menu-wrapper">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
@@ -46,25 +46,23 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (event: 'renameSuccess'): void;
+  (event: 'renameSuccess', value: ListPageResItem): void;
   (event: 'renameCatch', error: any): void;
   (event: 'deleteSuccess'): void;
   (event: 'deleteCatch', error: any): void;
   (event: 'useIndexSuccess'): void;
   (event: 'useIndexCatch', error: any): void;
-  (event: 'changeActive', item: any): void;
+  (event: 'changeActive', value: ListPageResItem): void;
 }>();
-
-const pageName = ref<string>(props.data.name);
 
 const formRef = ref<FormInstance>();
 
 const formModel = reactive({
-  pageName: props.data.name,
+  ...props.data,
 });
 
 const formRules = reactive<FormRules>({
-  pageName: [{ required: true, message: '请输入页面名称', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入页面名称', trigger: 'blur' }],
 });
 
 const renameVisible = ref<boolean>(false);
@@ -75,7 +73,6 @@ const menus = [
     label: '重命名',
     icon: 'Operation',
     action: () => {
-      formModel.pageName = pageName.value;
       renameVisible.value = true;
     },
   },
@@ -133,24 +130,27 @@ const handleMenuClick = (value: string | number) => {
 
 const handleCancel = () => {
   renameVisible.value = false;
-  formModel.pageName = pageName.value;
+  formRef.value && formRef.value.resetFields();
 };
 
 const handleRename = async () => {
   try {
     formRef.value && (await formRef.value.validate());
-    pageName.value = formModel.pageName;
     await pageApi.updatePage({
       pageId: props.data.pageId,
-      name: formModel.pageName,
+      name: formModel.name,
       applicationId: props.applicationId,
     });
     renameVisible.value = false;
     ElMessage.success('重命名成功');
-    emit('renameSuccess');
+    emit('renameSuccess', formModel);
   } catch (error) {
     emit('renameCatch', error);
   }
+};
+
+const handleClick = () => {
+  emit('changeActive', formModel);
 };
 </script>
 

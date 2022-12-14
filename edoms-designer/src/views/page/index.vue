@@ -26,7 +26,8 @@
             :is-active="item.pageId === active?.pageId"
             @delete-success="handleReload"
             @use-index-success="handleReload"
-            @click="clickPageListItem(item)"
+            @rename-success="handleRenameSuccess"
+            @change-active="handleChangeActive"
           />
         </template>
         <template #noMore>
@@ -128,7 +129,7 @@ const loadData: RequestFunc<ListPageResItem> = async ({ pageSize, current }) => 
   });
   totalCount.value = Number(count);
   appName.value = applicationName;
-  active.value = dataList[0] ?? { pushContentId: null };
+  !active.value && (active.value = dataList[0] ?? { pushContentId: null });
   if (totalCount.value) {
     previewVisible.value = true;
   }
@@ -211,6 +212,12 @@ const handleShowSearchInput = () => {
   search();
 };
 
+const handleRenameSuccess = (value: ListPageResItem) => {
+  if (value.pageId === active.value?.pageId) {
+    active.value = value;
+  }
+};
+
 const search = () => {
   gridList.value?.reload();
   isSearch.value = false;
@@ -224,8 +231,8 @@ const handleClearInput = () => {
   search();
 };
 
-const clickPageListItem = (item: any) => {
-  active.value = item;
+const handleChangeActive = (value: ListPageResItem) => {
+  active.value = value;
 };
 
 const goEdit = () => {
