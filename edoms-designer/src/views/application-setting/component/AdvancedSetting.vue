@@ -1,6 +1,10 @@
 <template>
   <div class="advance-container">
-    <div v-for="({ name, title, buttonType, action }, index) in advanceItems" :key="index" class="advance-item">
+    <div
+      v-for="({ name, title, buttonType, disabled, action }, index) in advanceItems"
+      :key="index"
+      class="advance-item"
+    >
       <div class="top-title">
         <p>
           <el-icon color="#e0e0e0"> <Minus /> </el-icon>
@@ -8,7 +12,7 @@
         <span>{{ name }}</span>
       </div>
       <p class="advance-item-title">{{ title }}</p>
-      <el-button :type="buttonType" size="large" @click="action">{{ name }}</el-button>
+      <el-button :type="buttonType" :disabled="disabled" size="large" @click="action">{{ name }}</el-button>
     </div>
   </div>
   <el-dialog v-model="deleteVisible" title="删除应用" width="40%" :before-close="handleClose" center>
@@ -40,6 +44,7 @@ interface AdvanceItem {
   name: string;
   title: string;
   buttonType: string;
+  disabled: boolean;
   action: (...args: any[]) => void;
 }
 
@@ -54,10 +59,25 @@ const deleteVisible = ref<boolean>(false);
 const confirmText = ref<string>('');
 const form = ref<FormInstance>();
 
-const handleDelete = () => {
-  deleteVisible.value = true;
-  confirmText.value = appInfo.value.secret;
-};
+const advanceItems = ref<AdvanceItem[]>([
+  {
+    name: '导出',
+    title: '可将应用导出到本地',
+    buttonType: 'primary',
+    disabled: !appInfo.value.export,
+    action: () => {},
+  },
+  {
+    name: '删除',
+    title: '将应用删除，应用下的页面也将全部删除',
+    buttonType: 'danger',
+    disabled: false,
+    action: () => {
+      deleteVisible.value = true;
+      confirmText.value = appInfo.value.secret;
+    },
+  },
+]);
 
 const rules = {
   inputText: [
@@ -71,6 +91,7 @@ const rules = {
 const confirmForm = ref({
   inputText: '',
 });
+
 const handleConfirm = async () => {
   if (!form.value) return;
   await form.value?.validate();
@@ -82,24 +103,10 @@ const handleConfirm = async () => {
   ElMessage.success('删除成功');
   router.go(-1);
 };
-const handleExportApplication = () => {};
+
 const handleClose = () => {
   deleteVisible.value = false;
 };
-const advanceItems = ref<AdvanceItem[]>([
-  {
-    name: '导出',
-    title: '可将应用导出到本地',
-    buttonType: 'primary',
-    action: handleExportApplication,
-  },
-  {
-    name: '删除',
-    title: '将应用删除，应用下的页面也将全部删除',
-    buttonType: 'danger',
-    action: handleDelete,
-  },
-]);
 </script>
 
 <style lang="scss" scoped>
