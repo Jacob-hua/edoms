@@ -71,6 +71,7 @@ export default {
         tenantId: '',
         thumbnailId: '',
         secret: '',
+        export: false,
       };
     }
   },
