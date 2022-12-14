@@ -57,8 +57,7 @@ watch(
   (filesValue) => {
     props.model[props.prop] = filesValue;
     emit('change', filesValue);
-  },
-  { immediate: true }
+  }
 );
 
 const handleDeleteFile = (fileName: string) => {
