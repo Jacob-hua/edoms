@@ -21,8 +21,10 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 import type { ListApplicationsResItem } from '@/api/application';
+import applicationApi from '@/api/application';
 import PreviewImage from '@/components/ImagePreview.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
@@ -40,7 +42,18 @@ const menus = [
     name: 'operation',
     label: '发布',
     icon: 'Operation',
-    action: () => {},
+    action: () => {
+      ElMessageBox.confirm(`是否发布${props.application.name}?`, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(async () => {
+        await applicationApi.releaseApplication({
+          applicationId: props.application.applicationId,
+        });
+        ElMessage.success('发布成功');
+      });
+    },
   },
   {
     name: 'setting',

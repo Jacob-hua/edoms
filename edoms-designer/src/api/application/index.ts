@@ -7,6 +7,7 @@ import {
   GetApplicationRes,
   ListApplicationsReq,
   ListApplicationsRes,
+  ReleaseApplicationReq,
   UpdateApplicationReq,
 } from './type';
 import { DeleteApplicationReq } from './type';
@@ -79,6 +80,13 @@ export default {
     await request<DeleteApplicationReq, void>({
       url: '/application/delete',
       method: 'DELETE',
+      data,
+    });
+  },
+  releaseApplication: async (data: ReleaseApplicationReq): Promise<void> => {
+    await request<ReleaseApplicationReq, void>({
+      url: '/application/release',
+      method: 'GET',
       data,
     });
   },
