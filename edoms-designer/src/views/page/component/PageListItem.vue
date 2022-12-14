@@ -81,7 +81,7 @@ const menus = [
     label: '设置首页',
     icon: 'Operation',
     action: () => {
-      ElMessageBox.confirm(`是否将${props.data.name}设置为首页?`, '提示', {
+      ElMessageBox.confirm(`是否将${formModel.name}设置为首页?`, '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning',
@@ -104,7 +104,7 @@ const menus = [
     label: '删除',
     icon: 'Delete',
     action: () => {
-      ElMessageBox.confirm(`此操作将永久删除${props.data.name}, 是否继续?`, '提示', {
+      ElMessageBox.confirm(`此操作将永久删除${formModel.name}, 是否继续?`, '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning',
