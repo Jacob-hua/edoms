@@ -25,7 +25,7 @@ const { fetchIndicatorData } = apiFactor(request);
 
 const imgRef = ref<HTMLImageElement>();
 
-const imgSrc = ref(props.config.src);
+const imgSrc = ref<string>(props.config.src?.[0] ?? '');
 
 const imgFileUrl = ref<string>('');
 
@@ -42,8 +42,8 @@ const intervalDelay = computed<number>(() => {
 
 watch(
   () => props.config.src,
-  (value: any) => {
-    if (!value) {
+  (value: any[]) => {
+    if (!value || value.length === 0) {
       imgSrc.value = 'https://puui.qpic.cn/vupload/0/1573555382625_bhp0wud8l6w.png/0';
       return;
     }
