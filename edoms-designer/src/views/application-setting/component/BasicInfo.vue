@@ -1,6 +1,6 @@
 <template>
   <div class="appInfo">
-    <el-form ref="formRef" :model="appInfo" :rules="rules" label-width="80px" class="demo-dynamic">
+    <el-form ref="formRef" :model="appInfo" :rules="formRules" label-width="80px" class="demo-dynamic">
       <el-form-item label="名称" prop="name">
         <el-input v-model="appInfo.name" placeholder="请输入应用名称"></el-input>
       </el-form-item>
@@ -14,7 +14,7 @@
           :rows="10"
         ></el-input>
       </el-form-item>
-      <el-form-item label="路径">
+      <el-form-item label="预览路径" prop="serviceAddress">
         <el-input v-model="appInfo.serviceAddress" placeholder="请输入路径">
           <template #prepend>{{ previewPath }}</template>
         </el-input>
@@ -44,11 +44,11 @@ const emit = defineEmits<{
 
 const previewPath = import.meta.env.VITE_PREVIEW_PATH;
 
-const rules = {
+const formRules = {
   name: [
     {
       required: true,
-      message: '请输入应用名称',
+      message: '应用名称不能为空',
       trigger: 'blur',
     },
     {
@@ -61,7 +61,7 @@ const rules = {
   description: [
     {
       required: true,
-      message: '请输入应用简介',
+      message: '应用简介不能为空',
       trigger: 'blur',
     },
     {
@@ -71,7 +71,19 @@ const rules = {
       trigger: 'blur',
     },
   ],
-  serviceAddress: [],
+  serviceAddress: [
+    {
+      required: true,
+      message: '预览路径不能为空',
+      trigger: 'blur',
+    },
+    {
+      min: 1,
+      max: 20,
+      message: '预览路径长度1-20字符',
+      trigger: 'blur',
+    },
+  ],
 };
 
 const { appInfo } = toRefs(props);
