@@ -1,6 +1,8 @@
 <template>
-  <iframe v-if="dsl" ref="runtimeIframe" :width="width" :height="height" :src="previewUrl"></iframe>
-  <el-empty v-else></el-empty>
+  <div v-loading="loading" class="wrapper">
+    <iframe v-if="dsl" ref="runtimeIframe" :width="width" :height="height" :src="previewUrl"></iframe>
+    <el-empty v-else></el-empty>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -27,6 +29,8 @@ const props = withDefaults(
     height: () => 'auto',
   }
 );
+
+const loading = ref<boolean>(true);
 
 const { VITE_RUNTIME_PATH } = import.meta.env;
 
@@ -79,4 +83,17 @@ function handleIframeLoad() {
   }
   runtimeIframe.value?.contentWindow?.postMessage(toRaw(dsl.value), `${VITE_RUNTIME_PATH}/page/index.html`);
 }
+
+window.addEventListener('message', (e) => {
+  if (e.data === 'runtime-ready') {
+    loading.value = false;
+  }
+});
 </script>
+
+<style lang="scss" scoped>
+.wrapper {
+  width: 100%;
+  height: 100%;
+}
+</style>

@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 
 import Core from '@edoms/core';
 import { getUrlParam } from '@edoms/utils';
@@ -17,5 +17,9 @@ window.addEventListener('message', ({ data }) => {
   }
   app.setConfig(data, getUrlParam('page'));
   pageConfig.value = app.page?.data || {};
+});
+
+onMounted(() => {
+  window.parent && window.parent.postMessage('runtime-ready', '*');
 });
 </script>
