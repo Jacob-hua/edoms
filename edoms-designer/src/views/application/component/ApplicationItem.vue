@@ -29,13 +29,13 @@ import PreviewImage from '@/components/ImagePreview.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
-const props = withDefaults(
-  defineProps<{
-    application: ListApplicationsResItem;
-  }>(),
-  {}
-);
+const props = defineProps<{
+  application: ListApplicationsResItem;
+}>();
+
 const router = useRouter();
+
+const previewPath = import.meta.env.VITE_PREVIEW_PATH;
 
 const menus = [
   {
@@ -51,6 +51,7 @@ const menus = [
         await applicationApi.releaseApplication({
           applicationId: props.application.applicationId,
         });
+        window.open(`${previewPath}${props.application.serviceAddress}`);
         ElMessage.success('发布成功');
       });
     },
