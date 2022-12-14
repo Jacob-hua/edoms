@@ -19,7 +19,7 @@ export interface MIndicatorItemConfig {
 
 export interface MGlobalSchematic extends MComponent {
   intervalDelay: number;
-  src: string;
+  src: any[];
   indicators: MIndicatorItemConfig[];
 }
 

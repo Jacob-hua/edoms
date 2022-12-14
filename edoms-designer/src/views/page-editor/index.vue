@@ -111,6 +111,8 @@ useAsyncLoadJS(
   }
 ).execute();
 
+const staticResource = ref<string[]>([]);
+
 const menu = computed<MenuBarData>(() => ({
   left: [
     {
@@ -298,6 +300,7 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   if (parameter === 'upload') {
     const { execute: fileUploadExecute } = useUpload();
     const result = await fileUploadExecute(props.data as File, props.data?.name, props.data?.type);
+    result && staticResource.value?.push(result);
     return result;
   }
   return;
@@ -347,7 +350,7 @@ async function uploadDsl(): Promise<string | null | undefined> {
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
 
-  return await uploadExecute(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8');
+  return await uploadExecute(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8', staticResource.value?.join(','));
 }
 
 async function save() {

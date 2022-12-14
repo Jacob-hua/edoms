@@ -55,13 +55,9 @@ const files = ref<Map<string, FileStruct>>(new Map());
 watch(
   () => Array.from(files.value.values()).filter(({ status }) => status === 'done'),
   (filesValue) => {
-    if (filesValue.length < 1) {
-      return;
-    }
     props.model[props.prop] = filesValue;
     emit('change', filesValue);
-  },
-  { immediate: true }
+  }
 );
 
 const handleDeleteFile = (fileName: string) => {

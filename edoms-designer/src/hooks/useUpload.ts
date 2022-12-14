@@ -11,9 +11,12 @@ export default () => {
     content: File | Blob | string,
     fileName: string,
     fileType: string,
-    charset?: string
+    charset?: string,
+    referenceIds?: string
   ): Promise<string | null | undefined> => {
     try {
+      console.log('~~~~~', referenceIds);
+
       if (typeof content === 'string') {
         content = new Blob([content], { type: `${fileType};charset=${charset}` });
       }
@@ -22,6 +25,7 @@ export default () => {
         file: content,
         fileName,
         fileType,
+        referenceIds,
       });
       return contentId;
     } catch (e) {

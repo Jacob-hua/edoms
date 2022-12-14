@@ -5,6 +5,8 @@ export interface UploadFileReq {
   fileType: string;
   /** 文件名称 */
   fileName: string;
+  /** 依赖资源 */
+  referenceIds?: string;
 }
 
 export interface UploadFileRes {
