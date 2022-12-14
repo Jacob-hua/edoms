@@ -70,16 +70,16 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/preview/:address',
+    component: () => import('../views/preview/index.vue'),
+  },
+  {
+    path: '/404',
+    component: () => import('../layout/404.vue'),
+  },
+  {
     path: '/:catchAll(.*)',
     redirect: '/404',
-  },
-  {
-    path: '/test',
-    component: () => import('../views/TestTable.vue'),
-  },
-  {
-    path: '/scroll',
-    component: () => import('../views/scroll.vue'),
   },
 ];
 

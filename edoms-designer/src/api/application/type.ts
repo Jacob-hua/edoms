@@ -90,3 +90,13 @@ export interface DeleteApplicationReq {
   /** 确认字符 */
   secret: string;
 }
+
+export interface ReleaseApplicationReq {
+  /** 应用ID */
+  applicationId: string;
+}
+
+export interface GetReleaseIdReq {
+  /** 服务地址 */
+  serviceAddress: string;
+}

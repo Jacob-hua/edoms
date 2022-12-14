@@ -1,6 +1,6 @@
 <template>
   <div class="appInfo">
-    <el-form ref="formRef" :model="appInfo" :rules="rules" label-width="80px" class="demo-dynamic">
+    <el-form ref="formRef" :model="appInfo" :rules="formRules" label-width="80px" class="demo-dynamic">
       <el-form-item label="名称" prop="name">
         <el-input v-model="appInfo.name" placeholder="请输入应用名称"></el-input>
       </el-form-item>
@@ -14,11 +14,10 @@
           :rows="10"
         ></el-input>
       </el-form-item>
-      <el-form-item label="路径">
-        <div class="path-box">
-          <span class="prefix-path">http://xxxxxxxxx.xx/dssd/</span>
-          <el-input v-model="appInfo.serviceAddress" placeholder="请输入路径"></el-input>
-        </div>
+      <el-form-item label="预览路径" prop="serviceAddress">
+        <el-input v-model="appInfo.serviceAddress" placeholder="请输入路径">
+          <template #prepend>{{ previewPath }}</template>
+        </el-input>
       </el-form-item>
       <el-form-item label="封面">
         <ImageUpload :thumbnail-id="appInfo.thumbnailId" @success="handleUploadSuccess"></ImageUpload>
@@ -43,11 +42,13 @@ const emit = defineEmits<{
   (event: 'success'): void;
 }>();
 
-const rules = {
+const previewPath = import.meta.env.VITE_PREVIEW_PATH;
+
+const formRules = {
   name: [
     {
       required: true,
-      message: '请输入应用名称',
+      message: '应用名称不能为空',
       trigger: 'blur',
     },
     {
@@ -60,7 +61,7 @@ const rules = {
   description: [
     {
       required: true,
-      message: '请输入应用简介',
+      message: '应用简介不能为空',
       trigger: 'blur',
     },
     {
@@ -70,7 +71,19 @@ const rules = {
       trigger: 'blur',
     },
   ],
-  serviceAddress: [],
+  serviceAddress: [
+    {
+      required: true,
+      message: '预览路径不能为空',
+      trigger: 'blur',
+    },
+    {
+      min: 1,
+      max: 20,
+      message: '预览路径长度1-20字符',
+      trigger: 'blur',
+    },
+  ],
 };
 
 const { appInfo } = toRefs(props);
@@ -125,13 +138,6 @@ const update = async ({ applicationId, name, description, thumbnailId, serviceAd
 .appInfo {
   width: 1000px;
   margin: auto;
-  .path-box {
-    display: flex;
-    .prefix-path {
-      padding: 0 10px;
-      background-color: #e0e0e0;
-    }
-  }
   .updateBtn {
     color: #fff;
     width: 160px;

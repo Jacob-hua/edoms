@@ -5,8 +5,10 @@ import {
   CreateApplicationRes,
   GetApplicationReq,
   GetApplicationRes,
+  GetReleaseIdReq,
   ListApplicationsReq,
   ListApplicationsRes,
+  ReleaseApplicationReq,
   UpdateApplicationReq,
 } from './type';
 import { DeleteApplicationReq } from './type';
@@ -81,5 +83,20 @@ export default {
       method: 'DELETE',
       data,
     });
+  },
+  releaseApplication: async (data: ReleaseApplicationReq): Promise<void> => {
+    await request<ReleaseApplicationReq, void>({
+      url: '/application/release',
+      method: 'GET',
+      data,
+    });
+  },
+  getReleaseId: async (data: GetReleaseIdReq): Promise<string> => {
+    const { result } = await request<GetReleaseIdReq, string>({
+      url: '/application/releaseId',
+      method: 'GET',
+      data,
+    });
+    return result;
   },
 };
