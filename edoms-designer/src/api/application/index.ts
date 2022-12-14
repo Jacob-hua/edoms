@@ -5,6 +5,7 @@ import {
   CreateApplicationRes,
   GetApplicationReq,
   GetApplicationRes,
+  GetReleaseIdReq,
   ListApplicationsReq,
   ListApplicationsRes,
   ReleaseApplicationReq,
@@ -89,5 +90,13 @@ export default {
       method: 'GET',
       data,
     });
+  },
+  getReleaseId: async (data: GetReleaseIdReq): Promise<string> => {
+    const { result } = await request<GetReleaseIdReq, string>({
+      url: '/application/releaseId',
+      method: 'GET',
+      data,
+    });
+    return result;
   },
 };

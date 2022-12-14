@@ -15,10 +15,9 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="路径">
-        <div class="path-box">
-          <span class="prefix-path">http://xxxxxxxxx.xx/dssd/</span>
-          <el-input v-model="appInfo.serviceAddress" placeholder="请输入路径"></el-input>
-        </div>
+        <el-input v-model="appInfo.serviceAddress" placeholder="请输入路径">
+          <template #prepend>{{ previewPath }}</template>
+        </el-input>
       </el-form-item>
       <el-form-item label="封面">
         <ImageUpload :thumbnail-id="appInfo.thumbnailId" @success="handleUploadSuccess"></ImageUpload>
@@ -42,6 +41,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: 'success'): void;
 }>();
+
+const previewPath = import.meta.env.VITE_PREVIEW_PATH;
 
 const rules = {
   name: [
@@ -125,13 +126,6 @@ const update = async ({ applicationId, name, description, thumbnailId, serviceAd
 .appInfo {
   width: 1000px;
   margin: auto;
-  .path-box {
-    display: flex;
-    .prefix-path {
-      padding: 0 10px;
-      background-color: #e0e0e0;
-    }
-  }
   .updateBtn {
     color: #fff;
     width: 160px;
