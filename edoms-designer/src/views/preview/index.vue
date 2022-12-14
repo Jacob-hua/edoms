@@ -27,7 +27,6 @@ watch(
         });
       }
     } catch (error) {
-      console.log('====');
       router.push({
         path: '/404',
       });
