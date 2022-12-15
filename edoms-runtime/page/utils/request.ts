@@ -1,6 +1,9 @@
+import { loadEnv } from 'vite';
 import { App } from 'vue';
 
 import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, Request } from '@edoms/utils';
+
+const productionEnv = loadEnv('production', '../../', '');
 
 const service = new Request({
   baseURL: import.meta.env.VITE_BASE_API ?? 'http://k8s.isiact.com/edoms-runtime-service-dev/edoms/run-time',
@@ -14,7 +17,7 @@ const service = new Request({
   },
 });
 
-console.log('=======baseUrl', import.meta.env.VITE_BASE_API);
+console.log('=======baseUrl', import.meta.env.VITE_BASE_API, productionEnv.VITE_BASE_API);
 const request = <D, R>(config: EdomsRequestConfig<D>): Promise<EdomsResponseData<R>> => {
   const { method = 'GET' } = config;
   if (method === 'GET') {
