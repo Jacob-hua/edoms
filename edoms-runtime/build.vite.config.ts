@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
 
       root: `./${type}/`,
 
-      publicDir: path.resolve(__dirname, './public'),
+      publicDir: path.resolve(__dirname, './config'),
 
       base,
 

@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
 
     base: env.VITE_BASE_URL,
 
-    publicDir: './public',
+    publicDir: './config',
 
     server: {
       host: '0.0.0.0',
