@@ -1,8 +1,8 @@
 const VITE_CONFIG = {
-  dev: {
+  development: {
     baseApi: 'http://localhost:8890/runtime-api/edoms/run-time',
   },
-  admin: {
+  'page:admin': {
     baseApi: 'http://k8s.isiact.com/edoms-runtime-service-dev/edoms/run-time',
   },
 };
