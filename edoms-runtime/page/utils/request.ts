@@ -2,21 +2,24 @@ import { App } from 'vue';
 
 import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, Request } from '@edoms/utils';
 
+const baseUrl = import.meta.env.VITE_BASE_API;
+
+const mode = import.meta.env.MODE;
+
 const getBaseURL = () => {
-  let result = import.meta.env.VITE_BASE_API;
+  let result = baseUrl;
   if (result) {
     return result;
   }
   const config = (window as any).VITE_CONFIG;
   if (config) {
-    result = config[import.meta.env.MODE]?.baseURL;
+    result = config[mode]?.baseURL;
     return result;
   }
   return result;
 };
 
-console.log(getBaseURL());
-
+console.log('======', getBaseURL());
 const service = new Request({
   baseURL: getBaseURL(),
   timeout: 1000 * 10,
