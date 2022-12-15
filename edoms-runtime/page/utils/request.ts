@@ -14,6 +14,7 @@ const service = new Request({
   },
 });
 
+console.log('=======baseUrl', import.meta.env.VITE_BASE_API);
 const request = <D, R>(config: EdomsRequestConfig<D>): Promise<EdomsResponseData<R>> => {
   const { method = 'GET' } = config;
   if (method === 'GET') {
