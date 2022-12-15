@@ -5,10 +5,10 @@ import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig(({ mode }) => {
-  const [type, isProduction] = mode.split(':');
-  const env = loadEnv(isProduction ? 'production' : 'development', process.cwd(), '');
+  const [type, isAdmin] = mode.split(':');
+  const env = loadEnv(isAdmin ? 'admin' : 'development', process.cwd(), '');
 
-  if (['value', 'config', 'event', 'value:production', 'config:production', 'event:production'].includes(mode)) {
+  if (['value', 'config', 'event', 'value:admin', 'config:admin', 'event:admin'].includes(mode)) {
     const capitalToken = type.charAt(0).toUpperCase() + type.slice(1);
     return {
       publicDir: './.edoms/public',
@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => {
     };
   }
 
-  if (['page', 'playground', 'page:production', 'playground:production'].includes(mode)) {
+  if (['page', 'playground', 'page:admin', 'playground:admin'].includes(mode)) {
     const base = `${env.VITE_BASE_URL}/${type}/`;
     const outDir = path.resolve(process.cwd(), `${env.VITE_OUT_DIR}/${type}`);
     return {
