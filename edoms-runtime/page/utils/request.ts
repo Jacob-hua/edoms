@@ -2,9 +2,23 @@ import { App } from 'vue';
 
 import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, Request } from '@edoms/utils';
 
-console.log('====window.VITE_CONFIG', import.meta.env.MODE, (window as any).VITE_CONFIG);
+const getBaseURL = () => {
+  let result = import.meta.env.VITE_BASE_API;
+  if (result) {
+    return result;
+  }
+  const config = (window as any).VITE_CONFIG;
+  if (config) {
+    result = config[import.meta.env.MODE]?.baseURL;
+    return result;
+  }
+  return result;
+};
+
+console.log(getBaseURL());
+
 const service = new Request({
-  baseURL: import.meta.env.VITE_BASE_API ?? 'http://k8s.isiact.com/edoms-runtime-service-dev/edoms/run-time',
+  baseURL: getBaseURL(),
   timeout: 1000 * 10,
   retry: 2,
   retryDelay: 1000,
