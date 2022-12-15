@@ -4,8 +4,6 @@ import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, R
 
 const baseUrl = import.meta.env.VITE_BASE_API;
 
-const mode = import.meta.env.MODE;
-
 const getBaseURL = () => {
   let result = baseUrl;
   if (result) {
@@ -13,13 +11,11 @@ const getBaseURL = () => {
   }
   const config = (window as any).VITE_CONFIG;
   if (config) {
-    result = config[mode]?.baseURL;
-    return result;
+    result = config.baseURL;
   }
   return result;
 };
 
-console.log('======', getBaseURL());
 const service = new Request({
   baseURL: getBaseURL(),
   timeout: 1000 * 10,
