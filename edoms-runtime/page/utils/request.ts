@@ -2,7 +2,7 @@ import { App } from 'vue';
 
 import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, Request } from '@edoms/utils';
 
-console.log('====window.VITE_CONFIG', (window as any).VITE_CONFIG);
+console.log('====window.VITE_CONFIG', import.meta.env.MODE, (window as any).VITE_CONFIG);
 const service = new Request({
   baseURL: import.meta.env.VITE_BASE_API ?? 'http://k8s.isiact.com/edoms-runtime-service-dev/edoms/run-time',
   timeout: 1000 * 10,
