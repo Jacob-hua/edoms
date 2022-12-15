@@ -21,7 +21,7 @@ if (isLocalPreview) {
     app.setConfig(data, getUrlParam('page'));
     pageConfig.value = app.page?.data || {};
   });
-} else if (app) {
+} else if (app && (window as any).edomsDSL) {
   app.setConfig((window as any).edomsDSL);
 }
 
