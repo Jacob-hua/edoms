@@ -9,6 +9,7 @@
     "build:page": "vite --config build.vite.config.ts build --mode page",
     "build:playground": "vite --config build.vite.config.ts build --mode playground",
     "build:page:admin": "vite --config build.vite.config.ts build --mode page:admin",
+    "build:page:offline": "vite --config build.vite.config.ts build --mode page:offline",
     "build:playground:admin": "vite --config build.vite.config.ts build --mode playground:admin",
     "build:libs": "edoms entry && npm run build:config && npm run build:value && npm run build:event",
     "build:libs:admin": "edoms entry && npm run build:config:admin && npm run build:value:admin && npm run build:event:admin",
