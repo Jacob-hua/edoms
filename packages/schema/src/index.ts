@@ -99,6 +99,7 @@ export interface MApp extends MComponent {
   items: MPage[];
   /** 代码块 */
   codeBlocks?: CodeBlockDSL;
+  index?: Id;
 }
 
 export interface CodeBlockDSL {
