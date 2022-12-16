@@ -8,7 +8,9 @@ public/entry
 public/runtime
 .edoms/
 edoms-runtime/public/entry
+edoms-runtime/entry
 edoms-runtime/public/runtime
+edoms-runtime/runtime
 
 comp-entry.ts
 config-entry.ts
