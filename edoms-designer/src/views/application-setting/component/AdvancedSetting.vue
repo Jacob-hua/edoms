@@ -62,7 +62,7 @@ const form = ref<FormInstance>();
 const advanceItems = ref<AdvanceItem[]>([
   {
     name: '导出',
-    title: '可将应用导出到本地',
+    title: '将发布的应用导出到本地，如果应用未被发布则不可导出',
     buttonType: 'primary',
     disabled: !appInfo.value.export,
     action: () => {},
