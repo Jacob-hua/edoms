@@ -5,8 +5,8 @@ import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig(({ mode }) => {
-  const [type, isAdmin] = mode.split(':');
-  const env = loadEnv(isAdmin ? 'admin' : 'development', process.cwd(), '');
+  const [type, _mode] = mode.split(':');
+  const env = loadEnv(_mode ?? 'development', process.cwd(), '');
 
   if (['value', 'config', 'event', 'value:admin', 'config:admin', 'event:admin'].includes(mode)) {
     const capitalToken = type.charAt(0).toUpperCase() + type.slice(1);
@@ -32,6 +32,35 @@ export default defineConfig(({ mode }) => {
   if (['page', 'playground', 'page:admin', 'playground:admin'].includes(mode)) {
     const base = `${env.VITE_BASE_URL}/${type}/`;
     const outDir = path.resolve(process.cwd(), `${env.VITE_OUT_DIR}/${type}`);
+    return {
+      plugins: [
+        vue(),
+        legacy({
+          targets: ['defaults', 'not IE 11'],
+        }),
+      ],
+
+      root: `./${type}/`,
+
+      publicDir: path.resolve(__dirname, './config'),
+
+      base,
+
+      build: {
+        emptyOutDir: true,
+        sourcemap: true,
+        rollupOptions: {
+          input: path.resolve(process.cwd(), `./${type}/index.html`),
+        },
+        outDir,
+      },
+    };
+  }
+
+  if (['page:offline'].includes(mode)) {
+    const base = `${env.VITE_BASE_URL}`;
+
+    const outDir = path.resolve(process.cwd(), `${env.VITE_OUT_DIR}`);
     return {
       plugins: [
         vue(),

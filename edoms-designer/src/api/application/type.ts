@@ -100,3 +100,8 @@ export interface GetReleaseIdReq {
   /** 服务地址 */
   serviceAddress: string;
 }
+
+export interface ExportApplicationReq {
+  /** 应用ID */
+  applicationId: string;
+}

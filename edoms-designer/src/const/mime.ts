@@ -16,4 +16,8 @@ export const enum MimeType {
   /** office */
   EXCEL = 'application/vnb.ms-excel',
   CSV = 'application/x-csv',
+  /** 压缩包 */
+  ZIP = 'application/zip',
+  TGZ = 'application/x-gtar',
+  TAR_GZ = 'application/x-gzip',
 }

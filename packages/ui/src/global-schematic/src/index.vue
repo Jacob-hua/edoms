@@ -51,7 +51,7 @@ watch(
     const url = value[0].url;
     const suffix = value[0].fileSuffix;
     imgFileUrl.value = url;
-    imgSrc.value = `${window.location.origin}/static/assets/${url}${suffix}`;
+    imgSrc.value = `${window.location.origin}/static/${url}${suffix}`;
   },
   { immediate: true }
 );
