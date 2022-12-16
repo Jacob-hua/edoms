@@ -26,6 +26,7 @@ interface EventCache {
 }
 
 class App extends EventEmitter {
+  public config: MApp | undefined;
   public env;
   public codeDsl: CodeBlockDSL | undefined;
   public pages = new Map<Id, Page>();
@@ -71,6 +72,7 @@ class App extends EventEmitter {
       this.transformStyle = options.transformStyle;
     }
 
+    this.config = options.config;
     options.config && this.setConfig(options.config, options.curPage);
 
     bindCommonEventListener(this);
@@ -126,6 +128,7 @@ class App extends EventEmitter {
    * @param curPage 当前页面id
    */
   public setConfig(config: MApp, curPage?: Id) {
+    this.config = config;
     this.codeDsl = config.codeBlocks;
     this.pages = new Map();
     config.items?.forEach((page) => {
@@ -149,7 +152,11 @@ class App extends EventEmitter {
     }
 
     if (!page) {
-      page = this.pages.get(this.pages.keys().next().value);
+      if (this.config?.index) {
+        page = this.pages.get(this.config?.index);
+      } else {
+        page = this.pages.get(this.pages.keys().next().value);
+      }
     }
 
     this.page = page;
