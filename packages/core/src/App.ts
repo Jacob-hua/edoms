@@ -115,7 +115,7 @@ class App extends EventEmitter {
       } else if (!whiteList.includes(key) && value && /^[-]?[0-9]*[.]?[0-9]*$/.test(value)) {
         results[key] = `${value / 100}rem`;
       } else {
-        results[key] = value;
+        value && (results[key] = value);
       }
     });
 

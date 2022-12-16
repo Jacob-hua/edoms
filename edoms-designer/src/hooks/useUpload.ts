@@ -15,8 +15,6 @@ export default () => {
     referenceIds?: string
   ): Promise<string | null | undefined> => {
     try {
-      console.log('~~~~~', referenceIds);
-
       if (typeof content === 'string') {
         content = new Blob([content], { type: `${fileType};charset=${charset}` });
       }
