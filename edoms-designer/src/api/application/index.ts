@@ -3,6 +3,7 @@ import { request } from '@/util/request';
 import {
   CreateApplicationReq,
   CreateApplicationRes,
+  ExportApplicationReq,
   GetApplicationReq,
   GetApplicationRes,
   GetReleaseIdReq,
@@ -98,5 +99,13 @@ export default {
       data,
     });
     return result;
+  },
+  exportApplication: async (data: ExportApplicationReq): Promise<any> => {
+    return await request<ExportApplicationReq, any>({
+      url: '/application/export',
+      method: 'GET',
+      data,
+      responseType: 'blob',
+    });
   },
 };

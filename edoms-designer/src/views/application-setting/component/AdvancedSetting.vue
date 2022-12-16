@@ -34,11 +34,13 @@
 </template>
 
 <script lang="ts" setup name="advancedSetting">
-import { ref, toRefs } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, FormInstance } from 'element-plus';
 
 import applicationApi, { GetApplicationRes } from '@/api/application';
+import { MimeType } from '@/const/mime';
+import useExport from '@/hooks/useExport';
 
 interface AdvanceItem {
   name: string;
@@ -59,13 +61,26 @@ const deleteVisible = ref<boolean>(false);
 const confirmText = ref<string>('');
 const form = ref<FormInstance>();
 
-const advanceItems = ref<AdvanceItem[]>([
+const { execute: handleExportApplication } = useExport(
+  async () => {
+    const result = await applicationApi.exportApplication({
+      applicationId: props.appInfo.applicationId,
+    });
+    return result;
+  },
+  () => `${props.appInfo.name}.zip`,
+  MimeType.ZIP
+);
+
+const advanceItems = computed<AdvanceItem[]>(() => [
   {
     name: '导出',
     title: '将发布的应用导出到本地，如果应用未被发布则不可导出',
     buttonType: 'primary',
     disabled: !appInfo.value.export,
-    action: () => {},
+    action: async () => {
+      await handleExportApplication();
+    },
   },
   {
     name: '删除',

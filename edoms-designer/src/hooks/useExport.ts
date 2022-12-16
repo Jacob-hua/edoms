@@ -7,7 +7,7 @@ export type ExportData = Record<string | number | symbol, any>;
 type Func = (...args: any[]) => string;
 
 export default (
-  requestFunc: (data: ExportData) => string | Promise<string>,
+  requestFunc: (data?: ExportData) => string | Promise<string>,
   fileName: string | Func = 'edoms-download',
   mime: MimeType = MimeType.HTML,
   charset: string = 'utf-8'
@@ -16,7 +16,7 @@ export default (
 
   const error = ref(null);
 
-  const execute = async (data: ExportData): Promise<void> => {
+  const execute = async (data?: ExportData): Promise<void> => {
     loading.value = true;
     error.value = null;
     try {
