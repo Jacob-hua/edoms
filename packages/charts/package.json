@@ -2,7 +2,23 @@
   "name": "@edoms/charts",
   "private": true,
   "version": "0.0.1",
-  "type": "module",
+  "sideEffects": [
+    "dist/*"
+  ],
+  "main": "dist/edoms-charts.umd.js",
+  "module": "dist/edoms-charts.mjs",
+  "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/edoms-charts.mjs",
+      "require": "./dist/edoms-charts.umd.js"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    },
+    "./*": "./*"
+  },
   "scripts": {
     "build": "npm run build:type && vite build",
     "build:type": "npm run clear:type && vue-tsc --declaration --emitDeclarationOnly --project tsconfig.build.json",
