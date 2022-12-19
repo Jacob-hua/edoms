@@ -78,6 +78,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../layout/404.vue'),
   },
   {
+    path: '/test',
+    component: () => import('../views/Test.vue'),
+  },
+  {
     path: '/:catchAll(.*)',
     redirect: '/404',
   },

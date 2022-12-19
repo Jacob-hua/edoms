@@ -4,6 +4,6 @@ import Charts from './Charts.vue';
 
 export default {
   install: (app: App): void => {
-    app.component('Charts', Charts);
+    app.component('EdomsCharts', Charts);
   },
 };

@@ -43,7 +43,7 @@ export default {
     // eslint-disable-next-line no-param-reassign
     app.config.globalProperties.$EDOMS_EDITOR = option;
     setConfig(option);
-    app.component(Editor.name, Editor);
+    app.component('EdomsEditor', Editor);
     app.component('MFieldsUiSelect', uiSelect);
     app.component('MFieldsCodeLink', CodeLink);
     app.component('MFieldsVsCode', Code);

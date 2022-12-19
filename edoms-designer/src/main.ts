@@ -11,6 +11,7 @@ import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 import { createPinia } from 'pinia';
 
+import EdomsCharts from '@edoms/charts';
 import ElDesign from '@edoms/design';
 import EdomsEditor from '@edoms/editor';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
@@ -58,4 +59,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(ElDesign, EdomsElementPlusAdapter);
 app.use(EdomsEditor);
 app.use(EdomsForm);
+app.use(EdomsCharts);
 app.mount('#app');
