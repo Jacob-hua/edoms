@@ -6,6 +6,10 @@ import {
   RouteRecordRaw,
 } from 'vue-router';
 
+import useAccountStore, { AccountStore } from '@/store/account';
+
+let accountStore: AccountStore | null = null;
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -97,8 +101,20 @@ const router = createRouter({
 });
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  console.log(to.path);
-  console.log(from.path);
+  console.log(to.path, from.path);
+  if (['/login', '/404'].includes(to.path)) {
+    next();
+    return;
+  }
+  if (!accountStore) {
+    accountStore = useAccountStore();
+  }
+  if (!accountStore.currentTenant) {
+    router.push({
+      path: '/login',
+    });
+    return;
+  }
   next();
 });
 

@@ -2,7 +2,7 @@ import { ElLoading, ElMessage } from 'element-plus';
 
 import { ContentType, EdomsError, EdomsRequestConfig, EdomsResponse, EdomsResponseData, Request } from '@edoms/utils';
 
-import useAccountStore from '@/store/account';
+import useAccountStore, { AccountStore } from '@/store/account';
 
 export interface LoadingService {
   close: () => void;
@@ -11,7 +11,14 @@ export interface LoadingService {
 
 let loadingService: LoadingService;
 
+let accountStore: AccountStore | null = null;
+
 const requestInterceptors = (config: EdomsRequestConfig) => {
+  if (!accountStore) {
+    accountStore = useAccountStore();
+  }
+  config.headers['tenantId'] = accountStore.currentTenant?.tenantId;
+  config.headers['Authorization'] = accountStore.token;
   if (!config.loading) {
     return config;
   }
@@ -79,8 +86,6 @@ const responseInterceptorsCatch = (error: EdomsError) => {
   return Promise.reject(error);
 };
 
-const accountStore = useAccountStore();
-
 const service = new Request({
   baseURL: import.meta.env.VITE_BASE_API,
   timeout: 1000 * 10,
@@ -89,8 +94,6 @@ const service = new Request({
   withCredentials: true,
   headers: {
     'Content-Type': ContentType.JSON,
-    tenantId: accountStore.tenantId,
-    Authorization: accountStore.token,
   },
   interceptors: {
     requestInterceptors,
