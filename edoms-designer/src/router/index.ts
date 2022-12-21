@@ -70,16 +70,16 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/login',
+    component: () => import('../views/login/index.vue'),
+  },
+  {
     path: '/preview/:address',
     component: () => import('../views/preview/index.vue'),
   },
   {
     path: '/404',
     component: () => import('../layout/404.vue'),
-  },
-  {
-    path: '/test',
-    component: () => import('../views/Test.vue'),
   },
   {
     path: '/:catchAll(.*)',

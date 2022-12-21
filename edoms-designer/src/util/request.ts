@@ -2,6 +2,8 @@ import { ElLoading, ElMessage } from 'element-plus';
 
 import { ContentType, EdomsError, EdomsRequestConfig, EdomsResponse, EdomsResponseData, Request } from '@edoms/utils';
 
+import useAccountStore from '@/store/account';
+
 export interface LoadingService {
   close: () => void;
   [key: string]: any;
@@ -77,6 +79,8 @@ const responseInterceptorsCatch = (error: EdomsError) => {
   return Promise.reject(error);
 };
 
+const accountStore = useAccountStore();
+
 const service = new Request({
   baseURL: import.meta.env.VITE_BASE_API,
   timeout: 1000 * 10,
@@ -85,7 +89,8 @@ const service = new Request({
   withCredentials: true,
   headers: {
     'Content-Type': ContentType.JSON,
-    tenantId: 70,
+    tenantId: accountStore.tenantId,
+    Authorization: accountStore.token,
   },
   interceptors: {
     requestInterceptors,
