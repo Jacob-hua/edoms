@@ -8,6 +8,7 @@ import IndicatorLight from './indicator-light';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
+import RunningParameters from './running-parameters';
 import SettingParameter from './setting-parameter';
 import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
@@ -28,6 +29,7 @@ const ui: Record<string, any> = {
   globalSchematic: GlobalSchematic,
   indicatorLight: IndicatorLight,
   warningRunningList: WarningRunningList,
+  runningParameters: RunningParameters,
 };
 
 export default ui;

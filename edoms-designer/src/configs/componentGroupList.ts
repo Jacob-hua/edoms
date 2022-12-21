@@ -130,6 +130,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '指示灯',
         type: 'indicator-light',
       },
+      {
+        icon: Opportunity,
+        text: '参数曲线',
+        type: 'running-parameters',
+      },
     ],
   },
 ];
