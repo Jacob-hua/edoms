@@ -3,46 +3,67 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { EChartsType } from 'echarts/core';
 
 import echarts from './echarts';
+import { ECOption } from './type';
 
 const props = withDefaults(
   defineProps<{
-    width: string;
-    height: string;
+    width: number;
+    height: number;
+    option: ECOption;
   }>(),
   {
-    width: '600px',
-    height: '500px',
+    width: 600,
+    height: 500,
   }
 );
 
-const styleObj = computed(() => `width: ${props.width}; height: ${props.height};`);
+const styleObj = computed(() => `width: ${props.width}px; height: ${props.height}px;`);
 
 const chartsContainer = ref<HTMLDivElement>();
 
-watchEffect(() => {
+const charts = ref<EChartsType>();
+
+watch(
+  () => ({ width: props.width, height: props.height }),
+  ({ width, height }) => {
+    if (!charts.value) {
+      return;
+    }
+    charts.value.resize({
+      width,
+      height,
+    });
+  }
+);
+
+watch(
+  () => props.option,
+  (option) => {
+    if (!charts.value) {
+      return;
+    }
+    charts.value.setOption(option);
+  },
+  { immediate: true, deep: true }
+);
+
+onMounted(() => {
   if (!chartsContainer.value) {
     return;
   }
-  echarts.init(chartsContainer.value).setOption({
-    title: {
-      text: 'ECharts 入门示例',
-    },
-    tooltip: {},
-    xAxis: {
-      data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子'],
-    },
-    yAxis: {},
-    series: [
-      {
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20],
-      },
-    ],
-  });
+  charts.value = echarts.init(chartsContainer.value);
+  charts.value.setOption(props.option);
+});
+
+onUnmounted(() => {
+  if (!charts.value) {
+    return;
+  }
+  charts.value.dispose();
 });
 </script>
 
