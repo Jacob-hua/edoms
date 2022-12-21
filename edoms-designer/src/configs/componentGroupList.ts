@@ -1,5 +1,6 @@
 import {
   Check,
+  Cpu,
   FolderOpened,
   Grid,
   Operation,
@@ -131,7 +132,7 @@ const componentGroupList: ComponentGroup[] = [
         type: 'indicator-light',
       },
       {
-        icon: Opportunity,
+        icon: Cpu,
         text: '参数曲线',
         type: 'running-parameters',
       },
