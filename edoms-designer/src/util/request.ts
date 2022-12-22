@@ -1,6 +1,7 @@
 import { ElLoading, ElMessage } from 'element-plus';
 
-import { ContentType, EdomsError, EdomsRequestConfig, EdomsResponse, EdomsResponseData, Request } from '@edoms/utils';
+import type { EdomsError, EdomsRequestConfig, EdomsResponse, EdomsResponseData } from '@edoms/utils';
+import { ContentType, Request } from '@edoms/utils';
 
 import useAccountStore, { AccountStore } from '@/store/account';
 
@@ -17,8 +18,9 @@ const requestInterceptors = (config: EdomsRequestConfig) => {
   if (!accountStore) {
     accountStore = useAccountStore();
   }
-  config.headers['tenantId'] = accountStore.currentTenant?.tenantId;
-  config.headers['Authorization'] = accountStore.token;
+  config.headers = config.headers ?? {};
+  accountStore.currentTenant?.tenantId && (config.headers['tenantId'] = accountStore.currentTenant?.tenantId);
+  accountStore.token && (config.headers['Authorization'] = accountStore.token);
   if (!config.loading) {
     return config;
   }

@@ -98,6 +98,7 @@ importers:
       monaco-editor: ^0.34.0
       npm-run-all: ^4.1.5
       pinia: ^2.0.17
+      pinia-plugin-persistedstate: ^3.0.1
       sass: ^1.54.8
       screenfull: ^6.0.2
       serialize-javascript: ^6.0.0
@@ -121,6 +122,7 @@ importers:
       element-plus: registry.npmmirror.com/element-plus/2.2.20_vue@3.2.44
       monaco-editor: registry.npmmirror.com/monaco-editor/0.34.1
       pinia: registry.npmmirror.com/pinia/2.0.23_ppsgutk2eo3k2gkxui7gdcuyzu
+      pinia-plugin-persistedstate: registry.npmmirror.com/pinia-plugin-persistedstate/3.0.1_pinia@2.0.23
       screenfull: registry.npmmirror.com/screenfull/6.0.2
       serialize-javascript: registry.npmmirror.com/serialize-javascript/6.0.0
       vue: registry.npmmirror.com/vue/3.2.44
@@ -7142,6 +7144,17 @@ packages:
     version: 3.0.0
     engines: {node: '>=4'}
     dev: true
+
+  registry.npmmirror.com/pinia-plugin-persistedstate/3.0.1_pinia@2.0.23:
+    resolution: {integrity: sha512-WRNWtR4v8StJqBQH+Qiz88SGnlr4wvEyh7wtA+fYEVLoIOnpZ0v4FICvUcC8eUkAIvQL3n6/Ew2yryw7okazvA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pinia-plugin-persistedstate/-/pinia-plugin-persistedstate-3.0.1.tgz}
+    id: registry.npmmirror.com/pinia-plugin-persistedstate/3.0.1
+    name: pinia-plugin-persistedstate
+    version: 3.0.1
+    peerDependencies:
+      pinia: ^2.0.0
+    dependencies:
+      pinia: registry.npmmirror.com/pinia/2.0.23_ppsgutk2eo3k2gkxui7gdcuyzu
+    dev: false
 
   registry.npmmirror.com/pinia/2.0.23_ppsgutk2eo3k2gkxui7gdcuyzu:
     resolution: {integrity: sha512-N15hFf4o5STrxpNrib1IEb1GOArvPYf1zPvQVRGOO1G1d74Ak0J0lVyalX/SmrzdT4Q0nlEFjbURsmBmIGUR5Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pinia/-/pinia-2.0.23.tgz}

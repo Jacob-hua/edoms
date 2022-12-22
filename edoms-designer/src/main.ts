@@ -10,6 +10,7 @@ import HtmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 import { createPinia } from 'pinia';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 import EdomsCharts from '@edoms/charts';
 import ElDesign from '@edoms/design';
@@ -46,9 +47,12 @@ globalThis.MonacoEnvironment = {
 
 monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
 
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
 const app = createApp(App);
 app.use(JsonViewer);
-app.use(createPinia());
+app.use(pinia);
 app.use(router);
 app.use(ElementPlus, {
   locale: zhCn,

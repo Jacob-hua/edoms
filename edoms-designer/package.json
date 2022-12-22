@@ -21,6 +21,7 @@
     "element-plus": "^2.2.15",
     "monaco-editor": "^0.34.0",
     "pinia": "^2.0.17",
+    "pinia-plugin-persistedstate": "^3.0.1",
     "screenfull": "^6.0.2",
     "serialize-javascript": "^6.0.0",
     "vue": "^3.2.37",

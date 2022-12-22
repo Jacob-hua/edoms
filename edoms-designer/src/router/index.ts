@@ -109,7 +109,7 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
   if (!accountStore) {
     accountStore = useAccountStore();
   }
-  if (!accountStore.currentTenant) {
+  if (!accountStore.token) {
     router.push({
       path: '/login',
     });

@@ -90,6 +90,9 @@ const menus = [
     label: '退出登录',
     action: () => {
       accountStore.logout();
+      router.push({
+        path: '/login',
+      });
     },
   },
 ];

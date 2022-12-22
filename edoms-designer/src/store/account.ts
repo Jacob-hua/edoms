@@ -1,10 +1,7 @@
-import { useRouter } from 'vue-router';
 import { defineStore, Store, StoreDefinition } from 'pinia';
 
 import type { ListTenantItem, LoginReq } from '@/api/account';
 import accountApi from '@/api/account';
-
-const router = useRouter();
 
 export interface AccountState {
   token: string;
@@ -35,6 +32,7 @@ const useAccountStore: AccountStoreDefinition = defineStore('account', {
     currentTenant: undefined,
     tenants: [],
   }),
+  persist: true,
   actions: {
     async login(data: LoginReq) {
       const { token } = await accountApi.login(data);
@@ -44,9 +42,6 @@ const useAccountStore: AccountStoreDefinition = defineStore('account', {
       this.nickName = user.nickName;
       this.userId = user.userId;
       this.tenants = userTenantList;
-      router.push({
-        path: '/',
-      });
     },
     async logout() {
       await accountApi.logout();

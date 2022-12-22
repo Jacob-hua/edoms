@@ -1,4 +1,5 @@
-import { MApp, MPage, NodeType } from '@edoms/schema';
+import type { MApp, MPage } from '@edoms/schema';
+import { NodeType } from '@edoms/schema';
 
 export interface AppDSLConfig {
   applicationId: string;
