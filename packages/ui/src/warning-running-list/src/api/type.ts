@@ -1,6 +1,7 @@
 export interface InitAlarmReq {
   sysInsCode: string;
   timeSpan: number;
+  isVirtual: string;
 }
 export interface InitAlarmRes {
   commonAlarm: AlarmList;
@@ -8,7 +9,7 @@ export interface InitAlarmRes {
   importantAlarm: AlarmList;
 }
 export interface AlarmList {
-  confirmed: string;
+  confirmed: boolean;
   list: Alarm[];
 }
 
