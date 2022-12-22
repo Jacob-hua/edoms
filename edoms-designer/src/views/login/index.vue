@@ -31,7 +31,7 @@
         </el-form>
       </div>
       <div class="footer">
-        <el-button type="primary" @click="nextStep">下一步</el-button>
+        <el-button :disabled="nextStepDisabled" type="primary" @click="nextStep">下一步</el-button>
       </div>
     </section>
     <section v-show="tenantFormVisible" class="form-section">
@@ -59,14 +59,14 @@
       </div>
       <div class="footer">
         <el-button type="primary" @click="backPreStep">上一步</el-button>
-        <el-button type="primary" @click="login">登录</el-button>
+        <el-button :disabled="loginDisabled" type="primary" @click="login">登录</el-button>
       </div>
     </section>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { FormInstance, FormRules } from 'element-plus';
 
@@ -83,6 +83,8 @@ const loginFormModel = reactive({
   password: '',
 });
 
+const nextStepDisabled = computed<boolean>(() => !loginFormModel.username || !loginFormModel.password);
+
 const loginFormRules = ref<FormRules>({
   username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
   password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
@@ -97,6 +99,8 @@ const tenantFormModel = reactive({
 const tenantFormRules = ref<FormRules>({
   tenantId: [{ required: true, message: '租户不能为空', trigger: 'blur' }],
 });
+
+const loginDisabled = computed<boolean>(() => !tenantFormModel.tenantId);
 
 const tenantFormRef = ref<FormInstance>();
 
