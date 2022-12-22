@@ -5,7 +5,7 @@
         <div class="describe">
           <span>E-DOMS</span>
           <div class="pop-menu-wrapper">
-            <PopMenu :width="350" @menu-click="handleMenuClick">
+            <PopMenu :width="350" @menu-click="handleMenuClick" @menu-hover="handleMenuHover">
               <template #reference>
                 <div class="avatar">
                   <el-avatar>
@@ -20,19 +20,23 @@
                     <el-icon :size="20"><Avatar /></el-icon>
                   </el-avatar>
                   <div>
-                    <span>李四 -{{ tenantName }}</span>
+                    <span>{{ nickName }} - {{ currentTenant?.tenantName }}</span>
                     <p><span>应用数:</span> 25 <span>发布数:</span> 16</p>
                   </div>
                 </div>
               </div>
               <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
-                <div class="pop-menu-item" @click="handleShowLevel(menu.name)">
+                <div class="pop-menu-item">
                   <span>{{ menu.label }}</span>
                 </div>
               </PopMenuOption>
-              <div v-show="level" class="pop-level">
-                <p v-for="({ name, isSelected, id }, index) in levelList" :key="index" @click="handleLevel(id, name)">
-                  {{ name }} <el-icon v-show="isSelected"><Select /></el-icon>
+              <div v-if="tenantListVisible" class="pop-level">
+                <p
+                  v-for="{ tenantName, tenantId, isActive } in tenantList"
+                  :key="tenantId"
+                  @click="handleTriggerTenant(tenantId)"
+                >
+                  {{ tenantName }} <el-icon v-show="isActive"><Select /></el-icon>
                 </p>
               </div>
             </PopMenu>
@@ -51,20 +55,36 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { RouterView, useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
+import useAccountStore from '@/store/account';
 
 import BaseLayout from './BaseLayout.vue';
+
 const router = useRouter();
+
+const accountStore = useAccountStore();
+
+const { nickName, tenants, currentTenant } = storeToRefs(accountStore);
+
+const tenantListVisible = ref<boolean>(false);
+
+const tenantList = computed(() =>
+  tenants.value.map((item) => ({ ...item, isActive: currentTenant.value?.tenantId === item.tenantId }))
+);
+
 const menus = [
   {
     name: 'switch',
     label: '切换租户',
     icon: 'Operation',
-    action: () => {},
+    action: () => {
+      accountStore.triggerTenant('');
+    },
   },
 
   {
@@ -77,48 +97,27 @@ const menus = [
     },
   },
   {
-    name: 'user',
-    label: '用户设置',
-    action: () => {},
-  },
-  {
     name: 'loginOut',
     label: '退出登录',
-    action: () => {},
+    action: () => {
+      accountStore.logout();
+      router.push({
+        path: '/login',
+      });
+    },
   },
 ];
 const handleMenuClick = (value: string | number) => {
   const menu = menus.find(({ name }) => name === value);
   menu?.action();
 };
-const levelList = ref([
-  {
-    id: Math.random(),
-    name: '陕汽',
-    isSelected: false,
-  },
-  {
-    id: Math.random(),
-    name: '喜来登',
-    isSelected: false,
-  },
-]);
-const level = ref<boolean>(false);
 
-const tenantName = ref<string>('陕汽');
-
-const handleShowLevel = (name: string) => {
-  if (name === menus[0].name) {
-    level.value = true;
-    return;
-  }
-  level.value = false;
+const handleMenuHover = (value: string | number) => {
+  tenantListVisible.value = value === 'switch';
 };
-const handleLevel = (levelId: number, name: string) => {
-  levelList.value.forEach((levelItem) => {
-    levelItem.isSelected = levelId === levelItem.id;
-  });
-  tenantName.value = name;
+
+const handleTriggerTenant = (tenantId: string) => {
+  accountStore.triggerTenant(tenantId);
 };
 </script>
 
