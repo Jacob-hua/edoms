@@ -5,7 +5,7 @@
         <div class="describe">
           <span>E-DOMS</span>
           <div class="pop-menu-wrapper">
-            <PopMenu :width="350" @menu-click="handleMenuClick">
+            <PopMenu :width="350" @menu-click="handleMenuClick" @menu-hover="handleMenuHover">
               <template #reference>
                 <div class="avatar">
                   <el-avatar>
@@ -30,9 +30,13 @@
                   <span>{{ menu.label }}</span>
                 </div>
               </PopMenuOption>
-              <div class="pop-level">
-                <p v-for="{ tenantName, tenantId } in tenants" :key="tenantId">
-                  {{ tenantName }} <el-icon><Select /></el-icon>
+              <div v-if="tenantListVisible" class="pop-level">
+                <p
+                  v-for="{ tenantName, tenantId, isActive } in tenantList"
+                  :key="tenantId"
+                  @click="handleTriggerTenant(tenantId)"
+                >
+                  {{ tenantName }} <el-icon v-show="isActive"><Select /></el-icon>
                 </p>
               </div>
             </PopMenu>
@@ -51,6 +55,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
+import { computed, ref } from 'vue';
 import { RouterView, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
@@ -65,6 +70,12 @@ const router = useRouter();
 const accountStore = useAccountStore();
 
 const { nickName, tenants, currentTenant } = storeToRefs(accountStore);
+
+const tenantListVisible = ref<boolean>(false);
+
+const tenantList = computed(() =>
+  tenants.value.map((item) => ({ ...item, isActive: currentTenant.value?.tenantId === item.tenantId }))
+);
 
 const menus = [
   {
@@ -99,6 +110,14 @@ const menus = [
 const handleMenuClick = (value: string | number) => {
   const menu = menus.find(({ name }) => name === value);
   menu?.action();
+};
+
+const handleMenuHover = (value: string | number) => {
+  tenantListVisible.value = value === 'switch';
+};
+
+const handleTriggerTenant = (tenantId: string) => {
+  accountStore.triggerTenant(tenantId);
 };
 </script>
 
