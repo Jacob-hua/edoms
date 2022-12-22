@@ -9,7 +9,6 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@edoms/charts": "workspace:^0.0.1",
     "@edoms/design": "workspace:^0.0.1",
     "@edoms/editor": "workspace:^0.0.1",
     "@edoms/element-plus-adapter": "workspace:^0.0.1",
