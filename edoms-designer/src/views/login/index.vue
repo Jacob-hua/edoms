@@ -126,6 +126,7 @@ const nextStep = () => {
 const backPreStep = () => {
   loginFormVisible.value = true;
   tenantFormVisible.value = false;
+  tenantFormRef.value && tenantFormRef.value.resetFields();
 };
 
 const login = () => {
