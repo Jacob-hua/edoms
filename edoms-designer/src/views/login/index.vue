@@ -116,10 +116,8 @@ const nextStep = () => {
         username: loginFormModel.username,
         password: loginFormModel.password,
       });
-      if (!accountStore.currentTenant) {
-        loginFormVisible.value = false;
-        tenantFormVisible.value = true;
-      }
+      loginFormVisible.value = false;
+      tenantFormVisible.value = true;
     });
 };
 

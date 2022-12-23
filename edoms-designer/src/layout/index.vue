@@ -5,20 +5,14 @@
         <div class="describe">
           <span>E-DOMS</span>
           <div class="pop-menu-wrapper">
-            <PopMenu :width="350" @menu-click="handleMenuClick" @menu-hover="handleMenuHover">
+            <PopMenu :width="350" @hide="handleMenuHide" @menu-click="handleMenuClick" @menu-hover="handleMenuHover">
               <template #reference>
                 <div class="avatar">
-                  <el-avatar>
-                    <el-icon :size="20"><Avatar /></el-icon>
-                  </el-avatar>
-                  <span>李四</span>
+                  <span>{{ nickName }}</span>
                 </div>
               </template>
               <div class="top-bar">
                 <div class="avatar">
-                  <el-avatar>
-                    <el-icon :size="20"><Avatar /></el-icon>
-                  </el-avatar>
                   <div>
                     <span>{{ nickName }} - {{ currentTenant?.tenantName }}</span>
                     <p><span>应用数:</span> {{ applicationNumber }}</p>
@@ -118,6 +112,11 @@ const menus = [
     },
   },
 ];
+
+const handleMenuHide = () => {
+  tenantListVisible.value = false;
+};
+
 const handleMenuClick = (value: string | number) => {
   const menu = menus.find(({ name }) => name === value);
   menu?.action();

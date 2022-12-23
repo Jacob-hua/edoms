@@ -3,6 +3,7 @@ import { ElLoading, ElMessage } from 'element-plus';
 import type { EdomsError, EdomsRequestConfig, EdomsResponse, EdomsResponseData } from '@edoms/utils';
 import { ContentType, Request } from '@edoms/utils';
 
+import router from '@/router';
 import useAccountStore, { AccountStore } from '@/store/account';
 
 export interface LoadingService {
@@ -72,6 +73,11 @@ const responseInterceptorsCatch = (error: EdomsError) => {
           type: 'error',
           message: res.errorInfo.errorMsg,
         });
+        if (res.errorInfo.errorCode === 'EDOMS-20005') {
+          router.push({
+            path: '/login',
+          });
+        }
       }
     } else {
       ElMessage({
