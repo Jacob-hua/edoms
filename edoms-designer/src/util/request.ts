@@ -73,11 +73,14 @@ const responseInterceptorsCatch = (error: EdomsError) => {
           type: 'error',
           message: res.errorInfo.errorMsg,
         });
-        if (res.errorInfo.errorCode === 'EDOMS-20005') {
-          router.push({
-            path: '/login',
-          });
-        }
+        new Promise((resolve) => {
+          if (res.errorInfo.errorCode === 'EDOMS-20005') {
+            router.push({
+              path: '/login',
+            });
+          }
+          resolve('');
+        });
       }
     } else {
       ElMessage({
