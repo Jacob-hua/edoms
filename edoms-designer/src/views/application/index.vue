@@ -28,11 +28,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 import applicationApi from '@/api/application';
 import { ListApplicationsRes, ListApplicationsResItem } from '@/api/application/type';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
+import useAccountStore from '@/store/account';
 
 import ApplicationItem from './component/ApplicationItem.vue';
 import NewApplication from './component/NewApplication.vue';
@@ -49,6 +50,15 @@ const loadData: RequestFunc<ListApplicationsResItem> = async ({ pageSize, curren
     total: Number(count),
   };
 };
+
+const accountStore = useAccountStore();
+
+watch(
+  () => accountStore.currentTenant?.tenantId,
+  () => {
+    gridList.value?.reload();
+  }
+);
 
 const handleCreateApp = () => {
   visible.value = true;
