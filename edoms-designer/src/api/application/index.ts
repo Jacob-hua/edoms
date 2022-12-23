@@ -108,4 +108,11 @@ export default {
       responseType: 'blob',
     });
   },
+  countApplication: async (): Promise<number> => {
+    const { result } = await request<void, number>({
+      url: '/application/application-count',
+      method: 'GET',
+    });
+    return result;
+  },
 };

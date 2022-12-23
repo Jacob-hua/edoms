@@ -21,7 +21,7 @@
                   </el-avatar>
                   <div>
                     <span>{{ nickName }} - {{ currentTenant?.tenantName }}</span>
-                    <p><span>应用数:</span> 25</p>
+                    <p><span>应用数:</span> {{ applicationNumber }}</p>
                   </div>
                 </div>
               </div>
@@ -55,10 +55,11 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { RouterView, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
+import applicationApi from '@/api/application';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useAccountStore from '@/store/account';
@@ -73,8 +74,18 @@ const { nickName, tenants, currentTenant } = storeToRefs(accountStore);
 
 const tenantListVisible = ref<boolean>(false);
 
+const applicationNumber = ref<number>();
+
 const tenantList = computed(() =>
   tenants.value.map((item) => ({ ...item, isActive: currentTenant.value?.tenantId === item.tenantId }))
+);
+
+watch(
+  () => accountStore.currentTenant?.tenantId,
+  async () => {
+    applicationNumber.value = await applicationApi.countApplication();
+  },
+  { immediate: true }
 );
 
 const menus = [
