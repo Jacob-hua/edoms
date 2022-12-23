@@ -21,7 +21,7 @@
                   </el-avatar>
                   <div>
                     <span>{{ nickName }} - {{ currentTenant?.tenantName }}</span>
-                    <p><span>应用数:</span> 25 <span>发布数:</span> 16</p>
+                    <p><span>应用数:</span> 25</p>
                   </div>
                 </div>
               </div>
@@ -116,8 +116,11 @@ const handleMenuHover = (value: string | number) => {
   tenantListVisible.value = value === 'switch';
 };
 
-const handleTriggerTenant = (tenantId: string) => {
-  accountStore.triggerTenant(tenantId);
+const handleTriggerTenant = async (tenantId: string) => {
+  await accountStore.triggerTenant(tenantId);
+  router.push({
+    path: '/',
+  });
 };
 </script>
 
