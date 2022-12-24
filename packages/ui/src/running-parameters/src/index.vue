@@ -10,7 +10,7 @@
         <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="index" />
       </el-tabs>
       <div>
-        <edoms-charts />
+        <edoms-charts width="908" height="240" :option="option" />
       </div>
     </div>
   </BusinessCard>
@@ -47,6 +47,20 @@ const parameterConfigs = computed<any[]>(() => {
   }
   return [];
 });
+
+const option = {
+  xAxis: {
+    data: ['A', 'B', 'C', 'D', 'E'],
+  },
+  yAxis: {},
+  series: [
+    {
+      data: [10, 22, 28, 23, 19],
+      type: 'line',
+      smooth: true,
+    },
+  ],
+};
 </script>
 
 <style lang="scss" scoped>
