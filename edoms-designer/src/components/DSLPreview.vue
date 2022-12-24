@@ -47,6 +47,7 @@ const { execute: downloadDslExecute } = useDownloadDSL();
 watchEffect(async () => {
   if (!props.contentId) {
     dsl.value = undefined;
+    loading.value = false;
     return;
   }
   await updateDsl(props.contentId);
