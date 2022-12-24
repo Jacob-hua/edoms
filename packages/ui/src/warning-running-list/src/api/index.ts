@@ -8,9 +8,9 @@ export default (request?: EdomsRequestFunc) => ({
   fetchInitAlarmList: async (data: InitAlarmReq): Promise<InitAlarmRes> => {
     if (!request) {
       return {
-        commonAlarm: { confirmed: '', list: [] },
-        seriousAlarm: { confirmed: '', list: [] },
-        importantAlarm: { confirmed: '', list: [] },
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
       };
     }
     try {
@@ -22,32 +22,32 @@ export default (request?: EdomsRequestFunc) => ({
       return result;
     } catch (error) {
       return {
-        commonAlarm: { confirmed: '', list: [] },
-        seriousAlarm: { confirmed: '', list: [] },
-        importantAlarm: { confirmed: '', list: [] },
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
       };
     }
   },
   fetchNewAlarmList: async (data: Pick<InitAlarmReq, 'sysInsCode'>): Promise<InitAlarmRes> => {
     if (!request) {
       return {
-        commonAlarm: { confirmed: '', list: [] },
-        seriousAlarm: { confirmed: '', list: [] },
-        importantAlarm: { confirmed: '', list: [] },
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
       };
     }
     try {
       const { result } = await request<Pick<InitAlarmReq, 'sysInsCode'>, InitAlarmRes>({
-        url: '/operation-monitor/alarm-confirm',
-        method: 'put',
+        url: '/operation-monitor/new-alarm-list',
+        method: 'GET',
         data,
       });
       return result;
     } catch (error) {
       return {
-        commonAlarm: { confirmed: '', list: [] },
-        seriousAlarm: { confirmed: '', list: [] },
-        importantAlarm: { confirmed: '', list: [] },
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
       };
     }
   },

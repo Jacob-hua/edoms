@@ -1,7 +1,7 @@
 <template>
   <div class="warning-running-list-container">
     <BusinessCard title="告警列表" subtitle="RUNNING PARAMETERS" min-width="440" min-height="800">
-      <div v-if="visible" class="warning-list-header">
+      <div class="warning-list-header">
         <div
           v-for="({ name, className }, index) in headerData"
           :key="index"
@@ -9,7 +9,7 @@
           @click="handleChangeWarningType(className)"
         >
           {{ name }}
-          <div v-if="activeClassName === className && !confirmed" :class="['circle', className]"></div>
+          <div v-if="!confirmed" :class="['circle', className]"></div>
         </div>
       </div>
       <!-- warningItem 组件 -->
@@ -44,6 +44,7 @@ export interface MConfig {
   intervalDelay: number;
   instance: string[];
   timeSpan: number;
+  isVirtual: string;
 }
 const props = withDefaults(
   defineProps<{
@@ -56,10 +57,10 @@ const props = withDefaults(
       intervalDelay: 5000,
       instance: [],
       timeSpan: 1,
+      isVirtual: '0',
     }),
   }
 );
-const visible = ref(false);
 const config = ref({
   speed: 12,
   isScroll: true,
@@ -77,7 +78,7 @@ watch(
 );
 const confirmed = computed(() => {
   const alarm = alarmMap[activeClassName.value] as Ref<AlarmList>;
-  return alarm.value.confirmed;
+  return alarm.value?.confirmed;
 });
 const headerData: HeaderData[] = [
   {
@@ -85,7 +86,7 @@ const headerData: HeaderData[] = [
     className: 'red',
   },
   {
-    name: '异常警告',
+    name: '重要警告',
     className: 'orange',
   },
   {
@@ -104,6 +105,7 @@ const initAlarmList = async () => {
   const result = await fetchInitAlarmList({
     sysInsCode: props.config.instance?.at(-1) as unknown as string,
     timeSpan: props.config.timeSpan,
+    isVirtual: props.config.isVirtual ?? '1',
   });
   commonAlarm.value = result.commonAlarm;
   importantAlarm.value = result.importantAlarm;
@@ -113,7 +115,7 @@ const initAlarmList = async () => {
     importantAlarm: importantAlarm.value,
     seriousAlarm: seriousAlarm.value,
   });
-  visible.value = true;
+  useIntervalAsync(updateAlarmList, props.config.intervalDelay);
 };
 
 const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmRes) => {
@@ -123,11 +125,11 @@ const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmR
 };
 const calculateIncrement = (result: InitAlarmRes) => {
   commonAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
-  commonAlarm.value.list = [...commonAlarm.value.list, ...result.commonAlarm.list];
+  commonAlarm.value.list = [...result.commonAlarm.list, ...commonAlarm.value.list];
   importantAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
-  importantAlarm.value.list = [...importantAlarm.value.list, ...result.importantAlarm.list];
+  importantAlarm.value.list = [...result.importantAlarm.list, ...importantAlarm.value.list];
   seriousAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
-  seriousAlarm.value.list = [...seriousAlarm.value.list, ...result.seriousAlarm.list];
+  seriousAlarm.value.list = [...result.seriousAlarm.list, ...seriousAlarm.value.list];
   config.value.speed = props.config.speed;
 };
 
@@ -141,10 +143,8 @@ const updateAlarmList = async () => {
     importantAlarm: importantAlarm.value,
     seriousAlarm: seriousAlarm.value,
   });
-  cancel();
 };
 initAlarmList();
-const { cancel } = useIntervalAsync(updateAlarmList, props.config.intervalDelay);
 const alarmMap = {
   // 严重
   red: seriousAlarm as Ref<AlarmList>,
@@ -170,7 +170,7 @@ const settingClear = (alarmList: AlarmList, result: Alarm) => {
         1
       );
     }
-  }, timeSubtract(new Date(), 1, 'hour') - stringToTimestamp(result?.date));
+  }, timeSubtract(new Date(), props.config.timeSpan, 'hour') - stringToTimestamp(result?.date));
 };
 const getFirstClearTime = (alarmList: AlarmList) => {
   const result = alarmList.list?.reduce((timeSpan = alarmList.list[0], alarm: Alarm) => {
