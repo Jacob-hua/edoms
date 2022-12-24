@@ -2,6 +2,7 @@ import { createApp, defineAsyncComponent } from 'vue';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
+import ECharts from '@edoms/charts';
 import Core from '@edoms/core';
 import ElDesign from '@edoms/design';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
@@ -44,4 +45,5 @@ const app = new Core({
 edomsApp.config.globalProperties.app = app;
 edomsApp.provide('app', app);
 
+edomsApp.use(ECharts);
 edomsApp.mount('#app');
