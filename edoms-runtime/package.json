@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "npm run build:libs && vite --config dev.vite.config.ts",
     "build": "npm run build:libs && npm run build:page && npm run build:playground",
-    "build:admin": "npm run build:libs:admin && npm run build:playground:admin",
+    "build:admin": "npm run build:libs:admin && npm run build:page:admin && npm run build:playground:admin",
     "build:page": "vite --config build.vite.config.ts build --mode page",
     "build:playground": "vite --config build.vite.config.ts build --mode playground",
     "build:page:admin": "vite --config build.vite.config.ts build --mode page:admin",
