@@ -67,28 +67,28 @@ const option = {
 .wrapper {
   display: flex;
 }
-// ::v-deep .left-tabs {
-//   & .el-tabs__item {
-//     width: 120px;
-//     text-align: center;
-//   }
-//   & .el-tabs__item.is-active {
-//     background-color: #333333;
-//   }
-// }
-// ::v-deep .el-tabs__header {
-//   margin: 0;
-// }
-// ::v-deep .el-tabs__item {
-//   color: #ffffff;
-// }
-// ::v-deep .el-tabs__item.is-active {
-//   color: #e99a3c;
-// }
-// ::v-deep .el-tabs__active-bar {
-//   background-color: #e99a3c;
-// }
-// ::v-deep .el-tabs__nav-wrap::after {
-//   background-color: transparent;
-// }
+::v-deep .left-tabs {
+  & .el-tabs__item {
+    width: 120px;
+    text-align: center;
+  }
+  & .el-tabs__item.is-active {
+    background-color: #333333;
+  }
+}
+::v-deep .el-tabs__header {
+  margin: 0;
+}
+::v-deep .el-tabs__item {
+  color: #ffffff;
+}
+::v-deep .el-tabs__item.is-active {
+  color: #e99a3c;
+}
+::v-deep .el-tabs__active-bar {
+  background-color: #e99a3c;
+}
+::v-deep .el-tabs__nav-wrap::after {
+  background-color: transparent;
+}
 </style>
