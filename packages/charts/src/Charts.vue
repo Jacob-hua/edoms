@@ -43,6 +43,7 @@ watch(
 watch(
   () => props.option,
   (option) => {
+    console.log('图表option变化', props.option);
     if (!charts.value) {
       return;
     }
@@ -64,6 +65,7 @@ onUnmounted(() => {
     return;
   }
   charts.value.dispose();
+  charts.value = undefined;
 });
 </script>
 
