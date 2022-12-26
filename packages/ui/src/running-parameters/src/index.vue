@@ -9,7 +9,7 @@
       <el-tabs v-model="activeParameter" class="left-tabs" tab-position="left">
         <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="index" />
       </el-tabs>
-      <edoms-charts v-if="option" width="908" height="240" :option="option" />
+      <EdomsCharts v-if="option" :width="908" :height="240" :option="option" />
     </div>
   </BusinessCard>
 </template>
@@ -20,6 +20,8 @@ import { computed, ref, watch } from 'vue';
 import { formatCurrentDateRange, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
+import EdomsCharts from '../../EdomsCharts.vue';
+import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
@@ -107,14 +109,14 @@ watch(
   () => flush()
 );
 
-const option = computed(() => {
+const option = computed<ECOption | undefined>(() => {
   if (parameterConfigs.value.length <= 0) {
     return undefined;
   }
   return generateOption(parameterData.value);
 });
 
-function generateOption(data: any[] = []) {
+function generateOption(data: any[] = []): ECOption {
   return {
     xAxis: {
       type: 'time',

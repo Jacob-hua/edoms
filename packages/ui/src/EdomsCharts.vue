@@ -7,7 +7,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { EChartsType } from 'echarts/core';
 
 import echarts from './echarts';
-import { ECOption } from './type';
+import { ECOption } from './types';
 
 const props = withDefaults(
   defineProps<{
