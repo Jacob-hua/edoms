@@ -117,21 +117,6 @@ const initAlarmList = async () => {
   });
 };
 
-const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmRes) => {
-  getFirstClearTime(commonAlarm);
-  getFirstClearTime(importantAlarm);
-  getFirstClearTime(seriousAlarm);
-};
-const calculateIncrement = (result: InitAlarmRes) => {
-  commonAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
-  commonAlarm.value.list = [...result.commonAlarm.list, ...commonAlarm.value.list];
-  importantAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
-  importantAlarm.value.list = [...result.importantAlarm.list, ...importantAlarm.value.list];
-  seriousAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
-  seriousAlarm.value.list = [...result.seriousAlarm.list, ...seriousAlarm.value.list];
-  config.value.speed = props.config.speed;
-};
-
 const updateAlarmList = async () => {
   const result = await fetchNewAlarmList({
     sysInsCode: props?.config?.instance?.at(-1) as unknown as string,
@@ -143,6 +128,36 @@ const updateAlarmList = async () => {
     seriousAlarm: seriousAlarm.value,
   });
 };
+
+watch(
+  () => props.config.intervalDelay,
+  (intervalDelay) => {
+    if (!intervalDelay) {
+      return;
+    }
+    useIntervalAsync(updateAlarmList, intervalDelay);
+  },
+  { immediate: true }
+);
+
+const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmRes) => {
+  getFirstClearTime(commonAlarm);
+  getFirstClearTime(importantAlarm);
+  getFirstClearTime(seriousAlarm);
+};
+const calculateIncrement = (result: InitAlarmRes) => {
+  if (!commonAlarm?.value?.confirmed) {
+    return;
+  }
+  commonAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
+  commonAlarm.value.list = [...result.commonAlarm.list, ...commonAlarm.value.list];
+  importantAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
+  importantAlarm.value.list = [...result.importantAlarm.list, ...importantAlarm.value.list];
+  seriousAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
+  seriousAlarm.value.list = [...result.seriousAlarm.list, ...seriousAlarm.value.list];
+  config.value.speed = props.config.speed;
+};
+
 initAlarmList();
 const alarmMap = {
   // 严重
@@ -163,16 +178,16 @@ const handleChangeWarningType = (className: ClassName) => {
 //设置清理
 const settingClear = (alarmList: AlarmList, result: Alarm) => {
   setTimeout(() => {
-    if (~alarmList.list.findIndex(({ id }) => id === result?.id)) {
-      alarmList.list.splice(
-        alarmList.list.findIndex(({ id }) => id === result?.id),
+    if (~alarmList?.list?.findIndex(({ id }) => id === result?.id)) {
+      alarmList?.list?.splice(
+        alarmList?.list?.findIndex(({ id }) => id === result?.id),
         1
       );
     }
   }, timeSubtract(new Date(), props.config.timeSpan, 'hour') - stringToTimestamp(result?.date));
 };
 const getFirstClearTime = (alarmList: AlarmList) => {
-  const result = alarmList.list?.reduce((timeSpan = alarmList.list[0], alarm: Alarm) => {
+  const result = alarmList?.list?.reduce((timeSpan = alarmList.list[0], alarm: Alarm) => {
     // 找到当前所有项告警信息毫秒值最小的Alarm
     if (stringToTimestamp(alarm.date) < stringToTimestamp(timeSpan.date)) {
       timeSpan = alarm;

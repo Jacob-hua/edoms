@@ -16,7 +16,7 @@ export default async (request: Request) => {
     {
       type: 'switch',
       name: 'isVirtual',
-      text: '是否采用虚拟数据',
+      text: '虚拟数据',
       activeValue: '1',
       inactiveValue: '0',
       defaultValue: '1',
