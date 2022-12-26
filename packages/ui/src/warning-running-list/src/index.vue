@@ -132,19 +132,6 @@ const updateAlarmList = async () => {
   });
 };
 
-watch(
-  () => props.config.intervalDelay,
-  (intervalDelay) => {
-    if (!intervalDelay) {
-      return;
-    }
-    useIntervalAsync(updateAlarmList, intervalDelay);
-  },
-  {
-    immediate: true,
-  }
-);
-
 const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmRes) => {
   getFirstClearTime(commonAlarm);
   getFirstClearTime(importantAlarm);
