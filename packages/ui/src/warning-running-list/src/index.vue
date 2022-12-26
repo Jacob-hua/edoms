@@ -78,6 +78,9 @@ watch(
 );
 const confirmed = computed(() => {
   const alarm = alarmMap[activeClassName.value] as Ref<AlarmList>;
+  if (alarm.value === undefined) {
+    alarm.value = { confirmed: true, list: [] };
+  }
   return alarm.value?.confirmed;
 });
 const headerData: HeaderData[] = [
@@ -107,9 +110,9 @@ const initAlarmList = async () => {
     timeSpan: props.config.timeSpan,
     isVirtual: props.config.isVirtual ?? '1',
   });
-  commonAlarm.value = result.commonAlarm;
-  importantAlarm.value = result.importantAlarm;
-  seriousAlarm.value = result.seriousAlarm;
+  commonAlarm.value = result?.commonAlarm;
+  importantAlarm.value = result?.importantAlarm;
+  seriousAlarm.value = result?.seriousAlarm;
   recordFailure({
     commonAlarm: commonAlarm.value,
     importantAlarm: importantAlarm.value,
