@@ -146,7 +146,7 @@ const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmR
   getFirstClearTime(seriousAlarm);
 };
 const calculateIncrement = (result: InitAlarmRes) => {
-  if (!commonAlarm?.value?.confirmed) {
+  if (!commonAlarm.value === undefined || commonAlarm?.value?.confirmed === undefined) {
     return;
   }
   commonAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
