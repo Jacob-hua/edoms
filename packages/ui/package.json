@@ -12,6 +12,7 @@
     "@edoms/schema": "workspace:^0.0.1",
     "@edoms/utils": "workspace:^0.0.1",
     "delegate": "^3.2.0",
+    "echarts": "^5.4.1",
     "qrcode": "^1.5.0",
     "tiny-emitter": "^2.1.0",
     "vue": "^3.2.37"

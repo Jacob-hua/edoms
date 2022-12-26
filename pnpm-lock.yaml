@@ -497,6 +497,7 @@ importers:
       '@vue/compiler-sfc': ^3.2.37
       '@vue/test-utils': ^2.0.0
       delegate: ^3.2.0
+      echarts: ^5.4.1
       qrcode: ^1.5.0
       tiny-emitter: ^2.1.0
       vue: ^3.2.37
@@ -507,6 +508,7 @@ importers:
       '@edoms/schema': link:../schema
       '@edoms/utils': link:../utils
       delegate: registry.npmmirror.com/delegate/3.2.0
+      echarts: registry.npmmirror.com/echarts/5.4.1
       qrcode: registry.npmmirror.com/qrcode/1.5.1
       tiny-emitter: registry.npmmirror.com/tiny-emitter/2.1.0
       vue: registry.npmmirror.com/vue/3.2.44
