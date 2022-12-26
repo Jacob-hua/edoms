@@ -198,6 +198,17 @@ const getFirstClearTime = (alarmList: AlarmList) => {
   settingClear(alarmList, result);
 };
 
+watch(
+  () => props.config.intervalDelay,
+  (intervalDelay) => {
+    if (!intervalDelay) {
+      return;
+    }
+    useIntervalAsync(updateAlarmList, intervalDelay);
+  },
+  { immediate: true }
+);
+
 provide<Ref<ClassName>>('textColor', activeClassName);
 provide<Ref<MConfig>>('config', config);
 provide('commonAlarm', commonAlarm);
