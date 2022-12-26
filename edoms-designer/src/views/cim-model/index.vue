@@ -2,13 +2,13 @@
   <div class="container">
     <div class="header-top" @click="goBack">
       <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
-      <span>陕汽冷站</span>
+      <span>{{ currentTenant?.tenantName }}</span>
     </div>
     <div class="header-bar">
       <div class="header-bar-left">
         <span class="name">CIM模型</span>
-        <span class="use"
-          ><span class="text">当前采用:</span> <span class="model">{{ modelText }}</span>
+        <span class="use">
+          <span class="text">{{ currentTenant?.tenantName }}当前采用:</span> <span class="model">{{ modelText }}</span>
         </span>
       </div>
       <div class="header-bar-right">
@@ -37,14 +37,19 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import { storeToRefs } from 'pinia';
 
 import modelApi from '@/api/model';
 import { ModelType } from '@/const/model';
+import useAccountStore from '@/store/account';
 
 import DynamicModel from './component/DynamicModel.vue';
 import StaticModel from './component/StaticModel.vue';
 
+const { currentTenant } = storeToRefs(useAccountStore());
+
 const { go } = useRouter();
+
 const modelTypeConfig = {
   [ModelType.STATIC]: {
     value: ModelType.STATIC,
@@ -57,6 +62,7 @@ const modelTypeConfig = {
     component: DynamicModel,
   },
 };
+
 const switchActive = computed(() => modelTypeConfig[ModelType.DYNAMIC]);
 const switchInactive = computed(() => modelTypeConfig[ModelType.STATIC]);
 
