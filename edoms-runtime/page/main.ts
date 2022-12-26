@@ -25,6 +25,8 @@ edomsApp.use(ElementPlus, {
 });
 edomsApp.use(ElDesign, EdomsElementPlusAdapter);
 
+edomsApp.use(ECharts);
+
 Object.entries(components).forEach(([type, component]: [string, any]) => {
   edomsApp.component(
     `edoms-ui-${toLine(type)}`,
@@ -45,5 +47,4 @@ const app = new Core({
 edomsApp.config.globalProperties.app = app;
 edomsApp.provide('app', app);
 
-edomsApp.use(ECharts);
 edomsApp.mount('#app');
