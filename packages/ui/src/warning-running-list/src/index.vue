@@ -123,6 +123,7 @@ const initAlarmList = async () => {
 const updateAlarmList = async () => {
   const result = await fetchNewAlarmList({
     sysInsCode: props?.config?.instance?.at(-1) as unknown as string,
+    isVirtual: props.config.isVirtual ?? '1',
   });
   calculateIncrement(result);
   recordFailure({

@@ -50,7 +50,7 @@ export default async (request: Request) => {
       text: '时间范围',
       name: 'timeSpan',
       type: 'number',
-      min: 1,
+      min: 0.5,
       step: 0.5,
       defaultValue: 1,
     },
