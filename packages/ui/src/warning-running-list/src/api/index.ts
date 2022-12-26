@@ -28,7 +28,7 @@ export default (request?: EdomsRequestFunc) => ({
       };
     }
   },
-  fetchNewAlarmList: async (data: Pick<InitAlarmReq, 'sysInsCode'>): Promise<InitAlarmRes> => {
+  fetchNewAlarmList: async (data: Pick<InitAlarmReq, 'sysInsCode' | 'isVirtual'>): Promise<InitAlarmRes> => {
     if (!request) {
       return {
         commonAlarm: { confirmed: false, list: [] },
