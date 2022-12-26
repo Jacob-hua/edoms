@@ -117,17 +117,6 @@ const initAlarmList = async () => {
   });
 };
 
-watch(
-  () => props.config.intervalDelay,
-  (intervalDelay) => {
-    if (!intervalDelay) {
-      return;
-    }
-    useIntervalAsync(updateAlarmList, intervalDelay);
-  },
-  { immediate: true }
-);
-
 const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmRes) => {
   getFirstClearTime(commonAlarm);
   getFirstClearTime(importantAlarm);
@@ -193,6 +182,17 @@ const getFirstClearTime = (alarmList: AlarmList) => {
   }, {} as Alarm);
   settingClear(alarmList, result);
 };
+
+watch(
+  () => props.config.intervalDelay,
+  (intervalDelay) => {
+    if (!intervalDelay) {
+      return;
+    }
+    useIntervalAsync(updateAlarmList, intervalDelay);
+  },
+  { immediate: true }
+);
 
 provide<Ref<ClassName>>('textColor', activeClassName);
 provide<Ref<MConfig>>('config', config);
