@@ -25,20 +25,4 @@ const config = inject<Ref<MConfig>>('config');
   overflow: hidden;
   position: relative;
 }
-//无限滚动
-//.marquee {
-//  animation-delay: -5s;
-//  animation: marquee v-bind(speed) linear infinite;
-//}
-//.marquee:hover {
-//  animation-play-state: paused;
-//}
-//@keyframes marquee {
-//  0% {
-//    transform: translateY(0%);
-//  }
-//  100% {
-//    transform: translateY(-51%); //这里不是-100%！
-//  }
-//}
 </style>
