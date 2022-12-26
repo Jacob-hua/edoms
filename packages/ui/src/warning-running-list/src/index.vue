@@ -137,7 +137,9 @@ watch(
     }
     useIntervalAsync(updateAlarmList, intervalDelay);
   },
-  { immediate: true }
+  {
+    immediate: true,
+  }
 );
 
 const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmRes) => {
