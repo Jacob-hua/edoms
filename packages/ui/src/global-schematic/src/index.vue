@@ -10,7 +10,7 @@ import { formatPrecision } from '@edoms/utils';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-import apiFactor from './api';
+import apiFactory from './api';
 import { IndicatorData, MGlobalSchematic, MIndicatorItemConfig, ParameterItem } from './type';
 
 const props = defineProps<{
@@ -21,7 +21,7 @@ const { request, app } = useApp(props);
 
 const node = app?.page?.getNode(props.config.id);
 
-const { fetchIndicatorData } = apiFactor(request);
+const { fetchIndicatorData } = apiFactory(request);
 
 const imgRef = ref<HTMLImageElement>();
 
