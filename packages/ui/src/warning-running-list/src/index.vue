@@ -78,7 +78,7 @@ watch(
 );
 const confirmed = computed(() => {
   const alarm = alarmMap[activeClassName.value] as Ref<AlarmList>;
-  if (alarm.value === undefined) {
+  if (!alarm.value) {
     alarm.value = { confirmed: true, list: [] };
   }
   return alarm.value?.confirmed;
