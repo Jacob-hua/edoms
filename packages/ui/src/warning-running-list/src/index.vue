@@ -78,6 +78,9 @@ watch(
 );
 const confirmed = computed(() => {
   const alarm = alarmMap[activeClassName.value] as Ref<AlarmList>;
+  if (!alarm.value) {
+    alarm.value = { confirmed: true, list: [] };
+  }
   return alarm.value?.confirmed;
 });
 const headerData: HeaderData[] = [
@@ -107,9 +110,9 @@ const initAlarmList = async () => {
     timeSpan: props.config.timeSpan,
     isVirtual: props.config.isVirtual ?? '1',
   });
-  commonAlarm.value = result.commonAlarm;
-  importantAlarm.value = result.importantAlarm;
-  seriousAlarm.value = result.seriousAlarm;
+  commonAlarm.value = result?.commonAlarm;
+  importantAlarm.value = result?.importantAlarm;
+  seriousAlarm.value = result?.seriousAlarm;
   recordFailure({
     commonAlarm: commonAlarm.value,
     importantAlarm: importantAlarm.value,
@@ -137,7 +140,9 @@ watch(
     }
     useIntervalAsync(updateAlarmList, intervalDelay);
   },
-  { immediate: true }
+  {
+    immediate: true,
+  }
 );
 
 const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmRes) => {
@@ -146,7 +151,7 @@ const recordFailure = ({ commonAlarm, importantAlarm, seriousAlarm }: InitAlarmR
   getFirstClearTime(seriousAlarm);
 };
 const calculateIncrement = (result: InitAlarmRes) => {
-  if (!commonAlarm?.value?.confirmed) {
+  if (!commonAlarm.value === undefined || commonAlarm?.value?.confirmed === undefined) {
     return;
   }
   commonAlarm.value.confirmed = !!(result.commonAlarm?.confirmed && commonAlarm.value?.confirmed);
