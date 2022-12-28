@@ -2,7 +2,6 @@ import { createApp, defineAsyncComponent } from 'vue';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
-import ECharts from '@edoms/charts';
 import Core from '@edoms/core';
 import ElDesign from '@edoms/design';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
@@ -24,8 +23,6 @@ edomsApp.use(ElementPlus, {
   locale: zhCn,
 });
 edomsApp.use(ElDesign, EdomsElementPlusAdapter);
-
-edomsApp.use(ECharts);
 
 Object.entries(components).forEach(([type, component]: [string, any]) => {
   edomsApp.component(

@@ -21,7 +21,6 @@
     "build:event:admin": "vite --config build.vite.config.ts build --mode event:admin"
   },
   "dependencies": {
-    "@edoms/charts": "workspace:^0.0.1",
     "@edoms/cli": "workspace:^0.0.1",
     "@edoms/core": "workspace:^0.0.1",
     "@edoms/design": "workspace:^0.0.1",
