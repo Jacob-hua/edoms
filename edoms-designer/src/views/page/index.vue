@@ -20,9 +20,9 @@
         :request="loadData"
       >
         <template #default="{ item }: { item: ListPageResItem }">
-          <!-- TODO: 缺失首页标识 -->
           <PageListItem
             :application-id="applicationId"
+            :home-page-id="homePageId"
             :data="item"
             :is-active="item.pageId === active?.pageId"
             @delete-success="handleReload"
@@ -117,11 +117,14 @@ const active = ref<ListPageResItem>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
+const homePageId = ref<string>('');
+
 const loadData: RequestFunc<ListPageResItem> = async ({ pageSize, current }) => {
   const {
     dataList = [],
     count,
     applicationName,
+    indexPageId = '',
   } = await pageApi.listPages({
     page: current,
     limit: pageSize,
@@ -130,6 +133,7 @@ const loadData: RequestFunc<ListPageResItem> = async ({ pageSize, current }) => 
   });
   totalCount.value = Number(count);
   appName.value = applicationName;
+  homePageId.value = indexPageId;
   !active.value && (active.value = dataList[0] ?? { pushContentId: null });
   if (totalCount.value) {
     previewVisible.value = true;

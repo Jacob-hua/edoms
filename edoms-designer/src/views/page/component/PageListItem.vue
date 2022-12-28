@@ -12,7 +12,10 @@
       </div>
     </template>
     <template v-else>
-      <p>{{ formModel.name }}</p>
+      <p class="pop-menu-content">
+        <el-icon v-if="formModel.pageId === props.homePageId" :size="20"><House /></el-icon>
+        {{ formModel.name }}
+      </p>
       <div class="pop-menu-wrapper">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
@@ -41,6 +44,7 @@ import PopMenuOption from '@/components/PopMenuOption.vue';
 
 const props = defineProps<{
   applicationId: string;
+  homePageId?: string;
   data: ListPageResItem;
   isActive: boolean;
 }>();
@@ -160,5 +164,10 @@ const handleClick = () => {
 }
 .active {
   background-color: #409eff;
+}
+.pop-menu-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
