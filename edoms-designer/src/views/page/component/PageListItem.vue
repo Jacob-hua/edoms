@@ -13,7 +13,7 @@
     </template>
     <template v-else>
       <p class="pop-menu-content">
-        <el-icon v-if="formModel.pageId === props.homePageId" :size="20"><House /></el-icon>
+        <el-icon v-if="formModel.isHomePage" :size="20"><House /></el-icon>
         {{ formModel.name }}
       </p>
       <div class="pop-menu-wrapper">
@@ -42,21 +42,25 @@ import pageApi from '@/api/page';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
+export interface ListPageItem extends ListPageResItem {
+  /** 页面首页标识 */
+  isHomePage?: boolean;
+}
+
 const props = defineProps<{
   applicationId: string;
-  homePageId?: string;
-  data: ListPageResItem;
+  data: ListPageItem;
   isActive: boolean;
 }>();
 
 const emit = defineEmits<{
-  (event: 'renameSuccess', value: ListPageResItem): void;
+  (event: 'renameSuccess', value: ListPageItem): void;
   (event: 'renameCatch', error: any): void;
   (event: 'deleteSuccess'): void;
   (event: 'deleteCatch', error: any): void;
   (event: 'useIndexSuccess'): void;
   (event: 'useIndexCatch', error: any): void;
-  (event: 'changeActive', value: ListPageResItem): void;
+  (event: 'changeActive', value: ListPageItem): void;
 }>();
 
 const formRef = ref<FormInstance>();
