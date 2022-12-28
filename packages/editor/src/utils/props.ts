@@ -41,7 +41,7 @@ export const fillConfig = (config: FormConfig = []) => [
     items: [
       {
         title: '属性',
-        labelWidth: '80px',
+        labelWidth: '70px',
         items: [
           // 组件类型，必须要有
           {
@@ -64,7 +64,7 @@ export const fillConfig = (config: FormConfig = []) => [
       },
       {
         title: '样式',
-        labelWidth: '80px',
+        labelWidth: '70px',
         items: [
           {
             name: 'style',
@@ -298,7 +298,7 @@ export const fillConfig = (config: FormConfig = []) => [
       },
       {
         title: '事件',
-        labelWidth: '80px',
+        labelWidth: '70px',
         items: [
           {
             type: 'groupList',
@@ -375,7 +375,7 @@ export const fillConfig = (config: FormConfig = []) => [
                 type: 'groupList',
                 name: 'mappings',
                 text: '动作参数',
-                labelWidth: '80px',
+                labelWidth: '70px',
                 movable: false,
                 titleKey: 'target',
                 deletable: false,
@@ -467,24 +467,6 @@ export const fillConfig = (config: FormConfig = []) => [
           },
         ],
       },
-      // {
-      //   title: '高级',
-      //   lazy: true,
-      //   items: [
-      //     {
-      //       name: 'created',
-      //       text: 'created',
-      //       type: 'code-select',
-      //       labelWidth: '100px',
-      //     },
-      //     {
-      //       name: 'mounted',
-      //       text: 'mounted',
-      //       type: 'code-select',
-      //       labelWidth: '100px',
-      //     },
-      //   ],
-      // },
     ],
   },
 ];

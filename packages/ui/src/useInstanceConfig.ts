@@ -47,7 +47,7 @@ export default async (request: Request, componentName: string) => {
     },
     {
       name: 'propertyType',
-      text: '属性类型',
+      text: '属性',
       type: 'radio-group',
       options: [
         {
@@ -66,7 +66,7 @@ export default async (request: Request, componentName: string) => {
     },
     {
       name: 'property',
-      text: '属性',
+      text: '点位',
       type: 'select',
       options: async (mForm: any, { formValue, prop }: any) => {
         return fetchProperties(request, componentName, formValue, prop);
