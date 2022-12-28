@@ -161,8 +161,8 @@ const menu = computed<MenuBarData>(() => ({
       type: 'button',
       text: '保存',
       icon: Coin,
-      handler: () => {
-        save();
+      handler: async () => {
+        await save();
         ElMessage.success('保存成功');
       },
     },
@@ -170,8 +170,8 @@ const menu = computed<MenuBarData>(() => ({
       type: 'button',
       text: '发布',
       icon: Finished,
-      handler: () => {
-        publish();
+      handler: async () => {
+        await publish();
         ElMessage.success('发布成功');
       },
     },
@@ -190,9 +190,9 @@ const menu = computed<MenuBarData>(() => ({
             }
             return true;
           },
-        }).then(({ value }) => {
-          saveWithVersion(value.trim());
-          ElMessage.success('保存成功');
+        }).then(async ({ value }) => {
+          await saveWithVersion(value.trim());
+          ElMessage.success('保存版本成功');
         });
       },
     },
