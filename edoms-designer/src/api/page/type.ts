@@ -51,7 +51,7 @@ export interface ListPageRes extends PageStruct<ListPageResItem> {
   applicationName: string;
   /** 应用ID */
   applicationId: string;
-  /** 列表首页标识 */
+  /** 应用首页下标 */
   indexPageId?: string;
 }
 
