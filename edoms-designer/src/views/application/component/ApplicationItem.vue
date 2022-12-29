@@ -27,7 +27,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import type { ListApplicationsResItem } from '@/api/application';
 import applicationApi from '@/api/application';
 import PreviewImage from '@/components/ImagePreview.vue';
-import LongText from '@/components/Longtext.vue';
+import LongText from '@/components/LongText.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
