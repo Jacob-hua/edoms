@@ -1,7 +1,7 @@
 export default {
   type: 'warning-running-list',
   style: {
-    width: '440',
-    height: '800',
+    width: '480',
+    height: '824',
   },
 };
