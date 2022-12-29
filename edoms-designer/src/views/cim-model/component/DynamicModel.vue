@@ -35,7 +35,7 @@ const tableData = ref();
 const isShow = ref<boolean>(false);
 
 const loadData = async () => {
-  const result: any = await modelApi.getDicData({
+  const result: any = await modelApi.getDynamicDicData({
     mark: ModelMark.CIM_URL as string,
   });
   tableData.value = result[0];
