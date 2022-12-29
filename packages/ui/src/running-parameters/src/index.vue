@@ -7,7 +7,7 @@
     </template>
     <div class="wrapper">
       <el-tabs v-model="activeParameter" class="left-tabs" tab-position="left">
-        <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="index" />
+        <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="`${index}`" />
       </el-tabs>
       <EdomsCharts v-if="option" :width="908" :height="240" :option="option" />
     </div>
@@ -17,6 +17,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
+import { ElTabPane, ElTabs } from '@edoms/design';
 import { formatCurrentDateRange, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';

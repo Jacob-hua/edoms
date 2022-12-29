@@ -22,8 +22,6 @@ export interface MIndicatorItemConfig {
 export interface MParameterItemConfig {
   /** 标签 */
   label: string;
-  /** 参数名称 */
-  name: string;
   /** 指标 */
   indicators: MIndicatorItemConfig[];
 }

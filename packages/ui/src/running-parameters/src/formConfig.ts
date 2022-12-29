@@ -24,10 +24,6 @@ export default async (request: Request) => [
         name: 'label',
       },
       {
-        text: '名称',
-        name: 'name',
-      },
-      {
         name: 'indicators',
         text: '指标',
         type: 'groupList',
@@ -65,10 +61,6 @@ export default async (request: Request) => [
       {
         text: '标签',
         name: 'label',
-      },
-      {
-        text: '名称',
-        name: 'name',
       },
       {
         name: 'indicators',
