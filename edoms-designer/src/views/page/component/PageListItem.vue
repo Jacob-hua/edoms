@@ -14,7 +14,7 @@
     <template v-else>
       <p class="pop-menu-content">
         <el-icon v-if="formModel.isHomePage" :size="20"><House /></el-icon>
-        {{ formModel.name }}
+        <LongText :content="formModel.name" :content-style="{ textAlign: 'left' }"></LongText>
       </p>
       <div class="pop-menu-wrapper">
         <PopMenu @menu-click="handleMenuClick">
@@ -39,6 +39,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 
 import type { ListPageResItem } from '@/api/page';
 import pageApi from '@/api/page';
+import LongText from '@/components/LongText.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
@@ -70,7 +71,10 @@ const formModel = reactive({
 });
 
 const formRules = reactive<FormRules>({
-  name: [{ required: true, message: '请输入页面名称', trigger: 'blur' }],
+  name: [
+    { required: true, message: '请输入页面名称', trigger: 'blur' },
+    { min: 1, max: 20, message: '页面名称长度1-20字符', trigger: 'blur' },
+  ],
 });
 
 const renameVisible = ref<boolean>(false);
