@@ -7,7 +7,7 @@
     </template>
     <div class="wrapper">
       <el-tabs v-model="activeParameter" class="left-tabs" tab-position="left">
-        <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="index" />
+        <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="`${index}`" />
       </el-tabs>
       <EdomsCharts v-if="option" :width="908" :height="240" :option="option" />
     </div>
@@ -17,6 +17,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
+import { ElTabPane, ElTabs } from '@edoms/design';
 import { formatCurrentDateRange, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
@@ -26,7 +27,7 @@ import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
 import apiFactory from './api';
-import { MIndicatorItemConfig, MRunningParameters } from './type';
+import { MIndicatorItemConfig, MParameterItemConfig, MRunningParameters } from './type';
 
 const props = defineProps<{
   config: MRunningParameters;
@@ -49,7 +50,7 @@ const categories = ref([
 
 const activeCategory = ref<string>('systems');
 
-const parameterConfigs = computed<MIndicatorItemConfig[]>(() => {
+const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
   if (result) {
     return result;
@@ -59,7 +60,16 @@ const parameterConfigs = computed<MIndicatorItemConfig[]>(() => {
 
 const activeParameter = ref<number>(-1);
 
-const activeParameterConfig = computed<MIndicatorItemConfig>(() => parameterConfigs.value[activeParameter.value]);
+const activeIndicatorConfig = computed<Map<string, MIndicatorItemConfig>>(() => {
+  const result = new Map<string, MIndicatorItemConfig>();
+  if (!parameterConfigs.value[activeParameter.value]?.indicators) {
+    return result;
+  }
+  parameterConfigs.value[activeParameter.value].indicators.forEach((config) =>
+    result.set(`${config.instance[config.instance.length - 1]}:${config.property}`, config)
+  );
+  return result;
+});
 
 watch(
   () => parameterConfigs.value,
@@ -74,7 +84,7 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 
-const parameterData = ref<any[]>([]);
+const chartSeries = ref<any[]>([]);
 
 const updateParameterData = async () => {
   const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
@@ -83,23 +93,18 @@ const updateParameterData = async () => {
     endTime: end,
     interval: '1h',
     type: 'dev',
-    dataList: parameterConfigs.value.map(({ instance, property }) => ({
+    dataList: Array.from(activeIndicatorConfig.value.values()).map(({ instance, property }) => ({
       deviceCode: instance[instance.length - 1],
-      propCodeList: [property],
+      propCode: property,
     })),
   });
 
-  const historyData = result.find(
-    (item) =>
-      Object.keys(item).includes(activeParameterConfig.value.property) &&
-      item[activeParameterConfig.value.property].some(
-        ({ insCode }) =>
-          insCode === activeParameterConfig.value.instance[activeParameterConfig.value.instance.length - 1]
-      )
-  );
-  parameterData.value = (historyData?.[activeParameterConfig.value.property][0].dataList ?? []).map(
-    ({ time, value }) => [stringToDate(time), value]
-  );
+  chartSeries.value = result.map(({ insCode, propCode, dataList }) => ({
+    name: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.label,
+    type: 'line',
+    showSymbol: false,
+    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+  }));
 };
 
 const { flush } = useIntervalAsync(updateParameterData, intervalDelay.value);
@@ -113,10 +118,10 @@ const option = computed<ECOption | undefined>(() => {
   if (parameterConfigs.value.length <= 0) {
     return undefined;
   }
-  return generateOption(parameterData.value);
+  return generateOption(chartSeries.value);
 });
 
-function generateOption(data: any[] = []): ECOption {
+function generateOption(series: any[] = []): ECOption {
   return {
     xAxis: {
       type: 'time',
@@ -131,14 +136,7 @@ function generateOption(data: any[] = []): ECOption {
         show: false,
       },
     },
-    series: [
-      {
-        name: 'Fake Data',
-        type: 'line',
-        showSymbol: false,
-        data,
-      },
-    ],
+    series,
   };
 }
 </script>

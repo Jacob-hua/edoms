@@ -19,9 +19,5 @@ $ pnpm bootstrap
 执行命令
 
 ```bash
-$ pnpm playground
+$ pnpm designer
 ```
-
-最后在浏览器中打开
-
-http://localhost:8098/edoms/playground/

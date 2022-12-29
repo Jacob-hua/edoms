@@ -1,14 +1,5 @@
 import { MComponent } from '@edoms/schema';
 
-export interface MParameterItemConfig {
-  /** 标签 */
-  label: string;
-  /** 参数名称 */
-  name: string;
-  /** 展示颜色 */
-  color: string;
-}
-
 export interface MIndicatorItemConfig {
   /** 标签 */
   label: string;
@@ -24,24 +15,31 @@ export interface MIndicatorItemConfig {
   precision: string;
   /** 单位 */
   unit: string;
-  /** 参数 */
-  parameters: MParameterItemConfig[];
+  /** 展示颜色 */
+  color: string;
+}
+
+export interface MParameterItemConfig {
+  /** 标签 */
+  label: string;
+  /** 指标 */
+  indicators: MIndicatorItemConfig[];
 }
 
 export interface MRunningParameters extends MComponent {
   /** 轮询间隔 */
   intervalDelay: number;
   /** 系统曲线 */
-  systems: MIndicatorItemConfig[];
+  systems: MParameterItemConfig[];
   /** 设备曲线 */
-  equipments: MIndicatorItemConfig[];
+  equipments: MParameterItemConfig[];
 }
 
 export interface ParameterItem {
   /** 设备实例code */
   deviceCode: string;
   /** 属性code列表 */
-  propCodeList: string[];
+  propCode: string;
 }
 
 export interface FetchHistoryDataReq {
@@ -57,9 +55,11 @@ export interface FetchHistoryDataReq {
   dataList: ParameterItem[];
 }
 
-export interface HistoryDataItem {
+export interface HistoryData {
   /** 实例Code */
   insCode: string;
+  /** 属性Code */
+  propCode: string;
   /** 数据列表 */
   dataList: Array<{
     /** 时间 */
@@ -67,10 +67,6 @@ export interface HistoryDataItem {
     /** 数值 */
     value: string;
   }>;
-}
-
-export interface HistoryData {
-  [propCode: string]: HistoryDataItem[];
 }
 
 export type FetchHistoryDataRes = HistoryData[];

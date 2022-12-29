@@ -19,8 +19,9 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 
+import { MComponent } from '@edoms/schema';
+
 import BusinessCard from '../../BusinessCard.vue';
-import { MComponent } from '../../types';
 
 import MoreParameters from './component/MoreParameters.vue';
 import { Parameter } from './type';

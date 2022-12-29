@@ -2,7 +2,6 @@ import { createApp } from 'vue';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
-import ECharts from '@edoms/charts';
 import ElDesign from '@edoms/design';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
 import { toLine } from '@edoms/utils';
@@ -26,6 +25,5 @@ Promise.all([import('../.edoms/comp-entry'), import('../.edoms/plugin-entry')]).
   Object.values(plugins.default).forEach((plugin: any) => {
     edomsApp.use(plugin);
   });
-  edomsApp.use(ECharts);
   edomsApp.mount('#app');
 });
