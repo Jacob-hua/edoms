@@ -1,5 +1,5 @@
 export default {
-  type: 'warning-running-list',
+  type: 'energy-efficiency-monitoring',
   style: {
     width: '440',
     height: '200',

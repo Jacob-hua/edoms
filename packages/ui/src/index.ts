@@ -2,6 +2,7 @@ import Button from './button';
 import Checkbox from './checkbox';
 import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
+import EnergyEfficiencyMonitoring from './energy-efficiency-monitoring';
 import GlobalSchematic from './global-schematic';
 import Img from './img';
 import IndicatorLight from './indicator-light';
@@ -30,6 +31,7 @@ const ui: Record<string, any> = {
   indicatorLight: IndicatorLight,
   warningRunningList: WarningRunningList,
   runningParameters: RunningParameters,
+  energyEfficiencyMonitoring: EnergyEfficiencyMonitoring,
 };
 
 export default ui;
