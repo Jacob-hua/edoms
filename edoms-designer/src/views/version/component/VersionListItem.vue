@@ -13,9 +13,7 @@
         </div>
       </div>
       <div v-else>
-        <p>
-          <LongText :content="formModel.name" :content-style="{ textAlign: 'left', fontSize: '18px' }"></LongText>
-        </p>
+        <LongText :content="formModel.name" :content-style="{ textAlign: 'left', fontSize: '18px' }"></LongText>
         <!-- {{ formModel.name }} -->
       </div>
     </div>
