@@ -3,6 +3,7 @@ import {
   Cpu,
   FolderOpened,
   Grid,
+  Odometer,
   Operation,
   Opportunity,
   Picture,
@@ -125,6 +126,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: Warning,
         text: '告警列表',
         type: 'warning-running-list',
+      },
+      {
+        icon: Odometer,
+        text: '能效监测',
+        type: 'energy-efficiency-monitoring',
       },
       {
         icon: Opportunity,
