@@ -19,9 +19,10 @@
         item-min-width="200px"
         :request="loadData"
       >
-        <template #default="{ item }: { item: ListPageResItem }">
+        <template #default="{ item }: { item: ListPageItem }">
           <PageListItem
             :application-id="applicationId"
+            :is-home-page="item.isHomePage"
             :data="item"
             :is-active="item.pageId === active?.pageId"
             @delete-success="handleReload"
@@ -87,7 +88,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import screenFull from 'screenfull';
 
-import type { ListPageResItem } from '@/api/page';
+// import type { ListPageResItem } from '@/api/page';
 import pageApi from '@/api/page';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
@@ -96,7 +97,7 @@ import PopMenuOption from '@/components/PopMenuOption.vue';
 import useDate from '@/hooks/useDate';
 
 import NewPageDialog from './component/NewPageDialog.vue';
-import PageListItem from './component/PageListItem.vue';
+import PageListItem, { ListPageItem } from './component/PageListItem.vue';
 
 const route = useRoute();
 
@@ -112,15 +113,16 @@ const previewVisible = ref<boolean>(false);
 
 const totalCount = ref<number>();
 
-const active = ref<ListPageResItem>();
+const active = ref<ListPageItem>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
-const loadData: RequestFunc<ListPageResItem> = async ({ pageSize, current }) => {
+const loadData: RequestFunc<ListPageItem> = async ({ pageSize, current }) => {
   const {
     dataList = [],
     count,
     applicationName,
+    indexPageId = '',
   } = await pageApi.listPages({
     page: current,
     limit: pageSize,
@@ -133,8 +135,12 @@ const loadData: RequestFunc<ListPageResItem> = async ({ pageSize, current }) => 
   if (totalCount.value) {
     previewVisible.value = true;
   }
+
   return {
-    data: dataList,
+    data: dataList.map<ListPageItem>((item) => ({
+      ...item,
+      isHomePage: indexPageId && indexPageId === item?.pageId ? true : false,
+    })),
     total: Number(count),
   };
 };
@@ -212,7 +218,7 @@ const handleShowSearchInput = () => {
   search();
 };
 
-const handleRenameSuccess = (value: ListPageResItem) => {
+const handleRenameSuccess = (value: ListPageItem) => {
   if (value.pageId === active.value?.pageId) {
     active.value = value;
   }
@@ -231,7 +237,7 @@ const handleClearInput = () => {
   search();
 };
 
-const handleChangeActive = (value: ListPageResItem) => {
+const handleChangeActive = (value: ListPageItem) => {
   active.value = value;
 };
 

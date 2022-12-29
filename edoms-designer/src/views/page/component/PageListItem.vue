@@ -12,7 +12,10 @@
       </div>
     </template>
     <template v-else>
-      <p>{{ formModel.name }}</p>
+      <p class="pop-menu-content">
+        <el-icon v-if="formModel.isHomePage" :size="20"><House /></el-icon>
+        {{ formModel.name }}
+      </p>
       <div class="pop-menu-wrapper">
         <PopMenu @menu-click="handleMenuClick">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
@@ -39,20 +42,25 @@ import pageApi from '@/api/page';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
+export interface ListPageItem extends ListPageResItem {
+  /** 页面首页标识 */
+  isHomePage?: boolean;
+}
+
 const props = defineProps<{
   applicationId: string;
-  data: ListPageResItem;
+  data: ListPageItem;
   isActive: boolean;
 }>();
 
 const emit = defineEmits<{
-  (event: 'renameSuccess', value: ListPageResItem): void;
+  (event: 'renameSuccess', value: ListPageItem): void;
   (event: 'renameCatch', error: any): void;
   (event: 'deleteSuccess'): void;
   (event: 'deleteCatch', error: any): void;
   (event: 'useIndexSuccess'): void;
   (event: 'useIndexCatch', error: any): void;
-  (event: 'changeActive', value: ListPageResItem): void;
+  (event: 'changeActive', value: ListPageItem): void;
 }>();
 
 const formRef = ref<FormInstance>();
@@ -160,5 +168,10 @@ const handleClick = () => {
 }
 .active {
   background-color: #409eff;
+}
+.pop-menu-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
