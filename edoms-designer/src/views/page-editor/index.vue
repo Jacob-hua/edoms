@@ -7,6 +7,7 @@
       :runtime-url="runtimeUrl"
       :props-configs="propsConfigs"
       :props-values="propsValues"
+      :can-select="canSelect"
       :event-method-list="eventMethodList"
       :component-group-list="componentGroupList"
       :default-selected="defaultSelected"
@@ -81,6 +82,8 @@ const stageRect = ref({
 });
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
+
+const idPrefix = 'edoms';
 
 const editorRef = ref<InstanceType<typeof EdomsEditor>>();
 
@@ -243,7 +246,10 @@ watch(
 );
 
 onMounted(() => {
-  editorRef.value?.uiService.set('showSrc', false);
+  if (editorRef.value) {
+    editorRef.value.uiService.set('showSrc', false);
+    editorRef.value.propsService.setIdPrefix(idPrefix);
+  }
 });
 
 const moveableOptions = (core?: StageCore): MoveableOptions => {
@@ -263,6 +269,13 @@ const moveableOptions = (core?: StageCore): MoveableOptions => {
   options.rotatable = !isPage;
 
   return options;
+};
+
+const canSelect = (el: HTMLElement): boolean => {
+  if (!el.id) {
+    return false;
+  }
+  return el.id.startsWith(idPrefix);
 };
 
 const { requestInstances, requestPoints } = useModel();

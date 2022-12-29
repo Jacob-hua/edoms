@@ -11,6 +11,8 @@ import { fillConfig } from '../utils/props';
 import BaseService from './BaseService';
 
 export class PropsService extends BaseService {
+  private idPrefix: string = '';
+
   private state = reactive<PropsState>({
     propsConfigMap: {},
     propsValueMap: {},
@@ -27,6 +29,10 @@ export class PropsService extends BaseService {
       'fillConfig',
       'getDefaultPropsValue',
     ]);
+  }
+
+  public setIdPrefix(prefix: string) {
+    this.idPrefix = prefix;
   }
 
   public setPropsConfigs(configs: Record<string, FormConfig>, request?: Request) {
@@ -122,7 +128,7 @@ export class PropsService extends BaseService {
   }
 
   public async createId(type: string | number): Promise<string> {
-    return `${type}_${this.guid()}`;
+    return `${this.idPrefix}_${type}_${this.guid()}`;
   }
 
   /**
