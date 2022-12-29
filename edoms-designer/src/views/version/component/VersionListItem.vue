@@ -13,7 +13,10 @@
         </div>
       </div>
       <div v-else>
-        {{ formModel.name }}
+        <p>
+          <LongText :content="formModel.name" :content-style="{ textAlign: 'left', fontSize: '18px' }"></LongText>
+        </p>
+        <!-- {{ formModel.name }} -->
       </div>
     </div>
     <div class="time">{{ formatTime(data.createTime) }}</div>
@@ -32,6 +35,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 
 import type { ListVersionResItem } from '@/api/version';
 import versionApi from '@/api/version';
+import LongText from '@/components/LongText.vue';
 import useDate from '@/hooks/useDate';
 
 const { formatTime } = useDate();
@@ -59,7 +63,10 @@ const formModel = reactive({
 });
 
 const formRules = reactive<FormRules>({
-  name: [{ required: true, message: '请输入版本名称', trigger: 'blur' }],
+  name: [
+    { required: true, message: '请输入版本名称', trigger: 'blur' },
+    { min: 1, max: 20, message: '版本名称长度1-20字符', trigger: 'blur' },
+  ],
 });
 
 const handleRenameVisible = () => {
