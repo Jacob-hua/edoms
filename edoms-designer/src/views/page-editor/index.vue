@@ -41,7 +41,7 @@ import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps 
 import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
-import { getByPath } from '@edoms/utils';
+import { getByPath, isNumber } from '@edoms/utils';
 
 import pageApi from '@/api/page';
 import versionApi from '@/api/version';
@@ -275,7 +275,7 @@ const canSelect = (el: HTMLElement): boolean => {
   if (!el.id) {
     return false;
   }
-  return el.id.startsWith(idPrefix);
+  return el.id.startsWith(idPrefix) || isNumber(el.id);
 };
 
 const { requestInstances, requestPoints } = useModel();
