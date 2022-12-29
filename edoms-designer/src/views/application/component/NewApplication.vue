@@ -74,7 +74,7 @@ const formRules = {
   ],
   description: [
     { required: true, message: '请输入应用简介', trigger: 'blur' },
-    { min: 1, max: 40, message: '应用简介长度1-40字符', trigger: 'blur' },
+    { min: 0, max: 40, message: '应用简介长度0-40字符', trigger: 'blur' },
   ],
 };
 

@@ -32,7 +32,7 @@ withDefaults(
     placement?: PlacementType;
   }>(),
   {
-    contentStyle: () => ({ width: '96px', color: '', fontSize: '16px' }),
+    contentStyle: () => ({ width: '96px', color: '', fontSize: '16px', textAlign: 'center' }),
     effect: () => 'dark',
     linesClamp: () => 1,
     placement: () => 'top',
@@ -40,9 +40,9 @@ withDefaults(
 );
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .content {
-  text-align: center;
+  text-align: v-bind('contentStyle.textAlign');
   width: v-bind('contentStyle.width');
   color: v-bind('contentStyle.color');
   font-size: v-bind('contentStyle.fontSize');

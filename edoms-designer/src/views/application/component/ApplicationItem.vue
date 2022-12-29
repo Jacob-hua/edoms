@@ -15,7 +15,8 @@
         </PopMenu>
       </div>
     </div>
-    <div>{{ application.name }}</div>
+    <!-- <div>{{ application.name }}</div> -->
+    <LongText :content="application.name" :content-style="{ width: '198px', fontSize: '15px' }"></LongText>
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import type { ListApplicationsResItem } from '@/api/application';
 import applicationApi from '@/api/application';
 import PreviewImage from '@/components/ImagePreview.vue';
+import LongText from '@/components/Longtext.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
