@@ -39,7 +39,7 @@ const data = ref({
 });
 const tableKey = ref();
 const loadData = async () => {
-  const result: any = await modelApi.getDicData({
+  const result: any = await modelApi.getStaticDicData({
     mark: ModelMark.CIM_TABLE as string,
   });
   data.value = result[0];

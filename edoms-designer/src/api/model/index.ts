@@ -50,10 +50,22 @@ export default {
       return [];
     }
   },
-  getDicData: async (data: GetDicReq): Promise<GetDicRes> => {
+  getStaticDicData: async (data: GetDicReq): Promise<GetDicRes> => {
     try {
       const { result } = await request<GetDicReq, GetDicRes>({
-        url: '/dic-data/list',
+        url: '/cim-model/table/static-table/list',
+        method: 'GET',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  getDynamicDicData: async (data: GetDicReq): Promise<GetDicRes> => {
+    try {
+      const { result } = await request<GetDicReq, GetDicRes>({
+        url: '/cim-model/table/dynamic-api/list',
         method: 'GET',
         data,
       });
