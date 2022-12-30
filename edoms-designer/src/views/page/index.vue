@@ -28,7 +28,6 @@
             @delete-success="handleReload"
             @use-index-success="handleReload"
             @rename-success="handleRenameSuccess"
-            @change-active="handleChangeActive"
           />
         </template>
         <template #noMore>
@@ -235,10 +234,6 @@ const handleNewPage = () => {
 
 const handleClearInput = () => {
   search();
-};
-
-const handleChangeActive = (value: ListPageItem) => {
-  active.value = value;
 };
 
 const goEdit = () => {
