@@ -74,6 +74,7 @@ const formRules = reactive<FormRules>({
   name: [
     { required: true, message: '请输入页面名称', trigger: 'blur' },
     { min: 1, max: 20, message: '页面名称长度1-20字符', trigger: 'blur' },
+    { whitespace: true, message: '页面名称不能为空格', trigger: 'blur' },
   ],
 });
 

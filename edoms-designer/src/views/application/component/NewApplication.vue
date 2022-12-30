@@ -71,10 +71,12 @@ const formRules = {
   name: [
     { required: true, message: '请输入应用名称', trigger: 'blur' },
     { min: 1, max: 20, message: '应用名称长度1-20字符', trigger: 'blur' },
+    { whitespace: true, message: '应用名称不能为空', trigger: 'blur' },
   ],
   description: [
     { required: true, message: '请输入应用简介', trigger: 'blur' },
-    { min: 0, max: 40, message: '应用简介长度0-40字符', trigger: 'blur' },
+    { min: 1, max: 40, message: '应用简介长度1-40字符', trigger: 'blur' },
+    { whitespace: true, message: '应用简介不能为空', trigger: 'blur' },
   ],
 };
 

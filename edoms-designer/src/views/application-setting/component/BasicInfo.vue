@@ -14,7 +14,7 @@
           :rows="10"
         ></el-input>
       </el-form-item>
-      <el-form-item label="预览路径" prop="serviceAddress">
+      <el-form-item label="发布路径" prop="serviceAddress">
         <el-input v-model="appInfo.serviceAddress" placeholder="请输入路径">
           <template #prepend>{{ previewPath }}</template>
         </el-input>
@@ -48,6 +48,7 @@ const formRules = {
   name: [
     {
       required: true,
+      whitespace: true,
       message: '应用名称不能为空',
       trigger: 'blur',
     },
@@ -61,26 +62,33 @@ const formRules = {
   description: [
     {
       required: true,
+      whitespace: true,
       message: '应用简介不能为空',
       trigger: 'blur',
     },
     {
-      min: 0,
+      min: 1,
       max: 40,
-      message: '应用简介长度0-40字符',
+      message: '应用简介长度1-40字符',
       trigger: 'blur',
     },
   ],
   serviceAddress: [
     {
       required: true,
-      message: '预览路径不能为空',
+      whitespace: true,
+      message: '发布路径不能为空',
       trigger: 'blur',
     },
     {
       min: 1,
       max: 20,
-      message: '预览路径长度1-20字符',
+      message: '发布路径长度1-20字符',
+      trigger: 'blur',
+    },
+    {
+      pattern: /^[0-9a-zA-Z]+$/,
+      message: '发布路径只能是数字和字母',
       trigger: 'blur',
     },
   ],
