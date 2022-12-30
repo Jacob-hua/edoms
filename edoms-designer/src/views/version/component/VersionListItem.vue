@@ -62,8 +62,9 @@ const formModel = reactive({
 
 const formRules = reactive<FormRules>({
   name: [
-    { required: true, message: '请输入版本名称', trigger: 'blur' },
-    { min: 1, max: 20, message: '版本名称长度1-20字符', trigger: 'blur' },
+    { required: true, message: '请输入页面名称', trigger: 'blur' },
+    { min: 1, max: 20, message: '页面名称长度1-20字符', trigger: 'blur' },
+    { whitespace: true, message: '页面名称不能为空格', trigger: 'blur' },
   ],
 });
 
@@ -122,6 +123,7 @@ const handleClick = () => {
 .wrapper {
   cursor: pointer;
   border-bottom: 1px solid #000000;
+  padding: 5px 10px;
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-template-areas:
@@ -145,7 +147,7 @@ const handleClick = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    padding-bottom: 12px;
     & i {
       cursor: pointer;
     }
