@@ -7,7 +7,9 @@
       </div>
       <div class="top-wrapper-right">
         <el-button type="danger" size="large" @click="handleClearTable">清空</el-button>
-        <el-button :loading="selectFileLoading" size="large" type="primary" @click="handleFileChange">导入</el-button>
+        <el-button ref="importBtn" :loading="selectFileLoading" size="large" type="primary" @click="handleFileChange"
+          >导入</el-button
+        >
         <el-button :loading="loading" type="primary" size="large" @click="execute">导出</el-button>
       </div>
     </div>
@@ -48,7 +50,7 @@
 </template>
 
 <script lang="ts" setup name="StaticModelTable">
-import { ref, watch } from 'vue';
+import { nextTick, ref, watch } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 import fileApi from '@/api/file';
@@ -115,6 +117,7 @@ const pageInfo = ref({
   limit: 10,
   total: 0,
 });
+const importBtn = ref();
 const loadTableHistory = async () => {
   const { dataList, count } = await modelApi.getTableHistory({
     page: pageInfo.value.page,
@@ -134,7 +137,7 @@ const onPageChange = (value: number) => {
 };
 
 const handleClearTable = async () => {
-  ElMessageBox.confirm('此操作将清空上次导入表数据, 是否继续?', '提示', {
+  ElMessageBox.confirm('此操作将清空表数据, 是否继续?', '提示', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
     type: 'warning',
@@ -150,7 +153,7 @@ const handleClearTable = async () => {
 };
 
 const handleFileChange = async () => {
-  ElMessageBox.confirm('此操作将清空上次导入表数据, 是否继续?', '提示', {
+  ElMessageBox.confirm('应该为“此操作将覆盖表数据, 是否继续?', '提示', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
     type: 'warning',
@@ -163,24 +166,33 @@ const handleFileChange = async () => {
         fileName: file.name,
       });
       ElMessage.success('导入成功');
+      importBtn?.value?.ref?.blur();
       loadTableHistory();
     })
-    .catch(() => {});
-};
-const { execute: handleFileDownload } = useExport(
-  async (data: any) => {
-    try {
-      const result = await fileApi.downloadFile({
-        contentId: data.contentId,
+    .catch(() => {
+      nextTick(() => {
+        importBtn?.value?.ref?.blur();
       });
-      return result;
-    } catch (e) {
-      return [];
-    }
-  },
-  () => `${props.data.name}.csv`,
-  MimeType.CSV
-);
+    });
+};
+
+const handleFileDownload = (data: any) => {
+  const { execute } = useExport(
+    async () => {
+      try {
+        const result = await fileApi.downloadFile({
+          contentId: data.contentId,
+        });
+        return result;
+      } catch (e) {
+        return [];
+      }
+    },
+    () => `${data.fileName}`,
+    MimeType.CSV
+  );
+  execute();
+};
 </script>
 
 <style lang="scss" scoped>
