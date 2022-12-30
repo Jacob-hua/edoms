@@ -167,20 +167,24 @@ const handleFileChange = async () => {
     })
     .catch(() => {});
 };
-const { execute: handleFileDownload } = useExport(
-  async (data: any) => {
-    try {
-      const result = await fileApi.downloadFile({
-        contentId: data.contentId,
-      });
-      return result;
-    } catch (e) {
-      return [];
-    }
-  },
-  () => `${props.data.name}.csv`,
-  MimeType.CSV
-);
+
+const handleFileDownload = (data: any) => {
+  const { execute } = useExport(
+    async () => {
+      try {
+        const result = await fileApi.downloadFile({
+          contentId: data.contentId,
+        });
+        return result;
+      } catch (e) {
+        return [];
+      }
+    },
+    () => `${data.fileName}`,
+    MimeType.CSV
+  );
+  execute();
+};
 </script>
 
 <style lang="scss" scoped>
