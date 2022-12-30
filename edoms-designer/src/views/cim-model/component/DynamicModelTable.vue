@@ -7,13 +7,17 @@
         <el-button type="primary" size="large" @click="handleSimulation">测试</el-button>
       </div>
     </div>
-    <el-input v-model="apiInfo.path" placeholder="请输入请求路径" class="input-with-select" size="large">
-      <template #prepend>
-        <el-select v-model="apiInfo.method" placeholder="请求方式" class="select" size="large">
-          <el-option v-for="{ label, value } in requestMethods" :key="value" :label="label" :value="value" />
-        </el-select>
-      </template>
-    </el-input>
+    <el-form ref="urlForm" :model="apiInfo">
+      <el-form-item :rules="[{ required: true, message: '请填写请求路径' }]" prop="path">
+        <el-input v-model="apiInfo.path" placeholder="请输入请求路径" class="input-with-select" size="large">
+          <template #prepend>
+            <el-select v-model="apiInfo.method" placeholder="请求方式" class="select" size="large">
+              <el-option v-for="{ label, value } in requestMethods" :key="value" :label="label" :value="value" />
+            </el-select>
+          </template>
+        </el-input>
+      </el-form-item>
+    </el-form>
     <p class="title">请求参数</p>
     <el-tabs v-model="tabActive" class="demo-tabs">
       <el-tab-pane
@@ -32,11 +36,7 @@
               <el-input v-model="row.key" />
             </template>
           </EditTableColumn>
-          <EditTableColumn
-            prop="value"
-            label="value"
-            :rules="[{ required: true, message: '请输入value值', trigger: 'blur' }]"
-          >
+          <EditTableColumn label="value">
             <template #edit="{ row }">
               <el-input v-model="row.value" />
             </template>
@@ -69,7 +69,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, toRefs } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, FormInstance } from 'element-plus';
 
 import modelApi, { ApiStruct, Dic } from '@/api/model';
 import EditTable from '@/components/EditTable.vue';
@@ -111,6 +111,8 @@ const parameterData = ref([
     tableData: [] as KVStruct[],
   },
 ]);
+
+const urlForm = ref<FormInstance>();
 const tabActive = ref<string>('Params');
 const tableInstance: Record<string, any> = {};
 const setRef = (el: any, instanceKey: string) => {
@@ -178,11 +180,19 @@ const parameterFactory = (paramsData: any[], isSimulation = true, { id, dicCimId
   }, {});
 };
 const handleSaveApi = async () => {
-  await modelApi.saveApi(parameterFactory(getNewResult([...parameterData.value])));
-  ElMessage.success('保存成功');
+  try {
+    if (!urlForm.value) return;
+    await urlForm.value?.validate();
+    await modelApi.saveApi(parameterFactory(getNewResult([...parameterData.value])));
+    ElMessage.success('保存成功');
+  } catch (e: any) {
+    throw new Error(e);
+  }
 };
 const handleSimulation = async () => {
   try {
+    if (!urlForm.value) return;
+    await urlForm.value?.validate();
     jsonData.value =
       (await modelApi.simulationApi(parameterFactory(getNewResult([...parameterData.value]), false))) ?? {};
   } catch (e) {
@@ -207,6 +217,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .right-section {
+  overflow-y: auto;
   .bottom {
     cursor: pointer;
     width: 100%;
