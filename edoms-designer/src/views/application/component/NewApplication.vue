@@ -9,6 +9,7 @@
           <el-input
             v-model="applicationForm.description"
             type="textarea"
+            resize="none"
             placeholder="请输入应用简介内容"
             min="0"
             max="40"
