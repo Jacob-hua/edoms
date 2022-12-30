@@ -120,6 +120,7 @@ const handleConfirm = async () => {
 };
 
 const handleClose = () => {
+  confirmForm.value.inputText = '';
   deleteVisible.value = false;
 };
 </script>
