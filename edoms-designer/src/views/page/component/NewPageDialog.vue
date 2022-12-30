@@ -59,8 +59,13 @@ const formRules = {
     },
     {
       min: 1,
-      max: 10,
-      message: '页面名称长度1-10字符',
+      max: 20,
+      message: '页面名称长度1-20字符',
+      trigger: 'blur',
+    },
+    {
+      whitespace: true,
+      message: '页面名称不能为空',
       trigger: 'blur',
     },
   ],
