@@ -36,7 +36,7 @@
               <el-input v-model="row.key" />
             </template>
           </EditTableColumn>
-          <EditTableColumn label="value">
+          <EditTableColumn prop="value" label="value">
             <template #edit="{ row }">
               <el-input v-model="row.value" />
             </template>
