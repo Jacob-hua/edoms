@@ -19,7 +19,7 @@
     <div class="modal-container">
       <p>正在删除 “{{ appInfo.name }}” 应用，应用数据将被清空。请输入下面内容后确认删除！</p>
       <p class="confirm">请在输入框输入"{{ confirmText }}" 以确认此操作。</p>
-      <el-form ref="form" :model="confirmForm" :rules="rules">
+      <el-form ref="formRef" :model="confirmForm" :rules="rules">
         <el-form-item prop="inputText">
           <el-input v-model="confirmForm.inputText" clearable></el-input>
         </el-form-item>
@@ -59,7 +59,7 @@ const router = useRouter();
 const { appInfo } = toRefs(props);
 const deleteVisible = ref<boolean>(false);
 const confirmText = ref<string>('');
-const form = ref<FormInstance>();
+const formRef = ref<FormInstance>();
 
 const { execute: handleExportApplication } = useExport(
   async () => {
@@ -108,8 +108,8 @@ const confirmForm = ref({
 });
 
 const handleConfirm = async () => {
-  if (!form.value) return;
-  await form.value?.validate();
+  if (!formRef.value) return;
+  await formRef.value?.validate();
   await applicationApi.deleteApplication({
     applicationId: appInfo.value.applicationId,
     secret: confirmForm.value.inputText,
@@ -120,7 +120,7 @@ const handleConfirm = async () => {
 };
 
 const handleClose = () => {
-  confirmForm.value.inputText = '';
+  formRef.value?.resetFields();
   deleteVisible.value = false;
 };
 </script>
