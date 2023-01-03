@@ -9,6 +9,7 @@
           v-model="appInfo.description"
           type="textarea"
           placeholder="请输入应用简介内容"
+          resize="none"
           min="0"
           max="40"
           :rows="10"

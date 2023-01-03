@@ -49,6 +49,14 @@ const handlePreview = () => {
 
 <style lang="scss" scoped>
 .upload-wrapper {
+  :deep(.el-icon) {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    svg {
+      width: 1.5em !important;
+      height: 1.5em !important;
+    }
+  }
   display: flex;
   align-items: flex-end;
   .image-wrapper {
