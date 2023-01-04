@@ -5,7 +5,7 @@
     <ElCollapse class="ui-component-panel" :model-value="collapseValue">
       <ElInput
         v-model="searchText"
-        placeholder="输入关键字进行过滤"
+        placeholder="请输入组件名称"
         class="search-input"
         size="small"
         clearable
