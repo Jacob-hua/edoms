@@ -6,7 +6,13 @@
         <span>{{ appName }}</span>
       </div>
       <div class="search-wrapper">
-        <el-input v-model="searchText" clearable @keyup.enter="search" @clear="handleClearInput"></el-input>
+        <el-input
+          v-model="searchText"
+          placeholder="根据页面名过滤"
+          clearable
+          @keyup.enter="search"
+          @clear="handleClearInput"
+        ></el-input>
         <el-icon class="header-icon" :size="21" @click="handleShowSearchInput"><Search /></el-icon>
         <el-icon class="header-icon" :size="20" @click="handleNewPage"><Plus /></el-icon>
       </div>
