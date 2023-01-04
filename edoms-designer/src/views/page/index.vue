@@ -341,6 +341,7 @@ const goEdit = () => {
       justify-content: space-between;
       align-items: center;
       padding-top: 10px;
+      padding-left: 10px;
       & > span {
         font-size: 25px;
       }
