@@ -87,11 +87,7 @@ const menus = [
     name: 'switch',
     label: '切换租户',
     icon: 'Operation',
-    action: () => {
-      accountStore.triggerTenant('');
-    },
   },
-
   {
     name: 'model',
     label: '租户模型',
@@ -119,7 +115,7 @@ const handleMenuHide = () => {
 
 const handleMenuClick = (value: string | number) => {
   const menu = menus.find(({ name }) => name === value);
-  menu?.action();
+  menu?.action?.();
 };
 
 const handleMenuHover = (value: string | number) => {

@@ -27,11 +27,7 @@
         :name="name"
       >
         <EditTable :ref="(el) => setRef(el, instanceKey)" :data-source="tableData">
-          <EditTableColumn
-            prop="key"
-            label="key"
-            :rules="[{ required: true, message: '请输入key值', trigger: 'blur' }]"
-          >
+          <EditTableColumn prop="key" label="key" :rules="editColumnRules.key">
             <template #edit="{ row }">
               <el-input v-model="row.key" />
             </template>
@@ -68,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, toRefs } from 'vue';
+import { onMounted, reactive, ref, toRefs } from 'vue';
 import { ElMessage, ElMessageBox, FormInstance } from 'element-plus';
 
 import modelApi, { ApiStruct, Dic } from '@/api/model';
@@ -111,6 +107,13 @@ const parameterData = ref([
     tableData: [] as KVStruct[],
   },
 ]);
+
+const editColumnRules = reactive({
+  key: [
+    { required: true, message: '请输入key值', trigger: 'blur' },
+    { whitespace: true, message: 'key值不能为空', trigger: 'blur' },
+  ],
+});
 
 const urlForm = ref<FormInstance>();
 const tabActive = ref<string>('Params');

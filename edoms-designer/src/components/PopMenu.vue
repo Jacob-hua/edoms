@@ -1,5 +1,6 @@
 <template>
   <el-popover
+    v-model:visible="popoverVisible"
     popper-class="popper"
     :placement="placement"
     :width="width"
@@ -30,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, provide } from 'vue';
+import { computed, provide, ref } from 'vue';
 
 import { throttle } from '@edoms/utils';
 
@@ -68,9 +69,12 @@ const emit = defineEmits<{
   (event: 'hide'): void;
 }>();
 
+const popoverVisible = ref<boolean>(false);
+
 const referenceClass = computed(() => (props.disabled ? ['reference', 'reference-disabled'] : ['reference']));
 
 const handleClick = (value: string | number) => {
+  popoverVisible.value = false;
   emit('menuClick', value);
 };
 

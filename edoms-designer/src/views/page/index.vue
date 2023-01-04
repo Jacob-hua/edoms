@@ -94,7 +94,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import screenFull from 'screenfull';
 
-// import type { ListPageResItem } from '@/api/page';
 import pageApi from '@/api/page';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
@@ -120,6 +119,7 @@ const previewVisible = ref<boolean>(false);
 const totalCount = ref<number>();
 
 const active = ref<ListPageItem>();
+console.log(active.value);
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
@@ -137,7 +137,7 @@ const loadData: RequestFunc<ListPageItem> = async ({ pageSize, current }) => {
   });
   totalCount.value = Number(count);
   appName.value = applicationName;
-  !active.value && (active.value = dataList[0] ?? { pushContentId: null });
+  active.value = dataList[0] ?? { pushContentId: null };
   if (totalCount.value) {
     previewVisible.value = true;
   }
