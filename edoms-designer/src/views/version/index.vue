@@ -180,8 +180,7 @@ const handleEdit = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px;
 
     & > span {
       font-size: 25px;
