@@ -48,6 +48,11 @@ const handlePreview = () => {
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-dialog) {
+  .el-dialog__body {
+    height: 600px;
+  }
+}
 .upload-wrapper {
   :deep(.el-icon) {
     width: 1.5em !important;
