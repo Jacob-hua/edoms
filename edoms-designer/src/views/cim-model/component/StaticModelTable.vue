@@ -153,7 +153,7 @@ const handleClearTable = async () => {
 };
 
 const handleFileChange = async () => {
-  ElMessageBox.confirm('应该为“此操作将覆盖表数据, 是否继续?', '提示', {
+  ElMessageBox.confirm('此操作将覆盖表数据, 是否继续?', '提示', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
     type: 'warning',
