@@ -335,6 +335,7 @@ const goEdit = () => {
   }
   .right-section {
     width: 82%;
+    overflow: hidden;
     .right-top-bar {
       display: flex;
       justify-content: space-between;
