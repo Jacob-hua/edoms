@@ -18,7 +18,7 @@
   <el-dialog v-model="deleteVisible" title="删除应用" width="40%" :before-close="handleClose" center>
     <div class="modal-container">
       <p>正在删除 “{{ appInfo.name }}” 应用，应用数据将被清空。请输入下面内容后确认删除！</p>
-      <p class="confirm">请在输入框输入"{{ confirmText }}" 以确认此操作。</p>
+      <p class="confirm" @click="handleCopy">请在输入框输入"{{ confirmText }}" 以确认此操作。</p>
       <el-form ref="form" :model="confirmForm" :rules="rules">
         <el-form-item prop="inputText">
           <el-input v-model="confirmForm.inputText" clearable></el-input>
@@ -123,6 +123,11 @@ const handleClose = () => {
   confirmForm.value.inputText = '';
   deleteVisible.value = false;
 };
+
+const handleCopy = () => {
+  navigator.clipboard.writeText(confirmText.value);
+  ElMessage.success(`复制内容为${confirmText.value}`);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -166,6 +171,7 @@ const handleClose = () => {
   .confirm {
     margin-top: 40px;
     margin-bottom: 25px;
+    cursor: pointer;
   }
 }
 </style>
