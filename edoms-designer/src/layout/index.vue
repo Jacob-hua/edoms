@@ -88,7 +88,6 @@ const menus = [
     label: '切换租户',
     icon: 'Operation',
   },
-
   {
     name: 'model',
     label: '租户模型',
