@@ -10,7 +10,7 @@
       v-model="filterText"
       class="search-input"
       size="small"
-      placeholder="输入关键字进行过滤"
+      placeholder="请输入组件名称"
       clearable
       :prefix-icon="Search"
       @change="filterTextChangeHandler"

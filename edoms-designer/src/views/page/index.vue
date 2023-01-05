@@ -8,7 +8,7 @@
       <div class="search-wrapper">
         <el-input
           v-model="searchText"
-          placeholder="根据页面名过滤"
+          placeholder="请输入页面名称"
           clearable
           @keyup.enter="search"
           @clear="handleClearInput"
@@ -335,6 +335,7 @@ const goEdit = () => {
   }
   .right-section {
     width: 82%;
+    overflow: hidden;
     .right-top-bar {
       display: flex;
       justify-content: space-between;
