@@ -5,7 +5,13 @@
         <div class="describe">
           <span>E-DOMS</span>
           <div class="pop-menu-wrapper">
-            <PopMenu :width="350" @hide="handleMenuHide" @menu-click="handleMenuClick" @menu-hover="handleMenuHover">
+            <PopMenu
+              ref="popMenuRef"
+              :width="350"
+              @hide="handleMenuHide"
+              @menu-click="handleMenuClick"
+              @menu-hover="handleMenuHover"
+            >
               <template #reference>
                 <div class="avatar">
                   <span>{{ nickName }}</span>
@@ -76,6 +82,8 @@ const tenantListVisible = ref<boolean>(false);
 
 const applicationNumber = ref<number>();
 
+const popMenuRef = ref();
+
 const tenantList = computed(() =>
   tenants.value.map((item) => ({ ...item, isActive: currentTenant.value?.tenantId === item.tenantId }))
 );
@@ -136,6 +144,7 @@ const handleTriggerTenant = async (tenantId: string) => {
   router.push({
     path: '/',
   });
+  popMenuRef.value?.handleClose();
 };
 </script>
 
