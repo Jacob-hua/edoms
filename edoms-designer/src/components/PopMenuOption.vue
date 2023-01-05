@@ -12,11 +12,17 @@ import { computed, inject } from 'vue';
 import { PopMenuProvide } from './PopMenu.vue';
 import { PopMenuOptGroupProvide } from './PopMenuOptGroup.vue';
 
+export interface DisabledType {
+  clickEvent?: boolean;
+  hoverEvent?: boolean;
+  allEvent?: boolean;
+}
+
 const props = withDefaults(
   defineProps<{
     value: string | number;
     label?: string;
-    disabled?: boolean;
+    disabled?: DisabledType;
   }>(),
   {
     label: '',
@@ -27,10 +33,10 @@ const popMenu = inject<PopMenuProvide>('popMenu', {});
 const popMenuOptGroup = inject<PopMenuOptGroupProvide>('popMenuOptGroup', {});
 
 const handleClick = () => {
-  if (props.disabled) {
+  if (props.disabled?.clickEvent) {
     return;
   }
-  if (popMenuOptGroup?.disabled) {
+  if (popMenuOptGroup?.disabled?.clickEvent) {
     return;
   }
   if (popMenu && typeof popMenu.handleClick === 'function') {
@@ -39,10 +45,10 @@ const handleClick = () => {
 };
 
 const handleHover = () => {
-  if (props.disabled) {
+  if (props.disabled?.hoverEvent) {
     return;
   }
-  if (popMenuOptGroup?.disabled) {
+  if (popMenuOptGroup?.disabled?.hoverEvent) {
     return;
   }
   if (popMenu && typeof popMenu.handleHover === 'function') {
@@ -51,7 +57,9 @@ const handleHover = () => {
 };
 
 const classNames = computed(() =>
-  props.disabled || popMenuOptGroup?.disabled ? ['pop-menu-option', 'pop-menu-option-disabled'] : ['pop-menu-option']
+  props.disabled?.allEvent || popMenuOptGroup?.disabled?.allEvent
+    ? ['pop-menu-option', 'pop-menu-option-disabled']
+    : ['pop-menu-option']
 );
 </script>
 

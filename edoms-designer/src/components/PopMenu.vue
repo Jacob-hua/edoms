@@ -90,9 +90,17 @@ const handlePopHide = () => {
   emit('hide');
 };
 
+const handleClose = () => {
+  popoverVisible.value = false;
+};
+
 provide<PopMenuProvide>('popMenu', {
   handleClick: throttle(handleClick, props.clickDelay),
   handleHover: throttle(handleHover, props.hoverDelay),
+});
+
+defineExpose({
+  handleClose,
 });
 </script>
 
