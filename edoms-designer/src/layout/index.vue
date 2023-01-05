@@ -19,7 +19,13 @@
                   </div>
                 </div>
               </div>
-              <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
+              <PopMenuOption
+                v-for="(menu, index) in menus"
+                :key="index"
+                :label="menu.label"
+                :value="menu.name"
+                :disabled="menu.disabled"
+              >
                 <div class="pop-menu-item">
                   <span>{{ menu.label }}</span>
                 </div>
@@ -87,6 +93,9 @@ const menus = [
     name: 'switch',
     label: '切换租户',
     icon: 'Operation',
+    disabled: {
+      clickEvent: true,
+    },
   },
   {
     name: 'model',

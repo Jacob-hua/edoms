@@ -15,18 +15,19 @@
 <script lang="ts" setup>
 import { provide } from 'vue';
 
+import type { DisabledType } from './PopMenuOption.vue';
+
 export interface PopMenuOptGroupProvide {
-  disabled?: boolean;
+  disabled?: DisabledType;
 }
 
 const props = withDefaults(
   defineProps<{
     label?: string;
-    disabled?: boolean;
+    disabled?: DisabledType;
   }>(),
   {
     label: () => '',
-    disabled: () => false,
   }
 );
 
