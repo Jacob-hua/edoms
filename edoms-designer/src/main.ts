@@ -15,7 +15,6 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import ElDesign from '@edoms/design';
 import EdomsEditor from '@edoms/editor';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
-import EdomsForm from '@edoms/form';
 
 import App from './App.vue';
 import router from './router';
@@ -61,5 +60,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 app.use(ElDesign, EdomsElementPlusAdapter);
 app.use(EdomsEditor);
-app.use(EdomsForm);
 app.mount('#app');

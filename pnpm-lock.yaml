@@ -83,7 +83,6 @@ importers:
       '@edoms/design': workspace:^0.0.1
       '@edoms/editor': workspace:^0.0.1
       '@edoms/element-plus-adapter': workspace:^0.0.1
-      '@edoms/form': workspace:^0.0.1
       '@edoms/schema': workspace:^0.0.1
       '@edoms/stage': workspace:^0.0.1
       '@edoms/utils': workspace:^0.0.1
@@ -112,7 +111,6 @@ importers:
       '@edoms/design': link:../packages/design
       '@edoms/editor': link:../packages/editor
       '@edoms/element-plus-adapter': link:../packages/element-plus-adapter
-      '@edoms/form': link:../packages/form
       '@edoms/schema': link:../packages/schema
       '@edoms/stage': link:../packages/stage
       '@edoms/utils': link:../packages/utils
@@ -1955,7 +1953,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: registry.npmmirror.com/vite/3.2.3_@types+node@15.14.9
+      vite: registry.npmmirror.com/vite/3.2.3_ine3jvitqo2wd63xsapbvgdjva
       vue: registry.npmmirror.com/vue/3.2.44
     dev: true
 
