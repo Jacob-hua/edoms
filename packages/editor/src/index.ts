@@ -1,5 +1,7 @@
 import { App } from 'vue';
 
+import EdomsForm from '@edoms/form';
+
 import Code from './fields/Code.vue';
 import CodeLink from './fields/CodeLink.vue';
 import CodeSelect from './fields/CodeSelect.vue';
@@ -38,6 +40,7 @@ const defaultInstallOpt: InstallOptions = {
 
 export default {
   install: (app: App, opt?: InstallOptions): void => {
+    app.use(EdomsForm);
     const option = Object.assign(defaultInstallOpt, opt || {});
 
     // eslint-disable-next-line no-param-reassign
