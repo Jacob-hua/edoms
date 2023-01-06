@@ -19,6 +19,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
+        name: 'Application',
         redirect: '/application',
       },
       {
@@ -119,7 +120,7 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
   }
   if (!accountStore.token) {
     router.push({
-      path: '/login',
+      path: 'login',
     });
     return;
   }
