@@ -6,11 +6,10 @@ export * from './type';
 
 export default {
   uploadFile: async (data: UploadFileReq): Promise<UploadFileRes> => {
-    const formData = new FormData();
-    formData.set('file', data.file);
-    formData.set('fileType', data.fileType);
-    formData.set('fileName', data.fileName);
-    data.referenceIds && formData.set('referenceIds', data.referenceIds);
+    const formData = Object.entries(data).reduce((formData, item) => {
+      formData.set(item[0], item[1]);
+      return formData;
+    }, new FormData());
 
     const { result } = await request<FormData, UploadFileRes>({
       url: '/file/upload',
