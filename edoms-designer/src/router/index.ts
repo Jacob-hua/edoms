@@ -19,6 +19,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
+        name: 'Application',
         redirect: '/application',
       },
       {
