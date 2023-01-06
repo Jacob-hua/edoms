@@ -49,7 +49,11 @@
           </div>
         </div>
       </template>
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <keep-alive :include="getCacheComps">
+          <component :is="Component"></component>
+        </keep-alive>
+      </RouterView>
     </BaseLayout>
   </div>
 </template>
@@ -69,12 +73,17 @@ import applicationApi from '@/api/application';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useAccountStore from '@/store/account';
+import useRoutersStore from '@/store/router';
 
 import BaseLayout from './BaseLayout.vue';
 
 const router = useRouter();
 
 const accountStore = useAccountStore();
+
+const routersStore = useRoutersStore();
+
+const { getCacheComps } = storeToRefs(routersStore);
 
 const { nickName, tenants, currentTenant } = storeToRefs(accountStore);
 

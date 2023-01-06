@@ -88,7 +88,7 @@
   />
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="Page">
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
