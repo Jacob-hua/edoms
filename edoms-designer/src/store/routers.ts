@@ -7,8 +7,8 @@ interface Getters {
   getRoutersComps: (state: State) => Set<string>;
 }
 interface Action {
-  addRoutersComp: (comp: string) => void;
-  deleteRoutersComp: (comp: string) => void;
+  addRoutersComp: (comps: string[]) => void;
+  deleteRoutersComp: (comps: string[]) => void;
 }
 
 type RoutersStoreType = StoreDefinition<string, State, Getters, Action>;
@@ -18,11 +18,15 @@ const useRoutersStore: RoutersStoreType = defineStore('RoutersStore', {
     RoutersCompList: new Set<string>(),
   }),
   actions: {
-    addRoutersComp(comp) {
-      this.RoutersCompList.add(comp);
+    addRoutersComp(comps) {
+      comps.forEach((comp) => {
+        this.RoutersCompList.add(comp);
+      });
     },
-    deleteRoutersComp(comp) {
-      this.RoutersCompList.delete(comp);
+    deleteRoutersComp(comps) {
+      comps.forEach((comp) => {
+        this.RoutersCompList.delete(comp);
+      });
     },
   },
   getters: {
