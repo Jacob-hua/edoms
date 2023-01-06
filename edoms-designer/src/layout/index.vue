@@ -50,7 +50,7 @@
         </div>
       </template>
       <RouterView v-slot="{ Component }">
-        <keep-alive :include="getKeepAliveComps">
+        <keep-alive :include="getRoutersComps">
           <component :is="Component"></component>
         </keep-alive>
       </RouterView>
@@ -73,7 +73,7 @@ import applicationApi from '@/api/application';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useAccountStore from '@/store/account';
-import useKeepAliveStore from '@/store/routers';
+import useRoutersStore from '@/store/routers';
 
 import BaseLayout from './BaseLayout.vue';
 
@@ -81,9 +81,9 @@ const router = useRouter();
 
 const accountStore = useAccountStore();
 
-const keepAliveStore = useKeepAliveStore();
+const RoutersStore = useRoutersStore();
 
-const { getKeepAliveComps } = storeToRefs(keepAliveStore);
+const { getRoutersComps } = storeToRefs(RoutersStore);
 
 const { nickName, tenants, currentTenant } = storeToRefs(accountStore);
 

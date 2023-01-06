@@ -1,33 +1,33 @@
 import { defineStore, StoreDefinition } from 'pinia';
 
 interface State {
-  keepAliveCompList: Set<string>;
+  RoutersCompList: Set<string>;
 }
 interface Getters {
-  getKeepAliveComps: (state: State) => Set<string>;
+  getRoutersComps: (state: State) => Set<string>;
 }
 interface Action {
-  updateKeepAliveCompList: (comp: string) => void;
-  removeKeepAliveComp: (comp: string) => void;
+  addRoutersComp: (comp: string) => void;
+  deleteRoutersComp: (comp: string) => void;
 }
 
-type KeepAliveStoreType = StoreDefinition<string, State, Getters, Action>;
+type RoutersStoreType = StoreDefinition<string, State, Getters, Action>;
 
-const useKeepAliveStore: KeepAliveStoreType = defineStore('keepAliveStore', {
+const useRoutersStore: RoutersStoreType = defineStore('RoutersStore', {
   state: (): State => ({
-    keepAliveCompList: new Set<string>(),
+    RoutersCompList: new Set<string>(),
   }),
   actions: {
-    updateKeepAliveCompList(comp) {
-      this.keepAliveCompList.add(comp);
+    addRoutersComp(comp) {
+      this.RoutersCompList.add(comp);
     },
-    removeKeepAliveComp(comp) {
-      this.keepAliveCompList.delete(comp);
+    deleteRoutersComp(comp) {
+      this.RoutersCompList.delete(comp);
     },
   },
   getters: {
-    getKeepAliveComps: (state: State) => [...state.keepAliveCompList],
+    getRoutersComps: (state: State) => [...state.RoutersCompList],
   },
 });
 
-export default useKeepAliveStore;
+export default useRoutersStore;

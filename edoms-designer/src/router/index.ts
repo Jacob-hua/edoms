@@ -7,7 +7,7 @@ import {
 } from 'vue-router';
 
 import useAccountStore, { AccountStore } from '@/store/account';
-import useKeepAliveStore from '@/store/routers';
+import useRoutersStore from '@/store/routers';
 
 let accountStore: AccountStore | null = null;
 
@@ -55,8 +55,7 @@ const routes: RouteRecordRaw[] = [
           }
         },
         meta: {
-          targetPath: '/editor',
-          keepAlive: true,
+          cacheLeave: ['/editor'],
         },
       },
       {
@@ -64,8 +63,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Version',
         component: () => import('@/views/version/index.vue'),
         meta: {
-          targetPath: '/editor',
-          keepAlive: true,
+          cacheLeave: ['/editor'],
         },
       },
       {
@@ -115,13 +113,14 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
     return;
   }
   console.log({ to, from });
-  const { updateKeepAliveCompList, removeKeepAliveComp } = useKeepAliveStore();
-  if (from.meta.keepAlive && to.path === from.meta.targetPath) {
-    updateKeepAliveCompList(from.name as string);
+  const { addRoutersComp, deleteRoutersComp } = useRoutersStore();
+  if (from.meta.cacheLeave && Array.isArray(from.meta.cacheLeave) && from.meta.cacheLeave.includes(to.path)) {
+    addRoutersComp(from.name as string);
   }
-  if (from.path !== to.meta.targetPath) {
-    removeKeepAliveComp(to.name as string);
+  if (to.meta.cacheLeave && Array.isArray(to.meta.cacheLeave) && !to.meta.cacheLeave.includes(from.path)) {
+    deleteRoutersComp(to.name as string);
   }
+
   if (!accountStore) {
     accountStore = useAccountStore();
   }
