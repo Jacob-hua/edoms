@@ -25,8 +25,8 @@ const useRoutersStore: RoutersStoreType = defineStore('router', {
         }
       }
       if (Array.isArray(to.meta.leaveCaches) && !to.meta.leaveCaches.includes(from.path)) {
-        if (typeof from.name === 'string') {
-          to.name && this.cacheComps.delete(to.name as string);
+        if (typeof to.name === 'string') {
+          to.name && this.cacheComps.delete(to.name);
         }
       }
     },
