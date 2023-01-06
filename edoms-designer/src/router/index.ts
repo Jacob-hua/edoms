@@ -55,7 +55,7 @@ const routes: RouteRecordRaw[] = [
           }
         },
         meta: {
-          cacheLeave: ['/editor'],
+          leaveCaches: ['/editor'],
         },
       },
       {
@@ -63,7 +63,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Version',
         component: () => import('@/views/version/index.vue'),
         meta: {
-          cacheLeave: ['/editor'],
+          leaveCaches: ['/editor'],
         },
       },
       {
@@ -112,12 +112,11 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
     next();
     return;
   }
-  console.log({ to, from });
   const { addRoutersComp, deleteRoutersComp } = useRoutersStore();
-  if (from.meta.cacheLeave && Array.isArray(from.meta.cacheLeave) && from.meta.cacheLeave.includes(to.path)) {
+  if (from.meta.leaveCaches && Array.isArray(from.meta.leaveCaches) && from.meta.leaveCaches.includes(to.path)) {
     addRoutersComp(from.name as string);
   }
-  if (to.meta.cacheLeave && Array.isArray(to.meta.cacheLeave) && !to.meta.cacheLeave.includes(from.path)) {
+  if (to.meta.leaveCaches && Array.isArray(to.meta.leaveCaches) && !to.meta.leaveCaches.includes(from.path)) {
     deleteRoutersComp(to.name as string);
   }
 
