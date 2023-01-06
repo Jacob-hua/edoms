@@ -114,10 +114,10 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
   }
   const { addRoutersComp, deleteRoutersComp } = useRoutersStore();
   if (from.meta.leaveCaches && Array.isArray(from.meta.leaveCaches) && from.meta.leaveCaches.includes(to.path)) {
-    addRoutersComp(from.name as string);
+    addRoutersComp([from.name as string]);
   }
   if (to.meta.leaveCaches && Array.isArray(to.meta.leaveCaches) && !to.meta.leaveCaches.includes(from.path)) {
-    deleteRoutersComp(to.name as string);
+    deleteRoutersComp([to.name as string]);
   }
 
   if (!accountStore) {
