@@ -20,10 +20,14 @@ const useRoutersStore: RoutersStoreType = defineStore('router', {
   actions: {
     cacheRouter(from: RouteLocationNormalized, to: RouteLocationNormalized) {
       if (Array.isArray(from.meta.leaveCaches) && from.meta.leaveCaches.includes(to.path)) {
-        from.name && this.cacheComps.add(from.name as string);
+        if (typeof from.name === 'string') {
+          from.name && this.cacheComps.add(from.name);
+        }
       }
       if (Array.isArray(to.meta.leaveCaches) && !to.meta.leaveCaches.includes(from.path)) {
-        to.name && this.cacheComps.delete(to.name as string);
+        if (typeof from.name === 'string') {
+          to.name && this.cacheComps.delete(to.name as string);
+        }
       }
     },
   },
