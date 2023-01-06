@@ -73,7 +73,7 @@ import applicationApi from '@/api/application';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 import useAccountStore from '@/store/account';
-import useKeepAliveStore from '@/store/keepAliveStore';
+import useKeepAliveStore from '@/store/routers';
 
 import BaseLayout from './BaseLayout.vue';
 
