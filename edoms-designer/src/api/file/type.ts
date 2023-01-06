@@ -9,8 +9,6 @@ export interface UploadFileReq {
   chunkIndex: number;
   /** 分片总数 */
   chunkSize: number;
-  /** 文件摘要 */
-  fileAbstract: string;
   /** uid */
   uid: string;
 }
@@ -18,6 +16,26 @@ export interface UploadFileReq {
 export interface UploadFileRes {
   /** 上传进度 */
   progress: number;
+}
+
+export interface UploadConfirmReq {
+  /** uid */
+  uid: string;
+  /** 是否完成 */
+  finished: boolean;
+  /** 文件类型 */
+  fileType: string;
+  /** 文件名称 */
+  fileName: string;
+  /** 文件摘要 */
+  md5: string;
+  /** 依赖资源ID */
+  referenceIds?: string;
+}
+
+export interface UploadConfirmRes {
+  /** 文件资源ID */
+  contentId: string;
 }
 
 export interface DownloadFileReq {

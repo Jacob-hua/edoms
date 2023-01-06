@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import Crypto from 'crypto-js';
 
 import fileApi from '@/api/file';
@@ -27,40 +27,50 @@ export default () => {
 
   const progress = ref<number>(0);
 
-  watch(
-    () => progress.value,
-    () => {
-      console.log('====', progress.value);
-    }
-  );
-
   const execute = async (
     content: File | Blob | string,
     fileName: string,
     fileType: string,
-    charset?: string
+    charset?: string,
+    referenceIds?: string
   ): Promise<string | null | undefined> => {
+    if (typeof content === 'string') {
+      content = new Blob([content], { type: `${fileType};charset=${charset}` });
+    }
+    loading.value = true;
+    const { fileChunks, md5, uid } = await readFile(content, fileName, fileType);
     try {
-      if (typeof content === 'string') {
-        content = new Blob([content], { type: `${fileType};charset=${charset}` });
-      }
-      loading.value = true;
-      const { fileChunks, md5, uid } = await readFile(content, fileName, fileType);
-      fileChunks.forEach(async ({ chunkIndex, chunks, fileChunk, fileName, fileType }) => {
-        const result = await fileApi.uploadFile({
-          file: fileChunk,
-          fileName,
-          fileType,
-          chunkIndex,
-          chunkSize: chunks,
-          fileAbstract: md5,
-          uid,
-        });
-        progress.value = result.progress;
+      const uploadRequests = fileChunks.map(
+        async ({ chunkIndex, chunks, fileChunk, fileName, fileType }) =>
+          await fileApi.uploadFile({
+            file: fileChunk,
+            fileName,
+            fileType,
+            chunkIndex,
+            chunkSize: chunks,
+            uid,
+          })
+      );
+      await Promise.all(uploadRequests);
+      const { contentId } = await fileApi.uploadConfirm({
+        finished: true,
+        fileName,
+        fileType,
+        uid,
+        md5,
+        referenceIds,
       });
-      return undefined;
+      return contentId;
     } catch (e) {
       error.value = e;
+      fileApi.uploadConfirm({
+        finished: false,
+        fileName,
+        fileType,
+        uid,
+        md5,
+        referenceIds,
+      });
     } finally {
       loading.value = false;
     }

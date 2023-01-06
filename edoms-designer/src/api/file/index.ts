@@ -1,6 +1,6 @@
 import { request } from '@/util/request';
 
-import { DownloadFileReq, UploadFileReq, UploadFileRes } from './type';
+import { DownloadFileReq, UploadConfirmReq, UploadConfirmRes, UploadFileReq, UploadFileRes } from './type';
 
 export * from './type';
 
@@ -15,6 +15,14 @@ export default {
       url: '/file/upload',
       method: 'POST',
       data: formData,
+    });
+    return result;
+  },
+  uploadConfirm: async (data: UploadConfirmReq): Promise<UploadConfirmRes> => {
+    const { result } = await request<UploadConfirmReq, UploadConfirmRes>({
+      url: '/file/upload-confirm',
+      method: 'POST',
+      data,
     });
     return result;
   },
