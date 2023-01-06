@@ -7,7 +7,7 @@ import {
 } from 'vue-router';
 
 import useAccountStore, { AccountStore } from '@/store/account';
-import useRoutersStore from '@/store/routers';
+import useRoutersStore from '@/store/router';
 
 let accountStore: AccountStore | null = null;
 
@@ -112,14 +112,8 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
     next();
     return;
   }
-  const { addRoutersComp, deleteRoutersComp } = useRoutersStore();
-  if (from.meta.leaveCaches && Array.isArray(from.meta.leaveCaches) && from.meta.leaveCaches.includes(to.path)) {
-    addRoutersComp([from.name as string]);
-  }
-  if (to.meta.leaveCaches && Array.isArray(to.meta.leaveCaches) && !to.meta.leaveCaches.includes(from.path)) {
-    deleteRoutersComp([to.name as string]);
-  }
-
+  const { cacheRouter } = useRoutersStore();
+  cacheRouter(from, to);
   if (!accountStore) {
     accountStore = useAccountStore();
   }
