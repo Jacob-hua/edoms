@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Crypto from 'crypto-js';
 
 import fileApi from '@/api/file';
@@ -27,6 +27,13 @@ export default () => {
 
   const progress = ref<number>(0);
 
+  watch(
+    () => progress.value,
+    () => {
+      console.log('当前进度', progress.value);
+    }
+  );
+
   const execute = async (
     content: File | Blob | string,
     fileName: string,
@@ -40,19 +47,19 @@ export default () => {
     loading.value = true;
     const { fileChunks, md5, uid } = await readFile(content, fileName, fileType);
     try {
-      const uploadRequests = fileChunks.map(
-        async ({ chunkIndex, chunks, fileChunk, fileName, fileType }) =>
-          await fileApi.uploadFile({
-            file: fileChunk,
-            fileName,
-            fileType,
-            chunkIndex,
-            chunkSize: chunks,
-            uid,
-          })
-      );
+      const uploadRequests = fileChunks.map(async ({ chunkIndex, chunks, fileChunk, fileName, fileType }) => {
+        const uploadResult = await fileApi.uploadFile({
+          file: fileChunk,
+          fileName,
+          fileType,
+          chunkIndex,
+          chunkSize: chunks,
+          uid,
+        });
+        progress.value = uploadResult.progress;
+      });
       await Promise.all(uploadRequests);
-      const { contentId } = await fileApi.uploadConfirm({
+      const confirmResult = await fileApi.uploadConfirm({
         finished: true,
         fileName,
         fileType,
@@ -60,7 +67,8 @@ export default () => {
         md5,
         referenceIds,
       });
-      return contentId;
+      progress.value = confirmResult.progress;
+      return confirmResult.contentId;
     } catch (e) {
       error.value = e;
       fileApi.uploadConfirm({

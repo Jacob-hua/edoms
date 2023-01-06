@@ -36,6 +36,8 @@ export interface UploadConfirmReq {
 export interface UploadConfirmRes {
   /** 文件资源ID */
   contentId: string;
+  /** 上传进度 */
+  progress: number;
 }
 
 export interface DownloadFileReq {
