@@ -50,7 +50,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="Version">
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
