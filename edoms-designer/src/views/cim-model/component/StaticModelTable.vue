@@ -154,9 +154,7 @@ const handleClearTable = async () => {
 
       ElMessage.success('清空成功');
     })
-    .finally(() => {
-      loadTableHistory();
-    });
+    .finally(() => loadTableHistory());
 };
 
 const handleFileChange = async () => {
