@@ -1,7 +1,6 @@
 import { ref, watch } from 'vue';
-import { ElMessage } from 'element-plus';
 
-import useSelectFile from './useSelectFile';
+import useSelectFile, { SelectFileError } from './useSelectFile';
 import useUpload from './useUpload';
 
 export interface SelectUploadResult {
@@ -12,7 +11,7 @@ export interface SelectUploadResult {
 export default () => {
   const loading = ref<boolean>(false);
 
-  const error = ref<any>(null);
+  const error = ref<SelectFileError | any>();
 
   const { error: selectError, execute: selectExecute } = useSelectFile();
 
@@ -49,7 +48,6 @@ export default () => {
       );
     } catch (e) {
       error.value = e;
-      ElMessage.error(`文件上传失败`);
       throw e;
     } finally {
       loading.value = false;

@@ -1,14 +1,21 @@
 import { ref } from 'vue';
-import { ElMessage } from 'element-plus';
 
 import { MApp, MPage, NodeType } from '@edoms/schema';
 
 import fileApi from '@/api/file';
+import { MessageError } from '@/const/error';
+
+export class DownloadDSLError extends MessageError {
+  constructor(cause?: any) {
+    super('dsl元数据下载失败');
+    this.cause = cause;
+  }
+}
 
 export default () => {
   const loading = ref<boolean>(false);
 
-  const error = ref<any>(null);
+  const error = ref<DownloadDSLError>();
 
   const execute = async (contentId: string): Promise<MApp | MPage> => {
     try {
@@ -25,9 +32,8 @@ export default () => {
       }
       return result;
     } catch (e) {
-      error.value = e;
-      ElMessage.error(`下载DSL元数据失败`);
-      throw e;
+      error.value = new DownloadDSLError(e);
+      throw error.value;
     } finally {
       loading.value = false;
     }

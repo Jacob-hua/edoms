@@ -1,7 +1,15 @@
 import { ref } from 'vue';
-import { ElMessage } from 'element-plus';
 
 import { asyncLoadJs } from '@edoms/utils';
+
+import { MessageError } from '@/const/error';
+
+export class AsyncLoadJSError extends MessageError {
+  constructor(paths: string[], cause?: any) {
+    super(`Failed to load ${paths}`);
+    this.cause = cause;
+  }
+}
 
 export interface Callback {
   (...args: any[]): void;
@@ -10,7 +18,7 @@ export interface Callback {
 export default (paths: string[], callback: Callback) => {
   const loading = ref<boolean>(false);
 
-  const error = ref<any>(null);
+  const error = ref<AsyncLoadJSError>();
 
   const execute = async () => {
     try {
@@ -20,10 +28,8 @@ export default (paths: string[], callback: Callback) => {
 
       callback();
     } catch (e: any) {
-      const asyncLoadError = new Error(`Failed to load ${paths}`, { cause: e });
-      error.value = asyncLoadError;
-      ElMessage.error(`远程资源加载失败`);
-      throw asyncLoadError;
+      error.value = new AsyncLoadJSError(paths, e);
+      throw error.value;
     } finally {
       loading.value = false;
     }

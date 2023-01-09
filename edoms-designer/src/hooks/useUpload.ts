@@ -1,8 +1,8 @@
 import { ref, watch } from 'vue';
 import Crypto from 'crypto-js';
-import { ElMessage } from 'element-plus';
 
 import fileApi from '@/api/file';
+import { MessageError } from '@/const/error';
 
 export interface FileChunk {
   fileName: string;
@@ -19,12 +19,19 @@ export interface FileReadResult {
   uid: string;
 }
 
+export class UploadError extends MessageError {
+  constructor(fileName: string, cause?: any) {
+    super(`${fileName}上传失败`);
+    this.cause = cause;
+  }
+}
+
 const chunkSize = 1024 * 1024;
 
 export default () => {
   const loading = ref<boolean>(false);
 
-  const error = ref<any>(null);
+  const error = ref<UploadError>();
 
   const progress = ref<number>(0);
 
@@ -71,8 +78,7 @@ export default () => {
       progress.value = confirmResult.progress;
       return confirmResult.contentId;
     } catch (e) {
-      error.value = e;
-      ElMessage.error(`${fileName}上传失败`);
+      error.value = new UploadError(fileName, e);
       fileApi.uploadConfirm({
         finished: false,
         fileName,
@@ -81,7 +87,7 @@ export default () => {
         md5,
         referenceIds,
       });
-      throw e;
+      throw error.value;
     } finally {
       loading.value = false;
     }
