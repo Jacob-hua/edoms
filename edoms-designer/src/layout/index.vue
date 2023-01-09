@@ -25,26 +25,30 @@
                   </div>
                 </div>
               </div>
-              <PopMenuOption
-                v-for="(menu, index) in menus"
-                :key="index"
-                :label="menu.label"
-                :value="menu.name"
-                :disabled="menu.disabled"
-              >
-                <div class="pop-menu-item">
-                  <span>{{ menu.label }}</span>
-                </div>
-              </PopMenuOption>
-              <div v-if="tenantListVisible" class="pop-level">
-                <p
-                  v-for="{ tenantName, tenantId, isActive } in tenantList"
-                  :key="tenantId"
-                  @click="handleTriggerTenant(tenantId)"
-                >
-                  {{ tenantName }} <el-icon v-show="isActive"><Select /></el-icon>
-                </p>
-              </div>
+              <template v-for="(menu, index) in menus" :key="index">
+                <SubPopMenuOption v-if="menu.subMenu" :label="menu.label" :value="menu.value">
+                  <template #title>
+                    <div class="pop-menu-item">
+                      <span>{{ menu.label }}</span>
+                    </div>
+                  </template>
+                  <PopMenuOption
+                    v-for="(submenu, index) in menu.subMenu"
+                    :key="index"
+                    :label="submenu.label"
+                    :value="submenu.value"
+                  >
+                    <div class="pop-menu-item">
+                      <span>{{ submenu.label }}</span>
+                    </div>
+                  </PopMenuOption>
+                </SubPopMenuOption>
+                <PopMenuOption v-else :label="menu.label" :value="menu.value">
+                  <div class="pop-menu-item">
+                    <span>{{ menu.label }}</span>
+                  </div>
+                </PopMenuOption>
+              </template>
             </PopMenu>
           </div>
         </div>
@@ -72,10 +76,20 @@ import { storeToRefs } from 'pinia';
 import applicationApi from '@/api/application';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
+import SubPopMenuOption from '@/components/SubPopMenuOption.vue';
 import useAccountStore from '@/store/account';
 import useRoutersStore from '@/store/router';
 
 import BaseLayout from './BaseLayout.vue';
+
+export interface Menu {
+  value: string | number;
+  label: string;
+  disabled?: object;
+  subMenu?: Menu[];
+  icon?: string;
+  action?: (value?: any) => void;
+}
 
 const router = useRouter();
 
@@ -94,7 +108,16 @@ const applicationNumber = ref<number>();
 const popMenuRef = ref();
 
 const tenantList = computed(() =>
-  tenants.value.map((item) => ({ ...item, isActive: currentTenant.value?.tenantId === item.tenantId }))
+  tenants.value.map((item) => ({
+    value: item.tenantId,
+    label: item.tenantName,
+    action: (value: string) => {
+      accountStore.triggerTenant(value);
+      router.push({
+        path: '/',
+      });
+    },
+  }))
 );
 
 watch(
@@ -105,17 +128,18 @@ watch(
   { immediate: true }
 );
 
-const menus = [
+const menus: Menu[] = [
   {
-    name: 'switch',
+    value: 'switch',
     label: '切换租户',
     icon: 'Operation',
     disabled: {
       clickEvent: true,
     },
+    subMenu: tenantList.value,
   },
   {
-    name: 'model',
+    value: 'model',
     label: '租户模型',
     action: () => {
       router.push({
@@ -124,7 +148,7 @@ const menus = [
     },
   },
   {
-    name: 'loginOut',
+    value: 'loginOut',
     label: '退出登录',
     action: () => {
       accountStore.logout();
@@ -139,21 +163,25 @@ const handleMenuHide = () => {
   tenantListVisible.value = false;
 };
 
-const handleMenuClick = (value: string | number) => {
-  const menu = menus.find(({ name }) => name === value);
-  menu?.action?.();
+const getTargetMenu = (menus: Menu[], values: (string | number)[]): Menu | undefined => {
+  if (values.length == 1) {
+    return menus.find(({ value }) => value === values[0]);
+  }
+  const nodeValue = values.shift();
+  const menu = menus.find(({ value }) => value === nodeValue);
+  if (menu?.subMenu) {
+    return getTargetMenu(menu.subMenu, values);
+  }
+  return;
+};
+
+const handleMenuClick = (values: (string | number)[]) => {
+  const menu = getTargetMenu(menus, values);
+  menu?.action?.(menu.value);
 };
 
 const handleMenuHover = (value: string | number) => {
   tenantListVisible.value = value === 'switch';
-};
-
-const handleTriggerTenant = async (tenantId: string) => {
-  await accountStore.triggerTenant(tenantId);
-  router.push({
-    path: '/',
-  });
-  popMenuRef.value?.handleClose();
 };
 </script>
 

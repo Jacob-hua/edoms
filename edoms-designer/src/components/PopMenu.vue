@@ -36,7 +36,7 @@ import { computed, provide, ref } from 'vue';
 import { throttle } from '@edoms/utils';
 
 export interface PopMenuProvide {
-  handleClick?: (value: string | number) => void;
+  handleClick?: (value: (string | number)[]) => void;
   handleHover?: (value: string | number) => void;
 }
 
@@ -63,7 +63,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (event: 'menuClick', value: string | number): void;
+  (event: 'menuClick', value: (string | number)[]): void;
   (event: 'menuHover', value: string | number): void;
   (event: 'show'): void;
   (event: 'hide'): void;
@@ -73,7 +73,7 @@ const popoverVisible = ref<boolean>(false);
 
 const referenceClass = computed(() => (props.disabled ? ['reference', 'reference-disabled'] : ['reference']));
 
-const handleClick = (value: string | number) => {
+const handleClick = (value: (string | number)[]) => {
   popoverVisible.value = false;
   emit('menuClick', value);
 };
