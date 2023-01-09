@@ -16,12 +16,8 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'index',
     component: () => import('@/layout/index.vue'),
+    redirect: '/application',
     children: [
-      {
-        path: '',
-        name: 'Application',
-        redirect: '/application',
-      },
       {
         path: '/application',
         name: 'Application',
