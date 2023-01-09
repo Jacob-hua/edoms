@@ -25,12 +25,3 @@ export const enum ModelMark {
   CIM_TABLE = 'cim_table',
   CIM_URL = 'cim_url',
 }
-
-export const enum ModelTableActionType {
-  /** 导入 */
-  IMPORT = 0,
-  /** 清空 */
-  CLEAR = 1,
-  /** 导出 */
-  EXPORT = 2,
-}

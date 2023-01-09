@@ -1,4 +1,4 @@
-import type { ModelCodeType, ModelPropType, ModelTableActionType } from '@/const/model';
+import type { ModelCodeType, ModelPropType } from '@/const/model';
 import { KVStruct, PageStruct } from '@/const/struct';
 
 export interface ListInstanceReq {
@@ -91,7 +91,9 @@ export interface TableHistory {
   /** 文件名称 */
   fileName: string;
   /** 操作类型 */
-  action: ModelTableActionType;
+  action: string;
+  /** 操作状态 */
+  status: string;
   /** 模型表ID */
   dicCimId: string;
   /** 操作人 */
@@ -120,12 +122,12 @@ export interface ExportTableReq {
 }
 
 export interface ImportTableReq {
-  /** 文件流 */
-  file: File;
   /** 表id */
   tableId: string;
   /** 文件名称 */
   fileName: string;
+  /** 文件资源ID */
+  contentId: string;
 }
 
 export interface ApiStruct {

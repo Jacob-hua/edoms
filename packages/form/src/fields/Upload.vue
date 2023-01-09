@@ -66,9 +66,6 @@ const handleDeleteFile = (fileName: string) => {
 
 const handleFileSelect = async () => {
   const selectedFiles = await selectExecute(props.config.accepts ?? ['*'], props.config.multiple);
-  if (!selectedFiles) {
-    return;
-  }
   selectedFiles.forEach(uploadFile);
 };
 
