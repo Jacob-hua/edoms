@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import Crypto from 'crypto-js';
 
 import fileApi from '@/api/file';
@@ -37,13 +37,6 @@ export default () => {
   const error = ref<UploadError>();
 
   const progress = ref<number>(0);
-
-  watch(
-    () => progress.value,
-    () => {
-      console.log('当前进度', progress.value);
-    }
-  );
 
   const execute = async (
     content: File | Blob | string,
