@@ -7,7 +7,7 @@ import {
 } from 'vue-router';
 
 import useAccountStore, { AccountStore } from '@/store/account';
-import useRoutersStore from '@/store/router';
+import useRouterStore from '@/store/router';
 
 let accountStore: AccountStore | null = null;
 
@@ -109,7 +109,7 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
     next();
     return;
   }
-  const { cacheRouter } = useRoutersStore();
+  const { cacheRouter } = useRouterStore();
   cacheRouter(from, to);
   if (!accountStore) {
     accountStore = useAccountStore();
