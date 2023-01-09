@@ -7,6 +7,7 @@ import {
 } from 'vue-router';
 
 import useAccountStore, { AccountStore } from '@/store/account';
+import useRoutersStore from '@/store/router';
 
 let accountStore: AccountStore | null = null;
 
@@ -18,6 +19,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
+        name: 'Application',
         redirect: '/application',
       },
       {
@@ -53,11 +55,17 @@ const routes: RouteRecordRaw[] = [
             next('/application');
           }
         },
+        meta: {
+          leaveCaches: ['/editor'],
+        },
       },
       {
         path: '/version',
         name: 'Version',
         component: () => import('@/views/version/index.vue'),
+        meta: {
+          leaveCaches: ['/editor'],
+        },
       },
       {
         path: '/editor',
@@ -99,19 +107,20 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_BASE_URL),
   routes,
 });
-
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   console.log(to.path, from.path);
   if (['/login', '/404'].includes(to.path)) {
     next();
     return;
   }
+  const { cacheRouter } = useRoutersStore();
+  cacheRouter(from, to);
   if (!accountStore) {
     accountStore = useAccountStore();
   }
   if (!accountStore.token) {
     router.push({
-      path: '/login',
+      path: 'login',
     });
     return;
   }
