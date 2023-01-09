@@ -118,7 +118,9 @@ const pageInfo = ref({
   limit: 10,
   total: 0,
 });
+
 const importBtn = ref();
+
 const loadTableHistory = async () => {
   const { dataList, count } = await modelApi.getTableHistory({
     page: pageInfo.value.page,
@@ -131,7 +133,9 @@ const loadTableHistory = async () => {
   pageInfo.value.total = Number(count);
   historyData.value = dataList;
 };
+
 loadTableHistory();
+
 const onPageChange = (value: number) => {
   pageInfo.value.page = value;
   loadTableHistory();
@@ -147,10 +151,12 @@ const handleClearTable = async () => {
       await modelApi.clearTable({
         tableId: Number(props.data.id),
       });
-      loadTableHistory();
+
       ElMessage.success('清空成功');
     })
-    .catch(() => {});
+    .finally(() => {
+      loadTableHistory();
+    });
 };
 
 const handleFileChange = async () => {
@@ -168,13 +174,13 @@ const handleFileChange = async () => {
       });
       ElMessage.success('导入成功');
       importBtn?.value?.ref?.blur();
-      loadTableHistory();
     })
     .catch(() => {
       nextTick(() => {
         importBtn?.value?.ref?.blur();
       });
-    });
+    })
+    .finally(() => loadTableHistory());
 };
 
 const handleFileDownload = (data: any) => {
