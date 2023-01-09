@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
 
 import { MimeType } from '@/const/mime';
 
@@ -33,6 +34,8 @@ export default (
       window.URL.revokeObjectURL(link.href);
     } catch (error: any) {
       error.value = error;
+      ElMessage.error(`导出${fileName}失败`);
+      throw error;
     } finally {
       loading.value = false;
     }

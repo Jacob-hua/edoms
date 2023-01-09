@@ -82,11 +82,6 @@ const responseInterceptorsCatch = (error: EdomsError) => {
           resolve('');
         });
       }
-    } else {
-      ElMessage({
-        type: 'error',
-        message: '请求异常',
-      });
     }
   }
 

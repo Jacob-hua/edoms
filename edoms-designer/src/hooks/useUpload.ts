@@ -1,5 +1,6 @@
 import { ref, watch } from 'vue';
 import Crypto from 'crypto-js';
+import { ElMessage } from 'element-plus';
 
 import fileApi from '@/api/file';
 
@@ -40,7 +41,7 @@ export default () => {
     fileType: string,
     charset?: string,
     referenceIds?: string
-  ): Promise<string | null | undefined> => {
+  ): Promise<string> => {
     if (typeof content === 'string') {
       content = new Blob([content], { type: `${fileType};charset=${charset}` });
     }
@@ -71,6 +72,7 @@ export default () => {
       return confirmResult.contentId;
     } catch (e) {
       error.value = e;
+      ElMessage.error(`${fileName}上传失败`);
       fileApi.uploadConfirm({
         finished: false,
         fileName,
@@ -79,6 +81,7 @@ export default () => {
         md5,
         referenceIds,
       });
+      throw e;
     } finally {
       loading.value = false;
     }

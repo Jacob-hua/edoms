@@ -8,7 +8,7 @@ export default () => {
 
   const error = ref<any>(null);
 
-  const execute = async (accepts: string[], multiple?: boolean): Promise<File[] | undefined> => {
+  const execute = async (accepts: string[], multiple?: boolean): Promise<File[]> => {
     try {
       loading.value = true;
       return await selectFile(accepts, multiple);
@@ -17,6 +17,7 @@ export default () => {
         ElMessage.error(`请选择${e.accepts}文件`);
       }
       error.value = e;
+      throw e;
     } finally {
       loading.value = false;
     }

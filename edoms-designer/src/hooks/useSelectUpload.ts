@@ -1,7 +1,13 @@
 import { ref, watch } from 'vue';
+import { ElMessage } from 'element-plus';
 
 import useSelectFile from './useSelectFile';
 import useUpload from './useUpload';
+
+export interface SelectUploadResult {
+  file: File;
+  contentId: string;
+}
 
 export default () => {
   const loading = ref<boolean>(false);
@@ -17,11 +23,11 @@ export default () => {
     }
   );
 
-  const execute = async (accepts: string[]): Promise<string | undefined | null> => {
+  const execute = async (accepts: string[], multiple?: boolean): Promise<SelectUploadResult[]> => {
     try {
       loading.value = true;
-      const [file] = (await selectExecute(accepts)) ?? [];
-      if (!file) {
+      const files = (await selectExecute(accepts, multiple)) ?? [];
+      if (!Array.isArray(files)) {
         loading.value = false;
         throw selectError.value;
       }
@@ -32,9 +38,19 @@ export default () => {
           error.value = e;
         }
       );
-      return await uploadExecute(file, file.name, file.type);
+      return await Promise.all(
+        files.map(async (file: File) => {
+          const contentId = await uploadExecute(file, file.name, file.type);
+          return {
+            file,
+            contentId,
+          };
+        })
+      );
     } catch (e) {
       error.value = e;
+      ElMessage.error(`文件上传失败`);
+      throw e;
     } finally {
       loading.value = false;
     }

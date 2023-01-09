@@ -60,9 +60,6 @@ watchEffect(async () => {
 async function updateDsl(contentId: string) {
   try {
     const remoteDsl = await downloadDslExecute(contentId);
-    if (!remoteDsl) {
-      return;
-    }
     if (remoteDsl.type === NodeType.ROOT) {
       dsl.value = remoteDsl;
     } else {

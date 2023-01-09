@@ -120,12 +120,12 @@ export interface ExportTableReq {
 }
 
 export interface ImportTableReq {
-  /** 文件流 */
-  file: File;
   /** 表id */
   tableId: string;
   /** 文件名称 */
   fileName: string;
+  /** 文件资源ID */
+  contentId: string;
 }
 
 export interface ApiStruct {

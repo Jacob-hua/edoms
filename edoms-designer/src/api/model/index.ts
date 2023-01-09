@@ -104,15 +104,10 @@ export default {
     });
   },
   importTable: async (data: ImportTableReq): Promise<void> => {
-    const formData = new FormData();
-    formData.set('file', data.file!);
-    formData.set('tableId', data.tableId);
-    formData.set('fileName', data.fileName);
-
-    await request<FormData, void>({
+    await request<ImportTableReq, void>({
       url: '/cim-model/table/import',
       method: 'POST',
-      data: formData,
+      data,
     });
   },
   getTableHistory: async (data: TableHistoryReq): Promise<TableHistoryRes> => {

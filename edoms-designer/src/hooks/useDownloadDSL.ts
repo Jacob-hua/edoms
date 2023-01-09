@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
 
 import { MApp, MPage, NodeType } from '@edoms/schema';
 
@@ -9,7 +10,7 @@ export default () => {
 
   const error = ref<any>(null);
 
-  const execute = async (contentId: string): Promise<MApp | MPage | undefined> => {
+  const execute = async (contentId: string): Promise<MApp | MPage> => {
     try {
       loading.value = true;
       const contentStream = (await fileApi.downloadFile({ contentId })) as Blob;
@@ -25,6 +26,8 @@ export default () => {
       return result;
     } catch (e) {
       error.value = e;
+      ElMessage.error(`下载DSL元数据失败`);
+      throw e;
     } finally {
       loading.value = false;
     }
