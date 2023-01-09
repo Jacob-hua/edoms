@@ -7,9 +7,14 @@ export class BaseError extends Error {
   }
 }
 
+export interface MessageOption {
+  type: 'error' | 'warning';
+  message: string;
+}
+
 export class MessageError extends BaseError {
-  constructor(message: string) {
-    super(message);
-    ElMessage.error(message);
+  constructor(option: MessageOption) {
+    super(option.message);
+    ElMessage(option);
   }
 }

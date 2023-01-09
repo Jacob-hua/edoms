@@ -21,7 +21,10 @@ export interface FileReadResult {
 
 export class UploadError extends MessageError {
   constructor(fileName: string, cause?: any) {
-    super(`${fileName}上传失败`);
+    super({
+      type: 'error',
+      message: `${fileName}上传失败`,
+    });
     this.cause = cause;
   }
 }

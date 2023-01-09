@@ -6,13 +6,15 @@ import { MessageError } from '@/const/error';
 
 export class SelectFileError extends MessageError {
   constructor(accepts: string[], cause?: any) {
-    super(
-      cause.type === 'WrongFormat'
-        ? `请选择${accepts}文件`
-        : cause.type === 'CancelSelect'
-        ? '取消选择'
-        : '文件选择异常'
-    );
+    super({
+      type: cause.type === 'CancelSelect' ? 'warning' : 'error',
+      message:
+        cause.type === 'WrongFormat'
+          ? `请选择${accepts}文件`
+          : cause.type === 'CancelSelect'
+          ? '取消文件选择'
+          : '文件选择异常',
+    });
     this.cause = cause;
   }
 }

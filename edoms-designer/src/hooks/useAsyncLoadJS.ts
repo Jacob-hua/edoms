@@ -6,7 +6,10 @@ import { MessageError } from '@/const/error';
 
 export class AsyncLoadJSError extends MessageError {
   constructor(paths: string[], cause?: any) {
-    super(`Failed to load ${paths}`);
+    super({
+      type: 'error',
+      message: `Failed to load ${paths}`,
+    });
     this.cause = cause;
   }
 }

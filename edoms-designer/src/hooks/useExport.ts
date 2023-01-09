@@ -5,7 +5,10 @@ import { MimeType } from '@/const/mime';
 
 export class ExportError extends MessageError {
   constructor(fileName: string, cause?: any) {
-    super(`导出${fileName}失败`);
+    super({
+      type: 'error',
+      message: `导出${fileName}失败`,
+    });
     this.cause = cause;
   }
 }

@@ -7,7 +7,10 @@ import { MessageError } from '@/const/error';
 
 export class DownloadDSLError extends MessageError {
   constructor(cause?: any) {
-    super('dsl元数据下载失败');
+    super({
+      type: 'error',
+      message: 'dsl元数据下载失败',
+    });
     this.cause = cause;
   }
 }
