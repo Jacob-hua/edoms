@@ -15,6 +15,9 @@
               <el-option v-for="{ label, value } in requestMethods" :key="value" :label="label" :value="value" />
             </el-select>
           </template>
+          <template #prefix>
+            <div class="prefix">{{ prefix }}</div>
+          </template>
         </el-input>
       </el-form-item>
     </el-form>
@@ -153,6 +156,7 @@ const handleAdd = (instanceKey: any) => {
   });
 };
 const jsonData = ref({});
+const prefix = ref<string>('http://');
 const apiInfo = ref<ApiStruct>({
   body: [],
   cookie: [],
@@ -170,16 +174,21 @@ const assignment = (metaData: typeof parameterData, api: typeof apiInfo) => {
   });
 };
 
-const parameterFactory = (paramsData: any[], isSimulation = true, { id, dicCimId, method, path } = apiInfo.value) => {
+const parameterFactory = (
+  paramsData: any[],
+  isSimulation = true,
+  { id, dicCimId, method, path } = apiInfo.value,
+  pathPrefix = prefix.value
+) => {
   return paramsData.reduce((parameter: ApiStruct, metaData) => {
     parameter[metaData.instanceKey] = metaData.tableData ?? [];
-    return isSimulation
-      ? { ...parameter, id, dicCimId, method, path }
-      : {
+    return !isSimulation
+      ? {
           ...parameter,
           method,
-          path,
-        };
+          path: `${pathPrefix}${path}`,
+        }
+      : { ...parameter, id, dicCimId, method, path: `${pathPrefix}${path}` };
   }, {});
 };
 const handleSaveApi = async () => {
@@ -214,6 +223,8 @@ onMounted(async () => {
   apiInfo.value = await modelApi.getApi({
     dicCimId: data.value.id,
   });
+  const url = new URL(apiInfo.value.path);
+  apiInfo.value.path = `${url.host}${url.pathname}`;
   assignment(parameterData, apiInfo);
 });
 </script>
