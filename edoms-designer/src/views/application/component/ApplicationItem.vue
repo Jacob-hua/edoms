@@ -73,8 +73,8 @@ const menus = [
   },
 ];
 
-const handleMenuClick = (value: string | number) => {
-  const menu = menus.find(({ name }) => name === value);
+const handleMenuClick = (value: (string | number)[]) => {
+  const menu = menus.find(({ name }) => name === value[0]);
   menu?.action();
 };
 const handleGoPage = () => {

@@ -208,8 +208,8 @@ const topMenus = [
   },
 ];
 
-const handleTopMenuClick = (value: string | number) => {
-  const menu = topMenus.find(({ name }) => name === value);
+const handleTopMenuClick = (value: (string | number)[]) => {
+  const menu = topMenus.find(({ name }) => name === value[0]);
   menu?.action();
 };
 
