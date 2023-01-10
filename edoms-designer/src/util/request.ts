@@ -50,8 +50,7 @@ const requestInterceptorsCatch = (error: EdomsError) => {
 
 const responseInterceptors = (response: any) => {
   const { data } = response as EdomsResponse;
-
-  requestCanceler.cancelRequest(response.config);
+  requestCanceler.confirmRequest(response.config);
 
   if (data.errorInfo && data.errorInfo.errorCode) {
     ElMessage.error(data.errorInfo.errorMsg);
@@ -64,8 +63,6 @@ const responseInterceptors = (response: any) => {
 
 const responseInterceptorsCatch = (error: EdomsError) => {
   const { response } = error;
-
-  requestCanceler.cancelRequest(error.config);
 
   if (response) {
     if (response.status === 404) {
@@ -88,6 +85,8 @@ const responseInterceptorsCatch = (error: EdomsError) => {
   if (loadingService) {
     loadingService.close();
   }
+
+  error.response?.config && requestCanceler.cancelRequest(error.response?.config);
 
   return Promise.reject(error);
 };

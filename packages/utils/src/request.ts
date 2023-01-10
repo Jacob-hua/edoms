@@ -52,7 +52,19 @@ export class RequestCanceler<T extends AxiosRequestConfig> {
     }
   }
 
+  confirmRequest(config: T): void {
+    const requestId = this.generateRequestId(config);
+    if (!this.pendingRequestMap.has(requestId)) {
+      return;
+    }
+    this.pendingRequestMap.delete(requestId);
+  }
+
   cancelRequest(config: T): void {
+    if (this.pendingRequestMap.size === 0) {
+      return;
+    }
+
     const requestId = this.generateRequestId(config);
     if (!this.pendingRequestMap.has(requestId)) {
       return;
@@ -65,10 +77,19 @@ export class RequestCanceler<T extends AxiosRequestConfig> {
     for (const abortController of this.pendingRequestMap.values()) {
       abortController.abort();
     }
+    this.pendingRequestMap.clear();
   }
 
   private generateRequestId<T extends AxiosRequestConfig>(config: T): string {
-    return this.MD5(JSON.stringify(config)).toString();
+    let { url, method, params, data } = config;
+    if (typeof data === 'string') {
+      data = JSON.parse(data);
+    }
+    if (typeof params === 'string') {
+      params = JSON.parse(params);
+    }
+
+    return this.MD5(JSON.stringify({ url, method, params, data })).toString();
   }
 }
 
