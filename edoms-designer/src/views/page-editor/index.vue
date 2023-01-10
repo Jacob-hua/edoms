@@ -155,6 +155,7 @@ const menu = computed<MenuBarData>(() => ({
             ElMessage.success('保存成功');
           } catch (e) {
             console.error(e);
+            return;
           }
         }
         previewDialogVisible.value = true;
