@@ -1,7 +1,7 @@
 import { ElLoading, ElMessage } from 'element-plus';
 
 import type { EdomsError, EdomsRequestConfig, EdomsResponse, EdomsResponseData } from '@edoms/utils';
-import { ContentType, Request } from '@edoms/utils';
+import { ContentType, Request, RequestCanceler } from '@edoms/utils';
 
 import router from '@/router';
 import useAccountStore, { AccountStore } from '@/store/account';
@@ -11,17 +11,22 @@ export interface LoadingService {
   [key: string]: any;
 }
 
+const requestCanceler = new RequestCanceler<EdomsRequestConfig>();
+
 let loadingService: LoadingService;
 
 let accountStore: AccountStore | null = null;
 
 const requestInterceptors = (config: EdomsRequestConfig) => {
+  requestCanceler.pendingRequest(config);
+
   if (!accountStore) {
     accountStore = useAccountStore();
   }
   config.headers = config.headers ?? {};
   accountStore.currentTenant?.tenantId && (config.headers['tenantId'] = accountStore.currentTenant?.tenantId);
   accountStore.token && (config.headers['Authorization'] = accountStore.token);
+
   if (!config.loading) {
     return config;
   }
@@ -45,6 +50,9 @@ const requestInterceptorsCatch = (error: EdomsError) => {
 
 const responseInterceptors = (response: any) => {
   const { data } = response as EdomsResponse;
+
+  requestCanceler.cancelRequest(response.config);
+
   if (data.errorInfo && data.errorInfo.errorCode) {
     ElMessage.error(data.errorInfo.errorMsg);
   }
@@ -57,6 +65,8 @@ const responseInterceptors = (response: any) => {
 const responseInterceptorsCatch = (error: EdomsError) => {
   const { response } = error;
 
+  requestCanceler.cancelRequest(error.config);
+
   if (response) {
     if (response.status === 404) {
       ElMessage.error('服务器资源不存在');
@@ -64,6 +74,8 @@ const responseInterceptorsCatch = (error: EdomsError) => {
       const res = response.data as EdomsResponseData<any>;
       if (res.errorInfo && res.errorInfo.errorCode) {
         if (res.errorInfo.errorCode === 'EDOMS-20005') {
+          requestCanceler.cancelAllRequest();
+
           router.replace({
             path: 'login',
           });
