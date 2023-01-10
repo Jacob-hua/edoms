@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Crypto from 'crypto-js';
 
 export * from 'axios';
 
@@ -29,6 +30,46 @@ export interface RequestConfig extends AxiosRequestConfig {
 
 export interface RequestError extends AxiosError<any, any> {
   config: RequestConfig;
+}
+
+export class RequestCanceler<T extends AxiosRequestConfig> {
+  private MD5;
+  pendingRequestMap: Map<string, AbortController>;
+
+  constructor() {
+    this.pendingRequestMap = new Map();
+    this.MD5 = Crypto.MD5;
+  }
+
+  pendingRequest(config: T): void {
+    const requestId = this.generateRequestId(config);
+    if (this.pendingRequestMap.has(requestId)) {
+      config.signal = this.pendingRequestMap.get(requestId)?.signal;
+    } else {
+      const abortController = new AbortController();
+      config.signal = abortController.signal;
+      this.pendingRequestMap.set(requestId, abortController);
+    }
+  }
+
+  cancelRequest(config: T): void {
+    const requestId = this.generateRequestId(config);
+    if (!this.pendingRequestMap.has(requestId)) {
+      return;
+    }
+    this.pendingRequestMap.get(requestId)?.abort();
+    this.pendingRequestMap.delete(requestId);
+  }
+
+  cancelAllRequest(): void {
+    for (const abortController of this.pendingRequestMap.values()) {
+      abortController.abort();
+    }
+  }
+
+  private generateRequestId<T extends AxiosRequestConfig>(config: T): string {
+    return this.MD5(JSON.stringify(config)).toString();
+  }
 }
 
 export class Request {
