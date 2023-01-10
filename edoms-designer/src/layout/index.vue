@@ -40,6 +40,7 @@
                   >
                     <div class="pop-menu-item">
                       <span>{{ submenu.label }}</span>
+                      <el-icon v-show="currentTenant?.tenantId === submenu.value"><Select /></el-icon>
                     </div>
                   </PopMenuOption>
                 </SubPopMenuOption>
