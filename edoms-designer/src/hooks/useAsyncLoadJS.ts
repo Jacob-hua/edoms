@@ -2,6 +2,18 @@ import { ref } from 'vue';
 
 import { asyncLoadJs } from '@edoms/utils';
 
+import { MessageError } from '@/const/error';
+
+export class AsyncLoadJSError extends MessageError {
+  constructor(paths: string[], cause?: any) {
+    super({
+      type: 'error',
+      message: `Failed to load ${paths}`,
+    });
+    this.cause = cause;
+  }
+}
+
 export interface Callback {
   (...args: any[]): void;
 }
@@ -9,7 +21,7 @@ export interface Callback {
 export default (paths: string[], callback: Callback) => {
   const loading = ref<boolean>(false);
 
-  const error = ref<any>(null);
+  const error = ref<AsyncLoadJSError>();
 
   const execute = async () => {
     try {
@@ -18,8 +30,9 @@ export default (paths: string[], callback: Callback) => {
       await Promise.all(paths.map((path: string) => asyncLoadJs(path)));
 
       callback();
-    } catch (e) {
-      error.value = e;
+    } catch (e: any) {
+      error.value = new AsyncLoadJSError(paths, e);
+      throw error.value;
     } finally {
       loading.value = false;
     }

@@ -7,7 +7,7 @@
       </div>
       <div class="top-wrapper-right">
         <el-button type="danger" size="large" @click="handleClearTable">清空</el-button>
-        <el-button ref="importBtn" :loading="selectFileLoading" size="large" type="primary" @click="handleFileChange"
+        <el-button ref="importBtn" :loading="selectUploadLoading" size="large" type="primary" @click="handleFileChange"
           >导入</el-button
         >
         <el-button :loading="loading" type="primary" size="large" @click="execute">导出</el-button>
@@ -23,6 +23,7 @@
       <el-table :data="historyData" border>
         <el-table-column type="index" label="序号" width="100"></el-table-column>
         <el-table-column prop="action" label="操作"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
         <el-table-column prop="createBy" label="操作人"></el-table-column>
         <el-table-column prop="fileName" label="文件名称">
           <template #default="scope">
@@ -58,11 +59,11 @@ import modelApi from '@/api/model';
 import { MimeType } from '@/const/mime';
 import useDate from '@/hooks/useDate';
 import useExport from '@/hooks/useExport';
-import useSelectFile from '@/hooks/useSelectFile';
+import useSelectUpload from '@/hooks/useSelectUpload';
 
 const { formatTime } = useDate();
 
-const { execute: selectFileExecute, loading: selectFileLoading } = useSelectFile();
+const { execute: selectUploadExecute, loading: selectUploadLoading } = useSelectUpload();
 
 const props = withDefaults(
   defineProps<{
@@ -117,7 +118,9 @@ const pageInfo = ref({
   limit: 10,
   total: 0,
 });
+
 const importBtn = ref();
+
 const loadTableHistory = async () => {
   const { dataList, count } = await modelApi.getTableHistory({
     page: pageInfo.value.page,
@@ -130,7 +133,9 @@ const loadTableHistory = async () => {
   pageInfo.value.total = Number(count);
   historyData.value = dataList;
 };
+
 loadTableHistory();
+
 const onPageChange = (value: number) => {
   pageInfo.value.page = value;
   loadTableHistory();
@@ -146,10 +151,10 @@ const handleClearTable = async () => {
       await modelApi.clearTable({
         tableId: Number(props.data.id),
       });
-      loadTableHistory();
+
       ElMessage.success('清空成功');
     })
-    .catch(() => {});
+    .finally(() => loadTableHistory());
 };
 
 const handleFileChange = async () => {
@@ -159,21 +164,21 @@ const handleFileChange = async () => {
     type: 'warning',
   })
     .then(async () => {
-      const file = (await selectFileExecute(['.csv']))?.[0]!;
+      const uploadResults = await selectUploadExecute(['.csv']);
       await modelApi.importTable({
-        file,
+        contentId: uploadResults[0].contentId,
         tableId: props.data.id!,
-        fileName: file.name,
+        fileName: uploadResults[0].file.name,
       });
       ElMessage.success('导入成功');
       importBtn?.value?.ref?.blur();
-      loadTableHistory();
     })
     .catch(() => {
       nextTick(() => {
         importBtn?.value?.ref?.blur();
       });
-    });
+    })
+    .finally(() => loadTableHistory());
 };
 
 const handleFileDownload = (data: any) => {

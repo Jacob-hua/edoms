@@ -5,13 +5,39 @@ export interface UploadFileReq {
   fileType: string;
   /** 文件名称 */
   fileName: string;
-  /** 依赖资源 */
-  referenceIds?: string;
+  /** 分片序号 */
+  chunkIndex: number;
+  /** 分片总数 */
+  chunkSize: number;
+  /** uid */
+  uid: string;
 }
 
 export interface UploadFileRes {
-  /** 文件Id */
+  /** 上传进度 */
+  progress: number;
+}
+
+export interface UploadConfirmReq {
+  /** uid */
+  uid: string;
+  /** 是否完成 */
+  finished: boolean;
+  /** 文件类型 */
+  fileType: string;
+  /** 文件名称 */
+  fileName: string;
+  /** 文件摘要 */
+  md5: string;
+  /** 依赖资源ID */
+  referenceIds?: string;
+}
+
+export interface UploadConfirmRes {
+  /** 文件资源ID */
   contentId: string;
+  /** 上传进度 */
+  progress: number;
 }
 
 export interface DownloadFileReq {

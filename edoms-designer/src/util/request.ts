@@ -46,10 +46,7 @@ const requestInterceptorsCatch = (error: EdomsError) => {
 const responseInterceptors = (response: any) => {
   const { data } = response as EdomsResponse;
   if (data.errorInfo && data.errorInfo.errorCode) {
-    ElMessage({
-      type: 'error',
-      message: data.errorInfo.errorMsg,
-    });
+    ElMessage.error(data.errorInfo.errorMsg);
   }
   if (loadingService) {
     loadingService.close();
@@ -62,31 +59,17 @@ const responseInterceptorsCatch = (error: EdomsError) => {
 
   if (response) {
     if (response.status === 404) {
-      ElMessage({
-        type: 'error',
-        message: '请求地址不存在',
-      });
+      ElMessage.error('服务器资源不存在');
     } else if (response.data) {
       const res = response.data as EdomsResponseData<any>;
       if (res.errorInfo && res.errorInfo.errorCode) {
-        ElMessage({
-          type: 'error',
-          message: res.errorInfo.errorMsg,
-        });
-        new Promise((resolve) => {
-          if (res.errorInfo.errorCode === 'EDOMS-20005') {
-            router.push({
-              path: '/login',
-            });
-          }
-          resolve('');
-        });
+        if (res.errorInfo.errorCode === 'EDOMS-20005') {
+          router.replace({
+            path: 'login',
+          });
+        }
+        ElMessage.error(res.errorInfo.errorMsg);
       }
-    } else {
-      ElMessage({
-        type: 'error',
-        message: '请求异常',
-      });
     }
   }
 

@@ -70,7 +70,7 @@ export class Request {
       },
       async (err: RequestError) => {
         const { code = '', config } = err;
-        if (!config || !config.retry || !['ECONNABORTED'].includes(code)) {
+        if (!config || !config.retry || !['ECONNABORTED', '417'].includes(code)) {
           return Promise.reject(err);
         }
         config.__retryCount = config.__retryCount ?? 0;

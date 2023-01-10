@@ -1,20 +1,24 @@
 import { RouteLocationNormalized } from 'vue-router';
-import { defineStore, StoreDefinition } from 'pinia';
+import { defineStore, Store, StoreDefinition } from 'pinia';
 
-interface State {
+export interface RouterState {
   cacheComps: Set<string>;
 }
-interface Getters {
-  getCacheComps: (state: State) => string[];
+
+export interface RouterGetters {
+  keepAliveComps: (state: RouterState) => string[];
 }
-interface Action {
+
+export interface RouterAction {
   cacheRouter: (from: RouteLocationNormalized, to: RouteLocationNormalized) => void;
 }
 
-type RoutersStoreType = StoreDefinition<string, State, Getters, Action>;
+export type RoutersStoreDefinition = StoreDefinition<string, RouterState, RouterGetters, RouterAction>;
 
-const useRoutersStore: RoutersStoreType = defineStore('router', {
-  state: (): State => ({
+export type RoutersStore = Store<string, RouterState, RouterGetters, RouterAction>;
+
+const useRouterStore: RoutersStoreDefinition = defineStore('router', {
+  state: (): RouterState => ({
     cacheComps: new Set<string>(),
   }),
   actions: {
@@ -36,8 +40,8 @@ const useRoutersStore: RoutersStoreType = defineStore('router', {
     },
   },
   getters: {
-    getCacheComps: (state: State) => [...state.cacheComps],
+    keepAliveComps: (state: RouterState) => [...state.cacheComps],
   },
 });
 
-export default useRoutersStore;
+export default useRouterStore;

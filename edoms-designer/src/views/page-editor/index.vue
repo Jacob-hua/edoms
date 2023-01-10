@@ -344,13 +344,15 @@ async function calculateDSL(): Promise<MApp> {
     pageName: contentState.pageName,
   });
   if (contentState.contentId) {
-    const remoteDsl = await downloadDslExecute(contentState.contentId);
-    if (!remoteDsl) {
+    try {
+      const remoteDsl = await downloadDslExecute(contentState.contentId);
+      if (remoteDsl.type === NodeType.PAGE) {
+        dsl.items.push(remoteDsl);
+      } else {
+        return remoteDsl;
+      }
+    } catch (error) {
       dsl.items.push(emptyPageDsl);
-    } else if (remoteDsl.type === NodeType.PAGE) {
-      dsl.items.push(remoteDsl);
-    } else {
-      return remoteDsl;
     }
   } else {
     dsl.items.push(emptyPageDsl);

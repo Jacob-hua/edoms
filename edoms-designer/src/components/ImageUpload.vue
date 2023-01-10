@@ -39,7 +39,8 @@ onMounted(() => {
 
 const handleUpload = async () => {
   const imgFormat = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP'];
-  contentId.value = (await selectUploadExecute(imgFormat)) ?? '';
+  const uploadResults = await selectUploadExecute(imgFormat);
+  contentId.value = uploadResults[0].contentId;
   emits('success', contentId.value);
 };
 const handlePreview = () => {

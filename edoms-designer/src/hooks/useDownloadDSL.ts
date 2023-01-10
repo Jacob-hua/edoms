@@ -3,13 +3,24 @@ import { ref } from 'vue';
 import { MApp, MPage, NodeType } from '@edoms/schema';
 
 import fileApi from '@/api/file';
+import { MessageError } from '@/const/error';
+
+export class DownloadDSLError extends MessageError {
+  constructor(cause?: any) {
+    super({
+      type: 'error',
+      message: 'dsl元数据下载失败',
+    });
+    this.cause = cause;
+  }
+}
 
 export default () => {
   const loading = ref<boolean>(false);
 
-  const error = ref<any>(null);
+  const error = ref<DownloadDSLError>();
 
-  const execute = async (contentId: string): Promise<MApp | MPage | undefined> => {
+  const execute = async (contentId: string): Promise<MApp | MPage> => {
     try {
       loading.value = true;
       const contentStream = (await fileApi.downloadFile({ contentId })) as Blob;
@@ -24,7 +35,8 @@ export default () => {
       }
       return result;
     } catch (e) {
-      error.value = e;
+      error.value = new DownloadDSLError(e);
+      throw error.value;
     } finally {
       loading.value = false;
     }
