@@ -6,8 +6,10 @@
       </slot>
     </div>
     <Transition>
-      <div v-show="subOptionVisible" :class="subOptionPosition" :style="`width:${width}px`">
-        <slot></slot>
+      <div v-show="subOptionVisible" :class="positionBox">
+        <div :class="subOptionPosition" :style="`width:${width}px`">
+          <slot></slot>
+        </div>
       </div>
     </Transition>
   </div>
@@ -39,15 +41,18 @@ const subOptionVisible = ref<boolean>(false);
 
 const subOptionPosition = ref<string>('sub-option-right');
 
-const nodeValues = ref<(string | number)[]>([]);
+const positionBox = ref<string>('position-box-right');
+
+const nodeValues = ref<(string | number)[]>(inject('nodeValues', []));
 
 const offsetWidth = ref<string>();
 
 const maxHeight = ref<string>();
 
+const offsetTop = ref<string>();
+
 const popMenu = inject<PopMenuProvide>('popMenu', {});
 const popMenuOptGroup = inject<PopMenuOptGroupProvide>('popMenuOptGroup', {});
-nodeValues.value = inject('nodeValues', []);
 
 const handleClick = () => {
   if (props.disabled?.clickEvent) {
@@ -68,7 +73,9 @@ const caculateStyle = () => {
   const currentNodeRect = subOptionRef.value?.getBoundingClientRect();
   maxHeight.value = clientHeight - currentNodeRect.top - 10 + 'px';
   subOptionPosition.value = clientWidth - parentNodeRect.right >= props.width ? 'sub-option-right' : 'sub-option-left';
+  positionBox.value = clientWidth - parentNodeRect.right >= props.width ? 'position-box-right' : 'position-box-left';
   offsetWidth.value = `${parentNodeRect.width}px`;
+  offsetTop.value = `${currentNodeRect.top - parentNodeRect.top}px`;
 };
 
 const handleHover = () => {
@@ -82,6 +89,7 @@ const handleHover = () => {
 
 const handleMouseLeave = () => {
   subOptionVisible.value = false;
+  nodeValues.value.pop();
 };
 
 const classNames = computed(() =>
@@ -93,6 +101,7 @@ provide<(string | number)[]>('nodeValues', nodeValues.value);
 
 <style lang="scss" scoped>
 $offsetWidth: v-bind('offsetWidth');
+$offserTop: v-bind('offsetTop');
 .pop-menu-option {
   cursor: pointer;
   border-bottom: 1px solid #333;
@@ -104,8 +113,7 @@ $offsetWidth: v-bind('offsetWidth');
 }
 
 %sub-option-common {
-  position: absolute;
-  top: 0px;
+  position: static;
   background: rgb(255, 255, 255);
   border: 1px solid #e4e7ed;
   border-radius: 4px;
@@ -118,14 +126,25 @@ $offsetWidth: v-bind('offsetWidth');
 }
 
 .sub-option {
+  position: static;
+  .position-box-right {
+    position: absolute;
+    top: $offserTop;
+    left: $offsetWidth;
+  }
+
+  .position-box-left {
+    position: absolute;
+    top: $offserTop;
+    right: $offsetWidth;
+  }
+
   .sub-option-left {
     @extend %sub-option-common;
-    right: $offsetWidth;
   }
 
   .sub-option-right {
     @extend %sub-option-common;
-    left: $offsetWidth;
   }
 }
 </style>

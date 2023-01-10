@@ -12,7 +12,7 @@
       <p>Loading...</p>
     </slot>
     <slot v-if="noMore" name="noMore">
-      <p>No more</p>
+      <p class="no-more-text">No more</p>
     </slot>
   </div>
 </template>
@@ -117,6 +117,11 @@ defineExpose({
       grid-column-start: 1;
       grid-column-end: 1;
     }
+  }
+
+  .no-more-text {
+    font-style: italic;
+    font-family: cursive;
   }
 }
 </style>
