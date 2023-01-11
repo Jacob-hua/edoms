@@ -32,7 +32,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref, toRaw, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Back, Coin, Connection, Document, Finished, PriceTag } from '@element-plus/icons-vue';
+import { Back, Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
@@ -169,37 +169,6 @@ const menu = computed<MenuBarData>(() => ({
         ElMessage.success('保存成功');
       },
     },
-    {
-      type: 'button',
-      text: '发布',
-      icon: Finished,
-      handler: async () => {
-        await publish();
-        ElMessage.success('发布成功');
-      },
-    },
-    {
-      type: 'button',
-      text: '保存版本',
-      icon: PriceTag,
-      handler: () => {
-        ElMessageBox.prompt('请输入版本名称', '保存版本', {
-          closeOnClickModal: false,
-          confirmButtonText: '确认',
-          cancelButtonText: '取消',
-          inputErrorMessage: '请输入版本名称',
-          inputValidator: (value) => {
-            if (!value || value.trim().length < 1) {
-              return false;
-            }
-            return true;
-          },
-        }).then(async ({ value }) => {
-          await saveWithVersion(value.trim());
-          ElMessage.success('保存版本成功');
-        });
-      },
-    },
     '/',
     {
       type: 'button',
@@ -221,22 +190,16 @@ const contentState = reactive({
 });
 
 watch(
-  () => ({ pageId: contentState.pageId, versionId: contentState.versionId }),
-  async ({ pageId, versionId }) => {
+  () => ({ pageId: contentState.pageId }),
+  async ({ pageId }) => {
     if (!pageId) {
       return;
     }
-    if (versionId) {
-      const versionInfo = await versionApi.getVersion({ versionId });
-      contentState.versionName = versionInfo.name;
-      contentState.contentId = versionInfo.editContentId;
-    } else {
-      const pageInfo = await pageApi.getPage({ pageId });
-      contentState.applicationId = pageInfo.applicationId;
-      contentState.applicationName = pageInfo.applicationName;
-      contentState.contentId = pageInfo.editContentId ?? '';
-      contentState.pageName = pageInfo.pageName;
-    }
+    const pageInfo = await pageApi.getPage({ pageId });
+    contentState.applicationId = pageInfo.applicationId;
+    contentState.applicationName = pageInfo.applicationName;
+    contentState.contentId = pageInfo.editContentId ?? '';
+    contentState.pageName = pageInfo.pageName;
     const dsl = await calculateDSL();
     value.value = dsl;
     defaultSelected.value = pageId;
@@ -387,40 +350,6 @@ async function save() {
     });
   }
   editorRef.value?.editorService.resetModifiedNodeId();
-}
-
-async function saveWithVersion(version: string) {
-  const contentId = await uploadDsl();
-  if (!contentId) {
-    return;
-  }
-  await versionApi.saveWithVersion({
-    pageId: contentState.pageId,
-    contentId,
-    name: version,
-    description: '',
-  });
-}
-
-async function publish() {
-  const contentId = await uploadDsl();
-  if (!contentId) {
-    return;
-  }
-  contentState.contentId = contentId;
-  if (contentState.versionId) {
-    await versionApi.publishVersion({
-      versionId: contentState.versionId,
-      contentId,
-    });
-  } else {
-    await pageApi.publishPage({
-      pageId: contentState.pageId,
-      contentId,
-    });
-  }
-  editorRef.value?.editorService.resetModifiedNodeId();
-  goBack();
 }
 </script>
 
