@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onUnmounted, provide, reactive, ref, toRaw, watch } from 'vue';
+import { onUnmounted, provide, reactive, toRaw, watch } from 'vue';
 
 import { EventOption, MethodOption } from '@edoms/core';
 import type { FormConfig } from '@edoms/form';
@@ -140,8 +140,6 @@ const emit = defineEmits<{
   (event: 'runtime-ready', value: boolean): void;
 }>();
 
-const runtimeReady = ref<boolean>(false);
-
 editorService.on('root-change', (value) => {
   const node = editorService.get<MNode | null>('node');
   const nodeId = node?.id || props.defaultSelected;
@@ -155,13 +153,8 @@ editorService.on('root-change', (value) => {
 });
 
 editorService.on('runtime-ready', (value: boolean) => {
-  runtimeReady.value = value;
+  emit('runtime-ready', value);
 });
-
-watch(
-  () => runtimeReady.value,
-  () => emit('runtime-ready', runtimeReady.value)
-);
 
 // 初始值变化，重新设置节点信息
 watch(
