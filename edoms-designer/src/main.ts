@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import JsonViewer from 'vue3-json-viewer';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
-import ElementPlus from 'element-plus';
+import ElementPlus, { ElDialog } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import * as monaco from 'monaco-editor';
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -47,6 +47,8 @@ monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
+
+ElDialog['props'].closeOnClickModal.default = false;
 
 const app = createApp(App);
 app.use(JsonViewer);
