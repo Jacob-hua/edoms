@@ -146,7 +146,7 @@ const menu = computed<MenuBarData>(() => ({
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           try {
-            await ElMessageBox.confirm('有修改未保存，是否先保存再预览', '提示', {
+            await ElMessageBox.confirm('有修改未保存，是否先保存再预览？', '提示', {
               confirmButtonText: '保存并预览',
               cancelButtonText: '预览',
               type: 'warning',
@@ -155,6 +155,7 @@ const menu = computed<MenuBarData>(() => ({
             ElMessage.success('保存成功');
           } catch (e) {
             console.error(e);
+            return;
           }
         }
         previewDialogVisible.value = true;
