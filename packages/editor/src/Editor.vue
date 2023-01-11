@@ -40,7 +40,7 @@
 
     <template #workspace>
       <slot name="workspace" :editor-service="editorService">
-        <workspace @runtime-ready="$emit('runtime-ready')">
+        <workspace>
           <template #stage><slot name="stage"></slot></template>
           <template #workspace-content><slot name="workspace-content" :editor-service="editorService"></slot></template>
         </workspace>
@@ -137,7 +137,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   (event: 'props-panel-mounted'): void;
   (event: 'update:modelValue', value: any): void;
-  (event: 'runtime-ready'): void;
+  (event: 'runtime-ready', value: boolean): void;
 }>();
 
 editorService.on('root-change', (value) => {
@@ -150,6 +150,10 @@ editorService.on('root-change', (value) => {
   }
 
   emit('update:modelValue', toRaw(editorService.get('root')));
+});
+
+editorService.on('runtime-ready', (value: boolean) => {
+  emit('runtime-ready', value);
 });
 
 // 初始值变化，重新设置节点信息

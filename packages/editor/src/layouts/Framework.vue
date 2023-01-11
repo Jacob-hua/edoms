@@ -14,6 +14,8 @@
       v-else
       v-model:left="columnWidth.left"
       v-model:right="columnWidth.right"
+      v-loading="loading"
+      element-loading-text="页面加载中..."
       class="edoms-editor-content"
       left-class="edoms-editor-framework-left"
       center-class="edoms-editor-framework-center"
@@ -67,6 +69,8 @@ withDefaults(
 
 const { editorService, uiService } = inject<Services>('services') || {};
 
+const loading = ref<boolean>(true);
+
 const root = computed(() => editorService?.get<MApp>('root'));
 const nodes = computed(() => editorService?.get<Node[]>('nodes') || []);
 
@@ -84,6 +88,19 @@ const columnWidth = ref<Partial<GetColumnWidth>>({
   center: 0,
   right: RightColumnWidthCacheData,
 });
+
+editorService?.on('runtime-ready', (value: boolean) => {
+  loading.value = !value;
+});
+
+watch(
+  () => showSrc.value,
+  (showSrc) => {
+    if (!showSrc) {
+      loading.value = true;
+    }
+  }
+);
 
 watch(
   pageLength,

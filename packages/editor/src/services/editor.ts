@@ -1,4 +1,4 @@
-import { reactive, toRaw } from 'vue';
+import { reactive, toRaw, watch } from 'vue';
 import { cloneDeep, mergeWith, uniq } from 'lodash-es';
 
 import type { CodeBlockDSL, Id, MApp, MComponent, MContainer, MNode, MPage } from '@edoms/schema';
@@ -68,6 +68,16 @@ export class EditorService extends BaseService {
       ],
       // 需要注意循环依赖问题，如果函数间有相互调用的话，不能设置为串行调用
       ['select', 'update', 'moveLayer']
+    );
+
+    watch(
+      () => this.state.stage,
+      (stage) => {
+        if (!stage) return;
+        stage.on('runtime-ready', () => {
+          this.emit('runtime-ready', true);
+        });
+      }
     );
   }
 
@@ -192,7 +202,9 @@ export class EditorService extends BaseService {
     } else {
       historyService.empty();
     }
-
+    if (node?.type === 'page') {
+      this.emit('runtime-ready', false);
+    }
     if (node?.id) {
       this.get<StageCore>('stage')
         ?.renderer.runtime?.getApp?.()
@@ -350,6 +362,7 @@ export class EditorService extends BaseService {
       await this.select(newNodes[0]);
 
       if (isPage(newNodes[0])) {
+        this.emit('runtime-ready', false);
         this.state.pageLength += 1;
       } else {
         // 新增页面，这个时候页面还有渲染出来，此时select会出错，在runtime-ready的时候回去select
@@ -382,6 +395,7 @@ export class EditorService extends BaseService {
     stage?.remove({ id: node.id, parentId: parent.id, root: cloneDeep(root) });
 
     if (node.type === NodeType.PAGE) {
+      this.emit('runtime-ready', false);
       this.state.pageLength -= 1;
 
       if (root.items[0]) {

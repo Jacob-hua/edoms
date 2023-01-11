@@ -104,14 +104,13 @@ defineExpose({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .el-popover.popper {
   padding: 12px 0;
 }
 .reference {
   display: inline-block;
   cursor: pointer;
-  margin: 1em;
 }
 .reference-disabled {
   cursor: auto;
@@ -122,6 +121,7 @@ defineExpose({
   height: 1em;
   width: 1em;
   line-height: 1em;
+  margin: 1em;
   display: inline-flex;
   justify-content: center;
   align-items: center;

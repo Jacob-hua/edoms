@@ -18,6 +18,8 @@ export interface ListVersionResItem {
   name: string;
   /** 版本描述 */
   description: string;
+  /** 版本内容ID */
+  contentId: string;
   /** 创建者 */
   createBy: string;
   /** 创建时间 */
@@ -28,7 +30,12 @@ export interface ListVersionResItem {
   updateTime: number;
 }
 
-export type ListVersionsRes = PageStruct<ListVersionResItem>;
+export interface ListVersionsRes extends PageStruct<ListVersionResItem> {
+  /** 应用ID */
+  applicationId: string;
+  /** 应用名称 */
+  applicationName: string;
+}
 
 export interface GetVersionReq {
   /** 版本Id */
