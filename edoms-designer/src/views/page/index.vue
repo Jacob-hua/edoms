@@ -10,17 +10,10 @@
           <el-button type="primary" size="large">菜单</el-button>
         </template>
         <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
-          <div class="pop-menu-item">
+          <div class="top-menu-item">
             <span>{{ menu.label }}</span>
           </div>
         </PopMenuOption>
-        <template #footer>
-          <div class="version-info">
-            <p>{{ active?.createBy }} 创建于 {{ formatTime(active?.createTime ?? '') }}</p>
-            <p>{{ active?.updateBy }} 最近更新于 {{ formatTime(active?.updateTime ?? '') }}</p>
-            <p>编辑者: {{ active?.updateBy }}</p>
-          </div>
-        </template>
       </PopMenu>
     </section>
     <section class="page-list">
@@ -40,9 +33,6 @@
             :is-home-page="item.isHomePage"
             :data="item"
             :is-active="item.pageId === active?.pageId"
-            @delete-success="handleReload"
-            @use-index-success="handleReload"
-            @rename-success="handleRenameSuccess"
           />
         </template>
         <template #noMore>
@@ -61,65 +51,37 @@
       />
     </section>
   </div>
-  <NewPageDialog
-    v-if="newPageVisible"
-    v-model:visible="newPageVisible"
-    :application-id="applicationId"
-    @success="handleReload"
-  />
+  <NewVersionDialog v-model:visible="newVersionVisible" :application-id="applicationId" @success="handleReload" />
 </template>
 
 <script lang="ts" setup name="Page">
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import pageApi from '@/api/page';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
-import useDate from '@/hooks/useDate';
 
-import NewPageDialog from './component/NewPageDialog.vue';
+import NewVersionDialog from './component/NewVersionDialog.vue';
 import PageListItem, { ListPageItem } from './component/PageListItem.vue';
 
 const route = useRoute();
 
 const router = useRouter();
 
-const { formatTime } = useDate();
-
 const gridListRef = ref();
 
 const appName = ref<string>('');
-
-const totalCount = ref<number>();
 
 const active = ref<ListPageItem>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
-const loadData: RequestFunc<ListPageItem> = async ({ pageSize, current }) => {
-  const {
-    dataList = [],
-    count,
-    applicationName,
-  } = await pageApi.listPages({
-    page: current,
-    limit: pageSize,
-    applicationId: route.query.applicationId as string,
-    name: searchText.value,
-  });
-  totalCount.value = Number(count);
-  appName.value = applicationName;
-  active.value = dataList[0] ?? { pushContentId: null };
-
+const loadData: RequestFunc<ListPageItem> = async () => {
   return {
-    data: dataList.map<ListPageItem>((item) => ({
-      ...item,
-      isHomePage: false,
-    })),
-    total: Number(count),
+    data: [],
+    total: 0,
   };
 };
 
@@ -133,17 +95,10 @@ const handleReload = () => {
 
 const topMenus = [
   {
-    name: 'newPage',
-    label: '新建页面',
-    action: () => {
-      newPageVisible.value = true;
-    },
-  },
-  {
     name: 'newVersion',
     label: '新建版本',
     action: () => {
-      console.log('新建版本');
+      newVersionVisible.value = true;
     },
   },
   {
@@ -160,15 +115,7 @@ const handleTopMenuClick = (value: (string | number)[]) => {
   menu?.action();
 };
 
-const searchText = ref<string | null>(null);
-
-const newPageVisible = ref<boolean>(false);
-
-const handleRenameSuccess = (value: ListPageItem) => {
-  if (value.pageId === active.value?.pageId) {
-    active.value = value;
-  }
-};
+const newVersionVisible = ref<boolean>(false);
 
 const handleSelectChange = (value: ListPageItem) => {
   if (value.pageId !== active.value?.pageId) {
@@ -178,7 +125,7 @@ const handleSelectChange = (value: ListPageItem) => {
 </script>
 
 <style lang="scss" scoped>
-.pop-menu-item {
+.top-menu-item {
   width: 100%;
   display: flex;
   align-items: center;
@@ -222,11 +169,5 @@ const handleSelectChange = (value: ListPageItem) => {
 
 .page-preview {
   overflow: hidden;
-}
-
-.version-info {
-  p {
-    margin-top: 10px;
-  }
 }
 </style>
