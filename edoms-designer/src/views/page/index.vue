@@ -51,16 +51,14 @@
       </GridList>
     </section>
     <section class="page-preview">
-      <div ref="editWrapper" class="edit">
-        <DSLPreview
-          v-if="previewVisible"
-          height="98%"
-          :application-id="applicationId"
-          :application-name="appName"
-          :content-id="active?.pushContentId"
-          :page-id="active?.pageId"
-        />
-      </div>
+      <DSLPreview
+        class="edit"
+        height="98%"
+        :application-id="applicationId"
+        :application-name="appName"
+        :content-id="active?.pushContentId"
+        :page-id="active?.pageId"
+      />
     </section>
   </div>
   <NewPageDialog
@@ -95,8 +93,6 @@ const gridList = ref();
 
 const appName = ref<string>('');
 
-const previewVisible = ref<boolean>(false);
-
 const totalCount = ref<number>();
 
 const active = ref<ListPageItem>();
@@ -118,9 +114,6 @@ const loadData: RequestFunc<ListPageItem> = async ({ pageSize, current }) => {
   totalCount.value = Number(count);
   appName.value = applicationName;
   active.value = dataList[0] ?? { pushContentId: null };
-  if (totalCount.value) {
-    previewVisible.value = true;
-  }
 
   return {
     data: dataList.map<ListPageItem>((item) => ({
@@ -138,8 +131,6 @@ const goBack = () => {
 const handleReload = () => {
   gridList.value?.reload();
 };
-
-const editWrapper = ref();
 
 const topMenus = [
   {
@@ -232,34 +223,6 @@ const handleChangeActive = (value: ListPageItem) => {
 
 .page-preview {
   overflow: hidden;
-  .right-top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 10px;
-    padding-left: 10px;
-    & > span {
-      font-size: 25px;
-    }
-    & > div {
-      display: flex;
-      align-items: center;
-    }
-    .el-icon {
-      margin: 0 30px;
-      cursor: pointer;
-    }
-  }
-  .edit {
-    text-align: center;
-    // height: calc(100% - 75px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    h1 {
-      font-size: 30px;
-    }
-  }
 }
 
 .version-info {
