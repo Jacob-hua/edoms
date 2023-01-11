@@ -7,7 +7,6 @@ import {
   PublishVersionReq,
   RecoveryVersionReq,
   SaveVersionReq,
-  SaveWithVersionReq,
   UpdateVersionReq,
 } from '@/api/version/type';
 import { request } from '@/util/request';
@@ -28,6 +27,8 @@ export default {
         count: 0,
         limit: 0,
         page: 0,
+        applicationId: '',
+        applicationName: '',
         dataList: [],
       };
     }
@@ -59,13 +60,6 @@ export default {
       data,
     });
   },
-  saveWithVersion: async (data: SaveWithVersionReq): Promise<void> => {
-    await request<SaveWithVersionReq, void>({
-      url: '/page/version/save-with-version',
-      method: 'POST',
-      data,
-    });
-  },
   recoveryVersion: async (data: RecoveryVersionReq): Promise<void> => {
     await request<RecoveryVersionReq, void>({
       url: '/page/version/version-recovery',
@@ -75,7 +69,7 @@ export default {
   },
   saveVersion: async (data: SaveVersionReq): Promise<void> => {
     await request<SaveVersionReq, void>({
-      url: '/page/version/save',
+      url: '/application/version/save',
       method: 'POST',
       data,
     });

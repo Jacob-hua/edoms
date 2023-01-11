@@ -18,9 +18,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="版本来源" prop="contentId">
-          <el-select v-model="formModel.contentId" clearable placeholder="请选择版本来源">
-            <el-option>选项1</el-option>
-          </el-select>
+          <SwitchVersion v-if="dialogVisible" v-model:version-id="formModel.contentId" :application-id="applicationId">
+            <template #default="{ version }">
+              <el-input :value="version?.name" clearable placeholder="请选择版本来源"></el-input>
+            </template>
+          </SwitchVersion>
         </el-form-item>
       </el-form>
     </span>
@@ -36,6 +38,10 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
+
+import versionApi from '@/api/version';
+
+import SwitchVersion from './SwitchVersion.vue';
 
 const props = defineProps<{
   visible: boolean;
@@ -108,9 +114,12 @@ const handleConfirm = async () => {
   if (!formRef.value) return;
   try {
     await formRef.value?.validate();
-    // await pageApi.createPage({
-    //   ...formModel.value,
-    // });
+    await versionApi.saveVersion({
+      applicationId: props.applicationId,
+      name: formModel.value.name,
+      description: formModel.value.description,
+      contentId: formModel.value.contentId,
+    });
     ElMessage.success('版本创建成功');
     dialogVisible.value = false;
     emit('success');
@@ -121,7 +130,17 @@ const handleConfirm = async () => {
 </script>
 
 <style lang="scss" scoped>
-.el-select {
+.version-btn {
   width: 100%;
+  padding: 2px 8px;
+  border: 1px solid #e1e1e1;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  & > span:first-child {
+    flex-grow: 1;
+  }
 }
 </style>
