@@ -6,19 +6,14 @@
           <el-icon :size="23"><ArrowLeft /></el-icon>
           <span>{{ appName }}</span>
         </div>
-        <el-select
-          v-model="curVersion"
-          filterable
-          remote
-          reserve-keyword
-          remote-show-suffix
-          :remote-method="loadData"
-          :loading="versionSelectLoading"
-        >
-          <el-option v-for="{ name, versionId } in versionList" :key="versionId" :value="versionId" :label="name">
-            {{ name }}
-          </el-option>
-        </el-select>
+        <SwitchVersion v-model:version-id="defaultVersionId" :application-id="applicationId">
+          <template #default="{ version }">
+            <div class="version-btn">
+              <span>{{ version?.name ?? defaultVersionName }}</span>
+              <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+            </div>
+          </template>
+        </SwitchVersion>
       </div>
       <PopMenu :width="330" @menu-click="handleTopMenuClick">
         <template #reference>
@@ -72,7 +67,7 @@
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import versionApi, { ListVersionResItem } from '@/api/version';
+import applicationApi from '@/api/application';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
@@ -80,6 +75,7 @@ import PopMenuOption from '@/components/PopMenuOption.vue';
 
 import NewVersionDialog from './component/NewVersionDialog.vue';
 import PageListItem, { ListPageItem } from './component/PageListItem.vue';
+import SwitchVersion from './component/SwitchVersion.vue';
 
 const route = useRoute();
 
@@ -89,37 +85,30 @@ const gridListRef = ref();
 
 const appName = ref<string>('');
 
+const defaultVersionId = ref<string>('');
+
+const defaultVersionName = ref<string>('');
+
 const active = ref<ListPageItem>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
-const curVersion = ref<string>();
-
-const versionList = ref<ListVersionResItem[]>([]);
-
-const versionSelectLoading = ref<boolean>(false);
-
-const loadData = async (name: string) => {
-  versionSelectLoading.value = true;
-  if (!applicationId.value) {
-    return;
-  }
-  const { dataList, applicationName } = await versionApi.listVersions({
-    applicationId: applicationId.value,
-    page: 1,
-    limit: 10,
-    name,
-  });
-
-  versionList.value = dataList;
-  appName.value = applicationName;
-  versionSelectLoading.value = false;
-};
-
 watch(
   () => applicationId.value,
-  () => {
-    loadData('');
+  async (applicationId) => {
+    if (!applicationId) {
+      return;
+    }
+    const {
+      name,
+      defaultVersionId: versionId,
+      defaultVersionName: versionName,
+    } = await applicationApi.getApplication({
+      applicationId,
+    });
+    appName.value = name;
+    defaultVersionId.value = versionId;
+    defaultVersionName.value = versionName;
   },
   { immediate: true }
 );
@@ -200,6 +189,20 @@ const handleSelectChange = (value: ListPageItem) => {
     display: flex;
     cursor: pointer;
     margin-right: 20px;
+  }
+
+  .version-btn {
+    padding: 2px 8px;
+    border: 1px solid #e1e1e1;
+    border-radius: 3px;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    & > span:first-child {
+      flex-grow: 1;
+    }
   }
 }
 
