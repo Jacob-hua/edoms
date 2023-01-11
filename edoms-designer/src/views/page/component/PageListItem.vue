@@ -34,6 +34,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
@@ -64,6 +65,8 @@ const emit = defineEmits<{
   (event: 'changeActive', value: ListPageItem): void;
 }>();
 
+const router = useRouter();
+
 const formRef = ref<FormInstance>();
 
 const formModel = reactive({
@@ -81,6 +84,19 @@ const formRules = reactive<FormRules>({
 const renameVisible = ref<boolean>(false);
 
 const menus = [
+  {
+    name: 'edit',
+    label: '编辑',
+    icon: 'Operation',
+    action: () => {
+      router.push({
+        path: '/editor',
+        query: {
+          pageId: props.data.pageId,
+        },
+      });
+    },
+  },
   {
     name: 'rename',
     label: '重命名',
@@ -171,12 +187,26 @@ const handleClick = () => {
 .el-form-item {
   margin: 0;
 }
+
 .active {
   background-color: #409eff;
 }
+
 .pop-menu-content {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.item {
+  cursor: pointer;
+  width: 100%;
+  height: 45px;
+  line-height: 45px;
+  padding-left: 10px;
+  border-bottom: 1px solid #e1e1e1;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 </style>
