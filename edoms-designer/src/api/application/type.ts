@@ -80,8 +80,8 @@ export interface GetApplicationRes {
   createTime: string;
   /** 删除密钥 */
   secret: string;
-  /** 是否支持导出 */
-  export: boolean;
+  /** 默认版本ID */
+  defaultVersionId: string;
 }
 
 export interface DeleteApplicationReq {
