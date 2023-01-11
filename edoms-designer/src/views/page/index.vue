@@ -104,7 +104,6 @@ const loadData: RequestFunc<ListPageItem> = async ({ pageSize, current }) => {
     dataList = [],
     count,
     applicationName,
-    indexPageId = '',
   } = await pageApi.listPages({
     page: current,
     limit: pageSize,
@@ -118,7 +117,7 @@ const loadData: RequestFunc<ListPageItem> = async ({ pageSize, current }) => {
   return {
     data: dataList.map<ListPageItem>((item) => ({
       ...item,
-      isHomePage: indexPageId && indexPageId === item?.pageId ? true : false,
+      isHomePage: false,
     })),
     total: Number(count),
   };
@@ -134,17 +133,17 @@ const handleReload = () => {
 
 const topMenus = [
   {
-    name: 'newVersion',
-    label: '新建版本',
-    action: () => {
-      console.log('新建版本');
-    },
-  },
-  {
     name: 'newPage',
     label: '新建页面',
     action: () => {
       newPageVisible.value = true;
+    },
+  },
+  {
+    name: 'newVersion',
+    label: '新建版本',
+    action: () => {
+      console.log('新建版本');
     },
   },
   {
