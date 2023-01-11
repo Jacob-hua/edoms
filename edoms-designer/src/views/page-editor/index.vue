@@ -185,6 +185,7 @@ const menu = computed<MenuBarData>(() => ({
       icon: PriceTag,
       handler: () => {
         ElMessageBox.prompt('请输入版本名称', '保存版本', {
+          closeOnClickModal: false,
           confirmButtonText: '确认',
           cancelButtonText: '取消',
           inputErrorMessage: '请输入版本名称',
