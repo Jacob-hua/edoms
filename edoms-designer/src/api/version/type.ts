@@ -1,23 +1,23 @@
 import { PageStruct } from '@/const/struct';
 
 export interface ListVersionsReq {
+  /** 应用ID */
+  applicationId: string;
   /** 页码 */
   page: number;
   /** 页面大小 */
   limit: number;
-  /** 页面ID */
-  pageId: string;
+  /** 版本名称（筛选条件） */
+  name?: string;
 }
 
 export interface ListVersionResItem {
   /** 版本ID */
   versionId: string;
-  /** 页面ID */
-  pageId: string;
   /** 版本名称 */
   name: string;
-  /** 发布内容ID */
-  pushContentId: string;
+  /** 版本描述 */
+  description: string;
   /** 创建者 */
   createBy: string;
   /** 创建时间 */
@@ -38,25 +38,31 @@ export interface GetVersionReq {
 export interface GetVersionRes {
   /** 版本ID */
   versionId: string;
-  /** 页面ID */
-  pageId: string;
   /** 版本名称 */
   name: string;
-  /** 编辑内容ID */
-  editContentId: string;
+  /** 版本描述 */
+  description: string;
   /** 创建者 */
   createBy: string;
   /** 创建时间 */
   createTime: number;
+  /** 更新者 */
+  updateBy: string;
+  /** 更新时间 */
+  updateTime: number;
 }
 
 export interface UpdateVersionReq {
+  /** 应用ID */
+  applicationId: string;
   /** 版本ID */
   versionId: string;
   /** 版本名称 */
   name: string;
-  /** 页面ID */
-  pageId: number;
+  /** 版本描述 */
+  description?: string;
+  /** 内容ID */
+  contentId: string;
 }
 
 export interface SaveWithVersionReq {

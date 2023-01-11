@@ -18,7 +18,7 @@ export default {
   listVersions: async (data: ListVersionsReq): Promise<ListVersionsRes> => {
     try {
       const { result } = await request<ListVersionsReq, ListVersionsRes>({
-        url: '/page/version/list',
+        url: '/application/version/list',
         method: 'POST',
         data,
       });
@@ -35,7 +35,7 @@ export default {
   getVersion: async (data: GetVersionReq): Promise<GetVersionRes> => {
     try {
       const { result } = await request<GetVersionReq, GetVersionRes>({
-        url: '/page/version',
+        url: '/application/version',
         method: 'GET',
         data,
       });
@@ -44,16 +44,17 @@ export default {
       return {
         versionId: '',
         name: '',
-        pageId: '',
-        editContentId: '',
+        description: '',
         createBy: '',
         createTime: -1,
+        updateBy: '',
+        updateTime: -1,
       };
     }
   },
   updateVersion: async (data: UpdateVersionReq): Promise<void> => {
     await request<UpdateVersionReq, void>({
-      url: '/page/version/update',
+      url: '/application/version/update',
       method: 'PUT',
       data,
     });
