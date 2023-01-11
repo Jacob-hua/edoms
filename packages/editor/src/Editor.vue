@@ -40,7 +40,7 @@
 
     <template #workspace>
       <slot name="workspace" :editor-service="editorService">
-        <workspace @runtime-ready="$emit('runtime-ready')">
+        <workspace>
           <template #stage><slot name="stage"></slot></template>
           <template #workspace-content><slot name="workspace-content" :editor-service="editorService"></slot></template>
         </workspace>
@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onUnmounted, provide, reactive, toRaw, watch } from 'vue';
+import { onUnmounted, provide, reactive, ref, toRaw, watch } from 'vue';
 
 import { EventOption, MethodOption } from '@edoms/core';
 import type { FormConfig } from '@edoms/form';
@@ -137,8 +137,10 @@ const props = withDefaults(
 const emit = defineEmits<{
   (event: 'props-panel-mounted'): void;
   (event: 'update:modelValue', value: any): void;
-  (event: 'runtime-ready'): void;
+  (event: 'runtime-ready', value: boolean): void;
 }>();
+
+const runtimeReady = ref<boolean>(false);
 
 editorService.on('root-change', (value) => {
   const node = editorService.get<MNode | null>('node');
@@ -151,6 +153,15 @@ editorService.on('root-change', (value) => {
 
   emit('update:modelValue', toRaw(editorService.get('root')));
 });
+
+editorService.on('runtime-ready', (value: boolean) => {
+  runtimeReady.value = value;
+});
+
+watch(
+  () => runtimeReady.value,
+  () => emit('runtime-ready', runtimeReady.value)
+);
 
 // 初始值变化，重新设置节点信息
 watch(

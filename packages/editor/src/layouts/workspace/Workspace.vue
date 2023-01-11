@@ -1,10 +1,14 @@
 <template>
   <div ref="workspace" class="edoms-editor-workspace" tabindex="-1">
     <slot name="stage">
-      <EdomsStage :key="page?.id" @runtime-ready="emit('runtime-ready')"></EdomsStage>
+      <EdomsStage :key="page?.id"></EdomsStage>
     </slot>
 
     <slot name="workspace-content"></slot>
+    <PageBar>
+      <template #page-bar-title="{ page }"><slot name="page-bar-title" :page="page"></slot></template>
+      <template #page-bar-popover="{ page }"><slot name="page-bar-popover" :page="page"></slot></template>
+    </PageBar>
   </div>
 </template>
 
@@ -17,11 +21,8 @@ import { isPage } from '@edoms/utils';
 
 import type { Services } from '../../type';
 
+import PageBar from './PageBar.vue';
 import EdomsStage from './Stage.vue';
-
-const emit = defineEmits<{
-  (event: 'runtime-ready'): void;
-}>();
 
 const services = inject<Services>('services');
 const workspace = ref<HTMLDivElement>();

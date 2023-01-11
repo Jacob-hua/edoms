@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-app">
+  <div v-loading="loading" element-loading-text="页面加载中..." class="editor-app">
     <edoms-editor
       ref="editorRef"
       v-model="value"
@@ -75,6 +75,8 @@ editorService.usePlugin({
 const router = useRouter();
 
 const route = useRoute();
+
+const loading = ref<boolean>(true);
 
 const stageRect = ref({
   width: 1920,
@@ -325,8 +327,8 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   return;
 };
 
-const handleRuntimeReady = () => {
-  console.log('准备好了');
+const handleRuntimeReady = (value: boolean) => {
+  loading.value = !value;
 };
 
 function goBack() {
