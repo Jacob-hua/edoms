@@ -2,7 +2,7 @@
   <div v-if="isAlive" class="infinite-list-wrapper" style="overflow: auto">
     <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
       <div><slot name="operation"></slot></div>
-      <div v-for="(item, index) in data" :key="index">
+      <div v-for="(item, index) in data" :key="index" @click="handleSelectChange(item)">
         <slot :item="item" :index="index">
           {{ item }}
         </slot>
@@ -56,6 +56,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (event: 'loaded'): void;
+  (event: 'onSelectChange', value: any): void;
 }>();
 
 const isAlive = ref(true);
@@ -96,6 +97,10 @@ const load = async () => {
   }
   data.push(...result.data);
   emit('loaded');
+};
+
+const handleSelectChange = (value: any) => {
+  emit('onSelectChange', value);
 };
 
 defineExpose({

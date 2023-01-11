@@ -25,13 +25,14 @@
     </section>
     <section class="page-list">
       <GridList
-        ref="gridList"
+        ref="gridListRef"
         class="grid-list"
         column-gap="20px"
         row-gap="10px"
         :page-size="20"
         item-min-width="200px"
         :request="loadData"
+        @on-select-change="handleSelectChange"
       >
         <template #default="{ item }: { item: ListPageItem }">
           <PageListItem
@@ -42,7 +43,6 @@
             @delete-success="handleReload"
             @use-index-success="handleReload"
             @rename-success="handleRenameSuccess"
-            @change-active="handleChangeActive"
           />
         </template>
         <template #noMore>
@@ -89,7 +89,7 @@ const router = useRouter();
 
 const { formatTime } = useDate();
 
-const gridList = ref();
+const gridListRef = ref();
 
 const appName = ref<string>('');
 
@@ -129,7 +129,7 @@ const goBack = () => {
 };
 
 const handleReload = () => {
-  gridList.value?.reload();
+  gridListRef.value?.reload();
 };
 
 const topMenus = [
@@ -171,7 +171,7 @@ const handleRenameSuccess = (value: ListPageItem) => {
   }
 };
 
-const handleChangeActive = (value: ListPageItem) => {
+const handleSelectChange = (value: ListPageItem) => {
   if (value.pageId !== active.value?.pageId) {
     active.value = value;
   }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['item', isActive ? 'active' : '']" @click="handleClick">
+  <div :class="['item', isActive ? 'active' : '']">
     <template v-if="renameVisible">
       <el-form ref="formRef" :inline="true" :model="formModel" :rules="formRules">
         <el-form-item prop="name">
@@ -62,7 +62,6 @@ const emit = defineEmits<{
   (event: 'deleteCatch', error: any): void;
   (event: 'useIndexSuccess'): void;
   (event: 'useIndexCatch', error: any): void;
-  (event: 'changeActive', value: ListPageItem): void;
 }>();
 
 const router = useRouter();
@@ -176,10 +175,6 @@ const handleRename = async () => {
   } catch (error) {
     emit('renameCatch', error);
   }
-};
-
-const handleClick = () => {
-  emit('changeActive', formModel);
 };
 </script>
 
