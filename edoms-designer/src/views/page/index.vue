@@ -1,9 +1,24 @@
 <template>
   <div class="page-container">
     <section class="header">
-      <div class="back-btn" @click="goBack">
-        <el-icon :size="23"><ArrowLeft /></el-icon>
-        <span>{{ appName }}</span>
+      <div>
+        <div class="back-btn" @click="goBack">
+          <el-icon :size="23"><ArrowLeft /></el-icon>
+          <span>{{ appName }}</span>
+        </div>
+        <el-select
+          v-model="curVersion"
+          filterable
+          remote
+          reserve-keyword
+          remote-show-suffix
+          :remote-method="loadData"
+          :loading="versionSelectLoading"
+        >
+          <el-option v-for="{ name, versionId } in versionList" :key="versionId" :value="versionId" :label="name">
+            {{ name }}
+          </el-option>
+        </el-select>
       </div>
       <PopMenu :width="330" @menu-click="handleTopMenuClick">
         <template #reference>
@@ -24,7 +39,6 @@
         row-gap="10px"
         :page-size="20"
         item-min-width="200px"
-        :request="loadData"
         @on-select-change="handleSelectChange"
       >
         <template #default="{ item }: { item: ListPageItem }">
@@ -55,11 +69,12 @@
 </template>
 
 <script lang="ts" setup name="Page">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import versionApi, { ListVersionResItem } from '@/api/version';
 import DSLPreview from '@/components/DSLPreview.vue';
-import GridList, { RequestFunc } from '@/components/GridList.vue';
+import GridList from '@/components/GridList.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
 
@@ -78,12 +93,36 @@ const active = ref<ListPageItem>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
-const loadData: RequestFunc<ListPageItem> = async () => {
-  return {
-    data: [],
-    total: 0,
-  };
+const curVersion = ref<string>();
+
+const versionList = ref<ListVersionResItem[]>([]);
+
+const versionSelectLoading = ref<boolean>(false);
+
+const loadData = async (name: string) => {
+  versionSelectLoading.value = true;
+  if (!applicationId.value) {
+    return;
+  }
+  const { dataList, applicationName } = await versionApi.listVersions({
+    applicationId: applicationId.value,
+    page: 1,
+    limit: 10,
+    name,
+  });
+
+  versionList.value = dataList;
+  appName.value = applicationName;
+  versionSelectLoading.value = false;
 };
+
+watch(
+  () => applicationId.value,
+  () => {
+    loadData('');
+  },
+  { immediate: true }
+);
 
 const goBack = () => {
   router.push('/');
@@ -151,9 +190,16 @@ const handleSelectChange = (value: ListPageItem) => {
   align-items: center;
   justify-content: space-between;
 
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+  }
+
   .back-btn {
+    width: 160px;
     display: flex;
     cursor: pointer;
+    margin-right: 20px;
   }
 }
 
