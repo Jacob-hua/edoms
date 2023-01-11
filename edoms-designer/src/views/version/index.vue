@@ -122,7 +122,7 @@ const handleRename = (value: ListVersionResItem) => {
 };
 
 const handleActive = (value: ListVersionResItem) => {
-  if (value.pageId !== active.value?.pageId) {
+  if (value.versionId !== active.value?.versionId) {
     active.value = value;
   }
 };

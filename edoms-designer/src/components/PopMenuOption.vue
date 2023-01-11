@@ -9,6 +9,8 @@
 <script lang="ts" setup>
 import { computed, inject } from 'vue';
 
+import { deepClone } from '@edoms/utils';
+
 import { PopMenuProvide } from './PopMenu.vue';
 import { PopMenuOptGroupProvide } from './PopMenuOptGroup.vue';
 
@@ -31,6 +33,7 @@ const props = withDefaults(
 
 const popMenu = inject<PopMenuProvide>('popMenu', {});
 const popMenuOptGroup = inject<PopMenuOptGroupProvide>('popMenuOptGroup', {});
+const nodeValues = inject<(string | number)[]>('nodeValues', []);
 
 const handleClick = () => {
   if (props.disabled?.clickEvent) {
@@ -40,7 +43,9 @@ const handleClick = () => {
     return;
   }
   if (popMenu && typeof popMenu.handleClick === 'function') {
-    popMenu.handleClick(props.value);
+    const values: (string | number)[] = deepClone(nodeValues) || [];
+    values.push(props.value);
+    popMenu.handleClick(values);
   }
 };
 
