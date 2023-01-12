@@ -20,7 +20,9 @@
         <el-button type="primary" text bg size="large" :icon="DocumentAdd" @click="handleNewVersion">
           新建版本
         </el-button>
-        <el-button type="primary" text bg size="large" :icon="Download" @click="handleDownload"> 导出应用 </el-button>
+        <el-button type="primary" text bg size="large" :icon="Download" @click="handleExportApplication">
+          导出应用
+        </el-button>
       </div>
     </section>
     <section class="page-list">
@@ -71,6 +73,8 @@ import { DocumentAdd, Download, Edit } from '@element-plus/icons-vue';
 import applicationApi from '@/api/application';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
+import { MimeType } from '@/const/mime';
+import useExport from '@/hooks/useExport';
 
 import NewVersionDialog from './component/NewVersionDialog.vue';
 import PageListItem, { ListPageItem } from './component/PageListItem.vue';
@@ -132,7 +136,16 @@ const handleNewVersion = () => {
   newVersionVisible.value = true;
 };
 
-const handleDownload = () => {};
+const { execute: handleExportApplication } = useExport(
+  async () => {
+    const result = await applicationApi.exportApplication({
+      applicationId: applicationId.value,
+    });
+    return result;
+  },
+  () => `${appName.value}.zip`,
+  MimeType.ZIP
+);
 
 const handleSelectChange = (value: ListPageItem) => {
   if (value.pageId !== active.value?.pageId) {
