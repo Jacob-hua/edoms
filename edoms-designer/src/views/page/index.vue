@@ -72,6 +72,7 @@ import applicationApi from '@/api/application';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
 import { MimeType } from '@/const/mime';
+import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useExport from '@/hooks/useExport';
 
 import NewVersionDialog from './component/NewVersionDialog.vue';
@@ -91,6 +92,8 @@ const version = ref<VersionModel>();
 const active = ref<ListPageItem>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
+
+const newVersionVisible = ref<boolean>(false);
 
 watch(
   () => applicationId.value,
@@ -113,6 +116,16 @@ watch(
   { immediate: true }
 );
 
+const { execute: downloadDsl } = useDownloadDSL();
+
+watch(version, async (version) => {
+  if (!version?.contentId) {
+    return;
+  }
+  const dsl = await downloadDsl(version.contentId);
+  console.log('当前dsl:', dsl);
+});
+
 const goBack = () => {
   router.push('/');
 };
@@ -120,8 +133,6 @@ const goBack = () => {
 const handleReload = () => {
   gridListRef.value?.reload();
 };
-
-const newVersionVisible = ref<boolean>(false);
 
 const handleEdit = () => {
   router.push({
