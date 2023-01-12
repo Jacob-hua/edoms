@@ -92,19 +92,17 @@ function objectHasProperties(object: Record<string | symbol | number, any>, prop
 }
 
 function handleRequiredParams(to: RouteLocationNormalized, next: NavigationGuardNext) {
-  if (!to.meta.params || !Array.isArray(to.meta.params.required)) {
-    next();
-    return;
-  }
-  if (objectHasProperties(to.query, to.meta.params.required)) {
-    next();
+  if (
+    !to.meta.params ||
+    !Array.isArray(to.meta.params.required) ||
+    objectHasProperties(to.query, to.meta.params.required)
+  ) {
     return;
   }
   if (to.meta.params.catchPath) {
     next(to.meta.params.catchPath);
     return;
   }
-  next('/');
 }
 
 const router = createRouter({
