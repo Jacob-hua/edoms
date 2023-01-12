@@ -3,10 +3,10 @@
     <template #reference>
       <slot :version="version">
         <el-input
+          class="reference-input"
           :value="version?.name"
           clearable
           placeholder="请选择版本"
-          style="cursor: pointer"
           :suffix-icon="ArrowDown"
         ></el-input>
       </slot>
@@ -117,6 +117,10 @@ function handleSelectChange(item: VersionModel) {
 </script>
 
 <style lang="scss" scoped>
+.reference-input :deep(.el-input__inner) {
+  cursor: pointer;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
