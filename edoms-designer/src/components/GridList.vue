@@ -7,6 +7,9 @@
           {{ item }}
         </slot>
       </div>
+      <slot v-if="data.length === 0" name="empty">
+        <el-empty description="No Data" />
+      </slot>
     </div>
     <slot v-if="loading" name="loading">
       <p>Loading...</p>

@@ -15,16 +15,13 @@
           </template>
         </SwitchVersion>
       </div>
-      <PopMenu :width="330" @menu-click="handleTopMenuClick">
-        <template #reference>
-          <el-button type="primary" size="large">菜单</el-button>
-        </template>
-        <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
-          <div class="top-menu-item">
-            <span>{{ menu.label }}</span>
-          </div>
-        </PopMenuOption>
-      </PopMenu>
+      <div>
+        <el-button type="primary" text bg size="large" :icon="Edit" @click="handleEdit">编辑</el-button>
+        <el-button type="primary" text bg size="large" :icon="DocumentAdd" @click="handleNewVersion">
+          新建版本
+        </el-button>
+        <el-button type="primary" text bg size="large" :icon="Download" @click="handleDownload"> 导出应用 </el-button>
+      </div>
     </section>
     <section class="page-list">
       <GridList
@@ -47,6 +44,9 @@
         <template #noMore>
           <div></div>
         </template>
+        <template #empty>
+          <el-empty description="暂无页面" />
+        </template>
       </GridList>
     </section>
     <section class="page-preview">
@@ -66,12 +66,11 @@
 <script lang="ts" setup name="Page">
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { DocumentAdd, Download, Edit } from '@element-plus/icons-vue';
 
 import applicationApi from '@/api/application';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
-import PopMenu from '@/components/PopMenu.vue';
-import PopMenuOption from '@/components/PopMenuOption.vue';
 
 import NewVersionDialog from './component/NewVersionDialog.vue';
 import PageListItem, { ListPageItem } from './component/PageListItem.vue';
@@ -121,29 +120,19 @@ const handleReload = () => {
   gridListRef.value?.reload();
 };
 
-const topMenus = [
-  {
-    name: 'newVersion',
-    label: '新建版本',
-    action: () => {
-      newVersionVisible.value = true;
-    },
-  },
-  {
-    name: 'exportApplication',
-    label: '导出应用',
-    action: () => {
-      console.log('导出应用');
-    },
-  },
-];
+const newVersionVisible = ref<boolean>(false);
 
-const handleTopMenuClick = (value: (string | number)[]) => {
-  const menu = topMenus.find(({ name }) => name === value[0]);
-  menu?.action();
+const handleEdit = () => {
+  router.push({
+    path: '/editor',
+  });
 };
 
-const newVersionVisible = ref<boolean>(false);
+const handleNewVersion = () => {
+  newVersionVisible.value = true;
+};
+
+const handleDownload = () => {};
 
 const handleSelectChange = (value: ListPageItem) => {
   if (value.pageId !== active.value?.pageId) {
@@ -153,18 +142,6 @@ const handleSelectChange = (value: ListPageItem) => {
 </script>
 
 <style lang="scss" scoped>
-.top-menu-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  text-align: center;
-
-  span {
-    margin-left: 15px;
-    width: 100%;
-  }
-}
-
 .page-container {
   display: grid;
   grid-template-columns: 400px 1fr;
