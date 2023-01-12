@@ -1,32 +1,20 @@
 <template>
-  <div :class="['item', isActive ? 'active' : '']">
+  <div :class="['item', isActive && 'active']">
     <p class="pop-menu-content">
-      <el-icon v-if="formModel.isHomePage" :size="20"><House /></el-icon>
-      <LongText :content="formModel.name" :content-style="{ textAlign: 'left' }"></LongText>
+      <LongText :content="data.name ?? ''" :content-style="{ textAlign: 'left' }"></LongText>
     </p>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import type { MPage } from '@edoms/schema';
 
-import type { ListPageResItem } from '@/api/page';
 import LongText from '@/components/LongText.vue';
 
-export interface ListPageItem extends ListPageResItem {
-  /** 页面首页标识 */
-  isHomePage?: boolean;
-}
-
-const props = defineProps<{
-  applicationId: string;
-  data: ListPageItem;
+defineProps<{
+  data: MPage;
   isActive: boolean;
 }>();
-
-const formModel = reactive({
-  ...props.data,
-});
 </script>
 
 <style lang="scss" scoped>

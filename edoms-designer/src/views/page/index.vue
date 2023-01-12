@@ -31,15 +31,11 @@
         row-gap="10px"
         :page-size="20"
         item-min-width="200px"
+        :data-source="pageList"
         @on-select-change="handleSelectChange"
       >
-        <template #default="{ item }: { item: ListPageItem }">
-          <PageListItem
-            :application-id="applicationId"
-            :is-home-page="item.isHomePage"
-            :data="item"
-            :is-active="item.pageId === active?.pageId"
-          />
+        <template #default="{ item }: { item: MPage }">
+          <PageListItem :data="item" :is-active="item.id === active?.id" />
         </template>
         <template #noMore>
           <div></div>
@@ -64,9 +60,11 @@
 </template>
 
 <script lang="ts" setup name="Page">
-import { ref, watch } from 'vue';
+import { ref, shallowRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { DocumentAdd, Download, Edit } from '@element-plus/icons-vue';
+
+import { MPage } from '@edoms/schema';
 
 import applicationApi from '@/api/application';
 import DSLPreview from '@/components/DSLPreview.vue';
@@ -76,7 +74,7 @@ import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useExport from '@/hooks/useExport';
 
 import NewVersionDialog from './component/NewVersionDialog.vue';
-import PageListItem, { ListPageItem } from './component/PageListItem.vue';
+import PageListItem from './component/PageListItem.vue';
 import SwitchVersion, { VersionModel } from './component/SwitchVersion.vue';
 
 const route = useRoute();
@@ -89,11 +87,13 @@ const appName = ref<string>('');
 
 const version = ref<VersionModel>();
 
-const active = ref<ListPageItem>();
+const active = ref<MPage>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
 const newVersionVisible = ref<boolean>(false);
+
+const pageList = shallowRef<MPage[]>([]);
 
 watch(
   () => applicationId.value,
@@ -120,10 +120,11 @@ const { execute: downloadDsl } = useDownloadDSL();
 
 watch(version, async (version) => {
   if (!version?.contentId) {
+    pageList.value = [];
     return;
   }
   const dsl = await downloadDsl(version.contentId);
-  console.log('当前dsl:', dsl);
+  pageList.value = dsl.items;
 });
 
 const goBack = () => {
@@ -159,8 +160,8 @@ const { execute: handleExportApplication } = useExport(
   MimeType.ZIP
 );
 
-const handleSelectChange = (value: ListPageItem) => {
-  if (value.pageId !== active.value?.pageId) {
+const handleSelectChange = (value: MPage) => {
+  if (value.id !== active.value?.id) {
     active.value = value;
   }
 };
