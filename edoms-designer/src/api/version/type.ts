@@ -49,6 +49,8 @@ export interface GetVersionRes {
   name: string;
   /** 版本描述 */
   description: string;
+  /** 版本内容ID */
+  contentId?: string;
   /** 创建者 */
   createBy: string;
   /** 创建时间 */

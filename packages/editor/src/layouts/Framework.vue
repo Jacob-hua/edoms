@@ -69,7 +69,7 @@ withDefaults(
 
 const { editorService, uiService } = inject<Services>('services') || {};
 
-const loading = ref<boolean>(true);
+const loading = ref<boolean>(false);
 
 const root = computed(() => editorService?.get<MApp>('root'));
 const nodes = computed(() => editorService?.get<Node[]>('nodes') || []);

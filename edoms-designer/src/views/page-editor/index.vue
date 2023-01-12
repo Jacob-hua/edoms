@@ -172,19 +172,24 @@ const contentState = reactive({
   applicationName: '',
   versionId: route.query?.versionId as string,
   versionName: '',
-  contentId: route.query?.contentId as string,
+  contentId: '',
 });
 
 watch(
-  () => ({ contentId: contentState.contentId }),
-  async ({ contentId }) => {
-    if (!contentId) {
-      return;
-    }
+  () => ({ versionId: contentState.versionId }),
+  async ({ versionId }) => {
+    // if (!contentId) {
+    //   return;
+    // }
     // contentState.applicationId = pageInfo.applicationId;
     // contentState.applicationName = pageInfo.applicationName;
     // contentState.contentId = pageInfo.editContentId ?? '';
+    await versionApi.getVersion({
+      versionId,
+    });
     dsl.value = await calculateDSL();
+    console.log('====', dsl);
+
     // defaultSelected.value = pageId;
   },
   {

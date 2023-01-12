@@ -14,7 +14,7 @@ import useDownloadDSL from '@/hooks/useDownloadDSL';
 
 const props = withDefaults(
   defineProps<{
-    contentId: string | null | undefined;
+    contentId?: string | null | undefined;
     pageId?: string;
     width?: string | number;
     height?: string | number;
