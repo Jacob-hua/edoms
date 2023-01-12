@@ -28,6 +28,8 @@ export default {
         count: 0,
         limit: 0,
         page: 0,
+        applicationId: '',
+        applicationName: '',
         dataList: [],
       };
     }
@@ -89,7 +91,7 @@ export default {
   },
   deleteVersion: async (data: DeleteVersion): Promise<void> => {
     await request<DeleteVersion, void>({
-      url: '/page/version/delete',
+      url: '/application/version/delete',
       method: 'DELETE',
       data,
     });
