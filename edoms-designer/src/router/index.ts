@@ -103,8 +103,8 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_BASE_URL),
   routes,
 });
+
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  console.log(to.path, from.path);
   if (['/login', '/404'].includes(to.path)) {
     next();
     return;
