@@ -20,7 +20,13 @@
         <el-form-item label="版本来源" prop="contentId">
           <SwitchVersion v-if="dialogVisible" v-model="formModel.contentId" :application-id="applicationId">
             <template #default="{ version }">
-              <el-input :value="version?.name" clearable placeholder="请选择版本来源"></el-input>
+              <el-input
+                :value="version?.name"
+                clearable
+                placeholder="请选择版本来源"
+                style="cursor: pointer"
+                :suffix-icon="ArrowDown"
+              ></el-input>
             </template>
           </SwitchVersion>
         </el-form-item>
@@ -37,6 +43,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
+import { ArrowDown } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
 
 import versionApi from '@/api/version';
@@ -129,18 +136,4 @@ const handleConfirm = async () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.version-btn {
-  width: 100%;
-  padding: 2px 8px;
-  border: 1px solid #e1e1e1;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-
-  & > span:first-child {
-    flex-grow: 1;
-  }
-}
-</style>
+<style lang="scss" scoped></style>
