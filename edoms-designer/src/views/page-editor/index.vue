@@ -178,19 +178,19 @@ const contentState = reactive({
 watch(
   () => ({ versionId: contentState.versionId }),
   async ({ versionId }) => {
-    // if (!contentId) {
-    //   return;
-    // }
-    // contentState.applicationId = pageInfo.applicationId;
-    // contentState.applicationName = pageInfo.applicationName;
-    // contentState.contentId = pageInfo.editContentId ?? '';
-    await versionApi.getVersion({
-      versionId,
-    });
+    try {
+      const { contentId, applicationId, applicationName } = await versionApi.getVersion({
+        versionId,
+      });
+      contentState.contentId = contentId ?? '';
+      contentState.applicationId = applicationId;
+      contentState.applicationName = applicationName;
+    } catch (error) {
+      router.replace('/');
+      return;
+    }
     dsl.value = await calculateDSL();
     console.log('====', dsl);
-
-    // defaultSelected.value = pageId;
   },
   {
     immediate: true,
@@ -295,12 +295,19 @@ async function calculateDSL(): Promise<MApp> {
 const { execute: uploadExecute } = useUpload();
 
 async function uploadDsl(): Promise<string | null | undefined> {
-  const pageDSL = serialize(toRaw(dsl.value?.items?.[0]), {
+  const pageDSL = serialize(toRaw(dsl.value), {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
+  console.log('====', pageDSL);
 
-  return await uploadExecute(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8', staticResource.value?.join(','));
+  return await uploadExecute(
+    pageDSL,
+    `${contentState.applicationName}-${contentState.versionName}.dsl`,
+    'text/javascript',
+    'utf-8',
+    staticResource.value?.join(',')
+  );
 }
 
 async function save() {

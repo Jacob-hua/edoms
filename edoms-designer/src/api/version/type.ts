@@ -43,6 +43,10 @@ export interface GetVersionReq {
 }
 
 export interface GetVersionRes {
+  /** 应用ID */
+  applicationId: string;
+  /** 应用名称 */
+  applicationName: string;
   /** 版本ID */
   versionId: string;
   /** 版本名称 */
