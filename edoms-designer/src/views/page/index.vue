@@ -6,7 +6,7 @@
           <el-icon :size="23"><ArrowLeft /></el-icon>
           <span>{{ appName }}</span>
         </div>
-        <SwitchVersion v-model="version" :application-id="applicationId">
+        <SwitchVersion v-model="version" :application-id="applicationId" title="切换版本">
           <div class="version-btn">
             <span>{{ version?.name }}</span>
             <el-icon class="el-icon--right"><ArrowDown /></el-icon>

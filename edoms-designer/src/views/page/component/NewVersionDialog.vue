@@ -19,15 +19,6 @@
         </el-form-item>
         <el-form-item label="版本来源" prop="createFrom">
           <SwitchVersion v-if="dialogVisible" v-model="formModel.createFrom" :application-id="applicationId">
-            <template #default="{ version }">
-              <el-input
-                :value="version?.name"
-                clearable
-                placeholder="请选择版本来源"
-                style="cursor: pointer"
-                :suffix-icon="ArrowDown"
-              ></el-input>
-            </template>
           </SwitchVersion>
         </el-form-item>
       </el-form>
@@ -43,7 +34,6 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
-import { ArrowDown } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
 
 import versionApi from '@/api/version';
@@ -110,13 +100,6 @@ const formRules: FormRules = {
       min: 1,
       max: 20,
       message: '版本描述字符长度在1-20之间',
-    },
-  ],
-  contentId: [
-    {
-      required: true,
-      message: '版本来源不能为空',
-      trigger: 'change',
     },
   ],
 };
