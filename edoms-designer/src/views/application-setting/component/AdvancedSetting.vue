@@ -1,18 +1,35 @@
 <template>
   <div class="advance-container">
     <div
-      v-for="({ name, title, buttonType, disabled, action }, index) in advanceItems"
+      v-for="({ name, title, buttonType, disabled, action, formVisible, buttonText }, index) in advanceItems"
       :key="index"
       class="advance-item"
     >
       <div class="top-title">
         <p>
-          <el-icon color="#e0e0e0"> <Minus /> </el-icon>
+          <el-icon color="#e0e0e0">
+            <Minus />
+          </el-icon>
         </p>
         <span>{{ name }}</span>
       </div>
       <p class="advance-item-title">{{ title }}</p>
-      <el-button :type="buttonType" :disabled="disabled" size="large" @click="action">{{ name }}</el-button>
+      <SwitchVersion v-if="formVisible" v-model="formModel.selectedForm" :application-id="appInfo.applicationId">
+        <template #default="{ version }">
+          <el-input
+            :value="version?.name"
+            clearable
+            placeholder="请选择版本来源"
+            style="cursor: pointer; width: 20%"
+            :suffix-icon="ArrowDown"
+          ></el-input>
+        </template>
+      </SwitchVersion>
+      <div class="item-footer-btn">
+        <el-button :type="buttonType" :disabled="disabled" size="large" @click="action">
+          {{ buttonText || name }}</el-button
+        >
+      </div>
     </div>
   </div>
   <el-dialog v-model="deleteVisible" title="删除应用" width="40%" :before-close="handleClose" center>
@@ -34,24 +51,31 @@
 </template>
 
 <script lang="ts" setup name="advancedSetting">
-import { computed, ref, toRefs } from 'vue';
+import { computed, reactive, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
+import { ArrowDown } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
 import applicationApi, { GetApplicationRes } from '@/api/application';
-import { MimeType } from '@/const/mime';
-import useExport from '@/hooks/useExport';
+
+import SwitchVersion, { VersionModel } from '../../page/component/SwitchVersion.vue';
 
 interface AdvanceItem {
   name: string;
   title: string;
   buttonType: string;
   disabled: boolean;
+  formVisible?: boolean;
+  buttonText?: string;
   action: (...args: any[]) => void;
 }
 
 const props = defineProps<{
   appInfo: GetApplicationRes;
+}>();
+
+const emit = defineEmits<{
+  (event: 'success'): void;
 }>();
 
 const router = useRouter();
@@ -60,26 +84,38 @@ const { appInfo } = toRefs(props);
 const deleteVisible = ref<boolean>(false);
 const confirmText = ref<string>('');
 const formRef = ref<FormInstance>();
+const formModel = reactive({
+  selectedForm: { name: '', versionId: '', contentId: '' } as VersionModel,
+});
 
-const { execute: handleExportApplication } = useExport(
-  async () => {
-    const result = await applicationApi.exportApplication({
+const handleUpdateDefaultVersion = async () => {
+  const { versionId } = formModel.selectedForm;
+  if (!versionId) {
+    ElMessage.warning('请选择默认版本！');
+    return;
+  }
+  try {
+    await applicationApi.updateDefaultVersion({
       applicationId: props.appInfo.applicationId,
+      versionId: formModel.selectedForm.versionId,
     });
-    return result;
-  },
-  () => `${props.appInfo.name}.zip`,
-  MimeType.ZIP
-);
+    ElMessage.success('设置默认版本成功！');
+    emit('success');
+  } catch (e: any) {
+    console.log(e);
+  }
+};
 
 const advanceItems = computed<AdvanceItem[]>(() => [
   {
-    name: '导出',
-    title: '将发布的应用导出到本地，如果应用未被发布则不可导出',
+    name: '默认版本',
+    title: '设置该项目的默认版本',
     buttonType: 'primary',
-    disabled: !appInfo.value.export,
+    disabled: false,
+    formVisible: true,
+    buttonText: '确认',
     action: async () => {
-      await handleExportApplication();
+      await handleUpdateDefaultVersion();
     },
   },
   {
@@ -135,18 +171,26 @@ const handleCopy = () => {
   width: 1200px;
   height: 600px;
   margin: auto;
+
   .advance-item {
     margin-bottom: 80px;
+
     .advance-item-title {
       font-size: 18px;
       font-weight: 600;
       margin: 30px 0;
     }
+
+    .item-footer-btn {
+      margin-top: 30px;
+    }
+
     .top-title {
       display: flex;
       align-items: center;
       border-bottom: 1px solid #e0e0e0;
       padding-bottom: 25px;
+
       p {
         display: flex;
         justify-content: center;
@@ -156,6 +200,7 @@ const handleCopy = () => {
         margin-right: 15px;
         background-color: #efefef;
       }
+
       span {
         font-size: 18px;
         font-weight: 600;
@@ -163,11 +208,13 @@ const handleCopy = () => {
     }
   }
 }
+
 .modal-container {
   p {
     font-size: 18px;
     font-weight: 500;
   }
+
   .confirm {
     margin-top: 40px;
     margin-bottom: 25px;

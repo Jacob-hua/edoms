@@ -3,7 +3,7 @@
     <el-header height="40px">
       <span class="title">版本列表</span>
     </el-header>
-    <el-main>
+    <el-main v-loading="loading" element-loading-text="Loading...">
       <div class="version-list">
         <VersionListItem
           v-for="(item, index) in versionList"
@@ -22,9 +22,10 @@
           v-model:current-page="currentPage"
           background
           layout="prev, pager, next"
-          :page-count="totalCount"
+          :total="totalCount"
           :pager-count="pagerCount"
           @update:current-page="handlePageChange"
+          @current-change="handlePageChange"
         >
         </el-pagination>
       </div>
@@ -49,6 +50,8 @@ const versionList = ref<ListVersionResItem[]>();
 const totalCount = ref<number>(0);
 const currentPage = ref<number>(1);
 
+const loading = ref<boolean>(false);
+
 const applicationId = ref<string>(route.query.applicationId as string);
 const appName = ref<string>('');
 
@@ -65,17 +68,20 @@ const props = withDefaults(
 );
 
 const load = async () => {
+  loading.value = true;
   try {
     const { dataList, count, applicationName }: ListVersionsRes = await versionApi.listVersions({
       applicationId: applicationId.value,
       page: currentPage.value,
       limit: props.pageSize,
     });
+    loading.value = false;
     versionList.value = dataList;
     totalCount.value = Number(count);
     appName.value = applicationName;
   } catch (e: any) {
     console.log(e);
+    loading.value = false;
   }
 };
 

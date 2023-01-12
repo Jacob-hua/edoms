@@ -11,6 +11,7 @@ import {
   ListApplicationsRes,
   ReleaseApplicationReq,
   UpdateApplicationReq,
+  UpdateDefaultVersionReq,
 } from './type';
 import { DeleteApplicationReq } from './type';
 
@@ -99,5 +100,12 @@ export default {
       method: 'GET',
     });
     return result;
+  },
+  updateDefaultVersion: async (data: UpdateDefaultVersionReq): Promise<void> => {
+    await request<UpdateDefaultVersionReq, void>({
+      url: '/application/update-defaultVersion',
+      method: 'PUT',
+      data,
+    });
   },
 };
