@@ -6,10 +6,10 @@
           <el-icon :size="23"><ArrowLeft /></el-icon>
           <span>{{ appName }}</span>
         </div>
-        <SwitchVersion v-model="defaultVersionId" :application-id="applicationId">
+        <SwitchVersion v-model="defaultVersion" :application-id="applicationId">
           <template #default="{ version }">
             <div class="version-btn">
-              <span>{{ version?.name ?? defaultVersionName }}</span>
+              <span>{{ version?.name ?? defaultVersion?.name }}</span>
               <el-icon class="el-icon--right"><ArrowDown /></el-icon>
             </div>
           </template>
@@ -78,7 +78,7 @@ import useExport from '@/hooks/useExport';
 
 import NewVersionDialog from './component/NewVersionDialog.vue';
 import PageListItem, { ListPageItem } from './component/PageListItem.vue';
-import SwitchVersion from './component/SwitchVersion.vue';
+import SwitchVersion, { VersionModel } from './component/SwitchVersion.vue';
 
 const route = useRoute();
 
@@ -88,9 +88,7 @@ const gridListRef = ref();
 
 const appName = ref<string>('');
 
-const defaultVersionId = ref<string>('');
-
-const defaultVersionName = ref<string>('');
+const defaultVersion = ref<VersionModel>();
 
 const active = ref<ListPageItem>();
 
@@ -102,16 +100,17 @@ watch(
     if (!applicationId) {
       return;
     }
-    const {
-      name,
-      defaultVersionId: versionId,
-      defaultVersionName: versionName,
-    } = await applicationApi.getApplication({
-      applicationId,
-    });
+    const { name, defaultVersionId, defaultVersionName, defaultVersionContentId } = await applicationApi.getApplication(
+      {
+        applicationId,
+      }
+    );
     appName.value = name;
-    defaultVersionId.value = versionId;
-    defaultVersionName.value = versionName;
+    defaultVersion.value = {
+      versionId: defaultVersionId,
+      name: defaultVersionName,
+      contentId: defaultVersionContentId,
+    };
   },
   { immediate: true }
 );

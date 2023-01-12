@@ -21,7 +21,9 @@
           @on-select-change="handleSelectChange"
         >
           <template #default="{ item }: { item: ListVersionResItem }">
-            <div :class="['grid-list-item', item.versionId === modelValue && 'is-active']">{{ item.name }}</div>
+            <div :class="['grid-list-item', item.versionId === modelValue?.versionId && 'is-active']">
+              {{ item.name }}
+            </div>
           </template>
           <template #noMore>
             <div></div>
@@ -38,14 +40,20 @@ import { ref, watch } from 'vue';
 import versionApi, { ListVersionResItem } from '@/api/version';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 
+export interface VersionModel {
+  versionId: string;
+  name: string;
+  contentId: string;
+}
+
 const props = defineProps<{
-  modelValue: string;
+  modelValue?: VersionModel;
   applicationId: string;
 }>();
 
 const emit = defineEmits<{
-  (event: 'update:modelValue', id: string): void;
-  (event: 'onSelectChange', value: ListVersionResItem): void;
+  (event: 'update:modelValue', value: VersionModel): void;
+  (event: 'onChange', value: ListVersionResItem): void;
 }>();
 
 const visible = ref<boolean>(false);
@@ -85,9 +93,10 @@ function handleClose() {
 }
 
 function handleSelectChange(item: ListVersionResItem) {
-  emit('update:modelValue', item.versionId);
+  emit('update:modelValue', item);
   version.value = item;
-  emit('onSelectChange', item);
+  emit('onChange', item);
+  handleClose();
 }
 </script>
 

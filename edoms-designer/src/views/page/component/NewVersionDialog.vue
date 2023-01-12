@@ -18,12 +18,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="版本来源" prop="createFrom">
-          <SwitchVersion
-            v-if="dialogVisible"
-            v-model="formModel.createFrom"
-            :application-id="applicationId"
-            @on-select-change="handleSelectChange"
-          >
+          <SwitchVersion v-if="dialogVisible" v-model="formModel.createFrom" :application-id="applicationId">
             <template #default="{ version }">
               <el-input
                 :value="version?.name"
@@ -51,9 +46,9 @@ import { computed, reactive, ref } from 'vue';
 import { ArrowDown } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
 
-import versionApi, { ListVersionResItem } from '@/api/version';
+import versionApi from '@/api/version';
 
-import SwitchVersion from './SwitchVersion.vue';
+import SwitchVersion, { VersionModel } from './SwitchVersion.vue';
 
 const props = defineProps<{
   visible: boolean;
@@ -76,15 +71,17 @@ const dialogVisible = computed({
   },
 });
 
-const createFromVersion = ref<ListVersionResItem>();
-
 const formRef = ref<FormInstance>();
 
 const formModel = reactive({
   applicationId: props.applicationId,
   name: '',
   description: '',
-  createFrom: '',
+  createFrom: {
+    name: '',
+    versionId: '',
+    contentId: '',
+  } as VersionModel,
 });
 
 const formRules: FormRules = {
@@ -124,20 +121,16 @@ const formRules: FormRules = {
   ],
 };
 
-const handleSelectChange = (version: ListVersionResItem) => {
-  createFromVersion.value = version;
-};
-
 const handleConfirm = async () => {
   if (!formRef.value) return;
   try {
     await formRef.value?.validate();
-    const { name, description } = formModel;
+    const { name, description, createFrom } = formModel;
     await versionApi.saveVersion({
       applicationId: props.applicationId,
       name,
       description,
-      contentId: createFromVersion.value?.contentId,
+      contentId: createFrom.contentId,
     });
     ElMessage.success('版本创建成功');
     dialogVisible.value = false;
