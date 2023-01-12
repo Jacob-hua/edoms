@@ -19,6 +19,15 @@
           <el-tab-pane>
             <template #label>
               <span class="custom-tabs-label">
+                <el-icon :size="20"><Document /></el-icon>
+                <span>版本管理</span>
+              </span>
+            </template>
+            <VersionList :app-info="appInfo"></VersionList>
+          </el-tab-pane>
+          <el-tab-pane>
+            <template #label>
+              <span class="custom-tabs-label">
                 <el-icon :size="20"><Setting /></el-icon>
                 <span>高级设置</span>
               </span>
@@ -40,6 +49,7 @@ import applicationApi, { GetApplicationRes } from '@/api/application';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
 import BasicInfo from './component/BasicInfo.vue';
+import VersionList from './component/version-setting/VersionList.vue';
 
 const { go } = useRouter();
 const appInfoVisible = ref<boolean>(false);
@@ -54,7 +64,7 @@ const appInfo = ref<GetApplicationRes>({
   tenantId: '',
   thumbnailId: '',
   secret: '',
-  export: false,
+  defaultVersionId: '',
 });
 
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
