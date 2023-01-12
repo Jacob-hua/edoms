@@ -137,6 +137,10 @@ const handleReload = () => {
 const handleEdit = () => {
   router.push({
     path: '/editor',
+    query: {
+      applicationId: applicationId.value,
+      versionId: version.value?.versionId,
+    },
   });
 };
 

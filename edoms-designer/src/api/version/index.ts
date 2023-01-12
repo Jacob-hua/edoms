@@ -7,6 +7,7 @@ import {
   PublishVersionReq,
   RecoveryVersionReq,
   SaveVersionReq,
+  UpdateContentReq,
   UpdateVersionReq,
 } from '@/api/version/type';
 import { request } from '@/util/request';
@@ -85,6 +86,13 @@ export default {
     await request<DeleteVersion, void>({
       url: '/page/version/delete',
       method: 'DELETE',
+      data,
+    });
+  },
+  updateContent: async (data: UpdateContentReq): Promise<void> => {
+    await request<UpdateContentReq, void>({
+      url: '/application/update-content',
+      method: 'PUT',
       data,
     });
   },

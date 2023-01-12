@@ -99,3 +99,12 @@ export interface DeleteVersion {
   /** 版本ID集合 */
   versionIds: string[];
 }
+
+export interface UpdateContentReq {
+  /** 应用ID */
+  applicationId: string;
+  /** 版本ID */
+  versionId: string;
+  /** 内容Id */
+  contentId: string;
+}

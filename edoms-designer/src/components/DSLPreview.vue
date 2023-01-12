@@ -8,23 +8,18 @@
 <script lang="ts" setup>
 import { computed, ref, toRaw, watchEffect } from 'vue';
 
-import { MApp, NodeType } from '@edoms/schema';
+import { MApp } from '@edoms/schema';
 
 import useDownloadDSL from '@/hooks/useDownloadDSL';
-import { generateEmptyAppDSL } from '@/util/dsl';
 
 const props = withDefaults(
   defineProps<{
-    contentId?: string | null | undefined;
-    applicationId?: string;
-    applicationName?: string;
+    contentId: string | null | undefined;
     pageId?: string;
     width?: string | number;
     height?: string | number;
   }>(),
   {
-    applicationId: () => '',
-    applicationName: () => '',
     width: () => '100%',
     height: () => 'auto',
   }
@@ -50,30 +45,15 @@ watchEffect(async () => {
     loading.value = false;
     return;
   }
-  await updateDsl(props.contentId);
+
+  const remoteDsl = await downloadDslExecute(props.contentId);
+  dsl.value = remoteDsl;
+
   if (runtimeIframe.value) {
     runtimeIframe.value.contentWindow?.location.reload();
     runtimeIframe.value.addEventListener('load', handleIframeLoad);
   }
 });
-
-async function updateDsl(contentId: string) {
-  try {
-    const remoteDsl = await downloadDslExecute(contentId);
-    if (remoteDsl.type === NodeType.ROOT) {
-      dsl.value = remoteDsl;
-    } else {
-      const appDsl = generateEmptyAppDSL({
-        applicationId: props.applicationId,
-        applicationName: props.applicationName,
-      });
-      appDsl.items.push(remoteDsl);
-      dsl.value = appDsl;
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 function handleIframeLoad() {
   if (!dsl.value) {

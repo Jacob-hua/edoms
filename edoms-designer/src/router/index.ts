@@ -63,7 +63,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/page-editor/index.vue'),
         meta: {
           params: {
-            required: ['pageId', 'versionId'],
+            required: ['applicationId', 'versionId'],
           },
         },
       },

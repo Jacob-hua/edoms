@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-import { MApp, MPage, NodeType } from '@edoms/schema';
+import { MApp, NodeType } from '@edoms/schema';
 
 import fileApi from '@/api/file';
 import { MessageError } from '@/const/error';
@@ -20,7 +20,7 @@ export default () => {
 
   const error = ref<DownloadDSLError>();
 
-  const execute = async (contentId: string): Promise<MApp | MPage> => {
+  const execute = async (contentId: string): Promise<MApp> => {
     try {
       loading.value = true;
       const contentStream = (await fileApi.downloadFile({ contentId })) as Blob;
@@ -29,7 +29,7 @@ export default () => {
       if (
         typeof result !== 'object' ||
         !Object.prototype.hasOwnProperty.call(result, 'type') ||
-        ![NodeType.ROOT, NodeType.PAGE].includes(result.type)
+        ![NodeType.ROOT].includes(result.type)
       ) {
         throw new Error('This resource is not DSL!');
       }
