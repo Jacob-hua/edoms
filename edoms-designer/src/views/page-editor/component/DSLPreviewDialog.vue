@@ -7,12 +7,14 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
+import { Id } from '@edoms/schema';
+
 import DSLPreview from '@/components/DSLPreview.vue';
 
 const props = withDefaults(
   defineProps<{
     visible: boolean;
-    pageId?: string;
+    pageId?: string | Id;
     contentId?: string | null;
     stageRect: {
       width: number;

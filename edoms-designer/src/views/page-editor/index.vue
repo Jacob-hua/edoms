@@ -21,6 +21,7 @@
       v-model:visible="previewDialogVisible"
       :stage-rect="stageRect"
       :content-id="contentState.contentId"
+      :page-id="previewPageId"
     />
   </div>
 </template>
@@ -33,7 +34,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import serialize from 'serialize-javascript';
 
 import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps } from '@edoms/editor';
-import type { Id, MApp, MContainer, MNode } from '@edoms/schema';
+import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath, isNumber } from '@edoms/utils';
@@ -81,7 +82,9 @@ const idPrefix = 'edoms';
 
 const editorRef = ref<InstanceType<typeof EdomsEditor>>();
 
-const previewDialogVisible = ref(false);
+const previewDialogVisible = ref<boolean>(false);
+
+const previewPageId = ref<Id>();
 
 const dsl = ref<MApp | undefined>();
 
@@ -145,6 +148,7 @@ const menu = computed<MenuBarData>(() => ({
             return;
           }
         }
+        previewPageId.value = services?.editorService.get<MPage>('page').id;
         previewDialogVisible.value = true;
       },
     },

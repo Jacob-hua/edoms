@@ -59,8 +59,6 @@ watch(
 );
 
 function handleIframeLoad() {
-  console.log('发送消息');
-
   if (!dsl.value) {
     return;
   }
