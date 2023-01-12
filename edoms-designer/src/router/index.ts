@@ -27,12 +27,10 @@ const routes: RouteRecordRaw[] = [
         path: '/application/setting',
         name: 'ApplicationSetting',
         component: () => import('@/views/application-setting/index.vue'),
-        beforeEnter: (to, from, next) => {
-          if (objectHasProperties(to.query, ['applicationId'])) {
-            next();
-          } else {
-            next('/application');
-          }
+        meta: {
+          params: {
+            required: ['applicationId'],
+          },
         },
       },
       {
@@ -44,15 +42,11 @@ const routes: RouteRecordRaw[] = [
         path: '/page',
         name: 'Page',
         component: () => import('@/views/page/index.vue'),
-        beforeEnter: (to, from, next) => {
-          if (objectHasProperties(to.query, ['applicationId'])) {
-            next();
-          } else {
-            next('/application');
-          }
-        },
         meta: {
           leaveCaches: ['/editor'],
+          params: {
+            required: ['applicationId'],
+          },
         },
       },
       {
@@ -67,12 +61,10 @@ const routes: RouteRecordRaw[] = [
         path: '/editor',
         name: 'Editor',
         component: () => import('@/views/page-editor/index.vue'),
-        beforeEnter: (to, from, next) => {
-          if (objectHasProperties(to.query, ['pageId', 'versionId'])) {
-            next();
-          } else {
-            next('/application');
-          }
+        meta: {
+          params: {
+            required: ['pageId', 'versionId'],
+          },
         },
       },
     ],
@@ -99,12 +91,29 @@ function objectHasProperties(object: Record<string | symbol | number, any>, prop
   return [...properties].some(Object.prototype.hasOwnProperty.bind(object));
 }
 
+function handleRequiredParams(to: RouteLocationNormalized, next: NavigationGuardNext) {
+  if (!to.meta.params || !Array.isArray(to.meta.params.required)) {
+    next();
+    return;
+  }
+  if (objectHasProperties(to.query, to.meta.params.required)) {
+    next();
+    return;
+  }
+  if (to.meta.params.catchPath) {
+    next(to.meta.params.catchPath);
+    return;
+  }
+  next('/');
+}
+
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_BASE_URL),
   routes,
 });
+
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  console.log(to.path, from.path);
+  handleRequiredParams(to, next);
   if (['/login', '/404'].includes(to.path)) {
     next();
     return;

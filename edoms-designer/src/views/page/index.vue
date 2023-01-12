@@ -6,30 +6,22 @@
           <el-icon :size="23"><ArrowLeft /></el-icon>
           <span>{{ appName }}</span>
         </div>
-        <el-select
-          v-model="curVersion"
-          filterable
-          remote
-          reserve-keyword
-          remote-show-suffix
-          :remote-method="loadData"
-          :loading="versionSelectLoading"
-        >
-          <el-option v-for="{ name, versionId } in versionList" :key="versionId" :value="versionId" :label="name">
-            {{ name }}
-          </el-option>
-        </el-select>
-      </div>
-      <PopMenu :width="330" @menu-click="handleTopMenuClick">
-        <template #reference>
-          <el-button type="primary" size="large">菜单</el-button>
-        </template>
-        <PopMenuOption v-for="(menu, index) in topMenus" :key="index" :label="menu.label" :value="menu.name">
-          <div class="top-menu-item">
-            <span>{{ menu.label }}</span>
+        <SwitchVersion v-model="version" :application-id="applicationId">
+          <div class="version-btn">
+            <span>{{ version?.name }}</span>
+            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
           </div>
-        </PopMenuOption>
-      </PopMenu>
+        </SwitchVersion>
+      </div>
+      <div>
+        <el-button type="primary" text bg size="large" :icon="Edit" @click="handleEdit">编辑</el-button>
+        <el-button type="primary" text bg size="large" :icon="DocumentAdd" @click="handleNewVersion">
+          新建版本
+        </el-button>
+        <el-button type="primary" text bg size="large" :icon="Download" @click="handleExportApplication">
+          导出应用
+        </el-button>
+      </div>
     </section>
     <section class="page-list">
       <GridList
@@ -52,6 +44,9 @@
         <template #noMore>
           <div></div>
         </template>
+        <template #empty>
+          <el-empty description="暂无页面" />
+        </template>
       </GridList>
     </section>
     <section class="page-preview">
@@ -71,15 +66,17 @@
 <script lang="ts" setup name="Page">
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { DocumentAdd, Download, Edit } from '@element-plus/icons-vue';
 
-import versionApi, { ListVersionResItem } from '@/api/version';
+import applicationApi from '@/api/application';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
-import PopMenu from '@/components/PopMenu.vue';
-import PopMenuOption from '@/components/PopMenuOption.vue';
+import { MimeType } from '@/const/mime';
+import useExport from '@/hooks/useExport';
 
 import NewVersionDialog from './component/NewVersionDialog.vue';
 import PageListItem, { ListPageItem } from './component/PageListItem.vue';
+import SwitchVersion, { VersionModel } from './component/SwitchVersion.vue';
 
 const route = useRoute();
 
@@ -89,37 +86,29 @@ const gridListRef = ref();
 
 const appName = ref<string>('');
 
+const version = ref<VersionModel>();
+
 const active = ref<ListPageItem>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
 
-const curVersion = ref<string>();
-
-const versionList = ref<ListVersionResItem[]>([]);
-
-const versionSelectLoading = ref<boolean>(false);
-
-const loadData = async (name: string) => {
-  versionSelectLoading.value = true;
-  if (!applicationId.value) {
-    return;
-  }
-  const { dataList, applicationName } = await versionApi.listVersions({
-    applicationId: applicationId.value,
-    page: 1,
-    limit: 10,
-    name,
-  });
-
-  versionList.value = dataList;
-  appName.value = applicationName;
-  versionSelectLoading.value = false;
-};
-
 watch(
   () => applicationId.value,
-  () => {
-    loadData('');
+  async (applicationId) => {
+    if (!applicationId) {
+      return;
+    }
+    const { name, defaultVersionId, defaultVersionName, defaultVersionContentId } = await applicationApi.getApplication(
+      {
+        applicationId,
+      }
+    );
+    appName.value = name;
+    version.value = {
+      versionId: defaultVersionId,
+      name: defaultVersionName,
+      contentId: defaultVersionContentId,
+    };
   },
   { immediate: true }
 );
@@ -132,29 +121,28 @@ const handleReload = () => {
   gridListRef.value?.reload();
 };
 
-const topMenus = [
-  {
-    name: 'newVersion',
-    label: '新建版本',
-    action: () => {
-      newVersionVisible.value = true;
-    },
-  },
-  {
-    name: 'exportApplication',
-    label: '导出应用',
-    action: () => {
-      console.log('导出应用');
-    },
-  },
-];
+const newVersionVisible = ref<boolean>(false);
 
-const handleTopMenuClick = (value: (string | number)[]) => {
-  const menu = topMenus.find(({ name }) => name === value[0]);
-  menu?.action();
+const handleEdit = () => {
+  router.push({
+    path: '/editor',
+  });
 };
 
-const newVersionVisible = ref<boolean>(false);
+const handleNewVersion = () => {
+  newVersionVisible.value = true;
+};
+
+const { execute: handleExportApplication } = useExport(
+  async () => {
+    const result = await applicationApi.exportApplication({
+      applicationId: applicationId.value,
+    });
+    return result;
+  },
+  () => `${appName.value}.zip`,
+  MimeType.ZIP
+);
 
 const handleSelectChange = (value: ListPageItem) => {
   if (value.pageId !== active.value?.pageId) {
@@ -164,18 +152,6 @@ const handleSelectChange = (value: ListPageItem) => {
 </script>
 
 <style lang="scss" scoped>
-.top-menu-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  text-align: center;
-
-  span {
-    margin-left: 15px;
-    width: 100%;
-  }
-}
-
 .page-container {
   display: grid;
   grid-template-columns: 400px 1fr;
@@ -200,6 +176,20 @@ const handleSelectChange = (value: ListPageItem) => {
     display: flex;
     cursor: pointer;
     margin-right: 20px;
+  }
+
+  .version-btn {
+    padding: 2px 8px;
+    border: 1px solid #e1e1e1;
+    border-radius: 3px;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    & > span:first-child {
+      flex-grow: 1;
+    }
   }
 }
 

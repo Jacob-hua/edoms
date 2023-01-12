@@ -17,10 +17,18 @@
             :rows="6"
           ></el-input>
         </el-form-item>
-        <el-form-item label="版本来源" prop="contentId">
-          <el-select v-model="formModel.contentId" clearable placeholder="请选择版本来源">
-            <el-option>选项1</el-option>
-          </el-select>
+        <el-form-item label="版本来源" prop="createFrom">
+          <SwitchVersion v-if="dialogVisible" v-model="formModel.createFrom" :application-id="applicationId">
+            <template #default="{ version }">
+              <el-input
+                :value="version?.name"
+                clearable
+                placeholder="请选择版本来源"
+                style="cursor: pointer"
+                :suffix-icon="ArrowDown"
+              ></el-input>
+            </template>
+          </SwitchVersion>
         </el-form-item>
       </el-form>
     </span>
@@ -34,8 +42,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
+import { ArrowDown } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
+
+import versionApi from '@/api/version';
+
+import SwitchVersion, { VersionModel } from './SwitchVersion.vue';
 
 const props = defineProps<{
   visible: boolean;
@@ -60,11 +73,15 @@ const dialogVisible = computed({
 
 const formRef = ref<FormInstance>();
 
-const formModel = ref({
+const formModel = reactive({
   applicationId: props.applicationId,
   name: '',
   description: '',
-  contentId: '',
+  createFrom: {
+    name: '',
+    versionId: '',
+    contentId: '',
+  } as VersionModel,
 });
 
 const formRules: FormRules = {
@@ -99,7 +116,7 @@ const formRules: FormRules = {
     {
       required: true,
       message: '版本来源不能为空',
-      trigger: 'blur',
+      trigger: 'change',
     },
   ],
 };
@@ -108,9 +125,13 @@ const handleConfirm = async () => {
   if (!formRef.value) return;
   try {
     await formRef.value?.validate();
-    // await pageApi.createPage({
-    //   ...formModel.value,
-    // });
+    const { name, description, createFrom } = formModel;
+    await versionApi.saveVersion({
+      applicationId: props.applicationId,
+      name,
+      description,
+      contentId: createFrom.contentId,
+    });
     ElMessage.success('版本创建成功');
     dialogVisible.value = false;
     emit('success');
@@ -120,8 +141,4 @@ const handleConfirm = async () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.el-select {
-  width: 100%;
-}
-</style>
+<style lang="scss" scoped></style>

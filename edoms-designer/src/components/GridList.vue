@@ -7,12 +7,15 @@
           {{ item }}
         </slot>
       </div>
+      <slot v-if="!loading && data.length === 0" name="empty">
+        <p>No Data</p>
+      </slot>
     </div>
     <slot v-if="loading" name="loading">
       <p>Loading...</p>
     </slot>
     <slot v-if="noMore" name="noMore">
-      <p class="no-more-text">No more</p>
+      <p class="no-more-text">No More</p>
     </slot>
   </div>
 </template>

@@ -56,27 +56,12 @@ export default {
     });
   },
   getApplication: async (data: GetApplicationReq): Promise<GetApplicationRes> => {
-    try {
-      const { result } = await request<GetApplicationReq, GetApplicationRes>({
-        url: '/application',
-        method: 'GET',
-        data,
-      });
-      return result;
-    } catch (error) {
-      return {
-        applicationId: '',
-        createBy: '',
-        createTime: '',
-        description: '',
-        name: '',
-        serviceAddress: '',
-        tenantId: '',
-        thumbnailId: '',
-        secret: '',
-        export: false,
-      };
-    }
+    const { result } = await request<GetApplicationReq, GetApplicationRes>({
+      url: '/application',
+      method: 'GET',
+      data,
+    });
+    return result;
   },
   deleteApplication: async (data: DeleteApplicationReq): Promise<void> => {
     await request<DeleteApplicationReq, void>({

@@ -70,27 +70,20 @@ export interface UpdateVersionReq {
   description: string;
 }
 
-export interface SaveWithVersionReq {
-  /** 页面ID */
-  pageId: string;
-  /** 内容ID */
-  contentId: string;
-  /** 版本名称 */
-  name: string;
-  /** 版本简介 */
-  description: string;
-}
-
 export interface RecoveryVersionReq {
   /** 版本ID */
   versionId: string;
 }
 
 export interface SaveVersionReq {
-  /** 版本ID */
-  versionId: string;
+  /** 应用ID */
+  applicationId: string;
+  /** 版本名称 */
+  name: string;
+  /** 版本描述 */
+  description: string;
   /** 内容ID */
-  contentId: string;
+  contentId?: string;
 }
 
 export interface PublishVersionReq {

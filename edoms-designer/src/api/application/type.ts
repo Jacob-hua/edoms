@@ -82,6 +82,10 @@ export interface GetApplicationRes {
   secret: string;
   /** 默认版本ID */
   defaultVersionId: string;
+  /** 默认版本名称 */
+  defaultVersionName: string;
+  /** 默认版本内容ID */
+  defaultVersionContentId: string;
 }
 
 export interface DeleteApplicationReq {
