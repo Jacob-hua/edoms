@@ -83,9 +83,9 @@ export interface SaveVersionReq {
   /** 版本名称 */
   name: string;
   /** 版本描述 */
-  description?: string;
+  description: string;
   /** 内容ID */
-  contentId: string;
+  contentId?: string;
 }
 
 export interface PublishVersionReq {

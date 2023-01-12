@@ -45,6 +45,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: 'update:modelValue', id: string): void;
+  (event: 'onSelectChange', value: ListVersionResItem): void;
 }>();
 
 const visible = ref<boolean>(false);
@@ -86,6 +87,7 @@ function handleClose() {
 function handleSelectChange(item: ListVersionResItem) {
   emit('update:modelValue', item.versionId);
   version.value = item;
+  emit('onSelectChange', item);
 }
 </script>
 
