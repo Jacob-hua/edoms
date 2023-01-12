@@ -304,13 +304,7 @@ async function uploadDsl(): Promise<string | null | undefined> {
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
 
-  return await uploadExecute(
-    pageDSL,
-    `${contentState.applicationName}-${contentState.versionName}.dsl`,
-    'text/javascript',
-    'utf-8',
-    staticResource.value?.join(',')
-  );
+  return await uploadExecute(pageDSL, `dsl.js`, 'text/javascript', 'utf-8', staticResource.value?.join(','));
 }
 
 async function save() {

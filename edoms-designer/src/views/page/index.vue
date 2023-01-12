@@ -144,13 +144,12 @@ const handleNewVersion = () => {
 };
 
 const { execute: handleExportApplication } = useExport(
-  async () => {
-    const result = await applicationApi.exportApplication({
+  async () =>
+    await applicationApi.exportApplication({
       applicationId: applicationId.value,
-    });
-    return result;
-  },
-  () => `${appName.value}.zip`,
+      versionId: version.value?.versionId ?? '',
+    }),
+  () => `${appName.value}（${version.value?.name}）.zip`,
   MimeType.ZIP
 );
 
