@@ -14,14 +14,14 @@
     <slot v-if="loading" name="loading">
       <p>Loading...</p>
     </slot>
-    <slot v-if="noMore" name="noMore">
+    <slot v-if="noMore && data.length > 0" name="noMore">
       <p class="no-more-text">No More</p>
     </slot>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, reactive, ref } from 'vue';
+import { computed, nextTick, ref, shallowRef, watch } from 'vue';
 
 export interface Pagination {
   pageSize: number;
@@ -65,17 +65,24 @@ const emit = defineEmits<{
 const isAlive = ref(true);
 const loading = ref(false);
 const noMore = ref(false);
-const data = reactive(props.dataSource);
+const data = shallowRef();
 const total = ref(0);
 const current = ref(1);
 const disabled = computed(() => loading.value || noMore.value);
+
+watch(
+  () => props.dataSource,
+  (dataSource) => {
+    data.value = dataSource;
+  },
+  { immediate: true }
+);
 
 const reload = () => {
   isAlive.value = false;
   nextTick(() => {
     isAlive.value = true;
-    data.length = 0;
-    data.concat(props.dataSource);
+    data.value = props.dataSource;
     total.value = 0;
     current.value = 1;
     noMore.value = false;
@@ -98,7 +105,7 @@ const load = async () => {
   } else {
     current.value += 1;
   }
-  data.push(...result.data);
+  data.value.push(...result.data);
   emit('loaded');
 };
 

@@ -43,12 +43,18 @@ export interface GetVersionReq {
 }
 
 export interface GetVersionRes {
+  /** 应用ID */
+  applicationId: string;
+  /** 应用名称 */
+  applicationName: string;
   /** 版本ID */
   versionId: string;
   /** 版本名称 */
   name: string;
   /** 版本描述 */
   description: string;
+  /** 版本内容ID */
+  contentId?: string;
   /** 创建者 */
   createBy: string;
   /** 创建时间 */
@@ -98,4 +104,13 @@ export interface DeleteVersion {
   versionIds: string[];
   /** 应用ID */
   applicationId: string;
+}
+
+export interface UpdateContentReq {
+  /** 应用ID */
+  applicationId: string;
+  /** 版本ID */
+  versionId: string;
+  /** 内容Id */
+  contentId: string;
 }

@@ -1,35 +1,27 @@
 <template>
   <el-dialog v-model="dialogVisible" destroy-on-close class="pre-viewer" title="预览" :width="stageRect.width">
-    <DSLPreview
-      :height="stageRect.height"
-      :application-id="applicationId"
-      :application-name="applicationName"
-      :content-id="contentId"
-      :page-id="pageId"
-    />
+    <DSLPreview :height="stageRect.height" :content-id="contentId" :page-id="pageId" />
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
 
+import { Id } from '@edoms/schema';
+
 import DSLPreview from '@/components/DSLPreview.vue';
 
 const props = withDefaults(
   defineProps<{
     visible: boolean;
-    applicationId?: string;
-    applicationName?: string;
-    pageId?: string;
-    contentId?: string | null | undefined;
+    pageId?: string | Id;
+    contentId?: string | null;
     stageRect: {
       width: number;
       height: number;
     };
   }>(),
   {
-    applicationId: '',
-    applicationName: '',
     pageId: '',
     width: '100%',
   }

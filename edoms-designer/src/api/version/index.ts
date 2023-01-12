@@ -7,6 +7,7 @@ import {
   PublishVersionReq,
   RecoveryVersionReq,
   SaveVersionReq,
+  UpdateContentReq,
   UpdateVersionReq,
 } from '@/api/version/type';
 import { request } from '@/util/request';
@@ -34,24 +35,12 @@ export default {
     }
   },
   getVersion: async (data: GetVersionReq): Promise<GetVersionRes> => {
-    try {
-      const { result } = await request<GetVersionReq, GetVersionRes>({
-        url: '/application/version',
-        method: 'GET',
-        data,
-      });
-      return result;
-    } catch (error) {
-      return {
-        versionId: '',
-        name: '',
-        description: '',
-        createBy: '',
-        createTime: -1,
-        updateBy: '',
-        updateTime: -1,
-      };
-    }
+    const { result } = await request<GetVersionReq, GetVersionRes>({
+      url: '/application/version',
+      method: 'GET',
+      data,
+    });
+    return result;
   },
   updateVersion: async (data: UpdateVersionReq): Promise<void> => {
     await request<UpdateVersionReq, void>({
@@ -85,6 +74,13 @@ export default {
     await request<DeleteVersion, void>({
       url: '/application/version/delete',
       method: 'DELETE',
+      data,
+    });
+  },
+  updateContent: async (data: UpdateContentReq): Promise<void> => {
+    await request<UpdateContentReq, void>({
+      url: '/application/version/update-content',
+      method: 'PUT',
       data,
     });
   },

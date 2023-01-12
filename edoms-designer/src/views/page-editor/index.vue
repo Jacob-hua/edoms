@@ -2,7 +2,7 @@
   <div class="editor-app">
     <edoms-editor
       ref="editorRef"
-      v-model="value"
+      v-model="dsl"
       :menu="menu"
       :runtime-url="runtimeUrl"
       :props-configs="propsConfigs"
@@ -10,7 +10,6 @@
       :can-select="canSelect"
       :event-method-list="eventMethodList"
       :component-group-list="componentGroupList"
-      :default-selected="defaultSelected"
       :moveable-options="moveableOptions"
       :auto-scroll-into-view="true"
       :stage-rect="stageRect"
@@ -21,10 +20,8 @@
     <DSLPreviewDialog
       v-model:visible="previewDialogVisible"
       :stage-rect="stageRect"
-      :application-id="contentState.applicationId"
-      :application-name="contentState.applicationName"
-      :page-id="contentState.pageId"
       :content-id="contentState.contentId"
+      :page-id="previewPageId"
     />
   </div>
 </template>
@@ -42,14 +39,13 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath, isNumber } from '@edoms/utils';
 
-import pageApi from '@/api/page';
 import versionApi from '@/api/version';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
 import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
-import { generateEmptyAppDSL, generateEmptyPageDSL } from '@/util/dsl';
+import { generateDefaultDSL } from '@/util/dsl';
 
 import DSLPreviewDialog from './component/DSLPreviewDialog.vue';
 
@@ -86,11 +82,11 @@ const idPrefix = 'edoms';
 
 const editorRef = ref<InstanceType<typeof EdomsEditor>>();
 
-const previewDialogVisible = ref(false);
+const previewDialogVisible = ref<boolean>(false);
 
-const value = ref<MApp | undefined>();
+const previewPageId = ref<Id>();
 
-const defaultSelected = ref();
+const dsl = ref<MApp | undefined>();
 
 const propsValues = ref<Record<string, any>>({});
 
@@ -127,12 +123,7 @@ const menu = computed<MenuBarData>(() => ({
     '/',
     {
       type: 'text',
-      text: '历史版本:',
-      display: () => Boolean(contentState.versionId),
-    },
-    {
-      type: 'text',
-      text: contentState.pageName || contentState.versionName,
+      text: `${contentState.applicationName}（${contentState.versionName}）`,
     },
   ],
   center: ['delete', 'undo', 'redo', 'guides', 'rule', 'zoom'],
@@ -157,6 +148,7 @@ const menu = computed<MenuBarData>(() => ({
             return;
           }
         }
+        previewPageId.value = services?.editorService.get<MPage>('page').id;
         previewDialogVisible.value = true;
       },
     },
@@ -180,29 +172,29 @@ const menu = computed<MenuBarData>(() => ({
 }));
 
 const contentState = reactive({
-  applicationId: '',
+  applicationId: route.query?.applicationId as string,
   applicationName: '',
-  pageId: route.query?.pageId as string,
-  pageName: '',
   versionId: route.query?.versionId as string,
   versionName: '',
   contentId: '',
 });
 
 watch(
-  () => ({ pageId: contentState.pageId }),
-  async ({ pageId }) => {
-    if (!pageId) {
+  () => ({ versionId: contentState.versionId }),
+  async ({ versionId }) => {
+    try {
+      const { contentId, applicationId, applicationName, name } = await versionApi.getVersion({
+        versionId,
+      });
+      contentState.contentId = contentId ?? '';
+      contentState.versionName = name;
+      contentState.applicationId = applicationId;
+      contentState.applicationName = applicationName;
+    } catch (error) {
+      router.replace('/');
       return;
     }
-    const pageInfo = await pageApi.getPage({ pageId });
-    contentState.applicationId = pageInfo.applicationId;
-    contentState.applicationName = pageInfo.applicationName;
-    contentState.contentId = pageInfo.editContentId ?? '';
-    contentState.pageName = pageInfo.pageName;
-    const dsl = await calculateDSL();
-    value.value = dsl;
-    defaultSelected.value = pageId;
+    dsl.value = await calculateDSL();
   },
   {
     immediate: true,
@@ -294,42 +286,25 @@ function goBack() {
 const { execute: downloadDslExecute } = useDownloadDSL();
 
 async function calculateDSL(): Promise<MApp> {
-  const dsl: MApp = generateEmptyAppDSL({
+  if (contentState.contentId) {
+    return await downloadDslExecute(contentState.contentId);
+  }
+
+  return generateDefaultDSL({
     applicationId: contentState.applicationId,
     applicationName: contentState.applicationName,
   });
-
-  const emptyPageDsl: MPage = generateEmptyPageDSL({
-    pageId: contentState.pageId,
-    pageName: contentState.pageName,
-  });
-  if (contentState.contentId) {
-    try {
-      const remoteDsl = await downloadDslExecute(contentState.contentId);
-      if (remoteDsl.type === NodeType.PAGE) {
-        dsl.items.push(remoteDsl);
-      } else {
-        return remoteDsl;
-      }
-    } catch (error) {
-      dsl.items.push(emptyPageDsl);
-    }
-  } else {
-    dsl.items.push(emptyPageDsl);
-  }
-
-  return dsl;
 }
 
 const { execute: uploadExecute } = useUpload();
 
 async function uploadDsl(): Promise<string | null | undefined> {
-  const pageDSL = serialize(toRaw(value.value?.items?.[0]), {
+  const pageDSL = serialize(toRaw(dsl.value), {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
 
-  return await uploadExecute(pageDSL, 'runtimeDSL', 'text/javascript', 'utf-8', staticResource.value?.join(','));
+  return await uploadExecute(pageDSL, `dsl.js`, 'text/javascript', 'utf-8', staticResource.value?.join(','));
 }
 
 async function save() {
@@ -338,17 +313,11 @@ async function save() {
     return;
   }
   contentState.contentId = contentId;
-  if (contentState.versionId) {
-    await versionApi.saveVersion({
-      versionId: contentState.versionId,
-      contentId,
-    });
-  } else {
-    await pageApi.savePage({
-      pageId: contentState.pageId,
-      contentId,
-    });
-  }
+  await versionApi.updateContent({
+    applicationId: contentState.applicationId,
+    versionId: contentState.versionId,
+    contentId,
+  });
   editorRef.value?.editorService.resetModifiedNodeId();
 }
 </script>

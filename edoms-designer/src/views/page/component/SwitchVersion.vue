@@ -2,12 +2,18 @@
   <el-popover v-model:visible="visible" trigger="click" width="350px">
     <template #reference>
       <slot :version="version">
-        <el-button>主版本</el-button>
+        <el-input
+          class="reference-input"
+          :value="version?.name"
+          clearable
+          placeholder="请选择版本"
+          :suffix-icon="ArrowDown"
+        ></el-input>
       </slot>
     </template>
     <div class="wrapper">
       <div class="header">
-        <span class="title">切换版本</span>
+        <span class="title">{{ title ?? '版本选择' }}</span>
         <el-icon class="close" :size="20" @click="handleClose"><Close /></el-icon>
       </div>
       <el-input v-model="versionName" clearable placeholder="输入版本名称"></el-input>
@@ -20,7 +26,7 @@
           :request="loadData"
           @on-select-change="handleSelectChange"
         >
-          <template #default="{ item }: { item: ListVersionResItem }">
+          <template #default="{ item }: { item: VersionModel }">
             <div :class="['grid-list-item', item.versionId === modelValue?.versionId && 'is-active']">
               {{ item.name }}
             </div>
@@ -36,8 +42,9 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
+import { ArrowDown } from '@element-plus/icons-vue';
 
-import versionApi, { ListVersionResItem } from '@/api/version';
+import versionApi from '@/api/version';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
 
 export interface VersionModel {
@@ -47,22 +54,23 @@ export interface VersionModel {
 }
 
 const props = defineProps<{
-  modelValue?: VersionModel;
   applicationId: string;
+  modelValue?: VersionModel;
+  title?: string;
 }>();
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: VersionModel): void;
-  (event: 'onChange', value: ListVersionResItem): void;
+  (event: 'onChange', value: VersionModel): void;
 }>();
 
 const visible = ref<boolean>(false);
 
-const version = ref<ListVersionResItem>();
+const version = ref<VersionModel>();
 
 const versionName = ref<string>();
 
-const versionList = ref<ListVersionResItem[]>([]);
+const versionList = ref<VersionModel[]>([]);
 
 const gridListRef = ref();
 
@@ -73,7 +81,15 @@ watch(
   }
 );
 
-const loadData: RequestFunc<ListVersionResItem> = async ({ pageSize, current }) => {
+watch(
+  () => props.modelValue,
+  () => {
+    version.value = props.modelValue;
+  },
+  { immediate: true }
+);
+
+const loadData: RequestFunc<VersionModel> = async ({ pageSize, current }) => {
   const { dataList, count } = await versionApi.listVersions({
     applicationId: props.applicationId,
     page: current,
@@ -92,7 +108,7 @@ function handleClose() {
   visible.value = false;
 }
 
-function handleSelectChange(item: ListVersionResItem) {
+function handleSelectChange(item: VersionModel) {
   emit('update:modelValue', item);
   version.value = item;
   emit('onChange', item);
@@ -101,6 +117,10 @@ function handleSelectChange(item: ListVersionResItem) {
 </script>
 
 <style lang="scss" scoped>
+.reference-input :deep(.el-input__inner) {
+  cursor: pointer;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;

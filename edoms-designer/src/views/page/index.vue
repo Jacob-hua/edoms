@@ -6,7 +6,7 @@
           <el-icon :size="23"><ArrowLeft /></el-icon>
           <span>{{ appName }}</span>
         </div>
-        <SwitchVersion v-model="version" :application-id="applicationId">
+        <SwitchVersion v-model="version" :application-id="applicationId" title="切换版本">
           <div class="version-btn">
             <span>{{ version?.name }}</span>
             <el-icon class="el-icon--right"><ArrowDown /></el-icon>
@@ -31,15 +31,11 @@
         row-gap="10px"
         :page-size="20"
         item-min-width="200px"
+        :data-source="pageList"
         @on-select-change="handleSelectChange"
       >
-        <template #default="{ item }: { item: ListPageItem }">
-          <PageListItem
-            :application-id="applicationId"
-            :is-home-page="item.isHomePage"
-            :data="item"
-            :is-active="item.pageId === active?.pageId"
-          />
+        <template #default="{ item }: { item: MPage }">
+          <PageListItem :data="item" :is-active="item.id === active?.id" />
         </template>
         <template #noMore>
           <div></div>
@@ -50,32 +46,28 @@
       </GridList>
     </section>
     <section class="page-preview">
-      <DSLPreview
-        class="edit"
-        height="98%"
-        :application-id="applicationId"
-        :application-name="appName"
-        :content-id="active?.pushContentId"
-        :page-id="active?.pageId"
-      />
+      <DSLPreview class="edit" height="98%" :content-id="version?.contentId" :page-id="active?.id" />
     </section>
   </div>
   <NewVersionDialog v-model:visible="newVersionVisible" :application-id="applicationId" @success="handleReload" />
 </template>
 
 <script lang="ts" setup name="Page">
-import { ref, watch } from 'vue';
+import { ref, shallowRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { DocumentAdd, Download, Edit } from '@element-plus/icons-vue';
+
+import { MPage } from '@edoms/schema';
 
 import applicationApi from '@/api/application';
 import DSLPreview from '@/components/DSLPreview.vue';
 import GridList from '@/components/GridList.vue';
 import { MimeType } from '@/const/mime';
+import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useExport from '@/hooks/useExport';
 
 import NewVersionDialog from './component/NewVersionDialog.vue';
-import PageListItem, { ListPageItem } from './component/PageListItem.vue';
+import PageListItem from './component/PageListItem.vue';
 import SwitchVersion, { VersionModel } from './component/SwitchVersion.vue';
 
 const route = useRoute();
@@ -88,9 +80,13 @@ const appName = ref<string>('');
 
 const version = ref<VersionModel>();
 
-const active = ref<ListPageItem>();
+const active = ref<MPage>();
 
 const applicationId = ref<string>(route.query.applicationId as string);
+
+const newVersionVisible = ref<boolean>(false);
+
+const pageList = shallowRef<MPage[]>([]);
 
 watch(
   () => applicationId.value,
@@ -113,6 +109,18 @@ watch(
   { immediate: true }
 );
 
+const { execute: downloadDsl } = useDownloadDSL();
+
+watch(version, async (version) => {
+  if (!version?.contentId) {
+    pageList.value = [];
+    return;
+  }
+  const dsl = await downloadDsl(version.contentId);
+  pageList.value = dsl.items;
+  active.value = dsl.items?.[0];
+});
+
 const goBack = () => {
   router.push('/');
 };
@@ -121,11 +129,13 @@ const handleReload = () => {
   gridListRef.value?.reload();
 };
 
-const newVersionVisible = ref<boolean>(false);
-
 const handleEdit = () => {
   router.push({
     path: '/editor',
+    query: {
+      applicationId: applicationId.value,
+      versionId: version.value?.versionId,
+    },
   });
 };
 
@@ -134,18 +144,17 @@ const handleNewVersion = () => {
 };
 
 const { execute: handleExportApplication } = useExport(
-  async () => {
-    const result = await applicationApi.exportApplication({
+  async () =>
+    await applicationApi.exportApplication({
       applicationId: applicationId.value,
-    });
-    return result;
-  },
-  () => `${appName.value}.zip`,
+      versionId: version.value?.versionId ?? '',
+    }),
+  () => `${appName.value}（${version.value?.name}）.zip`,
   MimeType.ZIP
 );
 
-const handleSelectChange = (value: ListPageItem) => {
-  if (value.pageId !== active.value?.pageId) {
+const handleSelectChange = (value: MPage) => {
+  if (value.id !== active.value?.id) {
     active.value = value;
   }
 };
@@ -162,6 +171,7 @@ const handleSelectChange = (value: ListPageItem) => {
   grid-column-start: 1;
   grid-column-end: 3;
   border-bottom: 1px solid #e1e1e1;
+  padding: 0 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
