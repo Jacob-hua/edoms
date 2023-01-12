@@ -6,16 +6,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRaw, watchEffect } from 'vue';
+import { computed, ref, toRaw, watch, watchEffect } from 'vue';
 
-import { MApp } from '@edoms/schema';
+import { Id, MApp } from '@edoms/schema';
 
 import useDownloadDSL from '@/hooks/useDownloadDSL';
 
 const props = withDefaults(
   defineProps<{
     contentId?: string | null | undefined;
-    pageId?: string;
+    pageId?: string | Id;
     width?: string | number;
     height?: string | number;
   }>(),
@@ -33,7 +33,7 @@ const runtimeUrl = `${VITE_RUNTIME_PATH}/page/index.html`;
 
 const previewUrl = computed(() => `${runtimeUrl}?localPreview=1&page=${props.pageId}`);
 
-const runtimeIframe = ref<HTMLIFrameElement | null>(null);
+const runtimeIframe = ref<HTMLIFrameElement>();
 
 const dsl = ref<MApp | undefined>();
 
@@ -48,18 +48,23 @@ watchEffect(async () => {
 
   const remoteDsl = await downloadDslExecute(props.contentId);
   dsl.value = remoteDsl;
-
-  if (runtimeIframe.value) {
-    runtimeIframe.value.contentWindow?.location.reload();
-    runtimeIframe.value.addEventListener('load', handleIframeLoad);
-  }
 });
 
+watch(
+  () => runtimeIframe.value,
+  (runtimeIframe) => {
+    runtimeIframe?.contentWindow?.location.reload();
+    runtimeIframe?.addEventListener('load', handleIframeLoad);
+  }
+);
+
 function handleIframeLoad() {
+  console.log('发送消息');
+
   if (!dsl.value) {
     return;
   }
-  runtimeIframe.value?.contentWindow?.postMessage(toRaw(dsl.value), `${VITE_RUNTIME_PATH}/page/index.html`);
+  runtimeIframe.value?.contentWindow?.postMessage(toRaw(dsl.value), runtimeUrl);
 }
 
 window.addEventListener('message', (e) => {

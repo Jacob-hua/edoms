@@ -46,14 +46,7 @@
       </GridList>
     </section>
     <section class="page-preview">
-      <DSLPreview
-        class="edit"
-        height="98%"
-        :application-id="applicationId"
-        :application-name="appName"
-        :content-id="active?.pushContentId"
-        :page-id="active?.pageId"
-      />
+      <DSLPreview class="edit" height="98%" :content-id="version?.contentId" :page-id="active?.id" />
     </section>
   </div>
   <NewVersionDialog v-model:visible="newVersionVisible" :application-id="applicationId" @success="handleReload" />
@@ -125,6 +118,7 @@ watch(version, async (version) => {
   }
   const dsl = await downloadDsl(version.contentId);
   pageList.value = dsl.items;
+  active.value = dsl.items?.[0];
 });
 
 const goBack = () => {
@@ -178,6 +172,7 @@ const handleSelectChange = (value: MPage) => {
   grid-column-start: 1;
   grid-column-end: 3;
   border-bottom: 1px solid #e1e1e1;
+  padding: 0 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
