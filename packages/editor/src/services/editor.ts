@@ -344,6 +344,9 @@ export class EditorService extends BaseService {
     } else {
       addNodes.push(...addNode);
     }
+    if (addNodes[0].type === NodeType.PAGE) {
+      this.emit('runtime-ready', false);
+    }
 
     const newNodes = await Promise.all(
       addNodes.map((node) => {
@@ -362,7 +365,6 @@ export class EditorService extends BaseService {
       await this.select(newNodes[0]);
 
       if (isPage(newNodes[0])) {
-        this.emit('runtime-ready', false);
         this.state.pageLength += 1;
       } else {
         // 新增页面，这个时候页面还有渲染出来，此时select会出错，在runtime-ready的时候回去select

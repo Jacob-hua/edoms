@@ -158,9 +158,9 @@ editorService.on('runtime-ready', (value: boolean) => {
 
 // 初始值变化，重新设置节点信息
 watch(
-  () => ({ modelValue: props.modelValue, defaultSelected: props.defaultSelected }),
-  ({ modelValue, defaultSelected }) => {
-    if (!modelValue || !defaultSelected) {
+  () => ({ modelValue: props.modelValue }),
+  ({ modelValue }) => {
+    if (!modelValue) {
       return;
     }
     editorService.set('root', modelValue);

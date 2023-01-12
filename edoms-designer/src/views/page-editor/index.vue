@@ -44,7 +44,7 @@ import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
 import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
-import { generateEmptyAppDSL } from '@/util/dsl';
+import { generateDefaultDSL } from '@/util/dsl';
 
 import DSLPreviewDialog from './component/DSLPreviewDialog.vue';
 
@@ -120,7 +120,7 @@ const menu = computed<MenuBarData>(() => ({
     '/',
     {
       type: 'text',
-      text: contentState.versionName,
+      text: `${contentState.applicationName}（${contentState.versionName}）`,
     },
   ],
   center: ['delete', 'undo', 'redo', 'guides', 'rule', 'zoom'],
@@ -179,10 +179,11 @@ watch(
   () => ({ versionId: contentState.versionId }),
   async ({ versionId }) => {
     try {
-      const { contentId, applicationId, applicationName } = await versionApi.getVersion({
+      const { contentId, applicationId, applicationName, name } = await versionApi.getVersion({
         versionId,
       });
       contentState.contentId = contentId ?? '';
+      contentState.versionName = name;
       contentState.applicationId = applicationId;
       contentState.applicationName = applicationName;
     } catch (error) {
@@ -190,7 +191,6 @@ watch(
       return;
     }
     dsl.value = await calculateDSL();
-    console.log('====', dsl);
   },
   {
     immediate: true,
@@ -286,7 +286,7 @@ async function calculateDSL(): Promise<MApp> {
     return await downloadDslExecute(contentState.contentId);
   }
 
-  return generateEmptyAppDSL({
+  return generateDefaultDSL({
     applicationId: contentState.applicationId,
     applicationName: contentState.applicationName,
   });
@@ -299,7 +299,6 @@ async function uploadDsl(): Promise<string | null | undefined> {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
-  console.log('====', pageDSL);
 
   return await uploadExecute(
     pageDSL,

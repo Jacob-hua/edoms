@@ -6,7 +6,7 @@ export interface AppDSLConfig {
   applicationName: string;
 }
 
-export const generateEmptyAppDSL = (config: AppDSLConfig): MApp => {
+export const generateDefaultDSL = (config: AppDSLConfig): MApp => {
   return {
     id: config.applicationId,
     name: config.applicationName,
