@@ -6,13 +6,11 @@
           <el-icon :size="23"><ArrowLeft /></el-icon>
           <span>{{ appName }}</span>
         </div>
-        <SwitchVersion v-model="defaultVersion" :application-id="applicationId">
-          <template #default="{ version }">
-            <div class="version-btn">
-              <span>{{ version?.name ?? defaultVersion?.name }}</span>
-              <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-            </div>
-          </template>
+        <SwitchVersion v-model="version" :application-id="applicationId">
+          <div class="version-btn">
+            <span>{{ version?.name }}</span>
+            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+          </div>
         </SwitchVersion>
       </div>
       <div>
@@ -88,7 +86,7 @@ const gridListRef = ref();
 
 const appName = ref<string>('');
 
-const defaultVersion = ref<VersionModel>();
+const version = ref<VersionModel>();
 
 const active = ref<ListPageItem>();
 
@@ -106,7 +104,7 @@ watch(
       }
     );
     appName.value = name;
-    defaultVersion.value = {
+    version.value = {
       versionId: defaultVersionId,
       name: defaultVersionName,
       contentId: defaultVersionContentId,
