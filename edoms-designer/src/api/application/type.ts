@@ -103,6 +103,8 @@ export interface ReleaseApplicationReq {
 export interface GetReleaseIdReq {
   /** 服务地址 */
   serviceAddress: string;
+  /** 版本ID */
+  versionId?: string;
 }
 
 export interface ExportApplicationReq {

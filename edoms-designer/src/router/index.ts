@@ -71,10 +71,12 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/login',
+    name: 'Login',
     component: () => import('../views/login/index.vue'),
   },
   {
-    path: '/preview/:address',
+    path: '/preview/:address/:versionId',
+    name: 'Preview',
     component: () => import('../views/preview/index.vue'),
   },
   {
