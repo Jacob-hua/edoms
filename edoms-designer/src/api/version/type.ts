@@ -73,9 +73,7 @@ export interface UpdateVersionReq {
   /** 版本名称 */
   name: string;
   /** 版本描述 */
-  description?: string;
-  /** 内容ID */
-  contentId: string;
+  description: string;
 }
 
 export interface RecoveryVersionReq {
@@ -104,6 +102,8 @@ export interface PublishVersionReq {
 export interface DeleteVersion {
   /** 版本ID集合 */
   versionIds: string[];
+  /** 应用ID */
+  applicationId: string;
 }
 
 export interface UpdateContentReq {

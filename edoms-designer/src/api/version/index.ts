@@ -72,7 +72,7 @@ export default {
   },
   deleteVersion: async (data: DeleteVersion): Promise<void> => {
     await request<DeleteVersion, void>({
-      url: '/page/version/delete',
+      url: '/application/version/delete',
       method: 'DELETE',
       data,
     });
