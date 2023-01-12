@@ -14,7 +14,7 @@
     <slot v-if="loading" name="loading">
       <p>Loading...</p>
     </slot>
-    <slot v-if="noMore" name="noMore">
+    <slot v-if="noMore && data.length > 0" name="noMore">
       <p class="no-more-text">No More</p>
     </slot>
   </div>
