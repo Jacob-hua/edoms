@@ -6,7 +6,7 @@
           <el-icon :size="23"><ArrowLeft /></el-icon>
           <span>{{ appName }}</span>
         </div>
-        <SwitchVersion v-model:version-id="defaultVersionId" :application-id="applicationId">
+        <SwitchVersion v-model="defaultVersionId" :application-id="applicationId">
           <template #default="{ version }">
             <div class="version-btn">
               <span>{{ version?.name ?? defaultVersionName }}</span>

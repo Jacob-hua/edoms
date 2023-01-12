@@ -18,7 +18,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="版本来源" prop="contentId">
-          <SwitchVersion v-if="dialogVisible" v-model:version-id="formModel.contentId" :application-id="applicationId">
+          <SwitchVersion v-if="dialogVisible" v-model="formModel.contentId" :application-id="applicationId">
             <template #default="{ version }">
               <el-input :value="version?.name" clearable placeholder="请选择版本来源"></el-input>
             </template>
@@ -105,7 +105,7 @@ const formRules: FormRules = {
     {
       required: true,
       message: '版本来源不能为空',
-      trigger: 'blur',
+      trigger: 'change',
     },
   ],
 };
