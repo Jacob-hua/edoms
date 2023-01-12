@@ -29,7 +29,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/application-setting/index.vue'),
         meta: {
           params: {
-            required: ['applicationId'],
+            required: ['applicationId', 'defaultActive'],
           },
         },
       },

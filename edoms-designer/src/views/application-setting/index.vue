@@ -6,8 +6,8 @@
     </div>
     <section>
       <div class="section-left">
-        <el-tabs tab-position="left">
-          <el-tab-pane>
+        <el-tabs v-model="activeName" tab-position="left">
+          <el-tab-pane :key="activeName" name="application">
             <template #label>
               <span class="custom-tabs-label">
                 <el-icon :size="20"><Document /></el-icon>
@@ -16,23 +16,23 @@
             </template>
             <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @success="goBack" />
           </el-tab-pane>
-          <el-tab-pane>
-            <template #label>
-              <span class="custom-tabs-label">
-                <el-icon :size="20"><Document /></el-icon>
-                <span>版本管理</span>
-              </span>
-            </template>
-            <VersionList :app-info="appInfo"></VersionList>
-          </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane :key="activeName" name="advance">
             <template #label>
               <span class="custom-tabs-label">
                 <el-icon :size="20"><Setting /></el-icon>
                 <span>高级设置</span>
               </span>
             </template>
-            <AdvancedSetting :app-info="appInfo" />
+            <AdvancedSetting :app-info="appInfo" @success="handleUpdateSuccess" />
+          </el-tab-pane>
+          <el-tab-pane :key="activeName" name="version">
+            <template #label>
+              <span class="custom-tabs-label">
+                <el-icon :size="20"><Document /></el-icon>
+                <span>版本管理</span>
+              </span>
+            </template>
+            <VersionList :app-info="appInfo" />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -51,8 +51,10 @@ import AdvancedSetting from './component/AdvancedSetting.vue';
 import BasicInfo from './component/BasicInfo.vue';
 import VersionList from './component/version-setting/VersionList.vue';
 
+const route = useRoute();
 const { go } = useRouter();
 const appInfoVisible = ref<boolean>(false);
+const activeName = ref<string>(route.query.defaultActive as string);
 
 const appInfo = ref<GetApplicationRes>({
   applicationId: '',
@@ -65,6 +67,8 @@ const appInfo = ref<GetApplicationRes>({
   thumbnailId: '',
   secret: '',
   defaultVersionId: '',
+  defaultVersionName: '',
+  defaultVersionContentId: '',
 });
 
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
@@ -75,7 +79,10 @@ const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryVal
 const goBack = () => {
   go(-1);
 };
-getAppDetail(useRoute().query.applicationId);
+const handleUpdateSuccess = () => {
+  getAppDetail(route.query.applicationId);
+};
+getAppDetail(route.query.applicationId);
 </script>
 
 <style scoped lang="scss">

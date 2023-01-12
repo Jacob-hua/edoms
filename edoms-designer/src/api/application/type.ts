@@ -109,3 +109,10 @@ export interface ExportApplicationReq {
   /** 应用ID */
   applicationId: string;
 }
+
+export interface UpdateDefaultVersionReq {
+  /** 应用ID */
+  applicationId: string;
+  /** 版本ID */
+  versionId: string;
+}

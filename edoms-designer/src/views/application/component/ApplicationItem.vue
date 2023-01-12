@@ -15,17 +15,14 @@
         </PopMenu>
       </div>
     </div>
-    <!-- <div>{{ application.name }}</div> -->
     <LongText :content="application.name" :content-style="{ width: '198px', fontSize: '15px' }"></LongText>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { ElMessage, ElMessageBox } from 'element-plus';
 
 import type { ListApplicationsResItem } from '@/api/application';
-import applicationApi from '@/api/application';
 import PreviewImage from '@/components/ImagePreview.vue';
 import LongText from '@/components/LongText.vue';
 import PopMenu from '@/components/PopMenu.vue';
@@ -37,29 +34,9 @@ const props = defineProps<{
 
 const router = useRouter();
 
-const previewPath = import.meta.env.VITE_PREVIEW_PATH;
-
 const menus = [
   {
-    name: 'operation',
-    label: '发布',
-    icon: 'Operation',
-    action: () => {
-      ElMessageBox.confirm(`是否发布${props.application.name}?`, '提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }).then(async () => {
-        await applicationApi.releaseApplication({
-          applicationId: props.application.applicationId,
-        });
-        window.open(`${previewPath}${props.application.serviceAddress}`);
-        ElMessage.success('发布成功');
-      });
-    },
-  },
-  {
-    name: 'setting',
+    name: 'application',
     label: '设置',
     icon: 'Setting',
     action: () => {
@@ -67,6 +44,35 @@ const menus = [
         path: '/application/setting',
         query: {
           applicationId: props.application.applicationId,
+          defaultActive: 'application',
+        },
+      });
+    },
+  },
+  {
+    name: 'version',
+    label: '管理',
+    icon: 'Setting',
+    action: () => {
+      router.push({
+        path: '/application/setting',
+        query: {
+          applicationId: props.application.applicationId,
+          defaultActive: 'version',
+        },
+      });
+    },
+  },
+  {
+    name: 'permission',
+    label: '权限',
+    icon: 'Setting',
+    action: () => {
+      router.push({
+        path: '/application/setting',
+        query: {
+          applicationId: props.application.applicationId,
+          activeName: 'permission',
         },
       });
     },

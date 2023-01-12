@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="12">
           <span class="version-name">{{ versionItem.name }} </span>
-          <span v-if="isCurrentVersion" class="currentFlag">当前</span>
+          <span v-if="isCurrentVersion" class="currentFlag">default</span>
         </el-col>
       </el-row>
       <el-row>
@@ -101,17 +101,18 @@ const handlePreview = () => {};
 
 <style lang="scss" scoped>
 .version-name {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 500;
   padding-right: 10px;
 }
 
 .currentFlag {
-  vertical-align: super;
-  border: 1px solid #eee;
-  border-radius: 8px;
+  vertical-align: text-top;
+  border: 1px solid #409eff;
+  border-radius: 15px;
   padding: 2px 4px;
   font-size: 12px;
-  background: #eee;
+  background: #409eff;
+  color: #fff;
 }
 </style>
