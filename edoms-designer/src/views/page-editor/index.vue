@@ -3,6 +3,7 @@
     <edoms-editor
       ref="editorRef"
       v-model="dsl"
+      :default-selected="defaultSelected"
       :menu="menu"
       :runtime-url="runtimeUrl"
       :props-configs="propsConfigs"
@@ -87,6 +88,8 @@ const previewDialogVisible = ref<boolean>(false);
 const previewPageId = ref<Id>();
 
 const dsl = ref<MApp | undefined>();
+
+const defaultSelected = ref<Id>();
 
 const propsValues = ref<Record<string, any>>({});
 
@@ -195,6 +198,7 @@ watch(
       return;
     }
     dsl.value = await calculateDSL();
+    defaultSelected.value = dsl.value.items?.[0].id;
   },
   {
     immediate: true,

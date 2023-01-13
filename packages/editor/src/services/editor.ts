@@ -193,6 +193,9 @@ export class EditorService extends BaseService {
    */
   public async select(config: MNode | Id): Promise<MNode> | never {
     const { node, page, parent } = this.selectedConfigExceptionHandler(config);
+    if (node?.type === 'page' && this.get('page') && this.get('page').id !== node?.id) {
+      this.emit('runtime-ready', false);
+    }
     this.set('nodes', [node]);
     this.set('page', page || null);
     this.set('parent', parent || null);
@@ -201,9 +204,6 @@ export class EditorService extends BaseService {
       historyService.changePage(toRaw(page));
     } else {
       historyService.empty();
-    }
-    if (node?.type === 'page') {
-      this.emit('runtime-ready', false);
     }
     if (node?.id) {
       this.get<StageCore>('stage')
