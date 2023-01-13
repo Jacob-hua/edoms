@@ -21,7 +21,7 @@ watch(
   () => ({ address: route.params.address as string, versionId: route.params.versionId as string }),
   async ({ address, versionId }) => {
     try {
-      contentId.value = await applicationApi.getReleaseId({ serviceAddress: address, versionId });
+      contentId.value = await applicationApi.previewApplication({ serviceAddress: address, versionId });
       if (!contentId.value) {
         router.push({
           path: '/404',

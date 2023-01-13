@@ -70,7 +70,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/login/index.vue'),
   },
   {
-    path: '/preview/:address/:versionId',
+    path: '/preview/:address/:versionId?',
     name: 'Preview',
     component: () => import('../views/preview/index.vue'),
   },
