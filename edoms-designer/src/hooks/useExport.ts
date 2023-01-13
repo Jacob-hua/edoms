@@ -13,11 +13,11 @@ export class ExportError extends MessageError {
   }
 }
 
-type Func = <T>(arg: T) => string;
+export type FileName<T> = string | ((data?: T) => string);
 
-export default <T = Record<string | number | symbol, any>>(
+const useExport = <T = Record<string | number | symbol, any>>(
   requestFunc: (data?: T) => string | Promise<string>,
-  fileName: string | Func = 'edoms-download',
+  fileName: FileName<T> = 'edoms-download',
   mime: MimeType = MimeType.HTML,
   charset: string = 'utf-8'
 ) => {
@@ -51,3 +51,5 @@ export default <T = Record<string | number | symbol, any>>(
     error,
   };
 };
+
+export default useExport;
