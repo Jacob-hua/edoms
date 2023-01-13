@@ -100,7 +100,7 @@ export interface ReleaseApplicationReq {
   applicationId: string;
 }
 
-export interface GetReleaseIdReq {
+export interface PreviewApplicationReq {
   /** 服务地址 */
   serviceAddress: string;
   /** 版本ID */
