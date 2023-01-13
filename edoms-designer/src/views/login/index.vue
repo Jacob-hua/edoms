@@ -143,6 +143,7 @@ const login = () => {
 
 <style lang="scss" scoped>
 .wrapper {
+  width: 100%;
   height: 100%;
   background-image: linear-gradient(to bottom right, #1ccdbb, #1254b9);
   display: flex;
