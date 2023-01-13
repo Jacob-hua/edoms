@@ -13,7 +13,7 @@ export class ExportError extends MessageError {
   }
 }
 
-type Func = <T>(arg: T) => string;
+type Func = <T>(arg?: T) => string;
 
 export default <T = Record<string | number | symbol, any>>(
   requestFunc: (data?: T) => string | Promise<string>,
@@ -28,7 +28,7 @@ export default <T = Record<string | number | symbol, any>>(
   const execute = async (data?: T): Promise<void> => {
     loading.value = true;
     if (typeof fileName === 'function') {
-      fileName = fileName(data);
+      fileName = fileName<T>(data);
     }
     try {
       const res = await Promise.resolve(requestFunc(data));
