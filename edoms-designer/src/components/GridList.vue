@@ -23,6 +23,8 @@
 <script lang="ts" setup>
 import { computed, nextTick, ref, shallowRef, watch } from 'vue';
 
+import { deepClone } from '@edoms/utils';
+
 export interface Pagination {
   pageSize: number;
   current: number;
@@ -73,7 +75,7 @@ const disabled = computed(() => loading.value || noMore.value);
 watch(
   () => props.dataSource,
   (dataSource) => {
-    data.value = dataSource;
+    data.value = deepClone(dataSource);
   },
   { immediate: true }
 );
@@ -82,7 +84,7 @@ const reload = () => {
   isAlive.value = false;
   nextTick(() => {
     isAlive.value = true;
-    data.value = props.dataSource;
+    data.value = deepClone(props.dataSource);
     total.value = 0;
     current.value = 1;
     noMore.value = false;
