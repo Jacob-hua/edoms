@@ -280,7 +280,13 @@ const loadData = async (props?: RequestProps): Promise<any> => {
 };
 
 function goBack() {
-  router.go(-1);
+  router.push({
+    path: '/page',
+    query: {
+      applicationId: contentState.applicationId,
+      contentId: contentState.contentId,
+    },
+  });
 }
 
 const { execute: downloadDslExecute } = useDownloadDSL();

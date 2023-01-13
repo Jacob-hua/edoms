@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup name="Page">
-import { ref, shallowRef, watch } from 'vue';
+import { onActivated, ref, shallowRef, unref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { DocumentAdd, Download, Edit } from '@element-plus/icons-vue';
 
@@ -109,17 +109,31 @@ watch(
   { immediate: true }
 );
 
+onActivated(() => {
+  if (route.query.contentId as string) {
+    const oldVersion = unref(version);
+    if (oldVersion) {
+      oldVersion['contentId'] = route.query.contentId as string;
+      version.value = oldVersion;
+      updateDsl();
+    }
+  }
+});
+
 const { execute: downloadDsl } = useDownloadDSL();
 
-watch(version, async (version) => {
-  if (!version?.contentId) {
+watch(version, updateDsl);
+
+async function updateDsl() {
+  if (!version.value?.contentId) {
     pageList.value = [];
     return;
   }
-  const dsl = await downloadDsl(version.contentId);
+  const dsl = await downloadDsl(version.value.contentId);
   pageList.value = dsl.items;
   active.value = dsl.items?.[0];
-});
+  handleReload();
+}
 
 const goBack = () => {
   router.push('/');
