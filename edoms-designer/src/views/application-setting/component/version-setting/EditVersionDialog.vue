@@ -29,15 +29,20 @@
 import { computed, reactive, ref } from 'vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
-import type { ListVersionResItem } from '@/api/version';
 import versionApi from '@/api/version';
+
+export interface VersionItem {
+  name: string;
+  versionId: string;
+  description: string;
+}
 
 const props = withDefaults(
   defineProps<{
     visible: boolean;
     applicationId: string;
     applicationName: string;
-    versionItem: ListVersionResItem;
+    versionItem: VersionItem;
   }>(),
   {
     visible: () => false,

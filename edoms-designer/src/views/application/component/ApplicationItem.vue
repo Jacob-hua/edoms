@@ -51,7 +51,7 @@ const menus = [
   },
   {
     name: 'version',
-    label: '管理',
+    label: '版本',
     icon: 'Setting',
     action: () => {
       router.push({

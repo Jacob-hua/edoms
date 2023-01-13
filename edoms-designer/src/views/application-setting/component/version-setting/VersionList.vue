@@ -5,17 +5,16 @@
     </el-header>
     <el-main v-loading="loading" element-loading-text="Loading...">
       <div class="version-list">
-        <VersionListItem
-          v-for="(item, index) in versionList"
-          :key="index"
-          :version-item="item"
+        <VersionListTable
+          :table-data="versionList || []"
           :application-name="appName"
           :application-id="applicationId"
+          :application-address="appInfo.serviceAddress"
           :default-version-id="appInfo.defaultVersionId"
           @delete-success="handleEditSuccess"
           @update-success="handleEditSuccess"
         >
-        </VersionListItem>
+        </VersionListTable>
       </div>
       <div class="version-pagination">
         <el-pagination
@@ -41,7 +40,7 @@ import { GetApplicationRes } from '@/api/application';
 import type { ListVersionResItem, ListVersionsRes } from '@/api/version';
 import versionApi from '@/api/version';
 
-import VersionListItem from './VersionListItem.vue';
+import VersionListTable from './VersionListTable.vue';
 
 const route = useRoute();
 

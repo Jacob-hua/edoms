@@ -85,7 +85,11 @@ const deleteVisible = ref<boolean>(false);
 const confirmText = ref<string>('');
 const formRef = ref<FormInstance>();
 const formModel = reactive({
-  selectedForm: { name: '', versionId: '', contentId: '' } as VersionModel,
+  selectedForm: {
+    name: props.appInfo.defaultVersionName,
+    versionId: props.appInfo.defaultVersionId,
+    contentId: props.appInfo.defaultVersionContentId,
+  } as VersionModel,
 });
 
 const handleUpdateDefaultVersion = async () => {
