@@ -22,6 +22,9 @@ const routes: RouteRecordRaw[] = [
         path: '/application',
         name: 'Application',
         component: () => import('@/views/application/index.vue'),
+        meta: {
+          leaveCaches: ['/application/setting'],
+        },
       },
       {
         path: '/application/setting',
@@ -50,14 +53,6 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/version',
-        name: 'Version',
-        component: () => import('@/views/version/index.vue'),
-        meta: {
-          leaveCaches: ['/editor'],
-        },
-      },
-      {
         path: '/editor',
         name: 'Editor',
         component: () => import('@/views/page-editor/index.vue'),
@@ -71,10 +66,12 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/login',
+    name: 'Login',
     component: () => import('../views/login/index.vue'),
   },
   {
-    path: '/preview/:address',
+    path: '/preview/:address/:versionId?',
+    name: 'Preview',
     component: () => import('../views/preview/index.vue'),
   },
   {

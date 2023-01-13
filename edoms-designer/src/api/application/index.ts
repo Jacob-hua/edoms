@@ -6,9 +6,9 @@ import {
   ExportApplicationReq,
   GetApplicationReq,
   GetApplicationRes,
-  GetReleaseIdReq,
   ListApplicationsReq,
   ListApplicationsRes,
+  PreviewApplicationReq,
   ReleaseApplicationReq,
   UpdateApplicationReq,
   UpdateDefaultVersionReq,
@@ -78,9 +78,9 @@ export default {
       data,
     });
   },
-  getReleaseId: async (data: GetReleaseIdReq): Promise<string> => {
-    const { result } = await request<GetReleaseIdReq, string>({
-      url: '/application/releaseId',
+  previewApplication: async (data: PreviewApplicationReq): Promise<string> => {
+    const { result } = await request<PreviewApplicationReq, string>({
+      url: '/application/preview',
       method: 'GET',
       data,
     });

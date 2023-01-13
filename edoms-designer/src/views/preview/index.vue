@@ -16,16 +16,12 @@ const route = useRoute();
 const router = useRouter();
 
 const contentId = ref<string>();
+
 watch(
-  () => route.params.address as string,
-  async (address: string) => {
+  () => ({ address: route.params.address as string, versionId: route.params.versionId as string }),
+  async ({ address, versionId }) => {
     try {
-      contentId.value = await applicationApi.getReleaseId({ serviceAddress: address });
-      if (!contentId.value) {
-        router.push({
-          path: '/404',
-        });
-      }
+      contentId.value = await applicationApi.previewApplication({ serviceAddress: address, versionId });
     } catch (error) {
       router.push({
         path: '/404',

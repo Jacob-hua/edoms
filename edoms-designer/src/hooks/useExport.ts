@@ -13,12 +13,10 @@ export class ExportError extends MessageError {
   }
 }
 
-export type ExportData = Record<string | number | symbol, any>;
+type Func = <T>(arg: T) => string;
 
-type Func = (...args: any[]) => string;
-
-export default (
-  requestFunc: (data?: ExportData) => string | Promise<string>,
+export default <T = Record<string | number | symbol, any>>(
+  requestFunc: (data?: T) => string | Promise<string>,
   fileName: string | Func = 'edoms-download',
   mime: MimeType = MimeType.HTML,
   charset: string = 'utf-8'
@@ -27,10 +25,10 @@ export default (
 
   const error = ref<ExportError>();
 
-  const execute = async (data?: ExportData): Promise<void> => {
+  const execute = async (data?: T): Promise<void> => {
     loading.value = true;
     if (typeof fileName === 'function') {
-      fileName = fileName();
+      fileName = fileName(data);
     }
     try {
       const res = await Promise.resolve(requestFunc(data));

@@ -15,7 +15,7 @@
           :rows="10"
         ></el-input>
       </el-form-item>
-      <el-form-item label="发布路径" prop="serviceAddress">
+      <el-form-item label="预览" prop="serviceAddress">
         <el-input v-model="appInfo.serviceAddress" placeholder="请输入路径">
           <template #prepend>{{ previewPath }}</template>
         </el-input>
