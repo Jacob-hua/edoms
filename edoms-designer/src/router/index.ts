@@ -22,6 +22,9 @@ const routes: RouteRecordRaw[] = [
         path: '/application',
         name: 'Application',
         component: () => import('@/views/application/index.vue'),
+        meta: {
+          leaveCaches: ['/application/setting'],
+        },
       },
       {
         path: '/application/setting',
@@ -47,14 +50,6 @@ const routes: RouteRecordRaw[] = [
           params: {
             required: ['applicationId'],
           },
-        },
-      },
-      {
-        path: '/version',
-        name: 'Version',
-        component: () => import('@/views/version/index.vue'),
-        meta: {
-          leaveCaches: ['/editor'],
         },
       },
       {
