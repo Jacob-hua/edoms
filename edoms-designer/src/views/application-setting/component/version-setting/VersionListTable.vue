@@ -19,7 +19,7 @@
       <template #default="scope">
         <el-row justify="end">
           <el-col :span="6">
-            <el-button @click="handlePreview">预览</el-button>
+            <el-button @click="handlePreview(scope.row)">预览</el-button>
           </el-col>
           <el-col :span="6">
             <el-button @click="handleEdit(scope.row)">修改</el-button>
@@ -73,6 +73,7 @@ const props = defineProps<{
   applicationName: string;
   applicationId: string;
   defaultVersionId: string;
+  applicationAddress: string;
 }>();
 
 const emit = defineEmits<{
@@ -88,7 +89,12 @@ const versionItem = reactive<VersionItem>({
   description: '',
 });
 
-const handlePreview = () => {};
+const previewPath = import.meta.env.VITE_PREVIEW_PATH;
+
+const handlePreview = (row: ListVersionResItem) => {
+  const previewUrl = `${previewPath}${props.applicationAddress}/${row.versionId ?? ''}`;
+  window.open(previewUrl);
+};
 
 const handleEdit = async (row: ListVersionResItem) => {
   const result = await versionApi.getVersion({ versionId: row.versionId });
@@ -102,7 +108,7 @@ const handleExport = (row: ListVersionResItem) => {
   handleUseExport(row);
 };
 
-const { execute: handleUseExport } = useExport(
+const { execute: handleUseExport } = useExport<ListVersionResItem>(
   async (row) =>
     await applicationApi.exportApplication({
       applicationId: props.applicationId,

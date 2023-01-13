@@ -9,6 +9,7 @@
           :table-data="versionList || []"
           :application-name="appName"
           :application-id="applicationId"
+          :application-address="appInfo.serviceAddress"
           :default-version-id="appInfo.defaultVersionId"
           @delete-success="handleEditSuccess"
           @update-success="handleEditSuccess"
