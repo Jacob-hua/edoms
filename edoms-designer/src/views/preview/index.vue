@@ -22,11 +22,6 @@ watch(
   async ({ address, versionId }) => {
     try {
       contentId.value = await applicationApi.previewApplication({ serviceAddress: address, versionId });
-      if (!contentId.value) {
-        router.push({
-          path: '/404',
-        });
-      }
     } catch (error) {
       router.push({
         path: '/404',
