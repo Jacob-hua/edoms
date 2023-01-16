@@ -1,4 +1,4 @@
-import { reactive, toRaw, watch } from 'vue';
+import { reactive, toRaw } from 'vue';
 import { cloneDeep, mergeWith, uniq } from 'lodash-es';
 
 import type { CodeBlockDSL, Id, MApp, MComponent, MContainer, MNode, MPage } from '@edoms/schema';
@@ -68,16 +68,6 @@ export class EditorService extends BaseService {
       ],
       // 需要注意循环依赖问题，如果函数间有相互调用的话，不能设置为串行调用
       ['select', 'update', 'moveLayer']
-    );
-
-    watch(
-      () => this.state.stage,
-      (stage) => {
-        if (!stage) return;
-        stage.on('runtime-ready', () => {
-          this.emit('runtime-ready', true);
-        });
-      }
     );
   }
 
@@ -193,9 +183,6 @@ export class EditorService extends BaseService {
    */
   public async select(config: MNode | Id): Promise<MNode> | never {
     const { node, page, parent } = this.selectedConfigExceptionHandler(config);
-    if (node?.type === 'page' && this.get('page') && this.get('page').id !== node?.id) {
-      this.emit('runtime-ready', false);
-    }
     this.set('nodes', [node]);
     this.set('page', page || null);
     this.set('parent', parent || null);
@@ -344,9 +331,6 @@ export class EditorService extends BaseService {
     } else {
       addNodes.push(...addNode);
     }
-    if (addNodes[0].type === NodeType.PAGE) {
-      this.emit('runtime-ready', false);
-    }
 
     const newNodes = await Promise.all(
       addNodes.map((node) => {
@@ -397,7 +381,6 @@ export class EditorService extends BaseService {
     stage?.remove({ id: node.id, parentId: parent.id, root: cloneDeep(root) });
 
     if (node.type === NodeType.PAGE) {
-      this.emit('runtime-ready', false);
       this.state.pageLength -= 1;
 
       if (root.items[0]) {

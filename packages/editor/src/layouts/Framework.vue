@@ -89,10 +89,6 @@ const columnWidth = ref<Partial<GetColumnWidth>>({
   right: RightColumnWidthCacheData,
 });
 
-editorService?.on('runtime-ready', (value: boolean) => {
-  loading.value = !value;
-});
-
 watch(
   () => showSrc.value,
   (showSrc) => {
