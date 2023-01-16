@@ -4,8 +4,6 @@ import {
   GetVersionRes,
   ListVersionsReq,
   ListVersionsRes,
-  PublishVersionReq,
-  RecoveryVersionReq,
   SaveVersionReq,
   UpdateContentReq,
   UpdateVersionReq,
@@ -49,23 +47,9 @@ export default {
       data,
     });
   },
-  recoveryVersion: async (data: RecoveryVersionReq): Promise<void> => {
-    await request<RecoveryVersionReq, void>({
-      url: '/page/version/version-recovery',
-      method: 'POST',
-      data,
-    });
-  },
   saveVersion: async (data: SaveVersionReq): Promise<void> => {
     await request<SaveVersionReq, void>({
       url: '/application/version/save',
-      method: 'POST',
-      data,
-    });
-  },
-  publishVersion: async (data: PublishVersionReq): Promise<void> => {
-    await request<PublishVersionReq, void>({
-      url: '/page/version/publish',
       method: 'POST',
       data,
     });

@@ -40,7 +40,9 @@ export interface CreateApplicationReq {
 
 export interface CreateApplicationRes {
   /** 应用ID */
-  applicationId: number | null;
+  applicationId: string;
+  /** 版本ID */
+  versionId: string;
 }
 
 export interface UpdateApplicationReq {
@@ -93,11 +95,6 @@ export interface DeleteApplicationReq {
   applicationId: string;
   /** 确认字符 */
   secret: string;
-}
-
-export interface ReleaseApplicationReq {
-  /** 应用ID */
-  applicationId: string;
 }
 
 export interface PreviewApplicationReq {

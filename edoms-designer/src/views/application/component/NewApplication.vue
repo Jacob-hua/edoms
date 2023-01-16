@@ -33,9 +33,14 @@
 <script lang="ts" setup name="newApp">
 import { computed, reactive, ref } from 'vue';
 import { ElMessage, FormInstance } from 'element-plus';
+import serialize from 'serialize-javascript';
 
 import applicationApi, { CreateApplicationReq } from '@/api/application';
+import versionApi from '@/api/version';
 import ImageUpload from '@/components/ImageUpload.vue';
+import useUpload from '@/hooks/useUpload';
+import { generateDefaultDSL } from '@/util/dsl';
+
 const props = withDefaults(
   defineProps<{
     visible?: boolean;
@@ -93,17 +98,33 @@ const handleFormSubmit = async () => {
   try {
     await formRef.value?.validate();
     // 提交表单操作
-    const { applicationId } = await applicationApi.createApplication(applicationForm);
-    if (applicationId) {
-      ElMessage.success('创建成功');
-      dialogVisible.value = false;
-      dialogVisible.value = false;
-      emit('submitted');
-    }
+    const { applicationId, versionId } = await applicationApi.createApplication(applicationForm);
+    const contentId = await uploadDefaultDsl(applicationId);
+    await versionApi.updateContent({
+      applicationId,
+      versionId: versionId,
+      contentId,
+    });
+    ElMessage.success('创建成功');
+    dialogVisible.value = false;
+    dialogVisible.value = false;
+    emit('submitted');
   } catch (e: any) {
     console.log(e);
   }
 };
+
+const { execute: uploadExecute } = useUpload();
+
+async function uploadDefaultDsl(applicationId: string): Promise<string> {
+  const dsl = generateDefaultDSL({ applicationId, applicationName: applicationForm.name });
+  const DSL = serialize(dsl, {
+    space: 2,
+    unsafe: true,
+  }).replace(/"(\w+)":\s/g, '$1: ');
+
+  return await uploadExecute(DSL, `dsl.js`, 'text/javascript', 'utf-8');
+}
 </script>
 
 <style scoped lang="scss">

@@ -309,12 +309,12 @@ async function calculateDSL(): Promise<MApp> {
 const { execute: uploadExecute } = useUpload();
 
 async function uploadDsl(): Promise<string | null | undefined> {
-  const pageDSL = serialize(toRaw(dsl.value), {
+  const DSL = serialize(toRaw(dsl.value), {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
 
-  return await uploadExecute(pageDSL, `dsl.js`, 'text/javascript', 'utf-8', staticResource.value?.join(','));
+  return await uploadExecute(DSL, `dsl.js`, 'text/javascript', 'utf-8', staticResource.value?.join(','));
 }
 
 async function save() {
