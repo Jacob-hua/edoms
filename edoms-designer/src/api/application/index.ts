@@ -35,18 +35,12 @@ export default {
     }
   },
   createApplication: async (data: CreateApplicationReq): Promise<CreateApplicationRes> => {
-    try {
-      const { result } = await request<CreateApplicationReq, CreateApplicationRes>({
-        url: '/application/create',
-        method: 'POST',
-        data,
-      });
-      return result;
-    } catch (error) {
-      return {
-        applicationId: null,
-      };
-    }
+    const { result } = await request<CreateApplicationReq, CreateApplicationRes>({
+      url: '/application/create',
+      method: 'POST',
+      data,
+    });
+    return result;
   },
   updateApplication: async (data: UpdateApplicationReq): Promise<void> => {
     await request<CreateApplicationReq, void>({
