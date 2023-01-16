@@ -76,11 +76,6 @@ export interface UpdateVersionReq {
   description: string;
 }
 
-export interface RecoveryVersionReq {
-  /** 版本ID */
-  versionId: string;
-}
-
 export interface SaveVersionReq {
   /** 应用ID */
   applicationId: string;
@@ -90,13 +85,6 @@ export interface SaveVersionReq {
   description: string;
   /** 内容ID */
   contentId?: string;
-}
-
-export interface PublishVersionReq {
-  /** 版本ID */
-  versionId: string;
-  /** 内容ID */
-  contentId: string;
 }
 
 export interface DeleteVersion {

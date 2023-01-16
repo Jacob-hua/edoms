@@ -9,7 +9,6 @@ import {
   ListApplicationsReq,
   ListApplicationsRes,
   PreviewApplicationReq,
-  ReleaseApplicationReq,
   UpdateApplicationReq,
   UpdateDefaultVersionReq,
 } from './type';
@@ -68,13 +67,6 @@ export default {
     await request<DeleteApplicationReq, void>({
       url: '/application/delete',
       method: 'DELETE',
-      data,
-    });
-  },
-  releaseApplication: async (data: ReleaseApplicationReq): Promise<void> => {
-    await request<ReleaseApplicationReq, void>({
-      url: '/application/release',
-      method: 'GET',
       data,
     });
   },
