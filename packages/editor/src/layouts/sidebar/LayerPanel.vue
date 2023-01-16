@@ -13,7 +13,6 @@
       placeholder="请输入组件名称"
       clearable
       :prefix-icon="Search"
-      @change="filterTextChangeHandler"
     ></ElInput>
 
     <ElTree
@@ -203,9 +202,11 @@ const filterNode = (value: string, data: MNode): boolean => {
 };
 
 // 过滤关键字
-const filterTextChangeHandler = (val: string) => {
-  tree.value?.filter(val);
-};
+watch(
+  () => filterText.value,
+  (filterText) => tree.value?.filter(filterText),
+  { immediate: true }
+);
 
 // 树节点更新后展开上次展开过的节点
 const expandNodes = async () => {
