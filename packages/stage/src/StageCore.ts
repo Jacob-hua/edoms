@@ -66,7 +66,8 @@ export default class StageCore extends EventEmitter {
     this.renderer.on('runtime-ready', (runtime: Runtime) => {
       this.emit('runtime-ready', runtime);
     });
-    this.renderer.on('page-el-update', (el: HTMLElement) => {
+    this.renderer.on('rendered', (el: HTMLElement) => {
+      this.emit('rendered', el);
       this.mask?.observe(el);
     });
 
@@ -229,23 +230,22 @@ export default class StageCore extends EventEmitter {
    * 更新选中的节点
    * @param data 更新的数据
    */
-  public update(data: UpdateData): Promise<void> {
+  public async update(data: UpdateData): Promise<void> {
     const { config } = data;
 
-    return this.renderer?.getRuntime().then((runtime) => {
-      runtime?.update?.(data);
-      // 更新配置后，需要等组件渲染更新
-      setTimeout(() => {
-        const el = this.renderer.contentWindow?.document.getElementById(`${config.id}`);
-        // 有可能dom已经重新渲染，不再是原来的dom了，所以这里判断id，而不是判断el === this.selectedDom
-        if (el && el.id === this.selectedDom?.id) {
-          this.selectedDom = el;
-          // 更新了组件的布局，需要重新设置mask是否可以滚动
-          this.mask.setLayout(el);
-          this.dr.updateMoveable(el);
-        }
-      }, 0);
-    });
+    const runtime = await this.renderer?.getRuntime();
+    runtime?.update?.(data);
+    // 更新配置后，需要等组件渲染更新
+    setTimeout(() => {
+      const el = this.renderer.contentWindow?.document.getElementById(`${config.id}`);
+      // 有可能dom已经重新渲染，不再是原来的dom了，所以这里判断id，而不是判断el === this.selectedDom
+      if (el && el.id === this.selectedDom?.id) {
+        this.selectedDom = el;
+        // 更新了组件的布局，需要重新设置mask是否可以滚动
+        this.mask.setLayout(el);
+        this.dr.updateMoveable(el);
+      }
+    }, 0);
   }
 
   /**
@@ -265,16 +265,19 @@ export default class StageCore extends EventEmitter {
     this.highlightedDom = el;
   }
 
-  public sortNode(data: SortEventData): Promise<void> {
-    return this.renderer?.getRuntime().then((runtime) => runtime?.sortNode?.(data));
+  public async sortNode(data: SortEventData): Promise<void> {
+    const runtime = await this.renderer?.getRuntime();
+    return runtime?.sortNode?.(data);
   }
 
-  public add(data: UpdateData): Promise<void> {
-    return this.renderer?.getRuntime().then((runtime) => runtime?.add?.(data));
+  public async add(data: UpdateData): Promise<void> {
+    const runtime = await this.renderer?.getRuntime();
+    return runtime?.add?.(data);
   }
 
-  public remove(data: RemoveData): Promise<void> {
-    return this.renderer?.getRuntime().then((runtime) => runtime?.remove?.(data));
+  public async remove(data: RemoveData): Promise<void> {
+    const runtime = await this.renderer?.getRuntime();
+    return runtime?.remove?.(data);
   }
 
   public setZoom(zoom: number = DEFAULT_ZOOM): void {
@@ -305,7 +308,7 @@ export default class StageCore extends EventEmitter {
     await renderer.mount(el);
     mask.mount(el);
 
-    this.emit('mounted');
+    this.emit('pre-runtime');
   }
 
   /**
@@ -343,6 +346,8 @@ export default class StageCore extends EventEmitter {
   public destroy(): void {
     const { mask, renderer, dr, highlightLayer } = this;
 
+    this.emit('before-destroy');
+
     renderer.destroy();
     mask.destroy();
     dr.destroy();
@@ -351,6 +356,7 @@ export default class StageCore extends EventEmitter {
     this.removeAllListeners();
 
     this.container = undefined;
+    this.emit('destroyed');
   }
 
   private async getTargetElement(idOrEl: Id | HTMLElement): Promise<HTMLElement> {

@@ -49,6 +49,7 @@ import { computed, inject, ref, watch } from 'vue';
 
 import { ElScrollbar } from '@edoms/design';
 import type { MApp } from '@edoms/schema';
+import StageCore from '@edoms/stage';
 
 import { GetColumnWidth, Services } from '../type';
 
@@ -76,6 +77,7 @@ const nodes = computed(() => editorService?.get<Node[]>('nodes') || []);
 
 const pageLength = computed(() => editorService?.get<number>('pageLength') || 0);
 const showSrc = computed(() => uiService?.get<boolean>('showSrc'));
+const stage = computed(() => editorService?.get<StageCore>('stage'));
 
 const LEFT_COLUMN_WIDTH_STORAGE_KEY = '$EdomsEditorLeftColumnWidthData';
 const RIGHT_COLUMN_WIDTH_STORAGE_KEY = '$EdomsEditorRightColumnWidthData';
@@ -90,12 +92,20 @@ const columnWidth = ref<Partial<GetColumnWidth>>({
 });
 
 watch(
-  () => showSrc.value,
-  (showSrc) => {
-    if (!showSrc) {
-      loading.value = true;
+  () => stage.value,
+  (stage: StageCore | undefined) => {
+    if (!stage) {
+      return;
     }
-  }
+    stage
+      .on('pre-runtime', () => {
+        loading.value = true;
+      })
+      .on('rendered', () => {
+        loading.value = false;
+      });
+  },
+  { immediate: true }
 );
 
 watch(

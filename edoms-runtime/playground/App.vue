@@ -73,9 +73,11 @@ window.edoms?.onRuntimeReady({
     const parent = getNodePath(parentId, [root.value]).pop();
     if (!parent) throw new Error('未找到父节点');
     if (parent.id !== selectedId.value) {
+      // add page
       const index = parent.items?.findIndex((child: MNode) => child.id === selectedId.value);
       parent.items?.splice(index + 1, 0, config);
     } else {
+      // add component
       // 新增节点添加到配置中
       parent.items?.push(config);
     }
