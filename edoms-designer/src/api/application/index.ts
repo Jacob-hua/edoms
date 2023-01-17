@@ -1,3 +1,4 @@
+import useAccountStore, { AccountStore } from '@/store/account';
 import { request } from '@/util/request';
 
 import {
@@ -15,6 +16,8 @@ import {
 import { DeleteApplicationReq } from './type';
 
 export * from './type';
+
+let accountStore: AccountStore | undefined = undefined;
 
 export default {
   listApplications: async (data: ListApplicationsReq): Promise<ListApplicationsRes> => {
@@ -54,6 +57,12 @@ export default {
       url: '/application',
       method: 'GET',
       data,
+    });
+    if (!accountStore) {
+      accountStore = useAccountStore();
+    }
+    accountStore.$patch((state) => {
+      state.curApplication = result;
     });
     return result;
   },

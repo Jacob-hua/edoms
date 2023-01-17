@@ -146,13 +146,13 @@ const menu = computed<MenuBarData>(() => ({
             });
             save();
             ElMessage.success('保存成功');
-            previewPageId.value = services?.editorService.get<MPage>('page').id;
-            previewDialogVisible.value = true;
           } catch (e) {
             console.error(e);
-            // return;
+            return;
           }
         }
+        previewPageId.value = services?.editorService.get<MPage>('page').id;
+        previewDialogVisible.value = true;
       },
     },
     {

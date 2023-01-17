@@ -9,13 +9,13 @@ export interface RouterGetters {
   keepAliveComps: (state: RouterState) => string[];
 }
 
-export interface RouterAction {
+export interface RouterActions {
   cacheRouter: (from: RouteLocationNormalized, to: RouteLocationNormalized) => void;
 }
 
-export type RoutersStoreDefinition = StoreDefinition<string, RouterState, RouterGetters, RouterAction>;
+export type RoutersStoreDefinition = StoreDefinition<string, RouterState, RouterGetters, RouterActions>;
 
-export type RoutersStore = Store<string, RouterState, RouterGetters, RouterAction>;
+export type RoutersStore = Store<string, RouterState, RouterGetters, RouterActions>;
 
 const useRouterStore: RoutersStoreDefinition = defineStore('router', {
   state: (): RouterState => ({
