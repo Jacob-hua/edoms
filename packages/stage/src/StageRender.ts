@@ -41,7 +41,9 @@ export default class StageRender extends EventEmitter {
   }
 
   public getEdomsApi = (): Edoms => ({
-    onPageElUpdate: (el: HTMLElement) => this.emit('page-el-update', el),
+    onPageElUpdate: (el: HTMLElement) => {
+      this.emit('rendered', el);
+    },
     onRuntimeReady: (runtime: Runtime) => {
       this.runtime = runtime;
       // @ts-ignore

@@ -21,6 +21,7 @@
         <template #default="{ item }: { item: ListApplicationsResItem }">
           <ApplicationItem :application="item"></ApplicationItem>
         </template>
+        <template #empty></template>
       </GridList>
     </div>
     <NewApplication v-if="visible" v-model:visible="visible" @submitted="handleAppCreated"></NewApplication>
