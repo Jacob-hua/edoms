@@ -141,14 +141,14 @@ const menu = computed<MenuBarData>(() => ({
           try {
             await ElMessageBox.confirm('有修改未保存，是否先保存再预览？', '提示', {
               confirmButtonText: '保存并预览',
-              cancelButtonText: '预览',
+              cancelButtonText: '取消',
               type: 'warning',
             });
             save();
             ElMessage.success('保存成功');
           } catch (e) {
             console.error(e);
-            return;
+            // return;
           }
         }
         previewPageId.value = services?.editorService.get<MPage>('page').id;
