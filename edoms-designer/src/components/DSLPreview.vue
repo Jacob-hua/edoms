@@ -48,6 +48,8 @@ watchEffect(async () => {
 
   const remoteDsl = await downloadDslExecute(props.contentId);
   dsl.value = remoteDsl;
+  loading.value = true;
+  runtimeIframe.value?.contentWindow?.location.reload();
 });
 
 watch(

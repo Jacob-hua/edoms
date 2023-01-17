@@ -83,6 +83,7 @@ const config = ref([
     type: 'number',
     text: '计数器',
     name: 'number',
+    append: '温度',
   },
   {
     type: 'textarea',

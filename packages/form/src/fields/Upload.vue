@@ -2,7 +2,7 @@
   <div>
     <ElButton class="select-file" :loading="selectLoading" @click="handleFileSelect">选择文件</ElButton>
     <div v-if="config.listType === 'picture'" class="picture-file-list">
-      <div v-for="([, { fileName, status, url }], index) in files" :key="index">
+      <div v-for="([, { fileName, status, url }], index) in files" :key="index" class="picture-wrapper">
         <div v-loading="status === 'uploading'" class="picture-file">
           <img :src="url" class="picture" />
           <div class="tool">
@@ -11,6 +11,9 @@
             </ElIcon>
           </div>
         </div>
+        <ElTooltip :content="fileName">
+          <div class="file-name">{{ fileName }}</div>
+        </ElTooltip>
       </div>
     </div>
     <div v-else>
@@ -26,7 +29,7 @@
 import { ref, watch } from 'vue';
 import { Delete } from '@element-plus/icons-vue';
 
-import { ElButton, ElIcon } from '@edoms/design';
+import { ElButton, ElIcon, ElTooltip } from '@edoms/design';
 
 import { FileStruct, UploadConfig } from '../schema';
 import { useAddField } from '../utils/useAddField';
@@ -101,11 +104,20 @@ const uploadFile = async (file: File) => {
 .select-file {
   cursor: pointer;
 }
+
 .picture-file-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+.picture-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .picture-file {
   overflow: hidden;
   width: 148px;
@@ -130,6 +142,10 @@ const uploadFile = async (file: File) => {
     color: #fff;
     opacity: 0;
     font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     &:hover {
       opacity: 1;
@@ -143,6 +159,18 @@ const uploadFile = async (file: File) => {
     }
   }
 }
+
+.file-name {
+  font-size: 10px;
+  text-align: center;
+  width: 100px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  word-break: break-all;
+}
+
 .text-file {
   display: flex;
   width: 100%;

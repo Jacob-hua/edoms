@@ -49,7 +49,12 @@
       <DSLPreview class="edit" height="98%" :content-id="version?.contentId" :page-id="active?.id" />
     </section>
   </div>
-  <NewVersionDialog v-model:visible="newVersionVisible" :application-id="applicationId" @success="handleReload" />
+  <NewVersionDialog
+    v-model:visible="newVersionVisible"
+    :application-id="applicationId"
+    :application-name="appName"
+    @success="handleReload"
+  />
 </template>
 
 <script lang="ts" setup name="Page">
@@ -122,7 +127,7 @@ onActivated(() => {
 
 const { execute: downloadDsl } = useDownloadDSL();
 
-watch(version, updateDsl);
+watch(() => version.value, updateDsl, { immediate: true });
 
 async function updateDsl() {
   if (!version.value?.contentId) {
