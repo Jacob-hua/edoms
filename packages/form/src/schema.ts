@@ -315,6 +315,20 @@ export interface NumberConfig extends FormItem {
   max?: number;
   step?: number;
   placeholder?: string;
+  /** 后置元素，一般为标签或按钮 */
+  append?:
+    | string
+    | {
+        text: string;
+        type: 'button';
+        handler: (
+          mForm: FormState | undefined,
+          data: {
+            model: any;
+            values: any;
+          }
+        ) => void;
+      };
 }
 
 /**

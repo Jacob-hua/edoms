@@ -5,28 +5,36 @@ import eventsService from '../services/events';
 
 const BorderStyleOptions = [
   {
-    text: 'none',
+    text: '无',
     value: 'none',
   },
   {
-    text: 'dotted',
+    text: '点线',
     value: 'dotted',
   },
   {
-    text: 'dashed',
+    text: '虚线',
     value: 'dashed',
   },
   {
-    text: 'solid',
+    text: '实线',
     value: 'solid',
   },
   {
-    text: 'groove',
+    text: '双实线',
+    value: 'double',
+  },
+  {
+    text: '雕刻',
     value: 'groove',
   },
   {
-    text: 'inset',
+    text: '凹陷',
     value: 'inset',
+  },
+  {
+    text: '突出',
+    value: 'outset',
   },
 ];
 
@@ -83,21 +91,21 @@ export const fillConfig = (config: FormConfig = []) => [
                   },
                   {
                     name: 'left',
-                    text: 'left',
+                    text: '距左边',
                   },
                   {
                     name: 'top',
-                    text: 'top',
+                    text: '距顶部',
                     disabled: (vm: FormState, { model }: any) =>
                       model.position === 'fixed' && model._edoms_position === 'fixedBottom',
                   },
                   {
                     name: 'right',
-                    text: 'right',
+                    text: '距右边',
                   },
                   {
                     name: 'bottom',
-                    text: 'bottom',
+                    text: '距底部',
                     disabled: (vm: FormState, { model }: any) =>
                       model.position === 'fixed' && model._edoms_position === 'fixedTop',
                   },
@@ -117,11 +125,11 @@ export const fillConfig = (config: FormConfig = []) => [
                   },
                   {
                     name: 'padding',
-                    text: 'padding',
+                    text: '内间距',
                   },
                   {
                     name: 'margin',
-                    text: 'margin',
+                    text: '外间距',
                   },
                 ],
               },
@@ -231,16 +239,16 @@ export const fillConfig = (config: FormConfig = []) => [
                 items: [
                   {
                     name: 'backgroundImage',
-                    text: '背景图',
+                    text: '图片',
                   },
                   {
                     name: 'backgroundColor',
-                    text: '背景颜色',
+                    text: '颜色',
                     type: 'colorPicker',
                   },
                   {
                     name: 'backgroundRepeat',
-                    text: '背景图重复',
+                    text: '重复',
                     type: 'select',
                     defaultValue: 'no-repeat',
                     options: [
@@ -253,7 +261,7 @@ export const fillConfig = (config: FormConfig = []) => [
                   },
                   {
                     name: 'backgroundSize',
-                    text: '背景图大小',
+                    text: '大小',
                     defaultValue: '100% 100%',
                   },
                 ],
@@ -284,7 +292,7 @@ export const fillConfig = (config: FormConfig = []) => [
                 items: [
                   {
                     name: 'rotate',
-                    text: '旋转角度',
+                    text: '旋转角',
                   },
                   {
                     name: 'scale',
