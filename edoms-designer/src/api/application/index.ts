@@ -61,8 +61,8 @@ export default {
     if (!accountStore) {
       accountStore = useAccountStore();
     }
-    accountStore.$patch((state) => {
-      state.curApplication = result;
+    accountStore.$patch({
+      curApplication: result,
     });
     return result;
   },

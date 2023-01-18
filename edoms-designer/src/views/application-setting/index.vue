@@ -69,6 +69,11 @@ const appInfo = ref<GetApplicationRes>({
   defaultVersionId: '',
   defaultVersionName: '',
   defaultVersionContentId: '',
+  edomsRoleInfoDTO: {
+    roleId: '',
+    roleKey: '',
+    roleName: '',
+  },
 });
 
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {

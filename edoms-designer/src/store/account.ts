@@ -15,7 +15,7 @@ export interface AccountState {
 }
 
 export interface AccountGetters {
-  role: (state: AccountState) => string | undefined;
+  role: (state: AccountState) => string;
 }
 
 export interface AccountActions {
@@ -23,6 +23,7 @@ export interface AccountActions {
   logout: () => Promise<void>;
   refreshTenants: () => Promise<void>;
   triggerTenant: (tenantId: string) => Promise<void>;
+  hasRole: (roles: string[]) => boolean;
 }
 
 export type AccountStoreDefinition = StoreDefinition<string, AccountState, AccountGetters, AccountActions>;
@@ -37,12 +38,13 @@ const useAccountStore: AccountStoreDefinition = defineStore('account', {
     nickName: '',
     currentTenant: undefined,
     tenants: [],
+    curApplication: undefined,
   }),
   persist: true,
   getters: {
     role: (state: AccountState) => {
       if (!state.curApplication) {
-        return;
+        return '';
       }
       return state.curApplication.edomsRoleInfoDTO.roleKey;
     },
@@ -77,6 +79,9 @@ const useAccountStore: AccountStoreDefinition = defineStore('account', {
       function isCurrentTenant(tenant: ListTenantItem) {
         return tenant.tenantId === tenantId;
       }
+    },
+    hasRole(roles: string[]): boolean {
+      return roles.includes(this.role);
     },
   },
 });
