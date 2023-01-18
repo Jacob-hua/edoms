@@ -66,6 +66,10 @@ editorService.usePlugin({
 
     return [config, parent];
   },
+  beforeDoRemove: (config: MNode, parent?: MContainer | null) => {
+    staticResource.value.delete(config.id);
+    return [config, parent];
+  },
 });
 
 const router = useRouter();
@@ -112,7 +116,7 @@ useAsyncLoadJS(
   }
 ).execute();
 
-const staticResource = ref<Map<string, string>>(new Map());
+const staticResource = ref<Map<Id, string>>(new Map());
 
 const menu = computed<MenuBarData>(() => ({
   left: [
