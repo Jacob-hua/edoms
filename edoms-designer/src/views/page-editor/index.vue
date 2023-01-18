@@ -119,8 +119,19 @@ const menu = computed<MenuBarData>(() => ({
     {
       type: 'button',
       icon: Back,
-      handler: () => {
-        goBack();
+      handler: async (services) => {
+        if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
+          try {
+            await ElMessageBox.confirm('有修改未保存，是否仍要退出？', '提示', {
+              confirmButtonText: '退出',
+              cancelButtonText: '取消',
+              type: 'warning',
+            });
+            goBack();
+          } catch (e) {
+            console.error(e);
+          }
+        }
       },
     },
     '/',
