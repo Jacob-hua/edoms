@@ -78,7 +78,7 @@ const props = withDefaults(
     maxHeight?: string | number;
   }>(),
   {
-    maxHeight: () => 590,
+    maxHeight: () => 530,
   }
 );
 
