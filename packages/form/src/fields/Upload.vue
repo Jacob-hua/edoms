@@ -56,15 +56,21 @@ useAddField(props.prop);
 
 const { loading: selectLoading, execute: selectExecute } = useSelectFile();
 
-const fileMap = new Map<string, FileStruct>();
-const values = getByPath(props.model, props.prop, []);
-if (Array.isArray(values)) {
-  values.forEach((item: FileStruct) => {
-    fileMap.set(item.fileName, item);
-  });
-}
+const files = ref<Map<string, FileStruct>>(new Map<string, FileStruct>());
 
-const files = ref<Map<string, FileStruct>>(fileMap);
+watch(
+  () => props.model.id,
+  () => {
+    files.value.clear();
+    const values = getByPath(props.model, props.prop, []);
+    if (Array.isArray(values)) {
+      values.forEach((item: FileStruct) => {
+        files.value.set(item.fileName, item);
+      });
+    }
+  },
+  { immediate: true }
+);
 
 watch(
   () => Array.from(files.value.values()).filter(({ status }) => status === 'done'),
