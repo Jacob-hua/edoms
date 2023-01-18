@@ -29,7 +29,7 @@ export class UploadError extends MessageError {
   }
 }
 
-const chunkSize = 1024 * 1024;
+const chunkSize = 1024 * 1024 * 5;
 
 export default () => {
   const loading = ref<boolean>(false);
