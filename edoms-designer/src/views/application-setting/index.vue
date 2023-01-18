@@ -1,38 +1,46 @@
 <template>
   <div class="container">
     <div class="header-top" @click="goBack">
-      <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
+      <el-icon class="header-icon" :size="23">
+        <ArrowLeft />
+      </el-icon>
       <span>{{ appInfo.name }}</span>
     </div>
     <section>
       <div class="section-left">
         <el-tabs v-model="activeName" tab-position="left">
-          <el-tab-pane :key="activeName" name="application">
+          <el-tab-pane name="application">
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon :size="20"><Document /></el-icon>
+                <el-icon :size="20">
+                  <Document />
+                </el-icon>
                 <span>应用信息</span>
               </span>
             </template>
             <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @success="goBack" />
           </el-tab-pane>
-          <el-tab-pane :key="activeName" name="advance">
+          <el-tab-pane name="advance">
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon :size="20"><Setting /></el-icon>
+                <el-icon :size="20">
+                  <Setting />
+                </el-icon>
                 <span>高级设置</span>
               </span>
             </template>
             <AdvancedSetting :app-info="appInfo" @success="handleUpdateSuccess" />
           </el-tab-pane>
-          <el-tab-pane :key="activeName" name="version">
+          <el-tab-pane name="version">
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon :size="20"><Document /></el-icon>
+                <el-icon :size="20">
+                  <Document />
+                </el-icon>
                 <span>版本管理</span>
               </span>
             </template>
-            <VersionList :app-info="appInfo" />
+            <VersionList v-if="activeName === 'version'" :app-info="appInfo" />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -82,6 +90,7 @@ const goBack = () => {
 const handleUpdateSuccess = () => {
   getAppDetail(route.query.applicationId);
 };
+
 getAppDetail(route.query.applicationId);
 </script>
 
@@ -90,21 +99,26 @@ getAppDetail(route.query.applicationId);
   .header-top {
     display: flex;
     align-items: center;
+
     .header-icon {
       cursor: pointer;
     }
+
     span {
       font-size: 16px;
       margin-left: 20px;
     }
   }
+
   section {
     .section-left {
       margin: 60px 0 0 100px;
+
       .custom-tabs-label {
         display: flex;
         align-items: center;
         margin-right: 30px;
+
         span {
           font-size: 16px;
           margin-left: 8px;

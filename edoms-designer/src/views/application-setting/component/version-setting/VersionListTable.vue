@@ -1,6 +1,6 @@
 <template>
-  <el-table :data="tableData">
-    <el-table-column label="Version">
+  <el-table :data="tableData" :max-height="maxHeight">
+    <el-table-column label="版本">
       <template #default="scope">
         <el-row>
           <el-col :span="12">
@@ -15,7 +15,7 @@
         </el-row>
       </template>
     </el-table-column>
-    <el-table-column label="Operations">
+    <el-table-column label="操作">
       <template #default="scope">
         <el-row justify="end">
           <el-col :span="6">
@@ -68,13 +68,19 @@ import useExport from '@/hooks/useExport';
 
 import EditVersionDialog, { VersionItem } from './EditVersionDialog.vue';
 
-const props = defineProps<{
-  tableData: ListVersionResItem[];
-  applicationName: string;
-  applicationId: string;
-  defaultVersionId: string;
-  applicationAddress: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    tableData: ListVersionResItem[];
+    applicationName: string;
+    applicationId: string;
+    defaultVersionId: string;
+    applicationAddress: string;
+    maxHeight?: string | number;
+  }>(),
+  {
+    maxHeight: () => 530,
+  }
+);
 
 const emit = defineEmits<{
   (event: 'deleteSuccess'): void;
