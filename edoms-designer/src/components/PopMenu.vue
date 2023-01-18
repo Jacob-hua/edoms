@@ -49,6 +49,7 @@ const props = withDefaults(
     trigger?: string;
     placement?: string;
     width?: string | number;
+    popoverVisible: boolean;
   }>(),
   {
     disabled: () => false,

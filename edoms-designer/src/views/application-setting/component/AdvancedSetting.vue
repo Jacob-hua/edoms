@@ -57,6 +57,7 @@ import { ArrowDown } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance } from 'element-plus';
 
 import applicationApi, { GetApplicationRes } from '@/api/application';
+import useAccountStore from '@/store/account';
 
 import SwitchVersion, { VersionModel } from '../../page/component/SwitchVersion.vue';
 
@@ -79,7 +80,7 @@ const emit = defineEmits<{
 }>();
 
 const router = useRouter();
-
+const { hasRole } = useAccountStore();
 const { appInfo } = toRefs(props);
 const deleteVisible = ref<boolean>(false);
 const confirmText = ref<string>('');
@@ -110,29 +111,46 @@ const handleUpdateDefaultVersion = async () => {
   }
 };
 
-const advanceItems = computed<AdvanceItem[]>(() => [
-  {
-    name: '默认版本',
-    title: '设置该项目的默认版本',
-    buttonType: 'primary',
-    disabled: false,
-    formVisible: true,
-    buttonText: '确认',
-    action: async () => {
-      await handleUpdateDefaultVersion();
+const advanceItems = computed<AdvanceItem[]>(() => {
+  if (!hasRole(['manager'])) {
+    return [
+      {
+        name: '默认版本',
+        title: '设置该项目的默认版本',
+        buttonType: 'primary',
+        disabled: false,
+        formVisible: true,
+        buttonText: '确认',
+        action: async () => {
+          await handleUpdateDefaultVersion();
+        },
+      },
+    ];
+  }
+  return [
+    {
+      name: '默认版本',
+      title: '设置该项目的默认版本',
+      buttonType: 'primary',
+      disabled: false,
+      formVisible: true,
+      buttonText: '确认',
+      action: async () => {
+        await handleUpdateDefaultVersion();
+      },
     },
-  },
-  {
-    name: '删除',
-    title: '将应用删除，应用下的页面也将全部删除',
-    buttonType: 'danger',
-    disabled: false,
-    action: () => {
-      deleteVisible.value = true;
-      confirmText.value = appInfo.value.secret;
+    {
+      name: '删除',
+      title: '将应用删除，应用下的页面也将全部删除',
+      buttonType: 'danger',
+      disabled: false,
+      action: () => {
+        deleteVisible.value = true;
+        confirmText.value = appInfo.value.secret;
+      },
     },
-  },
-]);
+  ];
+});
 
 const rules = {
   inputText: [

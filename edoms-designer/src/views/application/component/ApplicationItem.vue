@@ -3,7 +3,7 @@
     <div class="app-box">
       <PreviewImage :content-id="application.thumbnailId" @click="handleGoPage" />
       <div class="pop-menu">
-        <PopMenu @menu-click="handleMenuClick">
+        <PopMenu @menu-click="handleMenuClick" @show="handleShow">
           <PopMenuOption v-for="(menu, index) in menus" :key="index" :label="menu.label" :value="menu.name">
             <div class="pop-menu-item">
               <el-icon>
@@ -20,9 +20,11 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import type { ListApplicationsResItem } from '@/api/application';
+import applicationApi from '@/api/application';
 import PreviewImage from '@/components/ImagePreview.vue';
 import LongText from '@/components/LongText.vue';
 import PopMenu from '@/components/PopMenu.vue';
@@ -33,55 +35,94 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
-
-const menus = [
-  {
-    name: 'application',
-    label: '设置',
-    icon: 'Setting',
-    action: () => {
-      router.push({
-        path: '/application/setting',
-        query: {
-          applicationId: props.application.applicationId,
-          defaultActive: 'application',
+const hasRole = ref<boolean>(false);
+const menus = computed(() => {
+  if (!hasRole.value) {
+    return [
+      {
+        name: 'application',
+        label: '设置',
+        icon: 'Setting',
+        action: () => {
+          router.push({
+            path: '/application/setting',
+            query: {
+              applicationId: props.application.applicationId,
+              defaultActive: 'application',
+            },
+          });
         },
-      });
-    },
-  },
-  {
-    name: 'version',
-    label: '版本',
-    icon: 'Setting',
-    action: () => {
-      router.push({
-        path: '/application/setting',
-        query: {
-          applicationId: props.application.applicationId,
-          defaultActive: 'version',
+      },
+      {
+        name: 'version',
+        label: '版本',
+        icon: 'Setting',
+        action: () => {
+          router.push({
+            path: '/application/setting',
+            query: {
+              applicationId: props.application.applicationId,
+              defaultActive: 'version',
+            },
+          });
         },
-      });
+      },
+    ];
+  }
+  return [
+    {
+      name: 'application',
+      label: '设置',
+      icon: 'Setting',
+      action: () => {
+        router.push({
+          path: '/application/setting',
+          query: {
+            applicationId: props.application.applicationId,
+            defaultActive: 'application',
+          },
+        });
+      },
     },
-  },
-  {
-    name: 'permission',
-    label: '权限',
-    icon: 'Setting',
-    action: () => {
-      router.push({
-        path: '/application/setting',
-        query: {
-          applicationId: props.application.applicationId,
-          activeName: 'permission',
-        },
-      });
+    {
+      name: 'version',
+      label: '版本',
+      icon: 'Setting',
+      action: () => {
+        router.push({
+          path: '/application/setting',
+          query: {
+            applicationId: props.application.applicationId,
+            defaultActive: 'version',
+          },
+        });
+      },
     },
-  },
-];
+    {
+      name: 'permission',
+      label: '权限',
+      icon: 'Setting',
+      action: () => {
+        router.push({
+          path: '/application/setting',
+          query: {
+            applicationId: props.application.applicationId,
+            activeName: 'permission',
+            defaultActive: 'permission',
+          },
+        });
+      },
+    },
+  ];
+});
 
 const handleMenuClick = (value: (string | number)[]) => {
-  const menu = menus.find(({ name }) => name === value[0]);
+  const menu = menus?.value?.find(({ name }) => name === value[0]);
   menu?.action();
+};
+const handleShow = async () => {
+  const { edomsRoleInfoDTO } = await applicationApi.getApplication({ applicationId: props.application.applicationId });
+  hasRole.value = [edomsRoleInfoDTO.roleKey].includes('manager');
 };
 const handleGoPage = () => {
   router.push({
