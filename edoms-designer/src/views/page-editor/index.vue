@@ -135,6 +135,8 @@ const menu = computed<MenuBarData>(() => ({
           } catch (e) {
             console.error(e);
           }
+        } else {
+          goBack();
         }
       },
     },
@@ -214,6 +216,11 @@ watch(
     }
     dsl.value = await calculateDSL();
     defaultSelected.value = dsl.value.items?.[0].id;
+    if (dsl.value.referenceResource) {
+      for (const [id, value] of Object.entries(dsl.value.referenceResource)) {
+        staticResource.value.set(id, value);
+      }
+    }
   },
   {
     immediate: true,
@@ -324,7 +331,15 @@ async function calculateDSL(): Promise<MApp> {
 const { execute: uploadExecute } = useUpload();
 
 async function uploadDsl(): Promise<string | null | undefined> {
-  const DSL = serialize(toRaw(dsl.value), {
+  const rawDSL = toRaw(dsl.value);
+  if (rawDSL) {
+    const referenceResource = Array.from(staticResource.value.entries()).reduce(
+      (referenceResource, [id, value]) => ({ ...referenceResource, [id]: value }),
+      {}
+    );
+    rawDSL.referenceResource = referenceResource;
+  }
+  const DSL = serialize(rawDSL, {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
