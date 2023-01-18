@@ -703,8 +703,10 @@ export interface UploadConfig extends FormItem {
   limit?: number;
   /** 文件列表类型 */
   listType?: 'text' | 'picture';
+  /** 基础路径 */
+  basePreviewUrl?: string;
   /** 上传处理 */
-  upload?: (file: File) => Promise<string>;
+  upload?: (file: File, prop: string, mForm: FormState | undefined) => Promise<string>;
 }
 
 export type ChildConfig =
