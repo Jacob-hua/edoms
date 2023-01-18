@@ -88,6 +88,15 @@ export interface GetApplicationRes {
   defaultVersionName: string;
   /** 默认版本内容ID */
   defaultVersionContentId: string;
+  /** 应用角色 */
+  edomsRoleInfoDTO: {
+    /** 角色ID */
+    roleId: string;
+    /** 角色Key */
+    roleKey: string;
+    /** 角色名称 */
+    roleName: string;
+  };
 }
 
 export interface DeleteApplicationReq {

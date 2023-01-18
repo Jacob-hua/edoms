@@ -2,6 +2,7 @@ import { defineStore, Store, StoreDefinition } from 'pinia';
 
 import type { ListTenantItem, LoginReq } from '@/api/account';
 import accountApi from '@/api/account';
+import type { GetApplicationRes } from '@/api/application';
 
 export interface AccountState {
   token: string;
@@ -10,18 +11,24 @@ export interface AccountState {
   nickName: string;
   currentTenant: ListTenantItem | undefined;
   tenants: ListTenantItem[];
+  curApplication?: GetApplicationRes;
 }
 
-export interface AccountAction {
+export interface AccountGetters {
+  role: (state: AccountState) => string;
+}
+
+export interface AccountActions {
   login: (data: LoginReq) => Promise<void>;
   logout: () => Promise<void>;
   refreshTenants: () => Promise<void>;
   triggerTenant: (tenantId: string) => Promise<void>;
+  hasRole: (roles: string[]) => boolean;
 }
 
-export type AccountStoreDefinition = StoreDefinition<string, AccountState, Record<string, any>, AccountAction>;
+export type AccountStoreDefinition = StoreDefinition<string, AccountState, AccountGetters, AccountActions>;
 
-export type AccountStore = Store<string, AccountState, Record<string, any>, AccountAction>;
+export type AccountStore = Store<string, AccountState, AccountGetters, AccountActions>;
 
 const useAccountStore: AccountStoreDefinition = defineStore('account', {
   state: (): AccountState => ({
@@ -31,8 +38,17 @@ const useAccountStore: AccountStoreDefinition = defineStore('account', {
     nickName: '',
     currentTenant: undefined,
     tenants: [],
+    curApplication: undefined,
   }),
   persist: true,
+  getters: {
+    role: (state: AccountState) => {
+      if (!state.curApplication) {
+        return '';
+      }
+      return state.curApplication.edomsRoleInfoDTO.roleKey;
+    },
+  },
   actions: {
     async login(data: LoginReq) {
       const { token } = await accountApi.login(data);
@@ -63,6 +79,9 @@ const useAccountStore: AccountStoreDefinition = defineStore('account', {
       function isCurrentTenant(tenant: ListTenantItem) {
         return tenant.tenantId === tenantId;
       }
+    },
+    hasRole(roles: string[]): boolean {
+      return roles.includes(this.role);
     },
   },
 });

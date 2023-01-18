@@ -66,6 +66,10 @@ editorService.usePlugin({
 
     return [config, parent];
   },
+  beforeDoRemove: (config: MNode, parent?: MContainer | null) => {
+    staticResource.value.delete(config.id);
+    return [config, parent];
+  },
 });
 
 const router = useRouter();
@@ -112,15 +116,26 @@ useAsyncLoadJS(
   }
 ).execute();
 
-const staticResource = ref<string[]>([]);
+const staticResource = ref<Map<Id, string>>(new Map());
 
 const menu = computed<MenuBarData>(() => ({
   left: [
     {
       type: 'button',
       icon: Back,
-      handler: () => {
-        goBack();
+      handler: async (services) => {
+        if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
+          try {
+            await ElMessageBox.confirm('有修改未保存，是否仍要退出？', '提示', {
+              confirmButtonText: '退出',
+              cancelButtonText: '取消',
+              type: 'warning',
+            });
+            goBack();
+          } catch (e) {
+            console.error(e);
+          }
+        }
       },
     },
     '/',
@@ -146,13 +161,13 @@ const menu = computed<MenuBarData>(() => ({
             });
             save();
             ElMessage.success('保存成功');
-            previewPageId.value = services?.editorService.get<MPage>('page').id;
-            previewDialogVisible.value = true;
           } catch (e) {
             console.error(e);
-            // return;
+            return;
           }
         }
+        previewPageId.value = services?.editorService.get<MPage>('page').id;
+        previewDialogVisible.value = true;
       },
     },
     {
@@ -277,7 +292,7 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   if (parameter === 'upload') {
     const { execute: fileUploadExecute } = useUpload();
     const result = await fileUploadExecute(props.data as File, props.data?.name, props.data?.type);
-    result && staticResource.value?.push(result);
+    result && staticResource.value.set(props.formValue?.id, result);
     return result;
   }
   return;
@@ -314,7 +329,13 @@ async function uploadDsl(): Promise<string | null | undefined> {
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
 
-  return await uploadExecute(DSL, `dsl.js`, 'text/javascript', 'utf-8', staticResource.value?.join(','));
+  return await uploadExecute(
+    DSL,
+    `dsl.js`,
+    'text/javascript',
+    'utf-8',
+    Array.from(staticResource.value.values()).join(',')
+  );
 }
 
 async function save() {

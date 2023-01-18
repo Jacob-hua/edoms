@@ -4,7 +4,7 @@
     <div v-if="config.listType === 'picture'" class="picture-file-list">
       <div v-for="([, { fileName, status, url }], index) in files" :key="index" class="picture-wrapper">
         <div v-loading="status === 'uploading'" class="picture-file">
-          <img :src="url" class="picture" />
+          <img :src="config.basePreviewUrl ? `${config.basePreviewUrl}${url}` : url" class="picture" />
           <div class="tool">
             <ElIcon class="item-delete" @click="handleDeleteFile(fileName)">
               <Delete />
@@ -26,12 +26,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { inject, ref, watch } from 'vue';
 import { Delete } from '@element-plus/icons-vue';
 
 import { ElButton, ElIcon, ElTooltip } from '@edoms/design';
+import { getByPath } from '@edoms/utils';
 
-import { FileStruct, UploadConfig } from '../schema';
+import { FileStruct, FormState, UploadConfig } from '../schema';
 import { useAddField } from '../utils/useAddField';
 import useSelectFile from '../utils/useSelectFile';
 
@@ -49,11 +50,27 @@ const emit = defineEmits<{
   (emit: 'change', value: any): void;
 }>();
 
+const mForm = inject<FormState>('mForm');
+
 useAddField(props.prop);
 
 const { loading: selectLoading, execute: selectExecute } = useSelectFile();
 
-const files = ref<Map<string, FileStruct>>(new Map());
+const files = ref<Map<string, FileStruct>>(new Map<string, FileStruct>());
+
+watch(
+  () => props.model.id,
+  () => {
+    files.value.clear();
+    const values = getByPath(props.model, props.prop, []);
+    if (Array.isArray(values)) {
+      values.forEach((item: FileStruct) => {
+        files.value.set(item.fileName, item);
+      });
+    }
+  },
+  { immediate: true }
+);
 
 watch(
   () => Array.from(files.value.values()).filter(({ status }) => status === 'done'),
@@ -92,7 +109,7 @@ const uploadFile = async (file: File) => {
     return;
   }
   try {
-    fileStruct.url = await props.config.upload(file);
+    fileStruct.url = await props.config.upload(file, props.prop, mForm);
     fileStruct.status = 'done';
   } catch (error) {
     fileStruct.status = 'error';
