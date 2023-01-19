@@ -119,8 +119,8 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
     accountStore = useAccountStore();
   }
   if (!accountStore.token) {
-    router.replace({
-      path: 'login',
+    router.push({
+      path: '/login',
     });
     return;
   }

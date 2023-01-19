@@ -73,8 +73,8 @@ const responseInterceptorsCatch = (error: EdomsError) => {
         if (res.errorInfo.errorCode === 'EDOMS-20005') {
           requestCanceler.cancelAllRequest();
 
-          router.replace({
-            path: 'login',
+          router.push({
+            path: '/login',
           });
         }
         ElMessage.error(res.errorInfo.errorMsg);
