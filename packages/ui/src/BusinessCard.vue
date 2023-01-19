@@ -133,21 +133,22 @@ onUnmounted(() => {
   max-width: v-bind(cssMaxWidth);
   max-height: v-bind(cssMaxHeight);
   color: #ffffff85;
-  padding: 12px;
 }
 .business-wrapper-header {
   display: flex;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  padding: 3px;
+  padding: 12px 16px 0 16px;
 
   & > .title-wrapper {
     display: flex;
     align-items: center;
     .title {
       font-size: 16px;
-      font-weight: 400;
+      font-weight: bold;
+      color: #ffffff85;
+      padding-right: 4px;
     }
 
     .subtitle {

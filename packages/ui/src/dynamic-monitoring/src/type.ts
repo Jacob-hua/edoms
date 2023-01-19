@@ -65,8 +65,45 @@ export interface IndicatorDataItem {
   deviceCode: string;
 }
 
+export interface historyParameterItem {
+  /** 设备实例code */
+  deviceCode: string;
+  /** 属性code */
+  propCode: string;
+}
+
+export interface FetchHistoryDataReq {
+  /** 开始时间 */
+  startTime: string;
+  /** 结束时间 */
+  endTime: string;
+  /** 时间间隔 */
+  interval: string;
+  /** 类型 */
+  type: string;
+  /** 属性数据 */
+  dataList: historyParameterItem[];
+}
+
+export interface HistoryData {
+  /** 实例Code */
+  insCode: string;
+  /** 属性Code */
+  propCode: string;
+  /** 数据列表 */
+  dataList: Array<{
+    /** 时间 */
+    time: string;
+    /** 数值 */
+    value: string;
+  }>;
+}
+
+export type FetchHistoryDataRes = HistoryData[];
+
 export type FetchEnvMonitoringRes = IndicatorDataItem[];
 
 export interface Apis {
   fetchIndicatorData: (data: FetchEnvMonitoringReq) => Promise<FetchEnvMonitoringRes>;
+  fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
 }

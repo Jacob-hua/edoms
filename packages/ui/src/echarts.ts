@@ -3,6 +3,7 @@ import {
   DatasetComponent,
   GridComponent,
   TitleComponent,
+  ToolboxComponent,
   TooltipComponent,
   TransformComponent,
 } from 'echarts/components';
@@ -21,6 +22,7 @@ echarts.use([
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,
+  ToolboxComponent,
 ]);
 
 export default echarts;
