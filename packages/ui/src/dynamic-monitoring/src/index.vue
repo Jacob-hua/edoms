@@ -1,30 +1,48 @@
 <template>
-  <BusinessCard
-    title="动环监测"
-    :class="wrapperClassName"
-    subtitle="DYNAMIC MONITORING"
-    min-width="480"
-    min-height="200"
-  >
-    <template #operation>
-      <div class="operation" @click="handleTrigger">...</div>
-    </template>
-    <div class="dynamic-monitoring">
-      <div v-for="({ icon, displayParameter, parameterClass, label }, index) in indicators" :key="index">
-        <img :src="icon" />
-        <div :class="parameterClass">{{ displayParameter }}</div>
-        <div class="label">{{ label }}</div>
+  <div class="dynamic-monitoring-container">
+    <BusinessCard
+      title="动环监测"
+      :class="wrapperClassName"
+      subtitle="DYNAMIC MONITORING"
+      min-width="392"
+      min-height="160"
+    >
+      <template #operation>
+        <div :class="operatable" @click="handleTrigger">...</div>
+      </template>
+      <div class="dynamic-monitoring">
+        <div v-for="(item, index) in initIndicators" :key="index" @click="handleDisplayCharts(item)">
+          <img :src="item.icon" />
+          <div :class="item.parameterClass">{{ item.displayParameter }}</div>
+          <div class="label">{{ item.label }}</div>
+        </div>
       </div>
-    </div>
-  </BusinessCard>
+    </BusinessCard>
+    <MoreParameters
+      v-if="restParamVisible"
+      v-model:visible="restParamVisible"
+      :data="restIndicators"
+      @item-click="handleClickIndicator"
+    ></MoreParameters>
+    <EChartsDialog
+      v-if="chartDialogVisible"
+      v-model:visible="chartDialogVisible"
+      :title="dialogTitle"
+      :width="960"
+      :height="480"
+      :options="options"
+      @date-change="handleDateChange"
+    ></EChartsDialog>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { formatPrecision } from '@edoms/utils';
+import { formatDateRange, formatPrecision, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
+import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
@@ -32,15 +50,20 @@ import GasImg from './assets/gas.svg';
 import LiquidDepthImg from './assets/liquidDepth.svg';
 import MoistureImg from './assets/moisture.svg';
 import TemperatureImg from './assets/temperature.svg';
+import EChartsDialog from './component/EChartsDialog.vue';
+import MoreParameters from './component/MoreParameters.vue';
 import apiFactory from './api';
 import { MDynamicMonitoring, MEnvironmentIndicator, MIndicatorItemConfig, ParameterItem } from './type';
 
-interface Indicator {
+export interface Indicator {
   icon: string;
   parameter: string;
   displayParameter: string;
   parameterClass: string[];
   label: string;
+  deviceCode: string;
+  propCode: string;
+  unit: string;
 }
 
 const props = defineProps<{
@@ -49,10 +72,19 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchIndicatorData } = apiFactory(request);
+const { fetchIndicatorData, fetchHistoryData } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
+const initIndicators = ref<Indicator[]>([]);
+const restIndicators = ref<Indicator[]>([]);
+const activeIndicator = ref<Indicator>();
 const wrapperClassName = ref<string>('');
+
+const dialogTitle = ref<string>('');
+const options = ref<ECOption>({});
+
+const restParamVisible = ref<boolean>(false);
+const chartDialogVisible = ref<boolean>(false);
 
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
 const intervalDelay = computed<number>(() => {
@@ -62,16 +94,28 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 
+const operatable = computed(() => (restIndicators.value.length ? 'operation' : 'dis-operation'));
+
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
-    indicators.value = indicatorConfigs.map(({ label, type }) => ({
+    indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit }) => ({
       label,
       parameter: '',
       displayParameter: '',
       parameterClass: ['parameter'],
       icon: getIconByIndicatorType(type),
+      deviceCode: instance[instance.length - 1],
+      propCode: property,
+      unit: unit,
     }));
+    if (indicators.value.length > 5) {
+      initIndicators.value = indicators.value.slice(0, 5);
+      restIndicators.value = indicators.value.slice(5);
+    } else {
+      initIndicators.value = indicators.value;
+      restIndicators.value = [];
+    }
   },
   {
     immediate: true,
@@ -105,14 +149,13 @@ const updateIndicatorsData = async () => {
       indicatorConfig.unit
     }`;
     indicator.parameterClass = calculateParameterClassName(indicator, indicatorConfig);
+    indicator.deviceCode = deviceCode;
+    indicator.propCode = propCode;
+    indicator.unit = indicatorConfig.unit;
   });
 };
 
 useIntervalAsync(updateIndicatorsData, intervalDelay.value);
-
-const handleTrigger = () => {
-  wrapperClassName.value = wrapperClassName.value === '' ? 'open-wrapper' : '';
-};
 
 function getIconByIndicatorType(type: MEnvironmentIndicator) {
   const iconClassify = {
@@ -137,28 +180,130 @@ function calculateParameterClassName(indicator: Indicator, config: MIndicatorIte
   }
   return result;
 }
+
+const generateOption = (series: any[] = []): ECOption => {
+  return {
+    toolbox: {
+      show: true,
+      feature: {
+        magicType: {
+          type: ['line', 'bar'],
+        },
+      },
+      showTitle: false,
+      right: '10%',
+    },
+    tooltip: {
+      trigger: 'axis',
+      valueFormatter: (value) => `${value}${activeIndicator.value?.unit}`,
+    },
+    xAxis: {
+      type: 'time',
+    },
+    yAxis: {
+      name: `单位：${activeIndicator.value?.unit}`,
+      type: 'value',
+      axisLine: {
+        show: true,
+      },
+    },
+    series,
+  };
+};
+
+const getHistoryData = async (date: Date) => {
+  const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD HH:mm:ss');
+  const result = await fetchHistoryData({
+    startTime: start,
+    endTime: end,
+    interval: '1h',
+    type: 'dev',
+    dataList: [
+      {
+        deviceCode: activeIndicator.value?.deviceCode ?? '',
+        propCode: activeIndicator.value?.propCode ?? '',
+      },
+    ],
+  });
+
+  const chartSeries = result.map(({ dataList }) => ({
+    name: activeIndicator.value?.label,
+    type: 'line',
+    showSymbol: false,
+    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+  }));
+  options.value = generateOption(chartSeries);
+  console.log(result);
+};
+
+const handleTrigger = () => {
+  restParamVisible.value = restIndicators.value.length > 0;
+};
+
+const handleDisplayCharts = (item: Indicator) => {
+  activeIndicator.value = item;
+  dialogTitle.value = item.label;
+  getHistoryData(new Date());
+  chartDialogVisible.value = true;
+};
+
+const handleClickIndicator = (item: Indicator) => {
+  handleDisplayCharts(item);
+};
+
+const handleDateChange = (value: string) => {
+  getHistoryData(stringToDate(value));
+};
 </script>
 
 <style lang="scss" scoped>
+.dynamic-monitoring-container {
+  display: flex;
+}
+
 .operation {
-  font-size: 36px;
+  font-size: 28px;
   cursor: pointer;
   position: relative;
-  top: -14px;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  color: #ffffff85;
+  text-align: center;
 }
+
+.dis-operation {
+  font-size: 28px;
+  position: relative;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  color: #ffffff45;
+  text-align: center;
+  cursor: default;
+}
+
 .dynamic-monitoring {
   display: flex;
   width: 100%;
   justify-content: space-around;
   align-items: center;
   align-self: center;
+
   & > div {
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
+    width: 72px;
+    height: 90px;
 
     .parameter {
       font-size: 14px;
+      margin-bottom: 8px;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
     }
 
     .parameter-normal {
@@ -172,12 +317,21 @@ function calculateParameterClassName(indicator: Indicator, config: MIndicatorIte
     .parameter-danger {
       color: #ff4700;
     }
+
+    .label {
+      font-size: 14px;
+      font-weight: bold;
+    }
   }
+
   img {
-    width: 50px;
-    height: 100px;
+    width: 32px;
+    height: 32px;
+    margin-top: 12px;
+    margin-bottom: 10px;
   }
 }
+
 .open-wrapper {
   width: auto !important;
   overflow: auto !important;

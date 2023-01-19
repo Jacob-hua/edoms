@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, markRaw, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { EChartsType } from 'echarts/core';
 
 import echarts from './echarts';
@@ -56,7 +56,7 @@ onMounted(() => {
     if (!chartsContainer.value) {
       return;
     }
-    charts.value = echarts.init(chartsContainer.value);
+    charts.value = markRaw(echarts.init(chartsContainer.value));
     charts.value.setOption(props.option);
   });
 });

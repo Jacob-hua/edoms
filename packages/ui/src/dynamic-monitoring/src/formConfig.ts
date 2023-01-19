@@ -50,7 +50,7 @@ export default async (request: Request) => [
     items: [
       {
         name: 'type',
-        text: '指标',
+        text: '图标',
         type: 'select',
         options: indicatorTypes,
       },
