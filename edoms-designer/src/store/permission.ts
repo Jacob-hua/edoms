@@ -1,5 +1,6 @@
 import { defineStore, StoreDefinition } from 'pinia';
 
+import { ALL_PERMISSION } from '@/const/permission';
 export interface PermissionState {
   permissionList: string[];
 }
@@ -24,6 +25,9 @@ const usePermissionStore = defineStore('permission', {
       this.permissionList = permissionList;
     },
     hasPermission(permissionKey: string) {
+      if (this.permissionList.includes(ALL_PERMISSION)) {
+        return true;
+      }
       return this.permissionList.includes(permissionKey);
     },
   },
