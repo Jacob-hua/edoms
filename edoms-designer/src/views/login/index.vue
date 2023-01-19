@@ -149,6 +149,7 @@ const login = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
 }
 .form-section {
   background-color: aliceblue;
