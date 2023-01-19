@@ -11,7 +11,7 @@
           <span class="text">{{ currentTenant?.tenantName }}当前采用:</span> <span class="model">{{ modelText }}</span>
         </span>
       </div>
-      <div class="header-bar-right">
+      <div v-permission="TenantModelPermission.MODEL_CHANGE" class="header-bar-right">
         <el-switch
           v-model="useType"
           :inactive-value="switchInactive.value"
@@ -41,6 +41,7 @@ import { storeToRefs } from 'pinia';
 
 import modelApi from '@/api/model';
 import { ModelType } from '@/const/model';
+import { TenantModelPermission } from '@/const/permission';
 import useAccountStore from '@/store/account';
 
 import DynamicModel from './component/DynamicModel.vue';

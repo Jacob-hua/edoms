@@ -24,7 +24,6 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import type { ListApplicationsResItem } from '@/api/application';
-import applicationApi from '@/api/application';
 import PreviewImage from '@/components/ImagePreview.vue';
 import LongText from '@/components/LongText.vue';
 import PopMenu from '@/components/PopMenu.vue';
@@ -121,8 +120,7 @@ const handleMenuClick = (value: (string | number)[]) => {
   menu?.action();
 };
 const handleShow = async () => {
-  const { edomsRoleInfoDTO } = await applicationApi.getApplication({ applicationId: props.application.applicationId });
-  hasRole.value = [edomsRoleInfoDTO.roleKey].includes('manager');
+  hasRole.value = [props.application.roleKey].includes('manager');
 };
 const handleGoPage = () => {
   router.push({

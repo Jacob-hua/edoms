@@ -60,7 +60,7 @@ const getPermissionList = async (queryParams: Ref<PermissionListReq>) => {
   try {
     const { dataList, count } = await PermissionApi.permissionList({ ...queryParams.value });
     total.value = +count;
-    tableData.value = dataList;
+    tableData.value = dataList ?? [];
   } catch (e: any) {
     loading.value = false;
     throw new Error(e);

@@ -75,8 +75,8 @@ const loadUserListAndRoleList = async () => {
     PermissionApi.userList({ applicationId: props.applicationId }),
     PermissionApi.roleList(),
   ]);
-  userList.value = users;
-  roleList.value = roles;
+  userList.value = users ?? [];
+  roleList.value = roles ?? [];
   permissionAddForm.value.roleId = roleList?.value[0]?.roleId;
   roleName.value = roleList.value[0].roleName;
 };
