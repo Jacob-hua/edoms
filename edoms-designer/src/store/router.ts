@@ -1,5 +1,5 @@
 import { RouteLocationNormalized } from 'vue-router';
-import { defineStore, Store, StoreDefinition } from 'pinia';
+import { defineStore, StoreDefinition } from 'pinia';
 
 export interface RouterState {
   cacheComps: Set<string>;
@@ -14,8 +14,6 @@ export interface RouterActions {
 }
 
 export type RoutersStoreDefinition = StoreDefinition<string, RouterState, RouterGetters, RouterActions>;
-
-export type RoutersStore = Store<string, RouterState, RouterGetters, RouterActions>;
 
 const useRouterStore: RoutersStoreDefinition = defineStore('router', {
   state: (): RouterState => ({

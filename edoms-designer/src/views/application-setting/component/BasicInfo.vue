@@ -24,7 +24,9 @@
         <ImageUpload :thumbnail-id="appInfo.thumbnailId" @success="handleUploadSuccess"></ImageUpload>
       </el-form-item>
     </el-form>
-    <div class="updateBtn" @click="update(appInfo)">更新</div>
+    <div v-permission="ApplicationPermission.APPLICATION_DESIGN_UPDATE" class="updateBtn" @click="update(appInfo)">
+      更新
+    </div>
   </div>
 </template>
 
@@ -34,6 +36,7 @@ import { ElMessage, FormInstance } from 'element-plus';
 
 import applicationApi, { GetApplicationRes, UpdateApplicationReq } from '@/api/application';
 import ImageUpload from '@/components/ImageUpload.vue';
+import { ApplicationPermission } from '@/const/permission';
 
 const props = defineProps<{
   appInfo: GetApplicationRes;

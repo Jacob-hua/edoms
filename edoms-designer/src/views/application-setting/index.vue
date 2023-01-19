@@ -42,6 +42,15 @@
             </template>
             <VersionList v-if="activeName === 'version'" :app-info="appInfo" />
           </el-tab-pane>
+          <el-tab-pane v-if="appInfoVisible && hasRole" :key="activeName" name="permission">
+            <template #label>
+              <span class="custom-tabs-label">
+                <el-icon :size="20"><HomeFilled /></el-icon>
+                <span>权限管理</span>
+              </span>
+            </template>
+            <PermissionList :app-info="appInfo" />
+          </el-tab-pane>
         </el-tabs>
       </div>
     </section>
@@ -57,6 +66,7 @@ import applicationApi, { GetApplicationRes } from '@/api/application';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
 import BasicInfo from './component/BasicInfo.vue';
+import PermissionList from './component/permission/PermissionList.vue';
 import VersionList from './component/version-setting/VersionList.vue';
 
 const route = useRoute();
@@ -83,11 +93,12 @@ const appInfo = ref<GetApplicationRes>({
     roleName: '',
   },
 });
-
+const hasRole = ref<boolean>(false);
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
   const result = await applicationApi.getApplication({ applicationId } as { applicationId: string });
   appInfoVisible.value = true;
   appInfo.value = result;
+  hasRole.value = [result.edomsRoleInfoDTO.roleKey].includes('manager');
 };
 const goBack = () => {
   go(-1);

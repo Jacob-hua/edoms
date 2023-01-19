@@ -3,7 +3,13 @@
     <div class="section-top">
       <span class="name">{{ data.name }}</span>
       <div>
-        <el-button type="primary" size="large" @click="handleSaveApi">保存</el-button>
+        <el-button
+          v-permission="TenantModelPermission.DYNAMIC_MODEL_SAVE"
+          type="primary"
+          size="large"
+          @click="handleSaveApi"
+          >保存</el-button
+        >
         <el-button type="primary" size="large" @click="handleSimulation">测试</el-button>
       </div>
     </div>
@@ -73,6 +79,7 @@ import { ElMessage, ElMessageBox, FormInstance } from 'element-plus';
 import modelApi, { ApiStruct, Dic } from '@/api/model';
 import EditTable from '@/components/EditTable.vue';
 import EditTableColumn from '@/components/EditTableColumn.vue';
+import { TenantModelPermission } from '@/const/permission';
 import { KVStruct } from '@/const/struct';
 
 const props = defineProps<{
