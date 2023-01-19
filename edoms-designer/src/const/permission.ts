@@ -1,3 +1,4 @@
+export const ALL_PERMISSION = '*:*:*';
 export const enum TenantModelPermission {
   //模型类型切换
   MODEL_CHANGE = 'design:model:type:change',
