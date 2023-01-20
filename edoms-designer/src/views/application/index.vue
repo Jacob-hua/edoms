@@ -10,7 +10,7 @@
         :page-size="10"
         :request="loadData"
       >
-        <template v-if="hasPermission(ApplicationPermission.APPLICATION_DESIGN_ADD)" #operation>
+        <template #operation>
           <div class="slot-container" @click="handleCreateApp">
             <div class="app-add-box">
               <el-icon :size="55"><Plus /></el-icon>
@@ -34,15 +34,12 @@ import { ref, watch } from 'vue';
 import applicationApi from '@/api/application';
 import { ListApplicationsRes, ListApplicationsResItem } from '@/api/application/type';
 import GridList, { RequestFunc } from '@/components/GridList.vue';
-import { ApplicationPermission } from '@/const/permission';
 import useAccountStore from '@/store/account';
-import usePermissionStore from '@/store/permission';
 
 import ApplicationItem from './component/ApplicationItem.vue';
 import NewApplication from './component/NewApplication.vue';
 const gridList = ref();
 const visible = ref<boolean>(false);
-const { hasPermission } = usePermissionStore();
 const loadData: RequestFunc<ListApplicationsResItem> = async ({ pageSize, current }) => {
   const { dataList, count }: ListApplicationsRes = await applicationApi.listApplications({
     page: current,

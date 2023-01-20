@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAlive" class="infinite-list-wrapper" style="overflow: auto">
     <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
-      <div><slot name="operation"></slot></div>
+      <div v-permission="ApplicationPermission.APPLICATION_DESIGN_ADD"><slot name="operation"></slot></div>
       <div v-for="(item, index) in data" :key="index" @click="handleSelectChange(item)">
         <slot :item="item" :index="index">
           {{ item }}
@@ -24,6 +24,8 @@
 import { computed, nextTick, ref, shallowRef, watch } from 'vue';
 
 import { deepClone } from '@edoms/utils';
+
+import { ApplicationPermission } from '@/const/permission';
 
 export interface Pagination {
   pageSize: number;
