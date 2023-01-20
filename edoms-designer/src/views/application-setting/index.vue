@@ -20,7 +20,7 @@
             </template>
             <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @success="goBack" />
           </el-tab-pane>
-          <el-tab-pane name="advance">
+          <el-tab-pane v-if="accountStore.hasRole(['manager'])" name="advance">
             <template #label>
               <span class="custom-tabs-label">
                 <el-icon :size="20">
@@ -63,12 +63,13 @@ import { useRoute, useRouter } from 'vue-router';
 import { LocationQueryValue } from 'vue-router';
 
 import applicationApi, { GetApplicationRes } from '@/api/application';
+import useAccountStore from '@/store/account';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
 import BasicInfo from './component/BasicInfo.vue';
 import PermissionList from './component/permission/PermissionList.vue';
 import VersionList from './component/version-setting/VersionList.vue';
-
+const accountStore = useAccountStore();
 const route = useRoute();
 const { go } = useRouter();
 const appInfoVisible = ref<boolean>(false);

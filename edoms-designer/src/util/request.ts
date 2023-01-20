@@ -77,6 +77,11 @@ const responseInterceptorsCatch = (error: EdomsError) => {
             path: '/login',
           });
         }
+        if (res.errorInfo.errorCode === 'EDOMS-10067') {
+          router.push({
+            path: '/login',
+          });
+        }
         ElMessage.error(res.errorInfo.errorMsg);
       }
     }

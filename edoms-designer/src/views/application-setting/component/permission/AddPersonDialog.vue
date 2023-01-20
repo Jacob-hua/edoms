@@ -5,7 +5,7 @@
         <el-form-item label="权限" prop="roleId">
           <div>{{ roleName }}</div>
         </el-form-item>
-        <el-form-item label="用户" prop="userId">
+        <el-form-item label="用户昵称" prop="userId">
           <el-select v-model="permissionAddForm.userId" placeholder="请选择用户">
             <el-option
               v-for="{ userId, userName } in userList"
