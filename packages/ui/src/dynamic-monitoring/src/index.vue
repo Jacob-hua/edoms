@@ -12,7 +12,7 @@
       </template>
       <div class="dynamic-monitoring">
         <div v-for="(item, index) in initIndicators" :key="index" @click="handleDisplayCharts(item)">
-          <img :src="item.icon" />
+          <img :src="item.icon" alt="" />
           <div :class="item.parameterClass">{{ item.displayParameter }}</div>
           <div class="label">{{ item.label }}</div>
         </div>
@@ -64,6 +64,7 @@ export interface Indicator {
   deviceCode: string;
   propCode: string;
   unit: string;
+  lineColor: string;
 }
 
 const props = defineProps<{
@@ -99,7 +100,7 @@ const operatable = computed(() => (restIndicators.value.length ? 'operation' : '
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
-    indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit }) => ({
+    indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit, lineColor }) => ({
       label,
       parameter: '',
       displayParameter: '',
@@ -108,6 +109,7 @@ watch(
       deviceCode: instance[instance.length - 1],
       propCode: property,
       unit: unit,
+      lineColor: lineColor,
     }));
     if (indicators.value.length > 5) {
       initIndicators.value = indicators.value.slice(0, 5);
@@ -231,9 +233,11 @@ const getHistoryData = async (date: Date) => {
     type: 'line',
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    itemStyle: {
+      color: activeIndicator.value?.lineColor,
+    },
   }));
   options.value = generateOption(chartSeries);
-  console.log(result);
 };
 
 const handleTrigger = () => {
@@ -329,6 +333,11 @@ const handleDateChange = (value: string) => {
     height: 32px;
     margin-top: 12px;
     margin-bottom: 10px;
+  }
+
+  img[src=''],
+  img:not([src]) {
+    opacity: 0;
   }
 }
 

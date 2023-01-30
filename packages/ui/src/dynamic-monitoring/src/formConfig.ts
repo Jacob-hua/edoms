@@ -87,6 +87,12 @@ export default async (request: Request) => [
         type: 'number',
         defaultValue: undefined,
       },
+      {
+        name: 'lineColor',
+        type: 'colorPicker',
+        text: '曲线颜色',
+        defaultValue: '#008000',
+      },
     ],
   },
 ];

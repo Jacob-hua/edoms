@@ -32,6 +32,8 @@ export interface MIndicatorItemConfig {
   targetMax: number;
   /** 目标最小阈值 */
   targetMin: number;
+  /** 曲线颜色 */
+  lineColor: string;
   /** 精度 */
   precision: string;
   /** 单位 */

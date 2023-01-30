@@ -155,6 +155,11 @@ const handleCurrentChange = (value: string) => {
         margin-bottom: 10px;
       }
 
+      img[src=''],
+      img:not([src]) {
+        opacity: 0;
+      }
+
       .label {
         color: #ffffff85;
         width: 80px;
