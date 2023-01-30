@@ -18,7 +18,15 @@
         <el-button type="primary" text bg size="large" :icon="DocumentAdd" @click="handleNewVersion">
           新建版本
         </el-button>
-        <el-button type="primary" text bg size="large" :icon="Download" @click="handleExportApplication">
+        <el-button
+          v-role="['manager']"
+          type="primary"
+          text
+          bg
+          size="large"
+          :icon="Download"
+          @click="handleExportApplication"
+        >
           导出应用
         </el-button>
       </div>

@@ -9,7 +9,7 @@ const roleDirective: ObjectDirective = {
     if (role && Array.isArray(role) && role.length > 0 && !hasRole(role)) {
       el.style.display = 'none';
     } else {
-      throw new Error('鉴权指令不正确');
+      // throw new Error('鉴权指令不正确');
     }
   },
 };

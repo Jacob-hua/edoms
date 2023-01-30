@@ -16,6 +16,7 @@ import ElDesign from '@edoms/design';
 import EdomsEditor from '@edoms/editor';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
 
+import permissionDirective from './directive/permission';
 import roleDirective from './directive/role';
 import App from './App.vue';
 import router from './router';
@@ -64,4 +65,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(ElDesign, EdomsElementPlusAdapter);
 app.use(EdomsEditor);
 app.directive('role', roleDirective);
+app.directive('permission', permissionDirective);
 app.mount('#app');

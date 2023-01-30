@@ -6,17 +6,41 @@
         <p class="description"></p>
       </div>
       <div class="top-wrapper-right">
-        <el-button type="danger" size="large" @click="handleClearTable">清空</el-button>
-        <el-button ref="importBtn" :loading="selectUploadLoading" size="large" type="primary" @click="handleFileChange"
+        <el-button
+          v-permission="TenantModelPermission.STATIC_CLEAR_TABLE"
+          type="danger"
+          size="large"
+          @click="handleClearTable"
+          >清空</el-button
+        >
+        <el-button
+          ref="importBtn"
+          v-permission="TenantModelPermission.STATIC_MODEL_IMPORT"
+          :loading="selectUploadLoading"
+          size="large"
+          type="primary"
+          @click="handleFileChange"
           >导入</el-button
         >
-        <el-button :loading="loading" type="primary" size="large" @click="execute">导出</el-button>
+        <el-button
+          v-permission="TenantModelPermission.STATIC_MODEL_EXPORT"
+          :loading="loading"
+          type="primary"
+          size="large"
+          @click="execute"
+          >导出</el-button
+        >
       </div>
     </div>
     <div class="table">
       <div class="table-top">
         <div class="table-text">操作记录</div>
-        <el-button :loading="recordLoading" type="primary" size="large" @click="handleExportRecord"
+        <el-button
+          v-permission="TenantModelPermission.STATIC_MODEL_RECORD"
+          :loading="recordLoading"
+          type="primary"
+          size="large"
+          @click="handleExportRecord"
           >导出操作记录</el-button
         >
       </div>
@@ -57,10 +81,10 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import fileApi from '@/api/file';
 import modelApi from '@/api/model';
 import { MimeType } from '@/const/mime';
+import { TenantModelPermission } from '@/const/permission';
 import useDate from '@/hooks/useDate';
 import useExport from '@/hooks/useExport';
 import useSelectUpload from '@/hooks/useSelectUpload';
-
 const { formatTime } = useDate();
 
 const { execute: selectUploadExecute, loading: selectUploadLoading } = useSelectUpload();

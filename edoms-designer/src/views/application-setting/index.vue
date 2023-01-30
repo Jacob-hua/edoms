@@ -20,7 +20,7 @@
             </template>
             <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @success="goBack" />
           </el-tab-pane>
-          <el-tab-pane name="advance">
+          <el-tab-pane v-if="accountStore.hasRole(['manager'])" name="advance">
             <template #label>
               <span class="custom-tabs-label">
                 <el-icon :size="20">
@@ -42,6 +42,15 @@
             </template>
             <VersionList v-if="activeName === 'version'" :app-info="appInfo" />
           </el-tab-pane>
+          <el-tab-pane v-if="appInfoVisible && hasRole" :key="activeName" name="permission">
+            <template #label>
+              <span class="custom-tabs-label">
+                <el-icon :size="20"><HomeFilled /></el-icon>
+                <span>权限管理</span>
+              </span>
+            </template>
+            <PermissionList :app-info="appInfo" />
+          </el-tab-pane>
         </el-tabs>
       </div>
     </section>
@@ -54,11 +63,13 @@ import { useRoute, useRouter } from 'vue-router';
 import { LocationQueryValue } from 'vue-router';
 
 import applicationApi, { GetApplicationRes } from '@/api/application';
+import useAccountStore from '@/store/account';
 
 import AdvancedSetting from './component/AdvancedSetting.vue';
 import BasicInfo from './component/BasicInfo.vue';
+import PermissionList from './component/permission/PermissionList.vue';
 import VersionList from './component/version-setting/VersionList.vue';
-
+const accountStore = useAccountStore();
 const route = useRoute();
 const { go } = useRouter();
 const appInfoVisible = ref<boolean>(false);
@@ -83,11 +94,12 @@ const appInfo = ref<GetApplicationRes>({
     roleName: '',
   },
 });
-
+const hasRole = ref<boolean>(false);
 const getAppDetail = async (applicationId: LocationQueryValue | LocationQueryValue[]) => {
   const result = await applicationApi.getApplication({ applicationId } as { applicationId: string });
   appInfoVisible.value = true;
   appInfo.value = result;
+  hasRole.value = [result.edomsRoleInfoDTO.roleKey].includes('manager');
 };
 const goBack = () => {
   go(-1);
