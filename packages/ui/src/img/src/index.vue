@@ -7,7 +7,7 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 import useApp from '../../useApp';
 
-import Siact from './assets/siact-cloud.png';
+import AltImg from './assets/alt.svg';
 import { MImg } from './type';
 
 const props = defineProps<{
@@ -26,7 +26,7 @@ watch(
   () => props.config.src,
   (value) => {
     if (!value || value.length === 0) {
-      imgSrc.value = Siact;
+      imgSrc.value = AltImg;
       return;
     }
 
