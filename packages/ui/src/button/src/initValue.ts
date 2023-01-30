@@ -1,5 +1,5 @@
 export default {
-  text: '请输入文本内容',
+  text: '按钮',
   multiple: true,
   style: {
     width: '270',

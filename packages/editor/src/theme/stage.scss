@@ -1,8 +1,7 @@
 .edoms-editor-stage {
   position: relative;
   width: 100%;
-  height: 100%;
-  // height: calc(100% - #{$--page-bar-height});
+  height: calc(100% - #{$--page-bar-height});
   overflow: hidden;
   display: flex;
   justify-content: center;

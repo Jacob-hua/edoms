@@ -1,12 +1,13 @@
 <template>
-  <img class="edoms-ui-img" :src="imgSrc" @click="clickHandler" />
+  <img ref="imgRef" class="edoms-ui-img" :src="imgSrc" @click="clickHandler" />
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 import useApp from '../../useApp';
 
+import AltImg from './assets/alt.svg';
 import { MImg } from './type';
 
 const props = defineProps<{
@@ -15,11 +16,25 @@ const props = defineProps<{
 
 const { provideMethod } = useApp(props);
 
-const imgSrc = ref(props.config.src);
+const imgRef = ref<HTMLImageElement>();
+
+const imgSrc = ref<string>(props.config.src?.[0] ?? '');
+
+const imgFileUrl = ref<string>('');
 
 watch(
   () => props.config.src,
-  (value) => (imgSrc.value = value),
+  (value) => {
+    if (!value || value.length === 0) {
+      imgSrc.value = AltImg;
+      return;
+    }
+
+    const url = value[0].url;
+    const suffix = value[0].fileSuffix;
+    imgFileUrl.value = url;
+    imgSrc.value = `${window.location.origin}/static/${url}${suffix}`;
+  },
   { immediate: true }
 );
 
@@ -28,4 +43,17 @@ const clickHandler = () => {
 };
 
 provideMethod('setSrc', ({ src }) => (imgSrc.value = src), ['src']);
+
+onMounted(() => {
+  imgRef.value?.addEventListener('error', handleImgError);
+});
+
+onUnmounted(() => {
+  imgRef.value?.removeEventListener('error', handleImgError);
+});
+
+function handleImgError() {
+  // TODO: 此处应该通过配置文件来配置请求路径
+  imgSrc.value = `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=${imgFileUrl.value}`;
+}
 </script>
