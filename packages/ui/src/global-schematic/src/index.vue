@@ -10,6 +10,7 @@ import { formatPrecision } from '@edoms/utils';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
+import Siact from './assets/siact-cloud.png';
 import apiFactory from './api';
 import { IndicatorData, MGlobalSchematic, MIndicatorItemConfig, ParameterItem } from './type';
 
@@ -44,7 +45,7 @@ watch(
   () => props.config.src,
   (value: any[]) => {
     if (!value || value.length === 0) {
-      imgSrc.value = 'https://puui.qpic.cn/vupload/0/1573555382625_bhp0wud8l6w.png/0';
+      imgSrc.value = Siact;
       return;
     }
 
