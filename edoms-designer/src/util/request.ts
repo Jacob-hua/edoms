@@ -65,6 +65,12 @@ const responseInterceptorsCatch = (error: EdomsError) => {
   const { response } = error;
 
   if (response) {
+    if (response.status === 401) {
+      router.push({
+        path: '/login',
+      });
+      ElMessage.error('应用设计角色变更，权限失效');
+    }
     if (response.status === 404) {
       ElMessage.error('服务器资源不存在');
     } else if (response.data) {
@@ -72,12 +78,6 @@ const responseInterceptorsCatch = (error: EdomsError) => {
       if (res.errorInfo && res.errorInfo.errorCode) {
         if (res.errorInfo.errorCode === 'EDOMS-20005') {
           requestCanceler.cancelAllRequest();
-
-          router.push({
-            path: '/login',
-          });
-        }
-        if (res.errorInfo.errorCode === 'EDOMS-10067') {
           router.push({
             path: '/login',
           });
