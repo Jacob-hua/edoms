@@ -25,7 +25,7 @@
             <el-button @click="handleEdit(scope.row)">修改</el-button>
           </el-col>
           <el-col :span="6">
-            <el-button @click="handleExport(scope.row)">
+            <el-button v-role="['manager']" @click="handleExport(scope.row)">
               导出<el-icon>
                 <Download />
               </el-icon>

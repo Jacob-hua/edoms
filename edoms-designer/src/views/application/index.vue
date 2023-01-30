@@ -40,7 +40,6 @@ import ApplicationItem from './component/ApplicationItem.vue';
 import NewApplication from './component/NewApplication.vue';
 const gridList = ref();
 const visible = ref<boolean>(false);
-
 const loadData: RequestFunc<ListApplicationsResItem> = async ({ pageSize, current }) => {
   const { dataList, count }: ListApplicationsRes = await applicationApi.listApplications({
     page: current,

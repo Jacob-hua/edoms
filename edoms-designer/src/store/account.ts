@@ -3,6 +3,7 @@ import { defineStore, Store, StoreDefinition } from 'pinia';
 import type { ListTenantItem, LoginReq } from '@/api/account';
 import accountApi from '@/api/account';
 import type { GetApplicationRes } from '@/api/application';
+import usePermissionStore from '@/store/permission';
 
 export interface AccountState {
   token: string;
@@ -52,12 +53,14 @@ const useAccountStore: AccountStoreDefinition = defineStore('account', {
   actions: {
     async login(data: LoginReq) {
       const { token } = await accountApi.login(data);
+      const { refreshPermissionList } = usePermissionStore();
       this.token = token;
-      const { user, userTenantList } = await accountApi.getUserInfo();
+      const { user, userTenantList, permissions } = await accountApi.getUserInfo();
       this.username = user.userName;
       this.nickName = user.nickName;
       this.userId = user.userId;
       this.tenants = userTenantList;
+      refreshPermissionList(permissions);
     },
     async logout() {
       await accountApi.logout();
