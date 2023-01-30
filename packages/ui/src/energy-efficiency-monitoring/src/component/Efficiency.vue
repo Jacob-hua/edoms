@@ -3,7 +3,7 @@
     <div v-for="index in bisectionNumber" :key="index" :style="calculateDistance(index)" class="division-wrapper"></div>
     <div class="triangle"></div>
     <div class="reference-line-wrapper">
-      <div class="reference-value">{{ referenceValue }}</div>
+      <div class="reference-value">{{ refrenceValue }}</div>
     </div>
     <div class="start-value">{{ minValue }}</div>
     <div class="end-value">{{ maxValue }}</div>
@@ -36,7 +36,7 @@ const props = withDefaults(
     /** 最大值 **/
     maxValue: string;
     /** 参考值  **/
-    referenceValue: string;
+    refrenceValue: string;
     /** 实际值  **/
     actualValue: string;
     /** 等分数量 **/
@@ -48,15 +48,15 @@ const props = withDefaults(
     /** 游标颜色 **/
     cursorColor?: string;
     /** 参考线 颜色 **/
-    referenceLineColor?: string;
+    refrenceLineColor?: string;
   }>(),
   {
     bisectionNumber: () => 5,
     cursorColor: () => 'green',
-    referenceLineColor: () => '#fff',
+    refrenceLineColor: () => '#fff',
   }
 );
-const colorCardWidth: number = 360;
+const colorCardWidth: number = 262;
 
 const attribute = computed(() => `linear-gradient(90deg, ${props.startColor}, ${props.endColor})`);
 
@@ -78,36 +78,36 @@ const calculatePosition = (inputValue: string | number): Position => {
 };
 const calculateActualValuePosition = computed(() => `${+calculatePosition(props.actualValue)?.left - 8}px`);
 
-const calculateReferenceValuePosition = computed(() => `${calculatePosition(props.referenceValue)?.left}px`);
+const calculateReferenceValuePosition = computed(() => `${calculatePosition(props.refrenceValue)?.left}px`);
 
-const cursorAttribute = computed(() => `16px solid ${props.cursorColor}`);
+const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
 </script>
 
 <style lang="scss" scoped>
 .color-card-wrapper {
-  width: 360px;
-  height: 30px;
+  width: 262px;
+  height: 20px;
   background-image: v-bind(attribute);
   position: relative;
   .division-wrapper {
     width: 2px;
-    height: 30px;
+    height: 20px;
     position: absolute;
     background-color: #000;
   }
   .reference-line-wrapper {
     width: 2px;
-    height: 34px;
+    height: 24px;
     position: absolute;
     top: -2px;
     left: v-bind(calculateReferenceValuePosition);
-    background-color: v-bind(referenceLineColor);
+    background-color: v-bind(refrenceLineColor);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     .reference-value {
-      color: v-bind(referenceLineColor);
+      color: v-bind(refrenceLineColor);
       position: absolute;
       bottom: -20px;
     }
@@ -139,11 +139,9 @@ const cursorAttribute = computed(() => `16px solid ${props.cursorColor}`);
 .legend-wrapper {
   width: 240px;
   margin-top: 40px !important;
-  padding-top: 20px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding-left: 60px;
   .legend-start {
     width: 100px;
     display: flex;
@@ -176,7 +174,7 @@ const cursorAttribute = computed(() => `16px solid ${props.cursorColor}`);
     .legend-box {
       width: 2px;
       height: 20px;
-      background-color: v-bind(referenceLineColor);
+      background-color: v-bind(refrenceLineColor);
     }
     margin-left: 20px;
   }

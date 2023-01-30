@@ -7,11 +7,11 @@
       <span>{{ title }}</span>
     </template>
     <div class="time-select">
-      <span>日</span>
+      <span :class="active === 'day' ? 'checked' : ''" @click="handleChangeType('day')">日</span>
       <el-divider direction="vertical" />
-      <span>月</span>
+      <span :class="active === 'month' ? 'checked' : ''" @click="handleChangeType('month')">月</span>
       <el-divider direction="vertical" />
-      <span>年</span>
+      <span :class="active === 'year' ? 'checked' : ''" @click="handleChangeType('year')">年</span>
     </div>
     <div class="chart-container">
       <EdomsCharts :width="width" :height="height" :option="options"></EdomsCharts>
@@ -20,7 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
+
+import { UnitTime } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
@@ -39,10 +41,8 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (event: 'update:visible', value: boolean): void;
-  (event: 'dateChange', value: string): void;
+  (event: 'typeChange', value: UnitTime): void;
 }>();
-
-const pickerDate = ref<string>('');
 
 const dialogVisible = computed({
   get: () => props.visible,
@@ -51,12 +51,12 @@ const dialogVisible = computed({
   },
 });
 
-watch(
-  () => pickerDate.value,
-  (value) => {
-    emit('dateChange', value);
-  }
-);
+const active = ref<UnitTime>('day');
+
+const handleChangeType = (type: UnitTime) => {
+  active.value = type;
+  emit('typeChange', type);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -68,5 +68,9 @@ watch(
 
 .chart-container {
   padding-top: 10px;
+}
+
+.checked {
+  color: #499ec9;
 }
 </style>

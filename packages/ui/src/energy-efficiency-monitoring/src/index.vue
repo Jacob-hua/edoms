@@ -6,11 +6,11 @@
       </template>
       <div class="efficiency-wrapper">
         <div class="actual-wrapper">
-          <div class="actual-value">{{ efficinecyData.actualValue }}</div>
-          <div class="actual-unit">{{ efficinecyData.energyName }}</div>
+          <div class="actual-value">{{ actualValue }}</div>
+          <div class="actual-unit">{{ energyName }}</div>
         </div>
-        <div>
-          <Efficiency v-bind="efficinecyData"></Efficiency>
+        <div style="padding-top: 28px">
+          <Efficiency v-bind="indicators" :actual-value="actualValue"></Efficiency>
         </div>
       </div>
     </BusinessCard>
@@ -21,12 +21,15 @@
       :width="960"
       :height="480"
       :options="options"
+      @type-change="handleChangeDateType"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+import { formatDateRange, stringToDate, UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -38,18 +41,21 @@ import Efficiency from './component/Efficiency.vue';
 import apiFactory from './api';
 import { FetchEfficiencyReq, MEfficiencyMonitoring } from './type';
 
-interface EfficinecyData {
+interface Indicator {
   minValue: string;
   maxValue: string;
-  referenceValue: string;
-  actualValue: string;
+  refrenceValue: string;
   bisectionNumber?: number;
   startColor: string;
   endColor: string;
   cursorColor?: string;
-  referenceLineColor?: string;
-  energyName?: string;
+  refrenceLineColor?: string;
 }
+
+// enum interval{
+//   'day'='1h',
+//   'month'='1'
+// }
 
 const props = defineProps<{
   config: MEfficiencyMonitoring;
@@ -57,43 +63,22 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchEfficiencyData } = apiFactory(request);
+const { fetchEfficiencyData, fetchHistoryData } = apiFactory(request);
 
-// const efficinecyData = ref<EfficinecyData>({
-//   minValue: '',
-//   maxValue: '',
-//   referenceValue: '',
-//   actualValue: '',
-//   startColor:'',
-//   endColor: '',
-// });
+const actualValue = ref<string>('');
+const energyName = ref<string>('COP');
+
+const indicators = ref<Indicator>({
+  minValue: '0',
+  maxValue: '0',
+  refrenceValue: '0',
+  startColor: '',
+  endColor: ',',
+});
+
 const chartDialogVisible = ref<boolean>(false);
 const dialogTitle = ref<string>('');
-const options = ref<ECOption>({
-  toolbox: {
-    show: true,
-    feature: {
-      magicType: {
-        type: ['line', 'bar'],
-      },
-    },
-    showTitle: false,
-    right: '10%',
-  },
-  tooltip: {
-    trigger: 'axis',
-  },
-  xAxis: {
-    type: 'time',
-  },
-  yAxis: {
-    type: 'value',
-    axisLine: {
-      show: true,
-    },
-  },
-  series: [],
-});
+const options = ref<ECOption>({});
 
 const efficiencyConfig = computed<MEfficiencyMonitoring>(() => props.config);
 const intervalDelay = computed<number>(() => {
@@ -105,39 +90,25 @@ const intervalDelay = computed<number>(() => {
 
 const operatable = computed(() => 'operation');
 
-const efficinecyData = computed<EfficinecyData>(() => ({
-  minValue: efficiencyConfig.value.minValue ?? '',
-  maxValue: efficiencyConfig.value.maxValue ?? '',
-  referenceValue: efficiencyConfig.value.refrenceValue ?? '',
-  referenceLineColor: efficiencyConfig.value.refrenceLineColor,
-  actualValue: '',
-  bisectionNumber: efficiencyConfig.value.bisectionNumber,
-  startColor: efficiencyConfig.value.startColor ?? '',
-  endColor: efficiencyConfig.value.endColor ?? '',
-  cursorColor: efficiencyConfig.value.cursorColor,
-  energyName: efficiencyConfig.value.energyName ?? '',
-}));
-
-// watch(
-//   () => efficiencyConfig.value,
-//   (efficiencyConfig) => {
-//     efficinecyData.value = {
-//       minValue: efficiencyConfig.minValue??'',
-//       maxValue: efficiencyConfig.maxValue??'',
-//       referenceValue: efficiencyConfig.refrenceValue??'',
-//       referenceLineColor: efficiencyConfig.refrenceLineColor,
-//       actualValue: '',
-//       bisectionNumber: efficiencyConfig.bisectionNumber,
-//       startColor: efficiencyConfig.startColor??'',
-//       endColor: efficiencyConfig.endColor??'',
-//       cursorColor: efficiencyConfig.cursorColor,
-//       energyName: efficiencyConfig.energyName??''
-//     }
-//   },
-//   {
-//     immediate: true,
-//   }
-// );
+watch(
+  () => efficiencyConfig.value,
+  (val) => {
+    indicators.value = {
+      minValue: val.minValue ?? '',
+      maxValue: val.maxValue ?? '',
+      refrenceValue: val.refrenceValue ?? '',
+      refrenceLineColor: val.refrenceLineColor,
+      bisectionNumber: val.bisectionNumber,
+      startColor: val.startColor ?? '',
+      endColor: val.endColor ?? '',
+      cursorColor: val.cursorColor,
+    };
+    energyName.value = val.energyName;
+  },
+  {
+    immediate: true,
+  }
+);
 
 const updateEfficiencyData = async () => {
   if (!efficiencyConfig.value.instance || !efficiencyConfig.value.property) {
@@ -152,13 +123,75 @@ const updateEfficiencyData = async () => {
     if (insCode !== efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]) {
       return;
     }
-    efficinecyData.value.actualValue = efficiencyNum;
+    actualValue.value = efficiencyNum;
   });
+};
+
+const generateOption = (series: any[] = []): ECOption => {
+  return {
+    toolbox: {
+      show: true,
+      feature: {
+        magicType: {
+          type: ['line', 'bar'],
+        },
+      },
+      showTitle: false,
+      right: '10%',
+    },
+    tooltip: {
+      trigger: 'axis',
+      valueFormatter: (value) => `${value}${energyName.value}`,
+    },
+    xAxis: {
+      type: 'time',
+    },
+    yAxis: {
+      name: `单位：${energyName.value}`,
+      type: 'value',
+      axisLine: {
+        show: true,
+      },
+    },
+    series,
+  };
+};
+
+const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
+  const { start, end } = formatDateRange(date, type, 'YYYY-MM-DD HH:mm:ss');
+  const result = await fetchHistoryData({
+    startTime: start,
+    endTime: end,
+    interval: '1h',
+    type: 'dev',
+    dataList: [
+      {
+        deviceCode: efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1] ?? '',
+        propCode: efficiencyConfig.value.property ?? '',
+      },
+    ],
+  });
+
+  const chartSeries = result.map(({ dataList }) => ({
+    name: energyName.value,
+    type: 'line',
+    showSymbol: false,
+    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+  }));
+  options.value = generateOption(chartSeries);
 };
 
 useIntervalAsync(updateEfficiencyData, intervalDelay.value);
 
-const handleShowMore = () => {};
+const handleShowMore = () => {
+  dialogTitle.value = '能效监测';
+  getHistoryData(new Date(), 'day');
+  chartDialogVisible.value = true;
+};
+
+const handleChangeDateType = (type: UnitTime) => {
+  getHistoryData(new Date(), type);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -198,21 +231,24 @@ const handleShowMore = () => {};
 .efficiency-wrapper {
   width: 100%;
   display: flex;
-  align-items: center;
+  height: 100%;
 
   .actual-wrapper {
-    margin-right: 50px;
+    padding: 24px 20px 0 16px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 50px;
+    width: 74px;
 
     .actual-value {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 800;
-      color: greenyellow;
-      margin-bottom: 10px;
+      color: #00ff00;
+      margin-bottom: 4px;
+    }
+
+    .actual-unit {
+      font-size: 14px;
+      color: #ffffff65;
     }
   }
 }
