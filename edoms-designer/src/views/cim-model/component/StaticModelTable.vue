@@ -194,7 +194,7 @@ const handleFileChange = async () => {
         tableId: props.data.id!,
         fileName: uploadResults[0].file.name,
       });
-      ElMessage.success('导入成功');
+      ElMessage.success('上传成功，等待服务器处理');
       importBtn?.value?.ref?.blur();
     })
     .catch(() => {

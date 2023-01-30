@@ -286,7 +286,9 @@ const loadData = async (props?: RequestProps): Promise<any> => {
       const domainPath = prop.substring(0, pathLastIndex);
       model = getByPath(props.formValue ?? {}, domainPath, '');
     }
-
+    if (['energy-efficiency-monitoring'].includes(component)) {
+      model = props.formValue;
+    }
     if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
       return await requestPoints({
         insId: model.instance[model.instance.length - 1],
@@ -372,6 +374,7 @@ async function save() {
 html {
   overflow: hidden;
 }
+
 #app {
   width: 100%;
   height: 100%;

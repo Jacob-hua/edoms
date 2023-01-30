@@ -228,7 +228,6 @@ const handleMenuHover = (value: string | number) => {
   }
 }
 .describe {
-  width: 100%;
   height: 100%;
   margin: 0 41px;
   font-size: 16px;

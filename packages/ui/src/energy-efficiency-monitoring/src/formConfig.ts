@@ -1,9 +1,22 @@
-export default () => [
+import { Request } from '@edoms/editor';
+
+import useInstanceConfig from '../../useInstanceConfig';
+
+export default async (request: Request) => [
+  {
+    text: '轮询间隔',
+    name: 'intervalDelay',
+    type: 'number',
+    min: 1000,
+    step: 1000,
+    defaultValue: 10000,
+  },
   {
     text: '能效名称',
     name: 'energyName',
     defaultValue: 'COP',
   },
+  ...(await useInstanceConfig(request, 'energy-efficiency-monitoring')),
   {
     text: '最小值',
     name: 'minValue',

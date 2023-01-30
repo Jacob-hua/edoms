@@ -1,6 +1,6 @@
 <template>
   <div class="setting">
-    <BusinessCard title="设定参数" subtitle="SETTING PARAMETERS" min-width="480" min-height="200">
+    <BusinessCard title="设定参数" subtitle="SETTING PARAMETERS" min-width="392" min-height="160">
       <template #operation><span class="open" @click="handleShowMore">...</span></template>
       <div class="setting-wrapper">
         <div v-for="({ label, unit, value }, index) in parameterData" :key="index" class="parameter">
