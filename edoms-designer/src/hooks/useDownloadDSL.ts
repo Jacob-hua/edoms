@@ -10,8 +10,8 @@ export class DownloadDSLError extends MessageError {
     super({
       type: 'error',
       message: 'dsl元数据下载失败',
+      cause,
     });
-    this.cause = cause;
   }
 }
 
