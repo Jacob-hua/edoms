@@ -6,7 +6,7 @@
       </template>
       <div class="efficiency-wrapper">
         <div class="actual-wrapper">
-          <div class="actual-value">{{ actualValue }}</div>
+          <div :title="actualValue" class="actual-value">{{ actualValue }}</div>
           <div class="actual-unit">{{ energyName }}</div>
         </div>
         <div style="padding-top: 28px">
@@ -51,11 +51,6 @@ interface Indicator {
   cursorColor?: string;
   refrenceLineColor?: string;
 }
-
-// enum interval{
-//   'day'='1h',
-//   'month'='1'
-// }
 
 const props = defineProps<{
   config: MEfficiencyMonitoring;
@@ -159,10 +154,16 @@ const generateOption = (series: any[] = []): ECOption => {
 
 const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
   const { start, end } = formatDateRange(date, type, 'YYYY-MM-DD HH:mm:ss');
+  let interval = '1m';
+  if (type === 'day') {
+    interval = '1m';
+  } else {
+    interval = '1d';
+  }
   const result = await fetchHistoryData({
     startTime: start,
     endTime: end,
-    interval: '1h',
+    interval: interval,
     type: 'dev',
     dataList: [
       {
@@ -244,6 +245,10 @@ const handleChangeDateType = (type: UnitTime) => {
       font-weight: 800;
       color: #00ff00;
       margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
     }
 
     .actual-unit {

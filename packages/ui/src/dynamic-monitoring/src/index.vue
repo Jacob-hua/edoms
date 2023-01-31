@@ -13,7 +13,12 @@
       <div class="dynamic-monitoring">
         <div v-for="(item, index) in initIndicators" :key="index" @click="handleDisplayCharts(item)">
           <img :src="item.icon" alt="" />
-          <div :class="item.parameterClass">{{ item.displayParameter }}</div>
+          <div :title="item.displayParameter" class="parameter" :style="item.parameterStyle">
+            <el-row>
+              <el-col class="data-value" :span="14">{{ item.parameter }}</el-col>
+              <el-col :span="10">{{ item.unit }}</el-col>
+            </el-row>
+          </div>
           <div class="label">{{ item.label }}</div>
         </div>
       </div>
@@ -59,7 +64,7 @@ export interface Indicator {
   icon: string;
   parameter: string;
   displayParameter: string;
-  parameterClass: string[];
+  parameterStyle: {};
   label: string;
   deviceCode: string;
   propCode: string;
@@ -104,7 +109,7 @@ watch(
       label,
       parameter: '',
       displayParameter: '',
-      parameterClass: ['parameter'],
+      parameterStyle: { color: '#00ff00' },
       icon: getIconByIndicatorType(type),
       deviceCode: instance[instance.length - 1],
       propCode: property,
@@ -137,23 +142,29 @@ const updateIndicatorsData = async () => {
   }
 
   const result = await fetchIndicatorData({ dataList });
+
   result.forEach(({ dataValue, deviceCode, propCode }) => {
-    const targetIndex = indicatorConfigs.value.findIndex(
-      ({ instance, property }) => instance[instance.length - 1] === deviceCode && property === propCode
-    );
-    if (targetIndex < 0) {
+    const targetIndexs: number[] = [];
+    indicatorConfigs.value.forEach(({ instance, property }, index) => {
+      if (instance[instance.length - 1] === deviceCode && property === propCode) {
+        targetIndexs.push(index);
+      }
+    });
+    if (targetIndexs.length <= 0) {
       return;
     }
-    const indicatorConfig = indicatorConfigs.value[targetIndex];
-    const indicator = indicators.value[targetIndex];
-    indicator.parameter = dataValue + '';
-    indicator.displayParameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
-      indicatorConfig.unit
-    }`;
-    indicator.parameterClass = calculateParameterClassName(indicator, indicatorConfig);
-    indicator.deviceCode = deviceCode;
-    indicator.propCode = propCode;
-    indicator.unit = indicatorConfig.unit;
+    targetIndexs.forEach((targetIndex) => {
+      const indicatorConfig = indicatorConfigs.value[targetIndex];
+      const indicator = indicators.value[targetIndex];
+      indicator.parameter = dataValue + '';
+      indicator.displayParameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
+        indicatorConfig.unit
+      }`;
+      indicator.parameterStyle = calculateParameterStyle(indicator, indicatorConfig);
+      indicator.deviceCode = deviceCode;
+      indicator.propCode = propCode;
+      indicator.unit = indicatorConfig.unit;
+    });
   });
 };
 
@@ -169,17 +180,16 @@ function getIconByIndicatorType(type: MEnvironmentIndicator) {
   return iconClassify[type];
 }
 
-function calculateParameterClassName(indicator: Indicator, config: MIndicatorItemConfig) {
-  const { expectedMax, expectedMin, targetMax, targetMin } = config;
+function calculateParameterStyle(indicator: Indicator, config: MIndicatorItemConfig) {
+  const { thresholdConfigs } = config;
   const parameter = Number(indicator.parameter);
-  const result = ['parameter'];
-  if (parameter >= expectedMin && parameter <= expectedMax) {
-    result.push('parameter-normal');
-  } else if (parameter >= targetMin && parameter <= targetMax) {
-    result.push('parameter-warn');
-  } else {
-    result.push('parameter-danger');
-  }
+  const result = { color: '#00ff00' };
+  thresholdConfigs.forEach(({ minValue, maxValue, alarmColor }) => {
+    if (parameter >= minValue && parameter < maxValue) {
+      result.color = alarmColor;
+      return;
+    }
+  });
   return result;
 }
 
@@ -308,18 +318,12 @@ const handleDateChange = (value: string) => {
       width: 100%;
       text-align: center;
       font-weight: bold;
-    }
 
-    .parameter-normal {
-      color: #00ff00;
-    }
-
-    .parameter-warn {
-      color: #ff9b00;
-    }
-
-    .parameter-danger {
-      color: #ff4700;
+      .data-value {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     .label {

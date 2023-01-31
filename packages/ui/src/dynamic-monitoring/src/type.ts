@@ -11,6 +11,17 @@ export enum MEnvironmentIndicator {
   GAS = 'gas',
 }
 
+export interface ThresholdConfig {
+  //**阈值最小值 */
+  minValue: number;
+  /**阈值最大值 */
+  maxValue: number;
+  /**告警等级 */
+  alarmLevel: string;
+  /**颜色 */
+  alarmColor: string;
+}
+
 export interface MIndicatorItemConfig {
   /** 监测指标 */
   type: MEnvironmentIndicator;
@@ -24,14 +35,8 @@ export interface MIndicatorItemConfig {
   propertyType: string;
   /** 属性 */
   property: string;
-  /** 预期最大阈值 */
-  expectedMax: number;
-  /** 预期最小阈值 */
-  expectedMin: number;
-  /** 目标最大阈值 */
-  targetMax: number;
-  /** 目标最小阈值 */
-  targetMin: number;
+  /**阈值配置 */
+  thresholdConfigs: ThresholdConfig[];
   /** 曲线颜色 */
   lineColor: string;
   /** 精度 */

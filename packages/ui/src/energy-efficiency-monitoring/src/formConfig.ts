@@ -10,6 +10,7 @@ export default async (request: Request) => [
     min: 1000,
     step: 1000,
     defaultValue: 10000,
+    append: 'ms',
   },
   {
     text: '能效名称',

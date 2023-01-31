@@ -1,22 +1,24 @@
 <template>
-  <el-dialog v-model="dialogVisible" :width="1000">
-    <template #header>
-      <!-- <el-icon>
+  <div>
+    <el-dialog v-model="dialogVisible" :width="1000">
+      <template #header>
+        <!-- <el-icon>
         <DataAnalysis />
       </el-icon> -->
-      <span>{{ title }}</span>
-    </template>
-    <div class="time-select">
-      <span :class="active === 'day' ? 'checked' : ''" @click="handleChangeType('day')">日</span>
-      <el-divider direction="vertical" />
-      <span :class="active === 'month' ? 'checked' : ''" @click="handleChangeType('month')">月</span>
-      <el-divider direction="vertical" />
-      <span :class="active === 'year' ? 'checked' : ''" @click="handleChangeType('year')">年</span>
-    </div>
-    <div class="chart-container">
-      <EdomsCharts :width="width" :height="height" :option="options"></EdomsCharts>
-    </div>
-  </el-dialog>
+        <span>{{ title }}</span>
+      </template>
+      <div class="time-select">
+        <span :class="active === 'day' ? 'checked' : ''" @click="handleChangeType('day')">日</span>
+        <el-divider direction="vertical" />
+        <span :class="active === 'month' ? 'checked' : ''" @click="handleChangeType('month')">月</span>
+        <el-divider direction="vertical" />
+        <span :class="active === 'year' ? 'checked' : ''" @click="handleChangeType('year')">年</span>
+      </div>
+      <div class="chart-container">
+        <EdomsCharts :width="width" :height="height" :option="options"></EdomsCharts>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -60,10 +62,25 @@ const handleChangeType = (type: UnitTime) => {
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-dialog__header) {
+  background-color: rgba(31, 30, 29, 1);
+  margin: 0;
+}
+:deep(.el-dialog__header span) {
+  color: #ffffff85;
+}
+
+:deep(.el-dialog__body) {
+  background-color: #000000;
+}
 .time-select {
   position: absolute;
   right: 10%;
   top: 45px;
+
+  span {
+    cursor: pointer;
+  }
 }
 
 .chart-container {

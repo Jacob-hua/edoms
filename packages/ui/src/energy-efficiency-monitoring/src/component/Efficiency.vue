@@ -69,6 +69,11 @@ const calculateDistance = (index: number): Position => {
 };
 
 const calculatePosition = (inputValue: string | number): Position => {
+  if (Number(inputValue) >= Number(props.maxValue)) {
+    return {
+      left: `${colorCardWidth}`,
+    };
+  }
   return {
     left: `${
       colorCardWidth *
@@ -115,24 +120,25 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
   .triangle {
     width: 0;
     height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid transparent;
     border-bottom: v-bind(cursorAttribute);
     position: absolute;
-    bottom: -16px;
+    bottom: -15px;
     left: v-bind(calculateActualValuePosition);
     z-index: 2;
   }
   .start-value {
-    color: #fff;
+    color: #ffffff65;
     position: absolute;
-    left: 0;
+    left: -5px;
     bottom: -20px;
   }
   .end-value {
-    color: #fff;
+    color: #ffffff65;
     position: absolute;
-    right: 0;
+    right: -5px;
     bottom: -20px;
   }
 }
@@ -179,8 +185,8 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
     margin-left: 20px;
   }
   span {
-    color: #fff;
-    margin-left: 15px;
+    color: #ffffff65;
+    margin-left: 8px;
   }
 }
 </style>
