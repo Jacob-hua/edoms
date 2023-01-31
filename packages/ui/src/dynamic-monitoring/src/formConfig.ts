@@ -31,6 +31,7 @@ export default async (request: Request) => [
     min: 1000,
     step: 1000,
     defaultValue: 10000,
+    append: 'ms',
   },
   {
     text: '展示指标数',
@@ -38,7 +39,6 @@ export default async (request: Request) => [
     type: 'number',
     min: 0,
     max: 10,
-    append: 'ms',
   },
   {
     text: '监测指标',
