@@ -7,7 +7,7 @@
       </div>
     </template>
     <el-table v-loading="loading" :data="tableData" border>
-      <el-table-column prop="username" label="用户" align="center" />
+      <el-table-column prop="username" label="用户昵称" align="center" />
       <el-table-column prop="roleName" label="权限" align="center" />
       <el-table-column label="操作">
         <template #default="{ row }">

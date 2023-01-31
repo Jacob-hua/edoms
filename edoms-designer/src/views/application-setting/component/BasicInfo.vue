@@ -1,6 +1,13 @@
 <template>
   <div class="appInfo">
-    <el-form ref="formRef" :model="appInfo" :rules="formRules" label-width="80px" class="demo-dynamic">
+    <el-form
+      ref="formRef"
+      :disabled="isDisabledForm"
+      :model="appInfo"
+      :rules="formRules"
+      label-width="80px"
+      class="demo-dynamic"
+    >
       <el-form-item label="名称" prop="name">
         <el-input v-model="appInfo.name" placeholder="请输入应用名称"></el-input>
       </el-form-item>
@@ -37,6 +44,7 @@ import { ElMessage, FormInstance } from 'element-plus';
 import applicationApi, { GetApplicationRes, UpdateApplicationReq } from '@/api/application';
 import ImageUpload from '@/components/ImageUpload.vue';
 import { ApplicationPermission } from '@/const/permission';
+import usePermissionStore from '@/store/permission';
 
 const props = defineProps<{
   appInfo: GetApplicationRes;
@@ -45,9 +53,9 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: 'success'): void;
 }>();
-
+const { hasPermission } = usePermissionStore();
+const isDisabledForm = !hasPermission(ApplicationPermission.APPLICATION_DESIGN_UPDATE);
 const previewPath = import.meta.env.VITE_PREVIEW_PATH;
-
 const formRules = {
   name: [
     {
