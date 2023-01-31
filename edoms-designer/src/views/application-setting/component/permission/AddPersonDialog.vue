@@ -6,7 +6,7 @@
           <div>{{ roleName }}</div>
         </el-form-item>
         <el-form-item label="用户昵称" prop="userId">
-          <el-select v-model="permissionAddForm.userId" placeholder="请选择用户">
+          <el-select v-model="permissionAddForm.userId" placeholder="请选择用户昵称">
             <el-option
               v-for="{ userId, userName } in userList"
               :key="userId"
@@ -59,7 +59,7 @@ const dialogVisible = computed<boolean>({
 });
 
 const formRules = {
-  userId: [{ required: true, message: '用户不能为空', trigger: 'blur' }],
+  userId: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
 };
 
 const permissionAddForm = ref<PermissionAdd>({
