@@ -24,8 +24,8 @@ export class UploadError extends MessageError {
     super({
       type: 'error',
       message: `${fileName}上传失败`,
+      cause,
     });
-    this.cause = cause;
   }
 }
 

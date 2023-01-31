@@ -8,8 +8,8 @@ export class ExportError extends MessageError {
     super({
       type: 'error',
       message: `导出${fileName}失败`,
+      cause,
     });
-    this.cause = cause;
   }
 }
 

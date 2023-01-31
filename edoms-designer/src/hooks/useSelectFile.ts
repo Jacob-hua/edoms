@@ -14,8 +14,8 @@ export class SelectFileError extends MessageError {
           : cause.type === 'CancelSelect'
           ? '取消文件选择'
           : '文件选择异常',
+      cause,
     });
-    this.cause = cause;
   }
 }
 

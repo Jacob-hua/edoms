@@ -10,11 +10,15 @@ export class BaseError extends Error {
 export interface MessageOption {
   type: 'error' | 'warning';
   message: string;
+  cause?: any;
 }
 
 export class MessageError extends BaseError {
   constructor(option: MessageOption) {
     super(option.message);
-    ElMessage(option);
+    this.cause = option.cause;
+    if (option.cause.message !== 'Request failed with status code 401') {
+      ElMessage(option);
+    }
   }
 }

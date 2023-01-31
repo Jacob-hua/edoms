@@ -70,8 +70,7 @@ const responseInterceptorsCatch = (error: EdomsError) => {
         path: '/login',
       });
       ElMessage.error('应用设计角色变更，权限失效');
-    }
-    if (response.status === 404) {
+    } else if (response.status === 404) {
       ElMessage.error('服务器资源不存在');
     } else if (response.data) {
       const res = response.data as EdomsResponseData<any>;

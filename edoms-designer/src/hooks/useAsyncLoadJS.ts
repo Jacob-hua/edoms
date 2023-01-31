@@ -9,8 +9,8 @@ export class AsyncLoadJSError extends MessageError {
     super({
       type: 'error',
       message: `Failed to load ${paths}`,
+      cause,
     });
-    this.cause = cause;
   }
 }
 
