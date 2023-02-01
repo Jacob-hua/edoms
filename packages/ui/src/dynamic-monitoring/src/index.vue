@@ -12,8 +12,13 @@
       </template>
       <div class="dynamic-monitoring">
         <div v-for="(item, index) in initIndicators" :key="index" @click="handleDisplayCharts(item)">
-          <img :src="item.icon" />
-          <div :class="item.parameterClass">{{ item.displayParameter }}</div>
+          <img :src="item.icon" alt="" />
+          <div :title="item.displayParameter" class="parameter" :style="item.parameterStyle">
+            <el-row>
+              <el-col class="data-value" :span="14">{{ item.parameter }}</el-col>
+              <el-col :span="10">{{ item.unit }}</el-col>
+            </el-row>
+          </div>
           <div class="label">{{ item.label }}</div>
         </div>
       </div>
@@ -59,11 +64,12 @@ export interface Indicator {
   icon: string;
   parameter: string;
   displayParameter: string;
-  parameterClass: string[];
+  parameterStyle: {};
   label: string;
   deviceCode: string;
   propCode: string;
   unit: string;
+  lineColor: string;
 }
 
 const props = defineProps<{
@@ -99,15 +105,16 @@ const operatable = computed(() => (restIndicators.value.length ? 'operation' : '
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
-    indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit }) => ({
+    indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit, lineColor }) => ({
       label,
       parameter: '',
       displayParameter: '',
-      parameterClass: ['parameter'],
+      parameterStyle: { color: '#00ff00' },
       icon: getIconByIndicatorType(type),
       deviceCode: instance[instance.length - 1],
       propCode: property,
       unit: unit,
+      lineColor: lineColor,
     }));
     if (indicators.value.length > 5) {
       initIndicators.value = indicators.value.slice(0, 5);
@@ -135,23 +142,29 @@ const updateIndicatorsData = async () => {
   }
 
   const result = await fetchIndicatorData({ dataList });
+
   result.forEach(({ dataValue, deviceCode, propCode }) => {
-    const targetIndex = indicatorConfigs.value.findIndex(
-      ({ instance, property }) => instance[instance.length - 1] === deviceCode && property === propCode
-    );
-    if (targetIndex < 0) {
+    const targetIndexs: number[] = [];
+    indicatorConfigs.value.forEach(({ instance, property }, index) => {
+      if (instance[instance.length - 1] === deviceCode && property === propCode) {
+        targetIndexs.push(index);
+      }
+    });
+    if (targetIndexs.length <= 0) {
       return;
     }
-    const indicatorConfig = indicatorConfigs.value[targetIndex];
-    const indicator = indicators.value[targetIndex];
-    indicator.parameter = dataValue + '';
-    indicator.displayParameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
-      indicatorConfig.unit
-    }`;
-    indicator.parameterClass = calculateParameterClassName(indicator, indicatorConfig);
-    indicator.deviceCode = deviceCode;
-    indicator.propCode = propCode;
-    indicator.unit = indicatorConfig.unit;
+    targetIndexs.forEach((targetIndex) => {
+      const indicatorConfig = indicatorConfigs.value[targetIndex];
+      const indicator = indicators.value[targetIndex];
+      indicator.parameter = dataValue + '';
+      indicator.displayParameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
+        indicatorConfig.unit
+      }`;
+      indicator.parameterStyle = calculateParameterStyle(indicator, indicatorConfig);
+      indicator.deviceCode = deviceCode;
+      indicator.propCode = propCode;
+      indicator.unit = indicatorConfig.unit;
+    });
   });
 };
 
@@ -167,17 +180,16 @@ function getIconByIndicatorType(type: MEnvironmentIndicator) {
   return iconClassify[type];
 }
 
-function calculateParameterClassName(indicator: Indicator, config: MIndicatorItemConfig) {
-  const { expectedMax, expectedMin, targetMax, targetMin } = config;
+function calculateParameterStyle(indicator: Indicator, config: MIndicatorItemConfig) {
+  const { thresholdConfigs } = config;
   const parameter = Number(indicator.parameter);
-  const result = ['parameter'];
-  if (parameter >= expectedMin && parameter <= expectedMax) {
-    result.push('parameter-normal');
-  } else if (parameter >= targetMin && parameter <= targetMax) {
-    result.push('parameter-warn');
-  } else {
-    result.push('parameter-danger');
-  }
+  const result = { color: '#00ff00' };
+  thresholdConfigs.forEach(({ minValue, maxValue, alarmColor }) => {
+    if (parameter >= minValue && parameter < maxValue) {
+      result.color = alarmColor;
+      return;
+    }
+  });
   return result;
 }
 
@@ -231,9 +243,11 @@ const getHistoryData = async (date: Date) => {
     type: 'line',
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    itemStyle: {
+      color: activeIndicator.value?.lineColor,
+    },
   }));
   options.value = generateOption(chartSeries);
-  console.log(result);
 };
 
 const handleTrigger = () => {
@@ -304,18 +318,12 @@ const handleDateChange = (value: string) => {
       width: 100%;
       text-align: center;
       font-weight: bold;
-    }
 
-    .parameter-normal {
-      color: #00ff00;
-    }
-
-    .parameter-warn {
-      color: #ff9b00;
-    }
-
-    .parameter-danger {
-      color: #ff4700;
+      .data-value {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     .label {
@@ -329,6 +337,11 @@ const handleDateChange = (value: string) => {
     height: 32px;
     margin-top: 12px;
     margin-bottom: 10px;
+  }
+
+  img[src=''],
+  img:not([src]) {
+    opacity: 0;
   }
 }
 

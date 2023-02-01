@@ -3,6 +3,8 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+export type UnitTime = OpUnitType;
+
 export interface TimeRange {
   start: Dayjs;
   end: Dayjs;

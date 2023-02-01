@@ -3,7 +3,7 @@
     <div v-for="index in bisectionNumber" :key="index" :style="calculateDistance(index)" class="division-wrapper"></div>
     <div class="triangle"></div>
     <div class="reference-line-wrapper">
-      <div class="reference-value">{{ referenceValue }}</div>
+      <div class="reference-value">{{ refrenceValue }}</div>
     </div>
     <div class="start-value">{{ minValue }}</div>
     <div class="end-value">{{ maxValue }}</div>
@@ -36,7 +36,7 @@ const props = withDefaults(
     /** 最大值 **/
     maxValue: string;
     /** 参考值  **/
-    referenceValue: string;
+    refrenceValue: string;
     /** 实际值  **/
     actualValue: string;
     /** 等分数量 **/
@@ -48,15 +48,15 @@ const props = withDefaults(
     /** 游标颜色 **/
     cursorColor?: string;
     /** 参考线 颜色 **/
-    referenceLineColor?: string;
+    refrenceLineColor?: string;
   }>(),
   {
     bisectionNumber: () => 5,
     cursorColor: () => 'green',
-    referenceLineColor: () => '#fff',
+    refrenceLineColor: () => '#fff',
   }
 );
-const colorCardWidth: number = 360;
+const colorCardWidth: number = 262;
 
 const attribute = computed(() => `linear-gradient(90deg, ${props.startColor}, ${props.endColor})`);
 
@@ -69,6 +69,11 @@ const calculateDistance = (index: number): Position => {
 };
 
 const calculatePosition = (inputValue: string | number): Position => {
+  if (Number(inputValue) >= Number(props.maxValue)) {
+    return {
+      left: `${colorCardWidth}`,
+    };
+  }
   return {
     left: `${
       colorCardWidth *
@@ -78,36 +83,36 @@ const calculatePosition = (inputValue: string | number): Position => {
 };
 const calculateActualValuePosition = computed(() => `${+calculatePosition(props.actualValue)?.left - 8}px`);
 
-const calculateReferenceValuePosition = computed(() => `${calculatePosition(props.referenceValue)?.left}px`);
+const calculateReferenceValuePosition = computed(() => `${calculatePosition(props.refrenceValue)?.left}px`);
 
-const cursorAttribute = computed(() => `16px solid ${props.cursorColor}`);
+const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
 </script>
 
 <style lang="scss" scoped>
 .color-card-wrapper {
-  width: 360px;
-  height: 30px;
+  width: 262px;
+  height: 20px;
   background-image: v-bind(attribute);
   position: relative;
   .division-wrapper {
     width: 2px;
-    height: 30px;
+    height: 20px;
     position: absolute;
     background-color: #000;
   }
   .reference-line-wrapper {
     width: 2px;
-    height: 34px;
+    height: 24px;
     position: absolute;
     top: -2px;
     left: v-bind(calculateReferenceValuePosition);
-    background-color: v-bind(referenceLineColor);
+    background-color: v-bind(refrenceLineColor);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     .reference-value {
-      color: v-bind(referenceLineColor);
+      color: v-bind(refrenceLineColor);
       position: absolute;
       bottom: -20px;
     }
@@ -115,35 +120,34 @@ const cursorAttribute = computed(() => `16px solid ${props.cursorColor}`);
   .triangle {
     width: 0;
     height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid transparent;
     border-bottom: v-bind(cursorAttribute);
     position: absolute;
-    bottom: -16px;
+    bottom: -15px;
     left: v-bind(calculateActualValuePosition);
     z-index: 2;
   }
   .start-value {
-    color: #fff;
+    color: #ffffff65;
     position: absolute;
-    left: 0;
+    left: -5px;
     bottom: -20px;
   }
   .end-value {
-    color: #fff;
+    color: #ffffff65;
     position: absolute;
-    right: 0;
+    right: -5px;
     bottom: -20px;
   }
 }
 .legend-wrapper {
   width: 240px;
   margin-top: 40px !important;
-  padding-top: 20px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding-left: 60px;
   .legend-start {
     width: 100px;
     display: flex;
@@ -176,13 +180,13 @@ const cursorAttribute = computed(() => `16px solid ${props.cursorColor}`);
     .legend-box {
       width: 2px;
       height: 20px;
-      background-color: v-bind(referenceLineColor);
+      background-color: v-bind(refrenceLineColor);
     }
     margin-left: 20px;
   }
   span {
-    color: #fff;
-    margin-left: 15px;
+    color: #ffffff65;
+    margin-left: 8px;
   }
 }
 </style>

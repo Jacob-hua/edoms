@@ -10,6 +10,7 @@ export default async (request: Request) => [
     min: 1000,
     step: 1000,
     defaultValue: 10000,
+    append: 'ms',
   },
   {
     text: '能效名称',
@@ -20,25 +21,25 @@ export default async (request: Request) => [
   {
     text: '最小值',
     name: 'minValue',
-    defaultValue: '2.0',
+    defaultValue: '',
   },
   {
     text: '最大值',
     name: 'maxValue',
-    defaultValue: '6.0',
+    defaultValue: '',
   },
   {
     text: '参考值',
-    name: 'referenceValue',
-    defaultValue: '4.3',
-    onChange: (state: any, referenceValue: any, { model }: any) => {
-      if (Number(referenceValue) < Number(model.minValue)) {
-        model.referenceValue = model.minValue;
+    name: 'refrenceValue',
+    defaultValue: '',
+    onChange: (state: any, refrenceValue: any, { model }: any) => {
+      if (Number(refrenceValue) < Number(model.minValue)) {
+        model.refrenceValue = model.minValue;
       }
-      if (Number(referenceValue) > Number(model.maxValue)) {
-        model.referenceValue = model.maxValue;
+      if (Number(refrenceValue) > Number(model.maxValue)) {
+        model.refrenceValue = model.maxValue;
       }
-      return model.referenceValue;
+      return model.refrenceValue;
     },
   },
   {
@@ -51,25 +52,25 @@ export default async (request: Request) => [
     defaultValue: 5,
   },
   {
-    text: '开始颜色',
+    text: '最小值',
     type: 'colorPicker',
     name: 'startColor',
     defaultValue: '#FFFF00',
   },
   {
-    text: '结束颜色',
+    text: '最大值',
     type: 'colorPicker',
     name: 'endColor',
     defaultValue: '#FF0000',
   },
   {
-    text: '参考线颜色',
+    text: '参考值',
     type: 'colorPicker',
-    name: 'referenceLineColor',
+    name: 'refrenceLineColor',
     defaultValue: '#fff',
   },
   {
-    text: '游标颜色',
+    text: '游标',
     type: 'colorPicker',
     name: 'cursorColor',
     defaultValue: '#008000',

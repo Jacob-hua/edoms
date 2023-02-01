@@ -10,7 +10,12 @@
       <div class="setting-wrapper">
         <div v-for="(item, index) in currentPageData" :key="index" @click="handleClick(item)">
           <img :src="item.icon" />
-          <div :class="item.parameterClass">{{ item.displayParameter }}</div>
+          <div :title="item.displayParameter" class="parameter" :style="item.parameterStyle">
+            <el-row>
+              <el-col class="data-value" :span="14">{{ item.parameter }}</el-col>
+              <el-col :span="10">{{ item.unit }}</el-col>
+            </el-row>
+          </div>
           <div class="label">{{ item.label }}</div>
         </div>
       </div>
@@ -97,20 +102,16 @@ const handleCurrentChange = (value: string) => {
   background-color: #2c2c2c;
 
   .header-top {
-    padding: 10px 0 10px 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 16px 0 16px;
 
     .top-wrapper {
       cursor: pointer;
-    }
-
-    .header-text {
-      color: #fff;
-      font-size: 17px;
-    }
-
-    .header-back {
-      font-size: 20px;
-      color: #fff;
+      color: #ffffff85;
+      font-size: 16px;
     }
   }
 
@@ -133,18 +134,15 @@ const handleCurrentChange = (value: string) => {
         .parameter {
           font-size: 14px;
           margin-bottom: 8px;
-        }
+          width: 100%;
+          text-align: center;
+          font-weight: bold;
 
-        .parameter-normal {
-          color: #00ff00;
-        }
-
-        .parameter-warn {
-          color: #ff9b00;
-        }
-
-        .parameter-danger {
-          color: #ff4700;
+          .data-value {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
         }
       }
 
@@ -155,11 +153,15 @@ const handleCurrentChange = (value: string) => {
         margin-bottom: 10px;
       }
 
+      img[src=''],
+      img:not([src]) {
+        opacity: 0;
+      }
+
       .label {
-        color: #ffffff85;
-        width: 80px;
         font-size: 14px;
-        text-align: center;
+        font-weight: bold;
+        color: #ffffff65;
       }
     }
   }
