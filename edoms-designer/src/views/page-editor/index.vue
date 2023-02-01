@@ -93,7 +93,7 @@ const previewPageId = ref<Id>();
 
 const dsl = ref<MApp | undefined>();
 
-const defaultSelected = ref<Id>();
+const defaultSelected = ref<Id>(route.query.pageId as Id);
 
 const propsValues = ref<Record<string, any>>({});
 
@@ -176,8 +176,10 @@ const menu = computed<MenuBarData>(() => ({
       type: 'button',
       text: '保存',
       icon: Coin,
-      handler: async () => {
-        await save();
+      handler: async (services) => {
+        if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
+          await save();
+        }
         ElMessage.success('保存成功');
       },
     },
@@ -215,7 +217,7 @@ watch(
       return;
     }
     dsl.value = await calculateDSL();
-    defaultSelected.value = dsl.value.items?.[0].id;
+    !defaultSelected.value && (defaultSelected.value = dsl.value.items?.[0].id);
     if (dsl.value.referenceResource) {
       for (const [id, value] of Object.entries(dsl.value.referenceResource)) {
         staticResource.value.set(id, value);
