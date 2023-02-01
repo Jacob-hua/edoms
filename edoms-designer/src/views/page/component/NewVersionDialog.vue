@@ -35,11 +35,9 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
-import serialize from 'serialize-javascript';
 
 import versionApi from '@/api/version';
-import useUpload from '@/hooks/useUpload';
-import { generateDefaultDSL } from '@/util/dsl';
+import useUploadDefaultDSL from '@/hooks/useUploadDefaultDSL';
 
 import SwitchVersion, { VersionModel } from './SwitchVersion.vue';
 
@@ -108,6 +106,8 @@ const formRules: FormRules = {
   ],
 };
 
+const { execute: uploadDefaultDSLExecute } = useUploadDefaultDSL();
+
 const handleConfirm = async () => {
   if (!formRef.value) return;
   try {
@@ -115,7 +115,7 @@ const handleConfirm = async () => {
     const { name, description, createFrom } = formModel;
     let contentId = createFrom.contentId;
     if (!createFrom.contentId) {
-      contentId = await uploadDefaultDsl();
+      contentId = await uploadDefaultDSLExecute(props.applicationId, props.applicationName);
     }
     await versionApi.saveVersion({
       applicationId: props.applicationId,
@@ -130,18 +130,6 @@ const handleConfirm = async () => {
     emit('error', e);
   }
 };
-
-const { execute: uploadExecute } = useUpload();
-
-async function uploadDefaultDsl(): Promise<string> {
-  const dsl = generateDefaultDSL({ applicationId: props.applicationId, applicationName: props.applicationName });
-  const DSL = serialize(dsl, {
-    space: 2,
-    unsafe: true,
-  }).replace(/"(\w+)":\s/g, '$1: ');
-
-  return await uploadExecute(DSL, `dsl.js`, 'text/javascript', 'utf-8');
-}
 </script>
 
 <style lang="scss" scoped></style>

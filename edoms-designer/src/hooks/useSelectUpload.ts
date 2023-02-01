@@ -32,7 +32,7 @@ export default () => {
       }
       const { error: uploadError, execute: uploadExecute } = useUpload();
       watch(
-        () => uploadError,
+        () => uploadError.value,
         (e) => {
           error.value = e;
         }
