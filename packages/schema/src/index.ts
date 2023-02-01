@@ -100,6 +100,7 @@ export interface MApp extends MComponent {
   /** 代码块 */
   codeBlocks?: CodeBlockDSL;
   index?: Id;
+  tenantId?: string;
   referenceResource?: {
     [key: Id]: string;
   };
