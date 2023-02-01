@@ -123,13 +123,12 @@ watch(
 );
 
 onActivated(() => {
-  if (route.query.contentId as string) {
-    const oldVersion = unref(version);
-    if (oldVersion) {
-      oldVersion['contentId'] = route.query.contentId as string;
-      version.value = oldVersion;
-      updateDsl();
-    }
+  const contentId = route.query.contentId as string;
+  const oldVersion = unref(version);
+  if (oldVersion && contentId) {
+    oldVersion['contentId'] = route.query.contentId as string;
+    version.value = oldVersion;
+    updateDsl();
   }
 });
 
@@ -162,6 +161,7 @@ const handleEdit = () => {
     query: {
       applicationId: applicationId.value,
       versionId: version.value?.versionId,
+      pageId: active.value?.id,
     },
   });
 };
