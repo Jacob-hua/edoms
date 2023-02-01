@@ -32,6 +32,7 @@ import { computed, onMounted, reactive, ref, toRaw, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Back, Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { storeToRefs } from 'pinia';
 import serialize from 'serialize-javascript';
 
 import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps } from '@edoms/editor';
@@ -46,6 +47,7 @@ import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
 import useDownloadDSL from '@/hooks/useDownloadDSL';
 import useModel from '@/hooks/useModel';
 import useUpload from '@/hooks/useUpload';
+import useAccountStore from '@/store/account';
 import { generateDefaultDSL } from '@/util/dsl';
 
 import DSLPreviewDialog from './component/DSLPreviewDialog.vue';
@@ -321,6 +323,8 @@ function goBack() {
 
 const { execute: downloadDslExecute } = useDownloadDSL();
 
+const { currentTenant } = storeToRefs(useAccountStore());
+
 async function calculateDSL(): Promise<MApp> {
   if (contentState.contentId) {
     return await downloadDslExecute(contentState.contentId);
@@ -329,6 +333,7 @@ async function calculateDSL(): Promise<MApp> {
   return generateDefaultDSL({
     applicationId: contentState.applicationId,
     applicationName: contentState.applicationName,
+    tenantId: currentTenant.value?.tenantId,
   });
 }
 
