@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 
-import { Callback, CodeBlockDSL, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
+import { Callback, CodeBlockDSL, EventAction, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
 
 import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
@@ -203,8 +203,49 @@ class App extends EventEmitter {
   public eventHandler(eventConfig: EventItemConfig, fromCpt: any, props?: MethodProps) {
     if (!this.page) throw new Error('当前没有页面');
 
-    const { method: methodName, to } = eventConfig;
+    const { action, to, page, method: methodName } = eventConfig;
 
+    if (action === EventAction.COMPONENT_LINKAGE && to && methodName) {
+      const toNode = this.page.getNode(to);
+      if (!toNode) throw `ID为${to}的组件不存在`;
+
+      if (isCommonMethod(methodName)) {
+        return triggerCommonMethod(methodName, toNode);
+      }
+
+      if (!toNode.instance) {
+        this.addEventToMap({
+          eventConfig,
+          fromCpt,
+          props,
+        });
+      } else if (toNode.instance.methods && typeof toNode.instance.methods[methodName] === 'function') {
+        const method = toNode.instance.methods[methodName] as Callback;
+        let methodProps: MethodProps = { fromCpt };
+        if (method.__depends__) {
+          methodProps = method.__depends__.reduce(
+            (methodProps, dependKey: string) => ({ ...methodProps, [dependKey]: props?.[dependKey] }),
+            methodProps
+          );
+        }
+        method(methodProps);
+      }
+    } else if (action === EventAction.ROUTE_SETTING && page) {
+      console.log('路由跳转');
+    }
+  }
+
+  public destroy() {
+    this.removeAllListeners();
+    this.pages.clear();
+  }
+
+  private handleComponentLinkage(eventConfig: EventItemConfig, fromCpt: any, props?: MethodProps) {
+    if (!this.page) throw new Error('当前没有页面');
+    const { to, method: methodName } = eventConfig;
+    if (!to || !methodName) {
+      return;
+    }
     const toNode = this.page.getNode(to);
     if (!toNode) throw `ID为${to}的组件不存在`;
 
@@ -231,12 +272,10 @@ class App extends EventEmitter {
     }
   }
 
-  public destroy() {
-    this.removeAllListeners();
-    this.pages.clear();
-  }
-
   private addEventToMap(event: EventCache) {
+    if (!event.eventConfig.to) {
+      return;
+    }
     if (this.eventQueueMap[event.eventConfig.to]) {
       this.eventQueueMap[event.eventConfig.to].push(event);
     } else {

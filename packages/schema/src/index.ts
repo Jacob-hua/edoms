@@ -31,13 +31,22 @@ export type EventArgs = Record<string | number | symbol, any>;
 
 export type MethodProps = EventArgs;
 
+export const enum EventAction {
+  COMPONENT_LINKAGE = 'component_linkage',
+  ROUTE_SETTING = 'route_setting',
+}
+
 export interface EventItemConfig {
-  /** 被选中组件ID */
-  to: Id;
-  /** 被选中组件名称 */
+  /** 事件名称 */
   name: string;
+  /** 事件动作 */
+  action: EventAction;
+  /** 目标页面ID */
+  page?: Id;
+  /** 联动组件ID */
+  to?: Id;
   /** 触发事件后执行被选中组件的方法 */
-  method: string;
+  method?: string;
   mappings?: MappingStruct[];
 }
 
