@@ -4,6 +4,7 @@ import { NodeType } from '@edoms/schema';
 export interface AppDSLConfig {
   applicationId: string;
   applicationName: string;
+  tenantId?: string;
 }
 
 export const generateDefaultDSL = (config: AppDSLConfig): MApp => {
@@ -11,6 +12,7 @@ export const generateDefaultDSL = (config: AppDSLConfig): MApp => {
     id: config.applicationId,
     name: config.applicationName,
     type: NodeType.ROOT,
+    tenantId: config.tenantId,
     items: [
       {
         id: 'edoms_page_f0ae683d',
