@@ -21,6 +21,13 @@
             <ToolButton
               :data="{
                 type: 'button',
+                text: '重命名',
+                handler: () => rename(item),
+              }"
+            ></ToolButton>
+            <ToolButton
+              :data="{
+                type: 'button',
                 text: '复制',
                 icon: DocumentCopy,
                 handler: () => copy(item),
@@ -50,7 +57,7 @@
 import { computed, inject } from 'vue';
 import { CaretBottom, Delete, DocumentCopy } from '@element-plus/icons-vue';
 
-import { ElIcon, ElPopover, ElTooltip } from '@edoms/design';
+import { ElIcon, elMessageBox, ElPopover, ElTooltip } from '@edoms/design';
 import type { MApp, MPage } from '@edoms/schema';
 
 import ToolButton from '../../components/ToolButton.vue';
@@ -75,6 +82,21 @@ const copy = (node: MPage) => {
     left: 0,
     top: 0,
   });
+};
+
+const rename = (node: MPage) => {
+  elMessageBox
+    .prompt(`重命名${node.name}`, '提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      inputValue: node.name,
+      inputPattern: /\S/,
+      inputErrorMessage: '页面名不能为空',
+      closeOnClickModal: false,
+    })
+    .then(({ value }) => {
+      editorService?.update({ ...node, name: String.prototype.trim.call(value) });
+    });
 };
 
 const remove = (node: MPage) => {
