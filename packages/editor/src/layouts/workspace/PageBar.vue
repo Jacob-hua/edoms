@@ -22,6 +22,7 @@
               :data="{
                 type: 'button',
                 text: '重命名',
+                icon: Edit,
                 handler: () => rename(item),
               }"
             ></ToolButton>
@@ -55,7 +56,7 @@
 
 <script lang="ts" setup>
 import { computed, inject } from 'vue';
-import { CaretBottom, Delete, DocumentCopy } from '@element-plus/icons-vue';
+import { CaretBottom, Delete, DocumentCopy, Edit } from '@element-plus/icons-vue';
 
 import { ElIcon, elMessageBox, ElPopover, ElTooltip } from '@edoms/design';
 import type { MApp, MPage } from '@edoms/schema';
