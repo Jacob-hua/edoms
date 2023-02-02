@@ -3,13 +3,13 @@
     <el-dialog v-model="dialogVisible" width="40%" title="设定参数">
       <el-form ref="formRef" :model="formModel" :rules="formRules" label-width="80px">
         <el-form-item label="参数名称" prop="propName">
-          <el-input v-model="formModel.propName"></el-input>
+          <el-input v-model="formModel.propName" disabled></el-input>
         </el-form-item>
         <el-form-item label="参数值" prop="propValue">
           <el-input v-model="formModel.propValue"></el-input>
         </el-form-item>
         <el-form-item label="单位" prop="propUnit">
-          <el-input v-model="formModel.propUnit"></el-input>
+          <el-input v-model="formModel.propUnit" disabled></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
