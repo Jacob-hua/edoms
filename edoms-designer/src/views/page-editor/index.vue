@@ -41,6 +41,7 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath, isNumber } from '@edoms/utils';
 
+import applicationApi, { SaveParametrReq } from '@/api/application';
 import versionApi from '@/api/version';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
@@ -362,11 +363,37 @@ async function uploadDsl(): Promise<string | null | undefined> {
   );
 }
 
+async function savaRunTimeData() {
+  const rawDsl = toRaw(dsl.value);
+  const params: SaveParametrReq = {
+    applicationId: String(rawDsl?.id) ?? '',
+    tenantId: rawDsl?.tenantId ?? '',
+    list: [],
+  };
+  rawDsl?.items.forEach((ele) => {
+    ele.items.forEach((item) => {
+      if (item.type === 'setting-parameter') {
+        params.list.push({
+          componentType: item.type,
+          componentIdentify: String(item.id),
+          dataSetting: item.parameters,
+        });
+      }
+    });
+  });
+  try {
+    await applicationApi.saveParametersData(params);
+  } catch (e: any) {
+    console.log(e);
+  }
+}
+
 async function save() {
   const contentId = await uploadDsl();
   if (!contentId) {
     return;
   }
+  await savaRunTimeData();
   contentState.contentId = contentId;
   await versionApi.updateContent({
     applicationId: contentState.applicationId,

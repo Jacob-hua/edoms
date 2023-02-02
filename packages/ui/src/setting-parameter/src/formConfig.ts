@@ -15,21 +15,21 @@ export default () => [
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
-        name: 'label',
+        name: 'propName',
         text: '参数名称',
         type: 'text',
         placeholder: '请填写参数名称',
         trim: true,
       },
       {
-        name: 'value',
+        name: 'propValue',
         text: '参数值',
         type: 'text',
         placeholder: '请填写参数值',
         trim: true,
       },
       {
-        name: 'unit',
+        name: 'propUnit',
         text: '单位',
         type: 'text',
         placeholder: '请填写单位',

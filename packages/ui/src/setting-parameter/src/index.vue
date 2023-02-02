@@ -1,82 +1,204 @@
 <template>
   <div class="setting">
     <BusinessCard title="设定参数" subtitle="SETTING PARAMETERS" min-width="392" min-height="160">
-      <template #operation><span class="open" @click="handleShowMore">...</span></template>
+      <template #operation>
+        <div :class="operatable" @click="handleShowMore">...</div>
+      </template>
       <div class="setting-wrapper">
-        <div v-for="({ label, unit, value }, index) in parameterData" :key="index" class="parameter">
+        <div
+          v-for="(item, index) in initParameter"
+          :key="index"
+          class="parameter"
+          @click="handleSettingParameter(item, index)"
+        >
           <p class="value-wrapper">
-            <span class="value">{{ value }}</span
-            ><span class="unit">{{ unit }}</span>
+            <span class="value">{{ item.propValue }}</span
+            ><span class="unit">{{ item.propUnit }}</span>
           </p>
-          <p class="label">{{ label }}</p>
+          <p class="label">{{ item.propName }}</p>
         </div>
       </div>
     </BusinessCard>
-    <MoreParameters v-if="surplusParameterVisible" v-model:visible="surplusParameterVisible" :data="surplusParameter" />
+    <MoreParameters
+      v-if="surplusParameterVisible"
+      v-model:visible="surplusParameterVisible"
+      :data="restParameter"
+      @set-parameter="handleSetParameter"
+    />
+    <SettingDialog
+      v-model:visible="settingDialogVisible"
+      :parameter-data="parameter"
+      @submit-parameter="submitParameter"
+    ></SettingDialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 
-import { MComponent } from '@edoms/schema';
+import { elMessage } from '@edoms/design';
 
 import BusinessCard from '../../BusinessCard.vue';
+import useApp from '../../useApp';
 
 import MoreParameters from './component/MoreParameters.vue';
-import { Parameter } from './type';
+import SettingDialog from './component/SettingDialog.vue';
+import apiFactory from './api';
+import { FetchParametersReq, MParameterConfig, Parameter, UpdateParametersReq } from './type';
 
-interface MParameterConfig extends MComponent {
-  visibleNumber: number;
-  parameters: Parameter[];
-}
 const props = defineProps<{
   config: MParameterConfig;
 }>();
 
-const parameterData = ref<Parameter[]>();
-const surplusParameter = ref<Parameter[]>();
+const { request, app, node } = useApp(props);
+
+const targetType = String(node?.data.type);
+const targetId = String(node?.data.id);
+const applicationId = String(app?.config?.id);
+const tenantId = String(app?.config?.tenantId);
+
+const { fetchParametersData, updateParameterData } = apiFactory(request);
+
+const parameters = ref<Parameter[]>([]);
+const parameter = reactive<Parameter>({
+  propName: '',
+  propValue: '',
+  propUnit: '',
+});
+const initParameter = ref<Parameter[]>([]);
+const restParameter = ref<Parameter[]>([]);
 const surplusParameterVisible = ref<boolean>(false);
+const settingDialogVisible = ref<boolean>(false);
+
+const parameterIndex = ref<number>(0);
+
+const operatable = computed(() => (restParameter.value.length ? 'operation' : 'dis-operation'));
 
 watch(
   () => props.config,
   ({ parameters, visibleNumber }) => {
-    parameterData.value = parameters?.slice(0, visibleNumber);
-    surplusParameter.value = parameters?.slice(visibleNumber);
+    initParameter.value = parameters?.slice(0, visibleNumber);
+    restParameter.value = parameters?.slice(visibleNumber);
   },
   {
     immediate: true,
     deep: true,
   }
 );
+
+const fetchSettingData = async () => {
+  const params: FetchParametersReq = {
+    list: targetId,
+    applicationId: applicationId,
+    tenantId: tenantId,
+  };
+  const result = await fetchParametersData(params);
+  if (result.length <= 0) {
+    return;
+  }
+  const targetComponent = result.filter(({ componentIdentify }) => componentIdentify === targetId).pop();
+  if (!targetComponent || targetComponent.dataSetting.length <= 0) {
+    return;
+  }
+  parameters.value = targetComponent.dataSetting;
+  initParameter.value = targetComponent.dataSetting?.slice(0, props.config.visibleNumber);
+  restParameter.value = targetComponent.dataSetting?.slice(props.config.visibleNumber);
+};
+
+const setParameters = async () => {
+  const params: UpdateParametersReq = [
+    {
+      componentType: targetType,
+      componentIdentify: targetId,
+      dataSetting: parameters.value,
+      applicationId: applicationId,
+      tenantId: tenantId,
+    },
+  ];
+  try {
+    await updateParameterData(params);
+    elMessage.success('设置成功');
+    settingDialogVisible.value = false;
+  } catch (e: any) {
+    console.log(e);
+  }
+};
+
+const handleSetParameter = (item: Parameter, index: number) => {
+  parameter.propName = item.propName;
+  parameter.propUnit = item.propUnit;
+  parameter.propValue = item.propValue;
+  parameterIndex.value = index + props.config.visibleNumber;
+  settingDialogVisible.value = true;
+};
+
+const handleSettingParameter = (item: Parameter, index: number) => {
+  parameter.propName = item.propName;
+  parameter.propUnit = item.propUnit;
+  parameter.propValue = item.propValue;
+  parameterIndex.value = index;
+  settingDialogVisible.value = true;
+};
+
+const submitParameter = async (value: Parameter) => {
+  parameters.value.splice(parameterIndex.value, 1, value);
+  await setParameters();
+  fetchSettingData();
+};
+
 const handleShowMore = () => {
   // 没有更多数据时展开无法点击触发
-  surplusParameter.value?.length && (surplusParameterVisible.value = true);
+  restParameter.value?.length && (surplusParameterVisible.value = true);
 };
+
+onMounted(() => {
+  fetchSettingData();
+});
 </script>
 
 <style lang="scss" scoped>
 .setting {
   display: flex;
-  .open {
-    font-size: 36px;
+
+  .operation {
+    font-size: 28px;
     cursor: pointer;
     position: relative;
-    top: -14px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    color: #ffffff85;
+    text-align: center;
   }
+
+  .dis-operation {
+    font-size: 28px;
+    position: relative;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    color: #ffffff45;
+    text-align: center;
+    cursor: default;
+  }
+
   .setting-wrapper {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    align-items: center;
+
     .parameter {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      width: 20%;
+      width: auto;
+      margin-top: 32px;
+      padding: 8px;
+      cursor: pointer;
+
       .value-wrapper {
-        margin-bottom: 8px;
+        margin-bottom: 4px;
+
         .value {
           font-weight: 500;
           font-size: 18px;
@@ -84,6 +206,7 @@ const handleShowMore = () => {
           margin-right: 8px;
         }
       }
+
       .label {
         margin: 0;
         padding: 0;

@@ -8,12 +8,17 @@
     </div>
     <div class="parameter-wrapper">
       <div class="setting-wrapper">
-        <div v-for="({ label, unit, value }, index) in currentPageData" :key="index" class="parameter">
-          <p class="value-wrapper">
-            <span class="value">{{ value }}</span
-            ><span class="unit">{{ unit }}</span>
-          </p>
-          <p class="label">{{ label }}</p>
+        <div
+          v-for="(item, index) in currentPageData"
+          :key="index"
+          class="parameter"
+          @click="handleSetParameter(item, index)"
+        >
+          <div class="value-wrapper">
+            <span class="value">{{ item.propValue }}</span
+            ><span class="unit">{{ item.propUnit }}</span>
+          </div>
+          <div class="label">{{ item.propName }}</div>
         </div>
       </div>
       <div class="page">
@@ -50,6 +55,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (event: 'update:visible', value: boolean): void;
+  (event: 'setParameter', value: Parameter, index: number): void;
 }>();
 
 const currentPage = ref<number>(1);
@@ -72,6 +78,10 @@ const handleClose = () => {
   emit('update:visible', false);
 };
 
+const handleSetParameter = (item: Parameter, index: number) => {
+  emit('setParameter', item, index * currentPage.value);
+};
+
 const handleSizeChange = (value: string) => {
   currentPage.value = Number(value);
 };
@@ -88,45 +98,40 @@ const handleCurrentChange = (value: string) => {
 }
 .container {
   position: relative;
-  height: 400px;
+  height: fit-content;
   margin-left: 10px;
   background-color: #2c2c2c;
   .header-top {
-    padding: 10px 0 10px 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 16px 0 16px;
+
     .top-wrapper {
       cursor: pointer;
-    }
-    .header-text {
-      color: #fff;
-      font-size: 17px;
-    }
-    .header-back {
-      font-size: 20px;
-      color: #fff;
+      color: #ffffff85;
+      font-size: 16px;
     }
   }
   .parameter-wrapper {
-    width: 480px;
+    width: 392px;
     .setting-wrapper {
       display: grid;
       grid-template-columns: 33.3% 33.3% 33.3%;
-      grid-template-rows: 33.3% 33.3% 33.3%;
-      padding-left: 80px;
-      padding-top: 30px;
       .parameter {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
-        width: 20%;
-        margin-bottom: 30px;
+        cursor: pointer;
+        margin-top: 20px;
         .value-wrapper {
-          margin-bottom: 10px;
+          margin-bottom: 8px;
           .value {
             font-weight: 500;
             font-size: 18px;
             color: lawngreen;
-            margin-right: 8px;
+            margin-right: 4px;
           }
           .unit {
             color: #ffffff85;
@@ -165,10 +170,9 @@ const handleCurrentChange = (value: string) => {
   }
 }
 .page {
-  position: absolute;
-  bottom: 30px;
   width: 100%;
   display: flex;
   justify-content: center;
+  padding: 12px 0;
 }
 </style>
