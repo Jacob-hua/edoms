@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 
 import { Callback, CodeBlockDSL, EventAction, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
+import { setUrlParam } from '@edoms/utils';
 
 import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
@@ -208,7 +209,7 @@ class App extends EventEmitter {
     if (action === EventAction.COMPONENT_LINKAGE && to && methodName) {
       this.componentLinkageHandler(eventConfig, fromCpt, props);
     } else if (action === EventAction.ROUTE_SETTING && page) {
-      super.emit('route-update', page);
+      setUrlParam('page', `${page}`);
     }
   }
 
