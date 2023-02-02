@@ -208,7 +208,7 @@ class App extends EventEmitter {
     if (action === EventAction.COMPONENT_LINKAGE && to && methodName) {
       this.componentLinkageHandler(eventConfig, fromCpt, props);
     } else if (action === EventAction.ROUTE_SETTING && page) {
-      console.log('路由跳转');
+      super.emit('route-update', page);
     }
   }
 
