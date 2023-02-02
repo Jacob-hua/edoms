@@ -311,6 +311,7 @@ const handleDateChange = (value: string) => {
     cursor: pointer;
     width: 72px;
     height: 90px;
+    margin: 4px;
 
     .parameter {
       font-size: 14px;

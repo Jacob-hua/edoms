@@ -97,7 +97,7 @@ const handleCurrentChange = (value: string) => {
 
 .container {
   position: relative;
-  height: 370px;
+  height: fit-content;
   margin-left: 10px;
   background-color: #2c2c2c;
 
@@ -121,7 +121,6 @@ const handleCurrentChange = (value: string) => {
     .setting-wrapper {
       display: grid;
       grid-template-columns: 33.3% 33.3% 33.3%;
-      grid-template-rows: 33.3% 33.3% 33.3%;
 
       & > div {
         display: flex;
@@ -130,6 +129,7 @@ const handleCurrentChange = (value: string) => {
         cursor: pointer;
         width: 72px;
         height: 90px;
+        margin: 4px;
 
         .parameter {
           font-size: 14px;
@@ -196,10 +196,9 @@ const handleCurrentChange = (value: string) => {
 }
 
 .page {
-  position: absolute;
-  bottom: 20px;
   width: 100%;
   display: flex;
   justify-content: center;
+  padding: 12px 0;
 }
 </style>
