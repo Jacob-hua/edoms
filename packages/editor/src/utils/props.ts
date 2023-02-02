@@ -423,6 +423,27 @@ const eventCompLinkageConfig = () => [
   },
 ];
 
+const eventRouteSetting = () => [
+  {
+    name: 'page',
+    text: '目标页面',
+    type: 'select',
+    display: (mForm: FormState, { model }: any) => {
+      return model.action === EventAction.ROUTE_SETTING;
+    },
+    options: [
+      {
+        text: '页面1',
+        value: 'component_linkage',
+      },
+      {
+        text: '页面2',
+        value: 'route_setting',
+      },
+    ],
+  },
+];
+
 const eventConfig = () => [
   {
     type: 'groupList',
@@ -473,6 +494,7 @@ const eventConfig = () => [
         ],
       },
       ...eventCompLinkageConfig(),
+      ...eventRouteSetting(),
     ],
   },
 ];
