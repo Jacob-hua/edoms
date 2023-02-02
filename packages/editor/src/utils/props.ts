@@ -1,5 +1,5 @@
 import { FormConfig, FormState } from '@edoms/form';
-import { EventAction } from '@edoms/schema';
+import { EventAction, Id, MApp } from '@edoms/schema';
 
 import editorService from '../services/editor';
 import eventsService from '../services/events';
@@ -431,16 +431,21 @@ const eventRouteSetting = () => [
     display: (mForm: FormState, { model }: any) => {
       return model.action === EventAction.ROUTE_SETTING;
     },
-    options: [
-      {
-        text: '页面1',
-        value: 'component_linkage',
-      },
-      {
-        text: '页面2',
-        value: 'route_setting',
-      },
-    ],
+    options: () => {
+      return editorService.get<MApp>('root').items.reduce(
+        (options, item) => [
+          ...options,
+          {
+            text: item.name,
+            value: item.id,
+          },
+        ],
+        [] as {
+          text: string | undefined;
+          value: Id;
+        }[]
+      );
+    },
   },
 ];
 
