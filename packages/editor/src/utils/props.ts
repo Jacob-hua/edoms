@@ -1,4 +1,5 @@
 import { FormConfig, FormState } from '@edoms/form';
+import { EventAction } from '@edoms/schema';
 
 import editorService from '../services/editor';
 import eventsService from '../services/events';
@@ -344,14 +345,35 @@ export const fillConfig = (config: FormConfig = []) => [
                   })),
               },
               {
+                name: 'action',
+                text: '响应动作',
+                type: 'select',
+                options: [
+                  {
+                    text: '组件联动',
+                    value: 'component_linkage',
+                  },
+                  {
+                    text: '设置路由',
+                    value: 'route_setting',
+                  },
+                ],
+              },
+              {
                 name: 'to',
-                text: '联动组件',
+                text: '关联组件',
                 type: 'ui-select',
+                display: (mForm: FormState, { model }: any) => {
+                  return model.action === EventAction.COMPONENT_LINKAGE;
+                },
               },
               {
                 name: 'method',
-                text: '组件动作',
+                text: '组件方法',
                 type: 'select',
+                display: (mForm: FormState, { model }: any) => {
+                  return model.action === EventAction.COMPONENT_LINKAGE;
+                },
                 options: (mForm: FormState, { model }: any) => {
                   const node = editorService.getNodeById(model.to);
                   if (!node?.type) return [];
@@ -382,7 +404,7 @@ export const fillConfig = (config: FormConfig = []) => [
               {
                 type: 'groupList',
                 name: 'mappings',
-                text: '动作参数',
+                text: '方法参数',
                 labelWidth: '70px',
                 movable: false,
                 titleKey: 'target',
@@ -395,7 +417,7 @@ export const fillConfig = (config: FormConfig = []) => [
                     .getMethod(node.type)
                     .find(({ value }) => value === model.method);
 
-                  return selectedMethodOption?.props;
+                  return selectedMethodOption?.props && model.action === EventAction.COMPONENT_LINKAGE;
                 },
                 items: [
                   {

@@ -206,30 +206,7 @@ class App extends EventEmitter {
     const { action, to, page, method: methodName } = eventConfig;
 
     if (action === EventAction.COMPONENT_LINKAGE && to && methodName) {
-      const toNode = this.page.getNode(to);
-      if (!toNode) throw `ID为${to}的组件不存在`;
-
-      if (isCommonMethod(methodName)) {
-        return triggerCommonMethod(methodName, toNode);
-      }
-
-      if (!toNode.instance) {
-        this.addEventToMap({
-          eventConfig,
-          fromCpt,
-          props,
-        });
-      } else if (toNode.instance.methods && typeof toNode.instance.methods[methodName] === 'function') {
-        const method = toNode.instance.methods[methodName] as Callback;
-        let methodProps: MethodProps = { fromCpt };
-        if (method.__depends__) {
-          methodProps = method.__depends__.reduce(
-            (methodProps, dependKey: string) => ({ ...methodProps, [dependKey]: props?.[dependKey] }),
-            methodProps
-          );
-        }
-        method(methodProps);
-      }
+      this.componentLinkageHandler(eventConfig, fromCpt, props);
     } else if (action === EventAction.ROUTE_SETTING && page) {
       console.log('路由跳转');
     }
@@ -240,7 +217,7 @@ class App extends EventEmitter {
     this.pages.clear();
   }
 
-  private handleComponentLinkage(eventConfig: EventItemConfig, fromCpt: any, props?: MethodProps) {
+  private componentLinkageHandler(eventConfig: EventItemConfig, fromCpt: any, props?: MethodProps) {
     if (!this.page) throw new Error('当前没有页面');
     const { to, method: methodName } = eventConfig;
     if (!to || !methodName) {
@@ -254,7 +231,7 @@ class App extends EventEmitter {
     }
 
     if (!toNode.instance) {
-      this.addEventToMap({
+      this.addEventQueueMap({
         eventConfig,
         fromCpt,
         props,
@@ -272,7 +249,7 @@ class App extends EventEmitter {
     }
   }
 
-  private addEventToMap(event: EventCache) {
+  private addEventQueueMap(event: EventCache) {
     if (!event.eventConfig.to) {
       return;
     }
