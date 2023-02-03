@@ -1,5 +1,5 @@
 import { FormConfig, FormState } from '@edoms/form';
-import { EventAction, Id, MApp } from '@edoms/schema';
+import { EventAction, Id, MApp, NodeType } from '@edoms/schema';
 
 import editorService from '../services/editor';
 import eventsService from '../services/events';
@@ -63,6 +63,25 @@ const styleConfig = () => [
   {
     name: 'style',
     items: [
+      {
+        name: 'visibility',
+        text: '可见性',
+        type: 'radio-group',
+        display: (mForm: FormState, { model }: any) => {
+          const node = editorService.getNodeById(model.id);
+          return ![NodeType.PAGE, NodeType.ROOT].includes(node?.type as NodeType);
+        },
+        options: [
+          {
+            value: 'visible',
+            text: '显示',
+          },
+          {
+            value: 'hidden',
+            text: '隐藏',
+          },
+        ],
+      },
       {
         type: 'fieldset',
         legend: '位置',
