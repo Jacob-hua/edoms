@@ -31,7 +31,14 @@ const { VITE_RUNTIME_PATH } = import.meta.env;
 
 const runtimeUrl = `${VITE_RUNTIME_PATH}/page/index.html`;
 
-const previewUrl = computed(() => `${runtimeUrl}?localPreview=1&page=${props.pageId}`);
+const previewUrl = computed<string>(() => {
+  const previewUrl = new URL(runtimeUrl);
+  if (props.pageId) {
+    previewUrl.searchParams.set('page', `${props.pageId}`);
+  }
+  previewUrl.searchParams.set('localPreview', '1');
+  return previewUrl.toString();
+});
 
 const runtimeIframe = ref<HTMLIFrameElement>();
 
