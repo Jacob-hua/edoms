@@ -1,7 +1,9 @@
 <template>
   <div class="setting">
     <BusinessCard title="系统运行参数" subtitle="SYSTEM OPERATING PARAMETERS" min-width="392" min-height="160">
-      <template #operation><div :class="operatable" @click="handleShowMore">...</div></template>
+      <template #operation>
+        <div :class="operatable" @click="handleShowMore">...</div>
+      </template>
       <div class="setting-wrapper">
         <div v-for="({ label, unit, value }, index) in parameterData" :key="index" class="parameter">
           <p class="value-wrapper">
@@ -95,9 +97,15 @@ const updateParameters = async () => {
 watch(
   () => props.config,
   async ({ parameters, visibleNumber }) => {
+    if (!parameters) return;
     // visibleNumber 做分行显示用
-    parameterData.value = parameters?.slice(0, visibleNumber);
-    surplusParameter.value = parameters?.slice(visibleNumber);
+    if (parameters.length > visibleNumber) {
+      parameterData.value = parameters?.slice(0, visibleNumber);
+      surplusParameter.value = parameters?.slice(visibleNumber);
+    } else {
+      parameterData.value = parameters;
+      surplusParameter.value = [];
+    }
   },
   {
     immediate: true,
@@ -143,6 +151,7 @@ const handleShowMore = () => {
     display: flex;
     justify-content: space-around;
     padding: 0 16px;
+
     .parameter {
       display: flex;
       flex-direction: column;
@@ -150,6 +159,7 @@ const handleShowMore = () => {
       width: auto;
       margin-top: 32px;
       padding: 8px;
+
       .value-wrapper {
         margin-bottom: 4px;
 

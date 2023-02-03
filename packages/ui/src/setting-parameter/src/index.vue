@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 import { elMessage } from '@edoms/design';
 
@@ -77,8 +77,14 @@ const operatable = computed(() => (restParameter.value.length ? 'operation' : 'd
 watch(
   () => props.config,
   ({ parameters, visibleNumber }) => {
-    initParameter.value = parameters?.slice(0, visibleNumber);
-    restParameter.value = parameters?.slice(visibleNumber) ?? [];
+    if (!parameters) return;
+    if (parameters.length > visibleNumber) {
+      initParameter.value = parameters?.slice(0, visibleNumber);
+      restParameter.value = parameters?.slice(visibleNumber);
+    } else {
+      initParameter.value = parameters;
+      restParameter.value = [];
+    }
   },
   {
     immediate: true,
@@ -150,10 +156,7 @@ const handleShowMore = () => {
   // 没有更多数据时展开无法点击触发
   restParameter.value?.length && (surplusParameterVisible.value = true);
 };
-
-onMounted(async () => {
-  await fetchSettingData();
-});
+fetchSettingData();
 </script>
 
 <style lang="scss" scoped>
@@ -187,6 +190,7 @@ onMounted(async () => {
     display: flex;
     justify-content: space-around;
     padding: 0 16px;
+
     .parameter {
       display: flex;
       flex-direction: column;
