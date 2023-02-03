@@ -94,6 +94,24 @@ export interface DeleteVersion {
   applicationId: string;
 }
 
+export interface Parameter {
+  /** 参数名称 **/
+  name: string;
+  /** 参数值 **/
+  value: string;
+  /** 参数单位 **/
+  unit: string;
+}
+
+export interface ParameterList {
+  /**组件类型 */
+  componentType: string;
+  /**组件唯一标识 */
+  componentIdentify: string;
+  /**参数列表 */
+  dataSetting: Parameter[];
+}
+
 export interface UpdateContentReq {
   /** 应用ID */
   applicationId: string;
@@ -101,4 +119,6 @@ export interface UpdateContentReq {
   versionId: string;
   /** 内容Id */
   contentId: string;
+  /** 组件列表 */
+  list?: ParameterList[];
 }

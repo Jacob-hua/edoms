@@ -41,7 +41,8 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath, isNumber } from '@edoms/utils';
 
-import versionApi from '@/api/version';
+// import applicationApi, { SaveParametrReq } from '@/api/application';
+import versionApi, { ParameterList } from '@/api/version';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
 import useDownloadDSL from '@/hooks/useDownloadDSL';
@@ -364,16 +365,35 @@ async function uploadDsl(): Promise<string | null | undefined> {
   );
 }
 
+const getParameterConfig = async () => {
+  const app = await editorService.getApp();
+  const components = app?.page?.nodes;
+
+  const list: ParameterList[] = [];
+  components?.forEach((item) => {
+    if (item.data.type === 'setting-parameter') {
+      list.push({
+        componentType: item.data.type,
+        componentIdentify: String(item.data.id),
+        dataSetting: item.data.parameters,
+      });
+    }
+  });
+  return list;
+};
+
 async function save() {
   const contentId = await uploadDsl();
   if (!contentId) {
     return;
   }
+  const list = await getParameterConfig();
   contentState.contentId = contentId;
   await versionApi.updateContent({
     applicationId: contentState.applicationId,
     versionId: contentState.versionId,
     contentId,
+    list,
   });
   editorRef.value?.editorService.resetModifiedNodeId();
 }

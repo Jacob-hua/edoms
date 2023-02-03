@@ -1,10 +1,8 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { FetchParameterReq, FetchParameterRes } from './type';
+import { Apis, FetchParameterReq, FetchParameterRes } from './type';
 
-export * from './type';
-
-export default (request?: EdomsRequestFunc) => ({
+export default (request?: EdomsRequestFunc): Apis => ({
   fetchParameterData: async (data: FetchParameterReq): Promise<FetchParameterRes> => {
     if (!request) {
       return [];

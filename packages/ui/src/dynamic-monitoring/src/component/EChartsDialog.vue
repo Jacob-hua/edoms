@@ -64,6 +64,7 @@ onUnmounted(() => {});
 :deep(.el-dialog__header) {
   background-color: rgba(31, 30, 29, 1);
   margin: 0;
+  min-height: 14px;
 }
 
 :deep(.el-dialog__header span) {

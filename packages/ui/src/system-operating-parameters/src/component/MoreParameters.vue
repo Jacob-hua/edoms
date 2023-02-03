@@ -84,45 +84,40 @@ const handleCurrentChange = (value: string) => {
 <style lang="scss" scoped>
 .container {
   position: relative;
-  height: 400px;
+  height: fit-content;
   margin-left: 10px;
   background-color: #2c2c2c;
   .header-top {
-    padding: 10px 0 10px 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 16px 0 16px;
     .top-wrapper {
       cursor: pointer;
-    }
-    .header-text {
-      color: #fff;
-      font-size: 17px;
-    }
-    .header-back {
-      font-size: 20px;
-      color: #fff;
+      color: #ffffff85;
+      font-size: 16px;
     }
   }
   .parameter-wrapper {
-    width: 480px;
+    width: 392px;
     .setting-wrapper {
       display: grid;
       grid-template-columns: 33.3% 33.3% 33.3%;
-      grid-template-rows: 33.3% 33.3% 33.3%;
-      padding-left: 80px;
-      padding-top: 30px;
+      padding: 0 16px;
       .parameter {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
-        width: 20%;
-        margin-bottom: 30px;
+        margin-top: 20px;
+        padding: 8px;
         .value-wrapper {
-          margin-bottom: 10px;
+          margin-bottom: 8px;
           .value {
             font-weight: 500;
             font-size: 18px;
             color: lawngreen;
-            margin-right: 8px;
+            margin-right: 4px;
           }
           .unit {
             color: #ffffff85;
@@ -161,10 +156,9 @@ const handleCurrentChange = (value: string) => {
   }
 }
 .page {
-  position: absolute;
-  bottom: 30px;
   width: 100%;
   display: flex;
   justify-content: center;
+  padding: 12px 0;
 }
 </style>

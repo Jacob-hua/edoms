@@ -1,14 +1,16 @@
 <template>
   <div class="setting">
-    <BusinessCard title="系统运行参数" subtitle="SYSTEM OPERATING PARAMETERS" min-width="480" min-height="200">
-      <template #operation><span class="open" @click="handleShowMore">...</span></template>
+    <BusinessCard title="系统运行参数" subtitle="SYSTEM OPERATING PARAMETERS" min-width="392" min-height="160">
+      <template #operation>
+        <div :class="operatable" @click="handleShowMore">...</div>
+      </template>
       <div class="setting-wrapper">
-        <div v-for="({ label, unit, value }, index) in parameterData" :key="index" class="parameter">
+        <div v-for="({ name, unit, value }, index) in parameterData" :key="index" class="parameter">
           <p class="value-wrapper">
             <span class="value">{{ value }}</span
             ><span class="unit">{{ unit }}</span>
           </p>
-          <p class="label">{{ label }}</p>
+          <p class="label">{{ name }}</p>
         </div>
       </div>
     </BusinessCard>
@@ -17,8 +19,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
+import { MComponent } from '@edoms/schema';
 import { formatPrecision } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
@@ -26,20 +29,20 @@ import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
 import MoreParameters from './component/MoreParameters.vue';
-import api from './api';
+import apiFactory from './api';
 import { Parameter } from './type';
 
 interface MParameter {
   instance: string[];
   instanceType: string;
-  label: string;
+  name: string;
   precision: string;
   property: string;
   propertyType: string;
   value: string;
   unit: string;
 }
-interface MParameterConfig {
+interface MParameterConfig extends MComponent {
   visibleNumber: number;
   intervalDelay: number;
   parameters: MParameter[];
@@ -48,11 +51,20 @@ const props = defineProps<{
   config: MParameterConfig;
 }>();
 
-const parameterData = ref<Parameter[]>();
-const surplusParameter = ref<Parameter[]>();
+const parameterData = ref<Parameter[]>([]);
+const surplusParameter = ref<Parameter[]>([]);
 const surplusParameterVisible = ref<boolean>(false);
 const { request } = useApp(props);
-const { fetchParameterData } = api(request);
+const { fetchParameterData } = apiFactory(request);
+
+const intervalDelay = computed<number>(() => {
+  if (typeof props.config.intervalDelay !== 'number') {
+    return 1000;
+  }
+  return props.config.intervalDelay;
+});
+
+const operatable = computed(() => (surplusParameter.value.length ? 'operation' : 'dis-operation'));
 
 const makeParameterList = (parameters: MParameter[]) => {
   const dataList = parameters?.map(({ instance, property }) => {
@@ -85,16 +97,22 @@ const updateParameters = async () => {
 watch(
   () => props.config,
   async ({ parameters, visibleNumber }) => {
+    if (!parameters) return;
     // visibleNumber 做分行显示用
-    parameterData.value = parameters?.slice(0, visibleNumber);
-    surplusParameter.value = parameters?.slice(visibleNumber);
+    if (parameters.length > visibleNumber) {
+      parameterData.value = parameters?.slice(0, visibleNumber);
+      surplusParameter.value = parameters?.slice(visibleNumber);
+    } else {
+      parameterData.value = parameters;
+      surplusParameter.value = [];
+    }
   },
   {
     immediate: true,
     deep: true,
   }
 );
-useIntervalAsync(updateParameters, props.config.intervalDelay);
+useIntervalAsync(updateParameters, intervalDelay.value);
 
 const handleShowMore = () => {
   // 没有更多数据时无法点击
@@ -105,25 +123,46 @@ const handleShowMore = () => {
 <style lang="scss" scoped>
 .setting {
   display: flex;
-  .open {
-    font-size: 36px;
+
+  .operation {
+    font-size: 28px;
     cursor: pointer;
     position: relative;
-    top: -14px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    color: #ffffff85;
+    text-align: center;
   }
+
+  .dis-operation {
+    font-size: 28px;
+    position: relative;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    color: #ffffff45;
+    text-align: center;
+    cursor: default;
+  }
+
   .setting-wrapper {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    padding: 0 16px;
+
     .parameter {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      width: 20%;
+      width: auto;
+      margin-top: 32px;
+      padding: 8px;
+
       .value-wrapper {
-        margin-bottom: 8px;
+        margin-bottom: 4px;
+
         .value {
           font-weight: 500;
           font-size: 18px;
@@ -131,6 +170,7 @@ const handleShowMore = () => {
           margin-right: 8px;
         }
       }
+
       .label {
         margin: 0;
         padding: 0;

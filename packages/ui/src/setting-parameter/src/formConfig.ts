@@ -15,7 +15,7 @@ export default () => [
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
-        name: 'label',
+        name: 'name',
         text: '参数名称',
         type: 'text',
         placeholder: '请填写参数名称',

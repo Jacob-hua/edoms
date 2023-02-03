@@ -46,6 +46,7 @@ export default (props: any) => {
 
   return {
     app,
+    node,
     provideMethod,
     request,
   };

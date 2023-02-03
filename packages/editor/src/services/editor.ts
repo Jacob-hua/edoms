@@ -98,6 +98,22 @@ export class EditorService extends BaseService {
     return (this.state as any)[name];
   }
 
+  public async getApp() {
+    const stage = this.state.stage;
+    if (!stage) {
+      return null;
+    }
+    const renderer = stage.renderer;
+    if (!renderer) {
+      return null;
+    }
+    const runTime = await renderer.getRuntime();
+    if (!runTime) {
+      return null;
+    }
+    return runTime.getApp!();
+  }
+
   /**
    * 根据id获取组件、组件的父组件以及组件所属的页面节点
    * @param {number | string} id 组件id

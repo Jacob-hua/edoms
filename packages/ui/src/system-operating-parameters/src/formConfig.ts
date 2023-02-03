@@ -10,6 +10,7 @@ export default async (request: Request) => [
     min: 1000,
     step: 1000,
     defaultValue: 10000,
+    append: 'ms',
   },
   {
     text: '展示参数',
@@ -27,7 +28,7 @@ export default async (request: Request) => [
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
-        name: 'label',
+        name: 'name',
         text: '参数名称',
         type: 'text',
         placeholder: '请填写参数名称',
