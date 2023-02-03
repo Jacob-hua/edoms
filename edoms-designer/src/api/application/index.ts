@@ -10,7 +10,6 @@ import {
   ListApplicationsReq,
   ListApplicationsRes,
   PreviewApplicationReq,
-  SaveParametrReq,
   UpdateApplicationReq,
   UpdateDefaultVersionReq,
 } from './type';
@@ -101,13 +100,6 @@ export default {
     await request<UpdateDefaultVersionReq, void>({
       url: '/application/update-defaultVersion',
       method: 'PUT',
-      data,
-    });
-  },
-  saveParametersData: async (data: SaveParametrReq): Promise<void> => {
-    await request<SaveParametrReq, void>({
-      url: '/application/save-runtime-data',
-      method: 'POST',
       data,
     });
   },

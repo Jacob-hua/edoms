@@ -5,12 +5,12 @@
         <div :class="operatable" @click="handleShowMore">...</div>
       </template>
       <div class="setting-wrapper">
-        <div v-for="({ label, unit, value }, index) in parameterData" :key="index" class="parameter">
+        <div v-for="({ name, unit, value }, index) in parameterData" :key="index" class="parameter">
           <p class="value-wrapper">
             <span class="value">{{ value }}</span
             ><span class="unit">{{ unit }}</span>
           </p>
-          <p class="label">{{ label }}</p>
+          <p class="label">{{ name }}</p>
         </div>
       </div>
     </BusinessCard>
@@ -29,13 +29,13 @@ import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
 import MoreParameters from './component/MoreParameters.vue';
-import api from './api';
+import apiFactory from './api';
 import { Parameter } from './type';
 
 interface MParameter {
   instance: string[];
   instanceType: string;
-  label: string;
+  name: string;
   precision: string;
   property: string;
   propertyType: string;
@@ -55,7 +55,7 @@ const parameterData = ref<Parameter[]>([]);
 const surplusParameter = ref<Parameter[]>([]);
 const surplusParameterVisible = ref<boolean>(false);
 const { request } = useApp(props);
-const { fetchParameterData } = api(request);
+const { fetchParameterData } = apiFactory(request);
 
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {

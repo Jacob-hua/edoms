@@ -126,30 +126,3 @@ export interface UpdateDefaultVersionReq {
   /** 版本ID */
   versionId: string;
 }
-
-export interface Parameter {
-  /** 参数名称 **/
-  propName: string;
-  /** 参数值 **/
-  propValue: string;
-  /** 参数单位 **/
-  propUnit: string;
-}
-
-export interface ParameterList {
-  /**组件类型 */
-  componentType: string;
-  /**组件唯一标识 */
-  componentIdentify: string;
-  /**参数列表 */
-  dataSetting: Parameter[];
-}
-
-export interface SaveParametrReq {
-  /**应用ID */
-  applicationId: string;
-  /** 租户ID */
-  tenantId: string;
-  /**数据列表 */
-  list: ParameterList[];
-}

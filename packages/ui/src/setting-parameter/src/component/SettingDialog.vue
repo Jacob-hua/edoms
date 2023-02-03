@@ -2,14 +2,14 @@
   <div>
     <el-dialog v-model="dialogVisible" width="40%" title="设定参数">
       <el-form ref="formRef" :model="formModel" :rules="formRules" label-width="80px">
-        <el-form-item label="参数名称" prop="propName">
-          <el-input v-model="formModel.propName" disabled></el-input>
+        <el-form-item label="参数名称" prop="name">
+          <el-input v-model="formModel.name" disabled></el-input>
         </el-form-item>
-        <el-form-item label="单位" prop="propUnit">
-          <el-input v-model="formModel.propUnit" disabled></el-input>
+        <el-form-item label="单位" prop="unit">
+          <el-input v-model="formModel.unit" disabled></el-input>
         </el-form-item>
-        <el-form-item label="参数值" prop="propValue">
-          <el-input v-model="formModel.propValue" autofocus></el-input>
+        <el-form-item label="参数值" prop="value">
+          <el-input v-model="formModel.value" autofocus></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -45,9 +45,9 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>();
 const formModel = ref<Parameter>({
-  propName: props.parameterData.propName,
-  propValue: props.parameterData.propValue,
-  propUnit: props.parameterData.propUnit,
+  name: props.parameterData.name,
+  value: props.parameterData.value,
+  unit: props.parameterData.unit,
 });
 
 watch(
@@ -72,7 +72,7 @@ const dialogVisible = computed({
 });
 
 const formRules: FormRules = {
-  propValue: [{ required: true, message: '请输入参数值', trigger: 'blur' }],
+  value: [{ required: true, message: '请输入参数值', trigger: 'blur' }],
 };
 
 const handleFormCancle = () => {

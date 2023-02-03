@@ -15,10 +15,10 @@
           @click="handleSetParameter(item, index)"
         >
           <div class="value-wrapper">
-            <span class="value">{{ item.propValue }}</span
-            ><span class="unit">{{ item.propUnit }}</span>
+            <span class="value">{{ item.value }}</span
+            ><span class="unit">{{ item.unit }}</span>
           </div>
-          <div class="label">{{ item.propName }}</div>
+          <div class="label">{{ item.name }}</div>
         </div>
       </div>
       <div class="page">

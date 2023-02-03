@@ -2,11 +2,11 @@ import { MComponent } from '@edoms/schema';
 
 export interface Parameter {
   /** 参数名称 **/
-  propName: string;
+  name: string;
   /** 参数值 **/
-  propValue: string;
+  value: string;
   /** 参数单位 **/
-  propUnit: string;
+  unit: string;
 }
 
 export interface MParameterConfig extends MComponent {

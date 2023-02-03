@@ -12,10 +12,10 @@
           @click="handleSettingParameter(item, index)"
         >
           <p class="value-wrapper">
-            <span class="value">{{ item.propValue }}</span
-            ><span class="unit">{{ item.propUnit }}</span>
+            <span class="value">{{ item.value }}</span
+            ><span class="unit">{{ item.unit }}</span>
           </p>
-          <p class="label">{{ item.propName }}</p>
+          <p class="label">{{ item.name }}</p>
         </div>
       </div>
     </BusinessCard>
@@ -61,9 +61,9 @@ const { fetchParametersData, updateParameterData } = apiFactory(request);
 
 const parametersData = ref<Parameter[]>([]);
 const parameter = reactive<Parameter>({
-  propName: '',
-  propValue: '',
-  propUnit: '',
+  name: '',
+  value: '',
+  unit: '',
 });
 const initParameter = ref<Parameter[]>([]);
 const restParameter = ref<Parameter[]>([]);
@@ -72,17 +72,19 @@ const settingDialogVisible = ref<boolean>(false);
 
 const parameterIndex = ref<number>(0);
 
+const parameterConfig = computed<Parameter[]>(() => props.config.parameters ?? []);
 const operatable = computed(() => (restParameter.value.length ? 'operation' : 'dis-operation'));
 
 watch(
   () => props.config,
   ({ parameters, visibleNumber }) => {
     if (!parameters) return;
-    if (parameters.length > visibleNumber) {
-      initParameter.value = parameters?.slice(0, visibleNumber);
-      restParameter.value = parameters?.slice(visibleNumber);
+    parametersData.value = parameterConfig.value;
+    if (parametersData.value.length > visibleNumber) {
+      initParameter.value = parametersData.value?.slice(0, visibleNumber);
+      restParameter.value = parametersData.value?.slice(visibleNumber);
     } else {
-      initParameter.value = parameters;
+      initParameter.value = parametersData.value;
       restParameter.value = [];
     }
   },
@@ -99,7 +101,7 @@ const fetchSettingData = async () => {
     tenantId: tenantId,
   };
   const result = await fetchParametersData(params);
-  if (result.length <= 0) {
+  if (!result || result.length <= 0) {
     return;
   }
   const targetComponent = result.filter(({ componentIdentify }) => componentIdentify === targetId).pop();
@@ -131,17 +133,17 @@ const setParameters = async () => {
 };
 
 const handleSetParameter = (item: Parameter, index: number) => {
-  parameter.propName = item.propName;
-  parameter.propUnit = item.propUnit;
-  parameter.propValue = item.propValue;
+  parameter.name = item.name;
+  parameter.unit = item.unit;
+  parameter.value = item.value;
   parameterIndex.value = index + props.config.visibleNumber;
   settingDialogVisible.value = true;
 };
 
 const handleSettingParameter = (item: Parameter, index: number) => {
-  parameter.propName = item.propName;
-  parameter.propUnit = item.propUnit;
-  parameter.propValue = item.propValue;
+  parameter.name = item.name;
+  parameter.unit = item.unit;
+  parameter.value = item.value;
   parameterIndex.value = index;
   settingDialogVisible.value = true;
 };

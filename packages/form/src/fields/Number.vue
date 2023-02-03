@@ -53,12 +53,12 @@ useAddField(props.prop);
 const mForm = inject<FormState | undefined>('mForm');
 
 const changeHandler = (value: number) => {
-  emit('change', value);
+  emit('change', Number(value));
 };
 
-const inputHandler = (v: string) => {
-  emit('input', v);
-  mForm?.$emit('field-input', props.prop, v);
+const inputHandler = (v: number) => {
+  emit('input', Number(v));
+  mForm?.$emit('field-input', props.prop, Number(v));
 };
 
 const buttonClickHandler = () => {

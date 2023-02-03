@@ -41,8 +41,8 @@ import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getByPath, isNumber } from '@edoms/utils';
 
-import applicationApi, { SaveParametrReq } from '@/api/application';
-import versionApi from '@/api/version';
+// import applicationApi, { SaveParametrReq } from '@/api/application';
+import versionApi, { ParameterList } from '@/api/version';
 import componentGroupList from '@/configs/componentGroupList';
 import useAsyncLoadJS from '@/hooks/useAsyncLoadJS';
 import useDownloadDSL from '@/hooks/useDownloadDSL';
@@ -363,29 +363,21 @@ async function uploadDsl(): Promise<string | null | undefined> {
   );
 }
 
-const savaRunTimeData = async () => {
-  const rawDsl = toRaw(dsl.value);
-  const params: SaveParametrReq = {
-    applicationId: String(rawDsl?.id) ?? '',
-    tenantId: rawDsl?.tenantId ?? '',
-    list: [],
-  };
-  rawDsl?.items.forEach((ele) => {
-    ele.items.forEach((item) => {
-      if (item.type === 'setting-parameter') {
-        params.list.push({
-          componentType: item.type,
-          componentIdentify: String(item.id),
-          dataSetting: item.parameters,
-        });
-      }
-    });
+const getParameterConfig = async () => {
+  const app = await editorService.getApp();
+  const components = app?.page?.nodes;
+
+  const list: ParameterList[] = [];
+  components?.forEach((item) => {
+    if (item.data.type === 'setting-parameter') {
+      list.push({
+        componentType: item.data.type,
+        componentIdentify: String(item.data.id),
+        dataSetting: item.data.parameters,
+      });
+    }
   });
-  try {
-    await applicationApi.saveParametersData(params);
-  } catch (e: any) {
-    console.log(e);
-  }
+  return list;
 };
 
 async function save() {
@@ -393,12 +385,13 @@ async function save() {
   if (!contentId) {
     return;
   }
-  await savaRunTimeData();
+  const list = await getParameterConfig();
   contentState.contentId = contentId;
   await versionApi.updateContent({
     applicationId: contentState.applicationId,
     versionId: contentState.versionId,
     contentId,
+    list,
   });
   editorRef.value?.editorService.resetModifiedNodeId();
 }
