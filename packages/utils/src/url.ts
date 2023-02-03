@@ -2,20 +2,14 @@ export const filterXSS = (str: string) =>
   str.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 
 export const getUrlParam = (param: string, url?: string) => {
-  const u = url || location.href;
-  const reg = new RegExp(`[?&#]${param}=([^&#]+)`, 'gi');
+  const u = new URL(url || location.href);
+  return u.searchParams.get(param);
+};
 
-  const matches = u.match(reg);
-  let strArr;
-  if (matches && matches.length > 0) {
-    strArr = matches[matches.length - 1].split('=');
-    if (strArr && strArr.length > 1) {
-      // 过滤XSS字符
-      return filterXSS(strArr[1]);
-    }
-    return '';
-  }
-  return '';
+export const setUrlParam = (param: string, value: string, url?: string) => {
+  const u = new URL(url || location.href);
+  u.searchParams.set(param, value);
+  window.location.href = u.toString();
 };
 
 export const getHost = (targetUrl: string) => targetUrl.match(/\/\/([^/]+)/)?.[1];
