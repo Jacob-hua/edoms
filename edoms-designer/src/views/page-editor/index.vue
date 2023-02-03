@@ -181,8 +181,10 @@ const menu = computed<MenuBarData>(() => ({
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           await save();
+          ElMessage.success('保存成功');
+        } else {
+          ElMessage.warning('当前无修改，无需保存');
         }
-        ElMessage.success('保存成功');
       },
     },
     '/',
