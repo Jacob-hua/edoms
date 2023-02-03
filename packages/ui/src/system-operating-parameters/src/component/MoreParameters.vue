@@ -8,12 +8,12 @@
     </div>
     <div class="parameter-wrapper">
       <div class="setting-wrapper">
-        <div v-for="({ label, unit, value }, index) in currentPageData" :key="index" class="parameter">
+        <div v-for="({ name, unit, value }, index) in currentPageData" :key="index" class="parameter">
           <p class="value-wrapper">
             <span class="value">{{ value }}</span
             ><span class="unit">{{ unit }}</span>
           </p>
-          <p class="label">{{ label }}</p>
+          <p class="label">{{ name }}</p>
         </div>
       </div>
       <div class="page">
