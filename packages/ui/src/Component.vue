@@ -1,6 +1,5 @@
 <template>
   <component
-    v-if="display()"
     :id="config.id"
     :is="tagName"
     :class="`edoms-ui-component${config.className ? ` ${config.className}` : ''}`"
@@ -25,15 +24,6 @@ const app = inject<Core | undefined>('app');
 const tagName = computed(() => `edoms-ui-${toLine(props.config.type)}`);
 
 const style = computed(() => app?.transformStyle(props.config.style ?? ''));
-
-const display = () => {
-  const displayCfg = props.config?.display;
-
-  if (typeof displayCfg === 'function') {
-    return displayCfg(app);
-  }
-  return displayCfg !== false;
-};
 
 const vm = getCurrentInstance()?.proxy;
 provide('hoc', vm);

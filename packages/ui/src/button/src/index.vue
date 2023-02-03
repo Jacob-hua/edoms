@@ -14,15 +14,9 @@ import useApp from '../../useApp';
 
 import { MButton } from './type';
 
-const props = withDefaults(
-  defineProps<{
-    config: MButton;
-    model?: Record<string, any>;
-  }>(),
-  {
-    model: () => ({}),
-  }
-);
+const props = defineProps<{
+  config: MButton;
+}>();
 
 useApp(props);
 

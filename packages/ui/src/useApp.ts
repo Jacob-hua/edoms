@@ -19,6 +19,9 @@ export default (props: any) => {
     const vm = getCurrentInstance()?.proxy;
     if (vm) {
       instance.$el = vm.$el;
+      instance.methods = {
+        ...useCommonMethod(props),
+      };
     }
     node?.emit('mounted', instance);
   });
