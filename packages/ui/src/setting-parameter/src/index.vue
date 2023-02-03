@@ -59,7 +59,7 @@ const tenantId = String(app?.config?.tenantId);
 
 const { fetchParametersData, updateParameterData } = apiFactory(request);
 
-const parameters = ref<Parameter[]>([]);
+const parametersData = ref<Parameter[]>([]);
 const parameter = reactive<Parameter>({
   propName: '',
   propValue: '',
@@ -78,7 +78,7 @@ watch(
   () => props.config,
   ({ parameters, visibleNumber }) => {
     initParameter.value = parameters?.slice(0, visibleNumber);
-    restParameter.value = parameters?.slice(visibleNumber);
+    restParameter.value = parameters?.slice(visibleNumber) ?? [];
   },
   {
     immediate: true,
@@ -100,7 +100,7 @@ const fetchSettingData = async () => {
   if (!targetComponent || targetComponent.dataSetting.length <= 0) {
     return;
   }
-  parameters.value = targetComponent.dataSetting;
+  parametersData.value = targetComponent.dataSetting;
   initParameter.value = targetComponent.dataSetting?.slice(0, props.config.visibleNumber);
   restParameter.value = targetComponent.dataSetting?.slice(props.config.visibleNumber);
 };
@@ -110,7 +110,7 @@ const setParameters = async () => {
     {
       componentType: targetType,
       componentIdentify: targetId,
-      dataSetting: parameters.value,
+      dataSetting: parametersData.value,
       applicationId: applicationId,
       tenantId: tenantId,
     },
@@ -141,9 +141,9 @@ const handleSettingParameter = (item: Parameter, index: number) => {
 };
 
 const submitParameter = async (value: Parameter) => {
-  parameters.value.splice(parameterIndex.value, 1, value);
+  parametersData.value.splice(parameterIndex.value, 1, value);
   await setParameters();
-  fetchSettingData();
+  await fetchSettingData();
 };
 
 const handleShowMore = () => {
@@ -151,8 +151,8 @@ const handleShowMore = () => {
   restParameter.value?.length && (surplusParameterVisible.value = true);
 };
 
-onMounted(() => {
-  fetchSettingData();
+onMounted(async () => {
+  await fetchSettingData();
 });
 </script>
 
@@ -186,7 +186,7 @@ onMounted(() => {
     width: 100%;
     display: flex;
     justify-content: space-around;
-
+    padding: 0 16px;
     .parameter {
       display: flex;
       flex-direction: column;

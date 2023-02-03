@@ -363,7 +363,7 @@ async function uploadDsl(): Promise<string | null | undefined> {
   );
 }
 
-async function savaRunTimeData() {
+const savaRunTimeData = async () => {
   const rawDsl = toRaw(dsl.value);
   const params: SaveParametrReq = {
     applicationId: String(rawDsl?.id) ?? '',
@@ -386,7 +386,7 @@ async function savaRunTimeData() {
   } catch (e: any) {
     console.log(e);
   }
-}
+};
 
 async function save() {
   const contentId = await uploadDsl();

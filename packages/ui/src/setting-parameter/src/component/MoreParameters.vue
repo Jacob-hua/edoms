@@ -119,12 +119,14 @@ const handleCurrentChange = (value: string) => {
     .setting-wrapper {
       display: grid;
       grid-template-columns: 33.3% 33.3% 33.3%;
+      padding: 0 16px;
       .parameter {
         display: flex;
         flex-direction: column;
         align-items: center;
         cursor: pointer;
         margin-top: 20px;
+        padding: 8px;
         .value-wrapper {
           margin-bottom: 8px;
           .value {

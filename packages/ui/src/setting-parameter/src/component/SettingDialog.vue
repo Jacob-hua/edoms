@@ -5,11 +5,11 @@
         <el-form-item label="参数名称" prop="propName">
           <el-input v-model="formModel.propName" disabled></el-input>
         </el-form-item>
-        <el-form-item label="参数值" prop="propValue">
-          <el-input v-model="formModel.propValue"></el-input>
-        </el-form-item>
         <el-form-item label="单位" prop="propUnit">
           <el-input v-model="formModel.propUnit" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="参数值" prop="propValue">
+          <el-input v-model="formModel.propValue" autofocus></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -72,9 +72,7 @@ const dialogVisible = computed({
 });
 
 const formRules: FormRules = {
-  propName: [{ required: true, message: '请输入参数名称', trigger: 'blur' }],
   propValue: [{ required: true, message: '请输入参数值', trigger: 'blur' }],
-  propUnit: [{ required: true, message: '请输入单位', trigger: 'blur' }],
 };
 
 const handleFormCancle = () => {
@@ -110,6 +108,13 @@ $textColor: #ffffff85;
 
 :deep(.el-dialog__footer) {
   background-color: $bgColor;
+}
+
+:deep(.is-disabled) {
+  .el-input__wrapper {
+    background-color: $bgColor;
+    box-shadow: 0 0 0 1px $textColor;
+  }
 }
 
 :deep(.el-input__wrapper) {
