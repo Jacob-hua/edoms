@@ -17,7 +17,9 @@ export class MessageError extends BaseError {
   constructor(option: MessageOption) {
     super(option.message);
     this.cause = option.cause;
-    if (option.cause.message !== 'Request failed with status code 401') {
+    if (
+      !['Request failed with status code 401', 'Request failed with status code 403'].includes(option.cause.message)
+    ) {
       ElMessage(option);
     }
   }

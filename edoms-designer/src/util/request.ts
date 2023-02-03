@@ -70,17 +70,17 @@ const responseInterceptorsCatch = (error: EdomsError) => {
         path: '/login',
       });
       ElMessage.error('应用设计角色变更，权限失效');
+    } else if (response.status === 403) {
+      requestCanceler.cancelAllRequest();
+      router.push({
+        path: '/login',
+      });
+      ElMessage.error('认证失败，请重新登录');
     } else if (response.status === 404) {
       ElMessage.error('服务器资源不存在');
     } else if (response.data) {
       const res = response.data as EdomsResponseData<any>;
       if (res.errorInfo && res.errorInfo.errorCode) {
-        if (res.errorInfo.errorCode === 'EDOMS-20005') {
-          requestCanceler.cancelAllRequest();
-          router.push({
-            path: '/login',
-          });
-        }
         ElMessage.error(res.errorInfo.errorMsg);
       }
     }
