@@ -213,7 +213,6 @@ watch(
       const { contentId, applicationId, applicationName, name } = await versionApi.getVersion({
         versionId,
       });
-      console.log(contentId, 'cccc');
 
       contentState.contentId = contentId ?? '';
       contentState.versionName = name;
