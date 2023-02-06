@@ -30,13 +30,8 @@ import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
 import WarningList from './component/WarningList.vue';
-import warningApi, { Alarm, AlarmList, InitAlarmRes } from './api';
-import { ClassName } from './type';
-
-interface HeaderData {
-  name: string;
-  className: string;
-}
+import warningApi from './api';
+import { Alarm, AlarmList, ClassName, InitAlarmRes } from './type';
 
 export interface MConfig {
   speed: number;
@@ -46,6 +41,12 @@ export interface MConfig {
   timeSpan: number;
   isVirtual: string;
 }
+
+interface HeaderData {
+  name: string;
+  className: string;
+}
+
 const props = withDefaults(
   defineProps<{
     config: MConfig;
