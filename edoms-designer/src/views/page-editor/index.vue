@@ -213,6 +213,8 @@ watch(
       const { contentId, applicationId, applicationName, name } = await versionApi.getVersion({
         versionId,
       });
+      console.log(contentId, 'cccc');
+
       contentState.contentId = contentId ?? '';
       contentState.versionName = name;
       contentState.applicationId = applicationId;
@@ -365,17 +367,16 @@ async function uploadDsl(): Promise<string | null | undefined> {
   );
 }
 
-const getParameterConfig = async () => {
-  const app = await editorService.getApp();
-  const components = app?.page?.nodes;
-
+const getParameterConfig = () => {
+  const components = editorService.state.page?.items;
   const list: ParameterList[] = [];
   components?.forEach((item) => {
-    if (item.data.type === 'setting-parameter') {
+    if (item.type === 'setting-parameter') {
+      if (!item.parameters || item.parameters.length <= 0) return;
       list.push({
-        componentType: item.data.type,
-        componentIdentify: String(item.data.id),
-        dataSetting: item.data.parameters,
+        componentType: String(item.type),
+        componentIdentify: String(item.id),
+        dataList: item.parameters,
       });
     }
   });
@@ -387,14 +388,21 @@ async function save() {
   if (!contentId) {
     return;
   }
-  const list = await getParameterConfig();
   contentState.contentId = contentId;
-  await versionApi.updateContent({
-    applicationId: contentState.applicationId,
-    versionId: contentState.versionId,
-    contentId,
-    list,
-  });
+  const list = getParameterConfig();
+  const param = list.length
+    ? {
+        applicationId: contentState.applicationId,
+        versionId: contentState.versionId,
+        contentId,
+        list,
+      }
+    : {
+        applicationId: contentState.applicationId,
+        versionId: contentState.versionId,
+        contentId,
+      };
+  await versionApi.updateContent(param);
   editorRef.value?.editorService.resetModifiedNodeId();
 }
 </script>

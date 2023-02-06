@@ -178,6 +178,9 @@ const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
     type: 'line',
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    itemStyle: {
+      color: efficiencyConfig.value?.lineColor,
+    },
   }));
   options.value = generateOption(chartSeries);
 };
