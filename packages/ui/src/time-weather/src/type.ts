@@ -1,6 +1,7 @@
 import { MComponent } from '@edoms/schema';
 
 export interface TimeWeatherConfig extends MComponent {
+  /** 更新间隔 */
   intervalDelay: number;
 }
 

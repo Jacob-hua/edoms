@@ -1,6 +1,6 @@
 export default () => [
   {
-    text: '轮询间隔',
+    text: '更新间隔',
     name: 'intervalDelay',
     type: 'number',
     min: 1000,
