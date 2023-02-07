@@ -52,6 +52,12 @@ export default async (request: Request) => [
     defaultValue: 5,
   },
   {
+    text: '曲线颜色',
+    type: 'colorPicker',
+    name: 'lineColor',
+    defaultValue: '#008000',
+  },
+  {
     text: '最小值',
     type: 'colorPicker',
     name: 'startColor',

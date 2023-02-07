@@ -109,7 +109,7 @@ export interface ParameterList {
   /**组件唯一标识 */
   componentIdentify: string;
   /**参数列表 */
-  dataSetting: Parameter[];
+  dataList: Parameter[];
 }
 
 export interface UpdateContentReq {

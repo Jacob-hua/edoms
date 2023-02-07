@@ -1,10 +1,8 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { InitAlarmReq, InitAlarmRes } from './type';
+import { Apis, InitAlarmReq, InitAlarmRes } from './type';
 
-export * from './type';
-
-export default (request?: EdomsRequestFunc) => ({
+export default (request?: EdomsRequestFunc): Apis => ({
   fetchInitAlarmList: async (data: InitAlarmReq): Promise<InitAlarmRes> => {
     if (!request) {
       return {

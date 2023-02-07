@@ -17,6 +17,8 @@ export interface MEfficiencyMonitoring extends MComponent {
   refrenceValue: string;
   /**等分数量 */
   bisectionNumber: number;
+  /**曲线颜色 */
+  lineColor: string;
   /**开始颜色 */
   startColor: string;
   /**结束颜色 */

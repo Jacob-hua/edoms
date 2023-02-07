@@ -6,14 +6,14 @@
     </p>
     <p>
       <span> {{ item.title }} </span>
-      <span class="discover" @click="handleShowSurplus"> 展开 </span>
+      <span class="discover" @click="handleShowSurplus(item)"> 展开 </span>
     </p>
-    <p v-if="isShowBody" class="body">
+    <p v-if="item.expend" class="body">
       <span class="content">{{ item.content }}</span>
       <span class="button-container">
         <span v-if="item.status === 'unconfirm'" class="button-wrapper">
           <el-button type="primary" @click="handleConfirm(item)">确认</el-button>
-          <el-button type="paint" @click="handleIgnore">忽略</el-button>
+          <el-button @click="handleIgnore(item.id)">忽略</el-button>
         </span>
       </span>
     </p>
@@ -21,15 +21,14 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, Ref, ref } from 'vue';
+import { inject, Ref } from 'vue';
 
 import { ElButton } from '@edoms/design';
 
-import { Alarm } from '../api';
 import { ClassName } from '../type';
-
-const isShowBody = ref<boolean>(false);
 export interface Warning {
+  // 告警Id
+  id: number;
   // 告警日期
   date: string;
   //告警类型
@@ -40,6 +39,8 @@ export interface Warning {
   content: string;
   // 是否确认
   status: string;
+  // 是否展开
+  expend?: boolean;
 }
 
 withDefaults(
@@ -48,29 +49,35 @@ withDefaults(
   }>(),
   {
     item: () => ({
+      id: new Date().getTime(),
       date: '-',
       type: '-',
       title: '-',
       content: '-',
       status: '-',
+      expend: false,
     }),
     className: () => 'red',
   }
 );
 
+const emit = defineEmits<{
+  (event: 'ignoreWarning', value: number): void;
+}>();
+
 const textColor = inject<Ref<ClassName>>('textColor');
 const confirmedAlarmList = inject<Function>('confirmedAlarmList') as Function;
-const handleShowSurplus = () => {
-  isShowBody.value = !isShowBody.value;
+const handleShowSurplus = (alarm: Warning) => {
+  alarm.expend = !alarm.expend;
 };
-const handleIgnore = () => {
-  isShowBody.value = false;
+const handleIgnore = (alarmId: number) => {
+  emit('ignoreWarning', alarmId);
 };
 
-const handleConfirm = async (alarm: Alarm) => {
+const handleConfirm = async (alarm: Warning) => {
   const result = await confirmedAlarmList();
   result ? (alarm.status = 'confirmed') : (alarm.status = 'unconfirm');
-  isShowBody.value = !isShowBody.value;
+  alarm.expend = !alarm.expend;
 };
 </script>
 
