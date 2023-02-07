@@ -81,6 +81,9 @@ window.edoms?.onRuntimeReady({
       // 新增节点添加到配置中
       parent.items?.push(config);
     }
+    if (app.page) {
+      app.page.initNode(config, app.page.getNode(parent.id) ?? app.page);
+    }
   },
 
   update({ config, parentId }: UpdateData) {
@@ -96,6 +99,9 @@ window.edoms?.onRuntimeReady({
     if (!parent) throw new Error('未找到父节点');
     const index = parent.items?.findIndex((child: MNode) => child.id === node.id);
     parent.items.splice(index, 1, reactive(config));
+    if (app.page) {
+      app.page.initNode(config, app.page.getNode(parent.id) ?? app.page);
+    }
   },
 
   remove({ id, parentId }: RemoveData) {
@@ -109,6 +115,9 @@ window.edoms?.onRuntimeReady({
 
     const index = parent.items?.findIndex((child: MNode) => child.id === node.id);
     parent.items.splice(index, 1);
+    if (app.page) {
+      app.page.deleteNode(id);
+    }
   },
 });
 </script>
