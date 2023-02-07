@@ -80,6 +80,7 @@ export default class StageRender extends EventEmitter {
     return new Promise((resolve) => {
       const listener = (runtime: Runtime) => {
         this.off('runtime-ready', listener);
+        this.runtime = runtime;
         resolve(runtime);
       };
       this.on('runtime-ready', listener);
