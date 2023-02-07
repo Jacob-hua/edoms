@@ -13,6 +13,7 @@ import RunningParameters from './running-parameters';
 import SettingParameter from './setting-parameter';
 import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
+import TimeWeather from './time-weather';
 import WarningRunningList from './warning-running-list';
 
 const ui: Record<string, any> = {
@@ -32,6 +33,7 @@ const ui: Record<string, any> = {
   warningRunningList: WarningRunningList,
   runningParameters: RunningParameters,
   energyEfficiencyMonitoring: EnergyEfficiencyMonitoring,
+  timeWeather: TimeWeather,
 };
 
 export default ui;
