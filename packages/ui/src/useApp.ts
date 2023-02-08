@@ -11,7 +11,11 @@ export default (props: any) => {
   const node = app?.page?.getNode(props.config.id);
   const request = inject<EdomsRequestFunc | undefined>('request');
 
-  const instance: MNodeInstance = {};
+  const instance: MNodeInstance = {
+    methods: {
+      ...useCommonMethod(props),
+    },
+  };
 
   node?.emit('created', instance);
 
@@ -19,9 +23,6 @@ export default (props: any) => {
     const vm = getCurrentInstance()?.proxy;
     if (vm) {
       instance.$el = vm.$el;
-      instance.methods = {
-        ...useCommonMethod(props),
-      };
     }
     node?.emit('mounted', instance);
   });
