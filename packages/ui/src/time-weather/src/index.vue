@@ -11,7 +11,9 @@
       <el-col :span="6">
         <el-row :gutter="10" class="center-text">
           <el-col :span="14" class="condition-text">{{ weather.condition }}</el-col>
-          <el-col :span="10"><img :src="weatherIcon" alt="" /></el-col>
+          <el-col :span="10" class="condition-img">
+            <div ref="svgRef"></div>
+          </el-col>
         </el-row>
       </el-col>
     </el-row>
@@ -19,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
@@ -118,10 +120,7 @@ const currentDate = ref<CurrentDate>({
   realWeek: '星期-',
 });
 
-const weatherIcon = computed(() => {
-  const condition = weather.value.condition;
-  return iconObj[condition as keyof typeof iconObj];
-});
+const svgRef = ref();
 
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -159,6 +158,24 @@ const getLocalWeather = async () => {
   }
 };
 
+watch(
+  () => weather.value,
+  ({ condition }) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('get', iconObj[condition as keyof typeof iconObj]);
+    xhr.onload = function () {
+      if (xhr.responseText) {
+        svgRef.value.innerHTML = xhr.responseText;
+      }
+    };
+    xhr.send(null);
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
+
 useIntervalAsync(getLocalWeather, intervalDelay.value);
 
 onMounted(() => {
@@ -169,6 +186,8 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+$iconColor: inherit;
+
 .time-weather {
   min-width: 392px;
 
@@ -181,8 +200,19 @@ onMounted(() => {
     text-align: right;
   }
 
-  img {
-    width: 30px;
+  .condition-img {
+    overflow: hidden;
+
+    :deep(.icon) {
+      width: 32px;
+      height: 32px;
+      vertical-align: -4px;
+      overflow: hidden;
+
+      path {
+        fill: currentColor;
+      }
+    }
   }
 }
 </style>
