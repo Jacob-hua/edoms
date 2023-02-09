@@ -19,20 +19,83 @@ export interface MIndicatorItemConfig {
   color: string;
 }
 
-export interface MParameterItemConfig {
+export interface MSystemIndicatorConfig {
+  /** 标签 */
+  label: string;
+  /** 实例类型 */
+  instanceType: string;
+  /** 实例 */
+  instance: string;
+  /** 属性类型 */
+  propertyType: string;
+  /** 属性 */
+  property: string;
+  /** 精度 */
+  precision: string;
+  /** 单位 */
+  unit: string;
+  /** 展示颜色 */
+  color: string;
+}
+
+export interface MEquipmentIndicatorConfig {
+  /** 标签 */
+  label: string;
+  /** 实例类型 */
+  instanceType: string;
+  /**实例名称 */
+  instanceName: string;
+  /** 实例 */
+  instance: string;
+  /** 属性类型 */
+  propertyType: string;
+  /** 属性 */
+  property: string;
+  /** 精度 */
+  precision: string;
+  /** 单位 */
+  unit: string;
+  /** 展示颜色 */
+  color: string;
+}
+
+export interface MSystemParameterConfig {
   /** 标签 */
   label: string;
   /** 指标 */
-  indicators: MIndicatorItemConfig[];
+  indicators: MSystemIndicatorConfig[];
+}
+
+export interface MEquipmentParameterConfig {
+  /** 标签 */
+  label: string;
+  /** 指标 */
+  // indicators: MEquipmentIndicatorConfig[];
+  /** 实例类型 */
+  instanceType: string;
+  /**实例名称 */
+  instanceName: string;
+  /** 实例 */
+  instance: string;
+  /** 属性类型 */
+  propertyType: string;
+  /** 属性 */
+  property: string;
+  /** 精度 */
+  precision: string;
+  /** 单位 */
+  unit: string;
+  /** 展示颜色 */
+  color: string;
 }
 
 export interface MRunningParameters extends MComponent {
   /** 轮询间隔 */
   intervalDelay: number;
   /** 系统曲线 */
-  systems: MParameterItemConfig[];
+  systems: MSystemParameterConfig[];
   /** 设备曲线 */
-  equipments: MParameterItemConfig[];
+  equipments: MEquipmentParameterConfig[];
 }
 
 export interface ParameterItem {

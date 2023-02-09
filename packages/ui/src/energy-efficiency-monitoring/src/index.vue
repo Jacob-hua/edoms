@@ -29,7 +29,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { formatDateRange, stringToDate, UnitTime } from '@edoms/utils';
+import { formatDateRange, formatPrecision, stringToDate, UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -118,7 +118,8 @@ const updateEfficiencyData = async () => {
     if (insCode !== efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]) {
       return;
     }
-    actualValue.value = efficiencyNum;
+    // actualValue.value = efficiencyNum;
+    actualValue.value = String(formatPrecision(Number(efficiencyNum), efficiencyConfig.value.precision));
   });
 };
 
