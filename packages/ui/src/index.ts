@@ -14,6 +14,7 @@ import SettingParameter from './setting-parameter';
 import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
 import TimeWeather from './time-weather';
+import Video from './video';
 import WarningRunningList from './warning-running-list';
 
 const ui: Record<string, any> = {
@@ -34,6 +35,7 @@ const ui: Record<string, any> = {
   runningParameters: RunningParameters,
   energyEfficiencyMonitoring: EnergyEfficiencyMonitoring,
   timeWeather: TimeWeather,
+  video: Video,
 };
 
 export default ui;

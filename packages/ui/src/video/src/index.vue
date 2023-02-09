@@ -1,33 +1,47 @@
 <template>
-  <BusinessCard title="视频监控" min-width="1080" min-height="790">
+  <BusinessCard title="视频监控" min-width="800" min-height="500">
     <div class="warpper">
       <el-tabs v-model="activeCamera" class="camera-tabs">
-        <el-tab-pane
-          v-for="(camera, index) in cameras"
-          :key="index"
-          :label="camera.cameraName"
-          :name="`${index}`"
-        ></el-tab-pane>
+        <el-tab-pane v-for="(camera, index) in cameras" :key="index" :label="camera.cameraName" :name="`${index}`" />
       </el-tabs>
-      <!-- <video src=""></video> -->
+      <VideoPlayer :src="videoSource" type="application/vnd.apple.mpegurl" :muted="true" :playback-rate="2" />
     </div>
   </BusinessCard>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
 
-import { VideoConfigs } from './type';
+import VideoPlayer from './component/VideoPlayer.vue';
+import { CameraItem, VideoConfigs } from './type';
 
 const props = defineProps<{
-  configs: VideoConfigs;
+  config: VideoConfigs;
 }>();
 
-const activeCamera = ref<number>(-1);
+const activeCamera = ref<string>('0');
 
-const cameras = computed<VideoConfigs>(() => props.configs);
+const videoSource = ref<string>('');
+
+const cameras = computed<CameraItem[]>(() => props.config?.cameras ?? []);
+
+watch(
+  () => activeCamera.value,
+  (activeCamera) => {
+    if (cameras.value.length <= 0) return;
+    const targetCamera = cameras.value.at(Number(activeCamera));
+    videoSource.value = targetCamera?.videoSource ?? '';
+  },
+  {
+    immediate: true,
+  }
+);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.warpper {
+  width: 100%;
+}
+</style>

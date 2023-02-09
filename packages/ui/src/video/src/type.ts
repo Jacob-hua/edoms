@@ -6,5 +6,5 @@ export interface CameraItem {
 }
 
 export interface VideoConfigs extends MComponent {
-  videoConfig: CameraItem[];
+  cameras: CameraItem[];
 }

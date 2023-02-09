@@ -1,8 +1,9 @@
 export default () => [
   {
     text: '摄像头',
-    name: 'camera',
+    name: 'cameras',
     type: 'groupList',
+    labelWidth: '80px',
     addButtonText: '添加摄像头',
     items: [
       {
