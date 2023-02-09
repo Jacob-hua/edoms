@@ -52,3 +52,19 @@ const handleSelectedChange = () => {
   app?.emit('checkbox:change', node, selectedValue.value);
 };
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-checkbox__inner) {
+  display: inline-block;
+  position: relative;
+  border: var(--el-checkbox-input-border);
+  border-radius: var(--el-checkbox-border-radius);
+  box-sizing: border-box;
+  width: var(--el-checkbox-input-width);
+  height: var(--el-checkbox-input-height);
+  background-color: var(--el-checkbox-bg-color);
+  z-index: inherit;
+  transition: border-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46),
+    background-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46), outline 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46);
+}
+</style>
