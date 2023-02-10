@@ -2,6 +2,7 @@ import { BarChart, LineChart } from 'echarts/charts';
 import {
   DatasetComponent,
   GridComponent,
+  LegendComponent,
   TitleComponent,
   ToolboxComponent,
   TooltipComponent,
@@ -23,6 +24,7 @@ echarts.use([
   UniversalTransition,
   CanvasRenderer,
   ToolboxComponent,
+  LegendComponent,
 ]);
 
 export default echarts;

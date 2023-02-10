@@ -116,7 +116,8 @@ watch(
 
   .select-box {
     position: absolute;
-    right: 100px;
+    right: 130px;
+    width: 1.5rem;
   }
 }
 

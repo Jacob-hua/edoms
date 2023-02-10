@@ -30,7 +30,7 @@
 import { computed, ref, watch } from 'vue';
 
 import { ElTabPane, ElTabs } from '@edoms/design';
-import { formatCurrentDateRange, stringToDate } from '@edoms/utils';
+import { dateRange, formatCurrentDateRange, formatDate, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -67,7 +67,7 @@ const categories = ref([
   },
 ]);
 
-const activeCategory = ref<string>('equipments');
+const activeCategory = ref<string>('systems');
 const option = ref<ECOption>({});
 
 const parameterConfigs = computed(() => {
@@ -129,18 +129,45 @@ watch(
 );
 
 function generateOption(series: any[] = []): ECOption {
+  const legends = series.map(({ name }) => name);
   return {
+    legend: {
+      data: legends,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
     xAxis: {
       type: 'time',
+      min: dateRange(new Date(), 'day').start,
+      max: dateRange(new Date(), 'day').end,
       splitLine: {
         show: false,
+      },
+      minInterval: 3600 * 1000 * 2,
+      maxInterval: 3600 * 1000 * 2,
+      interval: 3600 * 1000 * 2,
+      axisLabel: {
+        formatter: function (value: any) {
+          return formatDate(value, 'HH:mm');
+        },
+        interval: 1,
       },
     },
     yAxis: {
       type: 'value',
       boundaryGap: [0, '100%'],
       splitLine: {
-        show: false,
+        lineStyle: {
+          type: 'dashed',
+          color: '#ffffff45',
+        },
+      },
+      axisLine: {
+        show: true,
       },
     },
     series,

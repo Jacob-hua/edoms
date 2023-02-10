@@ -31,8 +31,8 @@ watch(
   () => activeParameter.value,
   (activeParameter) => {
     const result = new Map<string, MSystemIndicatorConfig>();
-    if (!props.parameterConfigs[Number(activeParameter)].indicators) {
-      return result;
+    if (!props.parameterConfigs.length || !props.parameterConfigs[Number(activeParameter)].indicators) {
+      return;
     }
     props.parameterConfigs[Number(activeParameter)].indicators.forEach((config) =>
       result.set(`${config.instance[config.instance.length - 1]}:${config.property}`, config)
