@@ -1,10 +1,16 @@
 <template>
-  <BusinessCard title="视频监控" min-width="800" min-height="500">
+  <BusinessCard title="视频监控" min-width="392" min-height="320">
     <div class="warpper">
       <el-tabs v-model="activeCamera" class="camera-tabs">
         <el-tab-pane v-for="(camera, index) in cameras" :key="index" :label="camera.cameraName" :name="`${index}`" />
       </el-tabs>
-      <VideoPlayer :src="videoSource" type="application/vnd.apple.mpegurl" :muted="true" :playback-rate="2" />
+      <VideoPlayer
+        :src="videoSource"
+        type="application/vnd.apple.mpegurl"
+        :controls="false"
+        :muted="true"
+        :playback-rate="2"
+      />
     </div>
   </BusinessCard>
 </template>

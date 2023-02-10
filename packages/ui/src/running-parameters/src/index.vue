@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard title="运行参数" min-width="1080" min-height="240">
+  <BusinessCard title="参数曲线" min-width="1080" min-height="240">
     <template #operation>
       <el-tabs v-model="activeCategory">
         <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
@@ -46,6 +46,8 @@ import {
   MEquipmentParameterConfig,
   MRunningParameters,
   MSystemIndicatorConfig,
+  // MParameterItemConfig,
+  // MIndicatorItemConfig
 } from './type';
 
 const props = defineProps<{
