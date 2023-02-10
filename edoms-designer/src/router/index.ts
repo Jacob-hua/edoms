@@ -79,10 +79,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../layout/404.vue'),
   },
   {
-    path: '/test',
-    component: () => import('../views/Test.vue'),
-  },
-  {
     path: '/:catchAll(.*)',
     redirect: '/404',
   },
@@ -113,7 +109,7 @@ const router = createRouter({
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   handleRequiredParams(to, next);
-  if (['/login', '/404', 'test'].includes(to.path)) {
+  if (['/login', '/404'].includes(to.path)) {
     next();
     return;
   }
