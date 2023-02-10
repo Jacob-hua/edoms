@@ -283,6 +283,7 @@ const loadData = async (props?: RequestProps): Promise<any> => {
     let model: any = {
       instance: [],
       instanceType: undefined,
+      instanceName: undefined,
       propertyType: undefined,
     };
     if (

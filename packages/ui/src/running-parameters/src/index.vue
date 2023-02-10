@@ -5,12 +5,24 @@
         <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
       </el-tabs>
     </template>
-    <div class="wrapper">
-      <el-tabs v-model="activeParameter" class="left-tabs" tab-position="left">
-        <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="`${index}`" />
-      </el-tabs>
-      <EdomsCharts v-if="option" :width="908" :height="240" :option="option" />
-    </div>
+    <SystemParameter
+      v-if="activeCategory === 'systems'"
+      :option="option"
+      :parameter-configs="parameterConfigs"
+      :width="908"
+      :height="240"
+      @change-system-config="handleChangeSystemConfig"
+    >
+    </SystemParameter>
+    <EquipmentParameter
+      v-if="activeCategory === 'equipments'"
+      :option="option"
+      :parameter-configs="parameterConfigs"
+      :width="908"
+      :height="240"
+      @change-equipment-config="handleChangeEquipmentConfig"
+    >
+    </EquipmentParameter>
   </BusinessCard>
 </template>
 
@@ -21,13 +33,20 @@ import { ElTabPane, ElTabs } from '@edoms/design';
 import { formatCurrentDateRange, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
-import EdomsCharts from '../../EdomsCharts.vue';
 import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
+// import EdomsCharts from '../../EdomsCharts.vue';
+import EquipmentParameter from './component/EquipmentParameter.vue';
+import SystemParameter from './component/SystemParameter.vue';
 import apiFactory from './api';
-import { MIndicatorItemConfig, MParameterItemConfig, MRunningParameters } from './type';
+import {
+  MEquipmentIndicatorConfig,
+  MEquipmentParameterConfig,
+  MRunningParameters,
+  MSystemIndicatorConfig,
+} from './type';
 
 const props = defineProps<{
   config: MRunningParameters;
@@ -48,9 +67,10 @@ const categories = ref([
   },
 ]);
 
-const activeCategory = ref<string>('systems');
+const activeCategory = ref<string>('equipments');
+const option = ref<ECOption>({});
 
-const parameterConfigs = computed<MParameterItemConfig[]>(() => {
+const parameterConfigs = computed(() => {
   const result = props.config[activeCategory.value];
   if (result) {
     return result;
@@ -58,23 +78,8 @@ const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   return [];
 });
 
-const activeParameter = ref<number>(-1);
-
-const activeIndicatorConfig = computed<Map<string, MIndicatorItemConfig>>(() => {
-  const result = new Map<string, MIndicatorItemConfig>();
-  if (!parameterConfigs.value[activeParameter.value]?.indicators) {
-    return result;
-  }
-  parameterConfigs.value[activeParameter.value].indicators.forEach((config) =>
-    result.set(`${config.instance[config.instance.length - 1]}:${config.property}`, config)
-  );
-  return result;
-});
-
-watch(
-  () => parameterConfigs.value,
-  () => (activeParameter.value = 0),
-  { immediate: true }
+const activeIndicatorConfig = ref<Map<string, MSystemIndicatorConfig | MEquipmentIndicatorConfig>>(
+  new Map<string, MSystemIndicatorConfig | MEquipmentIndicatorConfig>()
 );
 
 const intervalDelay = computed<number>(() => {
@@ -85,6 +90,14 @@ const intervalDelay = computed<number>(() => {
 });
 
 const chartSeries = ref<any[]>([]);
+
+const handleChangeSystemConfig = (conf: Map<string, MSystemIndicatorConfig>) => {
+  activeIndicatorConfig.value = conf;
+};
+
+const handleChangeEquipmentConfig = (conf: Map<string, MEquipmentParameterConfig>) => {
+  activeIndicatorConfig.value = conf;
+};
 
 const updateParameterData = async () => {
   const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
@@ -105,21 +118,15 @@ const updateParameterData = async () => {
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
   }));
+  option.value = generateOption(chartSeries.value);
 };
 
 const { flush } = useIntervalAsync(updateParameterData, intervalDelay.value);
 
 watch(
-  () => activeParameter.value,
+  () => activeIndicatorConfig.value,
   () => flush()
 );
-
-const option = computed<ECOption | undefined>(() => {
-  if (parameterConfigs.value.length <= 0) {
-    return undefined;
-  }
-  return generateOption(chartSeries.value);
-});
 
 function generateOption(series: any[] = []): ECOption {
   return {
@@ -142,30 +149,22 @@ function generateOption(series: any[] = []): ECOption {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  display: flex;
-}
-:deep(.left-tabs) {
-  & .el-tabs__item {
-    width: 120px;
-    text-align: center;
-  }
-  & .el-tabs__item.is-active {
-    background-color: #333333;
-  }
-}
 :deep(.el-tabs__header) {
   margin: 0;
 }
+
 :deep(.el-tabs__item) {
   color: #ffffff;
 }
+
 :deep(.el-tabs__item.is-active) {
   color: #e99a3c;
 }
+
 :deep(.el-tabs__active-bar) {
   background-color: #e99a3c;
 }
+
 :deep(.el-tabs__nav-wrap::after) {
   background-color: transparent;
 }

@@ -93,9 +93,8 @@ watch(
   () => weather.value,
   ({ condition }) => {
     const svghtml = weatherSvg[`weather_${condition}` as keyof typeof weatherSvg];
-    console.log(svghtml, 'sss');
     nextTick(() => {
-      svgRef.value.innerHTML = svghtml;
+      svgRef.value.innerHTML = svghtml ?? '-';
     });
   },
   {

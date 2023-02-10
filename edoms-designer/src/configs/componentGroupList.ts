@@ -13,6 +13,7 @@ import {
   SwitchButton,
   Tickets,
   Umbrella,
+  VideoPlay,
   Warning,
 } from '@element-plus/icons-vue';
 
@@ -147,6 +148,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: Sunny,
         text: '时间天气',
         type: 'time-weather',
+      },
+      {
+        icon: VideoPlay,
+        text: '监控视频',
+        type: 'video',
       },
     ],
   },
