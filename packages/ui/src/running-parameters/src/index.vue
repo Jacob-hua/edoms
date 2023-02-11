@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard title="参数曲线" min-width="1080" min-height="240">
+  <BusinessCard title="参数曲线" min-width="1080" min-height="320">
     <template #operation>
       <el-tabs v-model="activeCategory">
         <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
@@ -10,7 +10,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="240"
+      :height="176"
       @change-system-config="handleChangeSystemConfig"
     >
     </SystemParameter>
@@ -19,7 +19,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="240"
+      :height="176"
       @change-equipment-config="handleChangeEquipmentConfig"
     >
     </EquipmentParameter>
@@ -41,14 +41,7 @@ import useIntervalAsync from '../../useIntervalAsync';
 import EquipmentParameter from './component/EquipmentParameter.vue';
 import SystemParameter from './component/SystemParameter.vue';
 import apiFactory from './api';
-import {
-  MEquipmentIndicatorConfig,
-  MEquipmentParameterConfig,
-  MRunningParameters,
-  MSystemIndicatorConfig,
-  // MParameterItemConfig,
-  // MIndicatorItemConfig
-} from './type';
+import { MIndicatorItemConfig, MParameterItemConfig, MRunningParameters } from './type';
 
 const props = defineProps<{
   config: MRunningParameters;
@@ -72,7 +65,7 @@ const categories = ref([
 const activeCategory = ref<string>('systems');
 const option = ref<ECOption>({});
 
-const parameterConfigs = computed(() => {
+const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
   if (result) {
     return result;
@@ -80,9 +73,7 @@ const parameterConfigs = computed(() => {
   return [];
 });
 
-const activeIndicatorConfig = ref<Map<string, MSystemIndicatorConfig | MEquipmentIndicatorConfig>>(
-  new Map<string, MSystemIndicatorConfig | MEquipmentIndicatorConfig>()
-);
+const activeIndicatorConfig = ref<Map<string, MIndicatorItemConfig>>(new Map<string, MIndicatorItemConfig>());
 
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -91,13 +82,11 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 
-const chartSeries = ref<any[]>([]);
-
-const handleChangeSystemConfig = (conf: Map<string, MSystemIndicatorConfig>) => {
+const handleChangeSystemConfig = (conf: Map<string, MIndicatorItemConfig>) => {
   activeIndicatorConfig.value = conf;
 };
 
-const handleChangeEquipmentConfig = (conf: Map<string, MEquipmentParameterConfig>) => {
+const handleChangeEquipmentConfig = (conf: Map<string, MIndicatorItemConfig>) => {
   activeIndicatorConfig.value = conf;
 };
 
@@ -114,20 +103,24 @@ const updateParameterData = async () => {
     })),
   });
 
-  chartSeries.value = result.map(({ insCode, propCode, dataList }) => ({
+  let chartSeries = [];
+  chartSeries = result.map(({ insCode, propCode, dataList }) => ({
     name: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.label,
     type: 'line',
     showSymbol: false,
+    color: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.color,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
   }));
-  option.value = generateOption(chartSeries.value);
+  option.value = generateOption(chartSeries);
 };
 
 const { flush } = useIntervalAsync(updateParameterData, intervalDelay.value);
 
 watch(
   () => activeIndicatorConfig.value,
-  () => flush()
+  () => {
+    flush();
+  }
 );
 
 function generateOption(series: any[] = []): ECOption {
@@ -141,6 +134,12 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
+    },
+    grid: {
+      left: '8%',
+      right: '1%',
+      top: 30,
+      bottom: 20,
     },
     xAxis: {
       type: 'time',

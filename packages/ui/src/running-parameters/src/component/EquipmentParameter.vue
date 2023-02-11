@@ -1,17 +1,17 @@
 <template>
   <div class="wrapper">
     <div class="select-box">
-      <el-select v-model="equipName" filterable>
+      <el-select v-model="equipIndex" filterable>
         <el-option
-          v-for="(item, index) in options"
+          v-for="(item, index) in equipmentConfigs"
           :key="index"
-          :value="item.instanceName"
-          :label="item.instanceName"
+          :value="`${index}`"
+          :label="item.label"
         ></el-option>
       </el-select>
     </div>
     <el-tabs v-model="activeParameter" class="left-tabs" tab-position="left">
-      <el-tab-pane v-for="({ label }, index) in equipmentConfigs" :key="index" :label="label" :name="`${index}`" />
+      <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="`${index}`" />
     </el-tabs>
     <EdomsCharts :option="option" :width="width" :height="height"></EdomsCharts>
   </div>
@@ -22,81 +22,44 @@ import { computed, ref, watch } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
-import { MEquipmentParameterConfig } from '../type';
+import { MIndicatorItemConfig, MParameterItemConfig } from '../type';
 
-interface EquipOptions {
-  instanceName: string;
-  instance: string;
-}
 const props = defineProps<{
   option: ECOption;
   width: number;
   height: number;
-  parameterConfigs: MEquipmentParameterConfig[];
+  parameterConfigs: MParameterItemConfig[];
 }>();
 
 const emit = defineEmits<{
-  (event: 'changeEquipmentConfig', value: Map<string, MEquipmentParameterConfig>): void;
+  (event: 'changeEquipmentConfig', value: Map<string, MIndicatorItemConfig>): void;
 }>();
 
 const activeParameter = ref<string>('0');
 
-const equipmentConfigs = ref<MEquipmentParameterConfig[]>([]);
+const equipmentConfigs = ref<MIndicatorItemConfig[]>([]);
 
-const equipName = ref(props.parameterConfigs[0].instanceName);
+const equipIndex = ref<string>('0');
 
-const options = computed<EquipOptions[]>(() => {
-  const opObj = new Map();
-  const result: EquipOptions[] = [];
-  props.parameterConfigs.forEach(({ instanceName, instance }) => {
-    opObj.set(instanceName, instance);
-  });
-  opObj.forEach((item, key) => {
-    result.push({
-      instanceName: key,
-      instance: item,
-    });
-  });
-  return result;
-});
-
-const equipmentsConfigs = ref<Map<string, MEquipmentParameterConfig[]>>(new Map<string, MEquipmentParameterConfig[]>());
-
-const activeIndicatorConfig = computed<Map<string, MEquipmentParameterConfig>>(() => {
-  const result = new Map<string, MEquipmentParameterConfig>();
-  if (!equipmentConfigs.value.length) {
+const activeIndicatorConfig = computed<Map<string, MIndicatorItemConfig>>(() => {
+  const result = new Map<string, MIndicatorItemConfig>();
+  if (!equipmentConfigs.value.length || !equipmentConfigs.value[Number(equipIndex.value)]) {
     return result;
   }
-  const activeConfig = equipmentConfigs.value[Number(activeParameter.value)];
-  result.set(`${activeConfig.instance[activeConfig.instance.length - 1]}:${activeConfig.property}`, activeConfig);
+  const equipment = equipmentConfigs.value[Number(equipIndex.value)];
+  result.set(`${equipment.instance[equipment.instance.length - 1]}:${equipment.property}`, equipment);
   return result;
 });
 
 watch(
-  () => props.parameterConfigs,
-  (parameterConfig) => {
-    const result = new Map<string, MEquipmentParameterConfig[]>();
-    parameterConfig.forEach((item) => {
-      if (result.has(item.instanceName)) {
-        const tarInstance = result.get(item.instanceName) ?? [];
-        tarInstance?.push(item);
-        result.set(item.instanceName, tarInstance);
-      } else {
-        result.set(item.instanceName, [item]);
-      }
-    });
-    equipmentsConfigs.value = result;
+  () => activeParameter.value,
+  (activeParameter) => {
+    equipIndex.value = '0';
+    equipmentConfigs.value = props.parameterConfigs[Number(activeParameter)].indicators;
   },
-  { immediate: true }
-);
-
-watch(
-  () => equipName.value,
-  () => {
-    equipmentConfigs.value = equipmentsConfigs.value.get(equipName.value) ?? [];
-    activeParameter.value = '0';
-  },
-  { immediate: true }
+  {
+    immediate: true,
+  }
 );
 
 watch(
@@ -115,9 +78,20 @@ watch(
   display: flex;
 
   .select-box {
+    --dark-background: rgba(31, 30, 29, 1);
     position: absolute;
-    right: 130px;
+    right: 50px;
     width: 1.5rem;
+
+    :deep(.el-input__wrapper) {
+      box-shadow: 0 0 0 1px #ffffff45 inset;
+      background: rgba(31, 30, 29, 1);
+    }
+
+    :deep(.el-input__inner) {
+      height: 20px;
+      color: #ffffff85;
+    }
   }
 }
 
