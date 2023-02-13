@@ -287,9 +287,13 @@ const loadData = async (props?: RequestProps): Promise<any> => {
       propertyType: undefined,
     };
     if (
-      ['dynamic-monitoring', 'system-operation-parameters', 'global-schematic', 'running-parameters'].includes(
-        component
-      )
+      [
+        'dynamic-monitoring',
+        'system-operation-parameters',
+        'global-schematic',
+        'running-parameters',
+        'global-schematic-chart',
+      ].includes(component)
     ) {
       const pathLastIndex = prop.lastIndexOf('.');
       const domainPath = prop.substring(0, pathLastIndex);
