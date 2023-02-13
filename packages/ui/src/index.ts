@@ -4,6 +4,7 @@ import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
 import EnergyEfficiencyMonitoring from './energy-efficiency-monitoring';
 import GlobalSchematic from './global-schematic';
+import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
 import IndicatorLight from './indicator-light';
 import Overlay from './overlay';
@@ -36,6 +37,7 @@ const ui: Record<string, any> = {
   energyEfficiencyMonitoring: EnergyEfficiencyMonitoring,
   timeWeather: TimeWeather,
   video: Video,
+  globalSchematicChart: GlobalSchematicChart,
 };
 
 export default ui;

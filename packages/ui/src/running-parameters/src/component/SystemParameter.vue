@@ -8,36 +8,40 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
-import { MSystemIndicatorConfig, MSystemParameterConfig } from '../type';
+import { MIndicatorItemConfig, MParameterItemConfig } from '../type';
 
 const props = defineProps<{
   option: ECOption;
   width: number;
   height: number;
-  parameterConfigs: MSystemParameterConfig[];
+  parameterConfigs: MParameterItemConfig[];
 }>();
 
 const emit = defineEmits<{
-  (event: 'changeSystemConfig', value: Map<string, MSystemIndicatorConfig>): void;
+  (event: 'changeSystemConfig', value: Map<string, MIndicatorItemConfig>): void;
 }>();
 
 const activeParameter = ref<string>('0');
 
+const activeIndicatorConfig = computed<Map<string, MIndicatorItemConfig>>(() => {
+  const result = new Map<string, MIndicatorItemConfig>();
+  if (!props.parameterConfigs.length || !props.parameterConfigs[Number(activeParameter.value)].indicators) {
+    return result;
+  }
+  props.parameterConfigs[Number(activeParameter.value)].indicators.forEach((config) =>
+    result.set(`${config.instance[config.instance.length - 1]}:${config.property}`, config)
+  );
+  return result;
+});
+
 watch(
-  () => activeParameter.value,
-  (activeParameter) => {
-    const result = new Map<string, MSystemIndicatorConfig>();
-    if (!props.parameterConfigs.length || !props.parameterConfigs[Number(activeParameter)].indicators) {
-      return;
-    }
-    props.parameterConfigs[Number(activeParameter)].indicators.forEach((config) =>
-      result.set(`${config.instance[config.instance.length - 1]}:${config.property}`, config)
-    );
-    emit('changeSystemConfig', result);
+  () => activeIndicatorConfig.value,
+  () => {
+    emit('changeSystemConfig', activeIndicatorConfig.value);
   },
   { immediate: true }
 );

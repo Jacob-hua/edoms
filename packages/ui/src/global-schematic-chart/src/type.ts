@@ -1,6 +1,5 @@
 import { MComponent } from '@edoms/schema';
-
-export interface MIndicatorItemConfig {
+export interface MIndicator {
   /** 标签 */
   label: string;
   /** 实例类型 */
@@ -11,28 +10,18 @@ export interface MIndicatorItemConfig {
   propertyType: string;
   /** 属性 */
   property: string;
+  /** 曲线颜色 */
+  lineColor: string;
   /** 精度 */
   precision: string;
   /** 单位 */
   unit: string;
-  /** 展示颜色 */
-  color: string;
 }
 
-export interface MParameterItemConfig {
-  /** 标签 */
+export interface MIndicatorConfig extends MComponent {
   label: string;
-  /** 指标 */
-  indicators: MIndicatorItemConfig[];
-}
-
-export interface MRunningParameters extends MComponent {
-  /** 轮询间隔 */
   intervalDelay: number;
-  /** 系统曲线 */
-  systems: MParameterItemConfig[];
-  /** 设备曲线 */
-  equipments: MParameterItemConfig[];
+  indicators: MIndicator[];
 }
 
 export interface ParameterItem {
