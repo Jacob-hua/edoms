@@ -8,8 +8,8 @@
     "build:admin": "npm run build:libs:admin && npm run build:page:admin && npm run build:playground:admin",
     "build:page": "vite --config build.vite.config.ts build --mode page",
     "build:playground": "vite --config build.vite.config.ts build --mode playground",
-    "build:page:admin": "vite --config build.vite.config.ts build --mode page:admin",
-    "build:page:offline": "vite --config build.vite.config.ts build --mode page:offline",
+    "build:page:admin": "npm run build:libs && vite --config build.vite.config.ts build --mode page:admin",
+    "build:page:offline": "npm run build:libs && vite --config build.vite.config.ts build --mode page:offline",
     "build:playground:admin": "vite --config build.vite.config.ts build --mode playground:admin",
     "build:libs": "edoms entry && npm run build:config && npm run build:value && npm run build:event",
     "build:libs:admin": "edoms entry && npm run build:config:admin && npm run build:value:admin && npm run build:event:admin",
@@ -30,7 +30,9 @@
     "@edoms/ui": "workspace:^0.0.1",
     "@edoms/utils": "workspace:^0.0.1",
     "element-plus": "^2.2.25",
+    "hls.js": "^1.3.3",
     "terser": "^5.14.2",
+    "video.js": "^8.0.4",
     "vue": "^3.2.37"
   },
   "peerDependencies": {

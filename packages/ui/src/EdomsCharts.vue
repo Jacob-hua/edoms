@@ -46,6 +46,7 @@ watch(
     if (!charts.value) {
       return;
     }
+    charts.value.clear();
     charts.value.setOption(option);
   },
   { immediate: true, deep: true }

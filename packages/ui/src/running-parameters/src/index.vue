@@ -1,16 +1,28 @@
 <template>
-  <BusinessCard title="运行参数" min-width="1080" min-height="240">
+  <BusinessCard title="参数曲线" min-width="1080" min-height="320">
     <template #operation>
       <el-tabs v-model="activeCategory">
         <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
       </el-tabs>
     </template>
-    <div class="wrapper">
-      <el-tabs v-model="activeParameter" class="left-tabs" tab-position="left">
-        <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="`${index}`" />
-      </el-tabs>
-      <EdomsCharts v-if="option" :width="908" :height="240" :option="option" />
-    </div>
+    <SystemParameter
+      v-if="activeCategory === 'systems'"
+      :option="option"
+      :parameter-configs="parameterConfigs"
+      :width="908"
+      :height="176"
+      @change-system-config="handleChangeSystemConfig"
+    >
+    </SystemParameter>
+    <EquipmentParameter
+      v-if="activeCategory === 'equipments'"
+      :option="option"
+      :parameter-configs="parameterConfigs"
+      :width="908"
+      :height="176"
+      @change-equipment-config="handleChangeEquipmentConfig"
+    >
+    </EquipmentParameter>
   </BusinessCard>
 </template>
 
@@ -18,14 +30,16 @@
 import { computed, ref, watch } from 'vue';
 
 import { ElTabPane, ElTabs } from '@edoms/design';
-import { formatCurrentDateRange, stringToDate } from '@edoms/utils';
+import { dateRange, formatCurrentDateRange, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
-import EdomsCharts from '../../EdomsCharts.vue';
 import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
+// import EdomsCharts from '../../EdomsCharts.vue';
+import EquipmentParameter from './component/EquipmentParameter.vue';
+import SystemParameter from './component/SystemParameter.vue';
 import apiFactory from './api';
 import { MIndicatorItemConfig, MParameterItemConfig, MRunningParameters } from './type';
 
@@ -49,6 +63,7 @@ const categories = ref([
 ]);
 
 const activeCategory = ref<string>('systems');
+const option = ref<ECOption>({});
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
@@ -58,24 +73,7 @@ const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   return [];
 });
 
-const activeParameter = ref<number>(-1);
-
-const activeIndicatorConfig = computed<Map<string, MIndicatorItemConfig>>(() => {
-  const result = new Map<string, MIndicatorItemConfig>();
-  if (!parameterConfigs.value[activeParameter.value]?.indicators) {
-    return result;
-  }
-  parameterConfigs.value[activeParameter.value].indicators.forEach((config) =>
-    result.set(`${config.instance[config.instance.length - 1]}:${config.property}`, config)
-  );
-  return result;
-});
-
-watch(
-  () => parameterConfigs.value,
-  () => (activeParameter.value = 0),
-  { immediate: true }
-);
+const activeIndicatorConfig = ref<Map<string, MIndicatorItemConfig>>(new Map<string, MIndicatorItemConfig>());
 
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -84,7 +82,13 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 
-const chartSeries = ref<any[]>([]);
+const handleChangeSystemConfig = (conf: Map<string, MIndicatorItemConfig>) => {
+  activeIndicatorConfig.value = conf;
+};
+
+const handleChangeEquipmentConfig = (conf: Map<string, MIndicatorItemConfig>) => {
+  activeIndicatorConfig.value = conf;
+};
 
 const updateParameterData = async () => {
   const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
@@ -99,41 +103,68 @@ const updateParameterData = async () => {
     })),
   });
 
-  chartSeries.value = result.map(({ insCode, propCode, dataList }) => ({
+  let chartSeries = [];
+  chartSeries = result.map(({ insCode, propCode, dataList }) => ({
     name: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.label,
     type: 'line',
     showSymbol: false,
+    color: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.color,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
   }));
+  option.value = generateOption(chartSeries);
 };
 
 const { flush } = useIntervalAsync(updateParameterData, intervalDelay.value);
 
 watch(
-  () => activeParameter.value,
-  () => flush()
+  () => activeIndicatorConfig.value,
+  () => {
+    flush();
+  }
 );
 
-const option = computed<ECOption | undefined>(() => {
-  if (parameterConfigs.value.length <= 0) {
-    return undefined;
-  }
-  return generateOption(chartSeries.value);
-});
-
 function generateOption(series: any[] = []): ECOption {
+  const legends = series.map(({ name }) => name);
   return {
+    legend: {
+      data: legends,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    grid: {
+      left: '8%',
+      right: '1%',
+      top: 30,
+      bottom: 20,
+    },
     xAxis: {
       type: 'time',
+      min: dateRange(new Date(), 'day').start,
+      max: dateRange(new Date(), 'day').end,
       splitLine: {
         show: false,
+      },
+      interval: 2,
+      axisLabel: {
+        formatter: '{HH}:{mm}',
+        interval: 2,
       },
     },
     yAxis: {
       type: 'value',
       boundaryGap: [0, '100%'],
       splitLine: {
-        show: false,
+        lineStyle: {
+          type: 'dashed',
+          color: '#ffffff45',
+        },
+      },
+      axisLine: {
+        show: true,
       },
     },
     series,
@@ -142,30 +173,22 @@ function generateOption(series: any[] = []): ECOption {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  display: flex;
-}
-:deep(.left-tabs) {
-  & .el-tabs__item {
-    width: 120px;
-    text-align: center;
-  }
-  & .el-tabs__item.is-active {
-    background-color: #333333;
-  }
-}
 :deep(.el-tabs__header) {
   margin: 0;
 }
+
 :deep(.el-tabs__item) {
   color: #ffffff;
 }
+
 :deep(.el-tabs__item.is-active) {
   color: #e99a3c;
 }
+
 :deep(.el-tabs__active-bar) {
   background-color: #e99a3c;
 }
+
 :deep(.el-tabs__nav-wrap::after) {
   background-color: transparent;
 }

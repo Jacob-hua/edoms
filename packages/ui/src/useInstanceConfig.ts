@@ -37,12 +37,19 @@ export default async (request: Request, componentName: string) => {
       checkStrictly: true,
       options: instances,
       onChange: (mForm: any, value: any, { model }: any) => {
-        model.instanceType = getSelectedInstance(value, instances)?.type;
+        const modelInstance = getSelectedInstance(value, instances);
+        model.instanceType = modelInstance?.type;
+        model.instanceName = modelInstance?.label;
       },
     },
     {
       name: 'instanceType',
       text: '实例类型',
+      type: 'hidden',
+    },
+    {
+      name: 'instanceName',
+      text: '实例名称',
       type: 'hidden',
     },
     {
