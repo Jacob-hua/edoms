@@ -1,6 +1,11 @@
 <template>
   <div>
-    <EdomsCharts :option="option" :width="1080" :height="320"></EdomsCharts>
+    <el-popover trigger="hover" effect="dark" :width="392">
+      <template #reference>
+        <el-button class="m-2"></el-button>
+      </template>
+      <EdomsCharts :option="option" :width="350" :height="160"></EdomsCharts>
+    </el-popover>
   </div>
 </template>
 
@@ -47,6 +52,7 @@ const updateParameterData = async () => {
       propCode: property,
     })),
   });
+  if (!result || result.length <= 0) return;
 
   let chartSeries = [];
   chartSeries = result.map(({ insCode, propCode, dataList }) => {
@@ -69,6 +75,7 @@ const updateParameterData = async () => {
 
 function generateOption(series: any[] = []): ECOption {
   const legends = series.map(({ name }) => name);
+
   return {
     legend: {
       data: legends,
@@ -80,7 +87,7 @@ function generateOption(series: any[] = []): ECOption {
       trigger: 'axis',
     },
     grid: {
-      left: '8%',
+      left: '20%',
       right: '1%',
       top: 30,
       bottom: 20,
@@ -92,9 +99,9 @@ function generateOption(series: any[] = []): ECOption {
       splitLine: {
         show: false,
       },
-      minInterval: 3600 * 1000 * 2,
-      maxInterval: 3600 * 1000 * 2,
-      interval: 3600 * 1000 * 2,
+      // minInterval: 3600 * 1000 * 2,
+      // maxInterval: 3600 * 1000 * 2,
+      // interval: 3600 * 1000 * 2,
       axisLabel: {
         formatter: function (value: any) {
           return formatDate(value, 'HH:mm');
@@ -118,17 +125,13 @@ function generateOption(series: any[] = []): ECOption {
     series,
   };
 }
-// watch(
-//   () => props.config.intervalDelay,
-//   (intervalDelay) => {
-//     if (!intervalDelay) {
-//       return;
-//     }
-//     useIntervalAsync(updateParameterData, intervalDelay);
-//   },
-//   { immediate: true }
-// );
 useIntervalAsync(updateParameterData, intervalDelay.value);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.m-2 {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+</style>
