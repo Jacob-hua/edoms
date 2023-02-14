@@ -160,6 +160,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '图表',
         type: 'global-schematic-chart',
       },
+      {
+        icon: Odometer,
+        text: '多项能效监测',
+        type: 'multiple-energy-monitoring',
+      },
     ],
   },
 ];
