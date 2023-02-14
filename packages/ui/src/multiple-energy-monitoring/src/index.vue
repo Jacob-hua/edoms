@@ -116,20 +116,24 @@ const calculatePosition = (result: FetchEfficiencyRes) => {
   energyEfficiencys.value.map((item) => {
     item.efficiencyNum =
       result[result.findIndex(({ insCode }) => insCode === item.instance[item.instance.length - 1])].efficiencyNum;
-    if (item.efficiencyNum <= item.minValue) {
+    const minValue = Number(item.minValue);
+    const maxValue = Number(item.maxValue);
+    const efficiencyNum = Number(item.efficiencyNum);
+    const targetValue = Number(item.targetValue);
+    if (efficiencyNum <= minValue) {
       item.percentage = 0;
-    } else if (item.efficiencyNum >= item.maxValue) {
+    } else if (efficiencyNum >= maxValue) {
       item.percentage = 100;
     } else {
-      item.percentage =
-        ((Number(item.efficiencyNum) - Number(item.minValue)) / (Number(item.maxValue) - Number(item.minValue))) * 100;
+      item.percentage = ((efficiencyNum - minValue) / (maxValue - minValue)) * 100;
     }
-    if (item.targetValue <= item.minValue || item.percentage == 0) {
+    if (targetValue <= minValue) {
       item.targetPosition = `${PROGRESS_WIDTH}px`;
-    } else if (item.targetValue >= item.maxValue) {
+    } else if (targetValue >= maxValue) {
       item.targetPosition = '0px';
     } else {
-      item.targetPosition = `${PROGRESS_WIDTH * (1 - item.percentage / 100)}px`;
+      const targetLinePercent = (targetValue - minValue) / (maxValue - minValue);
+      item.targetPosition = `${PROGRESS_WIDTH * (1 - targetLinePercent)}px`;
     }
     return item;
   });

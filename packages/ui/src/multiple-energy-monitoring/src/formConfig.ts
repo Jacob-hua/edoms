@@ -54,7 +54,7 @@ export default async (request: Request) => [
     ],
   },
   {
-    text: '能效值',
+    text: '实际值',
     type: 'colorPicker',
     name: 'efficiencyColor',
     defaultValue: '#FFFF00',
