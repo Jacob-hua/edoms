@@ -293,6 +293,7 @@ const loadData = async (props?: RequestProps): Promise<any> => {
         'global-schematic',
         'running-parameters',
         'global-schematic-chart',
+        'multiple-energy-monitoring',
       ].includes(component)
     ) {
       const pathLastIndex = prop.lastIndexOf('.');

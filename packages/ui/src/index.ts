@@ -7,6 +7,7 @@ import GlobalSchematic from './global-schematic';
 import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
 import IndicatorLight from './indicator-light';
+import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
@@ -38,6 +39,7 @@ const ui: Record<string, any> = {
   timeWeather: TimeWeather,
   video: Video,
   globalSchematicChart: GlobalSchematicChart,
+  multipleEnergyMonitoring: MultipleEnergyMonitoring,
 };
 
 export default ui;
