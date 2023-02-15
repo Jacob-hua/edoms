@@ -79,7 +79,7 @@ const handleClose = () => {
 };
 
 const handleSetParameter = (item: Parameter, index: number) => {
-  emit('setParameter', item, index * currentPage.value);
+  emit('setParameter', item, index + 9 * (currentPage.value - 1));
 };
 
 const handleSizeChange = (value: string) => {
