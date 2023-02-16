@@ -14,7 +14,7 @@
             <el-progress :stroke-width="24" :text-inside="true" :color="actureColor" :percentage="item.percentage">{{
               item.efficiencyNum
             }}</el-progress>
-            <div class="target-line"></div>
+            <div class="target-line" :style="{ right: item.targetPosition }"></div>
           </div>
         </div>
       </div>

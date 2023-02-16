@@ -49,6 +49,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '多选框',
         type: 'checkbox',
       },
+      {
+        icon: Histogram,
+        text: '图表',
+        type: 'charts',
+      },
     ],
   },
   {

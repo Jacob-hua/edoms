@@ -1,4 +1,5 @@
 import Button from './button';
+import Charts from './charts';
 import Checkbox from './checkbox';
 import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
@@ -40,6 +41,7 @@ const ui: Record<string, any> = {
   video: Video,
   globalSchematicChart: GlobalSchematicChart,
   multipleEnergyMonitoring: MultipleEnergyMonitoring,
+  charts: Charts,
 };
 
 export default ui;
