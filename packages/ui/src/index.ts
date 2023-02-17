@@ -4,6 +4,7 @@ import Checkbox from './checkbox';
 import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
 import EnergyEfficiencyMonitoring from './energy-efficiency-monitoring';
+import EquipmentCondition from './equipment-condition';
 import GlobalSchematic from './global-schematic';
 import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
@@ -42,6 +43,7 @@ const ui: Record<string, any> = {
   globalSchematicChart: GlobalSchematicChart,
   multipleEnergyMonitoring: MultipleEnergyMonitoring,
   charts: Charts,
+  equipmentCondition: EquipmentCondition,
 };
 
 export default ui;
