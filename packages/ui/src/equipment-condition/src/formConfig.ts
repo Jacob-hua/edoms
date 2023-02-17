@@ -13,32 +13,53 @@ export default async (request: Request) => [
     append: 'ms',
   },
   {
+    text: '设备分组',
+    name: 'groups',
+    type: 'table',
+    enableFullscreen: false,
+    fixed: false,
+    enableToggleMode: false,
+    items: [
+      {
+        label: '分组',
+        name: 'group',
+        text: '分组',
+        type: 'text',
+      },
+    ],
+  },
+  {
     text: '设备工况',
     name: 'conditions',
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加设备',
-    title: (model: any, index: number | string) => `# ${index} ${model.group ?? ''}`,
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
         name: 'label',
         text: '设备',
-        type: 'string',
+        type: 'text',
       },
       {
         name: 'group',
         text: '归属组',
-        type: 'string',
+        type: 'select',
+        options: (mForm: any, { formValue }: any) =>
+          formValue.groups.map(({ group }: any) => ({
+            text: group,
+            value: group,
+          })) ?? [],
       },
       {
         name: 'lineColor',
         text: '曲线颜色',
-        type: 'color',
+        type: 'colorPicker',
       },
       {
         name: 'color',
         text: '数值颜色',
-        type: 'color',
+        type: 'colorPicker',
       },
       {
         text: '参数',
@@ -51,7 +72,7 @@ export default async (request: Request) => [
           {
             name: 'label',
             text: '标签',
-            type: 'string',
+            type: 'text',
           },
           ...(await useInstanceConfig(request, 'equipment-condition')),
         ],

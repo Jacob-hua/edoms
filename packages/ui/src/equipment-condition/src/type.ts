@@ -30,9 +30,15 @@ export interface MConditionItemConfig {
   indicators: MIndicatorItemConfig[];
 }
 
+export interface MEquipmentGroup {
+  group: string;
+}
+
 export interface MEquipmentCondition extends MComponent {
   /** 轮询间隔 */
   intervalDelay: number;
+  /** 分组标签 */
+  groups: MEquipmentGroup[];
   /** 工况 */
-  conditions: MIndicatorItemConfig[];
+  conditions: MConditionItemConfig[];
 }

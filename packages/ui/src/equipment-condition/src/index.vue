@@ -1,7 +1,7 @@
 <template>
   <div>
     <ElTabs>
-      <ElTabPane v-for="(group, index) in equipmentGroups" :key="index" :label="group" :name="group">
+      <ElTabPane v-for="(group, index) in groups" :key="index" :label="group" :name="group">
         {{ group }}
       </ElTabPane>
     </ElTabs>
@@ -23,10 +23,14 @@ const props = defineProps<{
 
 useApp(props);
 
-const equipmentGroups = computed<string[]>(
-  () =>
-    props.config.conditions?.reduce((equipmentGroups, { label }) => [...equipmentGroups, label], [
-      '全部',
-    ] as string[]) ?? ['全部']
-);
+const groups = computed<Set<string>>(() => {
+  const result = new Set<string>();
+  result.add('全部');
+  return (
+    props.config.groups?.reduce((groups, { group }) => {
+      groups.add(group);
+      return groups;
+    }, result) ?? result
+  );
+});
 </script>
