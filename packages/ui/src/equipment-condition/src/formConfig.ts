@@ -36,6 +36,11 @@ export default async (request: Request) => [
         type: 'color',
       },
       {
+        name: 'color',
+        text: '数值颜色',
+        type: 'color',
+      },
+      {
         text: '参数',
         name: 'indicators',
         type: 'groupList',
@@ -49,40 +54,6 @@ export default async (request: Request) => [
             type: 'string',
           },
           ...(await useInstanceConfig(request, 'equipment-condition')),
-          {
-            name: 'thresholdConfigs',
-            text: '阈值设置',
-            type: 'table',
-            enableFullscreen: false,
-            fixed: false,
-            items: [
-              {
-                label: '最小值',
-                name: 'minValue',
-                text: '最小值',
-                type: 'number',
-              },
-              {
-                label: '最大值',
-                name: 'maxValue',
-                text: '最大值',
-                type: 'number',
-              },
-              {
-                label: '告警等级',
-                name: 'alarmLevel',
-                text: '告警等级',
-                type: 'text',
-              },
-              {
-                label: '告警颜色',
-                name: 'alarmColor',
-                text: '告警颜色',
-                type: 'colorPicker',
-                defaultValue: '#00ff00',
-              },
-            ],
-          },
         ],
       },
     ],

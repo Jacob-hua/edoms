@@ -1,21 +1,8 @@
 import { MComponent } from '@edoms/schema';
 
-export interface ThresholdConfig {
-  /**阈值最小值 */
-  minValue: number;
-  /**阈值最大值 */
-  maxValue: number;
-  /**告警等级 */
-  alarmLevel: string;
-  /**颜色 */
-  alarmColor: string;
-}
-
 export interface MIndicatorItemConfig {
   /** 指标标签 */
   label: string;
-  /** 曲线颜色 */
-  lineColor: string;
   /** 实例类型 */
   instanceType: string;
   /** 实例 */
@@ -28,8 +15,6 @@ export interface MIndicatorItemConfig {
   unit: string;
   /** 精度 */
   precision: string;
-  /**阈值配置 */
-  thresholdConfigs: ThresholdConfig[];
 }
 
 export interface MConditionItemConfig {
@@ -37,6 +22,8 @@ export interface MConditionItemConfig {
   label: string;
   /** 参数颜色 */
   color: string;
+  /** 曲线颜色 */
+  lineColor: string;
   /** 设备归属 */
   group: string;
   /** 参数指标 */
