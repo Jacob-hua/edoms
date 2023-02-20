@@ -15,6 +15,8 @@ export interface MIndicatorItemConfig {
   unit: string;
   /** 精度 */
   precision: string;
+  /** 对应的指标值 */
+  value?: string;
 }
 
 export interface MConditionItemConfig {

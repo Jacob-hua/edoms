@@ -6,27 +6,37 @@
       <span :style="titleStyle">21.2</span>
     </div>
     <div class="eq-indicator-tabs">
-      <button>冷水供水温度</button>
-      <button>冷冻回水温度</button>
-      <button>冷冻</button>
-      <button>冷水供水温度</button>
+      <button
+        v-for="(indicator, index) in condition.indicators"
+        :key="index"
+        :class="indicator.label === activeName ? ['eq-indicator-tab-active'] : []"
+        @click="handleIndicatorTabChange(indicator)"
+      >
+        {{ indicator.label }}
+      </button>
     </div>
     <div class="eq-indicator-chart">图表</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
-import { MConditionItemConfig } from '../type';
+import { MConditionItemConfig, MIndicatorItemConfig } from '../type';
 
 const props = defineProps<{
   condition: MConditionItemConfig;
 }>();
 
+const activeName = ref<string>('');
+
 const titleStyle = computed<Record<string, any> | undefined>(() =>
   props.condition.color ? { color: props.condition.color } : undefined
 );
+
+const handleIndicatorTabChange = (indicator: MIndicatorItemConfig) => {
+  activeName.value = indicator.label;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -78,9 +88,35 @@ $eqIndicatorColor: #999999;
 }
 .eq-indicator-tabs {
   display: flex;
-  background-color: antiquewhite;
   grid-column: 2;
   grid-row: 1;
+
+  button {
+    background-color: transparent;
+    color: $eqIndicatorColor;
+    border: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &::after {
+      content: '';
+      margin-top: 2px;
+      height: 2px;
+    }
+  }
+}
+.eq-indicator-tab-active {
+  color: #ffffff !important;
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 60px;
+    height: 2px;
+    background-color: #ffffff;
+    border-radius: 1px;
+  }
 }
 .eq-indicator-chart {
   background-color: #00ffff;
