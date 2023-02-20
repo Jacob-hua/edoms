@@ -37,7 +37,7 @@ export const selectFile = (accepts: string[] = ['*'], multiple: boolean = false)
               type: 'CancelSelect',
             });
           }
-        }, 0);
+        }, 1000);
       },
       { once: true }
     );
