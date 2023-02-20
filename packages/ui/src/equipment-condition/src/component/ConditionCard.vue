@@ -3,8 +3,8 @@
     <div class="eq-title">1#冷水机组</div>
     <div class="eq-indicators">
       <div v-for="(indicator, index) in condition.indicators" :key="index" class="eq-indicator">
-        <span>{{ indicator.label }}</span>
-        <span :style="titleStyle">21.2</span>
+        <LongText class="label" :content="indicator.label" :content-style="indicatorTitleStyle"></LongText>
+        <LongText class="value" content="21.2" :content-style="indicatorValueStyle"></LongText>
       </div>
     </div>
     <div class="eq-indicator-tabs">
@@ -14,7 +14,7 @@
         :class="indicator.label === activeTabIndicator ? ['eq-indicator-tab-active'] : []"
         @click="handleIndicatorTabChange(indicator)"
       >
-        {{ indicator.label }}
+        <LongText :content="indicator.label" :content-style="{ fontSize: '14px' }"></LongText>
       </button>
       <ElSelect
         v-if="otherIndicators.length"
@@ -40,6 +40,7 @@ import { computed, ref, watch } from 'vue';
 
 import { ElOption, ElSelect } from '@edoms/design';
 
+import LongText from '../../../LongText.vue';
 import { MConditionItemConfig, MIndicatorItemConfig } from '../type';
 
 const props = defineProps<{
@@ -54,8 +55,16 @@ const activeTabIndicator = ref<string>('');
 
 const activeOtherIndicator = ref<string>('');
 
-const titleStyle = computed<Record<string, any> | undefined>(() =>
-  props.condition.color ? { color: props.condition.color } : undefined
+const indicatorTitleStyle = computed<Record<string, any> | undefined>(() => ({
+  fontSize: '14px',
+  textAlign: 'center',
+  width: '100px',
+}));
+
+const indicatorValueStyle = computed<Record<string, any> | undefined>(() =>
+  props.condition.color
+    ? { color: props.condition.color, fontSize: '8px', textAlign: 'center' }
+    : { fontSize: '8px', textAlign: 'center' }
 );
 
 watch(
@@ -141,20 +150,12 @@ $eqIndicatorColor: #999999;
   border-radius: 3px;
   color: $eqIndicatorColor;
   margin-top: 4px;
-
-  span:first-child {
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  line-height: 30px;
+  .label {
     border-right: 1px solid $borderColor;
   }
-  span:last-child {
+  .value {
     flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 30px;
   }
 }
 .eq-indicator-tabs {
