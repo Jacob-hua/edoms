@@ -9,21 +9,36 @@
     </div>
     <div class="eq-indicator-tabs">
       <button
-        v-for="(indicator, index) in condition.indicators"
+        v-for="(indicator, index) in indicators"
         :key="index"
-        :class="indicator.label === activeName ? ['eq-indicator-tab-active'] : []"
+        :class="indicator.label === activeTabIndicator ? ['eq-indicator-tab-active'] : []"
         @click="handleIndicatorTabChange(indicator)"
       >
         {{ indicator.label }}
       </button>
-      <div class="eq-indicator-tabs-more">更多</div>
+      <ElSelect
+        v-if="otherIndicators.length"
+        v-model="activeOtherIndicator"
+        class="eq-indicator-tabs-more"
+        placeholder="其他参数"
+        @change="handleOtherIndicatorChange"
+      >
+        <ElOption
+          v-for="(indicator, index) in otherIndicators"
+          :key="index"
+          :label="indicator.label"
+          :value="indicator.label"
+        ></ElOption>
+      </ElSelect>
     </div>
     <div class="eq-indicator-chart">图表</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+import { ElOption, ElSelect } from '@edoms/design';
 
 import { MConditionItemConfig, MIndicatorItemConfig } from '../type';
 
@@ -31,16 +46,50 @@ const props = defineProps<{
   condition: MConditionItemConfig;
 }>();
 
-const activeName = ref<string>('');
+const indicators = ref<MIndicatorItemConfig[]>([]);
+
+const otherIndicators = ref<MIndicatorItemConfig[]>([]);
+
+const activeTabIndicator = ref<string>('');
+
+const activeOtherIndicator = ref<string>('');
 
 const titleStyle = computed<Record<string, any> | undefined>(() =>
   props.condition.color ? { color: props.condition.color } : undefined
 );
 
+watch(
+  () => props.condition.indicators,
+  (value) => {
+    indicators.value = value.slice(0, 5);
+    otherIndicators.value = value.slice(5);
+
+    activeTabIndicator.value = indicators.value?.[0].label;
+  },
+  {
+    immediate: true,
+  }
+);
+
 const handleIndicatorTabChange = (indicator: MIndicatorItemConfig) => {
-  activeName.value = indicator.label;
+  activeTabIndicator.value = indicator.label;
+  activeOtherIndicator.value = '';
+};
+
+const handleOtherIndicatorChange = (value: string) => {
+  if (value) {
+    activeTabIndicator.value = '';
+  }
 };
 </script>
+
+<style lang="scss">
+:root {
+  --el-bg-color-overlay: #1f1f1f;
+  --el-fill-color-light: #505152;
+  --el-color-primary: #ffffff;
+}
+</style>
 
 <style lang="scss" scoped>
 $borderColor: #505152;
@@ -48,6 +97,15 @@ $borderColor: #505152;
 $eqBg: #272727;
 $eqTitleColor: #ffffff;
 $eqIndicatorColor: #999999;
+:deep(.el-input) {
+  --el-input-bg-color: transparent;
+  --el-input-border-color: #505152;
+  --el-input-text-color: #ffffff;
+}
+:deep(.el-select) {
+  background-color: transparent;
+  --el-select-input-focus-border-color: #ffffff;
+}
 .eq-condition {
   width: 912px;
   height: 340px;
@@ -100,13 +158,15 @@ $eqIndicatorColor: #999999;
   }
 }
 .eq-indicator-tabs {
-  display: flex;
   grid-column: 2;
   grid-row: 1;
 
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+
   &-more {
-    background-color: bisque;
-    width: 104px;
+    width: 100%;
+    background-color: transparent;
   }
 
   button {
