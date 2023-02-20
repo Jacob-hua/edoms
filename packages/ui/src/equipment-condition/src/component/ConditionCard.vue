@@ -1,9 +1,11 @@
 <template>
   <div class="eq-condition">
     <div class="eq-title">1#冷水机组</div>
-    <div v-for="(indicator, index) in condition.indicators" :key="index" class="eq-indicator">
-      <span>{{ indicator.label }}</span>
-      <span :style="titleStyle">21.2</span>
+    <div class="eq-indicators">
+      <div v-for="(indicator, index) in condition.indicators" :key="index" class="eq-indicator">
+        <span>{{ indicator.label }}</span>
+        <span :style="titleStyle">21.2</span>
+      </div>
     </div>
     <div class="eq-indicator-tabs">
       <button
@@ -14,6 +16,7 @@
       >
         {{ indicator.label }}
       </button>
+      <div class="eq-indicator-tabs-more">更多</div>
     </div>
     <div class="eq-indicator-chart">图表</div>
   </div>
@@ -52,7 +55,7 @@ $eqIndicatorColor: #999999;
   border-radius: 3px;
   border: 1px solid $borderColor;
   display: grid;
-  grid-template-rows: 40px repeat(7, 30px);
+  grid-template-rows: 40px 1fr;
   grid-template-columns: 164px 1fr;
   padding: 30px 16px;
   row-gap: 4px;
@@ -64,12 +67,22 @@ $eqIndicatorColor: #999999;
   font-size: 14px;
   line-height: 40px;
 }
+.eq-indicators {
+  grid-column: 1 / span 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 .eq-indicator {
   display: flex;
   border: 1px solid $borderColor;
   border-radius: 3px;
   color: $eqIndicatorColor;
-  grid-column: 1 / span 1;
+  margin-top: 4px;
 
   span:first-child {
     width: 100px;
@@ -90,6 +103,11 @@ $eqIndicatorColor: #999999;
   display: flex;
   grid-column: 2;
   grid-row: 1;
+
+  &-more {
+    background-color: bisque;
+    width: 104px;
+  }
 
   button {
     background-color: transparent;
@@ -120,7 +138,7 @@ $eqIndicatorColor: #999999;
 }
 .eq-indicator-chart {
   background-color: #00ffff;
-  grid-row: 2 / span 7;
+  grid-row: 2;
   grid-column: 2;
 }
 </style>
