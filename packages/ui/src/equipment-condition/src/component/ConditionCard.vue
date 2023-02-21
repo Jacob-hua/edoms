@@ -2,9 +2,9 @@
   <div class="eq-condition">
     <div class="eq-title">{{ condition.label }}</div>
     <div class="eq-indicators">
-      <div v-for="(indicator, index) in condition.indicators" :key="index" class="eq-indicator">
-        <LongText class="label" :content="indicator.label" :content-style="indicatorTitleStyle"></LongText>
-        <LongText class="value" content="21.2" :content-style="indicatorValueStyle"></LongText>
+      <div v-for="({ label, displayParameter }, index) in realTimeIndicators" :key="index" class="eq-indicator">
+        <LongText class="label" :content="label" :content-style="indicatorTitleStyle"></LongText>
+        <LongText class="value" :content="displayParameter" :content-style="indicatorValueStyle"></LongText>
       </div>
     </div>
     <div class="eq-indicator-tabs">
@@ -48,7 +48,7 @@ import LongText from '../../../LongText.vue';
 import { ECOption } from '../../../types';
 import useIntervalAsync from '../../../useIntervalAsync';
 import apiFactory from '../api';
-import { MConditionItemConfig, MIndicatorItemConfig } from '../type';
+import { MConditionItemConfig, MIndicatorItemConfig, ParameterItem } from '../type';
 
 export interface Indicator {
   parameter: string;
@@ -66,7 +66,7 @@ const props = defineProps<{
   request?: EdomsRequestFunc;
 }>();
 
-const { fetchHistoryData } = apiFactory(props.request);
+const { fetchHistoryData, fetchRealTimeData } = apiFactory(props.request);
 
 const indicators = ref<MIndicatorItemConfig[]>([]);
 
@@ -75,6 +75,8 @@ const otherIndicators = ref<MIndicatorItemConfig[]>([]);
 const activeTabIndicator = ref<string>('');
 
 const activeOtherIndicator = ref<string>('');
+
+const realTimeIndicators = ref<Indicator[]>([]);
 
 const activeIndicator = ref<Indicator>();
 
@@ -95,6 +97,7 @@ const indicatorValueStyle = computed<Record<string, any> | undefined>(() =>
 watch(
   () => props.condition.indicators,
   (value) => {
+    realTimeIndicators.value = value.map((indicator) => getIndicator(indicator));
     indicators.value = value.slice(0, 5);
     otherIndicators.value = value.slice(5);
 
@@ -112,8 +115,30 @@ const updateIndicatorsData = async () => {
   if (!activeIndicator.value?.deviceCode || !activeIndicator.value?.propCode) {
     return;
   }
+  const realTimeResult = await fetchRealTimeData({
+    dataList: indicators.value.reduce(
+      (dataList, { instance, property }) => [
+        ...dataList,
+        {
+          deviceCode: instance[instance.length - 1],
+          propCodeList: [property],
+        },
+      ],
+      [] as ParameterItem[]
+    ),
+  });
+
+  realTimeResult.forEach((result) => {
+    for (const realTimeIndicator of realTimeIndicators.value) {
+      if (realTimeIndicator.deviceCode === result.deviceCode && realTimeIndicator.propCode === result.propCode) {
+        realTimeIndicator.parameter = `${result.dataValue}`;
+        realTimeIndicator.displayParameter = `${result.dataValue} ${realTimeIndicator.unit}`;
+      }
+    }
+  });
+
   const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
-  const result = await fetchHistoryData({
+  const historyResult = await fetchHistoryData({
     startTime: start,
     endTime: end,
     interval: '1h',
@@ -125,7 +150,7 @@ const updateIndicatorsData = async () => {
       },
     ],
   });
-  const chartSeries = result?.map(({ dataList }) => ({
+  const chartSeries = historyResult?.map(({ dataList }) => ({
     name: activeIndicator.value?.label,
     type: 'line',
     showSymbol: false,
