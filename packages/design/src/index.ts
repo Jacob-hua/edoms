@@ -96,7 +96,6 @@ export default {
     }
 
     app.config.globalProperties.$EDOMS_DESIGN = options;
-    console.log(options, '~~~~');
 
     setConfig(options);
   },

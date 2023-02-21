@@ -5,14 +5,17 @@
         <div :id="titleId" class="drawer-header" :class="titleClass" @click="visible = false">运行工况</div>
       </template>
       <div class="eq-wrapper">
-        <div class="group-tabs">
+        <div ref="groupTabsRef" class="group-tabs">
           <button
             v-for="(group, index) in groups"
             :key="index"
             :class="activeName === group ? ['group-tab-pane', 'group-tab-pane-active'] : ['group-tab-pane']"
             @click="handleGroupTabChange(group)"
           >
-            {{ group }}
+            <LongText
+              :content="group"
+              :content-style="{ width: 'inherit', fontSize: 'inherit', textAlign: 'center' }"
+            ></LongText>
           </button>
         </div>
         <ConditionCard
@@ -28,11 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 
 import { ElDrawer } from '@edoms/design';
 import { dateRange } from '@edoms/utils';
 
+import LongText from '../../LongText.vue';
 import { ECOption } from '../../types';
 import useApp from '../../useApp';
 
@@ -46,6 +50,8 @@ const props = defineProps<{
 useApp(props);
 
 const visible = ref<boolean>(false);
+
+const groupTabsRef = ref<HTMLElement>();
 
 const activeName = ref<string>('全部');
 
@@ -67,6 +73,22 @@ const conditions = computed<MConditionItemConfig[]>(() => {
     return props.config.conditions;
   }
   return props.config.conditions.filter(({ group }) => group === activeName.value);
+});
+
+watch(
+  () => groupTabsRef.value,
+  (groupTabsRef) => {
+    if (!groupTabsRef) {
+      return;
+    }
+    groupTabsRef.addEventListener('wheel', handleWheelChange);
+  }
+);
+
+onUnmounted(() => {
+  if (groupTabsRef.value) {
+    groupTabsRef.value.removeEventListener('wheel', handleWheelChange);
+  }
 });
 
 chartsOption.value = generateOption();
@@ -119,6 +141,14 @@ function generateOption(series: any[] = []): ECOption {
   };
 }
 
+function handleWheelChange(event: WheelEvent) {
+  event.preventDefault();
+  if (!groupTabsRef.value) {
+    return;
+  }
+  groupTabsRef.value.scrollLeft += event.deltaY;
+}
+
 const handleGroupTabChange = (group: string) => {
   activeName.value = group;
 };
@@ -166,6 +196,12 @@ $borderColor: #505152;
 }
 .group-tabs {
   grid-column: 1 / span 2;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 .group-tab-pane {
   width: 86px;
