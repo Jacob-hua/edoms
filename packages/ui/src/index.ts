@@ -14,6 +14,7 @@ import Page from './page';
 import Qrcode from './qrcode';
 import RunningParameters from './running-parameters';
 import SettingParameter from './setting-parameter';
+import SystemCumulativeData from './system-cumulative-data';
 import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
 import TimeWeather from './time-weather';
@@ -42,6 +43,7 @@ const ui: Record<string, any> = {
   globalSchematicChart: GlobalSchematicChart,
   multipleEnergyMonitoring: MultipleEnergyMonitoring,
   charts: Charts,
+  systemCumulativeData: SystemCumulativeData,
 };
 
 export default ui;
