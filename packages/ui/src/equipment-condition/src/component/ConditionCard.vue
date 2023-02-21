@@ -52,6 +52,10 @@ const props = defineProps<{
   chartsOption: ECOption;
 }>();
 
+const emits = defineEmits<{
+  (event: 'activeChange', contentId: string): void;
+}>();
+
 const indicators = ref<MIndicatorItemConfig[]>([]);
 
 const otherIndicators = ref<MIndicatorItemConfig[]>([]);
@@ -79,6 +83,7 @@ watch(
     otherIndicators.value = value.slice(5);
 
     activeTabIndicator.value = indicators.value?.[0].label;
+    emits('activeChange', activeTabIndicator.value);
   },
   {
     immediate: true,
@@ -88,12 +93,14 @@ watch(
 const handleIndicatorTabChange = (indicator: MIndicatorItemConfig) => {
   activeTabIndicator.value = indicator.label;
   activeOtherIndicator.value = '';
+  emits('activeChange', indicator.label);
 };
 
 const handleOtherIndicatorChange = (value: string) => {
   if (value) {
     activeTabIndicator.value = '';
   }
+  emits('activeChange', value);
 };
 </script>
 

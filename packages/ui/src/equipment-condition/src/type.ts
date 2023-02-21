@@ -44,3 +44,42 @@ export interface MEquipmentCondition extends MComponent {
   /** 工况 */
   conditions: MConditionItemConfig[];
 }
+
+export interface HistoryParameterItem {
+  /** 设备实例Code */
+  deviceCode: string;
+  /** 属性Code */
+  propCode: string;
+}
+
+export interface FetchHistoryDataReq {
+  /** 开始时间 */
+  startTime: string;
+  /** 结束时间 */
+  endTime: string;
+  /** 时间间隔 */
+  interval: string;
+  /** 类型 */
+  type: string;
+  /** 属性数据 */
+  dataList: HistoryParameterItem[];
+}
+
+export interface HistoryData {
+  /** 实例Code */
+  insCode: string;
+  /** 属性Code */
+  propCode: string;
+  /** 数据列表 */
+  dataList: Array<{
+    /** 时间 */
+    time: string;
+    value: string;
+  }>;
+}
+
+export type FetchHistoryDataRes = HistoryData[];
+
+export interface Apis {
+  fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
+}
