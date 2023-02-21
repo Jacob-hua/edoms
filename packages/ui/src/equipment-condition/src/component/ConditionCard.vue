@@ -1,6 +1,6 @@
 <template>
   <div class="eq-condition">
-    <div class="eq-title">1#冷水机组</div>
+    <div class="eq-title">{{ condition.label }}</div>
     <div class="eq-indicators">
       <div v-for="(indicator, index) in condition.indicators" :key="index" class="eq-indicator">
         <LongText class="label" :content="indicator.label" :content-style="indicatorTitleStyle"></LongText>
@@ -31,7 +31,9 @@
         ></ElOption>
       </ElSelect>
     </div>
-    <div class="eq-indicator-chart">图表</div>
+    <div class="eq-indicator-chart">
+      <EdomsCharts :option="chartsOption" :width="685" :height="220"></EdomsCharts>
+    </div>
   </div>
 </template>
 
@@ -40,11 +42,14 @@ import { computed, ref, watch } from 'vue';
 
 import { ElOption, ElSelect } from '@edoms/design';
 
+import EdomsCharts from '../../../EdomsCharts.vue';
 import LongText from '../../../LongText.vue';
+import { ECOption } from '../../../types';
 import { MConditionItemConfig, MIndicatorItemConfig } from '../type';
 
 const props = defineProps<{
   condition: MConditionItemConfig;
+  chartsOption: ECOption;
 }>();
 
 const indicators = ref<MIndicatorItemConfig[]>([]);
@@ -198,7 +203,6 @@ $eqIndicatorColor: #999999;
   }
 }
 .eq-indicator-chart {
-  background-color: #00ffff;
   grid-row: 2;
   grid-column: 2;
 }

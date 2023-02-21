@@ -10,13 +10,21 @@
         {{ group }}
       </button>
     </div>
-    <ConditionCard :condition="condition"></ConditionCard>
+    <ConditionCard
+      v-for="(condition, index) in conditions"
+      :key="index"
+      :condition="condition"
+      :charts-option="chartsOption"
+    ></ConditionCard>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
+import { dateRange } from '@edoms/utils';
+
+import { ECOption } from '../../types';
 import useApp from '../../useApp';
 
 import ConditionCard from './component/ConditionCard.vue';
@@ -30,7 +38,7 @@ useApp(props);
 
 const activeName = ref<string>('全部');
 
-const condition = computed<MConditionItemConfig>(() => props.config.conditions[0]);
+const chartsOption = ref<ECOption>({});
 
 const groups = computed<Set<string>>(() => {
   const result = new Set<string>();
@@ -42,6 +50,63 @@ const groups = computed<Set<string>>(() => {
     }, result) ?? result
   );
 });
+
+const conditions = computed<MConditionItemConfig[]>(() => {
+  if (activeName.value === '全部') {
+    return props.config.conditions;
+  }
+  return props.config.conditions.filter(({ group }) => group === activeName.value);
+});
+
+chartsOption.value = generateOption();
+
+function generateOption(series: any[] = []): ECOption {
+  const legends = series.map(({ name }) => name);
+  return {
+    legend: {
+      data: legends,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    grid: {
+      left: '8%',
+      right: '1%',
+      top: 30,
+      bottom: 20,
+    },
+    xAxis: {
+      type: 'time',
+      min: dateRange(new Date(), 'day').start,
+      max: dateRange(new Date(), 'day').end,
+      splitLine: {
+        show: false,
+      },
+      interval: 2,
+      axisLabel: {
+        formatter: '{HH}:{mm}',
+        interval: 2,
+      },
+    },
+    yAxis: {
+      type: 'value',
+      boundaryGap: [0, '100%'],
+      splitLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: '#ffffff45',
+        },
+      },
+      axisLine: {
+        show: true,
+      },
+    },
+    series,
+  };
+}
 
 const handleGroupTabChange = (group: string) => {
   activeName.value = group;
@@ -62,6 +127,7 @@ $borderColor: #505152;
 }
 .group-tabs {
   grid-column: 1 / span 2;
+  overflow: auto;
 }
 .group-tab-pane {
   width: 86px;
