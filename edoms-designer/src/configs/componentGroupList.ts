@@ -170,6 +170,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '多项能效监测',
         type: 'multiple-energy-monitoring',
       },
+      {
+        icon: Odometer,
+        text: '系统累计数据',
+        type: 'system-cumulative-data',
+      },
     ],
   },
 ];

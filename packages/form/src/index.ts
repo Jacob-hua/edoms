@@ -17,6 +17,7 @@ import Daterange from './fields/Daterange.vue';
 import DateTime from './fields/DateTime.vue';
 import Display from './fields/Display.vue';
 import DynamicField from './fields/DynamicField.vue';
+import Formula from './fields/Formula.vue';
 import Hidden from './fields/Hidden.vue';
 import Link from './fields/Link.vue';
 import Number from './fields/Number.vue';
@@ -65,7 +66,7 @@ export { default as MSelect } from './fields/Select.vue';
 export { default as MCascader } from './fields/Cascader.vue';
 export { default as MDynamicField } from './fields/DynamicField.vue';
 export { default as MUpload } from './fields/Upload.vue';
-
+export { default as Formula } from './fields/Formula.vue';
 const defaultInstallOpt = {};
 
 const install = (app: App, opt: any) => {
@@ -104,6 +105,7 @@ const install = (app: App, opt: any) => {
   app.component('MFieldsCascader', Cascader);
   app.component('MFieldsDynamicField', DynamicField);
   app.component('MFieldsUpload', Upload);
+  app.component('MFieldsFormula', Formula);
 };
 
 export default {

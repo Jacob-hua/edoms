@@ -295,6 +295,7 @@ const loadData = async (props?: RequestProps): Promise<any> => {
         'global-schematic-chart',
         'multiple-energy-monitoring',
         'charts',
+        'system-cumulative-data',
       ].includes(component)
     ) {
       const pathLastIndex = prop.lastIndexOf('.');
