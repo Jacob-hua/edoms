@@ -18,7 +18,13 @@ const props = defineProps<{
   appendToBody?: boolean;
   title?: string;
   size?: string | number;
+  lockScroll?: boolean;
   closeOnClickModal?: boolean;
+  closeOnPressEscape?: boolean;
+  direction?: 'rtl' | 'ltr' | 'ttb' | 'btt';
+  showClose?: boolean;
+  openDelay?: number;
+  closeDelay?: number;
 }>();
 
 const uiComponent = getConfig('components').drawer;
