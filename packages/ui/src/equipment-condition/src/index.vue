@@ -22,8 +22,8 @@
           v-for="(condition, index) in conditions"
           :key="index"
           :condition="condition"
-          :charts-option="chartsOption"
-          @active-change="(value) => handleActiveParameterChange(value, condition)"
+          :interval-delay="config.intervalDelay"
+          :request="request"
         ></ConditionCard>
       </div>
     </ElDrawer>
@@ -35,16 +35,12 @@
 import { computed, onUnmounted, ref, watch } from 'vue';
 
 import { ElDrawer } from '@edoms/design';
-import { dateRange, formatCurrentDateRange } from '@edoms/utils';
 
 import LongText from '../../LongText.vue';
-import { ECOption } from '../../types';
 import useApp from '../../useApp';
-import useIntervalAsync from '../../useIntervalAsync';
 
 import ConditionCard from './component/ConditionCard.vue';
-import apiFactory from './api';
-import { MConditionItemConfig, MEquipmentCondition, MIndicatorItemConfig } from './type';
+import { MConditionItemConfig, MEquipmentCondition } from './type';
 
 const props = defineProps<{
   config: MEquipmentCondition;
@@ -52,17 +48,11 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchHistoryData } = apiFactory(request);
-
 const visible = ref<boolean>(false);
 
 const groupTabsRef = ref<HTMLElement>();
 
 const activeName = ref<string>('全部');
-
-const chartsOption = ref<ECOption>({});
-
-const historyIndicatorMap = ref<Map<string, MIndicatorItemConfig | undefined>>(new Map());
 
 const groups = computed<Set<string>>(() => {
   const result = new Set<string>();
@@ -82,13 +72,6 @@ const conditions = computed<MConditionItemConfig[]>(() => {
   return props.config.conditions.filter(({ group }) => group === activeName.value);
 });
 
-const intervalDelay = computed<number>(() => {
-  if (typeof props.config.intervalDelay !== 'number') {
-    return 1000;
-  }
-  return props.config.intervalDelay;
-});
-
 watch(
   () => groupTabsRef.value,
   (groupTabsRef) => {
@@ -100,73 +83,8 @@ watch(
 );
 
 onUnmounted(() => {
-  if (groupTabsRef.value) {
-    groupTabsRef.value.removeEventListener('wheel', handleWheelChange);
-  }
+  groupTabsRef.value?.removeEventListener('wheel', handleWheelChange);
 });
-
-const updateIndicatorsData = async () => {
-  const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
-  await fetchHistoryData({
-    startTime: start,
-    endTime: end,
-    interval: '1h',
-    type: 'dev',
-    dataList: [],
-  });
-};
-
-useIntervalAsync(updateIndicatorsData, intervalDelay.value);
-
-chartsOption.value = generateOption();
-
-function generateOption(series: any[] = []): ECOption {
-  const legends = series.map(({ name }) => name);
-  return {
-    legend: {
-      data: legends,
-      textStyle: {
-        color: '#ffffff85',
-      },
-    },
-    tooltip: {
-      trigger: 'axis',
-    },
-    grid: {
-      left: '8%',
-      right: '1%',
-      top: 30,
-      bottom: 20,
-    },
-    xAxis: {
-      type: 'time',
-      min: dateRange(new Date(), 'day').start,
-      max: dateRange(new Date(), 'day').end,
-      splitLine: {
-        show: false,
-      },
-      interval: 2,
-      axisLabel: {
-        formatter: '{HH}:{mm}',
-        interval: 2,
-      },
-    },
-    yAxis: {
-      type: 'value',
-      boundaryGap: [0, '100%'],
-      splitLine: {
-        lineStyle: {
-          type: 'dashed',
-          color: '#ffffff45',
-        },
-      },
-      axisLine: {
-        show: true,
-      },
-    },
-    series,
-  };
-}
 
 function handleWheelChange(event: WheelEvent) {
   event.preventDefault();
@@ -178,11 +96,6 @@ function handleWheelChange(event: WheelEvent) {
 
 const handleGroupTabChange = (group: string) => {
   activeName.value = group;
-};
-
-const handleActiveParameterChange = (activeParameter: string, condition: MConditionItemConfig) => {
-  const indicator = condition.indicators.find(({ label }) => label === activeParameter);
-  historyIndicatorMap.value.set(condition.label, indicator);
 };
 </script>
 

@@ -41,20 +41,32 @@
 import { computed, ref, watch } from 'vue';
 
 import { ElOption, ElSelect } from '@edoms/design';
+import { dateRange, EdomsRequestFunc, formatCurrentDateRange, stringToDate } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import LongText from '../../../LongText.vue';
 import { ECOption } from '../../../types';
+import useIntervalAsync from '../../../useIntervalAsync';
+import apiFactory from '../api';
 import { MConditionItemConfig, MIndicatorItemConfig } from '../type';
+
+export interface Indicator {
+  parameter: string;
+  displayParameter: string;
+  parameterStyle: {};
+  label: string;
+  deviceCode: string;
+  propCode: string;
+  unit: string;
+}
 
 const props = defineProps<{
   condition: MConditionItemConfig;
-  chartsOption: ECOption;
+  intervalDelay: number;
+  request?: EdomsRequestFunc;
 }>();
 
-const emits = defineEmits<{
-  (event: 'activeChange', contentId: string): void;
-}>();
+const { fetchHistoryData } = apiFactory(props.request);
 
 const indicators = ref<MIndicatorItemConfig[]>([]);
 
@@ -63,6 +75,10 @@ const otherIndicators = ref<MIndicatorItemConfig[]>([]);
 const activeTabIndicator = ref<string>('');
 
 const activeOtherIndicator = ref<string>('');
+
+const activeIndicator = ref<Indicator>();
+
+const chartsOption = ref<ECOption>({});
 
 const indicatorTitleStyle = computed<Record<string, any> | undefined>(() => ({
   fontSize: '14px',
@@ -83,25 +99,126 @@ watch(
     otherIndicators.value = value.slice(5);
 
     activeTabIndicator.value = indicators.value?.[0].label;
-    emits('activeChange', activeTabIndicator.value);
+    if (indicators.value.length > 0) {
+      activeIndicator.value = getIndicator(indicators.value[0]);
+    }
   },
   {
     immediate: true,
   }
 );
 
-const handleIndicatorTabChange = (indicator: MIndicatorItemConfig) => {
-  activeTabIndicator.value = indicator.label;
+const updateIndicatorsData = async () => {
+  if (!activeIndicator.value?.deviceCode || !activeIndicator.value?.propCode) {
+    return;
+  }
+  const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
+  const result = await fetchHistoryData({
+    startTime: start,
+    endTime: end,
+    interval: '1h',
+    type: 'dev',
+    dataList: [
+      {
+        deviceCode: activeIndicator.value?.deviceCode ?? '',
+        propCode: activeIndicator.value?.propCode ?? '',
+      },
+    ],
+  });
+  const chartSeries = result?.map(({ dataList }) => ({
+    name: activeIndicator.value?.label,
+    type: 'line',
+    showSymbol: false,
+    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    itemStyle: {
+      color: props.condition.lineColor,
+    },
+  }));
+  chartsOption.value = generateOption(chartSeries ?? []);
+};
+
+const { flush } = useIntervalAsync(updateIndicatorsData, props.intervalDelay);
+
+watch(
+  () => activeIndicator.value,
+  () => flush()
+);
+
+function generateOption(series: any[] = []): ECOption {
+  const legends = series.map(({ name }) => name);
+  return {
+    legend: {
+      data: legends,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    grid: {
+      left: '8%',
+      right: '1%',
+      top: 30,
+      bottom: 20,
+    },
+    xAxis: {
+      type: 'time',
+      min: dateRange(new Date(), 'day').start,
+      max: dateRange(new Date(), 'day').end,
+      splitLine: {
+        show: false,
+      },
+      interval: 2,
+      axisLabel: {
+        formatter: '{HH}:{mm}',
+        interval: 2,
+      },
+    },
+    yAxis: {
+      type: 'value',
+      boundaryGap: [0, '100%'],
+      splitLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: '#ffffff45',
+        },
+      },
+      axisLine: {
+        show: true,
+      },
+    },
+    series,
+  };
+}
+
+const handleIndicatorTabChange = (indicatorConfig: MIndicatorItemConfig) => {
+  activeTabIndicator.value = indicatorConfig.label;
   activeOtherIndicator.value = '';
-  emits('activeChange', indicator.label);
+  activeIndicator.value = getIndicator(indicatorConfig);
 };
 
 const handleOtherIndicatorChange = (value: string) => {
   if (value) {
     activeTabIndicator.value = '';
   }
-  emits('activeChange', value);
+  const indicatorConfig = props.condition.indicators.find(({ label }) => label === value);
+  if (indicatorConfig) {
+    activeIndicator.value = getIndicator(indicatorConfig);
+  }
 };
+
+function getIndicator(indicatorConfig: MIndicatorItemConfig): Indicator {
+  return {
+    label: indicatorConfig.label,
+    deviceCode: indicatorConfig.instance[indicatorConfig.instance.length - 1],
+    propCode: indicatorConfig.property,
+    parameter: '',
+    displayParameter: '',
+    unit: indicatorConfig.unit,
+    parameterStyle: '',
+  };
+}
 </script>
 
 <style lang="scss">
