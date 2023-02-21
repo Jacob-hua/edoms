@@ -22,7 +22,6 @@
         clearable
         :placeholder="config.placeholder"
         :disabled="disabled"
-        @change="changeHandler"
         @input="inputHandler"
       ></ElInput>
     </el-main>
@@ -30,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref } from 'vue';
+import { inject, ref, watch } from 'vue';
 
 import { ElInput } from '@edoms/design';
 
@@ -54,13 +53,7 @@ useAddField(props.prop);
 
 const mForm = inject<FormState | null>('mForm');
 
-const textValue = ref(props.name[props.model]);
-
-const changeHandler = (value: number) => {
-  console.log(value, 'ffff');
-
-  emit('change', value);
-};
+const textValue = ref('');
 
 const inputHandler = (v: string) => {
   emit('input', v);
@@ -74,6 +67,24 @@ const handleCommand = (command: string) => {
     textValue.value = command;
   }
 };
+
+watch(
+  () => props.model.id,
+  () => {
+    textValue.value = props.model[props.name];
+  },
+  {
+    immediate: true,
+  }
+);
+
+watch(
+  () => textValue.value,
+  (value) => {
+    props.model[props.name] = value;
+    emit('change', value);
+  }
+);
 </script>
 
 <style lang="scss" scoped>
