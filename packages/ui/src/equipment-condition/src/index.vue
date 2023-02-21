@@ -1,27 +1,36 @@
 <template>
-  <div class="eq-wrapper">
-    <div class="group-tabs">
-      <button
-        v-for="(group, index) in groups"
-        :key="index"
-        :class="activeName === group ? ['group-tab-pane', 'group-tab-pane-active'] : ['group-tab-pane']"
-        @click="handleGroupTabChange(group)"
-      >
-        {{ group }}
-      </button>
-    </div>
-    <ConditionCard
-      v-for="(condition, index) in conditions"
-      :key="index"
-      :condition="condition"
-      :charts-option="chartsOption"
-    ></ConditionCard>
+  <div>
+    <ElDrawer v-model="visible" direction="btt" size="95%">
+      <template #header="{ titleId, titleClass }: any">
+        <div :id="titleId" class="drawer-header" :class="titleClass" @click="visible = false">运行工况</div>
+      </template>
+      <div class="eq-wrapper">
+        <div class="group-tabs">
+          <button
+            v-for="(group, index) in groups"
+            :key="index"
+            :class="activeName === group ? ['group-tab-pane', 'group-tab-pane-active'] : ['group-tab-pane']"
+            @click="handleGroupTabChange(group)"
+          >
+            {{ group }}
+          </button>
+        </div>
+        <ConditionCard
+          v-for="(condition, index) in conditions"
+          :key="index"
+          :condition="condition"
+          :charts-option="chartsOption"
+        ></ConditionCard>
+      </div>
+    </ElDrawer>
+    <div class="click-wrapper" @click="visible = true">运行工况</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
+import { ElDrawer } from '@edoms/design';
 import { dateRange } from '@edoms/utils';
 
 import { ECOption } from '../../types';
@@ -35,6 +44,8 @@ const props = defineProps<{
 }>();
 
 useApp(props);
+
+const visible = ref<boolean>(false);
 
 const activeName = ref<string>('全部');
 
@@ -119,6 +130,34 @@ $tabPanColor: #999999;
 $tabPanActiveColor: #00ffff;
 $borderColor: #505152;
 
+:deep(.el-drawer) {
+  --el-drawer-bg-color: rgb(19, 20, 21);
+}
+:deep(.el-drawer__header) {
+  margin-bottom: 25px;
+  padding: 0;
+}
+.click-wrapper {
+  width: inherit;
+  height: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 0 14px;
+}
+.drawer-header {
+  background-color: rgb(41, 41, 42);
+  height: 60px;
+  line-height: 60px;
+  padding: 0 14px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
 .eq-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -127,7 +166,6 @@ $borderColor: #505152;
 }
 .group-tabs {
   grid-column: 1 / span 2;
-  overflow: auto;
 }
 .group-tab-pane {
   width: 86px;
@@ -142,6 +180,7 @@ $borderColor: #505152;
   &-active {
     border-bottom: 2px solid $tabPanActiveColor;
     color: $tabPanActiveColor;
+    background-color: transparent;
   }
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
   <component :is="uiComponent.component" v-bind="uiProps" @close="closeHandler" @update:model-value="updateModelValue">
+    <template #header>
+      <slot name="header"></slot>
+    </template>
     <slot></slot>
 
     <template #footer>
