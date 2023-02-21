@@ -19,6 +19,7 @@ export { default as ElColorPicker } from './ColorPicker.vue';
 export { default as ElDatePicker } from './DatePicker.vue';
 export { default as ElDialog } from './Dialog.vue';
 export { default as ElDivider } from './Divider.vue';
+export { default as ElDrawer } from './Drawer.vue';
 export { default as ElDropdown } from './Dropdown.vue';
 export { default as ElDropdownItem } from './DropdownItem.vue';
 export { default as ElDropdownMenu } from './DropdownMenu.vue';
@@ -95,6 +96,8 @@ export default {
     }
 
     app.config.globalProperties.$EDOMS_DESIGN = options;
+    console.log(options, '~~~~');
+
     setConfig(options);
   },
 };
