@@ -295,6 +295,7 @@ const loadData = async (props?: RequestProps): Promise<any> => {
         'global-schematic-chart',
         'multiple-energy-monitoring',
         'charts',
+        'equipment-condition',
         'system-cumulative-data',
         'equipment-operating-parameter',
       ].includes(component)

@@ -70,15 +70,12 @@ export const isPage = (node: MNode | undefined): boolean => {
 };
 
 export const formatPrecision = (num: number, precision: string | number) => {
+  if (!precision) {
+    return String(num);
+  }
   if (typeof precision === 'number') {
     precision = String(precision);
   }
-  const [, s] = precision.split('.');
-  if (!s) {
-    return num;
-  }
-  const times = Math.pow(10, s.length);
-  let des = num * times + 0.5;
-  des = parseInt(`${des}`, 10) / times;
-  return des + '';
+  const precisionLength = precision.indexOf('.') === -1 ? 0 : precision.length - precision.indexOf('.') - 1;
+  return parseFloat(`${num}`).toFixed(precisionLength);
 };

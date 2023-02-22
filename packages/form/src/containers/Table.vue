@@ -108,7 +108,12 @@
       </ElTooltip>
       <slot></slot>
       <ElButton v-if="addable" size="small" type="primary" plain @click="newHandler">添加</ElButton> &nbsp;
-      <ElButton v-if="enableToggleMode && !isFullscreen" :icon="Grid" size="small" type="primary" @click="toggleMode"
+      <ElButton
+        v-if="config.enableToggleMode && !isFullscreen"
+        :icon="Grid"
+        size="small"
+        type="primary"
+        @click="toggleMode"
         >展开配置</ElButton
       >
       <ElButton
@@ -174,13 +179,11 @@ const props = withDefaults(
     sortKey?: string;
     text?: string;
     size?: string;
-    enableToggleMode?: boolean;
     showIndex?: boolean;
   }>(),
   {
     prop: '',
     sortKey: '',
-    enableToggleMode: true,
     showIndex: true,
   }
 );
@@ -516,7 +519,6 @@ const toggleMode = () => {
 
   // 切换为groupList的形式
   props.config.type = 'groupList';
-  props.config.enableToggleMode = true;
   props.config.tableItems = props.config.items;
   props.config.items =
     props.config.groupItems ||
