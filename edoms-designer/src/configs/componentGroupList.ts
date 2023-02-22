@@ -176,6 +176,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '运行工况',
         type: 'equipment-condition',
       },
+      {
+        icon: Odometer,
+        text: '系统累计数据',
+        type: 'system-cumulative-data',
+      },
     ],
   },
 ];

@@ -305,6 +305,19 @@ export interface TextareaConfig extends FormItem {
   placeholder?: string;
 }
 
+export interface FormulaConfig extends FormItem {
+  type: 'formula';
+  options: {
+    label: string;
+    value: {
+      label: string;
+      value: string;
+    }[];
+  }[];
+  placeholder?: string;
+  trigger?: string;
+}
+
 /**
  * 计数器
  */
@@ -736,7 +749,8 @@ export type ChildConfig =
   | TextareaConfig
   | DynamicFieldConfig
   | ComponentConfig
-  | UploadConfig;
+  | UploadConfig
+  | FormulaConfig;
 
 export type FormConfig = (ChildConfig & { [key: string]: any })[];
 
