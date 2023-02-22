@@ -16,6 +16,16 @@ export default () => [
         text: '视频源',
         type: 'text',
       },
+      {
+        name: 'acount',
+        text: '账号',
+        type: 'text',
+      },
+      {
+        name: 'password',
+        text: '密码',
+        type: 'text',
+      },
     ],
   },
 ];
