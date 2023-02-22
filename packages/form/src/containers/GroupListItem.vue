@@ -5,7 +5,11 @@
         ><CaretBottom v-if="expand" /><CaretRight v-else
       /></ElIcon>
 
-      <ElButton text @click="expandHandler">{{ title }}</ElButton>
+      <ElTooltip :content="title">
+        <ElButton text @click="expandHandler">
+          <span>{{ title }}</span>
+        </ElButton>
+      </ElTooltip>
 
       <div>
         <ElButton
@@ -45,7 +49,7 @@
 import { computed, inject, ref, watchEffect } from 'vue';
 import { CaretBottom, CaretRight, CaretTop, Delete } from '@element-plus/icons-vue';
 
-import { ElButton, ElIcon } from '@edoms/design';
+import { ElButton, ElIcon, ElTooltip } from '@edoms/design';
 
 import { FormState, GroupListConfig } from '../schema';
 import { filterFunction } from '../utils/form';
