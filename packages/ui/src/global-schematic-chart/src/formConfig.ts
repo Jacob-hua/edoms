@@ -25,7 +25,6 @@ export default async (request: Request) => [
     labelWidth: '50px',
     addButtonText: '添加指标',
     movable: false,
-    maxItems: 3,
     title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
     items: [
       {
