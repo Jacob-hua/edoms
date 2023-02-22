@@ -38,7 +38,7 @@ export default async (request: Request) => [
       ...(await useInstanceConfig(request, 'global-schematic-chart')),
       {
         text: '颜色',
-        name: 'color',
+        name: 'lineColor',
         type: 'colorPicker',
       },
     ],
