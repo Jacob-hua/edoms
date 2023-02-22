@@ -24,8 +24,13 @@
       align-items: center;
 
       & > button {
-        flex-grow: 1;
+        width: 200px;
         justify-content: start;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        word-break: break-all;
       }
 
       & > div:last-of-type {
