@@ -34,7 +34,7 @@ export default async (request: Request) => [
     append: 'ms',
   },
   {
-    text: '展示指标数',
+    text: '展示个数',
     name: 'visibleNumber',
     type: 'number',
     min: 0,
