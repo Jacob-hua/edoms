@@ -29,7 +29,7 @@ const indicatorConfigs = computed<MIndicator[]>(() => props.config.indicators);
 
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
-    return 1000;
+    return 10;
   }
   return props.config.intervalDelay;
 });

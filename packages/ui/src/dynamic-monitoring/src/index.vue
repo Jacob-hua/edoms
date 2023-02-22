@@ -95,7 +95,7 @@ const chartDialogVisible = ref<boolean>(false);
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
-    return 1000;
+    return 10;
   }
   return props.config.intervalDelay;
 });
