@@ -109,7 +109,8 @@ const option = ref<ECOption>({});
 
 const chartTitle = ref<string>('');
 
-const curUnit = ref<string>('');
+const chartUnit = ref<string>('');
+const chartPrecision = ref<string>('');
 
 const chartsParam = ref({
   dateRange: 'day',
@@ -196,7 +197,7 @@ const fetchHistory = async () => {
       name: chartTitle.value,
       type: 'bar',
       showSymbol: false,
-      data: result.map(({ time, value }) => [stringToDate(time), value]),
+      data: result.map(({ time, value }) => [stringToDate(time), formatPrecision(Number(value), chartPrecision.value)]),
     },
   ];
 
@@ -211,7 +212,8 @@ const handleChangeType = (type: string) => {
 const handleClickItem = (item: CumulativeList) => {
   dialogVisible.value = true;
   chartTitle.value = item.label;
-  curUnit.value = item.unit;
+  chartUnit.value = item.unit;
+  chartPrecision.value = item.precision;
   const variables: Record<string, any> = {};
   item.variables?.forEach(({ variable, instance, instanceType, property }) => {
     const insCode = instance[instance.length - 1];
@@ -249,7 +251,7 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      valueFormatter: (value) => `${value}${curUnit.value}`,
+      valueFormatter: (value) => `${value}${chartUnit.value}`,
     },
     grid: {
       left: '8%',
@@ -271,7 +273,7 @@ function generateOption(series: any[] = []): ECOption {
       },
     },
     yAxis: {
-      name: `单位：${curUnit.value}`,
+      name: `单位：${chartUnit.value}`,
       type: 'value',
       boundaryGap: [0, '100%'],
       splitLine: {
