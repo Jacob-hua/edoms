@@ -2,9 +2,10 @@
   <div class="eq-condition">
     <div class="eq-title">{{ condition.label }}</div>
     <div class="eq-indicators">
-      <div v-for="({ label, displayParameter }, index) in realTimeIndicators" :key="index" class="eq-indicator">
+      <div v-for="({ label, displayParameter, unit }, index) in realTimeIndicators" :key="index" class="eq-indicator">
         <LongText class="label" :content="label" :content-style="indicatorTitleStyle"></LongText>
         <LongText class="value" :content="displayParameter" :content-style="indicatorValueStyle"></LongText>
+        <span :style="indicatorValueStyle">{{ unit }}</span>
       </div>
     </div>
     <div class="eq-indicator-tabs">
@@ -41,7 +42,7 @@
 import { computed, ref, watch } from 'vue';
 
 import { ElOption, ElSelect } from '@edoms/design';
-import { dateRange, EdomsRequestFunc, formatCurrentDateRange, stringToDate } from '@edoms/utils';
+import { dateRange, EdomsRequestFunc, formatCurrentDateRange, formatPrecision, stringToDate } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import LongText from '../../../LongText.vue';
@@ -58,6 +59,7 @@ export interface Indicator {
   deviceCode: string;
   propCode: string;
   unit: string;
+  precision: string;
 }
 
 const props = defineProps<{
@@ -132,7 +134,9 @@ const updateIndicatorsData = async () => {
     for (const realTimeIndicator of realTimeIndicators.value) {
       if (realTimeIndicator.deviceCode === result.deviceCode && realTimeIndicator.propCode === result.propCode) {
         realTimeIndicator.parameter = `${result.dataValue}`;
-        realTimeIndicator.displayParameter = `${result.dataValue} ${realTimeIndicator.unit}`;
+        realTimeIndicator.displayParameter = `${String(
+          formatPrecision(result.dataValue, realTimeIndicator.precision)
+        )}`;
       }
     }
   });
@@ -242,6 +246,7 @@ function getIndicator(indicatorConfig: MIndicatorItemConfig): Indicator {
     displayParameter: '',
     unit: indicatorConfig.unit,
     parameterStyle: '',
+    precision: indicatorConfig.precision,
   };
 }
 </script>
