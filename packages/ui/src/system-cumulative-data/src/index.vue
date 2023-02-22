@@ -38,16 +38,16 @@
             </div>
           </div>
         </div>
-        <div class="paginator">
-          <ElPagination
-            layout="prev, pager, next"
-            :total="systemCumulativeData.length"
-            :cur-page="currentPage"
-            :page-size="pageSize"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          ></ElPagination>
-        </div>
+      </div>
+      <div class="paginator">
+        <ElPagination
+          layout="prev, pager, next"
+          :total="systemCumulativeData.length"
+          :cur-page="currentPage"
+          :page-size="pageSize"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        ></ElPagination>
       </div>
     </BusinessCard>
     <EChartsDialog
@@ -109,7 +109,8 @@ const option = ref<ECOption>({});
 
 const chartTitle = ref<string>('');
 
-const curUnit = ref<string>('');
+const chartUnit = ref<string>('');
+const chartPrecision = ref<string>('');
 
 const chartsParam = ref({
   dateRange: 'day',
@@ -196,7 +197,7 @@ const fetchHistory = async () => {
       name: chartTitle.value,
       type: 'bar',
       showSymbol: false,
-      data: result.map(({ time, value }) => [stringToDate(time), value]),
+      data: result.map(({ time, value }) => [stringToDate(time), formatPrecision(Number(value), chartPrecision.value)]),
     },
   ];
 
@@ -211,7 +212,8 @@ const handleChangeType = (type: string) => {
 const handleClickItem = (item: CumulativeList) => {
   dialogVisible.value = true;
   chartTitle.value = item.label;
-  curUnit.value = item.unit;
+  chartUnit.value = item.unit;
+  chartPrecision.value = item.precision;
   const variables: Record<string, any> = {};
   item.variables?.forEach(({ variable, instance, instanceType, property }) => {
     const insCode = instance[instance.length - 1];
@@ -249,7 +251,7 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      valueFormatter: (value) => `${value}${curUnit.value}`,
+      valueFormatter: (value) => `${value}${chartUnit.value}`,
     },
     grid: {
       left: '8%',
@@ -271,7 +273,7 @@ function generateOption(series: any[] = []): ECOption {
       },
     },
     yAxis: {
-      name: `单位：${curUnit.value}`,
+      name: `单位：${chartUnit.value}`,
       type: 'value',
       boundaryGap: [0, '100%'],
       splitLine: {
@@ -329,11 +331,7 @@ watch(
 
   .wrapper {
     width: 100%;
-    display: flex;
-    justify-content: center;
     color: rgba(255, 255, 255, 0.3960784314);
-    height: 100%;
-    align-items: flex-start;
     padding: 20px 16px 0 16px;
     box-sizing: border-box;
 
@@ -345,10 +343,12 @@ watch(
       padding: 0 16px 0 20px;
       cursor: pointer;
       margin-bottom: 4px;
+      box-sizing: border-box;
 
       .col-text {
         display: flex;
         align-items: center;
+        flex-wrap: nowrap;
 
         .trend {
           span {
@@ -401,53 +401,56 @@ watch(
       position: absolute;
       left: 16px;
     }
+  }
 
-    .paginator {
-      position: absolute;
-      bottom: 10px;
-      right: 16px;
+  .paginator {
+    position: absolute;
+    bottom: 0px;
+    right: 16px;
+  }
+
+  :deep(.el-pagination) {
+    background-color: transparent !important;
+
+    .btn-prev {
+      color: #fff;
+      background-color: transparent !important;
     }
 
-    :deep(.el-pagination) {
+    .btn-next {
+      color: #fff;
       background-color: transparent !important;
+    }
 
-      .btn-prev {
+    .el-pager {
+      .number {
         color: #fff;
+      }
+
+      .is-active {
+        color: #007acc;
+      }
+
+      li {
         background-color: transparent !important;
       }
+    }
+  }
 
-      .btn-next {
-        color: #fff;
-        background-color: transparent !important;
-      }
+  .type-select {
+    .type-box {
+      background-color: #2a2a2a;
+      cursor: pointer;
+      color: #ffffff45;
+      margin-left: 8px;
+    }
 
-      .el-pager {
-        .number {
-          color: #fff;
-        }
-
-        .is-active {
-          color: #007acc;
-        }
-
-        li {
-          background-color: transparent !important;
-        }
-      }
+    .checked {
+      color: #e99a3c;
     }
   }
 }
-
-.type-select {
-  .type-box {
-    background-color: #2a2a2a;
-    cursor: pointer;
-    color: #ffffff45;
-    margin-left: 8px;
-  }
-
-  .checked {
-    color: #e99a3c;
-  }
+:deep(.business-wrapper-body) {
+  align-items: flex-start;
 }
 </style>

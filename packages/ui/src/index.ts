@@ -5,6 +5,7 @@ import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
 import EnergyEfficiencyMonitoring from './energy-efficiency-monitoring';
 import EquipmentCondition from './equipment-condition';
+import EquipmentOperatingParameter from './equipment-operating-parameters';
 import GlobalSchematic from './global-schematic';
 import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
@@ -46,6 +47,7 @@ const ui: Record<string, any> = {
   charts: Charts,
   equipmentCondition: EquipmentCondition,
   systemCumulativeData: SystemCumulativeData,
+  equipmentOperatingParameter: EquipmentOperatingParameter,
 };
 
 export default ui;

@@ -163,7 +163,7 @@ const componentGroupList: ComponentGroup[] = [
       },
       {
         icon: Histogram,
-        text: '图表',
+        text: '浮表',
         type: 'global-schematic-chart',
       },
       {
@@ -180,6 +180,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: Odometer,
         text: '系统累计数据',
         type: 'system-cumulative-data',
+      },
+      {
+        icon: Operation,
+        text: '系统运行参数',
+        type: 'equipment-operating-parameter',
       },
     ],
   },
