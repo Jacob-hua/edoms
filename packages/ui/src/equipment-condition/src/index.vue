@@ -112,6 +112,11 @@ $borderColor: #505152;
   margin-bottom: 25px;
   padding: 0;
 }
+:deep(.el-drawer__body) {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 .click-wrapper {
   width: inherit;
   height: inherit;
