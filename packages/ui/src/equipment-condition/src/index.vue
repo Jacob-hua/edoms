@@ -2,7 +2,7 @@
   <div>
     <ElDrawer v-model="visible" direction="btt" size="95%">
       <template #header="{ titleId, titleClass }: any">
-        <div :id="titleId" class="drawer-header" :class="titleClass" @click="visible = false">运行工况</div>
+        <div :id="titleId" class="drawer-header" :class="titleClass" @click="visible = false">{{ config.title }}</div>
       </template>
       <div class="eq-wrapper">
         <div ref="groupTabsRef" class="group-tabs">
@@ -27,7 +27,7 @@
         ></ConditionCard>
       </div>
     </ElDrawer>
-    <div class="click-wrapper" @click="visible = true">运行工况</div>
+    <div class="click-wrapper" @click="visible = true">{{ config.title }}</div>
   </div>
 </template>
 

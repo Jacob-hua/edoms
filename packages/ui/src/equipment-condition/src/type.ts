@@ -37,6 +37,8 @@ export interface MEquipmentGroup {
 }
 
 export interface MEquipmentCondition extends MComponent {
+  /** 标题 */
+  title: string;
   /** 轮询间隔 */
   intervalDelay: number;
   /** 分组标签 */
