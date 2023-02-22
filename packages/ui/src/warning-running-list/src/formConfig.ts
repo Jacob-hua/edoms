@@ -22,23 +22,6 @@ export default async (request: Request) => {
       inactiveValue: '0',
       defaultValue: '1',
     },
-    // {
-    //   text: '滚屏速度',
-    //   name: 'speed',
-    //   type: 'number',
-    //   min: 1,
-    //   max: 100,
-    //   step: 1,
-    //   defaultValue: 12,
-    // },
-    // {
-    //   type: 'switch',
-    //   name: 'isScroll',
-    //   text: '是否滚屏',
-    //   activeValue: true,
-    //   inactiveValue: false,
-    //   defaultValue: true,
-    // },
     {
       name: 'instance',
       text: '实例',
@@ -54,6 +37,7 @@ export default async (request: Request) => {
       min: 0.5,
       step: 0.5,
       defaultValue: 1,
+      append: '天',
     },
   ];
 };

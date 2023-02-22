@@ -15,7 +15,7 @@
           @click="handleSetParameter(item, index)"
         >
           <div class="value-wrapper">
-            <span class="value">{{ item.value }}</span
+            <span class="value" :style="{ color: item.valueColor }">{{ item.value }}</span
             ><span class="unit">{{ item.unit }}</span>
           </div>
           <div class="label">{{ item.name }}</div>
