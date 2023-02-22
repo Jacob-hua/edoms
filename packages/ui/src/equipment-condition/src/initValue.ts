@@ -6,5 +6,6 @@ export default {
     width: '100%',
     height: '60',
     backgroundColor: 'rgb(41, 41, 41)',
+    color: 'rgb(252, 252, 252)',
   },
 };

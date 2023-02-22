@@ -118,9 +118,9 @@ $borderColor: #505152;
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: #ffffff;
-  font-weight: bold;
-  font-size: 16px;
+  color: inherit;
+  font-weight: inherit;
+  font-size: inherit;
   padding: 0 14px;
 }
 .drawer-header {
