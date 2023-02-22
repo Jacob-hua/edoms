@@ -7,9 +7,10 @@ export default async (request: Request) => [
     text: '轮询间隔',
     name: 'intervalDelay',
     type: 'number',
-    min: 1000,
-    step: 1000,
-    defaultValue: 10000,
+    min: 1,
+    step: 1,
+    defaultValue: 10,
+    append: 's',
   },
   {
     text: '图片资源',

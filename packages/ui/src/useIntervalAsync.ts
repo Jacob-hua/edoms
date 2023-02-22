@@ -1,15 +1,19 @@
 import { onUnmounted, ref } from 'vue';
 
+import { TimeUnit, toMilliseconds } from '@edoms/utils';
+
 export type Cleanup = () => any;
 
 type CallbackReturn = void | Cleanup;
 
 export type Callback = (...args: any[]) => CallbackReturn | Promise<CallbackReturn>;
 
-export default (callback: Callback, delay: number) => {
+export default (callback: Callback, delay: number, unit: TimeUnit = 'second') => {
   const timeout = ref<number | null>(null);
   const canceled = ref<boolean>(false);
   const cleanup = ref<Cleanup | void>();
+
+  delay = toMilliseconds(delay, unit);
 
   const run: TimerHandler = async () => {
     if (canceled.value) {
