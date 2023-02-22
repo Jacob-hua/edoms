@@ -103,8 +103,8 @@ watch(
     indicators.value = value.slice(0, 5);
     otherIndicators.value = value.slice(5);
 
-    activeTabIndicator.value = indicators.value?.[0].label;
     if (indicators.value.length > 0) {
+      activeTabIndicator.value = indicators.value?.[0].label;
       activeIndicator.value = getIndicator(indicators.value[0]);
     }
   },
