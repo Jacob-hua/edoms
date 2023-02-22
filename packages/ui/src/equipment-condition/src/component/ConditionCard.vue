@@ -113,36 +113,13 @@ watch(
   }
 );
 
-const updateIndicatorsData = async () => {
+const updateIndicatorsData = () => {
   if (!activeIndicator.value?.deviceCode || !activeIndicator.value?.propCode) {
     return;
   }
-  const realTimeResult = await fetchRealTimeData({
-    dataList: indicators.value.reduce(
-      (dataList, { instance, property }) => [
-        ...dataList,
-        {
-          deviceCode: instance[instance.length - 1],
-          propCodeList: [property],
-        },
-      ],
-      [] as ParameterItem[]
-    ),
-  });
-
-  realTimeResult.forEach((result) => {
-    for (const realTimeIndicator of realTimeIndicators.value) {
-      if (realTimeIndicator.deviceCode === result.deviceCode && realTimeIndicator.propCode === result.propCode) {
-        realTimeIndicator.parameter = `${result.dataValue}`;
-        realTimeIndicator.displayParameter = `${String(
-          formatPrecision(result.dataValue, realTimeIndicator.precision)
-        )}`;
-      }
-    }
-  });
 
   const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
-  const historyResult = await fetchHistoryData({
+  fetchHistoryData({
     startTime: start,
     endTime: end,
     interval: '1h',
@@ -153,17 +130,42 @@ const updateIndicatorsData = async () => {
         propCode: activeIndicator.value?.propCode ?? '',
       },
     ],
+  }).then((historyResult) => {
+    const chartSeries = historyResult?.map(({ dataList }) => ({
+      name: activeIndicator.value?.label,
+      type: 'line',
+      showSymbol: false,
+      data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+      itemStyle: {
+        color: props.condition.lineColor,
+      },
+    }));
+    chartsOption.value = generateOption(chartSeries ?? []);
   });
-  const chartSeries = historyResult?.map(({ dataList }) => ({
-    name: activeIndicator.value?.label,
-    type: 'line',
-    showSymbol: false,
-    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
-    itemStyle: {
-      color: props.condition.lineColor,
-    },
-  }));
-  chartsOption.value = generateOption(chartSeries ?? []);
+
+  fetchRealTimeData({
+    dataList: indicators.value.reduce(
+      (dataList, { instance, property }) => [
+        ...dataList,
+        {
+          deviceCode: instance[instance.length - 1],
+          propCodeList: [property],
+        },
+      ],
+      [] as ParameterItem[]
+    ),
+  }).then((realTimeResult) => {
+    realTimeResult.forEach((result) => {
+      for (const realTimeIndicator of realTimeIndicators.value) {
+        if (realTimeIndicator.deviceCode === result.deviceCode && realTimeIndicator.propCode === result.propCode) {
+          realTimeIndicator.parameter = `${result.dataValue}`;
+          realTimeIndicator.displayParameter = `${String(
+            formatPrecision(result.dataValue, realTimeIndicator.precision)
+          )}`;
+        }
+      }
+    });
+  });
 };
 
 const { flush } = useIntervalAsync(updateIndicatorsData, props.intervalDelay);
