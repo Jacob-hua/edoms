@@ -12,7 +12,7 @@
           @click="handleSettingParameter(item, index)"
         >
           <p class="value-wrapper">
-            <span class="value">{{ item.value }}</span
+            <span class="value" :style="{ color: item.valueColor }">{{ item.value }}</span
             ><span class="unit">{{ item.unit }}</span>
           </p>
           <p class="label">{{ item.name }}</p>
@@ -64,6 +64,7 @@ const parameter = reactive<Parameter>({
   name: '',
   value: '',
   unit: '',
+  valueColor: '#00ff00',
 });
 const initParameter = ref<Parameter[]>([]);
 const restParameter = ref<Parameter[]>([]);
@@ -136,6 +137,7 @@ const handleSetParameter = (item: Parameter, index: number) => {
   parameter.name = item.name;
   parameter.unit = item.unit;
   parameter.value = item.value;
+  parameter.valueColor = item.valueColor;
   parameterIndex.value = index + props.config.visibleNumber;
   settingDialogVisible.value = true;
 };
@@ -144,6 +146,7 @@ const handleSettingParameter = (item: Parameter, index: number) => {
   parameter.name = item.name;
   parameter.unit = item.unit;
   parameter.value = item.value;
+  parameter.valueColor = item.valueColor;
   parameterIndex.value = index;
   settingDialogVisible.value = true;
 };
