@@ -12,10 +12,12 @@
           @click="handleSettingParameter(item, index)"
         >
           <p class="value-wrapper">
-            <span class="value" :style="{ color: item.valueColor }">{{ item.value }}</span
+            <span class="value overflow-ellipsis" :style="{ color: item.valueColor }" :title="item.value">{{
+              item.value
+            }}</span
             ><span class="unit">{{ item.unit }}</span>
           </p>
-          <p class="label">{{ item.name }}</p>
+          <p class="label overflow-ellipsis">{{ item.name }}</p>
         </div>
       </div>
     </BusinessCard>
@@ -168,6 +170,12 @@ fetchSettingData();
 .setting {
   display: flex;
 
+  .overflow-ellipsis {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .operation {
     font-size: 28px;
     cursor: pointer;
@@ -193,24 +201,29 @@ fetchSettingData();
   .setting-wrapper {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 0 16px;
+    align-items: flex-start;
+    height: 100%;
 
     .parameter {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: auto;
       margin-top: 32px;
       padding: 8px;
       cursor: pointer;
+      max-width: 120px;
+      box-sizing: border-box;
 
       .value-wrapper {
+        display: flex;
         margin-bottom: 4px;
+        width: 100%;
 
         .value {
           font-weight: 500;
-          font-size: 18px;
+          font-size: 16px;
           color: lawngreen;
           margin-right: 8px;
         }
@@ -219,8 +232,7 @@ fetchSettingData();
       .label {
         margin: 0;
         padding: 0;
-        width: 80px;
-        font-size: 16px;
+        font-size: 14px;
         text-align: center;
         height: 60px;
       }

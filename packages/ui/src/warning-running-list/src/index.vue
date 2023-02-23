@@ -1,6 +1,6 @@
 <template>
   <div class="warning-running-list-container">
-    <BusinessCard title="告警列表" subtitle="RUNNING PARAMETERS" min-width="440" min-height="800">
+    <BusinessCard title="告警列表" subtitle="RUNNING PARAMETERS" min-width="392" min-height="538">
       <div class="warning-list-header">
         <div
           v-for="({ name, className }, index) in headerData"
@@ -230,20 +230,20 @@ provide('confirmedAlarmList', confirmedAlarmList);
     display: unset !important;
   }
   .warning-list-header {
-    width: 100%;
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    justify-content: space-between;
+    margin: 16px 26px 0;
     .list-item {
-      color: #ffffff;
-      width: 130px;
-      height: 45px;
-      line-height: 45px;
-      background-color: #ffffff08;
+      color: #ffffff45;
+      width: 110px;
+      height: 30px;
+      line-height: 30px;
+      background-color: #ffffff00;
       text-align: center;
       cursor: pointer;
-      box-shadow: 0 0 0 0.5px #e1e1e1;
+      box-shadow: 0 0 0 0.5px #ffffff02;
       position: relative;
+      border: 1px solid #ffffff02;
       .circle {
         width: 10px;
         height: 10px;
@@ -265,11 +265,13 @@ provide('confirmedAlarmList', confirmedAlarmList);
     }
   }
   .warning-list-wrapper {
-    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
   }
 }
 .active {
   color: #ffffff85 !important;
-  background-color: transparent !important;
+  background-color: #ffffff08 !important;
 }
 </style>

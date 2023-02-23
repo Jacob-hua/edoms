@@ -9,7 +9,7 @@
     <div class="parameter-wrapper">
       <div class="progress-box">
         <div v-for="(item, index) in data" :key="index" class="efficiency-row">
-          <div class="efficiency-col">{{ item.energyName }}</div>
+          <div class="efficiency-col overflow-ellipsis">{{ item.energyName }}</div>
           <div class="efficiency-col efficiency-progress">
             <el-progress :stroke-width="24" :text-inside="true" :color="actureColor" :percentage="item.percentage">{{
               item.efficiencyNum
@@ -52,6 +52,12 @@ const handleClose = () => {
 </script>
 
 <style lang="scss" scoped>
+.overflow-ellipsis {
+  width: 46px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .container {
   position: relative;
   height: fit-content;
@@ -97,7 +103,6 @@ const handleClose = () => {
 
     .efficiency-row {
       display: flex;
-      flex-wrap: wrap;
       position: relative;
       box-sizing: border-box;
       width: 356px;
