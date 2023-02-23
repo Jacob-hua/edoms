@@ -29,7 +29,7 @@ const lightConfigs = computed<LightItem[]>(() =>
       };
     }
 
-    if (lightValue.value <= item.maxValue && lightValue.value >= item.minValue) {
+    if (lightValue.value <= item.maxValue && lightValue.value > item.minValue) {
       style = `background-color: ${item.color}`;
     }
     return {

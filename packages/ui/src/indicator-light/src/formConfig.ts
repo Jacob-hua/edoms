@@ -19,14 +19,14 @@ export default [
         name: 'color',
       },
       {
-        text: '最大值',
-        type: 'number',
-        name: 'maxValue',
-      },
-      {
         text: '最小值',
         type: 'number',
         name: 'minValue',
+      },
+      {
+        text: '最大值',
+        type: 'number',
+        name: 'maxValue',
       },
     ],
   },
