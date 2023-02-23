@@ -183,7 +183,7 @@ const componentGroupList: ComponentGroup[] = [
       },
       {
         icon: Operation,
-        text: '系统运行参数',
+        text: '设备运行参数',
         type: 'equipment-operating-parameter',
       },
     ],
