@@ -54,6 +54,14 @@ const handleSelectedChange = () => {
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-checkbox) {
+  --el-checkbox-checked-bg-color: rgb(5, 104, 253);
+  font-size: inherit;
+  color: inherit;
+}
+:deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
+  color: inherit;
+}
 :deep(.el-checkbox__inner) {
   display: inline-block;
   position: relative;
@@ -66,5 +74,9 @@ const handleSelectedChange = () => {
   z-index: inherit;
   transition: border-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46),
     background-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46), outline 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46);
+}
+:deep(.el-checkbox__label) {
+  font-size: inherit;
+  color: inherit;
 }
 </style>
