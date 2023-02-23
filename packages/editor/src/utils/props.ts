@@ -483,11 +483,16 @@ const eventConfig = () => [
       if (selectedEventOption?.label) {
         title = `${title} ${selectedEventOption?.label}`;
       }
-      if (model.to) {
-        title = `${title} ${model.to}`;
-      }
-      if (selectedMethodOption?.label) {
-        title = `${title} ${selectedMethodOption.label}`;
+      if (model.action === 'route_setting') {
+        title = `${title} 设置路由`;
+        if (model.page) {
+          title = `${title} ${model.page}`;
+        }
+      } else if (model.action === 'component_linkage') {
+        title = `${title} 组件联动`;
+        if (selectedMethodOption?.label) {
+          title = `${title} ${selectedMethodOption.label}`;
+        }
       }
       return title;
     },

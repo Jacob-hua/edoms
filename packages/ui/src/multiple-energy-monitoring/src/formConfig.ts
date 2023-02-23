@@ -18,7 +18,6 @@ export default async (request: Request) => [
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加监测能效',
-    maxItems: 10,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
