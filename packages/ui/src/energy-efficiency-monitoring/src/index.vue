@@ -1,6 +1,12 @@
 <template>
-  <div class="efficiency-container">
-    <BusinessCard title="能效监测" subtitle="ENERGY EFFICIENCY MONITORING" min-width="392" min-height="160">
+  <div>
+    <BusinessCard
+      class="energy-efficiency-wrapper"
+      title="能效监测"
+      subtitle="ENERGY EFFICIENCY MONITORING"
+      min-width="392"
+      min-height="160"
+    >
       <template #operation>
         <div :class="operatable" @click="handleShowMore">...</div>
       </template>
@@ -200,8 +206,9 @@ const handleChangeDateType = (type: UnitTime) => {
 </script>
 
 <style lang="scss" scoped>
-.efficiency-container {
-  display: flex;
+.energy-efficiency-wrapper {
+  width: inherit;
+  height: inherit;
 }
 
 .operation {
