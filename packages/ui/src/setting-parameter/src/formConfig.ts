@@ -29,6 +29,12 @@ export default () => [
         trim: true,
       },
       {
+        name: 'valueColor',
+        text: '参数颜色',
+        type: 'colorPicker',
+        defaultValue: '#00ff00',
+      },
+      {
         name: 'unit',
         text: '单位',
         type: 'text',

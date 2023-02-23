@@ -24,7 +24,6 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
-import { FormInstance, FormRules } from 'element-plus';
 
 import { Parameter } from '../type';
 
@@ -43,10 +42,11 @@ const emit = defineEmits<{
   (event: 'submitParameter', value: Parameter): void;
 }>();
 
-const formRef = ref<FormInstance>();
+const formRef = ref();
 const formModel = ref<Parameter>({
   name: props.parameterData.name,
   value: props.parameterData.value,
+  valueColor: props.parameterData.valueColor,
   unit: props.parameterData.unit,
 });
 
@@ -71,7 +71,7 @@ const dialogVisible = computed({
   },
 });
 
-const formRules: FormRules = {
+const formRules = {
   value: [{ required: true, message: '请输入参数值', trigger: 'blur' }],
 };
 
@@ -112,7 +112,7 @@ $textColor: #ffffff85;
 
 :deep(.is-disabled) {
   .el-input__wrapper {
-    background-color: $bgColor;
+    background-color: rgba(31, 30, 29, 1);
     box-shadow: 0 0 0 1px $textColor;
   }
 }

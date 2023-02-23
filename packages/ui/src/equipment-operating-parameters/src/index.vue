@@ -24,11 +24,11 @@
       </div>
       <div class="parameter-content">
         <div v-for="({ dataValue, label, unit }, index) in currentParameters" :key="index" class="parameter-item">
-          <p class="value-wrapper">
+          <div class="value-wrapper">
             <span class="value overflow-ellipsis" :title="dataValue">{{ dataValue }}</span
             ><span class="unit">{{ unit }}</span>
-          </p>
-          <p class="label overflow-ellipsis">{{ label }}</p>
+          </div>
+          <div class="label overflow-ellipsis">{{ label }}</div>
         </div>
       </div>
     </div>
@@ -64,9 +64,19 @@ const scrollRef = ref();
 const activeEquipment = ref(0);
 const currentParameters = ref<Parameter[]>([]);
 
-const equipmentTypes = computed(() => props.config.equipmentTypes);
-const equipments = computed(() => equipmentTypes.value[activeName.value].equipments);
-const parameters = computed(() => equipments.value[activeEquipment.value].parameters);
+const equipmentTypes = computed(() => props.config.equipmentTypes ?? []);
+const equipments = computed(() => {
+  if (equipmentTypes.value.length) {
+    return equipmentTypes.value[activeName.value].equipments ?? [];
+  }
+  return [];
+});
+const parameters = computed(() => {
+  if (equipments.value.length) {
+    return equipments.value[activeEquipment.value].parameters ?? [];
+  }
+  return [];
+});
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
     return 1000;
@@ -74,7 +84,7 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 const params = computed(() => {
-  const instance = equipments.value[activeEquipment.value].instance;
+  const instance = equipments.value[activeEquipment.value]?.instance ?? '';
   return {
     dataList: [
       {
@@ -95,8 +105,11 @@ const leftBtnColor = computed(() => {
 const updateParameterData = async () => {
   const result = await fetchOperationParameter(params.value);
   currentParameters.value = parameters.value.map((parameter) => {
+    let dataValue = '';
     const parameterVal = result.find(({ propCode }) => propCode === parameter.property);
-    const dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision));
+    if (parameterVal && parameterVal.dataValue) {
+      dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision));
+    }
     return { ...parameter, dataValue };
   });
 };

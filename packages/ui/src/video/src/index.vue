@@ -1,8 +1,8 @@
 <template>
-  <BusinessCard title="视频监控" min-width="392" min-height="320">
+  <BusinessCard title="视频监控" subtitle="VIDEO" min-width="392" min-height="320">
     <div class="warpper">
       <el-tabs v-model="activeCamera" class="camera-tabs">
-        <el-tab-pane v-for="(camera, index) in cameras" :key="index" :label="camera.cameraName" :name="`${index}`" />
+        <el-tab-pane v-for="(camera, index) in cameras" :key="index" :label="camera.cameraName" :name="index" />
       </el-tabs>
       <VideoPlayer
         :src="videoSource"
@@ -27,7 +27,7 @@ const props = defineProps<{
   config: VideoConfigs;
 }>();
 
-const activeCamera = ref<string>('0');
+const activeCamera = ref(0);
 
 const videoSource = ref<string>('');
 
@@ -37,7 +37,7 @@ watch(
   () => activeCamera.value,
   (activeCamera) => {
     if (cameras.value.length <= 0) return;
-    const targetCamera = cameras.value.at(Number(activeCamera));
+    const targetCamera = cameras.value.at(activeCamera);
     videoSource.value = targetCamera?.videoSource ?? '';
   },
   {
@@ -49,5 +49,39 @@ watch(
 <style lang="scss" scoped>
 .warpper {
   width: 100%;
+}
+
+:deep(.el-tabs) {
+  padding: 0 16px;
+  .el-tabs__header {
+    margin: 0;
+    width: 360px;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #ffffff25;
+  }
+
+  .is-scrollable {
+    .el-tabs__item {
+      width: 80px;
+    }
+  }
+  .el-tabs__item {
+    width: 90px;
+    text-align: center;
+    color: #ffffff45;
+  }
+
+  .el-tabs__active-bar {
+    background-color: #e99a3c;
+  }
+
+  .is-active {
+    color: #e99a3c;
+  }
+}
+:deep(.business-wrapper-body) {
+  align-items: flex-start;
 }
 </style>

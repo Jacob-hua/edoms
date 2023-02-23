@@ -5,6 +5,8 @@ export interface Parameter {
   name: string;
   /** 参数值 **/
   value: string;
+  /** 参数颜色 */
+  valueColor: string;
   /** 参数单位 **/
   unit: string;
 }

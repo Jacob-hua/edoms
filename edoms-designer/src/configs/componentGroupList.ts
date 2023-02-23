@@ -163,7 +163,7 @@ const componentGroupList: ComponentGroup[] = [
       },
       {
         icon: Histogram,
-        text: '浮表',
+        text: '移动悬浮',
         type: 'global-schematic-chart',
       },
       {
