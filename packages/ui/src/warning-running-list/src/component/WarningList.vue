@@ -1,5 +1,5 @@
 <template>
-  <div class="warning-list-wrapper">
+  <div class="warning-list">
     <SeamLessScrolling :data-source="dataSource">
       <template #default="{ item }">
         <WarningItem :item="item" @ignore-warning="handleIgnoreAlarm"></WarningItem>
@@ -38,12 +38,13 @@ const handleIgnoreAlarm = (alarmId: number) => {
 </script>
 
 <style lang="scss" scoped>
-.warning-list-wrapper {
-  max-height: 700px;
+.warning-list {
+  width: 340px;
+  height: 440px;
   overflow: auto;
   --webkit--scrollbar-width: none;
 }
-.warning-list-wrapper::-webkit-scrollbar {
+.warning-list::-webkit-scrollbar {
   display: none; /* Chrome Safari */
 }
 </style>

@@ -5,7 +5,7 @@
       <span class="type">{{ item.type }}</span>
     </p>
     <p>
-      <span> {{ item.title }} </span>
+      <span class="warning-title"> {{ item.title }} </span>
       <span class="discover" @click="handleShowSurplus(item)"> 展开 </span>
     </p>
     <p v-if="item.expend" class="body">
@@ -102,12 +102,17 @@ const handleConfirm = async (alarm: Warning) => {
 .warning-item-wrapper {
   border: 1px solid #ffffff85;
   border-left: 10px solid v-bind(textColor);
-  padding: 15px 0;
-  margin-bottom: 8px;
+  padding: 10px 16px;
+  margin-bottom: 4px;
+  color: #ffffff65;
+  font-size: 14px;
+
+  .warning-item-top {
+    margin-bottom: 16px;
+  }
   p {
     display: flex;
     justify-content: space-between;
-    padding: 15px 10px;
     .discover {
       cursor: pointer;
     }
@@ -118,15 +123,13 @@ const handleConfirm = async (alarm: Warning) => {
   .button-wrapper {
     display: flex;
     justify-content: flex-end;
-    padding-right: 15px;
-    margin-top: 15px;
   }
   .body {
     display: block;
   }
   .content {
     display: block;
-    line-height: 24px;
+    margin: 16px;
   }
 }
 </style>
