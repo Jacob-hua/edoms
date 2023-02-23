@@ -40,6 +40,9 @@ export default async (request: Request, componentName: string) => {
         const modelInstance = getSelectedInstance(value, instances);
         model.instanceType = modelInstance?.type;
         model.instanceName = modelInstance?.label;
+        model.propertyType = '';
+        model.property = '';
+        model.unit = '';
       },
     },
     {
