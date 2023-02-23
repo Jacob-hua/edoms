@@ -24,11 +24,11 @@
       </div>
       <div class="parameter-content">
         <div v-for="({ dataValue, label, unit }, index) in currentParameters" :key="index" class="parameter-item">
-          <p class="value-wrapper">
+          <div class="value-wrapper">
             <span class="value overflow-ellipsis" :title="dataValue">{{ dataValue }}</span
             ><span class="unit">{{ unit }}</span>
-          </p>
-          <p class="label overflow-ellipsis">{{ label }}</p>
+          </div>
+          <div class="label overflow-ellipsis">{{ label }}</div>
         </div>
       </div>
     </div>
@@ -105,8 +105,11 @@ const leftBtnColor = computed(() => {
 const updateParameterData = async () => {
   const result = await fetchOperationParameter(params.value);
   currentParameters.value = parameters.value.map((parameter) => {
+    let dataValue = '';
     const parameterVal = result.find(({ propCode }) => propCode === parameter.property);
-    const dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision)) ?? '';
+    if (parameterVal && parameterVal.dataValue) {
+      dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision));
+    }
     return { ...parameter, dataValue };
   });
 };
