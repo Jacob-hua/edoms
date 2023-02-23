@@ -25,7 +25,7 @@ export default async (request: Request) => [
         name: 'energyName',
         defaultValue: '',
       },
-      ...(await useInstanceConfig(request, 'multiple-energy-monitoring')),
+      ...(await useInstanceConfig(request, 'multiple-energy-monitoring', ['property', 'propertyType', 'unit'])),
       {
         text: '最小值',
         name: 'minValue',

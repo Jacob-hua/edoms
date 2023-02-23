@@ -17,7 +17,7 @@ export default async (request: Request) => [
     name: 'energyName',
     defaultValue: 'COP',
   },
-  ...(await useInstanceConfig(request, 'energy-efficiency-monitoring')),
+  ...(await useInstanceConfig(request, 'energy-efficiency-monitoring', ['property', 'propertyType', 'unit'])),
   {
     text: '最小值',
     name: 'minValue',
