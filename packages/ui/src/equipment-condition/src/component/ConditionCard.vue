@@ -42,7 +42,14 @@
 import { computed, ref, watch } from 'vue';
 
 import { ElOption, ElSelect } from '@edoms/design';
-import { dateRange, EdomsRequestFunc, formatCurrentDateRange, formatPrecision, stringToDate } from '@edoms/utils';
+import {
+  dateRange,
+  EdomsRequestFunc,
+  formatCurrentDateRange,
+  formatDate,
+  formatPrecision,
+  stringToDate,
+} from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import LongText from '../../../LongText.vue';
@@ -186,12 +193,30 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
+      formatter: (params: any) => {
+        let relVal = '';
+        for (let i = 0, l = params.length; i < l; i++) {
+          const time = formatDate(params[0].value[0], 'HH:mm:ss');
+          const value = formatPrecision(params[0].value[1], activeIndicator.value?.precision ?? '');
+          relVal +=
+            '<br/>' +
+            params[i].marker +
+            params[i].seriesName +
+            '  ' +
+            time +
+            '  ' +
+            value +
+            activeIndicator.value?.unit;
+        }
+        return relVal;
+      },
     },
     grid: {
       left: '8%',
       right: '1%',
       top: 30,
       bottom: 20,
+      containLabel: true,
     },
     xAxis: {
       type: 'time',

@@ -25,7 +25,9 @@ const getSelectedProperty = (value: string, options: any[]): any => {
   return options.find((item) => item.value === value);
 };
 
-export default async (request: Request, componentName: string) => {
+export type InstanceItem = 'instance' | 'propertyType' | 'property' | 'unit' | 'precision';
+
+export default async (request: Request, componentName: string, hiddenItems: InstanceItem[] = []) => {
   const instances = await fetchInstances(request, componentName);
 
   return [
@@ -36,10 +38,14 @@ export default async (request: Request, componentName: string) => {
       filterable: true,
       checkStrictly: true,
       options: instances,
+      display: () => !hiddenItems.includes('instance'),
       onChange: (mForm: any, value: any, { model }: any) => {
         const modelInstance = getSelectedInstance(value, instances);
         model.instanceType = modelInstance?.type;
         model.instanceName = modelInstance?.label;
+        model.propertyType = '';
+        model.property = '';
+        model.unit = '';
       },
     },
     {
@@ -56,6 +62,7 @@ export default async (request: Request, componentName: string) => {
       name: 'propertyType',
       text: '属性',
       type: 'radio-group',
+      display: () => !hiddenItems.includes('propertyType'),
       options: [
         {
           text: '固有属性',
@@ -75,6 +82,7 @@ export default async (request: Request, componentName: string) => {
       name: 'property',
       text: '点位',
       type: 'select',
+      display: () => !hiddenItems.includes('property'),
       options: async (mForm: any, { formValue, prop }: any) => {
         return fetchProperties(request, componentName, formValue, prop);
       },
@@ -86,11 +94,13 @@ export default async (request: Request, componentName: string) => {
       name: 'unit',
       text: '单位',
       type: 'text',
+      display: () => !hiddenItems.includes('unit'),
     },
     {
       name: 'precision',
       text: '精度',
       type: 'select',
+      display: () => !hiddenItems.includes('precision'),
       options: [
         {
           text: '原始精度',
