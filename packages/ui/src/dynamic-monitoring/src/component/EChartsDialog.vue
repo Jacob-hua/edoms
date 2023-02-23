@@ -22,6 +22,8 @@
 <script lang="ts" setup>
 import { computed, onUnmounted, ref, watch } from 'vue';
 
+import { formatDate } from '@edoms/utils';
+
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
 
@@ -41,8 +43,7 @@ const emit = defineEmits<{
   (event: 'dateChange', value: string): void;
 }>();
 
-const pickerDate = ref<string>('');
-
+const pickerDate = ref<string>(formatDate(new Date(), 'YYYY-MM-DD'));
 const dialogVisible = computed({
   get: () => props.visible,
   set: (value) => {

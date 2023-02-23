@@ -16,7 +16,7 @@
               <el-col :span="10">{{ item.unit }}</el-col>
             </el-row>
           </div>
-          <div class="label">{{ item.label }}</div>
+          <div class="label overflow-ellipsis">{{ item.label }}</div>
         </div>
       </div>
       <div class="page">
@@ -93,6 +93,13 @@ const handleCurrentChange = (value: string) => {
 * {
   margin: 0;
   padding: 0;
+}
+
+.overflow-ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .container {
