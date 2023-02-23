@@ -64,9 +64,19 @@ const scrollRef = ref();
 const activeEquipment = ref(0);
 const currentParameters = ref<Parameter[]>([]);
 
-const equipmentTypes = computed(() => props.config.equipmentTypes);
-const equipments = computed(() => equipmentTypes.value[activeName.value].equipments);
-const parameters = computed(() => equipments.value[activeEquipment.value].parameters);
+const equipmentTypes = computed(() => props.config.equipmentTypes ?? []);
+const equipments = computed(() => {
+  if (equipmentTypes.value.length) {
+    return equipmentTypes.value[activeName.value].equipments ?? [];
+  }
+  return [];
+});
+const parameters = computed(() => {
+  if (equipments.value.length) {
+    return equipments.value[activeEquipment.value].parameters ?? [];
+  }
+  return [];
+});
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
     return 1000;
@@ -74,7 +84,7 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 const params = computed(() => {
-  const instance = equipments.value[activeEquipment.value].instance;
+  const instance = equipments.value[activeEquipment.value]?.instance ?? '';
   return {
     dataList: [
       {
@@ -96,7 +106,7 @@ const updateParameterData = async () => {
   const result = await fetchOperationParameter(params.value);
   currentParameters.value = parameters.value.map((parameter) => {
     const parameterVal = result.find(({ propCode }) => propCode === parameter.property);
-    const dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision));
+    const dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision)) ?? '';
     return { ...parameter, dataValue };
   });
 };
