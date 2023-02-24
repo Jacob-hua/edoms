@@ -224,6 +224,7 @@ const generateOption = (series: any[] = []): ECOption => {
       type: 'time',
       min: dateRange(selectDate.value, 'day').start,
       max: dateRange(selectDate.value, 'day').end,
+      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },

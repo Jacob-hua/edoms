@@ -89,12 +89,10 @@ function generateOption(series: any[] = []): ECOption {
       type: 'time',
       min: dateRange(new Date(), 'day').start,
       max: dateRange(new Date(), 'day').end,
+      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },
-      minInterval: 3600 * 1000 * 2,
-      maxInterval: 3600 * 1000 * 2,
-      interval: 3600 * 1000 * 2,
       axisLabel: {
         formatter: function (value: any) {
           return formatDate(value, 'HH:mm');

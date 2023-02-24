@@ -201,7 +201,6 @@ watch(
   }
 
   .equipment-list {
-    width: 360px;
     height: 24px;
     display: flex;
     align-items: center;

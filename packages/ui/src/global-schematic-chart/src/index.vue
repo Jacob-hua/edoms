@@ -96,6 +96,7 @@ function generateOption(series: any[] = []): ECOption {
       type: 'time',
       min: dateRange(new Date(), 'day').start,
       max: dateRange(new Date(), 'day').end,
+      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },
