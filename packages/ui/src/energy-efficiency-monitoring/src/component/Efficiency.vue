@@ -1,5 +1,5 @@
 <template>
-  <div class="color-card-wrapper">
+  <div ref="colorCardRef" class="color-card-wrapper">
     <div v-for="index in bisectionNumber" :key="index" :style="calculateDistance(index)" class="division-wrapper"></div>
     <div class="triangle"></div>
     <div class="reference-line-wrapper">
@@ -9,26 +9,30 @@
     <div class="end-value">{{ maxValue }}</div>
   </div>
   <div class="legend-wrapper">
-    <div class="legend-start">
-      <div class="legend-box"></div>
-      <span class="legend-text">较差</span>
-    </div>
-    <div class="legend-end">
-      <div class="legend-box"></div>
-      <span class="legend-text">优秀</span>
-    </div>
-    <div class="legend-reference">
-      <div class="legend-box"></div>
-      <span class="legend-text">参考值</span>
+    <div class="legend">
+      <div class="legend-start">
+        <div class="legend-box"></div>
+        <span class="legend-text">较差</span>
+      </div>
+      <div class="legend-end">
+        <div class="legend-box"></div>
+        <span class="legend-text">优秀</span>
+      </div>
+      <div class="legend-reference">
+        <div class="legend-box"></div>
+        <span class="legend-text">参考值</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+
 interface Position {
   left: string;
 }
+
 const props = withDefaults(
   defineProps<{
     /** 最小值 **/
@@ -56,11 +60,19 @@ const props = withDefaults(
     refrenceLineColor: () => '#fff',
   }
 );
-const colorCardWidth: number = 262;
+
+const colorCardRef = ref<HTMLElement>();
+
+const colorCardWidth = computed<number>(() => {
+  if (!colorCardRef.value) {
+    return 0;
+  }
+  return colorCardRef.value.clientWidth;
+});
 
 const attribute = computed(() => `linear-gradient(90deg, ${props.startColor}, ${props.endColor})`);
 
-const positionDistance = computed(() => colorCardWidth / (props.bisectionNumber + 1));
+const positionDistance = computed(() => colorCardWidth.value / (props.bisectionNumber + 1));
 
 const calculateDistance = (index: number): Position => {
   return {
@@ -68,12 +80,19 @@ const calculateDistance = (index: number): Position => {
   };
 };
 
-const calculatePosition = (inputValue: string | number): Position => {
+const calculatePosition = (inputValue: string | number, colorCardWidth: number): Position => {
   if (Number(inputValue) >= Number(props.maxValue)) {
     return {
       left: `${colorCardWidth}`,
     };
   }
+
+  if (Number(inputValue) <= Number(props.minValue)) {
+    return {
+      left: `${0}`,
+    };
+  }
+
   return {
     left: `${
       colorCardWidth *
@@ -81,16 +100,19 @@ const calculatePosition = (inputValue: string | number): Position => {
     }`,
   };
 };
-const calculateActualValuePosition = computed(() => `${+calculatePosition(props.actualValue)?.left - 8}px`);
+const calculateActualValuePosition = computed(
+  () => `${+calculatePosition(props.actualValue, colorCardWidth.value)?.left - 8}px`
+);
 
-const calculateReferenceValuePosition = computed(() => `${calculatePosition(props.refrenceValue)?.left}px`);
+const calculateReferenceValuePosition = computed(
+  () => `${calculatePosition(props.refrenceValue, colorCardWidth.value)?.left}px`
+);
 
 const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
 </script>
 
 <style lang="scss" scoped>
 .color-card-wrapper {
-  width: 262px;
   height: 20px;
   background-image: v-bind(attribute);
   position: relative;
@@ -143,11 +165,13 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
   }
 }
 .legend-wrapper {
-  width: 240px;
   margin-top: 40px !important;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  .legend {
+    display: flex;
+  }
   .legend-start {
     width: 100px;
     display: flex;

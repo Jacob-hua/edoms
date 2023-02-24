@@ -15,7 +15,7 @@
           <div :title="actualValue" class="actual-value">{{ actualValue }}</div>
           <div class="actual-unit overflow-ellipsis">{{ energyName }}</div>
         </div>
-        <div style="padding-top: 28px">
+        <div class="efficiency">
           <Efficiency v-bind="indicators" :actual-value="actualValue"></Efficiency>
         </div>
       </div>
@@ -290,7 +290,8 @@ const handleChangeDateType = (type: UnitTime) => {
     padding: 24px 20px 0 16px;
     display: flex;
     flex-direction: column;
-    width: 74px;
+    min-width: 74px;
+    flex-grow: 0.24;
 
     .actual-value {
       font-size: 24px;
@@ -306,6 +307,13 @@ const handleChangeDateType = (type: UnitTime) => {
       font-size: 14px;
       color: #ffffff65;
     }
+  }
+  .efficiency {
+    padding-top: 28px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
   }
 }
 </style>
