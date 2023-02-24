@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { formatDateRange, formatPrecision, stringToDate, UnitTime } from '@edoms/utils';
+import { dateRange, formatDateRange, formatPrecision, stringToDate, UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -80,6 +80,7 @@ const indicators = ref<Indicator>({
 const chartDialogVisible = ref<boolean>(false);
 const dialogTitle = ref<string>('');
 const options = ref<ECOption>({});
+const dateType = ref<UnitTime>('day');
 
 const efficiencyConfig = computed<MEfficiencyMonitoring>(() => props.config);
 const intervalDelay = computed<number>(() => {
@@ -90,6 +91,19 @@ const intervalDelay = computed<number>(() => {
 });
 
 const operatable = computed(() => 'operation');
+
+const formatXAxisLabel = computed(() => {
+  if (dateType.value === 'day') {
+    return '{HH}:{mm}';
+  }
+  if (dateType.value === 'month') {
+    return '{dd}';
+  }
+  if (dateType.value === 'year') {
+    return '{MM}';
+  }
+  return '{HH}:{mm}';
+});
 
 watch(
   () => efficiencyConfig.value,
@@ -145,12 +159,31 @@ const generateOption = (series: any[] = []): ECOption => {
       trigger: 'axis',
       valueFormatter: (value) => `${value}COP`,
     },
+    grid: {
+      containLabel: true,
+    },
     xAxis: {
       type: 'time',
+      min: dateRange(new Date(), dateType.value).start,
+      max: dateRange(new Date(), dateType.value).end,
+      splitLine: {
+        show: false,
+      },
+      interval: 2,
+      axisLabel: {
+        formatter: formatXAxisLabel.value,
+        interval: 2,
+      },
     },
     yAxis: {
       name: `单位：COP`,
       type: 'value',
+      splitLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: '#ffffff45',
+        },
+      },
       axisLine: {
         show: true,
       },
@@ -201,6 +234,7 @@ const handleShowMore = () => {
 };
 
 const handleChangeDateType = (type: UnitTime) => {
+  dateType.value = type;
   getHistoryData(new Date(), type);
 };
 </script>
@@ -266,7 +300,6 @@ const handleChangeDateType = (type: UnitTime) => {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      cursor: pointer;
     }
 
     .actual-unit {

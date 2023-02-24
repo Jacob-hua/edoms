@@ -1,6 +1,10 @@
 <template>
   <BusinessCard title="参数曲线" min-width="1080" min-height="320">
     <template #operation>
+      <div class="chart-type">
+        <i :class="{ line_active: !isCurve, line: isCurve }" @click="handleChangeChart(false)"></i>
+        <i :class="{ curver_active: isCurve, curver: !isCurve }" @click="handleChangeChart(true)"></i>
+      </div>
       <el-tabs v-model="activeCategory">
         <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
       </el-tabs>
@@ -10,7 +14,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="176"
+      :height="245"
       @change-system-config="handleChangeSystemConfig"
     >
     </SystemParameter>
@@ -19,7 +23,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="176"
+      :height="245"
       @change-equipment-config="handleChangeEquipmentConfig"
     >
     </EquipmentParameter>
@@ -65,6 +69,8 @@ const categories = ref([
 const activeCategory = ref<string>('systems');
 const option = ref<ECOption>({});
 
+const isCurve = ref<boolean>(false);
+
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
   if (result) {
@@ -108,10 +114,18 @@ const updateParameterData = async () => {
     name: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.label,
     type: 'line',
     showSymbol: false,
+    smooth: isCurve.value,
     color: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.color,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
   }));
   option.value = generateOption(chartSeries);
+  console.log(option.value);
+};
+
+const handleChangeChart = (flag: boolean) => {
+  if (isCurve.value === flag) return;
+  isCurve.value = flag;
+  flush();
 };
 
 const { flush } = useIntervalAsync(updateParameterData, intervalDelay.value);
@@ -134,12 +148,18 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
+      formatter: (param: any) => {
+        console.log(param);
+
+        return param;
+      },
     },
     grid: {
       left: '8%',
       right: '1%',
       top: 30,
       bottom: 20,
+      containLabel: true,
     },
     xAxis: {
       type: 'time',
@@ -173,12 +193,44 @@ function generateOption(series: any[] = []): ECOption {
 </script>
 
 <style lang="scss" scoped>
+.chart-type {
+  position: absolute;
+  right: 130px;
+  display: flex;
+  top: 12px;
+
+  i {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+  .line {
+    background: url('./assets/zhexian.png') no-repeat;
+    background-size: cover;
+  }
+  .line_active {
+    background: url('./assets/zhexian_active.png') no-repeat;
+    background-size: cover;
+  }
+
+  .curver {
+    background: url('./assets/quxian.png') no-repeat;
+    background-size: cover;
+  }
+
+  .curver_active {
+    background: url('./assets/quxian_active.png') no-repeat;
+    background-size: cover;
+  }
+}
 :deep(.el-tabs__header) {
   margin: 0;
 }
 
 :deep(.el-tabs__item) {
-  color: #ffffff;
+  color: #ffffff65;
+  padding: 0 4px;
 }
 
 :deep(.el-tabs__item.is-active) {

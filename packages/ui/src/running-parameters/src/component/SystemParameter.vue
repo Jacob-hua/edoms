@@ -50,6 +50,9 @@ watch(
 <style lang="scss" scoped>
 .wrapper {
   display: flex;
+  height: 100%;
+  padding: 12px 16px;
+  box-sizing: border-box;
 }
 
 :deep(.left-tabs) {
