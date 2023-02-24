@@ -98,5 +98,6 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
   flex-grow: 1;
   display: flex;
   align-items: center;
+  padding: 0 16px;
 }
 </style>

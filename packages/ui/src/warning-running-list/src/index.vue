@@ -269,7 +269,6 @@ provide('confirmedAlarmList', confirmedAlarmList);
     justify-content: center;
     margin-top: 8px;
     max-height: 86%;
-    padding: 0 20px;
   }
 }
 .active {
