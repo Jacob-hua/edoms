@@ -235,7 +235,7 @@ provide('confirmedAlarmList', confirmedAlarmList);
     margin: 16px 26px 0;
     .list-item {
       color: #ffffff45;
-      width: 110px;
+      flex-grow: 1;
       height: 30px;
       line-height: 30px;
       background-color: #ffffff00;
@@ -268,6 +268,8 @@ provide('confirmedAlarmList', confirmedAlarmList);
     display: flex;
     justify-content: center;
     margin-top: 8px;
+    max-height: 86%;
+    padding: 0 20px;
   }
 }
 .active {

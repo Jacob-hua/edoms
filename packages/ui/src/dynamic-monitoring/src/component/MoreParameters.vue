@@ -90,11 +90,6 @@ const handleCurrentChange = (value: string) => {
 </script>
 
 <style lang="scss" scoped>
-* {
-  margin: 0;
-  padding: 0;
-}
-
 .overflow-ellipsis {
   width: 100%;
   overflow: hidden;
@@ -103,9 +98,11 @@ const handleCurrentChange = (value: string) => {
 }
 
 .container {
-  position: relative;
+  position: absolute;
   height: fit-content;
-  margin-left: 10px;
+  width: 392px;
+  right: -402px;
+  top: 0px;
   background-color: #2c2c2c;
 
   .header-top {
@@ -123,11 +120,10 @@ const handleCurrentChange = (value: string) => {
   }
 
   .parameter-wrapper {
-    width: 250px;
-
     .setting-wrapper {
       display: grid;
-      grid-template-columns: 33.3% 33.3% 33.3%;
+      grid-template-columns: repeat(3, 1fr);
+      justify-items: center;
 
       & > div {
         display: flex;

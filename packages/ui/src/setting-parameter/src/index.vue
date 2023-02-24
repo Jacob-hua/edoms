@@ -201,9 +201,9 @@ fetchSettingData();
   .setting-wrapper {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 0 16px;
-    align-items: flex-start;
+    align-items: center;
     height: 100%;
 
     .parameter {

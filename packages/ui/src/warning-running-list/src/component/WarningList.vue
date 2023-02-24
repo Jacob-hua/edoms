@@ -39,8 +39,7 @@ const handleIgnoreAlarm = (alarmId: number) => {
 
 <style lang="scss" scoped>
 .warning-list {
-  width: 340px;
-  height: 440px;
+  width: 100%;
   overflow: auto;
   --webkit--scrollbar-width: none;
 }

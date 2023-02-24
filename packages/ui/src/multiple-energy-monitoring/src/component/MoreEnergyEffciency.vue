@@ -59,9 +59,11 @@ const handleClose = () => {
   white-space: nowrap;
 }
 .container {
-  position: relative;
+  position: absolute;
   height: fit-content;
-  margin-left: 10px;
+  width: 356px;
+  right: -366px;
+  top: 0px;
   background-color: #2c2c2c;
   color: #ffffff85;
 
