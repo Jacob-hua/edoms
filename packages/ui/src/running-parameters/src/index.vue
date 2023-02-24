@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard title="参数曲线" min-width="1080" min-height="320">
+  <BusinessCard title="参数曲线" min-width="1080" min-height="240">
     <template #operation>
       <div class="chart-type">
         <i :class="{ line_active: !isCurve, line: isCurve }" @click="handleChangeChart(false)"></i>
@@ -14,7 +14,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="245"
+      :height="176"
       @change-system-config="handleChangeSystemConfig"
     >
     </SystemParameter>
@@ -23,7 +23,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="245"
+      :height="176"
       @change-equipment-config="handleChangeEquipmentConfig"
     >
     </EquipmentParameter>
@@ -148,14 +148,13 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      formatter: (param: any) => {
-        console.log(param);
+      // formatter: (param: any) => {
+      //   console.log(param);
 
-        return param;
-      },
+      //   return param;
+      // },
     },
     grid: {
-      left: '8%',
       right: '1%',
       top: 30,
       bottom: 20,

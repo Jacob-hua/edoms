@@ -18,7 +18,6 @@ export default async (request: Request) => [
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加类型',
-    maxItems: 4,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
@@ -33,7 +32,6 @@ export default async (request: Request) => [
         type: 'groupList',
         labelWidth: '60px',
         addButtonText: '添加设备',
-        maxItems: 10,
         title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
         items: [
           {
@@ -49,7 +47,6 @@ export default async (request: Request) => [
             type: 'groupList',
             labelWidth: '50px',
             addButtonText: '添加参数',
-            maxItems: 6,
             title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
             items: [
               {
