@@ -7,8 +7,7 @@
       "@/*": ["./src/*"],
       "@edoms/*": ["../packages/*/src"],
       "@editor/*": ["../packages/editor/src/*"]
-    },
-    "types": ["vite-plugin-svg-icons/client"]
+    }
   },
   "exclude": ["**/dist/**/*"]
 }
