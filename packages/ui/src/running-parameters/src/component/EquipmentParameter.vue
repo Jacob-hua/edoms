@@ -76,12 +76,16 @@ watch(
 <style lang="scss" scoped>
 .wrapper {
   display: flex;
+  height: 100%;
+  padding: 12px 16px;
+  box-sizing: border-box;
 
   .select-box {
     --dark-background: rgba(31, 30, 29, 1);
     position: absolute;
-    right: 50px;
+    right: 30px;
     width: 1.5rem;
+    z-index: 2;
 
     :deep(.el-input__wrapper) {
       box-shadow: 0 0 0 1px #ffffff45 inset;

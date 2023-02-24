@@ -213,6 +213,9 @@ const generateOption = (series: any[] = []): ECOption => {
       showTitle: false,
       right: '10%',
     },
+    grid: {
+      containLabel: true,
+    },
     tooltip: {
       trigger: 'axis',
       valueFormatter: (value) => `${value}${activeIndicator.value?.unit}`,
@@ -371,6 +374,7 @@ watch(
     .label {
       font-size: 14px;
       font-weight: bold;
+      text-align: center;
     }
   }
 
