@@ -91,6 +91,7 @@ function generateOption(series: any[] = []): ECOption {
       right: '1%',
       top: 30,
       bottom: 20,
+      containLabel: true,
     },
     xAxis: {
       type: 'time',

@@ -14,7 +14,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="176"
+      :height="245"
       @change-system-config="handleChangeSystemConfig"
     >
     </SystemParameter>
@@ -23,7 +23,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="176"
+      :height="245"
       @change-equipment-config="handleChangeEquipmentConfig"
     >
     </EquipmentParameter>
@@ -148,12 +148,18 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
+      formatter: (param: any) => {
+        console.log(param);
+
+        return param;
+      },
     },
     grid: {
       left: '8%',
       right: '1%',
       top: 30,
       bottom: 20,
+      containLabel: true,
     },
     xAxis: {
       type: 'time',

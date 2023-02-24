@@ -258,6 +258,7 @@ function generateOption(series: any[] = []): ECOption {
       right: '1%',
       top: 30,
       bottom: 20,
+      containLabel: true,
     },
     xAxis: {
       type: 'time',
@@ -376,9 +377,13 @@ watch(
 
       .label {
         width: 60px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+
+        span {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
 
       .cumulative-value {

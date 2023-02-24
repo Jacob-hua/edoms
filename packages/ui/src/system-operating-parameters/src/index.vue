@@ -124,6 +124,11 @@ const handleShowMore = () => {
 .setting {
   display: flex;
 
+  .overflow-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .operation {
     font-size: 28px;
     cursor: pointer;

@@ -159,6 +159,9 @@ const generateOption = (series: any[] = []): ECOption => {
       trigger: 'axis',
       valueFormatter: (value) => `${value}COP`,
     },
+    grid: {
+      containLabel: true,
+    },
     xAxis: {
       type: 'time',
       min: dateRange(new Date(), dateType.value).start,
