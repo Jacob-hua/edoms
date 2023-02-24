@@ -16,25 +16,33 @@
             <span>{{ item.label }}</span>
           </div>
           <div class="col-text cumulative-value">
-            <span class="data-value">{{ item.dataValue }}</span>
+            <span class="data-value" :title="item.dataValue">{{ item.dataValue }}</span>
             <span class="data-unit">{{ item.unit }}</span>
           </div>
           <div class="col-text trend-box">
-            <div v-if="item.calculateType === 'MOM' || item.calculateType === 'ALL'" class="mom-trend trend">
+            <div
+              v-if="item.calculateType === 'MOM' || item.calculateType === 'ALL'"
+              class="mom-trend trend"
+              :style="{ width: item.calculateType === 'ALL' ? '50%' : '100%' }"
+            >
               <span>{{ typeName }}环比</span>
               <span v-if="item.momTrend === 'flat'" class="flat-span">--</span>
               <span v-else>
                 <img :src="item.momTrend === 'up' ? Up : Down" alt="" />
               </span>
-              <span class="ratio-span" :class="item.momTrend">{{ item.momRatio }}%</span>
+              <span class="ratio-span" :class="item.momTrend" :title="`${item.momRatio}%`">{{ item.momRatio }}%</span>
             </div>
-            <div v-if="item.calculateType === 'YOY' || item.calculateType === 'ALL'" class="yoy-trend trend">
+            <div
+              v-if="item.calculateType === 'YOY' || item.calculateType === 'ALL'"
+              class="yoy-trend trend"
+              :style="{ width: item.calculateType === 'ALL' ? '50%' : '100%' }"
+            >
               <span>{{ typeName }}同比</span>
               <span v-if="item.yoyTrend === 'flat'" class="flat-span">--</span>
               <span v-else>
                 <img :src="item.yoyTrend === 'up' ? Up : Down" alt="" />
               </span>
-              <span class="ratio-span" :class="item.yoyTrend">{{ item.yoyRatio }}%</span>
+              <span class="ratio-span" :class="item.yoyTrend" :title="`${item.yoyRatio}%`">{{ item.yoyRatio }}%</span>
             </div>
           </div>
         </div>

@@ -14,9 +14,12 @@
         <div ref="scrollRef" class="scroll-wrapper">
           <div class="list-box">
             <div v-for="(item, index) in equipments" :key="index" class="item" @click="handleChangeEquipment(index)">
-              <span class="overflow-ellipsis" :class="{ 'active-equipment': activeEquipment === index }">{{
-                item.label
-              }}</span>
+              <span
+                class="overflow-ellipsis"
+                :class="{ 'active-equipment': activeEquipment === index }"
+                :title="item.label"
+                >{{ item.label }}</span
+              >
             </div>
           </div>
         </div>
@@ -225,7 +228,7 @@ watch(
       .list-box {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
 
         .item {
           width: 64px;
@@ -254,6 +257,8 @@ watch(
   .parameter-content {
     display: flex;
     flex-wrap: wrap;
+    overflow: auto;
+    --webkit--scrollbar-width: none;
 
     .parameter-item {
       padding: 8px;
