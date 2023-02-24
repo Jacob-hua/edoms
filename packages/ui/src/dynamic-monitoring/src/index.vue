@@ -346,7 +346,7 @@ watch(
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  align-self: center;
+  height: 100%;
 
   & > div {
     display: flex;
@@ -354,7 +354,6 @@ watch(
     align-items: center;
     cursor: pointer;
     width: 72px;
-    height: 90px;
     margin: 4px;
 
     .parameter {

@@ -22,19 +22,19 @@
           <div class="col-text trend-box">
             <div v-if="item.calculateType === 'MOM' || item.calculateType === 'ALL'" class="mom-trend trend">
               <span>{{ typeName }}环比</span>
-              <span v-if="item.momTrend === 'flat'">--</span>
+              <span v-if="item.momTrend === 'flat'" class="flat-span">--</span>
               <span v-else>
                 <img :src="item.momTrend === 'up' ? Up : Down" alt="" />
               </span>
-              <span :class="item.momTrend">{{ item.momRatio }}%</span>
+              <span class="ratio-span" :class="item.momTrend">{{ item.momRatio }}%</span>
             </div>
             <div v-if="item.calculateType === 'YOY' || item.calculateType === 'ALL'" class="yoy-trend trend">
               <span>{{ typeName }}同比</span>
-              <span v-if="item.yoyTrend === 'flat'">--</span>
+              <span v-if="item.yoyTrend === 'flat'" class="flat-span">--</span>
               <span v-else>
                 <img :src="item.yoyTrend === 'up' ? Up : Down" alt="" />
               </span>
-              <span :class="item.yoyTrend">{{ item.yoyRatio }}%</span>
+              <span class="ratio-span" :class="item.yoyTrend">{{ item.yoyRatio }}%</span>
             </div>
           </div>
         </div>
@@ -183,9 +183,9 @@ const getSystemCumulativeData = async () => {
   result.forEach(({ identify, dataValue, momRatio, momTrend, yoyRatio, yoyTrend }) => {
     const targetResult = systemCumulativeData.value[Number(identify)];
     targetResult.dataValue = String(formatPrecision(Number(dataValue), targetResult.precision));
-    targetResult.momRatio = momRatio;
+    targetResult.momRatio = String(formatPrecision(Number(momRatio), targetResult.ratioPrecision));
     targetResult.momTrend = momTrend;
-    targetResult.yoyRatio = yoyRatio;
+    targetResult.yoyRatio = String(formatPrecision(Number(yoyRatio), targetResult.ratioPrecision));
     targetResult.yoyTrend = yoyTrend;
   });
 };
@@ -254,7 +254,6 @@ function generateOption(series: any[] = []): ECOption {
       valueFormatter: (value) => `${value}${chartUnit.value}`,
     },
     grid: {
-      left: '8%',
       right: '1%',
       top: 30,
       bottom: 20,
@@ -308,6 +307,7 @@ watch(
       propertyType: item.propertyType,
       property: item.property,
       precision: item.precision,
+      ratioPrecision: item.ratioPrecision,
       unit: item.unit,
       variables: item.variables,
       calculateType: item.calculateType,
@@ -352,8 +352,25 @@ watch(
         flex-wrap: nowrap;
 
         .trend {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+
           span {
             padding-right: 4px;
+          }
+
+          .flat-span {
+            display: inline-block;
+          }
+
+          .ratio-span {
+            width: 100%;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
           }
         }
 
@@ -373,10 +390,11 @@ watch(
       .trend-box {
         justify-content: center;
         flex-grow: 2;
+        width: 50%;
       }
 
       .label {
-        width: 60px;
+        width: 20%;
 
         span {
           width: 100%;
@@ -388,6 +406,7 @@ watch(
 
       .cumulative-value {
         padding: 0 8px;
+        width: 30%;
       }
 
       .data-value {
@@ -395,6 +414,11 @@ watch(
         color: #00ff00;
         font-weight: bold;
         padding-right: 4px;
+        width: 60%;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 

@@ -7,10 +7,10 @@
       <div class="setting-wrapper">
         <div v-for="({ name, unit, value }, index) in parameterData" :key="index" class="parameter">
           <p class="value-wrapper">
-            <span class="value">{{ value }}</span
+            <span class="value overflow-ellipsis" :title="value">{{ value }}</span
             ><span class="unit">{{ unit }}</span>
           </p>
-          <p class="label">{{ name }}</p>
+          <p class="label overflow-ellipsis">{{ name }}</p>
         </div>
       </div>
     </BusinessCard>
@@ -156,22 +156,28 @@ const handleShowMore = () => {
     display: flex;
     justify-content: space-around;
     padding: 0 16px;
+    align-items: flex-start;
+    height: 100%;
 
     .parameter {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: auto;
+      width: 120px;
       margin-top: 32px;
       padding: 8px;
+      box-sizing: border-box;
 
       .value-wrapper {
-        margin-bottom: 4px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         .value {
           font-weight: 500;
           font-size: 18px;
-          color: lawngreen;
+          color: #00ff00;
           margin-right: 8px;
         }
       }
@@ -182,7 +188,6 @@ const handleShowMore = () => {
         width: 80px;
         font-size: 16px;
         text-align: center;
-        height: 60px;
       }
     }
   }
