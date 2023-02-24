@@ -10,10 +10,10 @@
       <div class="setting-wrapper">
         <div v-for="({ name, unit, value }, index) in currentPageData" :key="index" class="parameter">
           <p class="value-wrapper">
-            <span class="value">{{ value }}</span
+            <span class="value overflow-ellipsis" :title="value">{{ value }}</span
             ><span class="unit">{{ unit }}</span>
           </p>
-          <p class="label">{{ name }}</p>
+          <p class="label overflow-ellipsis">{{ name }}</p>
         </div>
       </div>
       <div class="page">
@@ -82,6 +82,11 @@ const handleCurrentChange = (value: string) => {
 </script>
 
 <style lang="scss" scoped>
+.overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .container {
   position: relative;
   height: fit-content;
@@ -111,8 +116,13 @@ const handleCurrentChange = (value: string) => {
         align-items: center;
         margin-top: 20px;
         padding: 8px;
+        box-sizing: border-box;
         .value-wrapper {
           margin-bottom: 8px;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           .value {
             font-weight: 500;
             font-size: 18px;

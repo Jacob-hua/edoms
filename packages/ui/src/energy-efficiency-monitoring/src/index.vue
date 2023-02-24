@@ -126,12 +126,12 @@ watch(
 );
 
 const updateEfficiencyData = async () => {
-  if (!efficiencyConfig.value.instance || !efficiencyConfig.value.property) {
+  if (!efficiencyConfig.value.instance) {
     return;
   }
   const param: FetchEfficiencyReq = {
     insCodeList: [efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]],
-    propCode: efficiencyConfig.value.property,
+    propCode: 'COP',
   };
   const result = await fetchEfficiencyData(param);
   result.forEach(({ insCode, efficiencyNum }) => {
@@ -208,7 +208,7 @@ const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
     dataList: [
       {
         deviceCode: efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1] ?? '',
-        propCode: efficiencyConfig.value.property ?? '',
+        propCode: 'COP',
       },
     ],
   });

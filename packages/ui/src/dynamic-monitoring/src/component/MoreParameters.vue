@@ -135,7 +135,6 @@ const handleCurrentChange = (value: string) => {
         align-items: center;
         cursor: pointer;
         width: 72px;
-        height: 90px;
         margin: 4px;
 
         .parameter {

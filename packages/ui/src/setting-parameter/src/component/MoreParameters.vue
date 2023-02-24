@@ -140,6 +140,7 @@ const handleCurrentChange = (value: string) => {
           margin-bottom: 8px;
           width: 100%;
           justify-content: center;
+
           .value {
             font-weight: 500;
             font-size: 16px;
