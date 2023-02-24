@@ -128,14 +128,14 @@ const updateParameterData = async () => {
 };
 const leftSlid = () => {
   if (scrollRef.value.scrollLeft <= 0) return;
-  scrollRef.value.scrollLeft -= 64;
+  scrollRef.value.scrollLeft -= 80;
   scrollLeft.value = scrollRef.value.scrollLeft;
 };
 
 const rightSlid = () => {
   const clientWidth = scrollRef.value.clientWidth;
   if (scrollRef.value.scrollLeft + clientWidth >= scrollWidth.value) return;
-  scrollRef.value.scrollLeft += 64;
+  scrollRef.value.scrollLeft += 80;
   scrollLeft.value = scrollRef.value.scrollLeft;
 };
 
@@ -212,18 +212,19 @@ watch(
       height: 0;
       width: 0;
       cursor: pointer;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
     }
     .caret-left {
-      border-left: 10px solid transparent;
-      border-right: 10px solid;
+      border-left: 5px solid transparent;
+      border-right: 5px solid;
       border-right-color: v-bind(leftBtnColor);
     }
 
     .scroll-wrapper {
       width: 320px;
       overflow: hidden;
+      margin: 0 10px;
 
       .list-box {
         display: flex;
@@ -231,7 +232,7 @@ watch(
         justify-content: flex-start;
 
         .item {
-          width: 64px;
+          width: 80px;
           height: 24px;
           color: rgba(255, 255, 255, 0.2705882353);
           display: flex;
@@ -248,17 +249,21 @@ watch(
     }
 
     .caret-right {
-      border-right: 10px solid transparent;
-      border-left: 10px solid;
+      border-right: 5px solid transparent;
+      border-left: 5px solid;
       border-left-color: v-bind(rightBtnColor);
     }
+  }
+
+  .parameter-content::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
   }
 
   .parameter-content {
     display: flex;
     flex-wrap: wrap;
     overflow: auto;
-    --webkit--scrollbar-width: none;
+    height: 116px;
 
     .parameter-item {
       padding: 8px;
