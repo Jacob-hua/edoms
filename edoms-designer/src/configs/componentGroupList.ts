@@ -1,24 +1,3 @@
-import {
-  Check,
-  Cpu,
-  FolderOpened,
-  Grid,
-  Guide,
-  Histogram,
-  Odometer,
-  Operation,
-  Opportunity,
-  Picture,
-  PictureFilled,
-  Setting,
-  Sunny,
-  SwitchButton,
-  Tickets,
-  Umbrella,
-  VideoPlay,
-  Warning,
-} from '@element-plus/icons-vue';
-
 import { ComponentGroup } from '@edoms/editor';
 
 const componentGroupList: ComponentGroup[] = [
@@ -26,32 +5,32 @@ const componentGroupList: ComponentGroup[] = [
     title: '基础组件',
     items: [
       {
-        icon: Tickets,
+        icon: 'wenben',
         text: '文本',
         type: 'text',
       },
       {
-        icon: SwitchButton,
+        icon: 'anniu',
         text: '按钮',
         type: 'button',
       },
       {
-        icon: PictureFilled,
+        icon: 'tupian',
         text: '图片',
         type: 'img',
       },
       {
-        icon: Grid,
+        icon: 'erweima',
         text: '二维码',
         type: 'qrcode',
       },
       {
-        icon: Check,
+        icon: 'duoxuankuang',
         text: '多选框',
         type: 'checkbox',
       },
       {
-        icon: Histogram,
+        icon: 'zhexiantu',
         text: '图表',
         type: 'charts',
       },
@@ -61,18 +40,18 @@ const componentGroupList: ComponentGroup[] = [
     title: '基础容器',
     items: [
       {
-        icon: FolderOpened,
+        icon: 'zu',
         text: '组',
         type: 'container',
       },
       {
-        icon: FolderOpened,
+        icon: 'mengban',
         text: '蒙层',
         type: 'overlay',
       },
       // 高阶组件
       {
-        icon: Tickets,
+        icon: 'tanchuang',
         text: '弹窗',
         type: '',
         data: {
@@ -112,77 +91,77 @@ const componentGroupList: ComponentGroup[] = [
     title: '业务组件',
     items: [
       {
-        icon: Umbrella,
+        icon: 'donghuanjiance',
         text: '动环监测',
         type: 'dynamic-monitoring',
       },
       {
-        icon: Setting,
+        icon: 'shedingcanshu',
         text: '设定参数',
         type: 'setting-parameter',
       },
       {
-        icon: Operation,
+        icon: 'xitong',
         text: '系统运行参数',
         type: 'system-operating-parameters',
       },
       {
-        icon: Picture,
+        icon: 'shiyitu',
         text: '全局示意图',
         type: 'global-schematic',
       },
       {
-        icon: Warning,
+        icon: 'gaojing',
         text: '告警列表',
         type: 'warning-running-list',
       },
       {
-        icon: Odometer,
+        icon: 'nengxiaoguankong',
         text: '能效监测',
         type: 'energy-efficiency-monitoring',
       },
       {
-        icon: Opportunity,
+        icon: 'zhishideng',
         text: '指示灯',
         type: 'indicator-light',
       },
       {
-        icon: Cpu,
+        icon: 'canshuquxian',
         text: '参数曲线',
         type: 'running-parameters',
       },
       {
-        icon: Sunny,
+        icon: 'tianqi',
         text: '时间天气',
         type: 'time-weather',
       },
       {
-        icon: VideoPlay,
+        icon: 'jiankong',
         text: '监控视频',
         type: 'video',
       },
       {
-        icon: Histogram,
+        icon: 'xuanfu',
         text: '移动悬浮',
         type: 'global-schematic-chart',
       },
       {
-        icon: Odometer,
+        icon: 'duoxiangnengxiao',
         text: '多项能效监测',
         type: 'multiple-energy-monitoring',
       },
       {
-        icon: Guide,
+        icon: 'shishigongkuang',
         text: '运行工况',
         type: 'equipment-condition',
       },
       {
-        icon: Odometer,
+        icon: 'leijishuju',
         text: '系统累计数据',
         type: 'system-cumulative-data',
       },
       {
-        icon: Operation,
+        icon: 'shebei',
         text: '设备运行参数',
         type: 'equipment-operating-parameter',
       },
