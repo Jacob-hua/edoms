@@ -19,7 +19,7 @@
               <el-col :span="10">{{ item.unit }}</el-col>
             </el-row>
           </div>
-          <div class="label">{{ item.label }}</div>
+          <div class="label overflow-ellipsis">{{ item.label }}</div>
         </div>
       </div>
     </BusinessCard>
@@ -44,7 +44,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { formatDateRange, formatPrecision, stringToDate } from '@edoms/utils';
+import { dateRange, formatDateRange, formatPrecision, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -91,6 +91,7 @@ const options = ref<ECOption>({});
 
 const restParamVisible = ref<boolean>(false);
 const chartDialogVisible = ref<boolean>(false);
+const selectDate = ref(new Date());
 
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
 const intervalDelay = computed<number>(() => {
@@ -194,7 +195,14 @@ function calculateParameterStyle(indicator: Indicator, config: MIndicatorItemCon
 }
 
 const generateOption = (series: any[] = []): ECOption => {
+  const legends = series.map(({ name }) => name);
   return {
+    legend: {
+      data: legends,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
     toolbox: {
       show: true,
       feature: {
@@ -211,10 +219,26 @@ const generateOption = (series: any[] = []): ECOption => {
     },
     xAxis: {
       type: 'time',
+      min: dateRange(selectDate.value, 'day').start,
+      max: dateRange(selectDate.value, 'day').end,
+      splitLine: {
+        show: false,
+      },
+      interval: 2,
+      axisLabel: {
+        formatter: '{HH}:{mm}',
+        interval: 2,
+      },
     },
     yAxis: {
       name: `单位：${activeIndicator.value?.unit}`,
       type: 'value',
+      splitLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: '#ffffff45',
+        },
+      },
       axisLine: {
         show: true,
       },
@@ -266,13 +290,30 @@ const handleClickIndicator = (item: Indicator) => {
 };
 
 const handleDateChange = (value: string) => {
+  selectDate.value = stringToDate(value);
   getHistoryData(stringToDate(value));
 };
+
+watch(
+  () => chartDialogVisible.value,
+  (visible) => {
+    if (!visible) {
+      selectDate.value = new Date();
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>
 .dynamic-monitoring-container {
   display: flex;
+}
+
+.overflow-ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .operation {

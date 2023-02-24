@@ -6,7 +6,7 @@
       </template>
       <div class="efficiency-wrapper">
         <div v-for="(item, index) in initEfficiencys" :key="index" class="efficiency-row">
-          <div class="efficiency-col">{{ item.energyName }}</div>
+          <div class="efficiency-col overflow-ellipsis">{{ item.energyName }}</div>
           <div class="efficiency-col efficiency-progress">
             <el-progress
               :stroke-width="24"
@@ -164,6 +164,13 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   display: flex;
 }
 
+.overflow-ellipsis {
+  width: 46px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .operation {
   font-size: 28px;
   cursor: pointer;
@@ -191,11 +198,12 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
+  padding-top: 12px;
+  box-sizing: border-box;
 
   .efficiency-row {
     display: flex;
-    flex-wrap: wrap;
     position: relative;
     box-sizing: border-box;
     width: 356px;

@@ -15,10 +15,12 @@
           @click="handleSetParameter(item, index)"
         >
           <div class="value-wrapper">
-            <span class="value" :style="{ color: item.valueColor }">{{ item.value }}</span
+            <span class="value overflow-ellipsis" :style="{ color: item.valueColor }" :title="item.value">{{
+              item.value
+            }}</span
             ><span class="unit">{{ item.unit }}</span>
           </div>
-          <div class="label">{{ item.name }}</div>
+          <div class="label overflow-ellipsis">{{ item.name }}</div>
         </div>
       </div>
       <div class="page">
@@ -96,6 +98,12 @@ const handleCurrentChange = (value: string) => {
   margin: 0;
   padding: 0;
 }
+
+.overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .container {
   position: relative;
   height: fit-content;
@@ -128,10 +136,13 @@ const handleCurrentChange = (value: string) => {
         margin-top: 20px;
         padding: 8px;
         .value-wrapper {
+          display: flex;
           margin-bottom: 8px;
+          width: 100%;
+          justify-content: center;
           .value {
             font-weight: 500;
-            font-size: 18px;
+            font-size: 16px;
             color: lawngreen;
             margin-right: 4px;
           }
@@ -142,7 +153,7 @@ const handleCurrentChange = (value: string) => {
         .label {
           color: #ffffff85;
           width: 80px;
-          font-size: 16px;
+          font-size: 14px;
           text-align: center;
         }
       }

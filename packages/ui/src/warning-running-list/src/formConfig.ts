@@ -37,7 +37,7 @@ export default async (request: Request) => {
       min: 0.5,
       step: 0.5,
       defaultValue: 1,
-      append: '天',
+      append: '小时',
     },
   ];
 };

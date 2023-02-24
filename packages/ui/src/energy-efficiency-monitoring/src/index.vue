@@ -13,7 +13,7 @@
       <div class="efficiency-wrapper">
         <div class="actual-wrapper">
           <div :title="actualValue" class="actual-value">{{ actualValue }}</div>
-          <div class="actual-unit">{{ energyName }}</div>
+          <div class="actual-unit overflow-ellipsis">{{ energyName }}</div>
         </div>
         <div style="padding-top: 28px">
           <Efficiency v-bind="indicators" :actual-value="actualValue"></Efficiency>
@@ -143,13 +143,13 @@ const generateOption = (series: any[] = []): ECOption => {
     },
     tooltip: {
       trigger: 'axis',
-      valueFormatter: (value) => `${value}${energyName.value}`,
+      valueFormatter: (value) => `${value}COP`,
     },
     xAxis: {
       type: 'time',
     },
     yAxis: {
-      name: `单位：${energyName.value}`,
+      name: `单位：COP`,
       type: 'value',
       axisLine: {
         show: true,
@@ -209,6 +209,13 @@ const handleChangeDateType = (type: UnitTime) => {
 .energy-efficiency-wrapper {
   width: inherit;
   height: inherit;
+}
+
+.overflow-ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .operation {

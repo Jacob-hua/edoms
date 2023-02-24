@@ -47,7 +47,7 @@ watch(
       return;
     }
     charts.value.clear();
-    charts.value.setOption(option);
+    charts.value.setOption(option, { notMerge: true });
   },
   { immediate: true, deep: true }
 );
@@ -58,7 +58,7 @@ onMounted(() => {
       return;
     }
     charts.value = markRaw(echarts.init(chartsContainer.value));
-    charts.value.setOption(props.option);
+    charts.value.setOption(props.option, { notMerge: true });
   });
 });
 
