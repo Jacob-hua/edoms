@@ -13,7 +13,7 @@
       <div class="wrapper">
         <div v-for="(item, index) in currentData" :key="index" class="data-item" @click="handleClickItem(item)">
           <div class="col-text label">
-            <span>{{ item.label }}</span>
+            <span :title="item.label">{{ item.label }}</span>
           </div>
           <div class="col-text cumulative-value">
             <span class="data-value" :title="item.dataValue">{{ item.dataValue }}</span>
