@@ -87,6 +87,7 @@ function generateOption(series: any[] = []): ECOption {
       trigger: 'axis',
     },
     grid: {
+      left: 'left',
       right: '1%',
       top: 30,
       bottom: 20,
