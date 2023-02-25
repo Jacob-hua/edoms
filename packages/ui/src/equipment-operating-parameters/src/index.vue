@@ -163,6 +163,11 @@ watch(
   width: 100%;
   padding: 12px 16px 0 16px;
 
+  span {
+    display: inline-block;
+    line-height: 1;
+  }
+
   .overflow-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -276,10 +281,6 @@ watch(
         flex-wrap: nowrap;
         justify-content: center;
 
-        span {
-          display: inline-block;
-          line-height: 1;
-        }
         .value {
           display: inline-block;
           font-size: 16px;

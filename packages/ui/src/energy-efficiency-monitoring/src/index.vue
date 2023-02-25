@@ -177,7 +177,7 @@ const generateOption = (series: any[] = []): ECOption => {
     },
     tooltip: {
       trigger: 'axis',
-      valueFormatter: (value) => `${value}COP`,
+      valueFormatter: (value) => `${value}`,
     },
     grid: {
       containLabel: true,
@@ -193,11 +193,10 @@ const generateOption = (series: any[] = []): ECOption => {
       interval: 2,
       axisLabel: {
         formatter: formatXAxisLabel.value,
-        interval: 2,
+        interval: 0,
       },
     },
     yAxis: {
-      name: `单位：COP`,
       type: 'value',
       splitLine: {
         lineStyle: {
@@ -236,8 +235,8 @@ const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
     ],
   });
 
-  const chartSeries = result.map(({ dataList }) => ({
-    name: energyName.value,
+  const chartSeries = result.map(({ dataList }, index) => ({
+    name: energyName.value ? energyName : `未命名${index}`,
     type: 'line',
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
