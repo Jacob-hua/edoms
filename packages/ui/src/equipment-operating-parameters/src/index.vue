@@ -275,6 +275,11 @@ watch(
         display: flex;
         flex-wrap: nowrap;
         justify-content: center;
+
+        span {
+          display: inline-block;
+          line-height: 1;
+        }
         .value {
           display: inline-block;
           font-size: 16px;

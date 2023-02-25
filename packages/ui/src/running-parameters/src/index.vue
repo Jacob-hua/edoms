@@ -164,6 +164,7 @@ function generateOption(series: any[] = []): ECOption {
       },
     },
     grid: {
+      left: 'left',
       right: '1%',
       top: 30,
       bottom: 20,
