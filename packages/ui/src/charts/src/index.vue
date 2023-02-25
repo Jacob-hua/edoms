@@ -25,6 +25,8 @@ const option = ref<ECOption>({});
 const { request } = useApp(props);
 const { fetchHistoryData } = apiFactory(request);
 
+const lineUnit = ref<string[]>([]);
+
 const indicatorConfigs = computed<MIndicator[]>(() => props.config.indicators);
 
 const intervalDelay = computed<number>(() => {
@@ -56,6 +58,7 @@ const updateParameterData = async () => {
           ({ instance, property }) => insCode === instance[instance.length - 1] && propCode === property
         )
       ];
+    lineUnit.value.push(indicatorConfig.unit);
     return {
       name: indicatorConfig.label ? indicatorConfig.label : `未命名${index}`,
       type: 'line',
@@ -78,9 +81,17 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
+      formatter: (params: any) => {
+        let content = params[0].axisValueLabel;
+        for (const i in params) {
+          content +=
+            '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
+        }
+        return content;
+      },
     },
     grid: {
-      left: '8%',
+      left: 'left',
       right: '1%',
       top: 30,
       bottom: 20,
