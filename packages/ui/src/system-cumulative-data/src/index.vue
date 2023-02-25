@@ -128,7 +128,6 @@ const chartsParam = ref({
   propCode: '',
   type: '',
 });
-
 const xAxisMin = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).start);
 const xAxisMax = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).end);
 
@@ -143,6 +142,19 @@ const axisLabelFormatter = computed(() => {
     return '{MM}';
   }
   return '{HH}:{mm}';
+});
+
+const maxInterval = computed(() => {
+  if (chartsParam.value.dateRange === 'day') {
+    return 3600 * 1000 * 2;
+  }
+  if (chartsParam.value.dateRange === 'month') {
+    return 3600 * 1000 * 24;
+  }
+  if (chartsParam.value.dateRange === 'year') {
+    return 3600 * 1000 * 24 * 31;
+  }
+  return 3600 * 1000;
 });
 
 const categories = computed(() => props.config.category ?? []);
@@ -262,21 +274,19 @@ function generateOption(series: any[] = []): ECOption {
       valueFormatter: (value) => `${value}${chartUnit.value}`,
     },
     grid: {
-      right: '1%',
-      top: 30,
-      bottom: 20,
       containLabel: true,
     },
     xAxis: {
       type: 'time',
       min: xAxisMin.value,
       max: xAxisMax.value,
-      maxInterval: 3600 * 1000,
+      maxInterval: maxInterval.value,
       splitLine: {
         show: false,
       },
       axisLabel: {
         formatter: axisLabelFormatter.value,
+        interval: 0,
       },
     },
     yAxis: {

@@ -75,7 +75,6 @@ const handleChangeType = (type: UnitTime) => {
 .time-select {
   text-align: right;
   span {
-    background-color: #2a2a2a;
     cursor: pointer;
     position: relative;
     right: 10%;
