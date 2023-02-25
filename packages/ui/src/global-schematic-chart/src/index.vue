@@ -55,7 +55,7 @@ const updateParameterData = async () => {
   if (!result || result.length <= 0) return;
 
   let chartSeries = [];
-  chartSeries = result.map(({ insCode, propCode, dataList }) => {
+  chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
     const indicatorConfig =
       indicatorConfigs.value[
         indicatorConfigs.value.findIndex(
@@ -63,7 +63,7 @@ const updateParameterData = async () => {
         )
       ];
     return {
-      name: indicatorConfig.label,
+      name: indicatorConfig.label ? indicatorConfig.label : `未命名${index}`,
       type: 'line',
       showSymbol: false,
       color: indicatorConfig.lineColor,
@@ -96,7 +96,6 @@ function generateOption(series: any[] = []): ECOption {
       type: 'time',
       min: dateRange(new Date(), 'day').start,
       max: dateRange(new Date(), 'day').end,
-      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },

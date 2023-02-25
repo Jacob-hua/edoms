@@ -49,7 +49,7 @@ const updateParameterData = async () => {
   });
 
   let chartSeries = [];
-  chartSeries = result.map(({ insCode, propCode, dataList }) => {
+  chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
     const indicatorConfig =
       indicatorConfigs.value[
         indicatorConfigs.value.findIndex(
@@ -57,7 +57,7 @@ const updateParameterData = async () => {
         )
       ];
     return {
-      name: indicatorConfig.label,
+      name: indicatorConfig.label ? indicatorConfig.label : `未命名${index}`,
       type: 'line',
       showSymbol: false,
       color: indicatorConfig.lineColor,

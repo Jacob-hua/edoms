@@ -202,7 +202,7 @@ const fetchHistory = async () => {
   const result = await fetchHistoryData(chartsParam.value);
   const chartSeries = [
     {
-      name: chartTitle.value,
+      name: chartTitle.value ? chartTitle.value : `未命名`,
       type: 'bar',
       showSymbol: false,
       data: result.map(({ time, value }) => [stringToDate(time), formatPrecision(Number(value), chartPrecision.value)]),
