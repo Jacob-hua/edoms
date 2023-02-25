@@ -110,14 +110,17 @@ const updateParameterData = async () => {
   });
 
   let chartSeries = [];
-  chartSeries = result.map(({ insCode, propCode, dataList }) => ({
-    name: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.label,
-    type: 'line',
-    showSymbol: false,
-    smooth: isCurve.value,
-    color: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.color,
-    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
-  }));
+  chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
+    const name = activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.label;
+    return {
+      name: name ? name : `未命名${index}`,
+      type: 'line',
+      showSymbol: false,
+      smooth: isCurve.value,
+      color: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.color,
+      data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    };
+  });
   option.value = generateOption(chartSeries);
   console.log(option.value);
 };
@@ -164,6 +167,7 @@ function generateOption(series: any[] = []): ECOption {
       type: 'time',
       min: dateRange(new Date(), 'day').start,
       max: dateRange(new Date(), 'day').end,
+      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },

@@ -202,7 +202,7 @@ const fetchHistory = async () => {
   const result = await fetchHistoryData(chartsParam.value);
   const chartSeries = [
     {
-      name: chartTitle.value,
+      name: chartTitle.value ? chartTitle.value : `未命名`,
       type: 'bar',
       showSymbol: false,
       data: result.map(({ time, value }) => [stringToDate(time), formatPrecision(Number(value), chartPrecision.value)]),
@@ -271,13 +271,12 @@ function generateOption(series: any[] = []): ECOption {
       type: 'time',
       min: xAxisMin.value,
       max: xAxisMax.value,
+      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },
-      interval: 2,
       axisLabel: {
         formatter: axisLabelFormatter.value,
-        interval: 2,
       },
     },
     yAxis: {
@@ -348,7 +347,6 @@ watch(
       display: flex;
       height: 36px;
       background: #3a3a3a;
-      width: 360px;
       padding: 0 16px 0 20px;
       cursor: pointer;
       margin-bottom: 4px;

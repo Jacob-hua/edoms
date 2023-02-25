@@ -105,6 +105,19 @@ const formatXAxisLabel = computed(() => {
   return '{HH}:{mm}';
 });
 
+const maxInterval = computed(() => {
+  if (dateType.value === 'day') {
+    return 3600 * 1000;
+  }
+  if (dateType.value === 'month') {
+    return 3600 * 1000 * 24;
+  }
+  if (dateType.value === 'year') {
+    return 3600 * 1000 * 24 * 31;
+  }
+  return 3600 * 1000;
+});
+
 watch(
   () => efficiencyConfig.value,
   (val) => {
@@ -144,7 +157,14 @@ const updateEfficiencyData = async () => {
 };
 
 const generateOption = (series: any[] = []): ECOption => {
+  const legends = series.map(({ name }) => name);
   return {
+    legend: {
+      data: legends,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
     toolbox: {
       show: true,
       feature: {
@@ -166,6 +186,7 @@ const generateOption = (series: any[] = []): ECOption => {
       type: 'time',
       min: dateRange(new Date(), dateType.value).start,
       max: dateRange(new Date(), dateType.value).end,
+      maxInterval: maxInterval.value,
       splitLine: {
         show: false,
       },
@@ -194,11 +215,13 @@ const generateOption = (series: any[] = []): ECOption => {
 
 const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
   const { start, end } = formatDateRange(date, type, 'YYYY-MM-DD HH:mm:ss');
-  let interval = '1m';
+  let interval = '1h';
   if (type === 'day') {
-    interval = '1m';
-  } else {
+    interval = '1h';
+  } else if (type === 'month') {
     interval = '1d';
+  } else {
+    interval = '1n';
   }
   const result = await fetchHistoryData({
     startTime: start,

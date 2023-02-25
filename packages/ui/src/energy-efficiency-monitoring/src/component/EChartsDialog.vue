@@ -9,9 +9,7 @@
       </template>
       <div class="time-select">
         <span :class="active === 'day' ? 'checked' : ''" @click="handleChangeType('day')">日</span>
-        <el-divider direction="vertical" />
         <span :class="active === 'month' ? 'checked' : ''" @click="handleChangeType('month')">月</span>
-        <el-divider direction="vertical" />
         <span :class="active === 'year' ? 'checked' : ''" @click="handleChangeType('year')">年</span>
       </div>
       <div class="chart-container">
@@ -75,12 +73,15 @@ const handleChangeType = (type: UnitTime) => {
   background-color: #000000;
 }
 .time-select {
-  position: absolute;
-  right: 10%;
-  top: 45px;
-
+  text-align: right;
   span {
+    background-color: #2a2a2a;
     cursor: pointer;
+    position: relative;
+    right: 10%;
+    text-align: right;
+    margin-left: 10px;
+    // color: #ffffff45;
   }
 }
 

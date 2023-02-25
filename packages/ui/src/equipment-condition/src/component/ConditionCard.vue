@@ -138,8 +138,8 @@ const updateIndicatorsData = () => {
       },
     ],
   }).then((historyResult) => {
-    const chartSeries = historyResult?.map(({ dataList }) => ({
-      name: activeIndicator.value?.label,
+    const chartSeries = historyResult?.map(({ dataList }, index) => ({
+      name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
       type: 'line',
       showSymbol: false,
       data: dataList.map(({ time, value }) => [stringToDate(time), value]),

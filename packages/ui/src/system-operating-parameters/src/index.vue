@@ -22,7 +22,7 @@
 import { computed, ref, watch } from 'vue';
 
 import { MComponent } from '@edoms/schema';
-import { formatPrecision } from '@edoms/utils';
+import { formatPrecision, isNumber } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
@@ -89,7 +89,11 @@ const updateParameters = async () => {
       return;
     }
     target?.forEach((targetData) => {
-      targetData.value = String(formatPrecision(dataValue, targetData.precision));
+      if (isNumber(dataValue)) {
+        targetData.value = String(formatPrecision(Number(dataValue), targetData.precision));
+      } else {
+        targetData.value = dataValue;
+      }
     });
   });
 };
