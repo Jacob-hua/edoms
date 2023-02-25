@@ -63,6 +63,10 @@ export default async (request: Request, componentName: string, hiddenItems: Inst
       text: '属性',
       type: 'radio-group',
       display: () => !hiddenItems.includes('propertyType'),
+      onChange: (mForm: any, value: any, { model }: any) => {
+        model.property = '';
+        model.unit = '';
+      },
       options: [
         {
           text: '固有属性',
