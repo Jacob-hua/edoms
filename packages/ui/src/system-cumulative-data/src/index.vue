@@ -1,5 +1,5 @@
 <template>
-  <div class="system-cumulative-data">
+  <div class="system-cumulative-data" style="min-width: 392px; min-height: 240px">
     <BusinessCard title="系统累计数据" subtitle="SYSTEM CUMULATIVE DATA" :min-width="392" :min-height="240">
       <template #operation>
         <div class="type-select">

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="min-width: 392px; min-height: 160px">
     <BusinessCard
       class="energy-efficiency-wrapper"
       title="能效监测"

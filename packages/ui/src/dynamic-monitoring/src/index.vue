@@ -1,5 +1,5 @@
 <template>
-  <div class="dynamic-monitoring-container">
+  <div style="min-width: 392px; min-height: 160px">
     <BusinessCard
       title="动环监测"
       :class="wrapperClassName"
@@ -308,10 +308,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.dynamic-monitoring-container {
-  display: flex;
-}
-
 .overflow-ellipsis {
   width: 100%;
   overflow: hidden;

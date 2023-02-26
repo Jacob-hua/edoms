@@ -1,5 +1,5 @@
 <template>
-  <div class="setting">
+  <div class="setting" style="min-width: 392px; min-height: 160px">
     <BusinessCard title="系统运行参数" subtitle="SYSTEM OPERATING PARAMETERS" min-width="392" min-height="160">
       <template #operation>
         <div :class="operatable" @click="handleShowMore">...</div>

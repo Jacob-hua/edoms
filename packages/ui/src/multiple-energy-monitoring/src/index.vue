@@ -1,5 +1,5 @@
 <template>
-  <div class="multiple-efficiency-container">
+  <div class="multiple-efficiency-container" style="min-width: 392px; min-height: 160px">
     <BusinessCard title="能效监测" subtitle="ENERGY EFFICIENCY MONITORING" min-width="392" min-height="160">
       <template #operation>
         <div :class="operatable" @click="handleShowMore">...</div>
