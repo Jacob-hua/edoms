@@ -2,9 +2,6 @@
   <div>
     <el-dialog v-model="dialogVisible" :width="1000">
       <template #header>
-        <!-- <el-icon>
-        <DataAnalysis />
-      </el-icon> -->
         <span>{{ title }}</span>
       </template>
       <div class="time-select">
@@ -12,9 +9,7 @@
         <span :class="active === 'month' ? 'checked' : ''" @click="handleChangeType('month')">月</span>
         <span :class="active === 'year' ? 'checked' : ''" @click="handleChangeType('year')">年</span>
       </div>
-      <div class="chart-container">
-        <EdomsCharts :width="width" :height="height" :option="options"></EdomsCharts>
-      </div>
+      <EdomsCharts :option="options" class="chart-container"></EdomsCharts>
     </el-dialog>
   </div>
 </template>
@@ -24,13 +19,10 @@ import { computed, ref, watch } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
-// import { DataAnalysis } from '@element-plus/icons-vue';
 
 const props = withDefaults(
   defineProps<{
     title: string;
-    width: number;
-    height: number;
     options: ECOption;
     visible: boolean;
     dateRange: string;
@@ -89,7 +81,8 @@ watch(
 }
 
 .chart-container {
-  padding-top: 10px;
+  width: 960px;
+  height: 480px;
 }
 
 .checked {

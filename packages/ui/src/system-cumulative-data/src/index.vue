@@ -1,5 +1,5 @@
 <template>
-  <div class="system-cumulative-data" style="min-width: 392px; min-height: 240px">
+  <div style="min-width: 392px; min-height: 240px">
     <BusinessCard title="系统累计数据" subtitle="SYSTEM CUMULATIVE DATA" :min-width="392" :min-height="240">
       <template #operation>
         <div class="type-select">
@@ -46,9 +46,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="paginator">
         <ElPagination
+          class="paginator"
           layout="prev, pager, next"
           :total="systemCumulativeData.length"
           :cur-page="currentPage"
@@ -62,8 +61,6 @@
       v-model:visible="dialogVisible"
       :options="option"
       :title="chartTitle"
-      :width="960"
-      :height="480"
       :date-range="chartsParam.dateRange"
       @type-change="handleChangeDateType"
     >
@@ -356,157 +353,148 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.system-cumulative-data {
-  display: flex;
+.wrapper {
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.3960784314);
+  padding: 20px 0 0 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr) 30px;
+  row-gap: 4px;
 
-  .wrapper {
+  .paginator {
+    grid-row: 5 / 5;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .data-item {
+    display: flex;
+    height: 100%;
+    background: #3a3a3a;
+    padding: 0 16px 0 20px;
+    cursor: pointer;
+    margin-bottom: 4px;
     width: 100%;
-    color: rgba(255, 255, 255, 0.3960784314);
-    padding: 20px 16px 0 16px;
     box-sizing: border-box;
+    border-left: 4px solid rgb(179, 179, 179);
 
-    .data-item {
+    .col-text {
       display: flex;
-      height: 36px;
-      background: #3a3a3a;
-      padding: 0 16px 0 20px;
-      cursor: pointer;
-      margin-bottom: 4px;
-      box-sizing: border-box;
+      align-items: center;
+      flex-wrap: nowrap;
 
-      .col-text {
+      .trend {
         display: flex;
-        align-items: center;
-        flex-wrap: nowrap;
-
-        .trend {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-
-          span {
-            padding-right: 4px;
-          }
-
-          .flat-span {
-            display: inline-block;
-          }
-
-          .ratio-span {
-            width: 100%;
-            width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            text-align: center;
-          }
-        }
-
-        .up {
-          color: #d22129;
-        }
-
-        .down {
-          color: #49aa19;
-        }
-
-        .flat {
-          color: #ffffff45;
-        }
-      }
-
-      .trend-box {
+        flex-wrap: wrap;
         justify-content: center;
-        flex-grow: 2;
-        width: 50%;
-      }
-
-      .label {
-        width: 20%;
 
         span {
-          width: 100%;
+          padding-right: 4px;
+        }
+
+        .flat-span {
+          display: inline-block;
+        }
+
+        .ratio-span {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          text-align: center;
         }
       }
 
-      .cumulative-value {
-        padding: 0 8px;
-        width: 30%;
+      .up {
+        color: #d22129;
       }
 
-      .data-value {
-        font-size: 16px;
-        color: #00ff00;
-        font-weight: bold;
-        padding-right: 4px;
-        width: 60%;
-        text-align: right;
+      .down {
+        color: #49aa19;
+      }
+
+      .flat {
+        color: #ffffff45;
+      }
+    }
+
+    .trend-box {
+      justify-content: center;
+      width: 50%;
+    }
+
+    .label {
+      flex-grow: 0.2;
+      width: 20%;
+
+      span {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
     }
 
-    .data-item::before {
-      content: '';
-      width: 4px;
-      height: 36px;
-      background-color: #b3b3b3;
-      position: absolute;
-      left: 16px;
-    }
-  }
-
-  .paginator {
-    position: absolute;
-    bottom: 0px;
-    right: 16px;
-  }
-
-  :deep(.el-pagination) {
-    background-color: transparent !important;
-
-    .btn-prev {
-      color: #fff;
-      background-color: transparent !important;
+    .cumulative-value {
+      padding: 0 8px;
+      flex-grow: 0.3;
+      width: 30%;
     }
 
-    .btn-next {
-      color: #fff;
-      background-color: transparent !important;
-    }
-
-    .el-pager {
-      .number {
-        color: #fff;
-      }
-
-      .is-active {
-        color: #007acc;
-      }
-
-      li {
-        background-color: transparent !important;
-      }
-    }
-  }
-
-  .type-select {
-    .type-box {
-      background-color: #2a2a2a;
-      cursor: pointer;
-      color: #ffffff45;
-      margin-left: 8px;
-    }
-
-    .checked {
-      color: #e99a3c;
+    .data-value {
+      font-size: 16px;
+      color: #00ff00;
+      font-weight: bold;
+      padding-right: 4px;
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }
+
+:deep(.el-pagination) {
+  background-color: transparent !important;
+
+  .btn-prev {
+    color: #fff;
+    background-color: transparent !important;
+  }
+
+  .btn-next {
+    color: #fff;
+    background-color: transparent !important;
+  }
+
+  .el-pager {
+    .number {
+      color: #fff;
+    }
+
+    .is-active {
+      color: #007acc;
+    }
+
+    li {
+      background-color: transparent !important;
+    }
+  }
+}
+
+.type-select {
+  .type-box {
+    background-color: #2a2a2a;
+    cursor: pointer;
+    color: #ffffff45;
+    margin-left: 8px;
+  }
+
+  .checked {
+    color: #e99a3c;
+  }
+}
+
 :deep(.business-wrapper-body) {
   align-items: flex-start;
 }
