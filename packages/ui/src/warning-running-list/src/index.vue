@@ -1,6 +1,6 @@
 <template>
-  <div class="warning-running-list-container">
-    <BusinessCard title="告警列表" subtitle="RUNNING PARAMETERS" min-width="392" min-height="538">
+  <BusinessCard title="告警列表" subtitle="RUNNING PARAMETERS" min-width="392" min-height="538">
+    <div class="warning-wrapper">
       <div class="warning-list-header">
         <div
           v-for="({ name, className }, index) in headerData"
@@ -16,8 +16,8 @@
       <div class="warning-list-wrapper">
         <warning-list></warning-list>
       </div>
-    </BusinessCard>
-  </div>
+    </div>
+  </BusinessCard>
 </template>
 
 <script lang="ts" setup>
@@ -44,7 +44,7 @@ export interface MConfig {
 
 interface HeaderData {
   name: string;
-  className: string;
+  className: ClassName;
 }
 
 const props = withDefaults(
@@ -225,51 +225,54 @@ provide('confirmedAlarmList', confirmedAlarmList);
     transform: scale(1.3);
   }
 }
-.warning-running-list-container {
-  :deep(.business-wrapper-body) {
-    display: unset !important;
-  }
-  .warning-list-header {
-    display: flex;
-    justify-content: space-between;
-    margin: 16px 26px 0;
-    .list-item {
-      color: #ffffff45;
-      flex-grow: 1;
-      height: 30px;
-      line-height: 30px;
-      background-color: #ffffff00;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 0 0 0.5px #ffffff02;
-      position: relative;
-      border: 1px solid #ffffff02;
-      .circle {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        animation: circle 1s linear infinite;
-      }
-      .red {
-        background-color: red;
-      }
-      .orange {
-        background-color: orange;
-      }
-      .blue {
-        background-color: blue;
-      }
+
+.warning-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+}
+
+.warning-list-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0 8px 0;
+  .list-item {
+    color: #ffffff45;
+    flex-grow: 1;
+    height: 30px;
+    line-height: 30px;
+    background-color: #ffffff00;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 0 0.5px #ffffff02;
+    position: relative;
+    border: 1px solid #ffffff02;
+    .circle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      animation: circle 1s linear infinite;
+    }
+    .red {
+      background-color: red;
+    }
+    .orange {
+      background-color: orange;
+    }
+    .blue {
+      background-color: blue;
     }
   }
-  .warning-list-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 8px;
-    max-height: 86%;
-  }
+}
+.warning-list-wrapper {
+  display: flex;
+  justify-content: center;
+  max-height: 86%;
 }
 .active {
   color: #ffffff85 !important;
