@@ -27,8 +27,6 @@
       v-if="chartDialogVisible"
       v-model:visible="chartDialogVisible"
       :title="dialogTitle"
-      :width="960"
-      :height="480"
       :options="options"
       @date-change="handleDateChange"
     ></EChartsDialog>

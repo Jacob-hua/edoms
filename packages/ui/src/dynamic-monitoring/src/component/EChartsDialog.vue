@@ -12,9 +12,7 @@
           :append-to-body="false"
         ></el-date-picker>
       </div>
-      <div class="chart-container">
-        <EdomsCharts :width="width" :height="height" :option="options"></EdomsCharts>
-      </div>
+      <EdomsCharts class="chart-container" :option="options"></EdomsCharts>
     </el-dialog>
   </div>
 </template>
@@ -30,8 +28,6 @@ import { ECOption } from '../../../types';
 const props = withDefaults(
   defineProps<{
     title: string;
-    width: number;
-    height: number;
     options: ECOption;
     visible: boolean;
   }>(),
@@ -88,6 +84,8 @@ onUnmounted(() => {});
 
 .chart-container {
   padding-top: 10px;
+  width: 960px;
+  height: 480px;
 }
 </style>
 
