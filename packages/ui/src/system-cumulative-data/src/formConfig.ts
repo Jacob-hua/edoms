@@ -133,6 +133,53 @@ export default async (request: Request) => {
         },
         ...(await useInstanceConfig(request, 'system-cumulative-data')),
         {
+          name: 'ratioPrecision',
+          text: '精度',
+          type: 'select',
+          options: [
+            {
+              text: '原始精度',
+              value: '',
+            },
+            {
+              text: '0',
+              value: '0',
+            },
+            {
+              text: '0.1',
+              value: '0.1',
+            },
+            {
+              text: '0.01',
+              value: '0.01',
+            },
+            {
+              text: '0.001',
+              value: '0.001',
+            },
+            {
+              text: '0.0001',
+              value: '0.0001',
+            },
+            {
+              text: '0.00001',
+              value: '0.00001',
+            },
+            {
+              text: '0.000001',
+              value: '0.000001',
+            },
+            {
+              text: '0.0000001',
+              value: '0.0000001',
+            },
+            {
+              text: '0.00000001',
+              value: '0.00000001',
+            },
+          ],
+        },
+        {
           text: '变量',
           name: 'variables',
           type: 'groupList',

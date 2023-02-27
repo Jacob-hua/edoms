@@ -7,10 +7,10 @@
       <div class="setting-wrapper">
         <div v-for="({ name, unit, value }, index) in parameterData" :key="index" class="parameter">
           <p class="value-wrapper">
-            <span class="value">{{ value }}</span
+            <span class="value overflow-ellipsis" :title="value">{{ value }}</span
             ><span class="unit">{{ unit }}</span>
           </p>
-          <p class="label">{{ name }}</p>
+          <p class="label overflow-ellipsis">{{ name }}</p>
         </div>
       </div>
     </BusinessCard>
@@ -22,7 +22,7 @@
 import { computed, ref, watch } from 'vue';
 
 import { MComponent } from '@edoms/schema';
-import { formatPrecision } from '@edoms/utils';
+import { formatPrecision, isNumber } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
@@ -89,7 +89,11 @@ const updateParameters = async () => {
       return;
     }
     target?.forEach((targetData) => {
-      targetData.value = String(formatPrecision(dataValue, targetData.precision));
+      if (isNumber(dataValue)) {
+        targetData.value = String(formatPrecision(Number(dataValue), targetData.precision));
+      } else {
+        targetData.value = dataValue;
+      }
     });
   });
 };

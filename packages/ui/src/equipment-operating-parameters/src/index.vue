@@ -14,8 +14,11 @@
         <div ref="scrollRef" class="scroll-wrapper">
           <div class="list-box">
             <div v-for="(item, index) in equipments" :key="index" class="item" @click="handleChangeEquipment(index)">
-              <span class="overflow-ellipsis" :class="{ 'active-equipment': activeEquipment === index }"
-                >设备{{ item.label }}</span
+              <span
+                class="overflow-ellipsis"
+                :class="{ 'active-equipment': activeEquipment === index }"
+                :title="item.label"
+                >{{ item.label }}</span
               >
             </div>
           </div>
@@ -38,7 +41,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { formatPrecision } from '@edoms/utils';
+import { formatPrecision, isNumber } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
@@ -63,6 +66,7 @@ const activeName = ref(0);
 const scrollRef = ref();
 const activeEquipment = ref(0);
 const currentParameters = ref<Parameter[]>([]);
+const scrollLeft = ref(0);
 
 const equipmentTypes = computed(() => props.config.equipmentTypes ?? []);
 const equipments = computed(() => {
@@ -96,39 +100,43 @@ const params = computed(() => {
 });
 const scrollWidth = computed(() => equipments.value.length * 64);
 const leftBtnColor = computed(() => {
-  if (scrollRef.value.scrollLeft <= 0) {
+  if (scrollLeft.value <= 0) {
     return '#ffffff25';
+  } else {
+    return '#ffffff85';
   }
-  return '#ffffff85';
+});
+
+const rightBtnColor = computed(() => {
+  if (scrollRef.value.clientWidth + scrollLeft.value >= scrollWidth.value) {
+    return '#ffffff25';
+  } else {
+    return '#ffffff85';
+  }
 });
 
 const updateParameterData = async () => {
   const result = await fetchOperationParameter(params.value);
   currentParameters.value = parameters.value.map((parameter) => {
-    let dataValue = '';
+    let dataValue = '-';
     const parameterVal = result.find(({ propCode }) => propCode === parameter.property);
-    if (parameterVal && parameterVal.dataValue) {
+    if (parameterVal && parameterVal.dataValue && isNumber(parameterVal.dataValue)) {
       dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision));
     }
     return { ...parameter, dataValue };
   });
 };
-
-const rightBtnColor = computed(() => {
-  if (scrollRef.value.clientWidth + scrollRef.value.scrollLeft >= scrollWidth.value) {
-    return '#ffffff25';
-  }
-  return '#ffffff85';
-});
 const leftSlid = () => {
   if (scrollRef.value.scrollLeft <= 0) return;
-  scrollRef.value.scrollLeft -= 64;
+  scrollRef.value.scrollLeft -= 80;
+  scrollLeft.value = scrollRef.value.scrollLeft;
 };
 
 const rightSlid = () => {
   const clientWidth = scrollRef.value.clientWidth;
   if (scrollRef.value.scrollLeft + clientWidth >= scrollWidth.value) return;
-  scrollRef.value.scrollLeft += 64;
+  scrollRef.value.scrollLeft += 80;
+  scrollLeft.value = scrollRef.value.scrollLeft;
 };
 
 const handleChangeEquipment = (index: number) => {
@@ -155,41 +163,49 @@ watch(
   width: 100%;
   padding: 12px 16px 0 16px;
 
+  span {
+    display: inline-block;
+    line-height: 1;
+  }
+
   .overflow-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  :deep(.el-tabs__header) {
-    margin: 0;
-    width: 360px;
 
-    .el-tabs__nav-wrap::after {
-      background-color: #ffffff25;
-    }
+  :deep(.el-tabs) {
+    --el-tabs-header-height: 32px;
+    .el-tabs__header {
+      margin: 0;
+      width: 360px;
 
-    .is-scrollable {
-      .el-tabs__item {
-        width: 80px;
+      .el-tabs__nav-wrap::after {
+        background-color: #ffffff25;
       }
-    }
-    .el-tabs__item {
-      width: 90px;
-      text-align: center;
-      color: #ffffff45;
-    }
 
-    .el-tabs__active-bar {
-      background-color: #e99a3c;
-    }
+      .is-scrollable {
+        .el-tabs__item {
+          width: 80px;
+        }
+      }
+      .el-tabs__item {
+        width: 90px;
+        text-align: center;
+        color: #ffffff45;
+      }
 
-    .is-active {
-      color: #e99a3c;
+      .el-tabs__active-bar {
+        background-color: #e99a3c;
+      }
+
+      .is-active {
+        color: #e99a3c;
+      }
     }
   }
 
   .equipment-list {
-    width: 360px;
     height: 24px;
     display: flex;
     align-items: center;
@@ -200,26 +216,27 @@ watch(
       height: 0;
       width: 0;
       cursor: pointer;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
     }
     .caret-left {
-      border-left: 10px solid transparent;
-      border-right: 10px solid;
+      border-left: 5px solid transparent;
+      border-right: 5px solid;
       border-right-color: v-bind(leftBtnColor);
     }
 
     .scroll-wrapper {
       width: 320px;
       overflow: hidden;
+      margin: 0 10px;
 
       .list-box {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
 
         .item {
-          width: 64px;
+          width: 80px;
           height: 24px;
           color: rgba(255, 255, 255, 0.2705882353);
           display: flex;
@@ -236,15 +253,21 @@ watch(
     }
 
     .caret-right {
-      border-right: 10px solid transparent;
-      border-left: 10px solid;
+      border-right: 5px solid transparent;
+      border-left: 5px solid;
       border-left-color: v-bind(rightBtnColor);
     }
+  }
+
+  .parameter-content::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
   }
 
   .parameter-content {
     display: flex;
     flex-wrap: wrap;
+    overflow: auto;
+    height: 116px;
 
     .parameter-item {
       padding: 8px;
@@ -256,8 +279,9 @@ watch(
         text-align: center;
         display: flex;
         flex-wrap: nowrap;
+        justify-content: center;
+
         .value {
-          width: 65%;
           display: inline-block;
           font-size: 16px;
           color: #00ff00;

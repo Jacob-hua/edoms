@@ -1,10 +1,10 @@
 <template>
-  <BusinessCard title="参数曲线" min-width="1080" min-height="320">
+  <BusinessCard title="参数曲线" subtitle="RUNNING PARAMETER" min-width="1080" min-height="240">
     <template #operation>
       <div class="header-operation">
         <i :class="{ line_active: !isCurve, line: isCurve }" @click="handleChangeChart(false)"></i>
         <i :class="{ curver_active: isCurve, curver: !isCurve }" @click="handleChangeChart(true)"></i>
-        <el-tabs v-model="activeCategory">
+        <el-tabs v-model="activeCategory" class="header-tabs">
           <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
         </el-tabs>
       </div>
@@ -66,6 +66,8 @@ const option = ref<ECOption>({});
 
 const isCurve = ref<boolean>(false);
 
+const lineUnit = ref<string[]>([]);
+
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
   if (result) {
@@ -105,14 +107,19 @@ const updateParameterData = async () => {
   });
 
   let chartSeries = [];
-  chartSeries = result.map(({ insCode, propCode, dataList }) => ({
-    name: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.label,
-    type: 'line',
-    showSymbol: false,
-    smooth: isCurve.value,
-    color: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.color,
-    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
-  }));
+  chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
+    const activeIndicator = activeIndicatorConfig.value.get(`${insCode}:${propCode}`);
+    const name = activeIndicator?.label;
+    lineUnit.value.push(activeIndicator?.unit ?? '');
+    return {
+      name: name ? name : `未命名${index}`,
+      type: 'line',
+      showSymbol: false,
+      smooth: isCurve.value,
+      color: activeIndicator?.color,
+      data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    };
+  });
   option.value = generateOption(chartSeries);
 };
 
@@ -142,14 +149,17 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      formatter: (param: any) => {
-        console.log(param);
-
-        return param;
+      formatter: (params: any) => {
+        let content = params[0].axisValueLabel;
+        for (const i in params) {
+          content +=
+            '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
+        }
+        return content;
       },
     },
     grid: {
-      left: '8%',
+      left: 'left',
       right: '1%',
       top: 30,
       bottom: 20,
@@ -159,6 +169,7 @@ function generateOption(series: any[] = []): ECOption {
       type: 'time',
       min: dateRange(new Date(), 'day').start,
       max: dateRange(new Date(), 'day').end,
+      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },
@@ -215,6 +226,11 @@ function generateOption(series: any[] = []): ECOption {
   background: url('./assets/quxian_active.png') no-repeat;
   background-size: cover;
 }
+
+.header-tabs {
+  --el-tabs-header-height: 24px;
+}
+
 :deep(.el-tabs__header) {
   margin: 0;
 }

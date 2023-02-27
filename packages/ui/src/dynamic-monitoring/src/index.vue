@@ -217,6 +217,7 @@ const generateOption = (series: any[] = []): ECOption => {
       type: 'time',
       min: dateRange(selectDate.value, 'day').start,
       max: dateRange(selectDate.value, 'day').end,
+      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },
@@ -258,8 +259,8 @@ const getHistoryData = async (date: Date) => {
     ],
   });
 
-  const chartSeries = result.map(({ dataList }) => ({
-    name: activeIndicator.value?.label,
+  const chartSeries = result.map(({ dataList }, index) => ({
+    name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
     type: 'line',
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
@@ -335,7 +336,7 @@ watch(
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  align-self: center;
+  height: 100%;
 
   & > div {
     display: flex;
@@ -343,7 +344,6 @@ watch(
     align-items: center;
     cursor: pointer;
     width: 72px;
-    height: 90px;
     margin: 4px;
 
     .parameter {

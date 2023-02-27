@@ -21,7 +21,7 @@ export interface FetchParameterReq {
 
 export interface ParametersDataItem {
   /** 数据值 */
-  dataValue: number;
+  dataValue: string;
   /** 属性code */
   propCode: string;
   /** 设备code */

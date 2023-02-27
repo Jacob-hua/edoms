@@ -52,22 +52,33 @@ watch(
   display: flex;
   padding: 12px 16px;
   box-sizing: border-box;
+  width: 100%;
 }
 
 :deep(.left-tabs) {
   min-width: 122px;
+  margin-right: 20px;
   & .el-tabs__item {
-    width: 120px;
     text-align: center;
   }
 
   & .el-tabs__item.is-active {
     background-color: #333333;
   }
-}
+  .el-tabs__header {
+    width: 100%;
+    height: 90%;
+    overflow: auto;
+    margin: 0;
 
-:deep(.el-tabs__header) {
-  margin: 0;
+    .el-tabs__nav-wrap {
+      height: auto;
+    }
+  }
+
+  .el-tabs__header::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 :deep(.el-tabs__item) {

@@ -1,5 +1,5 @@
 <template>
-  <div style="min-width: 392px; min-height: 240px">
+  <div class="system-cumulative-data" style="min-width: 392px; min-height: 240px">
     <BusinessCard title="系统累计数据" subtitle="SYSTEM CUMULATIVE DATA" :min-width="392" :min-height="240">
       <template #operation>
         <div class="type-select">
@@ -13,28 +13,36 @@
       <div class="wrapper">
         <div v-for="(item, index) in currentData" :key="index" class="data-item" @click="handleClickItem(item)">
           <div class="col-text label">
-            <span>{{ item.label }}</span>
+            <span :title="item.label">{{ item.label }}</span>
           </div>
           <div class="col-text cumulative-value">
-            <span class="data-value">{{ item.dataValue }}</span>
+            <span class="data-value" :title="item.dataValue">{{ item.dataValue }}</span>
             <span class="data-unit">{{ item.unit }}</span>
           </div>
           <div class="col-text trend-box">
-            <div v-if="item.calculateType === 'MOM' || item.calculateType === 'ALL'" class="mom-trend trend">
+            <div
+              v-if="item.calculateType === 'MOM' || item.calculateType === 'ALL'"
+              class="mom-trend trend"
+              :style="{ width: item.calculateType === 'ALL' ? '50%' : '100%' }"
+            >
               <span>{{ typeName }}环比</span>
-              <span v-if="item.momTrend === 'flat'">--</span>
+              <span v-if="item.momTrend === 'flat'" class="flat-span">--</span>
               <span v-else>
                 <img :src="item.momTrend === 'up' ? Up : Down" alt="" />
               </span>
-              <span :class="item.momTrend">{{ item.momRatio }}%</span>
+              <span class="ratio-span" :class="item.momTrend" :title="`${item.momRatio}%`">{{ item.momRatio }}%</span>
             </div>
-            <div v-if="item.calculateType === 'YOY' || item.calculateType === 'ALL'" class="yoy-trend trend">
+            <div
+              v-if="item.calculateType === 'YOY' || item.calculateType === 'ALL'"
+              class="yoy-trend trend"
+              :style="{ width: item.calculateType === 'ALL' ? '50%' : '100%' }"
+            >
               <span>{{ typeName }}同比</span>
-              <span v-if="item.yoyTrend === 'flat'">--</span>
+              <span v-if="item.yoyTrend === 'flat'" class="flat-span">--</span>
               <span v-else>
                 <img :src="item.yoyTrend === 'up' ? Up : Down" alt="" />
               </span>
-              <span :class="item.yoyTrend">{{ item.yoyRatio }}%</span>
+              <span class="ratio-span" :class="item.yoyTrend" :title="`${item.yoyRatio}%`">{{ item.yoyRatio }}%</span>
             </div>
           </div>
         </div>
@@ -67,7 +75,7 @@
 import { computed, ref, watch } from 'vue';
 
 import { ElPagination } from '@edoms/design';
-import { dateRange, formatPrecision, stringToDate } from '@edoms/utils';
+import { dateRange, formatCurrentDateRange, formatPrecision, stringToDate, timeSubtract } from '@edoms/utils';
 import { UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
@@ -120,10 +128,21 @@ const chartsParam = ref({
   propCode: '',
   type: '',
 });
-
 const xAxisMin = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).start);
-const xAxisMax = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).end);
-
+// const xAxisMax = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).end);
+const xAxisMax = computed(() => {
+  const defaultMaxTime = dateRange(new Date(), 'day').end;
+  if (chartsParam.value.dateRange === 'day') {
+    return timeSubtract(defaultMaxTime, 1, 'hour');
+  }
+  if (chartsParam.value.dateRange === 'month') {
+    return formatCurrentDateRange('month', 'YYYY-MM-DD').end;
+  }
+  if (chartsParam.value.dateRange === 'year') {
+    return formatCurrentDateRange('year', 'YYYY-MM').end;
+  }
+  return dateRange(defaultMaxTime, 'day').start;
+});
 const axisLabelFormatter = computed(() => {
   if (chartsParam.value.dateRange === 'day') {
     return '{HH}:{mm}';
@@ -135,6 +154,19 @@ const axisLabelFormatter = computed(() => {
     return '{MM}';
   }
   return '{HH}:{mm}';
+});
+
+const maxInterval = computed(() => {
+  if (chartsParam.value.dateRange === 'day') {
+    return 3600 * 1000 * 2;
+  }
+  if (chartsParam.value.dateRange === 'month') {
+    return 3600 * 1000 * 24;
+  }
+  if (chartsParam.value.dateRange === 'year') {
+    return 3600 * 1000 * 24 * 31;
+  }
+  return 3600 * 1000;
 });
 
 const categories = computed(() => props.config.category ?? []);
@@ -183,9 +215,9 @@ const getSystemCumulativeData = async () => {
   result.forEach(({ identify, dataValue, momRatio, momTrend, yoyRatio, yoyTrend }) => {
     const targetResult = systemCumulativeData.value[Number(identify)];
     targetResult.dataValue = String(formatPrecision(Number(dataValue), targetResult.precision));
-    targetResult.momRatio = momRatio;
+    targetResult.momRatio = String(formatPrecision(Number(momRatio), targetResult.ratioPrecision));
     targetResult.momTrend = momTrend;
-    targetResult.yoyRatio = yoyRatio;
+    targetResult.yoyRatio = String(formatPrecision(Number(yoyRatio), targetResult.ratioPrecision));
     targetResult.yoyTrend = yoyTrend;
   });
 };
@@ -194,7 +226,7 @@ const fetchHistory = async () => {
   const result = await fetchHistoryData(chartsParam.value);
   const chartSeries = [
     {
-      name: chartTitle.value,
+      name: chartTitle.value ? chartTitle.value : `未命名`,
       type: 'bar',
       showSymbol: false,
       data: result.map(({ time, value }) => [stringToDate(time), formatPrecision(Number(value), chartPrecision.value)]),
@@ -254,23 +286,19 @@ function generateOption(series: any[] = []): ECOption {
       valueFormatter: (value) => `${value}${chartUnit.value}`,
     },
     grid: {
-      left: '8%',
-      right: '1%',
-      top: 30,
-      bottom: 20,
       containLabel: true,
     },
     xAxis: {
       type: 'time',
       min: xAxisMin.value,
       max: xAxisMax.value,
+      maxInterval: maxInterval.value,
       splitLine: {
         show: false,
       },
-      interval: 2,
       axisLabel: {
         formatter: axisLabelFormatter.value,
-        interval: 2,
+        interval: 0,
       },
     },
     yAxis: {
@@ -308,6 +336,7 @@ watch(
       propertyType: item.propertyType,
       property: item.property,
       precision: item.precision,
+      ratioPrecision: item.ratioPrecision,
       unit: item.unit,
       variables: item.variables,
       calculateType: item.calculateType,
@@ -327,131 +356,157 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  width: 100%;
-  color: rgba(255, 255, 255, 0.3960784314);
-  padding: 20px 16px 0 16px;
-  box-sizing: border-box;
+.system-cumulative-data {
+  display: flex;
 
-  .data-item {
-    display: flex;
-    height: 36px;
-    background: #3a3a3a;
-    width: 360px;
-    padding: 0 16px 0 20px;
-    cursor: pointer;
-    margin-bottom: 4px;
+  .wrapper {
+    width: 100%;
+    color: rgba(255, 255, 255, 0.3960784314);
+    padding: 20px 16px 0 16px;
     box-sizing: border-box;
 
-    .col-text {
+    .data-item {
       display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
+      height: 36px;
+      background: #3a3a3a;
+      padding: 0 16px 0 20px;
+      cursor: pointer;
+      margin-bottom: 4px;
+      box-sizing: border-box;
 
-      .trend {
-        span {
-          padding-right: 4px;
+      .col-text {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+
+        .trend {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+
+          span {
+            padding-right: 4px;
+          }
+
+          .flat-span {
+            display: inline-block;
+          }
+
+          .ratio-span {
+            width: 100%;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+          }
+        }
+
+        .up {
+          color: #d22129;
+        }
+
+        .down {
+          color: #49aa19;
+        }
+
+        .flat {
+          color: #ffffff45;
         }
       }
 
-      .up {
-        color: #d22129;
+      .trend-box {
+        justify-content: center;
+        flex-grow: 2;
+        width: 50%;
       }
 
-      .down {
-        color: #49aa19;
+      .label {
+        width: 20%;
+
+        span {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
 
-      .flat {
-        color: #ffffff45;
+      .cumulative-value {
+        padding: 0 8px;
+        width: 30%;
       }
-    }
 
-    .trend-box {
-      justify-content: center;
-      flex-grow: 2;
-    }
-
-    .label {
-      width: 60px;
-
-      span {
-        width: 100%;
+      .data-value {
+        font-size: 16px;
+        color: #00ff00;
+        font-weight: bold;
+        padding-right: 4px;
+        width: 60%;
+        text-align: right;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
     }
 
-    .cumulative-value {
-      padding: 0 8px;
-    }
-
-    .data-value {
-      font-size: 16px;
-      color: #00ff00;
-      font-weight: bold;
-      padding-right: 4px;
+    .data-item::before {
+      content: '';
+      width: 4px;
+      height: 36px;
+      background-color: #b3b3b3;
+      position: absolute;
+      left: 16px;
     }
   }
 
-  .data-item::before {
-    content: '';
-    width: 4px;
-    height: 36px;
-    background-color: #b3b3b3;
+  .paginator {
     position: absolute;
-    left: 16px;
+    bottom: 0px;
+    right: 16px;
   }
-}
 
-.paginator {
-  position: absolute;
-  bottom: 0px;
-  right: 16px;
-}
-
-:deep(.el-pagination) {
-  background-color: transparent !important;
-
-  .btn-prev {
-    color: #fff;
+  :deep(.el-pagination) {
     background-color: transparent !important;
-  }
 
-  .btn-next {
-    color: #fff;
-    background-color: transparent !important;
-  }
-
-  .el-pager {
-    .number {
+    .btn-prev {
       color: #fff;
-    }
-
-    .is-active {
-      color: #007acc;
-    }
-
-    li {
       background-color: transparent !important;
     }
+
+    .btn-next {
+      color: #fff;
+      background-color: transparent !important;
+    }
+
+    .el-pager {
+      .number {
+        color: #fff;
+      }
+
+      .is-active {
+        color: #007acc;
+      }
+
+      li {
+        background-color: transparent !important;
+      }
+    }
+  }
+
+  .type-select {
+    .type-box {
+      background-color: #2a2a2a;
+      cursor: pointer;
+      color: #ffffff45;
+      margin-left: 8px;
+    }
+
+    .checked {
+      color: #e99a3c;
+    }
   }
 }
-
-.type-select {
-  .type-box {
-    background-color: #2a2a2a;
-    cursor: pointer;
-    color: #ffffff45;
-    margin-left: 8px;
-  }
-
-  .checked {
-    color: #e99a3c;
-  }
-}
-
 :deep(.business-wrapper-body) {
   align-items: flex-start;
 }

@@ -5,10 +5,6 @@ export interface MEfficiencyMonitoring extends MComponent {
   instanceType: string;
   /** 实例 */
   instance: string;
-  /** 属性类型 */
-  propertyType: string;
-  /** 属性 */
-  property: string;
   /**最小值 */
   minValue: string;
   /**最大值 */

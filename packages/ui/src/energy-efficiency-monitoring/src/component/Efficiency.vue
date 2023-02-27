@@ -3,10 +3,10 @@
     <div v-for="index in bisectionNumber" :key="index" :style="calculateDistance(index)" class="division-wrapper"></div>
     <div class="triangle"></div>
     <div class="reference-line-wrapper">
-      <div class="reference-value">{{ refrenceValue }}</div>
+      <div class="reference-value overflow-ellipsis">{{ refrenceValue }}</div>
     </div>
-    <div class="start-value">{{ minValue }}</div>
-    <div class="end-value">{{ maxValue }}</div>
+    <div class="start-value overflow-ellipsis">{{ minValue }}</div>
+    <div class="end-value overflow-ellipsis">{{ maxValue }}</div>
   </div>
   <div class="legend-wrapper">
     <div class="legend-start">
@@ -124,6 +124,12 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
 </script>
 
 <style lang="scss" scoped>
+.overflow-ellipsis {
+  width: 74px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .color-card-wrapper {
   height: 20px;
   // width: 100%;
@@ -207,6 +213,7 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin-left: 20px;
     .legend-box {
       width: 2px;
       height: 20px;

@@ -26,6 +26,8 @@ export interface Category {
   property: string;
   /** 精度 */
   precision: string;
+  /** 比率精度 */
+  ratioPrecision: string;
   /** 单位 */
   unit: string;
   /** 变量列表 */
