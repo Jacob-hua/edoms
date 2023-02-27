@@ -13,7 +13,7 @@
     <el-tabs v-model="activeParameter" class="left-tabs" tab-position="left">
       <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="`${index}`" />
     </el-tabs>
-    <EdomsCharts :option="option" :width="width" :height="height"></EdomsCharts>
+    <EdomsCharts class="charts" :option="option"></EdomsCharts>
   </div>
 </template>
 
@@ -26,8 +26,6 @@ import { MIndicatorItemConfig, MParameterItemConfig } from '../type';
 
 const props = defineProps<{
   option: ECOption;
-  width: number;
-  height: number;
   parameterConfigs: MParameterItemConfig[];
 }>();
 
@@ -55,6 +53,9 @@ watch(
   () => activeParameter.value,
   (activeParameter) => {
     equipIndex.value = '0';
+    if (!props.parameterConfigs[Number(activeParameter)]) {
+      return;
+    }
     equipmentConfigs.value = props.parameterConfigs[Number(activeParameter)].indicators;
   },
   {
@@ -75,8 +76,9 @@ watch(
 
 <style lang="scss" scoped>
 .wrapper {
-  display: flex;
+  width: 100%;
   height: 100%;
+  display: flex;
   padding: 12px 16px;
   box-sizing: border-box;
 
@@ -100,6 +102,7 @@ watch(
 }
 
 :deep(.left-tabs) {
+  min-width: 122px;
   & .el-tabs__item {
     width: 120px;
     text-align: center;
@@ -128,5 +131,10 @@ watch(
 
 :deep(.el-tabs__nav-wrap::after) {
   background-color: transparent;
+}
+
+.charts {
+  flex-grow: 1;
+  height: 100%;
 }
 </style>
