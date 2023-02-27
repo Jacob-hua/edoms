@@ -1,5 +1,5 @@
 <template>
-  <div class="system-cumulative-data" style="min-width: 392px; min-height: 240px">
+  <div style="min-width: 392px; min-height: 240px">
     <BusinessCard title="系统累计数据" subtitle="SYSTEM CUMULATIVE DATA" :min-width="392" :min-height="240">
       <template #operation>
         <div class="type-select">
@@ -327,134 +327,131 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.system-cumulative-data {
-  display: flex;
+.wrapper {
+  width: 100%;
+  color: rgba(255, 255, 255, 0.3960784314);
+  padding: 20px 16px 0 16px;
+  box-sizing: border-box;
 
-  .wrapper {
-    width: 100%;
-    color: rgba(255, 255, 255, 0.3960784314);
-    padding: 20px 16px 0 16px;
+  .data-item {
+    display: flex;
+    height: 36px;
+    background: #3a3a3a;
+    width: 360px;
+    padding: 0 16px 0 20px;
+    cursor: pointer;
+    margin-bottom: 4px;
     box-sizing: border-box;
 
-    .data-item {
+    .col-text {
       display: flex;
-      height: 36px;
-      background: #3a3a3a;
-      width: 360px;
-      padding: 0 16px 0 20px;
-      cursor: pointer;
-      margin-bottom: 4px;
-      box-sizing: border-box;
+      align-items: center;
+      flex-wrap: nowrap;
 
-      .col-text {
-        display: flex;
-        align-items: center;
-        flex-wrap: nowrap;
-
-        .trend {
-          span {
-            padding-right: 4px;
-          }
-        }
-
-        .up {
-          color: #d22129;
-        }
-
-        .down {
-          color: #49aa19;
-        }
-
-        .flat {
-          color: #ffffff45;
-        }
-      }
-
-      .trend-box {
-        justify-content: center;
-        flex-grow: 2;
-      }
-
-      .label {
-        width: 60px;
-
+      .trend {
         span {
-          width: 100%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          padding-right: 4px;
         }
       }
 
-      .cumulative-value {
-        padding: 0 8px;
+      .up {
+        color: #d22129;
       }
 
-      .data-value {
-        font-size: 16px;
-        color: #00ff00;
-        font-weight: bold;
-        padding-right: 4px;
+      .down {
+        color: #49aa19;
+      }
+
+      .flat {
+        color: #ffffff45;
       }
     }
 
-    .data-item::before {
-      content: '';
-      width: 4px;
-      height: 36px;
-      background-color: #b3b3b3;
-      position: absolute;
-      left: 16px;
+    .trend-box {
+      justify-content: center;
+      flex-grow: 2;
+    }
+
+    .label {
+      width: 60px;
+
+      span {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .cumulative-value {
+      padding: 0 8px;
+    }
+
+    .data-value {
+      font-size: 16px;
+      color: #00ff00;
+      font-weight: bold;
+      padding-right: 4px;
     }
   }
 
-  .paginator {
+  .data-item::before {
+    content: '';
+    width: 4px;
+    height: 36px;
+    background-color: #b3b3b3;
     position: absolute;
-    bottom: 0px;
-    right: 16px;
+    left: 16px;
   }
+}
 
-  :deep(.el-pagination) {
+.paginator {
+  position: absolute;
+  bottom: 0px;
+  right: 16px;
+}
+
+:deep(.el-pagination) {
+  background-color: transparent !important;
+
+  .btn-prev {
+    color: #fff;
     background-color: transparent !important;
-
-    .btn-prev {
-      color: #fff;
-      background-color: transparent !important;
-    }
-
-    .btn-next {
-      color: #fff;
-      background-color: transparent !important;
-    }
-
-    .el-pager {
-      .number {
-        color: #fff;
-      }
-
-      .is-active {
-        color: #007acc;
-      }
-
-      li {
-        background-color: transparent !important;
-      }
-    }
   }
 
-  .type-select {
-    .type-box {
-      background-color: #2a2a2a;
-      cursor: pointer;
-      color: #ffffff45;
-      margin-left: 8px;
+  .btn-next {
+    color: #fff;
+    background-color: transparent !important;
+  }
+
+  .el-pager {
+    .number {
+      color: #fff;
     }
 
-    .checked {
-      color: #e99a3c;
+    .is-active {
+      color: #007acc;
+    }
+
+    li {
+      background-color: transparent !important;
     }
   }
 }
+
+.type-select {
+  .type-box {
+    background-color: #2a2a2a;
+    cursor: pointer;
+    color: #ffffff45;
+    margin-left: 8px;
+  }
+
+  .checked {
+    color: #e99a3c;
+  }
+}
+
 :deep(.business-wrapper-body) {
   align-items: flex-start;
 }
