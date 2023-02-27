@@ -2,9 +2,6 @@
   <div>
     <el-dialog v-model="dialogVisible" :width="1000">
       <template #header>
-        <!-- <el-icon>
-        <DataAnalysis />
-      </el-icon> -->
         <span>{{ title }}</span>
       </template>
       <div class="time-select">
@@ -13,7 +10,12 @@
         <span :class="active === 'year' ? 'checked' : ''" @click="handleChangeType('year')">年</span>
       </div>
       <div class="chart-container">
-        <EdomsCharts :width="width" :height="height" :option="options"></EdomsCharts>
+        <EdomsCharts
+          :width="width"
+          :height="height"
+          :option="options"
+          @magictype-chang="handleChangeMagictype"
+        ></EdomsCharts>
       </div>
     </el-dialog>
   </div>
@@ -26,7 +28,6 @@ import { UnitTime } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
-// import { DataAnalysis } from '@element-plus/icons-vue';
 
 const props = withDefaults(
   defineProps<{
@@ -42,6 +43,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   (event: 'update:visible', value: boolean): void;
   (event: 'typeChange', value: UnitTime): void;
+  (event: 'magictypeChange', value: string): void;
 }>();
 
 const dialogVisible = computed({
@@ -56,6 +58,10 @@ const active = ref<UnitTime>('day');
 const handleChangeType = (type: UnitTime) => {
   active.value = type;
   emit('typeChange', type);
+};
+
+const handleChangeMagictype = (value: string) => {
+  emit('magictypeChange', value);
 };
 </script>
 

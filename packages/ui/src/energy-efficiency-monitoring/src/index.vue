@@ -28,6 +28,7 @@
       :height="480"
       :options="options"
       @type-change="handleChangeDateType"
+      @magictype-change="handleChangeMagictype"
     />
   </div>
 </template>
@@ -35,7 +36,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { dateRange, formatDateRange, formatPrecision, stringToDate, UnitTime } from '@edoms/utils';
+import { dateRange, formatDateRange, formatPrecision, stringToDate, timeSubtract, UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -79,8 +80,10 @@ const indicators = ref<Indicator>({
 
 const chartDialogVisible = ref<boolean>(false);
 const dialogTitle = ref<string>('');
-const options = ref<ECOption>({});
 const dateType = ref<UnitTime>('day');
+
+const magictype = ref<string>('line');
+const chartSeries = ref<any[]>([]);
 
 const efficiencyConfig = computed<MEfficiencyMonitoring>(() => props.config);
 const intervalDelay = computed<number>(() => {
@@ -91,6 +94,27 @@ const intervalDelay = computed<number>(() => {
 });
 
 const operatable = computed(() => 'operation');
+
+const xAxisMin = computed(() => dateRange(new Date(), dateType.value).start);
+// const xAxisMax = computed(() => dateRange(new Date(), dateType.value).end);
+const xAxisMax = computed(() => {
+  const defaultMaxTime = dateRange(new Date(), dateType.value).end;
+  if (magictype.value === 'line') {
+    return dateRange(new Date(), dateType.value).end;
+  } else if (magictype.value === 'bar') {
+    if (dateType.value === 'day') {
+      return timeSubtract(defaultMaxTime, 1, 'hour');
+    }
+    if (dateType.value === 'month') {
+      return timeSubtract(defaultMaxTime, 1, 'day');
+    }
+    if (dateType.value === 'year') {
+      return timeSubtract(defaultMaxTime, 1, 'month');
+    }
+    return dateRange(defaultMaxTime, 'day').start;
+  }
+  return dateRange(new Date(), dateType.value).end;
+});
 
 const formatXAxisLabel = computed(() => {
   if (dateType.value === 'day') {
@@ -116,6 +140,62 @@ const maxInterval = computed(() => {
     return 3600 * 1000 * 24 * 31;
   }
   return 3600 * 1000;
+});
+
+const options = computed<ECOption>(() => {
+  return {
+    legend: {
+      show: true,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        magicType: {
+          type: ['line', 'bar'],
+        },
+      },
+      showTitle: false,
+      right: '10%',
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    grid: {
+      containLabel: true,
+    },
+    xAxis: {
+      type: 'time',
+      min: xAxisMin.value,
+      max: xAxisMax.value,
+      maxInterval: maxInterval.value,
+      splitLine: {
+        show: false,
+      },
+      axisLabel: {
+        formatter: formatXAxisLabel.value,
+        interval: 0,
+      },
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: '#ffffff45',
+        },
+      },
+      axisLine: {
+        show: true,
+      },
+    },
+    series: chartSeries.value.map((item) => {
+      item.type = magictype.value;
+      return item;
+    }),
+  };
 });
 
 watch(
@@ -156,62 +236,6 @@ const updateEfficiencyData = async () => {
   });
 };
 
-const generateOption = (series: any[] = []): ECOption => {
-  const legends = series.map(({ name }) => name);
-  return {
-    legend: {
-      data: legends,
-      textStyle: {
-        color: '#ffffff85',
-      },
-    },
-    toolbox: {
-      show: true,
-      feature: {
-        magicType: {
-          type: ['line', 'bar'],
-        },
-      },
-      showTitle: false,
-      right: '10%',
-    },
-    tooltip: {
-      trigger: 'axis',
-      valueFormatter: (value) => `${value}`,
-    },
-    grid: {
-      containLabel: true,
-    },
-    xAxis: {
-      type: 'time',
-      min: dateRange(new Date(), dateType.value).start,
-      max: dateRange(new Date(), dateType.value).end,
-      maxInterval: maxInterval.value,
-      splitLine: {
-        show: false,
-      },
-      interval: 2,
-      axisLabel: {
-        formatter: formatXAxisLabel.value,
-        interval: 0,
-      },
-    },
-    yAxis: {
-      type: 'value',
-      splitLine: {
-        lineStyle: {
-          type: 'dashed',
-          color: '#ffffff45',
-        },
-      },
-      axisLine: {
-        show: true,
-      },
-    },
-    series,
-  };
-};
-
 const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
   const { start, end } = formatDateRange(date, type, 'YYYY-MM-DD HH:mm:ss');
   let interval = '1h';
@@ -234,17 +258,15 @@ const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
       },
     ],
   });
-
-  const chartSeries = result.map(({ dataList }, index) => ({
+  chartSeries.value = result.map(({ dataList }, index) => ({
     name: energyName.value ? energyName : `未命名${index}`,
-    type: 'line',
+    type: magictype.value,
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
     itemStyle: {
       color: efficiencyConfig.value?.lineColor,
     },
   }));
-  options.value = generateOption(chartSeries);
 };
 
 useIntervalAsync(updateEfficiencyData, intervalDelay.value);
@@ -257,7 +279,12 @@ const handleShowMore = () => {
 
 const handleChangeDateType = (type: UnitTime) => {
   dateType.value = type;
+  magictype.value = 'line';
   getHistoryData(new Date(), type);
+};
+
+const handleChangeMagictype = (value: string) => {
+  magictype.value = value;
 };
 </script>
 

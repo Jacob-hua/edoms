@@ -37,6 +37,7 @@
       :height="480"
       :options="options"
       @date-change="handleDateChange"
+      @magictype-change="handleChangeMagictype"
     ></EChartsDialog>
   </div>
 </template>
@@ -44,7 +45,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { dateRange, formatDateRange, formatPrecision, stringToDate } from '@edoms/utils';
+import { dateRange, formatDateRange, formatPrecision, stringToDate, timeSubtract } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -87,11 +88,15 @@ const activeIndicator = ref<Indicator>();
 const wrapperClassName = ref<string>('');
 
 const dialogTitle = ref<string>('');
-const options = ref<ECOption>({});
+// const options = ref<ECOption>({});
+
+const chartSeries = ref<any[]>([]);
 
 const restParamVisible = ref<boolean>(false);
 const chartDialogVisible = ref<boolean>(false);
 const selectDate = ref(new Date());
+
+const magictype = ref<string>('line');
 
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
 const intervalDelay = computed<number>(() => {
@@ -103,6 +108,74 @@ const intervalDelay = computed<number>(() => {
 
 const operatable = computed(() => (restIndicators.value.length ? 'operation' : 'dis-operation'));
 
+const xAxisMax = computed(() => {
+  const defaultMaxTime = dateRange(new Date(), 'day').end;
+  if (magictype.value === 'line') {
+    return defaultMaxTime;
+  } else if (magictype.value === 'bar') {
+    return timeSubtract(defaultMaxTime, 1, 'hour');
+  }
+  return defaultMaxTime;
+});
+
+const options = computed<ECOption>(() => {
+  return {
+    legend: {
+      show: true,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        magicType: {
+          type: ['line', 'bar'],
+        },
+      },
+      showTitle: false,
+      right: '10%',
+    },
+    grid: {
+      containLabel: true,
+    },
+    tooltip: {
+      trigger: 'axis',
+      valueFormatter: (value) => `${value}${activeIndicator.value?.unit}`,
+    },
+    xAxis: {
+      type: 'time',
+      min: dateRange(selectDate.value, 'day').start,
+      max: xAxisMax.value,
+      maxInterval: 3600 * 1000,
+      splitLine: {
+        show: false,
+      },
+      interval: 2,
+      axisLabel: {
+        formatter: '{HH}:{mm}',
+        interval: 2,
+      },
+    },
+    yAxis: {
+      name: `单位：${activeIndicator.value?.unit}`,
+      type: 'value',
+      splitLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: '#ffffff45',
+        },
+      },
+      axisLine: {
+        show: true,
+      },
+    },
+    series: chartSeries.value.map((item) => {
+      item.type = magictype.value;
+      return item;
+    }),
+  };
+});
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
@@ -194,63 +267,6 @@ function calculateParameterStyle(indicator: Indicator, config: MIndicatorItemCon
   return result;
 }
 
-const generateOption = (series: any[] = []): ECOption => {
-  const legends = series.map(({ name }) => name);
-  return {
-    legend: {
-      data: legends,
-      textStyle: {
-        color: '#ffffff85',
-      },
-    },
-    toolbox: {
-      show: true,
-      feature: {
-        magicType: {
-          type: ['line', 'bar'],
-        },
-      },
-      showTitle: false,
-      right: '10%',
-    },
-    grid: {
-      containLabel: true,
-    },
-    tooltip: {
-      trigger: 'axis',
-      valueFormatter: (value) => `${value}${activeIndicator.value?.unit}`,
-    },
-    xAxis: {
-      type: 'time',
-      min: dateRange(selectDate.value, 'day').start,
-      max: dateRange(selectDate.value, 'day').end,
-      maxInterval: 3600 * 1000,
-      splitLine: {
-        show: false,
-      },
-      interval: 2,
-      axisLabel: {
-        formatter: '{HH}:{mm}',
-        interval: 2,
-      },
-    },
-    yAxis: {
-      name: `单位：${activeIndicator.value?.unit}`,
-      type: 'value',
-      splitLine: {
-        lineStyle: {
-          type: 'dashed',
-          color: '#ffffff45',
-        },
-      },
-      axisLine: {
-        show: true,
-      },
-    },
-    series,
-  };
-};
-
 const getHistoryData = async (date: Date) => {
   const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD HH:mm:ss');
   const result = await fetchHistoryData({
@@ -266,16 +282,15 @@ const getHistoryData = async (date: Date) => {
     ],
   });
 
-  const chartSeries = result.map(({ dataList }, index) => ({
+  chartSeries.value = result.map(({ dataList }, index) => ({
     name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
-    type: 'line',
+    type: magictype.value,
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
     itemStyle: {
       color: activeIndicator.value?.lineColor,
     },
   }));
-  options.value = generateOption(chartSeries);
 };
 
 const handleTrigger = () => {
@@ -294,8 +309,13 @@ const handleClickIndicator = (item: Indicator) => {
 };
 
 const handleDateChange = (value: string) => {
+  magictype.value = 'line';
   selectDate.value = stringToDate(value);
   getHistoryData(stringToDate(value));
+};
+
+const handleChangeMagictype = (value: string) => {
+  magictype.value = value;
 };
 
 watch(

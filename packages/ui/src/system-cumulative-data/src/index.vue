@@ -75,7 +75,7 @@
 import { computed, ref, watch } from 'vue';
 
 import { ElPagination } from '@edoms/design';
-import { dateRange, formatPrecision, stringToDate } from '@edoms/utils';
+import { dateRange, formatCurrentDateRange, formatPrecision, stringToDate, timeSubtract } from '@edoms/utils';
 import { UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
@@ -129,7 +129,20 @@ const chartsParam = ref({
   type: '',
 });
 const xAxisMin = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).start);
-const xAxisMax = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).end);
+// const xAxisMax = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).end);
+const xAxisMax = computed(() => {
+  const defaultMaxTime = dateRange(new Date(), 'day').end;
+  if (chartsParam.value.dateRange === 'day') {
+    return timeSubtract(defaultMaxTime, 1, 'hour');
+  }
+  if (chartsParam.value.dateRange === 'month') {
+    return formatCurrentDateRange('month', 'YYYY-MM-DD').end;
+  }
+  if (chartsParam.value.dateRange === 'year') {
+    return formatCurrentDateRange('year', 'YYYY-MM').end;
+  }
+  return dateRange(defaultMaxTime, 'day').start;
+});
 
 const axisLabelFormatter = computed(() => {
   if (chartsParam.value.dateRange === 'day') {
