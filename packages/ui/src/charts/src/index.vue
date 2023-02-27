@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <EdomsCharts :option="option" :width="1080" :height="320"></EdomsCharts>
-  </div>
+  <EdomsCharts style="min-width: 640px; min-height: 320px" :option="option"></EdomsCharts>
 </template>
 
 <script lang="ts" setup>
@@ -91,7 +89,7 @@ function generateOption(series: any[] = []): ECOption {
       },
     },
     grid: {
-      left: 'left',
+      left: '10%',
       right: '1%',
       top: 30,
       bottom: 20,
