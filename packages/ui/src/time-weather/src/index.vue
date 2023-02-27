@@ -121,6 +121,7 @@ $iconColor: inherit;
   .center-text {
     display: flex;
     align-items: center;
+    font-weight: inherit;
   }
 
   .condition-text {
