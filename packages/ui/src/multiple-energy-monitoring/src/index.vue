@@ -1,13 +1,13 @@
 <template>
-  <div class="multiple-efficiency-container" style="min-width: 392px; min-height: 160px">
+  <div style="min-width: 392px; min-height: 160px">
     <BusinessCard title="能效监测" subtitle="ENERGY EFFICIENCY MONITORING" min-width="392" min-height="160">
       <template #operation>
-        <div :class="operatable" @click="handleShowMore">...</div>
+        <div :class="operationClass" @click="handleShowMore">...</div>
       </template>
       <div class="efficiency-wrapper">
-        <div v-for="(item, index) in initEfficiencys" :key="index" class="efficiency-row">
+        <div v-for="(item, index) in initEfficiencies" :key="index" class="efficiency-row">
           <div class="efficiency-col overflow-ellipsis">{{ item.energyName }}</div>
-          <div class="efficiency-col efficiency-progress">
+          <div ref="efficiencyProgressRef" class="efficiency-col efficiency-progress">
             <el-progress
               :stroke-width="24"
               :color="efficiencyColor"
@@ -30,39 +30,42 @@
         </div>
       </div>
     </BusinessCard>
-    <MoreEnergyEffciency
+    <MoreEnergyEfficiency
       v-if="moreEfficiencyVisible"
       v-model:visible="moreEfficiencyVisible"
       :acture-color="efficiencyColor"
       :target-color="targetLineColor"
-      :data="restEfficiencys"
+      :data="restEfficiencies"
     >
-    </MoreEnergyEffciency>
+    </MoreEnergyEfficiency>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { FetchEfficiencyRes } from '../../energy-efficiency-monitoring/src/type';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-import MoreEnergyEffciency from './component/MoreEnergyEffciency.vue';
+import MoreEnergyEfficiency from './component/MoreEnergyEfficiency.vue';
 import apiFactory from './api';
 import { EnergyEfficiency, FetchEfficiencyReq, MEfficiencyConfigs, MEfficiencyMonitoring } from './type';
 
-const PROGRESS_WIDTH = 302;
 const props = defineProps<{
   config: MEfficiencyConfigs;
 }>();
 
+const { request } = useApp(props);
+
+const efficiencyProgressRef = ref<HTMLElement[]>();
+
+const progressWidth = ref<number>(0);
+
 const moreEfficiencyVisible = ref<boolean>(false);
 
-const energyEfficiencys = ref<EnergyEfficiency[]>([]);
-
-const { request } = useApp(props);
+const energyEfficiencies = ref<EnergyEfficiency[]>([]);
 
 const { fetchEfficiencyData } = apiFactory(request);
 
@@ -76,27 +79,27 @@ const intervalDelay = computed<number>(() => {
 
 const efficiencyColor = computed(() => props.config.efficiencyColor);
 const targetLineColor = computed(() => props.config.targetLineColor);
-const initEfficiencys = computed(() => {
-  if (energyEfficiencys.value && energyEfficiencys.value.length > 2) {
-    return energyEfficiencys.value?.slice(0, 2);
+const initEfficiencies = computed(() => {
+  if (energyEfficiencies.value && energyEfficiencies.value.length > 2) {
+    return energyEfficiencies.value?.slice(0, 2);
   } else {
-    return energyEfficiencys.value;
+    return energyEfficiencies.value;
   }
 });
-const restEfficiencys = computed(() => {
-  if (energyEfficiencys.value && energyEfficiencys.value.length > 2) {
-    return energyEfficiencys.value?.slice(2);
+const restEfficiencies = computed(() => {
+  if (energyEfficiencies.value && energyEfficiencies.value.length > 2) {
+    return energyEfficiencies.value?.slice(2);
   } else {
     return [];
   }
 });
-const operatable = computed(() => (restEfficiencys.value.length ? 'operation' : 'dis-operation'));
+const operationClass = computed(() => (restEfficiencies.value.length ? 'operation' : 'dis-operation'));
 
 watch(
   () => efficiencyConfigs.value,
   (val) => {
     if (!val || val.length <= 0) return;
-    energyEfficiencys.value = val.map((item) => ({
+    energyEfficiencies.value = val.map((item) => ({
       instance: item.instance,
       minValue: item.minValue,
       maxValue: item.maxValue,
@@ -104,7 +107,7 @@ watch(
       energyName: item.energyName,
       efficiencyNum: '0',
       percentage: 0,
-      targetPosition: `${PROGRESS_WIDTH}px`,
+      targetPosition: `${progressWidth.value}px`,
     }));
   },
   {
@@ -112,8 +115,33 @@ watch(
   }
 );
 
+const progressResizeObserver = new ResizeObserver(() => {
+  if (!Array.isArray(efficiencyProgressRef.value) || efficiencyProgressRef.value.length === 0) {
+    return;
+  }
+
+  progressWidth.value = efficiencyProgressRef.value[0].clientWidth;
+});
+
+onMounted(() => {
+  nextTick(() => {
+    if (!Array.isArray(efficiencyProgressRef.value) || efficiencyProgressRef.value.length === 0) {
+      return;
+    }
+    progressResizeObserver.observe(efficiencyProgressRef.value[0]);
+    progressWidth.value = efficiencyProgressRef.value[0]?.clientWidth ?? 0;
+  });
+});
+
+onUnmounted(() => {
+  if (!Array.isArray(efficiencyProgressRef.value) || efficiencyProgressRef.value.length === 0) {
+    return;
+  }
+  progressResizeObserver.unobserve(efficiencyProgressRef.value[0]);
+});
+
 const calculatePosition = (result: FetchEfficiencyRes) => {
-  energyEfficiencys.value.map((item) => {
+  energyEfficiencies.value.map((item) => {
     item.efficiencyNum =
       result[result.findIndex(({ insCode }) => insCode === item.instance[item.instance.length - 1])].efficiencyNum;
     const minValue = Number(item.minValue);
@@ -128,12 +156,12 @@ const calculatePosition = (result: FetchEfficiencyRes) => {
       item.percentage = ((efficiencyNum - minValue) / (maxValue - minValue)) * 100;
     }
     if (targetValue <= minValue) {
-      item.targetPosition = `${PROGRESS_WIDTH}px`;
+      item.targetPosition = `${progressWidth.value}px`;
     } else if (targetValue >= maxValue) {
       item.targetPosition = '0px';
     } else {
       const targetLinePercent = (targetValue - minValue) / (maxValue - minValue);
-      item.targetPosition = `${PROGRESS_WIDTH * (1 - targetLinePercent)}px`;
+      item.targetPosition = `${progressWidth.value * (1 - targetLinePercent)}px`;
     }
     return item;
   });
@@ -153,17 +181,13 @@ const updateEfficiencyData = async () => {
 };
 
 const handleShowMore = () => {
-  restEfficiencys.value?.length && (moreEfficiencyVisible.value = true);
+  restEfficiencies.value?.length && (moreEfficiencyVisible.value = true);
 };
 
 useIntervalAsync(updateEfficiencyData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
-.multiple-efficiency-container {
-  display: flex;
-}
-
 .overflow-ellipsis {
   width: 46px;
   overflow: hidden;
@@ -198,21 +222,19 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: space-between;
-  padding-top: 12px;
+  justify-content: space-around;
   box-sizing: border-box;
 
   .efficiency-row {
     display: flex;
     position: relative;
     box-sizing: border-box;
-    width: 356px;
     margin: 8px 20px 8px 16px;
     align-items: center;
     justify-content: space-between;
 
     .efficiency-progress {
-      width: 302px;
+      width: 100%;
     }
   }
 
