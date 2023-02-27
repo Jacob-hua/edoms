@@ -123,6 +123,15 @@ const handleConfirm = async (alarm: Warning) => {
   .button-wrapper {
     display: flex;
     justify-content: flex-end;
+
+    :deep(.el-button--primary) {
+      --el-button-bg-color: #409eff;
+      --el-button-border-color: #409eff;
+    }
+    :deep(.el-button) {
+      --el-button-hover-text-color: #606266;
+      line-height: 28px;
+    }
   }
   .body {
     display: block;

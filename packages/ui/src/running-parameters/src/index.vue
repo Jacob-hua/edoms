@@ -1,11 +1,11 @@
 <template>
-  <BusinessCard title="参数曲线" min-width="1080" min-height="240">
+  <BusinessCard title="参数曲线" subtitle="RUNNING PARAMETER" min-width="1080" min-height="240">
     <template #operation>
       <div class="chart-type">
         <i :class="{ line_active: !isCurve, line: isCurve }" @click="handleChangeChart(false)"></i>
         <i :class="{ curver_active: isCurve, curver: !isCurve }" @click="handleChangeChart(true)"></i>
       </div>
-      <el-tabs v-model="activeCategory">
+      <el-tabs v-model="activeCategory" class="header-tabs">
         <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
       </el-tabs>
     </template>
@@ -207,7 +207,6 @@ function generateOption(series: any[] = []): ECOption {
   position: absolute;
   right: 130px;
   display: flex;
-  top: 12px;
 
   i {
     display: inline-block;
@@ -234,6 +233,11 @@ function generateOption(series: any[] = []): ECOption {
     background-size: cover;
   }
 }
+
+.header-tabs {
+  --el-tabs-header-height: 24px;
+}
+
 :deep(.el-tabs__header) {
   margin: 0;
 }
