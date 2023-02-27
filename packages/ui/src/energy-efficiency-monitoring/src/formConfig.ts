@@ -30,16 +30,16 @@ export default async (request: Request) => [
   },
   {
     text: '参考值',
-    name: 'refrenceValue',
+    name: 'referenceValue',
     defaultValue: '',
-    onChange: (state: any, refrenceValue: any, { model }: any) => {
-      if (Number(refrenceValue) < Number(model.minValue)) {
-        model.refrenceValue = model.minValue;
+    onChange: (state: any, referenceValue: any, { model }: any) => {
+      if (Number(referenceValue) < Number(model.minValue)) {
+        model.referenceValue = model.minValue;
       }
-      if (Number(refrenceValue) > Number(model.maxValue)) {
-        model.refrenceValue = model.maxValue;
+      if (Number(referenceValue) > Number(model.maxValue)) {
+        model.referenceValue = model.maxValue;
       }
-      return model.refrenceValue;
+      return model.referenceValue;
     },
   },
   {
@@ -72,7 +72,7 @@ export default async (request: Request) => [
   {
     text: '参考值',
     type: 'colorPicker',
-    name: 'refrenceLineColor',
+    name: 'referenceLineColor',
     defaultValue: '#fff',
   },
   {

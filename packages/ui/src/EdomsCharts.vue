@@ -1,44 +1,27 @@
 <template>
-  <div ref="chartsContainer" :style="styleObj"></div>
+  <div ref="chartsWrapperRef"></div>
 </template>
 
 <script setup lang="ts">
-import { computed, markRaw, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { markRaw, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { EChartsType } from 'echarts/core';
 
 import echarts from './echarts';
 import { ECOption } from './types';
 
-const props = withDefaults(
-  defineProps<{
-    width: number;
-    height: number;
-    option: ECOption;
-  }>(),
-  {
-    width: 600,
-    height: 500,
-  }
-);
+const props = defineProps<{
+  option: ECOption;
+}>();
 
-const styleObj = computed(() => `width: ${props.width}px; height: ${props.height}px;`);
-
-const chartsContainer = ref<HTMLDivElement>();
+const chartsWrapperRef = ref<HTMLDivElement>();
 
 const charts = ref<EChartsType>();
 
-watch(
-  () => ({ width: props.width, height: props.height }),
-  ({ width, height }) => {
-    if (!charts.value) {
-      return;
-    }
-    charts.value.resize({
-      width,
-      height,
-    });
-  }
-);
+const chartsResizeObserver = new ResizeObserver(() => {
+  nextTick(() => {
+    charts.value?.resize();
+  });
+});
 
 watch(
   () => props.option,
@@ -54,26 +37,21 @@ watch(
 
 onMounted(() => {
   nextTick(() => {
-    if (!chartsContainer.value) {
+    if (!chartsWrapperRef.value) {
       return;
     }
-    charts.value = markRaw(echarts.init(chartsContainer.value));
+    charts.value = markRaw(echarts.init(chartsWrapperRef.value));
     charts.value.setOption(props.option, { notMerge: true });
+    chartsResizeObserver.observe(chartsWrapperRef.value);
   });
 });
 
 onUnmounted(() => {
-  if (!charts.value) {
-    return;
+  if (chartsWrapperRef.value) {
+    chartsResizeObserver.unobserve(chartsWrapperRef.value);
+  } else if (charts.value) {
+    charts.value.dispose();
+    charts.value = undefined;
   }
-  charts.value.dispose();
-  charts.value = undefined;
 });
 </script>
-
-<style scoped>
-.wrapper {
-  width: 500px;
-  height: 500px;
-}
-</style>

@@ -1,23 +1,13 @@
 <template>
-  <div>
-    <BusinessCard
-      class="energy-efficiency-wrapper"
-      title="能效监测"
-      subtitle="ENERGY EFFICIENCY MONITORING"
-      min-width="392"
-      min-height="160"
-    >
+  <div style="min-width: 392px; min-height: 160px">
+    <BusinessCard title="能效监测" subtitle="ENERGY EFFICIENCY MONITORING" min-width="392" min-height="160">
       <template #operation>
-        <div :class="operatable" @click="handleShowMore">...</div>
+        <div :class="operationClass" @click="handleShowMore">...</div>
       </template>
       <div class="efficiency-wrapper">
-        <div class="actual-wrapper">
-          <div :title="actualValue" class="actual-value">{{ actualValue }}</div>
-          <div class="actual-unit overflow-ellipsis">{{ energyName }}</div>
-        </div>
-        <div style="padding-top: 28px">
-          <Efficiency v-bind="indicators" :actual-value="actualValue"></Efficiency>
-        </div>
+        <ActualCard class="actual-card" :config="config" :actual-value="actualValue"></ActualCard>
+        <ColorCard class="color-card" :config="config" :actual-value="actualValue"></ColorCard>
+        <ColorLegend class="color-legend" :config="config"></ColorLegend>
       </div>
     </BusinessCard>
     <EChartsDialog
@@ -42,21 +32,12 @@ import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
+import ActualCard from './component/ActualCard.vue';
+import ColorCard from './component/ColorCard.vue';
+import ColorLegend from './component/ColorLegend.vue';
 import EChartsDialog from './component/EChartsDialog.vue';
-import Efficiency from './component/Efficiency.vue';
 import apiFactory from './api';
 import { FetchEfficiencyReq, MEfficiencyMonitoring } from './type';
-
-interface Indicator {
-  minValue: string;
-  maxValue: string;
-  refrenceValue: string;
-  bisectionNumber?: number;
-  startColor: string;
-  endColor: string;
-  cursorColor?: string;
-  refrenceLineColor?: string;
-}
 
 const props = defineProps<{
   config: MEfficiencyMonitoring;
@@ -66,16 +47,8 @@ const { request } = useApp(props);
 
 const { fetchEfficiencyData, fetchHistoryData } = apiFactory(request);
 
-const actualValue = ref<string>('');
+const actualValue = ref<number>(0);
 const energyName = ref<string>('COP');
-
-const indicators = ref<Indicator>({
-  minValue: '0',
-  maxValue: '0',
-  refrenceValue: '0',
-  startColor: '',
-  endColor: ',',
-});
 
 const chartDialogVisible = ref<boolean>(false);
 const dialogTitle = ref<string>('');
@@ -90,7 +63,7 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 
-const operatable = computed(() => 'operation');
+const operationClass = computed(() => 'operation');
 
 const formatXAxisLabel = computed(() => {
   if (dateType.value === 'day') {
@@ -121,16 +94,6 @@ const maxInterval = computed(() => {
 watch(
   () => efficiencyConfig.value,
   (val) => {
-    indicators.value = {
-      minValue: val.minValue ?? '',
-      maxValue: val.maxValue ?? '',
-      refrenceValue: val.refrenceValue ?? '',
-      refrenceLineColor: val.refrenceLineColor,
-      bisectionNumber: val.bisectionNumber,
-      startColor: val.startColor ?? '',
-      endColor: val.endColor ?? '',
-      cursorColor: val.cursorColor,
-    };
     energyName.value = val.energyName;
   },
   {
@@ -151,8 +114,7 @@ const updateEfficiencyData = async () => {
     if (insCode !== efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]) {
       return;
     }
-    // actualValue.value = efficiencyNum;
-    actualValue.value = String(formatPrecision(Number(efficiencyNum), efficiencyConfig.value.precision));
+    actualValue.value = +formatPrecision(Number(efficiencyNum), efficiencyConfig.value.precision);
   });
 };
 
@@ -262,11 +224,6 @@ const handleChangeDateType = (type: UnitTime) => {
 </script>
 
 <style lang="scss" scoped>
-.energy-efficiency-wrapper {
-  width: inherit;
-  height: inherit;
-}
-
 .overflow-ellipsis {
   width: 100%;
   overflow: hidden;
@@ -305,29 +262,25 @@ const handleChangeDateType = (type: UnitTime) => {
 
 .efficiency-wrapper {
   width: 100%;
-  display: flex;
   height: 100%;
+  display: grid;
+  margin-top: 20px;
+  grid-template-columns: 36px 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  column-gap: 50px;
+  align-items: center;
+}
 
-  .actual-wrapper {
-    padding: 24px 20px 0 16px;
-    display: flex;
-    flex-direction: column;
-    width: 74px;
+.actual-card {
+  grid-column: 1 / 2;
+}
 
-    .actual-value {
-      font-size: 24px;
-      font-weight: 800;
-      color: #00ff00;
-      margin-bottom: 4px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+.color-card {
+  grid-column: 2 / 2;
+}
 
-    .actual-unit {
-      font-size: 14px;
-      color: #ffffff65;
-    }
-  }
+.color-legend {
+  grid-row: 2 / 2;
+  grid-column: 2 / 2;
 }
 </style>

@@ -1,12 +1,6 @@
 <template>
-  <div class="dynamic-monitoring-container">
-    <BusinessCard
-      title="动环监测"
-      :class="wrapperClassName"
-      subtitle="DYNAMIC MONITORING"
-      min-width="392"
-      min-height="160"
-    >
+  <div style="min-width: 392px; min-height: 160px">
+    <BusinessCard title="动环监测" subtitle="DYNAMIC MONITORING" min-width="392" min-height="160">
       <template #operation>
         <div :class="operatable" @click="handleTrigger">...</div>
       </template>
@@ -33,8 +27,6 @@
       v-if="chartDialogVisible"
       v-model:visible="chartDialogVisible"
       :title="dialogTitle"
-      :width="960"
-      :height="480"
       :options="options"
       @date-change="handleDateChange"
     ></EChartsDialog>
@@ -84,7 +76,6 @@ const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
 const restIndicators = ref<Indicator[]>([]);
 const activeIndicator = ref<Indicator>();
-const wrapperClassName = ref<string>('');
 
 const dialogTitle = ref<string>('');
 const options = ref<ECOption>({});
@@ -309,10 +300,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.dynamic-monitoring-container {
-  display: flex;
-}
-
 .overflow-ellipsis {
   width: 100%;
   overflow: hidden;

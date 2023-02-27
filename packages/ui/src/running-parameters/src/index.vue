@@ -1,20 +1,18 @@
 <template>
   <BusinessCard title="参数曲线" subtitle="RUNNING PARAMETER" min-width="1080" min-height="240">
     <template #operation>
-      <div class="chart-type">
+      <div class="header-operation">
         <i :class="{ line_active: !isCurve, line: isCurve }" @click="handleChangeChart(false)"></i>
         <i :class="{ curver_active: isCurve, curver: !isCurve }" @click="handleChangeChart(true)"></i>
+        <el-tabs v-model="activeCategory" class="header-tabs">
+          <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
+        </el-tabs>
       </div>
-      <el-tabs v-model="activeCategory" class="header-tabs">
-        <el-tab-pane v-for="{ name, label } in categories" :key="name" :label="label" :name="name" />
-      </el-tabs>
     </template>
     <SystemParameter
       v-if="activeCategory === 'systems'"
       :option="option"
       :parameter-configs="parameterConfigs"
-      :width="908"
-      :height="176"
       @change-system-config="handleChangeSystemConfig"
     >
     </SystemParameter>
@@ -22,8 +20,6 @@
       v-if="activeCategory === 'equipments'"
       :option="option"
       :parameter-configs="parameterConfigs"
-      :width="908"
-      :height="176"
       @change-equipment-config="handleChangeEquipmentConfig"
     >
     </EquipmentParameter>
@@ -41,7 +37,6 @@ import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-// import EdomsCharts from '../../EdomsCharts.vue';
 import EquipmentParameter from './component/EquipmentParameter.vue';
 import SystemParameter from './component/SystemParameter.vue';
 import apiFactory from './api';
@@ -203,35 +198,33 @@ function generateOption(series: any[] = []): ECOption {
 </script>
 
 <style lang="scss" scoped>
-.chart-type {
-  position: absolute;
-  right: 130px;
+.header-operation {
   display: flex;
-
+  align-items: center;
   i {
     display: inline-block;
     width: 20px;
     height: 20px;
     margin-right: 8px;
   }
-  .line {
-    background: url('./assets/zhexian.png') no-repeat;
-    background-size: cover;
-  }
-  .line_active {
-    background: url('./assets/zhexian_active.png') no-repeat;
-    background-size: cover;
-  }
+}
+.line {
+  background: url('./assets/zhexian.png') no-repeat;
+  background-size: cover;
+}
+.line_active {
+  background: url('./assets/zhexian_active.png') no-repeat;
+  background-size: cover;
+}
 
-  .curver {
-    background: url('./assets/quxian.png') no-repeat;
-    background-size: cover;
-  }
+.curver {
+  background: url('./assets/quxian.png') no-repeat;
+  background-size: cover;
+}
 
-  .curver_active {
-    background: url('./assets/quxian_active.png') no-repeat;
-    background-size: cover;
-  }
+.curver_active {
+  background: url('./assets/quxian_active.png') no-repeat;
+  background-size: cover;
 }
 
 .header-tabs {

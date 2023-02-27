@@ -1,32 +1,30 @@
 <template>
   <div ref="wrapper" class="business-wrapper">
     <div class="business-wrapper-header">
-      <div class="title-wrapper" need-zoom="top;left">
+      <div class="title-wrapper">
         <span class="title">{{ title }}</span>
         <span class="subtitle">{{ subtitle }}</span>
       </div>
-      <div class="operation-wrapper" need-zoom="top;right">
+      <div class="operation-wrapper">
         <slot name="operation"></slot>
       </div>
     </div>
-    <div class="business-wrapper-body" need-zoom="top;left">
+    <div class="business-wrapper-body">
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
-import { isNumber, style2Obj, styleObj2Str } from '@edoms/utils';
+import { isNumber } from '@edoms/utils';
 
 const props = defineProps<{
   title?: string;
   subtitle?: string;
   minWidth?: string | number;
   minHeight?: string | number;
-  maxWidth?: string | number;
-  maxHeight?: string | number;
 }>();
 
 const wrapper = ref<HTMLElement | null>(null);
@@ -54,72 +52,6 @@ const minHeight = computed<number | undefined>(() => {
 });
 
 const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.value}px` : 'auto'));
-
-const scale = computed<number>(() => {
-  if (!minWidth.value || !minHeight.value) {
-    return 1;
-  }
-  return minWidth.value / minHeight.value;
-});
-
-const maxWidth = computed<number | undefined>(() => {
-  if (!props.maxWidth && props.maxHeight && typeof props.maxHeight === 'string' && isNumber(props.maxHeight)) {
-    return Number(props.maxHeight) * scale.value;
-  }
-  if (typeof props.maxWidth === 'string' && isNumber(props.maxWidth)) {
-    return Number(props.maxWidth);
-  }
-  return undefined;
-});
-
-const cssMaxWidth = computed<string>(() => (maxWidth.value ? `${maxWidth.value}px` : 'auto'));
-
-const maxHeight = computed<number | undefined>(() => {
-  if (!props.maxHeight && props.maxWidth && typeof props.maxWidth === 'string' && isNumber(props.maxWidth)) {
-    return Number(props.maxWidth) / scale.value;
-  }
-  if (typeof props.maxHeight === 'string' && isNumber(props.maxHeight)) {
-    return Number(props.maxHeight);
-  }
-  return undefined;
-});
-
-const cssMaxHeight = computed<string>(() => (maxHeight.value ? `${maxHeight.value}px` : 'auto'));
-
-const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-  const [wrapperEntry] = entries;
-  const widthScale = (wrapperEntry.contentRect.width * 1.0) / (minWidth.value ?? 1);
-  const heightScale = (wrapperEntry.contentRect.height * 1.0) / (minHeight.value ?? 1);
-  const styleObj = style2Obj(wrapperEntry.target.getAttribute('style') ?? '');
-  styleObj['aspect-ratio'] = scale.value;
-  styleObj['height'] = 'auto';
-  wrapperEntry.target.setAttribute('style', styleObj2Str(styleObj));
-  wrapperEntry.target.querySelectorAll('[need-zoom]').forEach((element: Element) => {
-    const origin = element.getAttribute('need-zoom') ?? 'top;left';
-
-    element.setAttribute(
-      'style',
-      `
-      transform:scale(${Math.min(widthScale, heightScale)});
-      transform-origin: ${origin.replace(';', ' ')};
-      `
-    );
-  });
-});
-
-onMounted(() => {
-  if (!wrapper.value) {
-    return;
-  }
-  resizeObserver.observe(wrapper.value);
-});
-
-onUnmounted(() => {
-  if (!wrapper.value) {
-    return;
-  }
-  resizeObserver.unobserve(wrapper.value);
-});
 </script>
 
 <style lang="scss">
@@ -130,8 +62,8 @@ onUnmounted(() => {
   background-color: rgba(31, 30, 29, 1);
   min-width: v-bind(cssMinWidth);
   min-height: v-bind(cssMinHeight);
-  max-width: v-bind(cssMaxWidth);
-  max-height: v-bind(cssMaxHeight);
+  width: inherit;
+  height: inherit;
   color: #ffffff85;
 }
 .business-wrapper-header {
@@ -166,5 +98,6 @@ onUnmounted(() => {
   flex-grow: 1;
   display: flex;
   align-items: center;
+  padding: 0 16px;
 }
 </style>

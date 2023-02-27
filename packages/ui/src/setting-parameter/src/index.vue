@@ -1,5 +1,5 @@
 <template>
-  <div class="setting">
+  <div style="min-width: 392px; min-height: 160px">
     <BusinessCard title="设定参数" subtitle="SETTING PARAMETERS" min-width="392" min-height="160">
       <template #operation>
         <div :class="operatable" @click="handleShowMore">...</div>
@@ -167,75 +167,70 @@ fetchSettingData();
 </script>
 
 <style lang="scss" scoped>
-.setting {
+.overflow-ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.operation {
+  font-size: 28px;
+  cursor: pointer;
+  position: relative;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  color: #ffffff85;
+  text-align: center;
+}
+
+.dis-operation {
+  font-size: 28px;
+  position: relative;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  color: #ffffff45;
+  text-align: center;
+  cursor: default;
+}
+
+.setting-wrapper {
+  width: 100%;
   display: flex;
+  justify-content: space-around;
+  padding: 0 16px;
+  align-items: center;
+  height: 100%;
 
-  .overflow-ellipsis {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .operation {
-    font-size: 28px;
-    cursor: pointer;
-    position: relative;
-    top: -10px;
-    width: 20px;
-    height: 20px;
-    color: #ffffff85;
-    text-align: center;
-  }
-
-  .dis-operation {
-    font-size: 28px;
-    position: relative;
-    top: -10px;
-    width: 20px;
-    height: 20px;
-    color: #ffffff45;
-    text-align: center;
-    cursor: default;
-  }
-
-  .setting-wrapper {
-    width: 100%;
+  .parameter {
     display: flex;
-    justify-content: space-between;
-    padding: 0 16px;
-    align-items: flex-start;
-    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 32px;
+    padding: 8px;
+    cursor: pointer;
+    max-width: 120px;
+    box-sizing: border-box;
 
-    .parameter {
+    .value-wrapper {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 32px;
-      padding: 8px;
-      cursor: pointer;
-      width: 120px;
-      box-sizing: border-box;
+      margin-bottom: 4px;
+      width: 100%;
 
-      .value-wrapper {
-        display: flex;
-        margin-bottom: 4px;
-        width: 100%;
-
-        .value {
-          font-weight: 500;
-          font-size: 16px;
-          color: lawngreen;
-          margin-right: 8px;
-          text-align: center;
-        }
+      .value {
+        font-weight: 500;
+        font-size: 16px;
+        color: lawngreen;
+        margin-right: 8px;
       }
+    }
 
-      .label {
-        margin: 0;
-        padding: 0;
-        font-size: 14px;
-        text-align: center;
-      }
+    .label {
+      margin: 0;
+      padding: 0;
+      font-size: 14px;
+      text-align: center;
     }
   }
 }

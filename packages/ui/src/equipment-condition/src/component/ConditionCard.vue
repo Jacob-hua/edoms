@@ -32,9 +32,7 @@
         ></ElOption>
       </ElSelect>
     </div>
-    <div class="eq-indicator-chart">
-      <EdomsCharts :option="chartsOption" :width="685" :height="220"></EdomsCharts>
-    </div>
+    <EdomsCharts class="eq-indicator-chart" :option="chartsOption"></EdomsCharts>
   </div>
 </template>
 

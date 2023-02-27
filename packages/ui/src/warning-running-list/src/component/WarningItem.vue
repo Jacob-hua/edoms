@@ -6,7 +6,9 @@
     </p>
     <p>
       <span class="warning-title"> {{ item.title }} </span>
-      <span class="discover" @click="handleShowSurplus(item)"> 展开 </span>
+      <span class="discover" @click="handleShowSurplus(item)">
+        {{ item.expend ? '收起' : '展开' }}
+      </span>
     </p>
     <p v-if="item.expend" class="body">
       <span class="content">{{ item.content }}</span>
