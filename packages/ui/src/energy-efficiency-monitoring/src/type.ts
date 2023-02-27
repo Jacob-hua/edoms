@@ -14,7 +14,7 @@ export interface MEfficiencyMonitoring extends MComponent {
   /**最大值 */
   maxValue: string;
   /**参考值 */
-  refrenceValue: string;
+  referenceValue: string;
   /**等分数量 */
   bisectionNumber: number;
   /**曲线颜色 */
@@ -26,7 +26,7 @@ export interface MEfficiencyMonitoring extends MComponent {
   /**游标颜色 */
   cursorColor: string;
   /**参考线颜色 */
-  refrenceLineColor: string;
+  referenceLineColor: string;
   /**能效名称 */
   energyName: string;
   /** 精度 */
