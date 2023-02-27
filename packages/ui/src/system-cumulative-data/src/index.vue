@@ -13,28 +13,36 @@
       <div class="wrapper">
         <div v-for="(item, index) in currentData" :key="index" class="data-item" @click="handleClickItem(item)">
           <div class="col-text label">
-            <span>{{ item.label }}</span>
+            <span :title="item.label">{{ item.label }}</span>
           </div>
           <div class="col-text cumulative-value">
-            <span class="data-value">{{ item.dataValue }}</span>
+            <span class="data-value" :title="item.dataValue">{{ item.dataValue }}</span>
             <span class="data-unit">{{ item.unit }}</span>
           </div>
           <div class="col-text trend-box">
-            <div v-if="item.calculateType === 'MOM' || item.calculateType === 'ALL'" class="mom-trend trend">
+            <div
+              v-if="item.calculateType === 'MOM' || item.calculateType === 'ALL'"
+              class="mom-trend trend"
+              :style="{ width: item.calculateType === 'ALL' ? '50%' : '100%' }"
+            >
               <span>{{ typeName }}环比</span>
-              <span v-if="item.momTrend === 'flat'">--</span>
+              <span v-if="item.momTrend === 'flat'" class="flat-span">--</span>
               <span v-else>
                 <img :src="item.momTrend === 'up' ? Up : Down" alt="" />
               </span>
-              <span :class="item.momTrend">{{ item.momRatio }}%</span>
+              <span class="ratio-span" :class="item.momTrend" :title="`${item.momRatio}%`">{{ item.momRatio }}%</span>
             </div>
-            <div v-if="item.calculateType === 'YOY' || item.calculateType === 'ALL'" class="yoy-trend trend">
+            <div
+              v-if="item.calculateType === 'YOY' || item.calculateType === 'ALL'"
+              class="yoy-trend trend"
+              :style="{ width: item.calculateType === 'ALL' ? '50%' : '100%' }"
+            >
               <span>{{ typeName }}同比</span>
-              <span v-if="item.yoyTrend === 'flat'">--</span>
+              <span v-if="item.yoyTrend === 'flat'" class="flat-span">--</span>
               <span v-else>
                 <img :src="item.yoyTrend === 'up' ? Up : Down" alt="" />
               </span>
-              <span :class="item.yoyTrend">{{ item.yoyRatio }}%</span>
+              <span class="ratio-span" :class="item.yoyTrend" :title="`${item.yoyRatio}%`">{{ item.yoyRatio }}%</span>
             </div>
           </div>
         </div>
@@ -120,7 +128,6 @@ const chartsParam = ref({
   propCode: '',
   type: '',
 });
-
 const xAxisMin = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).start);
 const xAxisMax = computed(() => dateRange(new Date(), chartsParam.value.dateRange as UnitTime).end);
 
@@ -135,6 +142,19 @@ const axisLabelFormatter = computed(() => {
     return '{MM}';
   }
   return '{HH}:{mm}';
+});
+
+const maxInterval = computed(() => {
+  if (chartsParam.value.dateRange === 'day') {
+    return 3600 * 1000 * 2;
+  }
+  if (chartsParam.value.dateRange === 'month') {
+    return 3600 * 1000 * 24;
+  }
+  if (chartsParam.value.dateRange === 'year') {
+    return 3600 * 1000 * 24 * 31;
+  }
+  return 3600 * 1000;
 });
 
 const categories = computed(() => props.config.category ?? []);
@@ -183,9 +203,9 @@ const getSystemCumulativeData = async () => {
   result.forEach(({ identify, dataValue, momRatio, momTrend, yoyRatio, yoyTrend }) => {
     const targetResult = systemCumulativeData.value[Number(identify)];
     targetResult.dataValue = String(formatPrecision(Number(dataValue), targetResult.precision));
-    targetResult.momRatio = momRatio;
+    targetResult.momRatio = String(formatPrecision(Number(momRatio), targetResult.ratioPrecision));
     targetResult.momTrend = momTrend;
-    targetResult.yoyRatio = yoyRatio;
+    targetResult.yoyRatio = String(formatPrecision(Number(yoyRatio), targetResult.ratioPrecision));
     targetResult.yoyTrend = yoyTrend;
   });
 };
@@ -194,7 +214,7 @@ const fetchHistory = async () => {
   const result = await fetchHistoryData(chartsParam.value);
   const chartSeries = [
     {
-      name: chartTitle.value,
+      name: chartTitle.value ? chartTitle.value : `未命名`,
       type: 'bar',
       showSymbol: false,
       data: result.map(({ time, value }) => [stringToDate(time), formatPrecision(Number(value), chartPrecision.value)]),
@@ -254,23 +274,19 @@ function generateOption(series: any[] = []): ECOption {
       valueFormatter: (value) => `${value}${chartUnit.value}`,
     },
     grid: {
-      left: '8%',
-      right: '1%',
-      top: 30,
-      bottom: 20,
       containLabel: true,
     },
     xAxis: {
       type: 'time',
       min: xAxisMin.value,
       max: xAxisMax.value,
+      maxInterval: maxInterval.value,
       splitLine: {
         show: false,
       },
-      interval: 2,
       axisLabel: {
         formatter: axisLabelFormatter.value,
-        interval: 2,
+        interval: 0,
       },
     },
     yAxis: {
@@ -308,6 +324,7 @@ watch(
       propertyType: item.propertyType,
       property: item.property,
       precision: item.precision,
+      ratioPrecision: item.ratioPrecision,
       unit: item.unit,
       variables: item.variables,
       calculateType: item.calculateType,
@@ -340,7 +357,6 @@ watch(
       display: flex;
       height: 36px;
       background: #3a3a3a;
-      width: 360px;
       padding: 0 16px 0 20px;
       cursor: pointer;
       margin-bottom: 4px;
@@ -352,8 +368,25 @@ watch(
         flex-wrap: nowrap;
 
         .trend {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+
           span {
             padding-right: 4px;
+          }
+
+          .flat-span {
+            display: inline-block;
+          }
+
+          .ratio-span {
+            width: 100%;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
           }
         }
 
@@ -373,10 +406,11 @@ watch(
       .trend-box {
         justify-content: center;
         flex-grow: 2;
+        width: 50%;
       }
 
       .label {
-        width: 60px;
+        width: 20%;
 
         span {
           width: 100%;
@@ -388,6 +422,7 @@ watch(
 
       .cumulative-value {
         padding: 0 8px;
+        width: 30%;
       }
 
       .data-value {
@@ -395,6 +430,11 @@ watch(
         color: #00ff00;
         font-weight: bold;
         padding-right: 4px;
+        width: 60%;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 

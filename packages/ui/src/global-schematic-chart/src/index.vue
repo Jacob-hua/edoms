@@ -30,6 +30,8 @@ const option = ref<ECOption>({});
 const { request } = useApp(props);
 const { fetchHistoryData } = apiFactory(request);
 
+const lineUnit = ref<string[]>([]);
+
 const indicatorConfigs = computed<MIndicator[]>(() => props.config.indicators);
 
 const intervalDelay = computed<number>(() => {
@@ -55,15 +57,16 @@ const updateParameterData = async () => {
   if (!result || result.length <= 0) return;
 
   let chartSeries = [];
-  chartSeries = result.map(({ insCode, propCode, dataList }) => {
+  chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
     const indicatorConfig =
       indicatorConfigs.value[
         indicatorConfigs.value.findIndex(
           ({ instance, property }) => insCode === instance[instance.length - 1] && propCode === property
         )
       ];
+    lineUnit.value.push(indicatorConfig.unit);
     return {
-      name: indicatorConfig.label,
+      name: indicatorConfig.label ? indicatorConfig.label : `未命名${index}`,
       type: 'line',
       showSymbol: false,
       color: indicatorConfig.lineColor,
@@ -85,9 +88,17 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
+      formatter: (params: any) => {
+        let content = params[0].axisValueLabel;
+        for (const i in params) {
+          content +=
+            '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
+        }
+        return content;
+      },
     },
     grid: {
-      left: '20%',
+      left: 'left',
       right: '1%',
       top: 30,
       bottom: 20,
@@ -100,9 +111,6 @@ function generateOption(series: any[] = []): ECOption {
       splitLine: {
         show: false,
       },
-      // minInterval: 3600 * 1000 * 2,
-      // maxInterval: 3600 * 1000 * 2,
-      // interval: 3600 * 1000 * 2,
       axisLabel: {
         formatter: function (value: any) {
           return formatDate(value, 'HH:mm');

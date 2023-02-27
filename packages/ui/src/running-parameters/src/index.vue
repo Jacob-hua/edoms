@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard title="参数曲线" min-width="1080" min-height="320">
+  <BusinessCard title="参数曲线" min-width="1080" min-height="240">
     <template #operation>
       <div class="chart-type">
         <i :class="{ line_active: !isCurve, line: isCurve }" @click="handleChangeChart(false)"></i>
@@ -14,7 +14,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="245"
+      :height="176"
       @change-system-config="handleChangeSystemConfig"
     >
     </SystemParameter>
@@ -23,7 +23,7 @@
       :option="option"
       :parameter-configs="parameterConfigs"
       :width="908"
-      :height="245"
+      :height="176"
       @change-equipment-config="handleChangeEquipmentConfig"
     >
     </EquipmentParameter>
@@ -71,6 +71,8 @@ const option = ref<ECOption>({});
 
 const isCurve = ref<boolean>(false);
 
+const lineUnit = ref<string[]>([]);
+
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
   if (result) {
@@ -110,16 +112,20 @@ const updateParameterData = async () => {
   });
 
   let chartSeries = [];
-  chartSeries = result.map(({ insCode, propCode, dataList }) => ({
-    name: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.label,
-    type: 'line',
-    showSymbol: false,
-    smooth: isCurve.value,
-    color: activeIndicatorConfig.value.get(`${insCode}:${propCode}`)?.color,
-    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
-  }));
+  chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
+    const activeIndicator = activeIndicatorConfig.value.get(`${insCode}:${propCode}`);
+    const name = activeIndicator?.label;
+    lineUnit.value.push(activeIndicator?.unit ?? '');
+    return {
+      name: name ? name : `未命名${index}`,
+      type: 'line',
+      showSymbol: false,
+      smooth: isCurve.value,
+      color: activeIndicator?.color,
+      data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    };
+  });
   option.value = generateOption(chartSeries);
-  console.log(option.value);
 };
 
 const handleChangeChart = (flag: boolean) => {
@@ -148,14 +154,17 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      formatter: (param: any) => {
-        console.log(param);
-
-        return param;
+      formatter: (params: any) => {
+        let content = params[0].axisValueLabel;
+        for (const i in params) {
+          content +=
+            '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
+        }
+        return content;
       },
     },
     grid: {
-      left: '8%',
+      left: 'left',
       right: '1%',
       top: 30,
       bottom: 20,
@@ -165,6 +174,7 @@ function generateOption(series: any[] = []): ECOption {
       type: 'time',
       min: dateRange(new Date(), 'day').start,
       max: dateRange(new Date(), 'day').end,
+      maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },

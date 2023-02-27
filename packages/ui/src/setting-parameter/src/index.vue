@@ -213,7 +213,7 @@ fetchSettingData();
       margin-top: 32px;
       padding: 8px;
       cursor: pointer;
-      max-width: 120px;
+      width: 120px;
       box-sizing: border-box;
 
       .value-wrapper {
@@ -226,6 +226,7 @@ fetchSettingData();
           font-size: 16px;
           color: lawngreen;
           margin-right: 8px;
+          text-align: center;
         }
       }
 

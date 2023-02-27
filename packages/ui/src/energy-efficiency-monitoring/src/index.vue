@@ -105,6 +105,19 @@ const formatXAxisLabel = computed(() => {
   return '{HH}:{mm}';
 });
 
+const maxInterval = computed(() => {
+  if (dateType.value === 'day') {
+    return 3600 * 1000;
+  }
+  if (dateType.value === 'month') {
+    return 3600 * 1000 * 24;
+  }
+  if (dateType.value === 'year') {
+    return 3600 * 1000 * 24 * 31;
+  }
+  return 3600 * 1000;
+});
+
 watch(
   () => efficiencyConfig.value,
   (val) => {
@@ -126,12 +139,12 @@ watch(
 );
 
 const updateEfficiencyData = async () => {
-  if (!efficiencyConfig.value.instance || !efficiencyConfig.value.property) {
+  if (!efficiencyConfig.value.instance) {
     return;
   }
   const param: FetchEfficiencyReq = {
     insCodeList: [efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]],
-    propCode: efficiencyConfig.value.property,
+    propCode: 'COP',
   };
   const result = await fetchEfficiencyData(param);
   result.forEach(({ insCode, efficiencyNum }) => {
@@ -144,7 +157,14 @@ const updateEfficiencyData = async () => {
 };
 
 const generateOption = (series: any[] = []): ECOption => {
+  const legends = series.map(({ name }) => name);
   return {
+    legend: {
+      data: legends,
+      textStyle: {
+        color: '#ffffff85',
+      },
+    },
     toolbox: {
       show: true,
       feature: {
@@ -157,7 +177,7 @@ const generateOption = (series: any[] = []): ECOption => {
     },
     tooltip: {
       trigger: 'axis',
-      valueFormatter: (value) => `${value}COP`,
+      valueFormatter: (value) => `${value}`,
     },
     grid: {
       containLabel: true,
@@ -166,17 +186,17 @@ const generateOption = (series: any[] = []): ECOption => {
       type: 'time',
       min: dateRange(new Date(), dateType.value).start,
       max: dateRange(new Date(), dateType.value).end,
+      maxInterval: maxInterval.value,
       splitLine: {
         show: false,
       },
       interval: 2,
       axisLabel: {
         formatter: formatXAxisLabel.value,
-        interval: 2,
+        interval: 0,
       },
     },
     yAxis: {
-      name: `单位：COP`,
       type: 'value',
       splitLine: {
         lineStyle: {
@@ -194,11 +214,13 @@ const generateOption = (series: any[] = []): ECOption => {
 
 const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
   const { start, end } = formatDateRange(date, type, 'YYYY-MM-DD HH:mm:ss');
-  let interval = '1m';
+  let interval = '1h';
   if (type === 'day') {
-    interval = '1m';
-  } else {
+    interval = '1h';
+  } else if (type === 'month') {
     interval = '1d';
+  } else {
+    interval = '1n';
   }
   const result = await fetchHistoryData({
     startTime: start,
@@ -208,13 +230,13 @@ const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
     dataList: [
       {
         deviceCode: efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1] ?? '',
-        propCode: efficiencyConfig.value.property ?? '',
+        propCode: 'COP',
       },
     ],
   });
 
-  const chartSeries = result.map(({ dataList }) => ({
-    name: energyName.value,
+  const chartSeries = result.map(({ dataList }, index) => ({
+    name: energyName.value ? energyName : `未命名${index}`,
     type: 'line',
     showSymbol: false,
     data: dataList.map(({ time, value }) => [stringToDate(time), value]),
