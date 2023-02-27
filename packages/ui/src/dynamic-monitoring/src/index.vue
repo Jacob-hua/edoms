@@ -1,12 +1,6 @@
 <template>
   <div style="min-width: 392px; min-height: 160px">
-    <BusinessCard
-      title="动环监测"
-      :class="wrapperClassName"
-      subtitle="DYNAMIC MONITORING"
-      min-width="392"
-      min-height="160"
-    >
+    <BusinessCard title="动环监测" subtitle="DYNAMIC MONITORING" min-width="392" min-height="160">
       <template #operation>
         <div :class="operatable" @click="handleTrigger">...</div>
       </template>
@@ -84,7 +78,6 @@ const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
 const restIndicators = ref<Indicator[]>([]);
 const activeIndicator = ref<Indicator>();
-const wrapperClassName = ref<string>('');
 
 const dialogTitle = ref<string>('');
 const options = ref<ECOption>({});
