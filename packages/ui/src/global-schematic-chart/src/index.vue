@@ -4,7 +4,7 @@
       <template #reference>
         <el-button class="m-2"></el-button>
       </template>
-      <EdomsCharts :option="option" :width="350" :height="160"></EdomsCharts>
+      <EdomsCharts style="width: 350px; height: 160px" :option="option"></EdomsCharts>
     </el-popover>
   </div>
 </template>
