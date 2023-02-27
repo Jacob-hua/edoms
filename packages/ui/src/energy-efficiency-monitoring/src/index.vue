@@ -1,12 +1,6 @@
 <template>
   <div style="min-width: 392px; min-height: 160px">
-    <BusinessCard
-      class="energy-efficiency-wrapper"
-      title="能效监测"
-      subtitle="ENERGY EFFICIENCY MONITORING"
-      min-width="392"
-      min-height="160"
-    >
+    <BusinessCard title="能效监测" subtitle="ENERGY EFFICIENCY MONITORING" min-width="392" min-height="160">
       <template #operation>
         <div :class="operatable" @click="handleShowMore">...</div>
       </template>
@@ -240,11 +234,6 @@ const handleChangeDateType = (type: UnitTime) => {
 </script>
 
 <style lang="scss" scoped>
-.energy-efficiency-wrapper {
-  width: inherit;
-  height: inherit;
-}
-
 .overflow-ellipsis {
   width: 100%;
   overflow: hidden;
@@ -301,6 +290,7 @@ const handleChangeDateType = (type: UnitTime) => {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      line-height: 20px;
     }
 
     .actual-unit {
@@ -310,7 +300,7 @@ const handleChangeDateType = (type: UnitTime) => {
   }
   .efficiency {
     padding-top: 28px;
-    flex-grow: 1;
+    flex-grow: 0.76;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;

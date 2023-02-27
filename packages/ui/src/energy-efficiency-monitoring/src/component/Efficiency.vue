@@ -9,27 +9,25 @@
     <div class="end-value">{{ maxValue }}</div>
   </div>
   <div class="legend-wrapper">
-    <div class="legend">
-      <div class="legend-start">
-        <div class="legend-box"></div>
-        <span class="legend-text">较差</span>
-      </div>
-      <div class="legend-end">
-        <div class="legend-box"></div>
-        <span class="legend-text">优秀</span>
-      </div>
-      <div class="legend-reference">
-        <div class="legend-box"></div>
-        <span class="legend-text">参考值</span>
-      </div>
+    <div class="legend-start">
+      <div class="legend-box"></div>
+      <span class="legend-text">较差</span>
+    </div>
+    <div class="legend-end">
+      <div class="legend-box"></div>
+      <span class="legend-text">优秀</span>
+    </div>
+    <div class="legend-reference">
+      <div class="legend-box"></div>
+      <span class="legend-text">参考值</span>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
-interface Position {
+interface Position extends Record<string, any> {
   left: string;
 }
 
@@ -63,16 +61,30 @@ const props = withDefaults(
 
 const colorCardRef = ref<HTMLElement>();
 
-const colorCardWidth = computed<number>(() => {
-  if (!colorCardRef.value) {
-    return 0;
-  }
-  return colorCardRef.value.clientWidth;
-});
+const colorCardWidth = ref<number>(0);
 
 const attribute = computed(() => `linear-gradient(90deg, ${props.startColor}, ${props.endColor})`);
 
-const positionDistance = computed(() => colorCardWidth.value / (props.bisectionNumber + 1));
+const positionDistance = computed(() => colorCardWidth.value / props.bisectionNumber);
+
+const colorCardObserver = new ResizeObserver(() => {
+  colorCardWidth.value = colorCardRef.value?.clientWidth ?? 0;
+});
+
+onMounted(() => {
+  if (!colorCardRef.value) {
+    return;
+  }
+  colorCardWidth.value = colorCardRef.value.clientWidth;
+  colorCardObserver.observe(colorCardRef.value);
+});
+
+onUnmounted(() => {
+  if (!colorCardRef.value) {
+    return;
+  }
+  colorCardObserver.unobserve(colorCardRef.value);
+});
 
 const calculateDistance = (index: number): Position => {
   return {
@@ -114,6 +126,7 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
 <style lang="scss" scoped>
 .color-card-wrapper {
   height: 20px;
+  // width: 100%;
   background-image: v-bind(attribute);
   position: relative;
   .division-wrapper {
@@ -165,15 +178,12 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
   }
 }
 .legend-wrapper {
-  margin-top: 40px !important;
+  width: 100%;
+  margin-top: 40px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  .legend {
-    display: flex;
-  }
   .legend-start {
-    width: 100px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -182,10 +192,8 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
       height: 16px;
       background-color: v-bind(startColor);
     }
-    margin-left: 20px;
   }
   .legend-end {
-    width: 100px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -194,10 +202,8 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
       height: 16px;
       background-color: v-bind(endColor);
     }
-    margin-left: 20px;
   }
   .legend-reference {
-    width: 100px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -206,7 +212,6 @@ const cursorAttribute = computed(() => `12px solid ${props.cursorColor}`);
       height: 20px;
       background-color: v-bind(refrenceLineColor);
     }
-    margin-left: 20px;
   }
   span {
     color: #ffffff65;
