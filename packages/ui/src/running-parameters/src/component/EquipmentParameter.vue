@@ -127,6 +127,10 @@ watch(
   .el-tabs__header::-webkit-scrollbar {
     display: none;
   }
+
+  .el-tabs__nav {
+    z-index: inherit;
+  }
 }
 
 :deep(.el-tabs__item) {
