@@ -18,14 +18,15 @@
       :height="480"
       :options="options"
       @type-change="handleChangeDateType"
+      @magictype-change="handleChangeMagictype"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 
-import { dateRange, formatDateRange, formatPrecision, stringToDate, UnitTime } from '@edoms/utils';
+import { daysInMonth, formatDate, formatDateRange, formatPrecision, UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -52,8 +53,10 @@ const energyName = ref<string>('COP');
 
 const chartDialogVisible = ref<boolean>(false);
 const dialogTitle = ref<string>('');
-const options = ref<ECOption>({});
 const dateType = ref<UnitTime>('day');
+
+const magictype = ref<string>('line');
+const chartSeries = ref<any[]>([]);
 
 const efficiencyConfig = computed<MEfficiencyMonitoring>(() => props.config);
 const intervalDelay = computed<number>(() => {
@@ -65,64 +68,68 @@ const intervalDelay = computed<number>(() => {
 
 const operationClass = computed(() => 'operation');
 
+const xAxisData = computed(() => {
+  let defaultResult = [
+    '00:00',
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
+  ];
+  if (dateType.value === 'day') {
+    return defaultResult;
+  } else if (dateType.value === 'month') {
+    const days = daysInMonth(new Date());
+    defaultResult = [];
+    for (let i = 1; i <= days; i++) {
+      defaultResult.push(i < 10 ? `0${i}` : `${i}`);
+    }
+    return defaultResult;
+  } else {
+    defaultResult = [];
+    for (let i = 1; i <= 12; i++) {
+      defaultResult.push(i < 10 ? `0${i}` : `${i}`);
+    }
+    return defaultResult;
+  }
+});
+
 const formatXAxisLabel = computed(() => {
   if (dateType.value === 'day') {
-    return '{HH}:{mm}';
+    return 'HH:mm';
   }
   if (dateType.value === 'month') {
-    return '{dd}';
+    return 'dd';
   }
   if (dateType.value === 'year') {
-    return '{MM}';
+    return 'MM';
   }
-  return '{HH}:{mm}';
+  return 'HH:mm';
 });
 
-const maxInterval = computed(() => {
-  if (dateType.value === 'day') {
-    return 3600 * 1000;
-  }
-  if (dateType.value === 'month') {
-    return 3600 * 1000 * 24;
-  }
-  if (dateType.value === 'year') {
-    return 3600 * 1000 * 24 * 31;
-  }
-  return 3600 * 1000;
-});
-
-watch(
-  () => efficiencyConfig.value,
-  (val) => {
-    energyName.value = val.energyName;
-  },
-  {
-    immediate: true,
-  }
-);
-
-const updateEfficiencyData = async () => {
-  if (!efficiencyConfig.value.instance) {
-    return;
-  }
-  const param: FetchEfficiencyReq = {
-    insCodeList: [efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]],
-    propCode: 'COP',
-  };
-  const result = await fetchEfficiencyData(param);
-  result.forEach(({ insCode, efficiencyNum }) => {
-    if (insCode !== efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]) {
-      return;
-    }
-    actualValue.value = +formatPrecision(Number(efficiencyNum), efficiencyConfig.value.precision);
-  });
-};
-
-const generateOption = (series: any[] = []): ECOption => {
-  const legends = series.map(({ name }) => name);
+const options = computed<ECOption>(() => {
   return {
     legend: {
-      data: legends,
+      show: true,
       textStyle: {
         color: '#ffffff85',
       },
@@ -139,24 +146,19 @@ const generateOption = (series: any[] = []): ECOption => {
     },
     tooltip: {
       trigger: 'axis',
-      valueFormatter: (value) => `${value}`,
     },
     grid: {
       containLabel: true,
     },
     xAxis: {
-      type: 'time',
-      min: dateRange(new Date(), dateType.value).start,
-      max: dateRange(new Date(), dateType.value).end,
-      maxInterval: maxInterval.value,
+      type: 'category',
       splitLine: {
         show: false,
       },
-      interval: 2,
       axisLabel: {
-        formatter: formatXAxisLabel.value,
         interval: 0,
       },
+      data: xAxisData.value,
     },
     yAxis: {
       type: 'value',
@@ -170,8 +172,28 @@ const generateOption = (series: any[] = []): ECOption => {
         show: true,
       },
     },
-    series,
+    series: chartSeries.value.map((item) => {
+      item.type = magictype.value;
+      return item;
+    }),
   };
+});
+
+const updateEfficiencyData = async () => {
+  if (!efficiencyConfig.value.instance) {
+    return;
+  }
+  const param: FetchEfficiencyReq = {
+    insCodeList: [efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]],
+    propCode: 'COP',
+  };
+  const result = await fetchEfficiencyData(param);
+  result.forEach(({ insCode, efficiencyNum }) => {
+    if (insCode !== efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]) {
+      return;
+    }
+    actualValue.value = +formatPrecision(Number(efficiencyNum), efficiencyConfig.value.precision);
+  });
 };
 
 const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
@@ -196,17 +218,18 @@ const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
       },
     ],
   });
-
-  const chartSeries = result.map(({ dataList }, index) => ({
+  chartSeries.value = result.map(({ dataList }, index) => ({
     name: energyName.value ? energyName : `未命名${index}`,
-    type: 'line',
+    type: magictype.value,
     showSymbol: false,
-    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    data: dataList.map(({ time, value }) => {
+      const label = formatDate(time, formatXAxisLabel.value);
+      return [label, value];
+    }),
     itemStyle: {
       color: efficiencyConfig.value?.lineColor,
     },
   }));
-  options.value = generateOption(chartSeries);
 };
 
 useIntervalAsync(updateEfficiencyData, intervalDelay.value);
@@ -219,7 +242,12 @@ const handleShowMore = () => {
 
 const handleChangeDateType = (type: UnitTime) => {
   dateType.value = type;
+  magictype.value = 'line';
   getHistoryData(new Date(), type);
+};
+
+const handleChangeMagictype = (value: string) => {
+  magictype.value = value;
 };
 </script>
 
@@ -265,9 +293,9 @@ const handleChangeDateType = (type: UnitTime) => {
   height: 100%;
   display: grid;
   margin-top: 20px;
-  grid-template-columns: 36px 1fr;
+  grid-template-columns: 76px 1fr;
   grid-template-rows: repeat(2, 1fr);
-  column-gap: 50px;
+  column-gap: 20px;
   align-items: center;
 }
 

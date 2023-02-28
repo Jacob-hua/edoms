@@ -12,13 +12,13 @@
           :append-to-body="false"
         ></el-date-picker>
       </div>
-      <EdomsCharts class="chart-container" :option="options"></EdomsCharts>
+      <EdomsCharts class="chart-container" :option="options" @magictype-chang="handleChangeMagictype"></EdomsCharts>
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { formatDate } from '@edoms/utils';
 
@@ -37,6 +37,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   (event: 'update:visible', value: boolean): void;
   (event: 'dateChange', value: string): void;
+  (event: 'magictypeChange', value: string): void;
 }>();
 
 const pickerDate = ref<string>(formatDate(new Date(), 'YYYY-MM-DD'));
@@ -54,7 +55,9 @@ watch(
   }
 );
 
-onUnmounted(() => {});
+const handleChangeMagictype = (value: string) => {
+  emit('magictypeChange', value);
+};
 </script>
 
 <style lang="scss" scoped>

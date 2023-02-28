@@ -9,7 +9,7 @@
         <span :class="active === 'month' ? 'checked' : ''" @click="handleChangeType('month')">月</span>
         <span :class="active === 'year' ? 'checked' : ''" @click="handleChangeType('year')">年</span>
       </div>
-      <EdomsCharts class="chart-container" :option="options"></EdomsCharts>
+      <EdomsCharts class="chart-container" :option="options" @magictype-chang="handleChangeMagictype"></EdomsCharts>
     </el-dialog>
   </div>
 </template>
@@ -34,6 +34,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   (event: 'update:visible', value: boolean): void;
   (event: 'typeChange', value: UnitTime): void;
+  (event: 'magictypeChange', value: string): void;
 }>();
 
 const dialogVisible = computed({
@@ -48,6 +49,10 @@ const active = ref<UnitTime>('day');
 const handleChangeType = (type: UnitTime) => {
   active.value = type;
   emit('typeChange', type);
+};
+
+const handleChangeMagictype = (value: string) => {
+  emit('magictypeChange', value);
 };
 </script>
 

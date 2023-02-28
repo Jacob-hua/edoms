@@ -13,6 +13,10 @@ const props = defineProps<{
   option: ECOption;
 }>();
 
+const emit = defineEmits<{
+  (event: 'magictypeChang', value: string): void;
+}>();
+
 const chartsWrapperRef = ref<HTMLDivElement>();
 
 const charts = ref<EChartsType>();
@@ -29,6 +33,7 @@ watch(
     if (!charts.value) {
       return;
     }
+
     charts.value.clear();
     charts.value.setOption(option, { notMerge: true });
   },
@@ -42,6 +47,9 @@ onMounted(() => {
     }
     charts.value = markRaw(echarts.init(chartsWrapperRef.value));
     charts.value.setOption(props.option, { notMerge: true });
+    charts.value.on('magictypechanged', (params: any) => {
+      emit('magictypeChang', params.currentType);
+    });
     chartsResizeObserver.observe(chartsWrapperRef.value);
   });
 });

@@ -8,10 +8,10 @@
     ></div>
     <div class="cursor"></div>
     <div class="reference-line-wrapper">
-      <div class="reference-value">{{ config.referenceValue }}</div>
+      <div class="reference-value overflow-ellipsis" :title="config.referenceValue">{{ config.referenceValue }}</div>
     </div>
-    <div class="min-value">{{ config.minValue }}</div>
-    <div class="max-value">{{ config.maxValue }}</div>
+    <div class="min-value overflow-ellipsis" :title="config.minValue">{{ config.minValue }}</div>
+    <div class="max-value overflow-ellipsis" :title="config.maxValue">{{ config.maxValue }}</div>
   </div>
 </template>
 
@@ -93,6 +93,13 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
   height: 20px;
   background-image: v-bind(attribute);
   position: relative;
+
+  .overflow-ellipsis {
+    width: 76px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .division-wrapper {
     width: 2px;
     height: 20px;

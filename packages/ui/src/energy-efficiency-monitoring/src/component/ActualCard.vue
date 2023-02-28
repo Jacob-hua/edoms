@@ -1,7 +1,7 @@
 <template>
   <div class="actual-wrapper">
-    <div class="actual-value">{{ actualValue }}</div>
-    <div class="actual-unit overflow-ellipsis">{{ config.energyName }}</div>
+    <div class="actual-value overflow-ellipsis" :title="`${actualValue}`">{{ actualValue }}</div>
+    <div class="actual-unit overflow-ellipsis" :title="config.energyName">{{ config.energyName }}</div>
   </div>
 </template>
 
@@ -17,6 +17,12 @@ defineProps<{
 .actual-wrapper {
   display: flex;
   flex-direction: column;
+
+  .overflow-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   .actual-value {
     font-size: 24px;
