@@ -17,7 +17,7 @@
             }}</span
             ><span class="unit">{{ item.unit }}</span>
           </p>
-          <p class="label overflow-ellipsis">{{ item.name }}</p>
+          <p class="label overflow-ellipsis" :title="item.name">{{ item.name }}</p>
         </div>
       </div>
     </BusinessCard>
@@ -207,7 +207,6 @@ fetchSettingData();
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 32px;
     padding: 8px;
     cursor: pointer;
     max-width: 120px;
