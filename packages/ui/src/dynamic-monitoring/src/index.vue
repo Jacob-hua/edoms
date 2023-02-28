@@ -221,7 +221,7 @@ const updateIndicatorsData = async () => {
     targetIndexs.forEach((targetIndex) => {
       const indicatorConfig = indicatorConfigs.value[targetIndex];
       const indicator = indicators.value[targetIndex];
-      indicator.parameter = dataValue + '';
+      indicator.parameter = formatPrecision(dataValue, indicatorConfig.precision);
       indicator.displayParameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
         indicatorConfig.unit
       }`;

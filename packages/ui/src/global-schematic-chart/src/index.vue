@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-import { dateRange, formatCurrentDateRange, formatDate, stringToDate } from '@edoms/utils';
+import { dateRange, formatCurrentDateRange, formatDate, formatPrecision, stringToDate } from '@edoms/utils';
 
 import EdomsCharts from '../../EdomsCharts.vue';
 import { ECOption } from '../../types';
@@ -70,7 +70,10 @@ const updateParameterData = async () => {
       type: 'line',
       showSymbol: false,
       color: indicatorConfig.lineColor,
-      data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+      data: dataList.map(({ time, value }) => [
+        stringToDate(time),
+        +formatPrecision(+value, indicatorConfig.precision),
+      ]),
     };
   });
   option.value = generateOption(chartSeries);

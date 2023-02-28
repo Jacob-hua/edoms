@@ -95,7 +95,7 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
   position: relative;
 
   .overflow-ellipsis {
-    width: 76px;
+    max-width: 76px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
