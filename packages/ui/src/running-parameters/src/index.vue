@@ -30,7 +30,7 @@
 import { computed, ref, watch } from 'vue';
 
 import { ElTabPane, ElTabs } from '@edoms/design';
-import { dateRange, formatCurrentDateRange, stringToDate } from '@edoms/utils';
+import { dateRange, formatCurrentDateRange, formatPrecision, stringToDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -117,7 +117,10 @@ const updateParameterData = async () => {
       showSymbol: false,
       smooth: isCurve.value,
       color: activeIndicator?.color,
-      data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+      data: dataList.map(({ time, value }) => [
+        stringToDate(time),
+        +formatPrecision(+value, activeIndicator?.precision ?? ''),
+      ]),
     };
   });
   option.value = generateOption(chartSeries);
