@@ -82,6 +82,7 @@ const handleClose = () => {
   }
 
   .parameter-wrapper {
+    padding: 0 16px;
     .progress-box {
       margin-top: 12px;
       max-height: 240px;
@@ -113,7 +114,7 @@ const handleClose = () => {
       justify-content: space-between;
 
       .efficiency-progress {
-        width: 302px;
+        width: 100%;
       }
     }
 
