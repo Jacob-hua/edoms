@@ -1,5 +1,5 @@
 <template>
-  <div class="setting">
+  <div style="min-width: 392px; min-height: 160px">
     <BusinessCard title="系统运行参数" subtitle="SYSTEM OPERATING PARAMETERS" min-width="392" min-height="160">
       <template #operation>
         <div :class="operatable" @click="handleShowMore">...</div>
@@ -125,74 +125,65 @@ const handleShowMore = () => {
 </script>
 
 <style lang="scss" scoped>
-.setting {
+.overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.operation {
+  font-size: 28px;
+  cursor: pointer;
+  position: relative;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  color: #ffffff85;
+  text-align: center;
+}
+
+.dis-operation {
+  font-size: 28px;
+  position: relative;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  color: #ffffff45;
+  text-align: center;
+  cursor: default;
+}
+
+.setting-wrapper {
+  width: 100%;
   display: flex;
+  justify-content: space-around;
+  padding: 0 16px;
 
-  .overflow-ellipsis {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .operation {
-    font-size: 28px;
-    cursor: pointer;
-    position: relative;
-    top: -10px;
-    width: 20px;
-    height: 20px;
-    color: #ffffff85;
-    text-align: center;
-  }
-
-  .dis-operation {
-    font-size: 28px;
-    position: relative;
-    top: -10px;
-    width: 20px;
-    height: 20px;
-    color: #ffffff45;
-    text-align: center;
-    cursor: default;
-  }
-
-  .setting-wrapper {
-    width: 100%;
+  .parameter {
     display: flex;
-    justify-content: space-around;
-    padding: 0 16px;
-    align-items: flex-start;
-    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    margin-top: 32px;
+    padding: 8px;
 
-    .parameter {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 120px;
-      margin-top: 32px;
-      padding: 8px;
-      box-sizing: border-box;
+    .value-wrapper {
+      margin-bottom: 4px;
 
-      .value-wrapper {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .value {
-          font-weight: 500;
-          font-size: 18px;
-          color: #00ff00;
-          margin-right: 8px;
-        }
+      .value {
+        font-weight: 500;
+        font-size: 18px;
+        color: lawngreen;
+        margin-right: 8px;
       }
+    }
 
-      .label {
-        margin: 0;
-        padding: 0;
-        width: 80px;
-        font-size: 16px;
-        text-align: center;
-      }
+    .label {
+      margin: 0;
+      padding: 0;
+      width: 80px;
+      font-size: 16px;
+      text-align: center;
+      height: 60px;
     }
   }
 }

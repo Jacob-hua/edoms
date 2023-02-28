@@ -88,9 +88,11 @@ const handleCurrentChange = (value: string) => {
   white-space: nowrap;
 }
 .container {
-  position: relative;
+  position: absolute;
   height: fit-content;
-  margin-left: 10px;
+  width: 392px;
+  right: -402px;
+  top: 0px;
   background-color: #2c2c2c;
   .header-top {
     display: flex;

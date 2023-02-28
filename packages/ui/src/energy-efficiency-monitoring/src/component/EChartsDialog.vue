@@ -9,14 +9,7 @@
         <span :class="active === 'month' ? 'checked' : ''" @click="handleChangeType('month')">月</span>
         <span :class="active === 'year' ? 'checked' : ''" @click="handleChangeType('year')">年</span>
       </div>
-      <div class="chart-container">
-        <EdomsCharts
-          :width="width"
-          :height="height"
-          :option="options"
-          @magictype-chang="handleChangeMagictype"
-        ></EdomsCharts>
-      </div>
+      <EdomsCharts class="chart-container" :option="options" @magictype-chang="handleChangeMagictype"></EdomsCharts>
     </el-dialog>
   </div>
 </template>
@@ -32,8 +25,6 @@ import { ECOption } from '../../../types';
 const props = withDefaults(
   defineProps<{
     title: string;
-    width: number;
-    height: number;
     options: ECOption;
     visible: boolean;
   }>(),
@@ -86,12 +77,13 @@ const handleChangeMagictype = (value: string) => {
     right: 10%;
     text-align: right;
     margin-left: 10px;
-    // color: #ffffff45;
   }
 }
 
 .chart-container {
   padding-top: 10px;
+  width: 960px;
+  height: 480px;
 }
 
 .checked {

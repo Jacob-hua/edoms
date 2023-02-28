@@ -6,18 +6,6 @@ export default {
       disabled: false,
       selected: false,
     },
-    {
-      label: '选项2',
-      value: '2',
-      disabled: false,
-      selected: false,
-    },
-    {
-      label: '选项3',
-      value: '3',
-      disabled: false,
-      selected: false,
-    },
   ],
   style: {
     width: '85',

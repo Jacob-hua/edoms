@@ -161,7 +161,8 @@ watch(
 <style lang="scss" scoped>
 .wrapper {
   width: 100%;
-  padding: 12px 16px 0 16px;
+  height: 100%;
+  padding: 12px 0 0 0;
 
   span {
     display: inline-block;
@@ -176,9 +177,9 @@ watch(
 
   :deep(.el-tabs) {
     --el-tabs-header-height: 32px;
+    width: 100%;
     .el-tabs__header {
       margin: 0;
-      width: 360px;
 
       .el-tabs__nav-wrap::after {
         background-color: #ffffff25;
@@ -206,6 +207,7 @@ watch(
   }
 
   .equipment-list {
+    width: 100%;
     height: 24px;
     display: flex;
     align-items: center;
@@ -226,7 +228,7 @@ watch(
     }
 
     .scroll-wrapper {
-      width: 320px;
+      width: 100%;
       overflow: hidden;
       margin: 0 10px;
 
@@ -267,7 +269,7 @@ watch(
     display: flex;
     flex-wrap: wrap;
     overflow: auto;
-    height: 116px;
+    height: 65%;
 
     .parameter-item {
       padding: 8px;

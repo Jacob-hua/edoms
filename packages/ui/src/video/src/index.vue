@@ -1,7 +1,7 @@
 <template>
   <BusinessCard title="视频监控" subtitle="VIDEO" min-width="392" min-height="320">
-    <div class="warpper">
-      <el-tabs v-model="activeCamera" class="camera-tabs">
+    <div class="wrapper">
+      <el-tabs v-model="activeCamera">
         <el-tab-pane v-for="(camera, index) in cameras" :key="index" :label="camera.cameraName" :name="index" />
       </el-tabs>
       <VideoPlayer
@@ -47,15 +47,13 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.warpper {
+.wrapper {
   width: 100%;
 }
 
 :deep(.el-tabs) {
-  padding: 0 16px;
   .el-tabs__header {
     margin: 0;
-    width: 360px;
   }
 
   .el-tabs__nav-wrap::after {

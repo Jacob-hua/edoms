@@ -56,6 +56,8 @@ watch(
 
 <style lang="scss" scoped>
 .wrapper {
+  width: inherit;
+  height: inherit;
   min-width: 20px;
   min-height: 20px;
   display: flex;
