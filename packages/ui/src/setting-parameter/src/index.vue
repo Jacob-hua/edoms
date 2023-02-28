@@ -168,7 +168,7 @@ fetchSettingData();
 
 <style lang="scss" scoped>
 .overflow-ellipsis {
-  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -216,6 +216,7 @@ fetchSettingData();
       display: flex;
       margin-bottom: 4px;
       width: 100%;
+      justify-content: center;
 
       .value {
         font-weight: 500;
