@@ -156,7 +156,6 @@ const handleShowMore = () => {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  padding: 0 16px;
 
   .parameter {
     display: flex;
