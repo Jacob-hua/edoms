@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { dateRange, formatDateRange, formatPrecision, stringToDate, timeSubtract, UnitTime } from '@edoms/utils';
+import { daysInMonth, formatDate, formatDateRange, formatPrecision, UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -95,51 +95,62 @@ const intervalDelay = computed<number>(() => {
 
 const operatable = computed(() => 'operation');
 
-const xAxisMin = computed(() => dateRange(new Date(), dateType.value).start);
-// const xAxisMax = computed(() => dateRange(new Date(), dateType.value).end);
-const xAxisMax = computed(() => {
-  const defaultMaxTime = dateRange(new Date(), dateType.value).end;
-  if (magictype.value === 'line') {
-    return dateRange(new Date(), dateType.value).end;
-  } else if (magictype.value === 'bar') {
-    if (dateType.value === 'day') {
-      return timeSubtract(defaultMaxTime, 1, 'hour');
+const xAxisData = computed(() => {
+  let defaultResult = [
+    '00:00',
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
+  ];
+  if (dateType.value === 'day') {
+    return defaultResult;
+  } else if (dateType.value === 'month') {
+    const days = daysInMonth(new Date());
+    defaultResult = [];
+    for (let i = 1; i <= days; i++) {
+      defaultResult.push(i < 10 ? `0${i}` : `${i}`);
     }
-    if (dateType.value === 'month') {
-      return timeSubtract(defaultMaxTime, 1, 'day');
+    return defaultResult;
+  } else {
+    defaultResult = [];
+    for (let i = 1; i <= 12; i++) {
+      defaultResult.push(i < 10 ? `0${i}` : `${i}`);
     }
-    if (dateType.value === 'year') {
-      return timeSubtract(defaultMaxTime, 1, 'month');
-    }
-    return dateRange(defaultMaxTime, 'day').start;
+    return defaultResult;
   }
-  return dateRange(new Date(), dateType.value).end;
 });
 
 const formatXAxisLabel = computed(() => {
   if (dateType.value === 'day') {
-    return '{HH}:{mm}';
+    return 'HH:mm';
   }
   if (dateType.value === 'month') {
-    return '{dd}';
+    return 'dd';
   }
   if (dateType.value === 'year') {
-    return '{MM}';
+    return 'MM';
   }
-  return '{HH}:{mm}';
-});
-
-const maxInterval = computed(() => {
-  if (dateType.value === 'day') {
-    return 3600 * 1000;
-  }
-  if (dateType.value === 'month') {
-    return 3600 * 1000 * 24;
-  }
-  if (dateType.value === 'year') {
-    return 3600 * 1000 * 24 * 31;
-  }
-  return 3600 * 1000;
+  return 'HH:mm';
 });
 
 const options = computed<ECOption>(() => {
@@ -167,17 +178,14 @@ const options = computed<ECOption>(() => {
       containLabel: true,
     },
     xAxis: {
-      type: 'time',
-      min: xAxisMin.value,
-      max: xAxisMax.value,
-      maxInterval: maxInterval.value,
+      type: 'category',
       splitLine: {
         show: false,
       },
       axisLabel: {
-        formatter: formatXAxisLabel.value,
         interval: 0,
       },
+      data: xAxisData.value,
     },
     yAxis: {
       type: 'value',
@@ -262,7 +270,11 @@ const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
     name: energyName.value ? energyName : `未命名${index}`,
     type: magictype.value,
     showSymbol: false,
-    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    // data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    data: dataList.map(({ time, value }) => {
+      const label = formatDate(time, formatXAxisLabel.value);
+      return [label, value];
+    }),
     itemStyle: {
       color: efficiencyConfig.value?.lineColor,
     },
