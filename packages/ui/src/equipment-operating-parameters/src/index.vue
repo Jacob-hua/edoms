@@ -116,15 +116,19 @@ const rightBtnColor = computed(() => {
 });
 
 const updateParameterData = async () => {
-  const result = await fetchOperationParameter(params.value);
-  currentParameters.value = parameters.value.map((parameter) => {
-    let dataValue = '-';
-    const parameterVal = result.find(({ propCode }) => propCode === parameter.property);
-    if (parameterVal && parameterVal.dataValue && isNumber(parameterVal.dataValue)) {
-      dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision));
-    }
-    return { ...parameter, dataValue };
-  });
+  try {
+    const result = await fetchOperationParameter(params.value);
+    currentParameters.value = parameters.value.map((parameter) => {
+      let dataValue = '-';
+      const parameterVal = result.find(({ propCode }) => propCode === parameter.property);
+      if (parameterVal && parameterVal.dataValue && isNumber(parameterVal.dataValue)) {
+        dataValue = String(formatPrecision(Number(parameterVal?.dataValue), parameter.precision));
+      }
+      return { ...parameter, dataValue };
+    });
+  } catch (error) {
+    currentParameters.value = parameters.value.map((parameter) => ({ ...parameter, dataValue: '-' }));
+  }
 };
 const leftSlid = () => {
   if (scrollRef.value.scrollLeft <= 0) return;
