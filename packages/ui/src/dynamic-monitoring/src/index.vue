@@ -276,8 +276,6 @@ const getHistoryData = async (date: Date) => {
     ],
   });
 
-  console.log(activeIndicator.value?.precision);
-
   chartSeries.value = result.map(({ dataList }, index) => ({
     name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
     type: magictype.value,

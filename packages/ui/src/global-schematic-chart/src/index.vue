@@ -64,7 +64,6 @@ const updateParameterData = async () => {
           ({ instance, property }) => insCode === instance[instance.length - 1] && propCode === property
         )
       ];
-    console.log(indicatorConfig);
 
     lineUnit.value.push(indicatorConfig.unit);
     return {
