@@ -1,7 +1,11 @@
 <template>
   <div class="wrapper">
     <el-tabs v-model="activeParameter" class="left-tabs" tab-position="left">
-      <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :label="label" :name="`${index}`" />
+      <el-tab-pane v-for="({ label }, index) in parameterConfigs" :key="index" :name="`${index}`">
+        <template #label>
+          <div :title="label">{{ label }}</div>
+        </template>
+      </el-tab-pane>
     </el-tabs>
     <EdomsCharts class="charts" :option="option"></EdomsCharts>
   </div>
@@ -47,10 +51,9 @@ watch(
 
 <style lang="scss" scoped>
 .wrapper {
-  width: 100%;
   height: 100%;
   display: flex;
-  padding: 12px 16px;
+  padding: 12px 0px;
   box-sizing: border-box;
   width: 100%;
 }
@@ -58,8 +61,15 @@ watch(
 :deep(.left-tabs) {
   min-width: 122px;
   margin-right: 20px;
+  max-width: 10%;
   & .el-tabs__item {
     text-align: center;
+
+    div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   & .el-tabs__item.is-active {
@@ -67,7 +77,7 @@ watch(
   }
   .el-tabs__header {
     width: 100%;
-    height: 90%;
+    height: 100%;
     overflow: auto;
     margin: 0;
 
