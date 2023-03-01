@@ -64,16 +64,15 @@ const updateParameterData = async () => {
           ({ instance, property }) => insCode === instance[instance.length - 1] && propCode === property
         )
       ];
+    console.log(indicatorConfig);
+
     lineUnit.value.push(indicatorConfig.unit);
     return {
       name: indicatorConfig.label ? indicatorConfig.label : `未命名${index}`,
       type: 'line',
       showSymbol: false,
       color: indicatorConfig.lineColor,
-      data: dataList.map(({ time, value }) => [
-        stringToDate(time),
-        +formatPrecision(+value, indicatorConfig.precision),
-      ]),
+      data: dataList.map(({ time, value }) => [stringToDate(time), formatPrecision(+value, indicatorConfig.precision)]),
     };
   });
   option.value = generateOption(chartSeries);

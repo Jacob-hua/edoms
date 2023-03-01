@@ -119,7 +119,7 @@ const updateParameterData = async () => {
       color: activeIndicator?.color,
       data: dataList.map(({ time, value }) => [
         stringToDate(time),
-        +formatPrecision(+value, activeIndicator?.precision ?? ''),
+        formatPrecision(+value, activeIndicator?.precision ?? ''),
       ]),
     };
   });
