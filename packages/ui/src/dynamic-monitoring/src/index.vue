@@ -62,6 +62,7 @@ export interface Indicator {
   deviceCode: string;
   propCode: string;
   unit: string;
+  precision: string;
   lineColor: string;
 }
 
@@ -170,7 +171,7 @@ const options = computed<ECOption>(() => {
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
-    indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit, lineColor }) => ({
+    indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit, lineColor, precision }) => ({
       label,
       parameter: '',
       displayParameter: '',
@@ -179,6 +180,7 @@ watch(
       deviceCode: instance[instance.length - 1],
       propCode: property,
       unit: unit,
+      precision: precision,
       lineColor: lineColor,
     }));
     if (indicators.value.length > 5) {
@@ -228,6 +230,7 @@ const updateIndicatorsData = async () => {
       indicator.parameterStyle = calculateParameterStyle(indicator, indicatorConfig);
       indicator.deviceCode = deviceCode;
       indicator.propCode = propCode;
+      indicator.precision = indicatorConfig.precision;
       indicator.unit = indicatorConfig.unit;
     });
   });
@@ -277,7 +280,10 @@ const getHistoryData = async (date: Date) => {
     name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
     type: magictype.value,
     showSymbol: false,
-    data: dataList.map(({ time, value }) => [stringToDate(time), value]),
+    data: dataList.map(({ time, value }) => [
+      stringToDate(time),
+      formatPrecision(+value, activeIndicator.value?.precision ?? ''),
+    ]),
     itemStyle: {
       color: activeIndicator.value?.lineColor,
     },

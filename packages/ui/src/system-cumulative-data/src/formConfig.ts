@@ -134,7 +134,7 @@ export default async (request: Request) => {
         ...(await useInstanceConfig(request, 'system-cumulative-data')),
         {
           name: 'ratioPrecision',
-          text: '精度',
+          text: '比率精度',
           type: 'select',
           options: [
             {

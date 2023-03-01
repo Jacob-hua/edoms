@@ -224,7 +224,7 @@ const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
     showSymbol: false,
     data: dataList.map(({ time, value }) => {
       const label = formatDate(time, formatXAxisLabel.value);
-      return [label, +formatPrecision(+value, efficiencyConfig.value.precision)];
+      return [label, formatPrecision(+value, efficiencyConfig.value.precision)];
     }),
     itemStyle: {
       color: efficiencyConfig.value?.lineColor,
