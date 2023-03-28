@@ -14,7 +14,7 @@ const props = defineProps<{
   config: MImg;
 }>();
 
-const { provideMethod, filePreviewFile } = useApp(props);
+const { provideMethod } = useApp(props);
 
 const imgRef = ref<HTMLImageElement>();
 
@@ -53,6 +53,6 @@ onUnmounted(() => {
 });
 
 function handleImgError() {
-  imgSrc.value = `${filePreviewFile}${imgFileUrl.value}`;
+  imgSrc.value = `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=${imgFileUrl.value}`;
 }
 </script>

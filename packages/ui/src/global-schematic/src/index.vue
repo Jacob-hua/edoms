@@ -18,7 +18,7 @@ const props = defineProps<{
   config: MGlobalSchematic;
 }>();
 
-const { request, app, filePreviewFile } = useApp(props);
+const { request, app } = useApp(props);
 
 const node = app?.page?.getNode(props.config.id);
 
@@ -94,6 +94,6 @@ onUnmounted(() => {
 });
 
 function handleImgError() {
-  imgSrc.value = `${filePreviewFile}${imgFileUrl.value}`;
+  imgSrc.value = `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=${imgFileUrl.value}`;
 }
 </script>
