@@ -10,7 +10,6 @@ export default (props: any) => {
   const app = inject<Core | undefined>('app');
   const node = app?.page?.getNode(props.config.id);
   const request = inject<EdomsRequestFunc | undefined>('request');
-  const filePreviewFile = inject<string | undefined>('filePreviewFile') ?? '/';
 
   const instance: MNodeInstance = {
     methods: {
@@ -54,6 +53,5 @@ export default (props: any) => {
     node,
     provideMethod,
     request,
-    filePreviewFile,
   };
 };

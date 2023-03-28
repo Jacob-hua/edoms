@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, onMounted, onUnmounted, provide, ref, watch } from 'vue';
+import { inject, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import Core from '@edoms/core';
 import { MApp } from '@edoms/schema';
@@ -39,11 +39,6 @@ watch(
     app.setConfig(dsl, getUrlParam('page') ?? dsl.index);
     pageConfig.value = app.page?.data || {};
   }
-);
-
-provide(
-  'filePreviewUrl',
-  'http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId='
 );
 
 function setDSL({ data }: { data: MApp }) {

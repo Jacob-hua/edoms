@@ -32,11 +32,6 @@ provide('app', app);
 
 provide('request', undefined);
 
-provide(
-  'filePreviewUrl',
-  'http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId='
-);
-
 watch(pageConfig, async () => {
   await nextTick();
   const page = document.querySelector<HTMLElement>('.edoms-ui-page');
