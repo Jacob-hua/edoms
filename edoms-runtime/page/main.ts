@@ -37,8 +37,11 @@ Object.values(plugins).forEach((plugin: any) => {
 
 const designWidth = document.documentElement.getBoundingClientRect().width;
 
+const filePreviewUrl = import.meta.env.VITE_FILE_PREVIEW_URL;
+
 const app = new Core({
   designWidth,
+  filePreviewUrl,
 });
 
 edomsApp.config.globalProperties.app = app;

@@ -19,10 +19,12 @@ const pageConfig = computed(
 );
 
 const designWidth = document.documentElement.getBoundingClientRect().width;
+const filePreviewUrl = import.meta.env.VITE_FILE_PREVIEW_URL;
 const app = new Core({
   designWidth,
   config: root.value,
   platform: 'editor',
+  filePreviewUrl,
 });
 
 window.appInstance = app;
