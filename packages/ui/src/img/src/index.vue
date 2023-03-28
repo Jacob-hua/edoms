@@ -53,7 +53,6 @@ onUnmounted(() => {
 });
 
 function handleImgError() {
-  // TODO: 此处应该通过配置文件来配置请求路径
   imgSrc.value = `${app?.filePreviewUrl}${imgFileUrl.value}`;
 }
 </script>
