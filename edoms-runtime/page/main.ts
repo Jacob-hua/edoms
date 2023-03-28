@@ -36,12 +36,12 @@ Object.values(plugins).forEach((plugin: any) => {
 });
 
 const designWidth = document.documentElement.getBoundingClientRect().width;
-
-const filePreviewUrl = import.meta.env.VITE_FILE_PREVIEW_URL;
+const { VITE_FILE_PREVIEW_URL } = import.meta.env;
+console.log('运行时filePreviewUrl预览地址', VITE_FILE_PREVIEW_URL);
 
 const app = new Core({
   designWidth,
-  filePreviewUrl,
+  filePreviewUrl: VITE_FILE_PREVIEW_URL,
 });
 
 edomsApp.config.globalProperties.app = app;
