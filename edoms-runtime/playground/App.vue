@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts" setup>
+import { loadEnv } from 'vite';
 import { computed, nextTick, provide, reactive, ref, watch } from 'vue';
 
 import Core from '@edoms/core';
@@ -20,13 +21,15 @@ const pageConfig = computed(
 
 const designWidth = document.documentElement.getBoundingClientRect().width;
 
-const { VITE_FILE_PREVIEW_URL } = import.meta.env;
-console.log('编辑时filePreviewUrl预览地址', VITE_FILE_PREVIEW_URL);
+const mode = import.meta.env.MODE;
+const [, _mode] = mode.split(':');
+const env = loadEnv(_mode ?? 'development', process.cwd(), '');
+
 const app = new Core({
   designWidth,
   config: root.value,
   platform: 'editor',
-  filePreviewUrl: VITE_FILE_PREVIEW_URL,
+  filePreviewUrl: env.VITE_FILE_PREVIEW_URL,
 });
 
 window.appInstance = app;
