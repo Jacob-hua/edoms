@@ -1,4 +1,3 @@
-// import { loadEnv } from 'vite';
 import { createApp, defineAsyncComponent } from 'vue';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -38,13 +37,8 @@ Object.values(plugins).forEach((plugin: any) => {
 
 const designWidth = document.documentElement.getBoundingClientRect().width;
 
-// const mode = import.meta.env.MODE;
-// const [, _mode] = mode.split(':');
-// const env = loadEnv(_mode ?? 'development', process.cwd(), '');
-
 const app = new Core({
   designWidth,
-  filePreviewUrl: 'http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=',
 });
 
 edomsApp.config.globalProperties.app = app;

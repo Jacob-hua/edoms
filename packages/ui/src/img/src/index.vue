@@ -14,7 +14,7 @@ const props = defineProps<{
   config: MImg;
 }>();
 
-const { provideMethod, app } = useApp(props);
+const { provideMethod, filePreviewFile } = useApp(props);
 
 const imgRef = ref<HTMLImageElement>();
 
@@ -53,6 +53,6 @@ onUnmounted(() => {
 });
 
 function handleImgError() {
-  imgSrc.value = `${app?.filePreviewUrl}${imgFileUrl.value}`;
+  imgSrc.value = `${filePreviewFile}${imgFileUrl.value}`;
 }
 </script>
