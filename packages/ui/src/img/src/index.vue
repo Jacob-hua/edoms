@@ -14,7 +14,7 @@ const props = defineProps<{
   config: MImg;
 }>();
 
-const { provideMethod } = useApp(props);
+const { provideMethod, app } = useApp(props);
 
 const imgRef = ref<HTMLImageElement>();
 
@@ -54,6 +54,6 @@ onUnmounted(() => {
 
 function handleImgError() {
   // TODO: 此处应该通过配置文件来配置请求路径
-  imgSrc.value = `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=${imgFileUrl.value}`;
+  imgSrc.value = `${app?.filePreviewUrl}${imgFileUrl.value}`;
 }
 </script>

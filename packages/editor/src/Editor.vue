@@ -130,7 +130,11 @@ const props = withDefaults(
     containerHighlightDuration: () => 800,
     containerHighlightType: () => ContainerHighlightType.DEFAULT,
     codeOptions: () => ({}),
-    request: () => () => {},
+    request: () => {
+      const request: Request = () => {};
+      request.filePreviewUrl = '';
+      return request;
+    },
   }
 );
 

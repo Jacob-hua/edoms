@@ -35,7 +35,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import serialize from 'serialize-javascript';
 
-import { editorService, EdomsEditor, MenuBarData, MoveableOptions, RequestProps } from '@edoms/editor';
+import { editorService, EdomsEditor, MenuBarData, MoveableOptions, Request, RequestProps } from '@edoms/editor';
 import type { Id, MApp, MContainer, MNode, MPage } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
@@ -270,7 +270,7 @@ const canSelect = (el: HTMLElement): boolean => {
 
 const { requestInstances, requestPoints } = useModel();
 
-const loadData = async (props?: RequestProps): Promise<any> => {
+const loadData: Request = async (props?: RequestProps): Promise<any> => {
   if (!props) {
     return;
   }
@@ -324,6 +324,10 @@ const loadData = async (props?: RequestProps): Promise<any> => {
   }
   return;
 };
+
+loadData.filePreviewUrl =
+  import.meta.env.VITE_FILE_PREVIEW_URL ??
+  'http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=';
 
 function goBack() {
   router.push({

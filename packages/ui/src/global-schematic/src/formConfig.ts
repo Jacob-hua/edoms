@@ -17,7 +17,7 @@ export default async (request: Request) => [
     name: 'src',
     type: 'upload',
     listType: 'picture',
-    basePreviewUrl: 'http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=',
+    basePreviewUrl: request.basePreviewUrl,
     accepts: ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP'],
     upload: async (value: any, prop: string, mForm: any) => {
       return await request({
