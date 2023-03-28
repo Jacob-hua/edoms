@@ -18,7 +18,7 @@ const props = defineProps<{
   config: MGlobalSchematic;
 }>();
 
-const { request, app } = useApp(props);
+const { request, app, filePreviewFile } = useApp(props);
 
 const node = app?.page?.getNode(props.config.id);
 
@@ -94,6 +94,6 @@ onUnmounted(() => {
 });
 
 function handleImgError() {
-  imgSrc.value = `${app?.filePreviewUrl}${imgFileUrl.value}`;
+  imgSrc.value = `${filePreviewFile}${imgFileUrl.value}`;
 }
 </script>

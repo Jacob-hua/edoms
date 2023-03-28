@@ -11,7 +11,6 @@ import Store from './Store';
 import { calculateMethodProps, fillBackgroundImage, isNumber, style2Obj } from './utils';
 
 interface AppOptionsConfig {
-  filePreviewUrl?: string;
   ua?: string;
   config?: MApp;
   platform?: 'editor' | 'mobile' | 'tv' | 'pc';
@@ -32,7 +31,6 @@ class App extends EventEmitter {
   public env;
   public codeDsl: CodeBlockDSL | undefined;
   public pages = new Map<Id, Page>();
-  public filePreviewUrl: string = '';
 
   public page: Page | undefined;
 
@@ -55,8 +53,6 @@ class App extends EventEmitter {
     options.platform && (this.platform = options.platform);
     options.jsEngine && (this.jsEngine = options.jsEngine);
     options.designWidth && (this.designWidth = options.designWidth);
-
-    this.filePreviewUrl = options.filePreviewUrl ?? '';
 
     // 根据屏幕大小计算出跟节点的font-size，用于rem样式的适配
     if (this.platform === 'mobile' || this.platform === 'editor') {
