@@ -325,9 +325,9 @@ const loadData: Request = async (props?: RequestProps): Promise<any> => {
   return;
 };
 
-loadData.filePreviewUrl =
-  import.meta.env.VITE_FILE_PREVIEW_URL ??
-  'http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=';
+loadData.filePreviewUrl = import.meta.env.VITE_FILE_PREVIEW_URL ?? '';
+
+console.log('=====图片上传预览地址', loadData.filePreviewUrl);
 
 function goBack() {
   router.push({
