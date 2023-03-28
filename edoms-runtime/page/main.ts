@@ -1,3 +1,4 @@
+import { loadEnv } from 'vite';
 import { createApp, defineAsyncComponent } from 'vue';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -36,12 +37,14 @@ Object.values(plugins).forEach((plugin: any) => {
 });
 
 const designWidth = document.documentElement.getBoundingClientRect().width;
-const { VITE_FILE_PREVIEW_URL } = import.meta.env;
-console.log('运行时filePreviewUrl预览地址', VITE_FILE_PREVIEW_URL);
+
+const mode = import.meta.env.MODE;
+const [, _mode] = mode.split(':');
+const env = loadEnv(_mode ?? 'development', process.cwd(), '');
 
 const app = new Core({
   designWidth,
-  filePreviewUrl: VITE_FILE_PREVIEW_URL,
+  filePreviewUrl: env.VITE_FILE_PREVIEW_URL,
 });
 
 edomsApp.config.globalProperties.app = app;

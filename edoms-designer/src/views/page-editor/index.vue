@@ -54,7 +54,7 @@ import { generateDefaultDSL } from '@/util/dsl';
 
 import DSLPreviewDialog from './component/DSLPreviewDialog.vue';
 
-const { VITE_RUNTIME_PATH } = import.meta.env;
+const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH, VITE_FILE_PREVIEW_URL } = import.meta.env;
 
 editorService.usePlugin({
   beforeDoAdd: (config: MNode, parent?: MContainer | null) => {
@@ -104,8 +104,6 @@ const propsValues = ref<Record<string, any>>({});
 const propsConfigs = ref<Record<string, any>>({});
 
 const eventMethodList = ref<Record<string, any>>({});
-
-const { VITE_ENTRY_PATH } = import.meta.env;
 
 useAsyncLoadJS(
   [
@@ -271,7 +269,7 @@ const canSelect = (el: HTMLElement): boolean => {
 
 const { requestInstances, requestPoints } = useModel();
 
-const uploadPreviewFile: string = import.meta.env.VITE_FILE_PREVIEW_URL;
+const uploadPreviewFile: string = VITE_FILE_PREVIEW_URL;
 
 const loadData: Request = async (props?: RequestProps): Promise<any> => {
   if (!props) {
