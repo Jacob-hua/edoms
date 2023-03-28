@@ -2,7 +2,7 @@ import { Request } from '@edoms/editor';
 
 import useInstanceConfig from '../../useInstanceConfig';
 
-export default async (request: Request) => [
+export default async (request: Request, uploadPreviewFile: string) => [
   {
     text: '轮询间隔',
     name: 'intervalDelay',
@@ -17,7 +17,7 @@ export default async (request: Request) => [
     name: 'src',
     type: 'upload',
     listType: 'picture',
-    basePreviewUrl: request.basePreviewUrl,
+    basePreviewUrl: uploadPreviewFile,
     accepts: ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP'],
     upload: async (value: any, prop: string, mForm: any) => {
       return await request({

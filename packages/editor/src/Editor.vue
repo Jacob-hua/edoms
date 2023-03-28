@@ -115,6 +115,7 @@ const props = withDefaults(
     codeOptions?: Record<string | number | symbol, any>;
     updateDragEl?: (el: HTMLDivElement, target: HTMLElement) => void;
     request?: Request;
+    uploadPreviewFile?: string;
   }>(),
   {
     componentGroupList: () => [],
@@ -130,11 +131,8 @@ const props = withDefaults(
     containerHighlightDuration: () => 800,
     containerHighlightType: () => ContainerHighlightType.DEFAULT,
     codeOptions: () => ({}),
-    request: () => {
-      const request: Request = () => {};
-      request.filePreviewUrl = '';
-      return request;
-    },
+    request: () => () => {},
+    uploadPreviewFile: () => '',
   }
 );
 
@@ -178,8 +176,8 @@ watch(
 );
 
 watch(
-  () => ({ configs: props.propsConfigs, request: props.request }),
-  ({ configs, request }) => propsService.setPropsConfigs(configs, request),
+  () => ({ configs: props.propsConfigs, request: props.request, uploadPreviewFile: props.uploadPreviewFile }),
+  ({ configs, request, uploadPreviewFile }) => propsService.setPropsConfigs(configs, request, uploadPreviewFile),
   {
     immediate: true,
   }

@@ -24,7 +24,6 @@ export interface RequestProps {
 // export type Request = (props?: RequestProps) => Promise<any> | any;
 export interface Request {
   (props?: RequestProps): Promise<any> | any;
-  filePreviewUrl: any;
 }
 
 export type BeforeAdd = (config: MNode, parent: MContainer) => Promise<MNode> | MNode;
