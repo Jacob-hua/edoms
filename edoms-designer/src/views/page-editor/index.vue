@@ -15,6 +15,7 @@
       :auto-scroll-into-view="true"
       :stage-rect="stageRect"
       :request="loadData"
+      :upload-preview-file="uploadPreviewFile"
     >
     </edoms-editor>
 
@@ -270,6 +271,8 @@ const canSelect = (el: HTMLElement): boolean => {
 
 const { requestInstances, requestPoints } = useModel();
 
+const uploadPreviewFile: string = import.meta.env.VITE_FILE_PREVIEW_URL;
+
 const loadData: Request = async (props?: RequestProps): Promise<any> => {
   if (!props) {
     return;
@@ -324,10 +327,6 @@ const loadData: Request = async (props?: RequestProps): Promise<any> => {
   }
   return;
 };
-
-loadData.filePreviewUrl = import.meta.env.VITE_FILE_PREVIEW_URL ?? '';
-
-console.log('=====图片上传预览地址', loadData.filePreviewUrl);
 
 function goBack() {
   router.push({

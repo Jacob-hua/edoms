@@ -35,9 +35,9 @@ export class PropsService extends BaseService {
     this.idPrefix = prefix;
   }
 
-  public setPropsConfigs(configs: Record<string, FormConfig>, request?: Request) {
+  public setPropsConfigs(configs: Record<string, FormConfig>, request?: Request, uploadPreviewFile?: string) {
     Object.keys(configs).forEach((type: string) => {
-      this.setPropsConfig(toLine(type), configs[type], request);
+      this.setPropsConfig(toLine(type), configs[type], request, uploadPreviewFile);
     });
     this.emit('props-configs-change');
   }
@@ -53,12 +53,13 @@ export class PropsService extends BaseService {
    */
   public async setPropsConfig(
     type: string,
-    config: FormConfig | ((request?: Request) => Promise<FormConfig> | FormConfig),
-    request?: Request
+    config: FormConfig | ((request?: Request, uploadPreviewFile?: string) => Promise<FormConfig> | FormConfig),
+    request?: Request,
+    uploadPreviewFile?: string
   ) {
     let componentConfig = [];
     if (typeof config === 'function') {
-      componentConfig = await config(request);
+      componentConfig = await config(request, uploadPreviewFile);
     } else {
       componentConfig = Array.isArray(config) ? config : [config];
     }
