@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { loadEnv } from 'vite';
+// import { loadEnv } from 'vite';
 import { computed, nextTick, provide, reactive, ref, watch } from 'vue';
 
 import Core from '@edoms/core';
@@ -21,15 +21,15 @@ const pageConfig = computed(
 
 const designWidth = document.documentElement.getBoundingClientRect().width;
 
-const mode = import.meta.env.MODE;
-const [, _mode] = mode.split(':');
-const env = loadEnv(_mode ?? 'development', process.cwd(), '');
+// const mode = import.meta.env.MODE;
+// const [, _mode] = mode.split(':');
+// const env = loadEnv(_mode ?? 'development', process.cwd(), '');
 
 const app = new Core({
   designWidth,
   config: root.value,
   platform: 'editor',
-  filePreviewUrl: env.VITE_FILE_PREVIEW_URL,
+  filePreviewUrl: 'http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=',
 });
 
 window.appInstance = app;
