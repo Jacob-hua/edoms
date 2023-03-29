@@ -9,6 +9,7 @@
 import { computed, ref, toRaw, watch, watchEffect } from 'vue';
 
 import { Id, MApp } from '@edoms/schema';
+import { isURL } from '@edoms/utils';
 
 import useDownloadDSL from '@/hooks/useDownloadDSL';
 
@@ -29,10 +30,10 @@ const loading = ref<boolean>(true);
 
 const { VITE_RUNTIME_PATH } = import.meta.env;
 
-const runtimeUrl = `${VITE_RUNTIME_PATH}/page/index.html`;
+const runtimeUrl = isURL(VITE_RUNTIME_PATH) ? `${VITE_RUNTIME_PATH}` : `${window.location.origin}${VITE_RUNTIME_PATH}`;
 
 const previewUrl = computed<string>(() => {
-  const previewUrl = new URL(runtimeUrl);
+  const previewUrl = new URL(`${runtimeUrl}/page/index.html`);
   if (props.pageId) {
     previewUrl.searchParams.set('page', `${props.pageId}`);
   }

@@ -21,3 +21,12 @@ export const isSameDomain = (targetUrl = '', source = globalThis.location.host) 
 
   return getHost(targetUrl) === source;
 };
+
+export const isURL = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
