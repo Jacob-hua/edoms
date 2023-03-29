@@ -72,7 +72,7 @@ const menu: MenuBarData = {
   left: [
     {
       type: 'text',
-      text: 'E-DOMS',
+      text: 'E-DOMs',
     },
   ],
   center: ['delete', 'undo', 'redo', 'guides', 'rule', 'zoom'],

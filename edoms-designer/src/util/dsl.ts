@@ -69,7 +69,7 @@ export const generateDefaultDSL = (config: AppDSLConfig): MApp => {
               },
             },
             name: '文本',
-            text: 'E-DOMS',
+            text: 'E-DOMs',
             multiple: true,
             inputEvent: {
               isTrusted: true,
