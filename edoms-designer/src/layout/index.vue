@@ -3,7 +3,7 @@
     <BaseLayout>
       <template #header>
         <div class="describe">
-          <span>E-DOMS</span>
+          <span>E-DOMs</span>
           <div class="pop-menu-wrapper">
             <PopMenu
               ref="popMenuRef"

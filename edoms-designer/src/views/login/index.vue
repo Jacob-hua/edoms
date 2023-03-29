@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <section v-show="loginFormVisible" class="form-section">
-      <div class="title">E-DOMS</div>
+      <div class="title">E-DOMs</div>
       <div class="body">
         <el-form
           ref="loginFormRef"
@@ -35,7 +35,7 @@
       </div>
     </section>
     <section v-show="tenantFormVisible" class="form-section">
-      <div class="title">E-DOMS</div>
+      <div class="title">E-DOMs</div>
       <div class="body">
         <el-form
           ref="tenantFormRef"
