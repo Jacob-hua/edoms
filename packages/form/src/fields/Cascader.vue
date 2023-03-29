@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, watch } from 'vue';
+import { computed, inject, ref, watch, watchEffect } from 'vue';
 
 import { ElCascader } from '@edoms/design';
 
@@ -88,17 +88,21 @@ const setRemoteOptions = async function () {
 };
 
 // 初始化
-if (typeof props.config.options === 'function' && props.model && mForm) {
-  // watchEffect(async () => {
-  //   options.value = await (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values });
-  // });
-  watch(
-    () => ({ configOptions: props.config.options }),
-    async ({ configOptions }) => {
-      options.value = await (configOptions as Function)(mForm, { model: props.model, formValues: mForm.values });
-    },
-    { immediate: true }
-  );
+if (typeof props.config.options === 'function') {
+  watchEffect(() => {
+    typeof props.config.options === 'function' &&
+      Promise.resolve(
+        props.config.options(mForm, {
+          model: props.model,
+          prop: props.prop,
+          formValues: mForm?.values,
+          formValue: mForm?.values,
+          config: props.config,
+        })
+      ).then((data) => {
+        options.value = data;
+      });
+  });
 } else if (!props.config.options || !props.config.options.length || props.config.remote) {
   Promise.resolve(setRemoteOptions());
 }

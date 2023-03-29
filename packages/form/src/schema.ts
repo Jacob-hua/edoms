@@ -495,6 +495,17 @@ export interface LinkConfig extends FormItem {
   fullscreen?: boolean;
 }
 
+type CascaderOptionFunction = (
+  mForm: FormState | undefined,
+  data: {
+    model: any;
+    prop?: string;
+    formValues: any;
+    formValue: any;
+    config: any;
+  }
+) => CascaderOption[] | Promise<CascaderOption[]>;
+
 /**
  * 级联选择器
  */
@@ -504,15 +515,7 @@ export interface CascaderConfig extends FormItem, Input {
   multiple?: boolean;
   filterable?: boolean;
   checkStrictly?: boolean;
-  options?:
-    | ((
-        mForm: FormState | undefined,
-        data: {
-          model: Record<any, any>;
-          formValues?: Record<any, any>;
-        }
-      ) => CascaderOption[] | Promise<CascaderOption[]>)
-    | CascaderOption[];
+  options: CascaderOption[] | CascaderOptionFunction;
   relOptions?: CascaderOption[];
   option?: {
     url: string;
