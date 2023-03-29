@@ -269,62 +269,73 @@ const canSelect = (el: HTMLElement): boolean => {
 
 const { requestInstances, requestPoints } = useModel();
 
+const instances = ref<any[]>([]);
+
+requestInstances().then((data) => (instances.value = data));
+
 const uploadPreviewFile: string = VITE_FILE_PREVIEW_URL;
 
-const loadData: Request = async (props?: RequestProps): Promise<any> => {
-  if (!props) {
-    return;
-  }
-  const [component, parameter] = props.resourceId?.split(':');
-  if (parameter === 'instance') {
-    return await requestInstances();
-  }
-  if (parameter === 'point') {
-    const prop = props.prop ?? '';
-    let model: any = {
-      instance: [],
-      instanceType: undefined,
-      instanceName: undefined,
-      propertyType: undefined,
+const loadData = ref<Request>(() => {});
+
+watch(
+  () => instances.value,
+  (instances) => {
+    loadData.value = async (props?: RequestProps): Promise<any> => {
+      if (!props) {
+        return;
+      }
+      const [component, parameter] = props.resourceId?.split(':');
+      if (parameter === 'instance') {
+        return instances;
+      }
+      if (parameter === 'point') {
+        const prop = props.prop ?? '';
+        let model: any = {
+          instance: [],
+          instanceType: undefined,
+          instanceName: undefined,
+          propertyType: undefined,
+        };
+        if (
+          [
+            'dynamic-monitoring',
+            'system-operation-parameters',
+            'global-schematic',
+            'running-parameters',
+            'global-schematic-chart',
+            'multiple-energy-monitoring',
+            'charts',
+            'equipment-condition',
+            'system-cumulative-data',
+            'equipment-operating-parameter',
+          ].includes(component)
+        ) {
+          const pathLastIndex = prop.lastIndexOf('.');
+          const domainPath = prop.substring(0, pathLastIndex);
+          model = getByPath(props.formValue ?? {}, domainPath, '');
+        }
+        if (['energy-efficiency-monitoring'].includes(component)) {
+          model = props.formValue;
+        }
+        if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
+          return await requestPoints({
+            insId: model.instance[model.instance.length - 1],
+            codeType: model.instanceType,
+            propType: model.propertyType,
+          });
+        }
+        return [];
+      }
+      if (parameter === 'upload') {
+        const { execute: fileUploadExecute } = useUpload();
+        const result = await fileUploadExecute(props.data as File, props.data?.name, props.data?.type);
+        result && staticResource.value.set(props.formValue?.id, result);
+        return result;
+      }
+      return;
     };
-    if (
-      [
-        'dynamic-monitoring',
-        'system-operation-parameters',
-        'global-schematic',
-        'running-parameters',
-        'global-schematic-chart',
-        'multiple-energy-monitoring',
-        'charts',
-        'equipment-condition',
-        'system-cumulative-data',
-        'equipment-operating-parameter',
-      ].includes(component)
-    ) {
-      const pathLastIndex = prop.lastIndexOf('.');
-      const domainPath = prop.substring(0, pathLastIndex);
-      model = getByPath(props.formValue ?? {}, domainPath, '');
-    }
-    if (['energy-efficiency-monitoring'].includes(component)) {
-      model = props.formValue;
-    }
-    if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
-      return await requestPoints({
-        insId: model.instance[model.instance.length - 1],
-        codeType: model.instanceType,
-        propType: model.propertyType,
-      });
-    }
-    return [];
   }
-  if (parameter === 'upload') {
-    const { execute: fileUploadExecute } = useUpload();
-    const result = await fileUploadExecute(props.data as File, props.data?.name, props.data?.type);
-    result && staticResource.value.set(props.formValue?.id, result);
-    return result;
-  }
-  return;
-};
+);
 
 function goBack() {
   router.push({

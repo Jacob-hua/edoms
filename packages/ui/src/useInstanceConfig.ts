@@ -28,7 +28,7 @@ const getSelectedProperty = (value: string, options: any[]): any => {
 export type InstanceItem = 'instance' | 'propertyType' | 'property' | 'unit' | 'precision';
 
 export default async (request: Request, componentName: string, hiddenItems: InstanceItem[] = []) => {
-  // const instances = await fetchInstances(request, componentName);
+  const instances = await fetchInstances(request, componentName);
 
   return [
     {
@@ -37,10 +37,10 @@ export default async (request: Request, componentName: string, hiddenItems: Inst
       type: 'cascader',
       filterable: true,
       checkStrictly: true,
-      options: async () => await fetchInstances(request, componentName),
+      options: instances,
       display: () => !hiddenItems.includes('instance'),
-      onChange: (mForm: any, value: any, { model, config }: any) => {
-        const modelInstance = getSelectedInstance(value, config.relOptions ?? []);
+      onChange: (mForm: any, value: any, { model }: any) => {
+        const modelInstance = getSelectedInstance(value, instances);
         model.instanceType = modelInstance?.type;
         model.instanceName = modelInstance?.label;
         model.propertyType = '';

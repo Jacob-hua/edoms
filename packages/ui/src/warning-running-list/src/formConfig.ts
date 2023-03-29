@@ -25,9 +25,11 @@ export default async (request: Request) => {
       filterable: true,
       checkStrictly: true,
       options: async () =>
-        (await request({
-          resourceId: `warning-running-list:instance`,
-        })) ?? [],
+        (await (
+          request({
+            resourceId: `warning-running-list:instance`,
+          }) as Function
+        )()) ?? [],
     },
     {
       text: '时间范围',
