@@ -513,6 +513,7 @@ export interface CascaderConfig extends FormItem, Input {
         }
       ) => CascaderOption[] | Promise<CascaderOption[]>)
     | CascaderOption[];
+  relOptions?: CascaderOption[];
   option?: {
     url: string;
     cache?: boolean;

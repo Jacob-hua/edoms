@@ -1,9 +1,5 @@
 import { Request } from '@editor/type';
 export default async (request: Request) => {
-  const instances =
-    (await request({
-      resourceId: `warning-running-list:instance`,
-    })) ?? [];
   return [
     {
       text: '轮询间隔',
@@ -28,7 +24,10 @@ export default async (request: Request) => {
       type: 'cascader',
       filterable: true,
       checkStrictly: true,
-      options: instances,
+      options: async () =>
+        (await request({
+          resourceId: `warning-running-list:instance`,
+        })) ?? [],
     },
     {
       text: '时间范围',

@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, watchEffect } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 
 import { ElCascader } from '@edoms/design';
 
@@ -48,6 +48,11 @@ const options = Array.isArray(props.config.options) ? ref(props.config.options) 
 const remoteData = ref<any>(null);
 
 const filterable = computed(() => props.config.filterable ?? false);
+
+watch(
+  () => options.value,
+  (options) => (props.config.relOptions = options)
+);
 
 const setRemoteOptions = async function () {
   const { config } = props;
@@ -84,9 +89,16 @@ const setRemoteOptions = async function () {
 
 // 初始化
 if (typeof props.config.options === 'function' && props.model && mForm) {
-  watchEffect(async () => {
-    options.value = await (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values });
-  });
+  // watchEffect(async () => {
+  //   options.value = await (props.config.options as Function)(mForm, { model: props.model, formValues: mForm.values });
+  // });
+  watch(
+    () => ({ configOptions: props.config.options }),
+    async ({ configOptions }) => {
+      options.value = await (configOptions as Function)(mForm, { model: props.model, formValues: mForm.values });
+    },
+    { immediate: true }
+  );
 } else if (!props.config.options || !props.config.options.length || props.config.remote) {
   Promise.resolve(setRemoteOptions());
 }
