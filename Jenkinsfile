@@ -41,7 +41,7 @@ pipeline {
 			steps {
 				echo "2. Npm build Package"
 				sh """
-				npm install -g pnpm
+				npm install -g pnpm@7.30.5
 				pnpm bootstrap
 				pnpm build:designer
 				"""
