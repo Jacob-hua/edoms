@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: lihao
+ * @Date: 2023-04-18 13:24:10
+ * @LastEditors: lihao
+ * @LastEditTime: 2023-04-21 11:02:50
+ */
 import { join, resolve } from 'path';
 
 import { defineConfig, loadEnv } from 'vite';
@@ -75,9 +82,9 @@ export default defineConfig(({ mode }) => {
           },
         },
         '/runtime-api': {
-          target: 'http://192.100.4.80:8062', //思昊
+          //   target: 'http://192.100.4.80:8062', //思昊
           // target: 'http://192.100.4.25:8062', //刘旺
-          // target: 'http://k8s.isiact.com/edoms-runtime-service-dev',
+          target: 'http://k8s.isiact.com/edoms-runtime-service-dev',
           changeOrigin: true,
           rewrite(path) {
             return path.replace(/\/runtime-api/, '');
