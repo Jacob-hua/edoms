@@ -165,6 +165,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '设备运行参数',
         type: 'equipment-operating-parameter',
       },
+      {
+        icon: 'donghuanjiance',
+        text: '经济指标',
+        type: 'economic-indicators',
+      },
     ],
   },
 ];
