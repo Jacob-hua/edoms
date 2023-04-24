@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, getCurrentInstance, inject, onMounted, ref, watchEffect } from 'vue';
+import { computed, getCurrentInstance, inject, onMounted, ref, watch, watchEffect } from 'vue';
 
 import { elMessage } from '@edoms/design';
 import type { FormValue, MForm } from '@edoms/form';
@@ -45,8 +45,22 @@ const init = async () => {
   curFormConfig.value = (await services?.propsService.getPropsConfig(type)) || [];
   values.value = node.value;
 };
+init();
 
-watchEffect(init);
+watch(
+  () => node.value,
+  async (node, oldNode) => {
+    if (!node) {
+      curFormConfig.value = [];
+      return;
+    }
+    if (node.id !== oldNode?.id) {
+      const type = node.type || (node.items ? 'container' : 'text');
+      curFormConfig.value = (await services?.propsService.getPropsConfig(type)) || [];
+    }
+    values.value = node;
+  }
+);
 services?.propsService.on('props-configs-change', init);
 
 onMounted(() => {
