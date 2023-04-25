@@ -22,6 +22,8 @@ import Text from './text';
 import TimeWeather from './time-weather';
 import Video from './video';
 import WarningRunningList from './warning-running-list';
+// 告警列表
+import WarningTableList from './warning-table-list';
 
 const ui: Record<string, any> = {
   page: Page,
@@ -48,6 +50,7 @@ const ui: Record<string, any> = {
   equipmentCondition: EquipmentCondition,
   systemCumulativeData: SystemCumulativeData,
   equipmentOperatingParameter: EquipmentOperatingParameter,
+  WarningTableList: WarningTableList,
 };
 
 export default ui;

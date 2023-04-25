@@ -165,6 +165,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '设备运行参数',
         type: 'equipment-operating-parameter',
       },
+      {
+        icon: 'gaojing',
+        text: '告警管理',
+        type: 'warning-table-list',
+      },
     ],
   },
 ];
