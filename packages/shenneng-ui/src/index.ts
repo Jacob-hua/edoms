@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-18 13:24:10
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-21 14:12:03
+ * @LastEditTime: 2023-04-25 11:07:09
  */
 import Button from './button';
 import Charts from './charts';
@@ -12,6 +12,7 @@ import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
 import EconomicIndicators from './economic-indicators';
 import EnergyEfficiencyMonitoring from './energy-efficiency-monitoring';
+import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
 import EquipmentOperatingParameter from './equipment-operating-parameters';
 import GlobalSchematic from './global-schematic';
@@ -19,6 +20,7 @@ import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
 import IndicatorLight from './indicator-light';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
+import OperationalAnalysis from './operational-analysis';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
@@ -57,6 +59,8 @@ const ui: Record<string, any> = {
   systemCumulativeData: SystemCumulativeData,
   equipmentOperatingParameter: EquipmentOperatingParameter,
   economicIndicators: EconomicIndicators,
+  operationalAnalysis: OperationalAnalysis,
+  energyMonitoring: EnergyMonitoring,
 };
 
 export default ui;
