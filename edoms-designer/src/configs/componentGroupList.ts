@@ -170,6 +170,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '告警管理',
         type: 'warning-table-list',
       },
+      {
+        icon: 'donghuanjiance',
+        text: '经济指标',
+        type: 'economic-indicators',
+      },
     ],
   },
 ];
