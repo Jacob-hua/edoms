@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-25 15:50:42
+ * @LastEditTime: 2023-04-26 14:44:16
 -->
 <template>
   <BusinessCard :title="props.config.name" :subtitle="props.config.subTitle" min-width="822" min-height="367">
@@ -142,13 +142,6 @@ const updateParameterData = async () => {
   });
   option.value = generateOption(chartSeries);
 };
-
-// const handleChangeChart = (flag: boolean) => {
-//   if (isCurve.value === flag) return;
-//   isCurve.value = flag;
-//   flush();
-// };
-
 const { flush } = useIntervalAsync(updateParameterData, intervalDelay.value);
 
 watch(
@@ -160,15 +153,14 @@ watch(
 
 function generateOption(series: any[] = []): ECOption {
   const legends = series.map(({ name }) => name);
+  const colors = series.map(({ color }) => color);
   return {
     legend: {
       data: legends,
       icon: 'rect',
       itemWidth: 14,
       itemHeight: 4,
-      itemStyle: {
-        color: '#287CE7',
-      },
+      color: colors,
       textStyle: {
         color: '#EFF7FF',
         fontWeight: 400,
@@ -201,10 +193,15 @@ function generateOption(series: any[] = []): ECOption {
       splitLine: {
         show: false,
       },
+      axisTick: {
+        show: false,
+      },
       interval: 2,
       axisLabel: {
         formatter: '{HH}:{mm}',
         interval: 2,
+        color: '#FFFFFF',
+        fontSize: 10,
       },
     },
     yAxis: {
@@ -217,7 +214,16 @@ function generateOption(series: any[] = []): ECOption {
         },
       },
       axisLine: {
-        show: true,
+        show: false,
+      },
+      axisLabel: {
+        color: '#FDFEFF',
+        fontSize: 10,
+      },
+      nameTextStyle: {
+        color: '#D8D8D8',
+        fontWeight: 300,
+        fontSize: 10,
       },
     },
     series,
@@ -283,8 +289,6 @@ function generateOption(series: any[] = []): ECOption {
           background: rgba(0, 163, 255, 0.16);
           border: 1px solid #007bc0;
           color: #ffffff;
-          background: url('./assets/button_line.png') no-repeat;
-          background-size: cover;
         }
       }
     }

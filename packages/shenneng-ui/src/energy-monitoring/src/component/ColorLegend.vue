@@ -1,53 +1,110 @@
+<!--
+ * @Description: 
+ * @Author: lihao
+ * @Date: 2023-04-25 11:03:11
+ * @LastEditors: lihao
+ * @LastEditTime: 2023-04-26 11:02:44
+-->
 <template>
   <div class="legend-wrapper">
-    <div class="legend">
-      <div class="legend-block" :style="{ backgroundColor: config.startColor }"></div>
-      <span>较差</span>
-    </div>
-    <div class="legend">
-      <div class="legend-block" :style="{ backgroundColor: config.endColor }"></div>
-      <span>优秀</span>
-    </div>
-    <div class="legend">
-      <div class="legend-line" :style="{ backgroundColor: config.referenceLineColor }"></div>
-      <span>参考值</span>
+    <div v-for="item in legends" :key="item.type" class="legend">
+      <div class="legend-top">
+        <div class="color" :style="`background: ${item.data.color}`"></div>
+        <div class="value" :style="`color: ${item.data.color}`">
+          <span class="min"> {{ item.data.minValue }} </span>
+          <span class="symbol">~</span>
+          <span class="max"> {{ item.data.maxValue }}</span>
+        </div>
+      </div>
+      <div class="legend-bottom">{{ item.name }}</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { MEfficiencyMonitoring } from '../type';
+import { computed } from 'vue';
 
-defineProps<{
-  config: MEfficiencyMonitoring;
+import { MEnergyMonitoring } from '../type';
+
+const props = defineProps<{
+  config: MEnergyMonitoring;
 }>();
+
+const legends = computed<any[]>(() => [
+  {
+    name: '中等',
+    data: props.config.medium[0],
+  },
+  {
+    name: '良好',
+    data: props.config.good[0],
+  },
+  {
+    name: '优异',
+    data: props.config.excellent[0],
+  },
+]);
+
+// const legends: any = ref([
+//   {
+//     name: '中等',
+//     type: 'medium',
+//     data: props.config.medium[0],
+//   },
+//   {
+//     name: '良好',
+//     type: 'good',
+//     data: props.config.good[0],
+//   },
+//   {
+//     name: '优异',
+//     type: 'excellent',
+//     data: props.config.excellent[0],
+//   },
+// ]);
 </script>
 
 <style lang="scss" scoped>
 .legend-wrapper {
   width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: space-around;
   align-items: center;
-}
-
-.legend {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  span {
-    color: #ffffff65;
-    margin-left: 8px;
+  justify-content: center;
+  .legend {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .legend-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 50%;
+      .color {
+        width: 12px;
+        height: 12px;
+        margin-right: 10px;
+        border-radius: 2px;
+      }
+      .value {
+        font-size: 14px;
+        font-weight: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .legend-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #c4e5f8;
+    }
   }
-}
-
-.legend-block {
-  width: 16px;
-  height: 16px;
-}
-
-.legend-line {
-  width: 2px;
-  height: 20px;
 }
 </style>

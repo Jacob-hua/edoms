@@ -18,14 +18,14 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 
-import { MEfficiencyMonitoring } from '../type';
+import { MEnergyMonitoring } from '../type';
 
 interface StyleValue extends Record<string, any> {
   left: string;
 }
 
 const props = defineProps<{
-  config: MEfficiencyMonitoring;
+  config: MEnergyMonitoring;
   actualValue: number;
 }>();
 

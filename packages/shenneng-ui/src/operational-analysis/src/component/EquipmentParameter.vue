@@ -43,13 +43,6 @@ const changeTab = (index: number) => {
 // const equipIndex = ref<string>('0');
 
 const activeIndicatorConfig = computed<Map<string, MIndicatorItemConfig>>(() => {
-  //   const result = new Map<string, MIndicatorItemConfig>();
-  //   if (!equipmentConfigs.value.length || !equipmentConfigs.value[Number(activeTab.value)]) {
-  //     return result;
-  //   }
-  //   const equipment = equipmentConfigs.value[Number(activeTab.value)];
-  //   result.set(`${equipment.instance[equipment.instance.length - 1]}:${equipment.property}`, equipment);
-  //   return result;
   const result = new Map<string, MIndicatorItemConfig>();
   if (!props.parameterConfigs.length || !props.parameterConfigs[activeTab.value].indicators) {
     return result;
@@ -74,7 +67,7 @@ watch(
 <style lang="scss" scoped>
 .wrapper {
   width: 100%;
-  height: 282px;
+  height: calc(100% - 31px);
   display: flex;
   //   padding: 12px 0px;
   box-sizing: border-box;
@@ -82,13 +75,15 @@ watch(
   //   width: 100%;
   .left-tab {
     min-width: 110px;
+    height: 95%;
+    width: 13.4%;
     margin-left: 20px;
     display: flex;
     flex-direction: column;
     text-align: center;
     align-items: center;
     .button-tab {
-      width: 100px;
+      width: calc(100% - 10px);
       height: 24px;
       //   background-color: red;
       margin-top: 20px;

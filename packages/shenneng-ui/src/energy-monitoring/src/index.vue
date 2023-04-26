@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-25 16:08:11
+ * @LastEditTime: 2023-04-26 10:33:23
 -->
 <template>
   <div style="min-width: 522px; min-height: 246px">
@@ -11,21 +11,23 @@
       <div class="wrap-body">
         <div class="left">
           <div class="top">
-            <ActualCard class="actual-card" :config="config" :actual-value="actualValue"></ActualCard>
+            <ActualCard :config="config" :actual-value="actualValue"></ActualCard>
           </div>
           <div class="line"></div>
-          <div class="bottom"></div>
+          <div class="bottom">
+            <LevelCard :config="config" :actual-value="actualValue"></LevelCard>
+          </div>
         </div>
-        <div class="right"></div>
+        <div class="right">
+          <div class="top">
+            <LinearCard :config="config" :actual-value="actualValue"></LinearCard>
+          </div>
+          <div class="line"></div>
+          <div class="bottom">
+            <ColorLegend :config="config"></ColorLegend>
+          </div>
+        </div>
       </div>
-      <!-- <template #operation>
-        <div :class="operationClass" @click="handleShowMore">...</div>
-      </template> -->
-      <!-- <div class="efficiency-wrapper">
-        <ActualCard class="actual-card" :config="config" :actual-value="actualValue"></ActualCard>
-        <ColorCard class="color-card" :config="config" :actual-value="actualValue"></ColorCard>
-        <ColorLegend class="color-legend" :config="config"></ColorLegend>
-      </div> -->
     </BusinessCard>
   </div>
 </template>
@@ -40,6 +42,9 @@ import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
 import ActualCard from './component/ActualCard.vue';
+import ColorLegend from './component/ColorLegend.vue';
+import LevelCard from './component/LevelCard.vue';
+import LinearCard from './component/LinearCard.vue';
 import apiFactory from './api';
 import { FetchEfficiencyReq, MEnergyMonitoring } from './type';
 
@@ -52,7 +57,7 @@ const { request } = useApp(props);
 const { fetchEfficiencyData } = apiFactory(request);
 
 const actualValue = ref<number>(0);
-const efficiencyConfig = computed<MEnergyMonitoring>(() => props.config);
+const energyConfig = computed<MEnergyMonitoring>(() => props.config);
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
     return 10;
@@ -61,20 +66,21 @@ const intervalDelay = computed<number>(() => {
 });
 
 const updateEfficiencyData = async () => {
-  if (!efficiencyConfig.value.instance) {
+  if (!energyConfig.value.instance) {
     return;
   }
   const param: FetchEfficiencyReq = {
-    insCodeList: [efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]],
+    insCodeList: [energyConfig.value.instance[energyConfig.value.instance.length - 1]],
     propCode: 'COP',
   };
   const result = await fetchEfficiencyData(param);
   result.forEach(({ insCode, efficiencyNum }) => {
-    if (insCode !== efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1]) {
+    if (insCode !== energyConfig.value.instance[energyConfig.value.instance.length - 1]) {
       return;
     }
-    actualValue.value = +formatPrecision(Number(efficiencyNum), efficiencyConfig.value.precision);
+    actualValue.value = +formatPrecision(Number(efficiencyNum), energyConfig.value.precision);
   });
+  console.log(result);
 };
 
 useIntervalAsync(updateEfficiencyData, intervalDelay.value);
@@ -96,14 +102,15 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     border-radius: 2px;
     display: flex;
     flex-direction: column;
-    // align-items: center;
+    justify-content: center;
+    align-items: center;
     .top {
       width: 100%;
       height: 49.5%;
     }
     .line {
-      margin-left: 10.5px;
-      width: 103px;
+      //   margin-left: 10.5px;
+      width: calc(100% - 21px);
       height: 1px;
       background: rgba($color: #00a3ff, $alpha: 0.2);
     }
@@ -113,9 +120,24 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     }
   }
   .right {
-    // background-color: red;
+    margin: 25px 32px 28px 30px;
     flex-grow: 1;
-    height: 100%;
+    height: calc(100% - 53px);
+    display: flex;
+    flex-direction: column;
+    .top {
+      width: 100%;
+      flex: 2;
+    }
+    .line {
+      width: 100%;
+      height: 1px;
+      background: rgba($color: #00a3ff, $alpha: 0.2);
+    }
+    .bottom {
+      width: 100%;
+      flex: 1;
+    }
   }
 }
 </style>
