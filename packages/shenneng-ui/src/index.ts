@@ -14,6 +14,7 @@ import EconomicIndicators from './economic-indicators';
 import EnergyEfficiencyMonitoring from './energy-efficiency-monitoring';
 import EquipmentCondition from './equipment-condition';
 import EquipmentOperatingParameter from './equipment-operating-parameters';
+import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
 import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
@@ -25,11 +26,13 @@ import Qrcode from './qrcode';
 import RunningParameters from './running-parameters';
 import SettingParameter from './setting-parameter';
 import SystemCumulativeData from './system-cumulative-data';
+import SystemDataCumulation from './system-data-cumulation';
 import SystemOperatingParameters from './system-operating-parameters';
 import Text from './text';
 import TimeWeather from './time-weather';
 import Video from './video';
 import WarningRunningList from './warning-running-list';
+import WarningTableList from './warning-table-list';
 
 const ui: Record<string, any> = {
   page: Page,
@@ -57,6 +60,9 @@ const ui: Record<string, any> = {
   systemCumulativeData: SystemCumulativeData,
   equipmentOperatingParameter: EquipmentOperatingParameter,
   economicIndicators: EconomicIndicators,
+  warningTableList: WarningTableList,
+  equipmentQueryOperation: EquipmentQueryOperation,
+  systemDataCumulation: SystemDataCumulation,
 };
 
 export default ui;

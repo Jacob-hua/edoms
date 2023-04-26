@@ -175,6 +175,16 @@ const componentGroupList: ComponentGroup[] = [
         text: '经济指标',
         type: 'economic-indicators',
       },
+      {
+        icon: 'xitong',
+        text: '设备运行参数-xin',
+        type: 'equipment-query-operation',
+      },
+      {
+        icon: 'leijishuju',
+        text: '系统累计数据-xin',
+        type: 'system-data-cumulation',
+      },
     ],
   },
 ];
