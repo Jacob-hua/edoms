@@ -309,6 +309,8 @@ watch(
             'system-cumulative-data',
             'equipment-operating-parameter',
             'economic-indicators',
+            'operational-analysis',
+            'energy-monitoring',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');

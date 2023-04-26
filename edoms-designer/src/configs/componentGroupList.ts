@@ -185,6 +185,16 @@ const componentGroupList: ComponentGroup[] = [
         text: '系统累计数据-xin',
         type: 'system-data-cumulation',
       },
+      {
+        icon: 'yunxingfenxi',
+        text: '运行分析',
+        type: 'operational-analysis',
+      },
+      {
+        icon: 'nengxiaojiance',
+        text: '能效监测',
+        type: 'energy-monitoring',
+      },
     ],
   },
 ];
