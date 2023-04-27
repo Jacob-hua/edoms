@@ -46,6 +46,7 @@ const attributeRight = computed<string>(
 const positionDistance = computed<number>(
   () => (colorCardWidth.value - (props.config.bisectionNumber - 1) * 15) / props.config.bisectionNumber
 );
+// 监听html元素变化
 const colorCardObserver = new ResizeObserver(() => {
   colorCardWidth.value = colorCardRef.value?.clientWidth ?? 0;
 });
@@ -93,13 +94,10 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
 
 <style lang="scss" scoped>
 .color-card-wrapper {
-  //   height: 20px;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  //   background-image: v-bind(attribute);
-  //   position: relative;
   .color {
     position: relative;
     width: 100%;

@@ -36,12 +36,6 @@ const changeTab = (index: number) => {
   activeTab.value = index;
 };
 
-// const activeParameter = ref<string>('0');
-
-// const equipmentConfigs = ref<MIndicatorItemConfig[]>([]);
-
-// const equipIndex = ref<string>('0');
-
 const activeIndicatorConfig = computed<Map<string, MIndicatorItemConfig>>(() => {
   const result = new Map<string, MIndicatorItemConfig>();
   if (!props.parameterConfigs.length || !props.parameterConfigs[activeTab.value].indicators) {
@@ -69,10 +63,7 @@ watch(
   width: 100%;
   height: calc(100% - 31px);
   display: flex;
-  //   padding: 12px 0px;
   box-sizing: border-box;
-  //   background-color: red;
-  //   width: 100%;
   .left-tab {
     min-width: 110px;
     height: 95%;
@@ -99,81 +90,9 @@ watch(
     }
   }
 
-  .select-box {
-    --dark-background: rgba(31, 30, 29, 1);
-    position: absolute;
-    right: 30px;
-    width: 1.5rem;
-    z-index: 2;
-
-    :deep(.el-input__wrapper) {
-      box-shadow: 0 0 0 1px #ffffff45 inset;
-      background: rgba(31, 30, 29, 1);
-    }
-
-    :deep(.el-input__inner) {
-      height: 20px;
-      color: #ffffff85;
-    }
-  }
-}
-
-:deep(.left-tabs) {
-  min-width: 122px;
-  margin-right: 20px;
-  max-width: 10%;
-  & .el-tabs__item {
-    text-align: center;
-
-    div {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
-  & .el-tabs__item.is-active {
-    background-color: #333333;
-  }
-
-  .el-tabs__header {
-    width: 100%;
+  .charts {
+    flex-grow: 1;
     height: 100%;
-    overflow: auto;
-    margin: 0;
-
-    .el-tabs__nav-wrap {
-      height: auto;
-    }
   }
-
-  .el-tabs__header::-webkit-scrollbar {
-    display: none;
-  }
-
-  .el-tabs__nav {
-    z-index: inherit;
-  }
-}
-
-:deep(.el-tabs__item) {
-  color: #ffffff;
-}
-
-:deep(.el-tabs__item.is-active) {
-  color: #e99a3c;
-}
-
-:deep(.el-tabs__active-bar) {
-  background-color: #e99a3c;
-}
-
-:deep(.el-tabs__nav-wrap::after) {
-  background-color: transparent;
-}
-
-.charts {
-  flex-grow: 1;
-  height: 100%;
 }
 </style>

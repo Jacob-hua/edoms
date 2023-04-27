@@ -311,6 +311,7 @@ watch(
             'economic-indicators',
             'operational-analysis',
             'energy-monitoring',
+            'intelligence-report',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');

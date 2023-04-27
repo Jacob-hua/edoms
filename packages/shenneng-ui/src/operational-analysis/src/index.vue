@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 14:44:16
+ * @LastEditTime: 2023-04-26 17:16:51
 -->
 <template>
   <BusinessCard :title="props.config.name" :subtitle="props.config.subTitle" min-width="822" min-height="367">
@@ -179,7 +179,7 @@ function generateOption(series: any[] = []): ECOption {
       },
     },
     grid: {
-      left: 'left',
+      left: '3%',
       right: '1%',
       top: 30,
       bottom: 20,
@@ -293,49 +293,5 @@ function generateOption(series: any[] = []): ECOption {
       }
     }
   }
-}
-
-.line {
-  background: url('./assets/zhexian.png') no-repeat;
-  background-size: cover;
-}
-.line_active {
-  background: url('./assets/zhexian_active.png') no-repeat;
-  background-size: cover;
-}
-
-.curver {
-  background: url('./assets/quxian.png') no-repeat;
-  background-size: cover;
-}
-
-.curver_active {
-  background: url('./assets/quxian_active.png') no-repeat;
-  background-size: cover;
-}
-
-.header-tabs {
-  --el-tabs-header-height: 24px;
-}
-
-:deep(.el-tabs__header) {
-  margin: 0;
-}
-
-:deep(.el-tabs__item) {
-  color: #ffffff65;
-  padding: 0 4px;
-}
-
-:deep(.el-tabs__item.is-active) {
-  color: #e99a3c;
-}
-
-:deep(.el-tabs__active-bar) {
-  background-color: #e99a3c;
-}
-
-:deep(.el-tabs__nav-wrap::after) {
-  background-color: transparent;
 }
 </style>

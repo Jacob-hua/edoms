@@ -181,9 +181,14 @@ const componentGroupList: ComponentGroup[] = [
         type: 'operational-analysis',
       },
       {
-        icon: 'nengxiaojiance',
+        icon: 'nengxiaoguankong',
         text: '能效监测',
         type: 'energy-monitoring',
+      },
+      {
+        icon: 'zhinengbaogao',
+        text: '智能报告',
+        type: 'intelligence-report',
       },
     ],
   },

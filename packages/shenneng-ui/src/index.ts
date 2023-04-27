@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-18 13:24:10
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-25 11:07:09
+ * @LastEditTime: 2023-04-27 10:36:03
  */
 import Button from './button';
 import Charts from './charts';
@@ -19,6 +19,7 @@ import GlobalSchematic from './global-schematic';
 import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
 import IndicatorLight from './indicator-light';
+import IntelligenceReport from './intelligence-report';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
 import Overlay from './overlay';
@@ -61,6 +62,7 @@ const ui: Record<string, any> = {
   economicIndicators: EconomicIndicators,
   operationalAnalysis: OperationalAnalysis,
   energyMonitoring: EnergyMonitoring,
+  intelligenceReport: IntelligenceReport,
 };
 
 export default ui;

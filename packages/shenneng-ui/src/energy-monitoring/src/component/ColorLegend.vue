@@ -44,24 +44,6 @@ const legends = computed<any[]>(() => [
     data: props.config.excellent[0],
   },
 ]);
-
-// const legends: any = ref([
-//   {
-//     name: '中等',
-//     type: 'medium',
-//     data: props.config.medium[0],
-//   },
-//   {
-//     name: '良好',
-//     type: 'good',
-//     data: props.config.good[0],
-//   },
-//   {
-//     name: '优异',
-//     type: 'excellent',
-//     data: props.config.excellent[0],
-//   },
-// ]);
 </script>
 
 <style lang="scss" scoped>

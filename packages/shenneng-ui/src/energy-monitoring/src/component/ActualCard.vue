@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 09:11:26
+ * @LastEditTime: 2023-04-26 15:34:15
 -->
 <template>
   <div class="actual-wrapper">
@@ -60,23 +60,5 @@ defineProps<{
     align-items: center;
     justify-content: center;
   }
-
-  //   .actual-value {
-  //     font-size: 24px;
-  //     font-weight: 800;
-  //     color: #00ff00;
-  //     margin-bottom: 4px;
-  //     overflow: hidden;
-  //     text-overflow: ellipsis;
-  //     white-space: nowrap;
-  //     line-height: 24px;
-  //     min-height: 24px;
-  //   }
-
-  //   .actual-unit {
-  //     font-size: 14px;
-  //     font-weight: 400;
-  //     color: #ffffff65;
-  //   }
 }
 </style>
