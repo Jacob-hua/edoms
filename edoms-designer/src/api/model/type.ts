@@ -7,6 +7,8 @@ export interface ListInstanceReq {
   deviceCode: string;
   /** 是否是查询设备 */
   isQueryDevice: boolean;
+  /** 租戶id */
+  dataCode: string;
 }
 
 export interface ListInstanceResItem {
@@ -27,7 +29,9 @@ export type ListInstanceRes = ListInstanceResItem[];
 
 export interface ListPointReq {
   /** 实例ID */
-  insId: string;
+  insId?: string;
+  /** 实例id 数字孪生 */
+  insDataCode: string;
   /** 实例编码类型 */
   codeType: ModelCodeType;
   /** 属性类型 */

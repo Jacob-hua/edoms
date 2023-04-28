@@ -48,9 +48,9 @@
           <el-form-item label="项目" prop="tenantId">
             <el-select v-model="tenantFormModel.tenantId">
               <el-option
-                v-for="{ tenantId, proName } in accountStore.tenants"
-                :key="tenantId"
-                :value="tenantId"
+                v-for="{ dataCode, proName } in accountStore.tenants"
+                :key="dataCode"
+                :value="dataCode"
                 :label="proName"
               />
             </el-select>

@@ -323,7 +323,7 @@ watch(
         }
         if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
           return await requestPoints({
-            insId: model.instance[model.instance.length - 1],
+            insDataCode: model.instance[model.instance.length - 1],
             codeType: model.instanceType,
             propType: model.propertyType,
           });

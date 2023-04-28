@@ -29,7 +29,7 @@ export default {
   listInstance: async (data: ListInstanceReq): Promise<ListInstanceRes> => {
     try {
       const { result } = await request<ListInstanceReq, ListInstanceRes>({
-        url: '/common/cim-energy/system-device-tree',
+        url: '/common/sec-energy/system-device-tree',
         method: 'POST',
         data,
       });
@@ -41,7 +41,7 @@ export default {
   listPointCode: async (data: ListPointReq): Promise<ListPointRes> => {
     try {
       const { result } = await request<ListPointReq, ListPointRes>({
-        url: '/common/model/point-code-list',
+        url: '/code/point/sec/point-code-list',
         method: 'POST',
         data,
       });

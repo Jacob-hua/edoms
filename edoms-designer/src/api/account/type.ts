@@ -11,6 +11,8 @@ export interface LoginRes {
 }
 
 export interface ListTenantItem {
+  /** 租戶 ID 數字孿生 */
+  dataCode: string;
   /** 租户ID */
   tenantId: string;
   /** 租户名称 */

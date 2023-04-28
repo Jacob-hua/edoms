@@ -1,4 +1,7 @@
 import modelApi, { ListInstanceReq, ListInstanceResItem, ListPointReq, ListPointResItem } from '@/api/model';
+import useAccountStore from '@/store/account';
+
+const accountStore = useAccountStore();
 
 export interface InstanceOption {
   label: string;
@@ -12,7 +15,7 @@ function handleInstanceTree(instance: ListInstanceResItem): InstanceOption {
   const result = {
     label: instance.insName,
     value: instance.insCode,
-    disable: instance.disable,
+    // disable: true,
     type: instance.type,
   } as InstanceOption;
 
@@ -20,7 +23,7 @@ function handleInstanceTree(instance: ListInstanceResItem): InstanceOption {
     return result;
   }
 
-  const enableInstances = instance.children.filter((item) => item.disable);
+  const enableInstances = instance.children;
   if (enableInstances.length === 0) {
     return result;
   }
@@ -34,10 +37,16 @@ export default () => {
       virtual: 'mixed',
       deviceCode: '',
       isQueryDevice: true,
+      dataCode: accountStore.currentTenant?.tenantId ?? '',
     }
   ): Promise<InstanceOption[]> => {
     const instances = await modelApi.listInstance(data);
-    return instances?.filter((instance) => instance.disable).map((instance) => handleInstanceTree(instance));
+    // console.log(
+    //   '2222222222222',
+    //   instances?.map((instance) => handleInstanceTree(instance))
+    //   // instances?.filter((instance) => instance.disable).map((instance) => handleInstanceTree(instance))
+    // );
+    return instances?.map((instance) => handleInstanceTree(instance));
   };
 
   const requestPoints = async (data: ListPointReq) => {
