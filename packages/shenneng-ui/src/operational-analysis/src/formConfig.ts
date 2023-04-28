@@ -3,13 +3,23 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-25 10:36:05
+ * @LastEditTime: 2023-04-28 15:04:15
  */
 import { Request } from '@edoms/editor';
 
 import useInstanceConfig from '../../useInstanceConfig';
 
 export default async (request: Request) => [
+  {
+    text: '标题',
+    name: 'title',
+    type: 'string',
+  },
+  {
+    text: '子标题',
+    name: 'subTitle',
+    type: 'string',
+  },
   {
     text: '轮询间隔',
     name: 'intervalDelay',
@@ -18,11 +28,6 @@ export default async (request: Request) => [
     step: 1,
     defaultValue: 10,
     append: 's',
-  },
-  {
-    text: '子标题',
-    name: 'subTitle',
-    type: 'string',
   },
   {
     text: '系统曲线',

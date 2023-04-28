@@ -3,11 +3,11 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 10:33:23
+ * @LastEditTime: 2023-04-28 15:03:41
 -->
 <template>
   <div style="min-width: 522px; min-height: 246px">
-    <BusinessCard :title="props.config.name" :subtitle="props.config.subTitle" min-width="522" min-height="246">
+    <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="522" min-height="246">
       <div class="wrap-body">
         <div class="left">
           <div class="top">

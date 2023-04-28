@@ -29,6 +29,8 @@ export interface MParameterItemConfig {
 export interface MOperationalParameters extends MComponent {
   /** 轮询间隔 */
   intervalDelay: number;
+  /** 标题 */
+  title: string;
   /** 子标题 */
   subTitle: string;
   /** 系统曲线 */

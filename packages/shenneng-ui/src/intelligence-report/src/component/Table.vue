@@ -3,13 +3,13 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-28 11:13:14
+ * @LastEditTime: 2023-04-28 17:00:40
 -->
 <template>
   <div class="wrap-table">
     <div class="header">
       <img src="../assets/dialog_icon_report.png" alt="" class="icon-report" />
-      <div class="label"></div>
+      <div class="label">{{ config.title }}</div>
       <div class="close" @click="closeTable"></div>
     </div>
     <div class="report">
@@ -83,9 +83,10 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
 
-import { MEnergyMonitoring, MQueryForm } from '../type';
+import mockData from '../mock';
+import { MIntelligenceReport, MQueryForm } from '../type';
 defineProps<{
-  config: MEnergyMonitoring;
+  config: MIntelligenceReport;
 }>();
 
 const queryRef = ref(ElForm);
@@ -96,152 +97,7 @@ const state: any = reactive({
     building: '',
     room: '',
   } as MQueryForm,
-  testData: [
-    {
-      time: '01:00',
-      device: [
-        {
-          name: '001电压线',
-          data: {
-            'EP+': 10,
-            'EP-': 20,
-            'EQ+': 30,
-            'EQ-': 40,
-          },
-        },
-        {
-          name: '002电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '003电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '004电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-      ],
-    },
-    {
-      time: '02:00',
-      device: [
-        {
-          name: '001电压线',
-          data: {
-            'EP+': 10,
-            'EP-': 20,
-            'EQ+': 30,
-            'EQ-': 40,
-          },
-        },
-        {
-          name: '002电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '003电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-      ],
-    },
-    {
-      time: '03:00',
-      device: [
-        {
-          name: '001电压线',
-          data: {
-            'EP+': 10,
-            'EP-': 20,
-            'EQ+': 30,
-            'EQ-': 40,
-          },
-        },
-        {
-          name: '002电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '003电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '004电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-      ],
-    },
-    {
-      time: '04:00',
-      device: [
-        {
-          name: '001电压线',
-          data: {
-            'EP+': 10,
-            'EP-': 20,
-            'EQ+': 30,
-            'EQ-': 40,
-          },
-        },
-        {
-          name: '002电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '003电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-      ],
-    },
-    {
-      time: '05:00',
-      device: [
-        {
-          name: '001电压线',
-          data: {
-            'EP+': 10,
-            'EP-': 20,
-            'EQ+': 30,
-            'EQ-': 40,
-          },
-        },
-        {
-          name: '002电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '003电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '004电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-      ],
-    },
-    {
-      time: '06:00',
-      device: [
-        {
-          name: '001电压线',
-          data: {
-            'EP+': 10,
-            'EP-': 20,
-            'EQ+': 30,
-            'EQ-': 40,
-          },
-        },
-        {
-          name: '002电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-        {
-          name: '003电压线',
-          data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
-        },
-      ],
-    },
-  ],
+  testData: [],
   titleList: [],
   tableData: [],
   buildingOptions: [
@@ -256,7 +112,7 @@ const state: any = reactive({
   ],
   tableStyle: {
     width: '100%',
-    height: '637',
+    height: '637px',
     backgroundColor: 'rgba(9, 13, 18, 0.9)',
     textAlign: 'center',
     '--el-table-border-color': 'none',
@@ -265,7 +121,6 @@ const state: any = reactive({
 
 const handleTableData = () => {
   state.titleList = state.testData[0].device;
-  console.log(state.titleList);
   const arr: any = [];
 
   state.testData.forEach((item: any) => {
@@ -279,7 +134,6 @@ const handleTableData = () => {
     arr.push(obj);
   });
   state.tableData = arr;
-  console.log(arr);
 };
 
 const emit = defineEmits(['closeTable']);
@@ -289,6 +143,7 @@ const closeTable = () => {
 };
 
 onMounted(() => {
+  state.testData = mockData;
   handleTableData();
 });
 </script>
@@ -352,6 +207,7 @@ onMounted(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   .header {
     position: relative;
     width: 100%;
