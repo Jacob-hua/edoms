@@ -3,17 +3,17 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-27 11:01:30
+ * @LastEditTime: 2023-04-28 11:18:58
 -->
 <template>
   <div class="wrap-report">
     <div class="wrap-icon">
-      <img class="icon-report" src="./assets/icon_report.png" alt="" @click="showReport = true" />
+      <img class="icon-report" src="./assets/icon_report.png" alt="" @click="changeReport" />
     </div>
     <div class="label">{{ config.name }}</div>
   </div>
   <div v-if="showReport" class="dialog-table">
-    <Table :config="config"></Table>
+    <Table :config="config" @close-table="showReport = false"></Table>
   </div>
 </template>
 
@@ -36,6 +36,10 @@ const { request } = useApp(props);
 const { fetchEfficiencyData } = apiFactory(request);
 
 const showReport = ref<boolean>(false);
+
+const changeReport = () => {
+  showReport.value = true;
+};
 const energyConfig = computed<MEnergyMonitoring>(() => props.config);
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -50,7 +54,7 @@ const updateEfficiencyData = async () => {
   }
   const param: FetchEfficiencyReq = {
     insCodeList: [energyConfig.value.instance[energyConfig.value.instance.length - 1]],
-    propCode: 'COP',
+    propCode: '',
   };
   const result = await fetchEfficiencyData(param);
   result.forEach(({ insCode }) => {
@@ -66,7 +70,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
 
 <style lang="scss" scoped>
 .wrap-report {
-  min-width: 117px;
+  width: 117px;
   min-height: 80px;
   background: rgba(0, 163, 255, 0.06);
   border: 1px solid #051823;
@@ -80,6 +84,9 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(0, 114, 179, 0.4);
+    border: 1px solid #0072b3;
+    border-radius: 4px;
     .icon-report {
       width: 22px;
       height: 24px;
@@ -88,15 +95,16 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   }
 
   .label {
+    margin-top: 5px;
     font-size: 14px;
     color: #ffffff;
     font-weight: 300;
   }
 }
 .dialog-table {
-  min-width: 1480px;
-  min-height: 786px;
-  background: #000000;
+  width: 1480px;
+  height: 786px;
+  background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
 }
 </style>
