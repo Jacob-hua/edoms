@@ -45,13 +45,13 @@
           :model="tenantFormModel"
           :rules="tenantFormRules"
         >
-          <el-form-item label="租户" prop="tenantId">
+          <el-form-item label="项目" prop="tenantId">
             <el-select v-model="tenantFormModel.tenantId">
               <el-option
-                v-for="{ tenantId, tenantName } in accountStore.tenants"
+                v-for="{ tenantId, proName } in accountStore.tenants"
                 :key="tenantId"
                 :value="tenantId"
-                :label="tenantName"
+                :label="proName"
               />
             </el-select>
           </el-form-item>
