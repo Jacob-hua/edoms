@@ -7,13 +7,13 @@
  */
 import { MComponent } from '@edoms/schema';
 
-export interface MParameterItemConfig {
-  /** 最小值 */
-  minValue: string;
-  /** 最大值 */
-  maxValue: string;
-  /** 颜色 */
-  color: string;
+export interface MQueryForm {
+  /** 当前时间 */
+  date: string;
+  /** 楼 */
+  building: string;
+  /** 室 */
+  room: string;
 }
 
 export interface MEnergyMonitoring extends MComponent {
