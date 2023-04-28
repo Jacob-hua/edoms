@@ -14,7 +14,7 @@
       <div class="right-content">
         <div v-for="(eq, idx) in state.dataList.equipmentList[ctIndex].queryList" :key="idx" class="itm-content">
           <div class="top-ft">
-            <span class="font">{{ eq.data }}</span>
+            <span class="font" :style="{ color: eq.color }">{{ eq.data }}</span>
             <span class="unit">{{ eq.queryUnit }}</span>
           </div>
           <div class="bottom-name">{{ eq.queryName }}</div>
@@ -78,6 +78,7 @@ defineExpose({
       height: 100%;
       overflow: hidden;
       border-right: 1px solid rgba(0, 163, 255, 0.1);
+      overflow-y: auto;
       .itm-tab {
         width: 90%;
         height: 22px;
@@ -96,6 +97,22 @@ defineExpose({
         }
       }
     }
+    .left-content::-webkit-scrollbar {
+      width: 3px;
+      height: 1px;
+    }
+
+    .left-content::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      // -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+      background: rgba(4, 70, 108, 1);
+    }
+
+    .left-content::-webkit-scrollbar-track {
+      // -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+      background: transparent;
+    }
     .right-content {
       width: 78%;
       padding-left: 2%;
@@ -108,7 +125,7 @@ defineExpose({
         width: 30%;
         height: 62px;
         margin-right: 3.333%;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         background-color: rgba(0, 163, 255, 0.06);
         padding: 10px 20px;
         box-sizing: border-box;

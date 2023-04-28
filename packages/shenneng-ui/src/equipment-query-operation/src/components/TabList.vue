@@ -58,6 +58,7 @@ const handlerToChange = (itm: { [key: string]: any }) => {
 const getDomRect = () => {
   const domPer = document.getElementsByClassName('tab-list')[0];
   const domFt = document.getElementsByClassName('tab-wrapper')[0];
+  if (!domPer) return;
   domList = Array.from(domPer.getElementsByClassName('list-item'));
   const domPerRect = domPer.getBoundingClientRect();
   perHasWidth.value = domFt.getBoundingClientRect().width;

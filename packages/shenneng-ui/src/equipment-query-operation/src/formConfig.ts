@@ -29,12 +29,12 @@ export default async (request: Request) => [
         text: '类型编码',
         type: 'text',
       },
-      ...(await useInstanceConfig(request, 'warning-table-list', ['property', 'propertyType', 'unit'])),
+      ...(await useInstanceConfig(request, 'warning-table-list')),
       {
         name: 'equipmentList',
         text: '设备参数',
-        type: 'table',
-        enableFullscreen: false,
+        type: 'groupList',
+        enableFullscreen: true,
         fixed: false,
         items: [
           {
@@ -49,12 +49,13 @@ export default async (request: Request) => [
             text: '设备编码',
             type: 'text',
           },
+          ...(await useInstanceConfig(request, 'equipment-operating-parameter')),
           {
             label: '参数指标',
             name: 'queryList',
             text: '参数指标',
             type: 'table',
-            enableFullscreen: false,
+            enableFullscreen: true,
             fixed: false,
             items: [
               {
@@ -74,6 +75,13 @@ export default async (request: Request) => [
                 name: 'queryApi',
                 text: '接口字段',
                 type: 'text',
+              },
+              {
+                label: '颜色',
+                name: 'color',
+                text: '颜色',
+                type: 'colorPicker',
+                defaultValue: '#ff0000',
               },
             ],
           },

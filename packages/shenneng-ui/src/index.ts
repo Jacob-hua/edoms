@@ -22,6 +22,7 @@ import Img from './img';
 import IndicatorLight from './indicator-light';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
+import OperationsAnalysis from './operations-analysis';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
@@ -67,6 +68,7 @@ const ui: Record<string, any> = {
   systemDataCumulation: SystemDataCumulation,
   operationalAnalysis: OperationalAnalysis,
   energyMonitoring: EnergyMonitoring,
+  operationsAnalysis: OperationsAnalysis,
 };
 
 export default ui;

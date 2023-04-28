@@ -1,4 +1,4 @@
-import { BarChart, LineChart } from 'echarts/charts';
+import { BarChart, LineChart, PieChart } from 'echarts/charts';
 import {
   DatasetComponent,
   GridComponent,
@@ -20,6 +20,7 @@ echarts.use([
   TransformComponent,
   BarChart,
   LineChart,
+  PieChart,
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,

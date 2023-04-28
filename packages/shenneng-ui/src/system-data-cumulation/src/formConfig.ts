@@ -2,87 +2,215 @@ import { Request } from '@edoms/editor';
 
 import useInstanceConfig from '../../useInstanceConfig';
 
-export default async (request: Request) => [
+const calculateTypes = [
   {
-    text: '轮询间隔',
-    name: 'intervalDelay',
-    type: 'number',
-    min: 1,
-    step: 1,
-    defaultValue: 10,
-    append: 's',
+    text: '无',
+    value: 'NONE',
   },
   {
-    text: '日期分类',
-    name: 'dateTypeList',
-    type: 'groupList',
-    labelWidth: '80px',
-    addButtonText: '添加日期分类',
-    items: [
+    text: '环比',
+    value: 'MOM',
+  },
+  {
+    text: '同比',
+    value: 'YOY',
+  },
+  {
+    text: '全部',
+    value: 'ALL',
+  },
+];
+
+const options = [
+  {
+    label: '四则运算',
+    value: [
       {
-        name: 'key',
-        text: '分类名称',
-        type: 'text',
+        label: '加(+)',
+        value: 'x+y',
       },
       {
-        name: 'value',
-        text: '分类编码',
-        type: 'text',
+        label: '减(-)',
+        value: 'x-y',
       },
-      ...(await useInstanceConfig(request, 'system-data-cumlation', [])),
-      // {
-      //   name: 'thresholdConfigs',
-      //   text: '告警类型',
-      //   type: 'table',
-      //   enableFullscreen: false,
-      //   fixed: false,
-      //   items: [
-      //     {
-      //       label: '名称',
-      //       name: 'warningName',
-      //       text: '名称',
-      //       type: 'text',
-      //     },
-      //     {
-      //       label: '编码',
-      //       name: 'warningCode',
-      //       text: '编码',
-      //       type: 'text',
-      //       defaultValue: 'warningCode',
-      //     },
-      //     {
-      //       label: '颜色',
-      //       name: 'color',
-      //       text: '颜色',
-      //       type: 'colorPicker',
-      //       defaultValue: '#ff0000',
-      //     },
-      //   ],
-      // },
+      {
+        label: '乘(*)',
+        value: 'x*y',
+      },
+      {
+        label: '除(/)',
+        value: 'x/y',
+      },
+      {
+        label: '取余(%)',
+        value: 'x%y',
+      },
     ],
   },
   {
-    text: '表格字段',
-    name: 'tableTitleList',
-    type: 'groupList',
-    labelWidth: '80px',
-    addButtonText: '添加列',
-    items: [
+    label: '三角函数',
+    value: [
       {
-        name: 'key',
-        text: '名称',
-        type: 'text',
+        label: '圆周(Π)',
+        value: 'pi',
       },
       {
-        name: 'value',
-        text: '值',
-        type: 'text',
+        label: '正弦函数(sin)',
+        value: 'sin(x)',
       },
       {
-        name: 'width',
-        text: '宽度(%)',
-        type: 'text',
+        label: '余弦函数(cos)',
+        value: 'cos(x)',
+      },
+      {
+        label: '正切函数(tan)',
+        value: 'tan(x)',
+      },
+      {
+        label: '余切函数(cot)',
+        value: 'cot(x)',
+      },
+    ],
+  },
+  {
+    label: '对数',
+    value: [
+      {
+        label: 'log',
+        value: 'log(x,y)',
+      },
+      {
+        label: 'lg',
+        value: 'lg(x)',
+      },
+      {
+        label: 'ln',
+        value: 'ln(x)',
+      },
+    ],
+  },
+  {
+    label: '其他',
+    value: [
+      {
+        label: '绝对值(|x|)',
+        value: 'abs(x)',
+      },
+      {
+        label: '阶乘(!)',
+        value: 'x!',
       },
     ],
   },
 ];
+
+export default async (request: Request) => {
+  // const useInstance = await useInstanceConfig(request, 'system-cumulative-data');
+  return [
+    {
+      text: '轮询间隔',
+      name: 'intervalDelay',
+      type: 'number',
+      min: 1,
+      step: 1,
+      defaultValue: 10,
+      append: 's',
+    },
+    {
+      text: '类别',
+      name: 'category',
+      type: 'groupList',
+      labelWidth: '80px',
+      addButtonText: '添加类别',
+      maxItems: 10,
+      title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+      items: [
+        {
+          text: '类名',
+          name: 'label',
+          type: 'text',
+          trim: true,
+        },
+        ...(await useInstanceConfig(request, 'system-cumulative-data')),
+        {
+          name: 'ratioPrecision',
+          text: '比率精度',
+          type: 'select',
+          options: [
+            {
+              text: '原始精度',
+              value: '',
+            },
+            {
+              text: '0',
+              value: '0',
+            },
+            {
+              text: '0.1',
+              value: '0.1',
+            },
+            {
+              text: '0.01',
+              value: '0.01',
+            },
+            {
+              text: '0.001',
+              value: '0.001',
+            },
+            {
+              text: '0.0001',
+              value: '0.0001',
+            },
+            {
+              text: '0.00001',
+              value: '0.00001',
+            },
+            {
+              text: '0.000001',
+              value: '0.000001',
+            },
+            {
+              text: '0.0000001',
+              value: '0.0000001',
+            },
+            {
+              text: '0.00000001',
+              value: '0.00000001',
+            },
+          ],
+        },
+        {
+          text: '变量',
+          name: 'variables',
+          type: 'groupList',
+          labelWidth: '50px',
+          addButtonText: '添加变量',
+          maxItems: 10,
+          title: (model: any, index: number | string) => `# ${index} ${model.variable ?? ''}`,
+          items: [
+            {
+              text: '变量名',
+              name: 'variable',
+              type: 'text',
+              defaultValue: '',
+            },
+            ...(await useInstanceConfig(request, 'system-cumulative-data')).slice(0, 5),
+          ],
+        },
+        {
+          text: '表达式',
+          type: 'formula',
+          name: 'expression',
+          options: options,
+          defaultValue: '',
+        },
+        {
+          text: '计算方式',
+          name: 'calculateType',
+          type: 'select',
+          options: calculateTypes,
+        },
+      ],
+    },
+  ];
+};

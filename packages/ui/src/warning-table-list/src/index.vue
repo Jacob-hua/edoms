@@ -29,8 +29,6 @@ const tableWrapper = ref<any>(null);
 const handlerToOperate = (itm: { [key: string]: any }) => {
   tableWrapper.value.changeType(itm);
 };
-
-console.log(props);
 </script>
 
 <style lang="scss" scoped>

@@ -38,5 +38,6 @@ console.log(props);
 .warning-table-list {
   width: 100%;
   height: 100%;
+  padding: 0 10px;
 }
 </style>

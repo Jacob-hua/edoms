@@ -29,7 +29,7 @@ export default async (request: Request) => [
         text: '分类编码',
         type: 'text',
       },
-      ...(await useInstanceConfig(request, 'warning-table-list', ['property', 'propertyType', 'unit'])),
+      ...(await useInstanceConfig(request, 'warning-table-list')),
       {
         name: 'thresholdConfigs',
         text: '告警类型',
