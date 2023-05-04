@@ -311,6 +311,8 @@ watch(
             'economic-indicators',
             'operational-analysis',
             'energy-monitoring',
+            'suspended-window',
+            'intelligence-report-heat',
             // 'intelligence-report',
           ].includes(component)
         ) {

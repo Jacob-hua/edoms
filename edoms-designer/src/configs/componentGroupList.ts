@@ -205,6 +205,16 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report',
       },
+      {
+        icon: 'xuanfuchuang',
+        text: '悬浮窗',
+        type: 'suspended-window',
+      },
+      {
+        icon: 'zhinengbaogaore',
+        text: '智能报告(热)',
+        type: 'intelligence-report-heat',
+      },
     ],
   },
 ];

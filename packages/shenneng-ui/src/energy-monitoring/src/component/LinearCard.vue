@@ -32,6 +32,8 @@ const props = defineProps<{
   actualValue: number;
 }>();
 
+console.log(props.config);
+
 const colorCardRef = ref<HTMLElement>();
 
 const colorCardWidth = ref<number>(0);
