@@ -55,11 +55,11 @@ const useAccountStore: AccountStoreDefinition = defineStore('account', {
       const { token } = await accountApi.login(data);
       const { refreshPermissionList } = usePermissionStore();
       this.token = token;
-      const { user, userTenantList, permissions } = await accountApi.getUserInfo();
+      const { user, userProList, permissions } = await accountApi.getUserInfo();
       this.username = user.userName;
       this.nickName = user.nickName;
       this.userId = user.userId;
-      this.tenants = userTenantList;
+      this.tenants = userProList;
       refreshPermissionList(permissions);
     },
     async logout() {

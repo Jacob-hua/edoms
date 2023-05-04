@@ -20,7 +20,7 @@
               <div class="top-bar">
                 <div class="avatar">
                   <div>
-                    <span>{{ nickName }} - {{ currentTenant?.tenantName }}</span>
+                    <span>{{ nickName }} - {{ currentTenant?.proName }}</span>
                     <p><span>应用数:</span> {{ applicationNumber }}</p>
                   </div>
                 </div>
@@ -111,7 +111,7 @@ const popMenuRef = ref();
 const tenantList = computed(() =>
   tenants.value.map((item) => ({
     value: item.tenantId,
-    label: item.tenantName,
+    label: item.proName,
     action: (value: string) => {
       accountStore.triggerTenant(value);
       router.push({
@@ -132,7 +132,7 @@ watch(
 const menus: Menu[] = [
   {
     value: 'switch',
-    label: '切换租户',
+    label: '切换项目',
     icon: 'Operation',
     disabled: {
       clickEvent: true,
@@ -141,7 +141,7 @@ const menus: Menu[] = [
   },
   {
     value: 'model',
-    label: '租户模型',
+    label: '项目模型',
     action: () => {
       router.push({
         path: '/model',

@@ -2,13 +2,13 @@
   <div class="container">
     <div class="header-top" @click="goBack">
       <el-icon class="header-icon" :size="23"><ArrowLeft /></el-icon>
-      <span>{{ currentTenant?.tenantName }}</span>
+      <span>{{ currentTenant?.proName }}</span>
     </div>
     <div class="header-bar">
       <div class="header-bar-left">
         <span class="name">CIM模型</span>
         <span class="use">
-          <span class="text">{{ currentTenant?.tenantName }}当前采用:</span> <span class="model">{{ modelText }}</span>
+          <span class="text">{{ currentTenant?.proName }}当前采用:</span> <span class="model">{{ modelText }}</span>
         </span>
       </div>
       <div v-permission="TenantModelPermission.MODEL_CHANGE" class="header-bar-right">

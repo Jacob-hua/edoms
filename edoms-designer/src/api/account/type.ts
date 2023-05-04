@@ -14,14 +14,14 @@ export interface ListTenantItem {
   /** 租户ID */
   tenantId: string;
   /** 租户名称 */
-  tenantName: string;
+  proName: string;
 }
 
 export interface GetUserInfoRes {
   /** 权限列表 */
   permissions: string[];
   /** 租户列表 */
-  userTenantList: ListTenantItem[];
+  userProList: ListTenantItem[];
   /** 用户信息 */
   user: {
     /** 用户ID */
