@@ -1,6 +1,6 @@
 <template>
   <div style="min-width: 522px; min-height: 241px">
-    <BusinessCard title="经济指标" subtitle="Economic indicators" min-width="522" min-height="241">
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="241">
       <template #operation>
         <div :class="operatable" @click="handleTrigger">...</div>
       </template>

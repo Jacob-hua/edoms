@@ -11,6 +11,8 @@ export interface LoginRes {
 }
 
 export interface ListTenantItem {
+  /** 租戶 ID 數字孿生 */
+  dataCode: string;
   /** 租户ID */
   tenantId: string;
   /** 租户名称 */
@@ -20,7 +22,7 @@ export interface ListTenantItem {
 export interface GetUserInfoRes {
   /** 权限列表 */
   permissions: string[];
-  /** 租户列表 */
+  /** 项目列表 */
   userProList: ListTenantItem[];
   /** 用户信息 */
   user: {

@@ -15,6 +15,8 @@ export interface MEnergyMonitoring extends MComponent {
   /** 能效名称 */
   energyName: string;
   /** 子标题 */
+  title: string;
+  /** 子标题 */
   subTitle: string;
   /** 实例 */
   instance: string;

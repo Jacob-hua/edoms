@@ -25,6 +25,16 @@ const indicatorTypes = [
 
 export default async (request: Request) => [
   {
+    text: '标题',
+    name: 'title',
+    type: 'string',
+  },
+  {
+    text: '子标题',
+    name: 'subTitle',
+    type: 'string',
+  },
+  {
     text: '轮询间隔',
     name: 'intervalDelay',
     type: 'number',

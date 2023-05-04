@@ -20,6 +20,7 @@ echarts.use([
   TransformComponent,
   BarChart,
   LineChart,
+  PieChart,
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,

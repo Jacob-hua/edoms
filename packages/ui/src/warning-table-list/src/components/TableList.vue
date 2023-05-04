@@ -45,10 +45,16 @@ const props = withDefaults(
     tableData: () => [
       {
         warningCode: 'gz',
+        warningName: '1#设备',
         warningContent: '系统内制冷剂不足，节流阀开。系统内制冷剂不足，节流阀开。',
         warningTime: '02-15 16:31',
       },
-      { warningCode: 'yz', warningContent: '系统内制冷剂不足，节流阀开。', warningTime: '02-15 16:31' },
+      {
+        warningCode: 'yz',
+        warningName: '2#设备',
+        warningContent: '系统内制冷剂不足，节流阀开。',
+        warningTime: '02-15 16:31',
+      },
     ],
     warningTypeList: () => [],
   }

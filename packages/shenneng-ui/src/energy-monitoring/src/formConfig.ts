@@ -3,13 +3,23 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-25 14:28:34
+ * @LastEditTime: 2023-04-28 15:02:57
  */
 import { Request } from '@edoms/editor';
 
 import useInstanceConfig from '../../useInstanceConfig';
 
 export default async (request: Request) => [
+  {
+    text: '标题',
+    name: 'title',
+    type: 'string',
+  },
+  {
+    text: '子标题',
+    name: 'subTitle',
+    type: 'string',
+  },
   {
     text: '轮询间隔',
     name: 'intervalDelay',
@@ -23,11 +33,6 @@ export default async (request: Request) => [
     text: '能效名称',
     name: 'energyName',
     defaultValue: 'COP',
-  },
-  {
-    text: '子标题',
-    name: 'subTitle',
-    type: 'string',
   },
   /** 注入业务组件的共通字段 */
   ...(await useInstanceConfig(request, 'operational-analysis')),
@@ -57,8 +62,8 @@ export default async (request: Request) => [
     defaultValue: '#008000',
   },
   {
-    text: '优异',
-    name: 'excellent',
+    text: '中等',
+    name: 'medium',
     type: 'groupList',
     labelWidth: '70px',
     addButtonText: '添加类别',
@@ -79,6 +84,7 @@ export default async (request: Request) => [
         text: '颜色',
         name: 'color',
         type: 'colorPicker',
+        defaultValue: '#E76A2F',
       },
     ],
   },
@@ -105,12 +111,13 @@ export default async (request: Request) => [
         text: '颜色',
         name: 'color',
         type: 'colorPicker',
+        defaultValue: '#938748',
       },
     ],
   },
   {
-    text: '中等',
-    name: 'medium',
+    text: '优异',
+    name: 'excellent',
     type: 'groupList',
     labelWidth: '70px',
     addButtonText: '添加类别',
@@ -131,6 +138,7 @@ export default async (request: Request) => [
         text: '颜色',
         name: 'color',
         type: 'colorPicker',
+        defaultValue: '#36A763',
       },
     ],
   },

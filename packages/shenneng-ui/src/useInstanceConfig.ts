@@ -28,8 +28,9 @@ const getSelectedProperty = (value: string, options: any[]): any => {
 export type InstanceItem = 'instance' | 'propertyType' | 'property' | 'unit' | 'precision';
 
 export default async (request: Request, componentName: string, hiddenItems: InstanceItem[] = []) => {
+  // fetchProperties(request, componentName, formValue, prop)
   const instances = await fetchInstances(request, componentName);
-
+  let pointList: any[] = [];
   return [
     {
       name: 'instance',
@@ -39,8 +40,9 @@ export default async (request: Request, componentName: string, hiddenItems: Inst
       checkStrictly: true,
       options: instances,
       display: () => !hiddenItems.includes('instance'),
-      onChange: (mForm: any, value: any, { model }: any) => {
+      onChange: async (mForm: any, value: any, { model }: any) => {
         const modelInstance = getSelectedInstance(value, instances);
+        pointList = [];
         model.instanceType = modelInstance?.type;
         model.instanceName = modelInstance?.label;
         model.propertyType = '';
@@ -63,22 +65,25 @@ export default async (request: Request, componentName: string, hiddenItems: Inst
       text: '属性',
       type: 'radio-group',
       display: () => !hiddenItems.includes('propertyType'),
-      onChange: (mForm: any, value: any, { model }: any) => {
+      onChange: async (mForm: any, value: any, { formValue, prop, model }: any) => {
+        if (model.instance.length) {
+          pointList = await fetchProperties(request, componentName, formValue, prop);
+        }
         model.property = '';
         model.unit = '';
       },
       options: [
         {
-          text: '固有属性',
-          value: 'inherent',
+          text: '基础属性',
+          value: 'base',
         },
         {
-          text: '采集属性',
-          value: 'gather',
+          text: '静态属性',
+          value: 'static',
         },
         {
-          text: '计算属性',
-          value: 'calculate',
+          text: '动态属性',
+          value: 'dynamic',
         },
       ],
     },
@@ -87,9 +92,7 @@ export default async (request: Request, componentName: string, hiddenItems: Inst
       text: '点位',
       type: 'select',
       display: () => !hiddenItems.includes('property'),
-      options: async (mForm: any, { formValue, prop }: any) => {
-        return fetchProperties(request, componentName, formValue, prop);
-      },
+      options: () => pointList,
       onChange: async (mForm: any, value: any, { formValue, prop, model }: any) => {
         model.unit = getSelectedProperty(value, await fetchProperties(request, componentName, formValue, prop))?.unit;
       },

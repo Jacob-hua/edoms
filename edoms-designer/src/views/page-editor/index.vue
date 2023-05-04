@@ -311,6 +311,7 @@ watch(
             'economic-indicators',
             'operational-analysis',
             'energy-monitoring',
+            // 'intelligence-report',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');
@@ -322,7 +323,7 @@ watch(
         }
         if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
           return await requestPoints({
-            insId: model.instance[model.instance.length - 1],
+            insDataCode: model.instance[model.instance.length - 1],
             codeType: model.instanceType,
             propType: model.propertyType,
           });
@@ -396,6 +397,7 @@ const getParameterConfig = () => {
   const list: ParameterList[] = [];
   components?.forEach((item) => {
     if (item.type === 'setting-parameter') {
+      console.log(item.parameters, 111111111);
       if (!item.parameters || item.parameters.length <= 0) return;
       list.push({
         componentType: String(item.type),

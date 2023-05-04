@@ -176,12 +176,22 @@ const componentGroupList: ComponentGroup[] = [
         type: 'economic-indicators',
       },
       {
+        icon: 'xitong',
+        text: '设备运行参数-xin',
+        type: 'equipment-query-operation',
+      },
+      {
+        icon: 'leijishuju',
+        text: '系统累计数据-xin',
+        type: 'system-data-cumulation',
+      },
+      {
         icon: 'yunxingfenxi',
         text: '运行分析',
         type: 'operational-analysis',
       },
       {
-        icon: 'nengxiaojiance',
+        icon: 'nengxiaoguankong',
         text: '能效监测',
         type: 'energy-monitoring',
       },
@@ -189,6 +199,16 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'diannengzhiliang',
         text: '电能质量',
         type: 'electric-energy-quality',
+      },
+      {
+        icon: 'yunxingfenxi',
+        text: '运行分析（弹窗）',
+        type: 'operations-analysis',
+      },
+      {
+        icon: 'zhinengbaogao',
+        text: '智能报告',
+        type: 'intelligence-report',
       },
     ],
   },
