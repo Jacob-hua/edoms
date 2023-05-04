@@ -3,13 +3,23 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 09:51:05
+ * @LastEditTime: 2023-04-28 15:02:57
  */
 import { Request } from '@edoms/editor';
 
 import useInstanceConfig from '../../useInstanceConfig';
 
 export default async (request: Request) => [
+  {
+    text: '标题',
+    name: 'title',
+    type: 'string',
+  },
+  {
+    text: '子标题',
+    name: 'subTitle',
+    type: 'string',
+  },
   {
     text: '轮询间隔',
     name: 'intervalDelay',
@@ -23,11 +33,6 @@ export default async (request: Request) => [
     text: '能效名称',
     name: 'energyName',
     defaultValue: 'COP',
-  },
-  {
-    text: '子标题',
-    name: 'subTitle',
-    type: 'string',
   },
   /** 注入业务组件的共通字段 */
   ...(await useInstanceConfig(request, 'operational-analysis')),

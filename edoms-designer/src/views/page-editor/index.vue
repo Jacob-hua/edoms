@@ -311,7 +311,7 @@ watch(
             'economic-indicators',
             'operational-analysis',
             'energy-monitoring',
-            'intelligence-report',
+            // 'intelligence-report',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');
@@ -397,6 +397,7 @@ const getParameterConfig = () => {
   const list: ParameterList[] = [];
   components?.forEach((item) => {
     if (item.type === 'setting-parameter') {
+      console.log(item.parameters, 111111111);
       if (!item.parameters || item.parameters.length <= 0) return;
       list.push({
         componentType: String(item.type),

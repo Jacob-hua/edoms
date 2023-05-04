@@ -46,6 +46,10 @@ export interface MIndicatorItemConfig {
 export interface MEconomicIndicators extends MComponent {
   visibleNumber: number;
   intervalDelay: number;
+  /** 标题 */
+  title: string;
+  /** 子标题 */
+  subTitle: string;
   indicators: MIndicatorItemConfig[];
 }
 
