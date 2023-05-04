@@ -11,6 +11,7 @@ import Checkbox from './checkbox';
 import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
 import EconomicIndicators from './economic-indicators';
+import ElectricEnergyQuality from './electric-energy-quality';
 import EnergyEfficiencyMonitoring from './energy-efficiency-monitoring';
 import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
@@ -61,6 +62,7 @@ const ui: Record<string, any> = {
   economicIndicators: EconomicIndicators,
   operationalAnalysis: OperationalAnalysis,
   energyMonitoring: EnergyMonitoring,
+  electricEnergyQuality: ElectricEnergyQuality,
 };
 
 export default ui;
