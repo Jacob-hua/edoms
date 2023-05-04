@@ -185,6 +185,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '能效监测',
         type: 'energy-monitoring',
       },
+      {
+        icon: 'diannengzhiliang',
+        text: '电能质量',
+        type: 'electric-energy-quality',
+      },
     ],
   },
 ];
