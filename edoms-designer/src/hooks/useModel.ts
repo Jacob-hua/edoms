@@ -41,11 +41,6 @@ export default () => {
     }
   ): Promise<InstanceOption[]> => {
     const instances = await modelApi.listInstance(data);
-    // console.log(
-    //   '2222222222222',
-    //   instances?.map((instance) => handleInstanceTree(instance))
-    //   // instances?.filter((instance) => instance.disable).map((instance) => handleInstanceTree(instance))
-    // );
     return instances?.map((instance) => handleInstanceTree(instance));
   };
 
