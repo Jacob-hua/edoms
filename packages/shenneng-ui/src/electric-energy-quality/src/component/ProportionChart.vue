@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-24 11:45:45
- * @LastEditors: lihao
- * @LastEditTime: 2023-04-25 16:01:29
--->
 <template>
   <div class="wrapper">
     <div style="width: 300px; border-right: 1px solid #212c3c">占比分布</div>

@@ -35,37 +35,45 @@ export default async (request: Request) => [
     ],
   },
   {
-    text: '电流',
-    name: 'current',
-    type: 'groupList',
-    maxItems: 3,
-    items: [
-      {
-        text: '标签',
-        name: 'label',
-      },
-      {
-        text: '曲线颜色',
-        name: 'color',
-        type: 'colorPicker',
-      },
-    ],
+    text: 'LA',
+    name: 'currentLa',
+    type: 'colorPicker',
+  },
+  {
+    text: 'LB',
+    name: 'currentLb',
+    type: 'colorPicker',
+  },
+  {
+    text: 'LC',
+    name: 'currentLc',
+    type: 'colorPicker',
   },
   {
     text: '负载率',
-    name: 'load',
-    type: 'groupList',
-    maxItems: 2,
-    items: [
-      {
-        text: '标签',
-        name: 'label',
-      },
-      {
-        text: '曲线颜色',
-        name: 'color',
-        type: 'colorPicker',
-      },
-    ],
+    name: 'loadRate',
+    type: 'colorPicker',
   },
+  {
+    text: '三相不平衡率',
+    name: 'threePhasRate',
+    type: 'colorPicker',
+  },
+  // {
+  //   text: '负载率',
+  //   name: 'load',
+  //   type: 'groupList',
+  //   maxItems: 2,
+  //   items: [
+  //     {
+  //       text: '标签',
+  //       name: 'label',
+  //     },
+  //     {
+  //       text: '曲线颜色',
+  //       name: 'color',
+  //       type: 'colorPicker',
+  //     },
+  //   ],
+  // },
 ];

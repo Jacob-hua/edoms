@@ -34,7 +34,11 @@
         </div>
       </el-col>
     </el-row>
-    <Proportion class="echart" style="width: 300px; border-right: 1px solid #212c3c" :option="option_prop"></Proportion>
+    <ProportionChart
+      class="echart"
+      style="width: 300px; border-right: 1px solid #212c3c"
+      :option="option_prop"
+    ></ProportionChart>
     <CurrentChart class="echart" :option="option_current"></CurrentChart>
     <LoadChart class="echart" :option="option_load"></LoadChart>
   </div>
@@ -50,7 +54,7 @@ import { ElectricEnergyQuality } from '../type';
 import CurrentChart from './CurrentChart.vue';
 import LoadChart from './LoadChart.vue';
 // import useApp from '../../../useApp';
-import Proportion from './Proportion.vue';
+import ProportionChart from './ProportionChart.vue';
 
 const props = defineProps<{
   config: ElectricEnergyQuality;
@@ -68,20 +72,16 @@ const getpropColor = (series: any[] = []) => {
   return series.map(({ color }) => color);
 };
 // 获取图例名称
-const getpropName = (series: any[] = []) => {
-  return series.map(({ label }) => label);
-};
+// const getpropName = (series: any[] = []) => {
+//   return series.map(({ label }) => label);
+// };
 
 //数据配置不详 后续在此数据解析
 watch(
   () => props.config.proportion,
   () => {
-    console.log(getpropColor(props.config.proportion));
+    console.log(props.config);
     const propColor = getpropColor(props.config.proportion);
-    const propCurrentName = getpropName(props.config.current);
-    const propCurrentColor = getpropColor(props.config.current);
-    const propLoadName = getpropName(props.config.load);
-    const propLoadColor = getpropColor(props.config.load);
     option_prop.value = {
       tooltip: {
         trigger: 'item',
@@ -137,7 +137,7 @@ watch(
         trigger: 'axis',
       },
       legend: {
-        data: propCurrentName,
+        data: ['La', 'Lb', 'Lc'],
         textStyle: {
           color: '#fff',
         },
@@ -152,22 +152,22 @@ watch(
         name: 'B',
         data: ['2', '4', '6', '8'],
       },
-      color: propCurrentColor,
+      color: [props.config.currentLa, props.config.currentLb, props.config.currentLc],
       series: [
         {
-          name: propCurrentName[0],
+          name: 'La',
           data: [1, 4, 1, 5, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
         },
         {
-          name: propCurrentName[1],
+          name: 'Lb',
           data: [1, 2, 3, 2, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
         },
         {
-          name: propCurrentName[2],
+          name: 'Lc',
           data: [2, 6, 2, 6, 2, 6, 2, 6],
           type: 'line',
           smooth: true,
@@ -179,7 +179,7 @@ watch(
         trigger: 'axis',
       },
       legend: {
-        data: propLoadName,
+        data: ['负载率', '三相不平衡率'],
         textStyle: {
           color: '#fff',
         },
@@ -201,16 +201,16 @@ watch(
           data: ['20%', '40%', '60%', '80%'],
         },
       ],
-      color: propLoadColor,
+      color: [props.config.loadRate, props.config.threePhasRate],
       series: [
         {
-          name: propLoadName[0],
+          name: '负载率',
           data: [1, 4, 1, 5, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
         },
         {
-          name: propLoadName[1],
+          name: '三相不平衡率',
           data: [1, 2, 3, 2, 1, 4, 1, 5],
           type: 'line',
           smooth: true,

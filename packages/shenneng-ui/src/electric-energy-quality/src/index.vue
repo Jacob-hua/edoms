@@ -30,7 +30,9 @@
             <PowerFactor></PowerFactor>
             <!-- <ThreePhaseUnbalance></ThreePhaseUnbalance> -->
           </el-tab-pane>
-          <el-tab-pane class="tab" label="电压分析">电压分析</el-tab-pane>
+          <el-tab-pane class="tab" label="电压分析">
+            <VoltagAnalysis></VoltagAnalysis>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -42,6 +44,7 @@ import { ref } from 'vue';
 
 import PowerFactor from './component/PowerFactor.vue';
 import ThreePhaseUnbalance from './component/ThreePhaseUnbalance.vue';
+import VoltagAnalysis from './component/VoltagAnalysis.vue';
 import { ElectricEnergyQuality } from './type';
 
 defineProps<{
@@ -75,7 +78,9 @@ const changeElectric = () => {
   text-align: center;
   line-height: 34px;
 }
-
+:deep(.el-tabs--border-card) {
+  border: none;
+}
 :deep(.el-tabs--border-card > .el-tabs__content) {
   padding: 0;
 }

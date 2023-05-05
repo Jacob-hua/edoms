@@ -18,9 +18,14 @@ export interface ElectricEnergyQuality extends MComponent {
   unit: string;
   /**轮询间隔时间 */
   intervalDelay: number;
+  /**三相电流颜色 */
+  currentLa: string;
+  currentLb: string;
+  currentLc: string;
+  /**负载率 三相不平衡率颜色 */
+  loadRate: string;
+  threePhasRate: string;
   proportion: MParameterItemConfig[];
-  current: MParameterItemConfig[];
-  load: MParameterItemConfig[];
 }
 
 export interface FetchEfficiencyReq {
