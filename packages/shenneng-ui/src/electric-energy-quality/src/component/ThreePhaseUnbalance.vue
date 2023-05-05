@@ -68,9 +68,9 @@ const getpropColor = (series: any[] = []) => {
   return series.map(({ color }) => color);
 };
 // 获取图例名称
-// const getpropName = (series: any[] = []) => {
-//   return series.map(({ label }) => label);
-// }
+const getpropName = (series: any[] = []) => {
+  return series.map(({ label }) => label);
+};
 
 //数据配置不详 后续在此数据解析
 watch(
@@ -78,7 +78,10 @@ watch(
   () => {
     console.log(getpropColor(props.config.proportion));
     const propColor = getpropColor(props.config.proportion);
-    // const propName = getpropName(props.config.proportion);
+    const propCurrentName = getpropName(props.config.current);
+    const propCurrentColor = getpropColor(props.config.current);
+    const propLoadName = getpropName(props.config.load);
+    const propLoadColor = getpropColor(props.config.load);
     option_prop.value = {
       tooltip: {
         trigger: 'item',
@@ -134,7 +137,7 @@ watch(
         trigger: 'axis',
       },
       legend: {
-        data: ['La', 'Lb', 'Lc'],
+        data: propCurrentName,
         textStyle: {
           color: '#fff',
         },
@@ -149,22 +152,22 @@ watch(
         name: 'B',
         data: ['2', '4', '6', '8'],
       },
-      color: ['#287CE7', '#38AE1C', '#C1721D', '#41e4de'],
+      color: propCurrentColor,
       series: [
         {
-          name: 'La',
+          name: propCurrentName[0],
           data: [1, 4, 1, 5, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
         },
         {
-          name: 'Lb',
+          name: propCurrentName[1],
           data: [1, 2, 3, 2, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
         },
         {
-          name: 'Lc',
+          name: propCurrentName[2],
           data: [2, 6, 2, 6, 2, 6, 2, 6],
           type: 'line',
           smooth: true,
@@ -176,7 +179,7 @@ watch(
         trigger: 'axis',
       },
       legend: {
-        data: ['负载率', '三相不平衡率'],
+        data: propLoadName,
         textStyle: {
           color: '#fff',
         },
@@ -198,16 +201,16 @@ watch(
           data: ['20%', '40%', '60%', '80%'],
         },
       ],
-      color: ['#41E4DE', '#38AE1C', '#21a768', '#41e4de'],
+      color: propLoadColor,
       series: [
         {
-          name: '负载率',
+          name: propLoadName[0],
           data: [1, 4, 1, 5, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
         },
         {
-          name: '三相不平衡率',
+          name: propLoadName[1],
           data: [1, 2, 3, 2, 1, 4, 1, 5],
           type: 'line',
           smooth: true,

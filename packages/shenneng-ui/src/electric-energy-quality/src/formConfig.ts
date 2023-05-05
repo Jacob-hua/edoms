@@ -38,6 +38,7 @@ export default async (request: Request) => [
     text: '电流',
     name: 'current',
     type: 'groupList',
+    maxItems: 3,
     items: [
       {
         text: '标签',
@@ -54,6 +55,7 @@ export default async (request: Request) => [
     text: '负载率',
     name: 'load',
     type: 'groupList',
+    maxItems: 2,
     items: [
       {
         text: '标签',
