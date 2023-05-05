@@ -1,10 +1,6 @@
 import { MComponent } from '@edoms/schema';
 
 export interface MParameterItemConfig {
-  /** 最小值 */
-  minValue: string;
-  /** 最大值 */
-  maxValue: string;
   /** 颜色 */
   color: string;
 }
@@ -12,29 +8,19 @@ export interface MParameterItemConfig {
 export interface ElectricEnergyQuality extends MComponent {
   /** 实例类型 */
   instanceType: string;
-  /** 能效名称 */
-  energyName: string;
-  /** 子标题 */
-  subTitle: string;
+
   /** 实例 */
   instance: string;
-  /**最小值 */
-  minValue: string;
-  /**最大值 */
-  maxValue: string;
-  /**等分数量 */
-  bisectionNumber: number;
-  /**游标颜色 */
-  cursorColor: string;
+
   /** 精度 */
   precision: string;
   /** 单位 */
   unit: string;
   /**轮询间隔时间 */
   intervalDelay: number;
-  excellent: MParameterItemConfig[];
-  good: MParameterItemConfig[];
-  medium: MParameterItemConfig[];
+  proportion: MParameterItemConfig[];
+  current: MParameterItemConfig[];
+  load: MParameterItemConfig[];
 }
 
 export interface FetchEfficiencyReq {

@@ -4,50 +4,28 @@ import useInstanceConfig from '../../useInstanceConfig';
 
 export default async (request: Request) => [
   /** 注入业务组件的共通字段 */
-  ...(await useInstanceConfig(request, 'operational-analysis')),
+  ...(await useInstanceConfig(request, 'electric-energy-quality')),
   {
-    text: '最小值',
-    name: 'minValue',
-    defaultValue: '',
-  },
-  {
-    text: '最大值',
-    name: 'maxValue',
-    defaultValue: '',
-  },
-  {
+    text: '轮询间隔',
+    name: 'intervalDelay',
     type: 'number',
-    name: 'bisectionNumber',
-    text: '等分数量',
     min: 1,
-    max: 10,
     step: 1,
-    defaultValue: 5,
+    defaultValue: 10,
+    append: 's',
   },
   {
-    text: '游标',
-    type: 'colorPicker',
-    name: 'cursorColor',
-    defaultValue: '#008000',
-  },
-  {
-    text: '优异',
-    name: 'excellent',
+    text: '占比分布',
+    name: 'proportion',
     type: 'groupList',
     labelWidth: '70px',
     addButtonText: '添加类别',
-    maxItems: 1,
+    maxItems: 4,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
-        text: '最小值',
-        name: 'minValue',
-        defaultValue: '',
-      },
-      {
-        text: '最大值',
-        name: 'maxValue',
-        defaultValue: '',
+        text: '标签',
+        name: 'label',
       },
       {
         text: '颜色',
@@ -57,52 +35,32 @@ export default async (request: Request) => [
     ],
   },
   {
-    text: '良好',
-    name: 'good',
+    text: '电流',
+    name: 'current',
     type: 'groupList',
-    labelWidth: '70px',
-    addButtonText: '添加类别',
-    maxItems: 1,
-    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
-        text: '最小值',
-        name: 'minValue',
-        defaultValue: '',
+        text: '标签',
+        name: 'label',
       },
       {
-        text: '最大值',
-        name: 'maxValue',
-        defaultValue: '',
-      },
-      {
-        text: '颜色',
+        text: '曲线颜色',
         name: 'color',
         type: 'colorPicker',
       },
     ],
   },
   {
-    text: '中等',
-    name: 'medium',
+    text: '负载率',
+    name: 'load',
     type: 'groupList',
-    labelWidth: '70px',
-    addButtonText: '添加类别',
-    maxItems: 1,
-    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
-        text: '最小值',
-        name: 'minValue',
-        defaultValue: '',
+        text: '标签',
+        name: 'label',
       },
       {
-        text: '最大值',
-        name: 'maxValue',
-        defaultValue: '',
-      },
-      {
-        text: '颜色',
+        text: '曲线颜色',
         name: 'color',
         type: 'colorPicker',
       },

@@ -311,6 +311,7 @@ watch(
             'economic-indicators',
             'operational-analysis',
             'energy-monitoring',
+            'electric-energy-quality',
             // 'intelligence-report',
           ].includes(component)
         ) {

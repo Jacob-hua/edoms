@@ -1,7 +1,7 @@
 export default {
   type: 'electric-energy-quality',
   style: {
-    width: '1800',
-    height: '840',
+    width: '117',
+    height: '80',
   },
 };
