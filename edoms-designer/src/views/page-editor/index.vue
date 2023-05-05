@@ -312,6 +312,8 @@ watch(
             'operational-analysis',
             'energy-monitoring',
             'electric-energy-quality',
+            'suspended-window',
+            'intelligence-report-heat',
             // 'intelligence-report',
           ].includes(component)
         ) {

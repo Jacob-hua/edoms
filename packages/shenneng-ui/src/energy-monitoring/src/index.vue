@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-28 15:03:41
+ * @LastEditTime: 2023-05-04 10:10:59
 -->
 <template>
   <div style="min-width: 522px; min-height: 246px">
@@ -52,6 +52,8 @@ const props = defineProps<{
   config: MEnergyMonitoring;
 }>();
 
+console.log(props.config);
+
 const { request } = useApp(props);
 
 const { fetchEfficiencyData } = apiFactory(request);
@@ -80,7 +82,6 @@ const updateEfficiencyData = async () => {
     }
     actualValue.value = +formatPrecision(Number(efficiencyNum), energyConfig.value.precision);
   });
-  console.log(result);
 };
 
 useIntervalAsync(updateEfficiencyData, intervalDelay.value);
