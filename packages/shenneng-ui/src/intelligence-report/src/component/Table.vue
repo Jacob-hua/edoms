@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-28 17:00:40
+ * @LastEditTime: 2023-05-04 17:43:17
 -->
 <template>
   <div class="wrap-table">
@@ -56,11 +56,11 @@
           stripe
           :style="{ ...state.tableStyle }"
           :header-cell-style="{
-            background: '#201b1b',
+            background: 'rgba(17,22,30,0.9)',
             color: '#EAF5FF',
             textAlign: 'center',
           }"
-          :cell-style="{ textAlign: 'center', color: '#EAF5FF' }"
+          :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
         >
           <el-table-column prop="time" fixed label="时间" width="110" />
           <el-table-column v-for="(item, index) in state.titleList" :key="item.name" :label="item.name">
@@ -113,7 +113,7 @@ const state: any = reactive({
   tableStyle: {
     width: '100%',
     height: '637px',
-    backgroundColor: 'rgba(9, 13, 18, 0.9)',
+    // backgroundColor: 'rgba(9, 13, 18, 0.9)',
     textAlign: 'center',
     '--el-table-border-color': 'none',
   },
@@ -160,11 +160,14 @@ onMounted(() => {
   //最下面的白线
   background-color: transparent;
 }
+::v-deep .el-table tr {
+  background-color: transparent !important;
+}
 ::v-deep .el-table .el-table__body tr.el-table__row td {
-  background: rgba(5, 7, 10, 0.95);
+  background: rgba(8, 11, 15, 1);
 }
 ::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: #201b1b;
+  background: rgba($color: #11161e, $alpha: 0.9);
 }
 
 ::v-deep .el-table--border .el-table__cell {

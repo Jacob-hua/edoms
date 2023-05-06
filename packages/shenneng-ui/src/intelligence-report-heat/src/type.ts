@@ -29,6 +29,7 @@ export interface MIntelligenceReport extends MComponent {
   intervalDelay: number;
   /** 标题 */
   title: string;
+  buildings: any[];
   tableData: any[];
 }
 

@@ -39,10 +39,16 @@ const colorCardRef = ref<HTMLElement>();
 const colorCardWidth = ref<number>(0);
 
 const attributeLeft = computed<string>(
-  () => `linear-gradient(90deg, ${props.config.medium[0].color}, ${props.config.good[0].color})`
+  () =>
+    `linear-gradient(90deg, ${props.config.medium ? props.config.medium[0].color : '#E76A2F'}, ${
+      props.config.good ? props.config.good[0].color : '#938748'
+    })`
 );
 const attributeRight = computed<string>(
-  () => `linear-gradient(90deg, ${props.config.good[0].color}, ${props.config.excellent[0].color})`
+  () =>
+    `linear-gradient(90deg, ${props.config.good ? props.config.good[0].color : '#938748'}, ${
+      props.config.excellent ? props.config.excellent[0].color : '#36A763'
+    })`
 );
 
 const positionDistance = computed<number>(

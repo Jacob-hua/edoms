@@ -26,4 +26,21 @@ export default async (request: Request) => [
   },
   /** 注入业务组件的共通字段 */
   ...(await useInstanceConfig(request, 'intelligence-report-heat')),
+  {
+    text: '建筑',
+    name: 'buildings',
+    type: 'groupList',
+    labelWidth: '70px',
+    addButtonText: '添加建筑',
+    maxItems: 10,
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+    items: [
+      {
+        text: '名称',
+        name: 'label',
+        defaultValue: '',
+      },
+      ...(await useInstanceConfig(request, 'intelligence-report-heat')),
+    ],
+  },
 ];

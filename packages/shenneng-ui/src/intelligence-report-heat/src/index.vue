@@ -111,8 +111,8 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 1480px;
-    height: 786px;
+    width: 1800px;
+    height: 945px;
     background: rgba($color: #000000, $alpha: 0.9);
     border: 1px solid #013460;
   }
