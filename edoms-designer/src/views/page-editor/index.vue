@@ -313,7 +313,8 @@ watch(
             'energy-monitoring',
             'suspended-window',
             'intelligence-report-heat',
-            // 'intelligence-report',
+            'intelligence-report',
+            'intelligence-report-cold',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');

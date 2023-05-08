@@ -21,6 +21,7 @@ import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
 import IndicatorLight from './indicator-light';
 import IntelligenceReport from './intelligence-report';
+import IntelligenceReportCold from './intelligence-report-cold';
 import IntelligenceReportHeat from './intelligence-report-heat';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
@@ -75,6 +76,7 @@ const ui: Record<string, any> = {
   intelligenceReport: IntelligenceReport,
   suspendedWindow: SuspendedWindow,
   intelligenceReportHeat: IntelligenceReportHeat,
+  intelligenceReportCold: IntelligenceReportCold,
 };
 
 export default ui;

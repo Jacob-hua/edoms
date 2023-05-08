@@ -215,6 +215,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告(热)',
         type: 'intelligence-report-heat',
       },
+      {
+        icon: 'zhinengbaogaore',
+        text: '智能报告(冷)',
+        type: 'intelligence-report-cold',
+      },
     ],
   },
 ];
