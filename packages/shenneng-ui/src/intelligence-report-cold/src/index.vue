@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-08 16:55:45
+ * @LastEditTime: 2023-05-09 09:51:22
 -->
 <template>
   <div class="wrap-intell">
@@ -27,9 +27,12 @@
           <Table :config="config" :type="'month'"></Table>
         </div>
         <div class="retrieval-table">
-          <RetrievalTable :config="config"></RetrievalTable>
+          <RetrievalTable :config="config" @show-detail-table="showDetailTable"></RetrievalTable>
         </div>
       </div>
+    </div>
+    <div v-if="showDetail" class="detail-table">
+      <DetailTable :config="config" :column-index="columnIndex" @close-detail-table="showDetail = false"></DetailTable>
     </div>
   </div>
 </template>
@@ -40,6 +43,7 @@ import { computed, ref } from 'vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
+import DetailTable from './component/DetailTable.vue';
 import RetrievalTable from './component/RetrievalTable.vue';
 import Table from './component/Table.vue';
 import apiFactory from './api';
@@ -54,10 +58,18 @@ const { request } = useApp(props);
 const { fetchEfficiencyData } = apiFactory(request);
 
 const showReport = ref<boolean>(false);
+const showDetail = ref<boolean>(false);
+const columnIndex = ref<number>(0);
 
 const changeReport = () => {
   showReport.value = true;
 };
+
+const showDetailTable = (index: number) => {
+  showDetail.value = true;
+  columnIndex.value = index;
+};
+
 const intelligenceReport = computed<MIntelligenceReport>(() => props.config);
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -194,6 +206,17 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
         border: 1px solid #212c3c;
       }
     }
+  }
+  .detail-table {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 840px;
+    height: 710px;
+    background: #000000;
+    border: 1px solid #013460;
+    z-index: 10;
   }
 }
 </style>

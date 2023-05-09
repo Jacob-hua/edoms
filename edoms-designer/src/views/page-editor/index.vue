@@ -313,7 +313,7 @@ watch(
             'energy-monitoring',
             'suspended-window',
             'intelligence-report-heat',
-            'intelligence-report',
+            'intelligence-report-eletric',
             'intelligence-report-cold',
           ].includes(component)
         ) {

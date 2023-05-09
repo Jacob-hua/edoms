@@ -379,14 +379,14 @@ const retrievalData = [
   },
 ];
 
-const leftTitle = [
+const leftDayTitle = [
   {
     label: 'COP',
     value: '2.0',
     width: 86,
   },
   {
-    label: '总制冷量\n（KWh）',
+    label: '总制冷量\n（GJ）',
     value: '25843',
     width: 86,
   },
@@ -406,6 +406,33 @@ const leftTitle = [
     width: 136,
   },
 ];
+const leftMonthTitle = [
+  {
+    label: 'COP',
+    value: '2.0',
+    width: 86,
+  },
+  {
+    label: '总制冷量\n（GJ）',
+    value: '25843',
+    width: 86,
+  },
+  {
+    label: '总耗电量\n（KWh）',
+    value: '4521',
+    width: 86,
+  },
+  {
+    label: '总制冷成本\n（元/GJ）',
+    value: '4521',
+    width: 86,
+  },
+  {
+    label: '运行时间    \n（月）',
+    value: ['制冷量（GJ）', '耗电量（KWh）', '制冷成本（元/GJ）'],
+    width: 136,
+  },
+];
 
 const retrievalTitle = [
   {
@@ -414,7 +441,7 @@ const retrievalTitle = [
     width: 86,
   },
   {
-    label: '总制冷量\n（KWh）',
+    label: '总制冷量\n（GJ）',
     value: '25843',
     width: 86,
   },
@@ -435,4 +462,170 @@ const retrievalTitle = [
   },
 ];
 
-export { dayData, monthData, retrievalData, leftTitle, retrievalTitle };
+const detailTitle = [
+  {
+    label: '运行时间（日）',
+    value: 'time',
+  },
+  {
+    label: '制冷量（GJ）',
+    value: 'coldMeasure',
+  },
+  {
+    label: '耗电量（KWh）',
+    value: 'eletric',
+  },
+  {
+    label: '制冷成本（元/GJ）',
+    value: 'coldCost',
+  },
+];
+
+const detailData = [
+  {
+    time: '5月10日 0:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 1:00',
+    coldMeasure: 200,
+    eletric: 60,
+    coldCost: 10,
+  },
+  {
+    time: '5月10日 2:00',
+    coldMeasure: 300,
+    eletric: 70,
+    coldCost: 20,
+  },
+  {
+    time: '5月10日 3:00',
+    coldMeasure: 400,
+    eletric: 80,
+    coldCost: 30,
+  },
+  {
+    time: '5月10日 4:00',
+    coldMeasure: 500,
+    eletric: 90,
+    coldCost: 40,
+  },
+  {
+    time: '5月10日 5:00',
+    coldMeasure: 600,
+    eletric: 50,
+    coldCost: 50,
+  },
+  {
+    time: '5月10日 6:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 60,
+  },
+  {
+    time: '5月10日 7:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 8:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 9:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 10:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 11:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 12:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 13:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 14:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 15:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 16:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 17:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 18:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 19:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 20:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 21:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 22:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+  {
+    time: '5月10日 23:00',
+    coldMeasure: 100,
+    eletric: 50,
+    coldCost: 80,
+  },
+];
+
+export { dayData, monthData, retrievalData, leftDayTitle, leftMonthTitle, retrievalTitle, detailTitle, detailData };

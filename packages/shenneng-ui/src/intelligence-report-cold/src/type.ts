@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-27 10:36:24
+ * @LastEditTime: 2023-05-09 08:47:54
  */
 import { MComponent } from '@edoms/schema';
 
@@ -14,6 +14,23 @@ export interface MQueryForm {
   building: string;
   /** 室 */
   room: string;
+  /** 起始时间 */
+  startDate?: string;
+  /** 结束时间 */
+  endDate?: string;
+  /** 室外最小温度 */
+  minTem?: string;
+  /** 室外最大温度 */
+  maxTem?: string;
+  /** 目标最小湿度 */
+  minTargetHumidity?: string;
+  /** 目标最大湿度 */
+  maxTargetHumidity?: string;
+}
+
+export interface MTableQueryForm {
+  date: string;
+  range: string;
 }
 
 export interface MIntelligenceReport extends MComponent {

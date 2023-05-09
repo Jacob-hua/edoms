@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-28 15:04:04
+ * @LastEditTime: 2023-05-09 15:01:01
  */
 import { Request } from '@edoms/editor';
 
@@ -25,5 +25,5 @@ export default async (request: Request) => [
     append: 's',
   },
   /** 注入业务组件的共通字段 */
-  ...(await useInstanceConfig(request, 'intelligence-report')),
+  ...(await useInstanceConfig(request, 'intelligence-report-eletric')),
 ];

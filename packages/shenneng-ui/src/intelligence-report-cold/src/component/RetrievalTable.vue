@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-08 17:47:38
+ * @LastEditTime: 2023-05-09 17:16:59
 -->
 <template>
   <div class="wrap-table">
@@ -12,15 +12,40 @@
       <div class="label">检索报表</div>
     </div>
     <div class="report">
-      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
-        <el-row :gutter="10">
-          <el-col :span="6">
-            <el-form-item label="时间选择：">
-              <el-date-picker v-model="state.queryForm.date" type="day" />
+      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="70px">
+        <el-row>
+          <el-col :span="3">
+            <el-form-item label="起始日期">
+              <el-date-picker v-model="state.queryForm.startDate" type="day" />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="范围选择：">
+          <el-col :span="3">
+            <el-form-item label="—" label-width="35px">
+              <el-date-picker v-model="state.queryForm.endDate" type="day" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="室外温度">
+              <el-input v-model="state.queryForm.minTem" placeholder="请输入最小值℃" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="—" label-width="35px">
+              <el-input v-model="state.queryForm.minTem" placeholder="请输入最大值℃" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="目标湿度">
+              <el-input v-model="state.queryForm.minTargetHumidity" placeholder="请输入最小值%rh" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="—" label-width="35px">
+              <el-input v-model="state.queryForm.minTargetHumidity" placeholder="请输入最大值%rh" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item label="范围选择">
               <el-date-picker v-model="state.queryForm.date" type="day" />
             </el-form-item>
           </el-col>
@@ -43,8 +68,8 @@
             :data="state.tableData"
             :style="{ ...state.tableStyle }"
             :header-cell-style="{
-              background: 'rgba(17,22,30,0.9)',
-              color: '#EAF5FF',
+              background: 'rgba(17,22,30,1)',
+              color: '#C7C7C7',
               textAlign: 'center',
               height: '52px',
               borderRight: '1px solid rgba(29, 38, 52, 0.6)',
@@ -63,33 +88,8 @@
               :width="item.width"
             >
             </el-table-column>
-            <!-- <template #append>
-              <div class="detail">详情</div>
-            </template> -->
           </el-table>
         </div>
-        <!-- <el-table
-            :data="state.tableData"
-            stripe
-            :style="{ ...state.tableStyle }"
-            :header-cell-style="{
-              background: 'rgba(17,22,30,0.9)',
-              color: '#EAF5FF',
-              textAlign: 'center',
-            }"
-            :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
-            :row-style="{ height: '50px' }"
-          >
-            <el-table-column type="index" label="序号" width="60"></el-table-column>
-            <el-table-column
-              v-for="item in state.titleList"
-              :key="item.name"
-              :prop="item.value"
-              :label="item.name"
-              :width="item.width"
-            >
-            </el-table-column>
-          </el-table> -->
       </div>
     </div>
   </div>
@@ -111,6 +111,12 @@ const queryRef = ref(ElForm);
 
 const state: any = reactive({
   queryForm: {
+    startDate: '',
+    endDate: '',
+    minTem: '',
+    maxTem: '',
+    minTargetHumidity: '',
+    maxTargetHumidity: '',
     date: '',
   } as MQueryForm,
   testData: [],
@@ -125,7 +131,7 @@ const state: any = reactive({
   ],
   tableStyle: {
     width: '100%',
-    height: '240px',
+    height: '244px',
     fontSize: '14px',
     textAlign: 'center',
     color: '#C7C7C7',
@@ -133,22 +139,27 @@ const state: any = reactive({
   },
 });
 
-// const groupArrayByKey = (arr: any, key: any) => {
-//   return arr.reduce((t: any, v: any) => (!t[v[key]] && (t[v[key]] = []), t[v[key]].push(v), t), {});
-// };
-
 const getRowStyle = (params: any) => {
   const rowStyle: any = { height: '48px', textAlign: 'center' };
   if (params.rowIndex === 3) {
     rowStyle.color = '#01649C';
     rowStyle.cursor = 'pointer';
   }
-
   return rowStyle;
 };
 
-const handleCellClick = (row: any, column: any, cell: any, event: any) => {
-  console.log(row, column, cell, event);
+const emit = defineEmits(['showDetailTable']);
+
+/**
+ * @Author: lihao
+ * @Date: 2023-05-09 10:25:25
+ * @param {*} column 点击的当前列
+ * @param {*} cell 当前单元格
+ * @Description: 点击打开日详情报表
+ */
+const handleCellClick = (row: any, column: any, cell: any) => {
+  if (cell.innerText !== '详情') return;
+  emit('showDetailTable', column.no);
 };
 
 const handleTableData = () => {
@@ -215,10 +226,10 @@ onMounted(() => {
   background-color: transparent;
 }
 ::v-deep .el-table .el-table__body tr.el-table__row td {
-  background: rgba(8, 11, 15, 1);
+  background: #030507;
 }
 ::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: rgba($color: #11161e, $alpha: 0.9);
+  background: rgba($color: #11161e, $alpha: 1);
 }
 
 ::v-deep .el-table--enable-row-transition .el-table__body td.el-table__cell {
@@ -275,8 +286,12 @@ onMounted(() => {
     cursor: default !important;
   }
 }
-.el-select .el-input.is-focus .el-input__wrapper {
-  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+:deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
+  border: 1px solid #454e72;
+}
+:deep(.el-select .el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
   border: 1px solid #454e72;
 }
 .el-popper.is-light {
@@ -333,7 +348,6 @@ onMounted(() => {
         font-weight: 400;
         color: #eaf5ff;
         line-height: 32px;
-        margin-right: 30px;
         cursor: pointer;
       }
     }

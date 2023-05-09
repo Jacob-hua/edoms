@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-05 13:48:50
+ * @LastEditTime: 2023-05-09 15:35:10
 -->
 <template>
   <div class="wrap-table">
@@ -43,7 +43,7 @@
           stripe
           :style="{ ...state.tableStyle }"
           :header-cell-style="{
-            background: 'rgba(17,22,30,0.9)',
+            background: 'rgba(17,22,30,1)',
             color: '#EAF5FF',
             textAlign: 'center',
           }"
@@ -181,8 +181,12 @@ onMounted(() => {
     cursor: default !important;
   }
 }
-.el-select .el-input.is-focus .el-input__wrapper {
-  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+:deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
+  border: 1px solid #454e72;
+}
+:deep(.el-select .el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
   border: 1px solid #454e72;
 }
 .el-popper.is-light {

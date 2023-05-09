@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-06 09:13:33
+ * @LastEditTime: 2023-05-09 16:00:56
 -->
 <template>
   <div style="min-width: 522px; min-height: 246px">
@@ -44,7 +44,7 @@ import useIntervalAsync from '../../useIntervalAsync';
 import ActualCard from './component/ActualCard.vue';
 import ColorLegend from './component/ColorLegend.vue';
 import LevelCard from './component/LevelCard.vue';
-// import LinearCard from './component/LinearCard.vue';
+import LinearCard from './component/LinearCard.vue';
 import apiFactory from './api';
 import { FetchEfficiencyReq, MEnergyMonitoring } from './type';
 

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-08 17:04:40
+ * @LastEditTime: 2023-05-09 14:27:05
 -->
 <template>
   <div class="wrap-table">
@@ -13,15 +13,22 @@
     </div>
     <div class="report">
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
-        <el-row :gutter="10">
-          <el-col :span="6">
-            <el-form-item label="时间选择：">
+        <el-row :gutter="2">
+          <el-col :span="4">
+            <el-form-item label="时间选择">
               <el-date-picker v-model="state.queryForm.date" type="day" />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="范围选择：">
-              <el-date-picker v-model="state.queryForm.date" type="day" />
+          <el-col :span="4">
+            <el-form-item label="范围选择">
+              <el-select v-model="state.queryForm.range">
+                <el-option
+                  v-for="item in state.rangeOption"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <div class="button">查询</div>
@@ -43,8 +50,8 @@
             :data="state.tableData"
             :style="{ ...state.tableStyle }"
             :header-cell-style="{
-              background: 'rgba(17,22,30,0.9)',
-              color: '#EAF5FF',
+              background: 'rgba(17,22,30,1)',
+              color: '#C7C7C7',
               textAlign: 'center',
               height: '52px',
               borderRight: '1px solid rgba(29, 38, 52, 0.6)',
@@ -64,28 +71,6 @@
             </el-table-column>
           </el-table>
         </div>
-        <!-- <el-table
-          :data="state.tableData"
-          stripe
-          :style="{ ...state.tableStyle }"
-          :header-cell-style="{
-            background: 'rgba(17,22,30,0.9)',
-            color: '#EAF5FF',
-            textAlign: 'center',
-          }"
-          :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
-          :row-style="{ height: '50px' }"
-        >
-          <el-table-column type="index" label="序号" width="60"></el-table-column>
-          <el-table-column
-            v-for="item in state.titleList"
-            :key="item.name"
-            :prop="item.value"
-            :label="item.name"
-            :width="item.width"
-          >
-          </el-table-column>
-        </el-table> -->
       </div>
     </div>
   </div>
@@ -96,8 +81,8 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
 
-import { dayData, leftTitle, monthData } from '../mock';
-import { MIntelligenceReport, MQueryForm } from '../type';
+import { dayData, leftDayTitle, leftMonthTitle, monthData } from '../mock';
+import { MIntelligenceReport, MTableQueryForm } from '../type';
 
 const props = defineProps<{
   config: MIntelligenceReport;
@@ -109,15 +94,24 @@ const queryRef = ref(ElForm);
 const state: any = reactive({
   queryForm: {
     date: '',
-  } as MQueryForm,
+    range: '',
+  } as MTableQueryForm,
   testData: [],
   leftTitle: [],
   rightTitle: [],
   tableData: [],
-  tabs: [
+  rangeOption: [
     {
-      name: '全部',
-      type: 'all',
+      label: '全部',
+      value: 'all',
+    },
+    {
+      label: '楼1',
+      value: 'building1',
+    },
+    {
+      label: '楼2',
+      value: 'building2',
     },
   ],
   tableStyle: {
@@ -134,8 +128,9 @@ const state: any = reactive({
 //   return arr.reduce((t: any, v: any) => (!t[v[key]] && (t[v[key]] = []), t[v[key]].push(v), t), {});
 // };
 
-const handleTableData = (data: any) => {
-  state.leftTitle = leftTitle;
+const handleTableData = () => {
+  const data = props.type === 'day' ? dayData : monthData;
+  state.leftTitle = props.type === 'day' ? leftDayTitle : leftMonthTitle;
   const arrTitle: any = [];
   data.forEach((item: any) => {
     arrTitle.push({
@@ -159,16 +154,6 @@ const handleTableData = (data: any) => {
     arr.push(obj);
   }
   state.tableData = arr;
-  //   console.log('我是table', state.rightTitle, state.tableData);
-
-  //   state.tableData = tableData;
-  //   if (props.config.buildings.length > 0) {
-  //     props.config.buildings.forEach((item: any) => {
-  //       state.tabs.push({
-  //         name: item.label,
-  //       });
-  //     });
-  //   }
 };
 
 // const emit = defineEmits(['closeTable']);
@@ -178,7 +163,7 @@ const handleTableData = (data: any) => {
 // };
 
 onMounted(() => {
-  handleTableData(props.type === 'day' ? dayData : monthData);
+  handleTableData();
 });
 </script>
 
@@ -196,10 +181,10 @@ onMounted(() => {
   background-color: transparent;
 }
 ::v-deep .el-table .el-table__body tr.el-table__row td {
-  background: rgba(8, 11, 15, 1);
+  background: #030507;
 }
 ::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: rgba($color: #11161e, $alpha: 0.9);
+  background: rgba($color: #11161e, $alpha: 1);
 }
 
 ::v-deep .el-table--enable-row-transition .el-table__body td.el-table__cell {
@@ -240,11 +225,15 @@ onMounted(() => {
     cursor: default !important;
   }
 }
-.el-select .el-input.is-focus .el-input__wrapper {
-  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+:deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
   border: 1px solid #454e72;
 }
-.el-popper.is-light {
+:deep(.el-select .el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
+  border: 1px solid #454e72;
+}
+::v-deep .el-popper.is-light {
   border: 1px solid #454e72;
 }
 

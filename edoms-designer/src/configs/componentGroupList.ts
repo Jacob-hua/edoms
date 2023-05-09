@@ -186,7 +186,7 @@ const componentGroupList: ComponentGroup[] = [
         type: 'system-data-cumulation',
       },
       {
-        icon: 'yunxingfenxi',
+        icon: 'duoxiangnengxiao',
         text: '运行分析',
         type: 'operational-analysis',
       },
@@ -201,22 +201,22 @@ const componentGroupList: ComponentGroup[] = [
         type: 'operations-analysis',
       },
       {
-        icon: 'zhinengbaogao',
-        text: '智能报告',
-        type: 'intelligence-report',
+        icon: 'xitong',
+        text: '智能报告(配电)',
+        type: 'intelligence-report-eletric',
       },
       {
-        icon: 'xuanfuchuang',
+        icon: 'xuanfu',
         text: '悬浮窗',
         type: 'suspended-window',
       },
       {
-        icon: 'zhinengbaogaore',
+        icon: 'xitong',
         text: '智能报告(热)',
         type: 'intelligence-report-heat',
       },
       {
-        icon: 'zhinengbaogaore',
+        icon: 'xitong',
         text: '智能报告(冷)',
         type: 'intelligence-report-cold',
       },
