@@ -125,7 +125,7 @@ const options = ref<any>({
   yAxis: [
     {
       type: 'value',
-      // max:20,
+      // max: 60,
       axisLine: {
         show: false,
       },
@@ -205,7 +205,7 @@ const options = ref<any>({
           {
             name: '有效均值',
             // type:'average',
-            yAxis: 15,
+            yAxis: 50,
             lineStyle: {
               normal: {
                 color: '#4193F7',
@@ -217,10 +217,20 @@ const options = ref<any>({
               position: 'middle',
               color: '#F5F7FA',
               fontSize: 14,
-              formatter: (param: any) => {
-                console.log('123123123133===========');
-                return `${'有效均值：' + param.value}`;
+              formatter: ['{text|有效均值：}', `{num|${50}}`].join(''),
+              rich: {
+                text: {
+                  color: '#F5F7FA',
+                  fontSize: 14,
+                },
+                num: {
+                  color: 'rgba(65, 228, 222, 1)',
+                  fontSize: 14,
+                },
               },
+              // formatter: (param: any) => {
+              //   return `${'有效均值：' + param.value}`;
+              // },
             },
           },
         ],
