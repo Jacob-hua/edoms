@@ -10,16 +10,24 @@ const indicatorTypes = [
     value: MEconomicIndicator.ELECTRICITY_CONSUMPTION,
   },
   {
-    text: '单位制冷成本',
-    value: MEconomicIndicator.COOL_COST,
-  },
-  {
     text: '电费',
     value: MEconomicIndicator.ELECTRIC,
   },
   {
+    text: '单位制冷成本',
+    value: MEconomicIndicator.COOL_COST,
+  },
+  {
     text: '单位制冷能耗',
-    value: MEconomicIndicator.ENERGY_CONSUMPTION,
+    value: MEconomicIndicator.COOL_ENERGY_CONSUMPTION,
+  },
+  {
+    text: '单位制热成本',
+    value: MEconomicIndicator.HEAT_COST,
+  },
+  {
+    text: '单位制热能耗',
+    value: MEconomicIndicator.HEAT_ENERGY_CONSUMPTION,
   },
 ];
 
@@ -28,11 +36,13 @@ export default async (request: Request) => [
     text: '标题',
     name: 'title',
     type: 'string',
+    defaultValue: '经济指标',
   },
   {
     text: '子标题',
     name: 'subTitle',
     type: 'string',
+    defaultValue: 'Energy efficiency monitoring',
   },
   {
     text: '轮询间隔',
@@ -56,7 +66,7 @@ export default async (request: Request) => [
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加指标',
-    maxItems: 10,
+    maxItems: 4,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
