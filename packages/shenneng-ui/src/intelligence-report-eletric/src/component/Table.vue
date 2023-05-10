@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-28 17:00:40
+ * @LastEditTime: 2023-05-09 15:29:27
 -->
 <template>
   <div class="wrap-table">
@@ -22,9 +22,9 @@
           </el-col>
           <el-col :span="4" :offset="6">
             <el-form-item label="">
-              <el-select v-model="state.queryForm.building">
+              <el-select v-model="state.queryForm.station">
                 <el-option
-                  v-for="item in state.buildingOptions"
+                  v-for="item in state.stationOptions"
                   :key="item.label"
                   :label="item.label"
                   :value="item.value"
@@ -34,9 +34,9 @@
           </el-col>
           <el-col :span="4">
             <el-form-item label="">
-              <el-select v-model="state.queryForm.building">
+              <el-select v-model="state.queryForm.device">
                 <el-option
-                  v-for="item in state.buildingOptions"
+                  v-for="item in state.deviceOptions"
                   :key="item.label"
                   :label="item.label"
                   :value="item.value"
@@ -56,11 +56,11 @@
           stripe
           :style="{ ...state.tableStyle }"
           :header-cell-style="{
-            background: '#201b1b',
+            background: 'rgba(17,22,30,1)',
             color: '#EAF5FF',
             textAlign: 'center',
           }"
-          :cell-style="{ textAlign: 'center', color: '#EAF5FF' }"
+          :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
         >
           <el-table-column prop="time" fixed label="时间" width="110" />
           <el-table-column v-for="(item, index) in state.titleList" :key="item.name" :label="item.name">
@@ -94,26 +94,52 @@ const queryRef = ref(ElForm);
 const state: any = reactive({
   queryForm: {
     date: '',
-    building: '',
-    room: '',
+    station: 'station1',
+    device: 'device1',
   } as MQueryForm,
   testData: [],
   titleList: [],
   tableData: [],
-  buildingOptions: [
+  stationOptions: [
     {
-      label: '博士楼',
-      value: 'boshi',
+      label: '一号配电室',
+      value: 'station1',
     },
     {
-      label: '硕士楼',
-      value: 'shuoshi',
+      label: '二号配电室',
+      value: 'station2',
+    },
+    {
+      label: '三号配电室',
+      value: 'station3',
+    },
+    {
+      label: '四号配电室',
+      value: 'station4',
+    },
+  ],
+  deviceOptions: [
+    {
+      label: '电压配电柜一',
+      value: 'device1',
+    },
+    {
+      label: '电压配电柜二',
+      value: 'device2',
+    },
+    {
+      label: '电压配电柜三',
+      value: 'device3',
+    },
+    {
+      label: '电压配电柜四',
+      value: 'device4',
     },
   ],
   tableStyle: {
     width: '100%',
     height: '637px',
-    backgroundColor: 'rgba(9, 13, 18, 0.9)',
+    // backgroundColor: 'rgba(9, 13, 18, 0.9)',
     textAlign: 'center',
     '--el-table-border-color': 'none',
   },
@@ -160,11 +186,14 @@ onMounted(() => {
   //最下面的白线
   background-color: transparent;
 }
+::v-deep .el-table tr {
+  background-color: transparent !important;
+}
 ::v-deep .el-table .el-table__body tr.el-table__row td {
-  background: rgba(5, 7, 10, 0.95);
+  background: rgba(8, 11, 15, 1);
 }
 ::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: #201b1b;
+  background: rgba($color: #11161e, $alpha: 0.9);
 }
 
 ::v-deep .el-table--border .el-table__cell {
@@ -178,7 +207,7 @@ onMounted(() => {
 }
 
 :deep(.el-textarea__inner) {
-  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+  //   box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
   resize: none;
   cursor: default;
 }
@@ -186,7 +215,7 @@ onMounted(() => {
 :deep(.el-input__wrapper) {
   box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
   cursor: default;
-  background-color: rgba(5, 7, 10, 0.95);
+  background-color: #030507;
   border: 1px solid #454e72;
   border-radius: 4px;
 
@@ -194,12 +223,16 @@ onMounted(() => {
     cursor: default !important;
   }
 }
-.el-select .el-input.is-focus .el-input__wrapper {
-  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+:deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
   border: 1px solid #454e72;
 }
-.el-popper.is-light {
+:deep(.el-select .el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
   border: 1px solid #454e72;
+}
+:deep(.el-select__popper.el-popper) {
+  border: 1px solid #454e72 !important;
 }
 
 .wrap-table {

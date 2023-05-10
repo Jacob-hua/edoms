@@ -312,9 +312,16 @@ watch(
             'operational-analysis',
             'energy-monitoring',
             'electric-energy-quality',
+            'warning-table-list',
+            'equipment-query-operation',
+            'system-data-cumulation',
+            'operations-analysis',
+            'efficiency-analysis',
+            // 'intelligence-report',
             'suspended-window',
             'intelligence-report-heat',
-            // 'intelligence-report',
+            'intelligence-report-eletric',
+            'intelligence-report-cold',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');

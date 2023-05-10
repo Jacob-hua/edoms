@@ -2,7 +2,7 @@
   <div class="operations-analysis" @click="handlerToShow($event, true)">
     <div class="top-bg"></div>
     <div class="bottom-font">运行分析</div>
-    <div v-show="isShowModel" class="model-wrapper-ftst">
+    <div v-show="isShowModel" class="model-wrapper-gtst">
       <div class="model-content">
         <div class="content-title">
           <div class="left-title-font">
@@ -228,12 +228,14 @@ const handlerToClick = () => {
 
 const hanlderToChoose = (key: string) => {
   dateValue.value = key;
+  isShowOptions.value = false;
+  // handlerToClick();
 };
 
 watch(
   () => isShowModel.value,
   (newV) => {
-    const dom = document.getElementsByClassName('model-wrapper-ftst')[0];
+    const dom = document.getElementsByClassName('model-wrapper-gtst')[0];
     newV
       ? dom.addEventListener('click', handlerToClick, false)
       : dom.removeEventListener('click', handlerToClick, false),
@@ -269,7 +271,7 @@ watch(
     font-size: 14px;
     margin-top: 6px;
   }
-  .model-wrapper-ftst {
+  .model-wrapper-gtst {
     position: fixed;
     top: 0;
     right: 0;

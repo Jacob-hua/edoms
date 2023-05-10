@@ -11,9 +11,9 @@ export interface MQueryForm {
   /** 当前时间 */
   date: string;
   /** 楼 */
-  building: string;
+  station: string;
   /** 室 */
-  room: string;
+  device: string;
 }
 
 export interface MIntelligenceReport extends MComponent {

@@ -1,9 +1,6 @@
 <template>
   <div style="min-width: 522px; min-height: 241px">
     <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="241">
-      <template #operation>
-        <div :class="operatable" @click="handleTrigger">...</div>
-      </template>
       <div class="economic-indicators">
         <div v-for="(item, index) in initIndicators" :key="index" class="wrap-info">
           <img :src="item.icon" alt="" />
@@ -36,15 +33,16 @@ import useIntervalAsync from '../../useIntervalAsync';
 // import MoistureImg from './assets/moisture.svg';
 // import TemperatureImg from './assets/temperature.svg';
 import ConsumptionImg from './assets/consumption.png';
-import CostImg from './assets/cool_cost.png';
+import CostImg from './assets/cost.png';
 import ElectricImg from './assets/electric.png';
-import EnergyImg from './assets/energy.png';
+import ColdEnergyImg from './assets/energy.png';
+import HeatEnergyImg from './assets/heat_energy.png';
 import apiFactory from './api';
 import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig, ParameterItem } from './type';
 
 export interface Indicator {
   icon: string;
-  parameter: string;
+  parameter: string | number;
   displayParameter: string;
   parameterStyle: {};
   label: string;
@@ -72,7 +70,6 @@ const restIndicators = ref<Indicator[]>([]);
 
 // const chartSeries = ref<any[]>([]);
 
-const restParamVisible = ref<boolean>(false);
 const chartDialogVisible = ref<boolean>(false);
 const selectDate = ref(new Date());
 
@@ -86,14 +83,12 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 
-const operatable = computed(() => (restIndicators.value.length ? 'operation' : 'dis-operation'));
-
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
     indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit, precision }) => ({
       label,
-      parameter: '',
+      parameter: Math.floor(Math.random() * 10000),
       displayParameter: '',
       parameterStyle: { color: '#00ff00' },
       icon: getIconByIndicatorType(type),
@@ -162,7 +157,9 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     [MEconomicIndicator.ELECTRICITY_CONSUMPTION]: ConsumptionImg,
     [MEconomicIndicator.COOL_COST]: CostImg,
     [MEconomicIndicator.ELECTRIC]: ElectricImg,
-    [MEconomicIndicator.ENERGY_CONSUMPTION]: EnergyImg,
+    [MEconomicIndicator.COOL_ENERGY_CONSUMPTION]: ColdEnergyImg,
+    [MEconomicIndicator.HEAT_COST]: CostImg,
+    [MEconomicIndicator.HEAT_ENERGY_CONSUMPTION]: HeatEnergyImg,
   };
   return iconClassify[type];
 }
@@ -208,10 +205,6 @@ function calculateParameterStyle(indicator: Indicator, config: MIndicatorItemCon
 //     },
 //   }));
 // };
-
-const handleTrigger = () => {
-  restParamVisible.value = restIndicators.value.length > 0;
-};
 
 // const handleDisplayCharts = (item: Indicator) => {
 //   activeIndicator.value = item;
@@ -289,6 +282,7 @@ watch(
       align-items: center;
       text-align: left;
       .header {
+        width: 100%;
         height: 50%;
         display: flex;
         align-items: center;
@@ -306,28 +300,31 @@ watch(
         }
       }
       .bottom {
+        width: 100%;
         height: 50%;
         font-size: 14px;
         color: #ffffff;
         text-align: left;
+        display: flex;
+        align-items: center;
       }
     }
     // width: 72px;
     // margin: 4px;
 
-    .parameter {
-      font-size: 14px;
-      margin-bottom: 8px;
-      width: 100%;
-      text-align: center;
-      font-weight: bold;
+    // .parameter {
+    //   font-size: 14px;
+    //   margin-bottom: 8px;
+    //   width: 100%;
+    //   text-align: center;
+    //   font-weight: bold;
 
-      .data-value {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
+    //   .data-value {
+    //     overflow: hidden;
+    //     text-overflow: ellipsis;
+    //     white-space: nowrap;
+    //   }
+    // }
 
     .label {
       font-size: 14px;
@@ -335,14 +332,5 @@ watch(
       text-align: center;
     }
   }
-  img[src=''],
-  img:not([src]) {
-    opacity: 0;
-  }
-}
-
-.open-wrapper {
-  width: auto !important;
-  overflow: auto !important;
 }
 </style>

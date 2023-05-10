@@ -6,7 +6,7 @@
  * @LastEditTime: 2023-04-28 10:46:16
  */
 export default {
-  type: 'intelligence-report',
+  type: 'intelligence-report-eletric',
   style: {
     width: '117',
     height: '80',

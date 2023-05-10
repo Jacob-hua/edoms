@@ -3,11 +3,11 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 11:02:44
+ * @LastEditTime: 2023-05-06 10:04:19
 -->
 <template>
   <div class="legend-wrapper">
-    <div v-for="item in legends" :key="item.type" class="legend">
+    <div v-for="item in legend" :key="item.name" class="legend">
       <div class="legend-top">
         <div class="color" :style="`background: ${item.data.color}`"></div>
         <div class="value" :style="`color: ${item.data.color}`">
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 
 import { MEnergyMonitoring } from '../type';
 
@@ -30,20 +30,75 @@ const props = defineProps<{
   config: MEnergyMonitoring;
 }>();
 
-const legends = computed<any[]>(() => [
+const legend = ref<any[]>([
   {
     name: '中等',
-    data: props.config.medium[0],
+    data: {
+      minValue: 1,
+      maxValue: 2,
+      color: '#E76A2F',
+    },
   },
   {
     name: '良好',
-    data: props.config.good[0],
+    data: {
+      minValue: 2,
+      maxValue: 3,
+      color: '#938748',
+    },
   },
   {
     name: '优异',
-    data: props.config.excellent[0],
+    data: {
+      minValue: 3,
+      maxValue: 4,
+      color: '#36A763',
+    },
   },
 ]);
+
+// const legends = computed<any[]>(() => [
+//   {
+//     name: '中等',
+//     data: props.config.medium[0],
+//   },
+//   {
+//     name: '良好',
+//     data: props.config.good[0],
+//   },
+//   {
+//     name: '优异',
+//     data: props.config.excellent[0],
+//   },
+// ]);
+
+watch(
+  () => props.config,
+  (newConfig: MEnergyMonitoring) => {
+    if (newConfig.medium && newConfig.medium.length > 0) legend.value[0].data = newConfig.medium[0];
+    if (newConfig.good && newConfig.good.length > 0) legend.value[1].data = newConfig.good[0];
+    if (newConfig.excellent && newConfig.excellent.length > 0) legend.value[2].data = newConfig.excellent[0];
+  }
+);
+
+// const legends = computed<any[]>(() => {
+//   return [
+//     {
+//       name: '中等',
+//       data: props.config.medium ? props.config.medium[0] : [],
+//     },
+//     {
+//       name: '良好',
+//       data: props.config.good ? props.config.good[0] : [],
+//     },
+//     {
+//       name: '优异',
+//       data: props.config.excellent ? props.config.excellent[0] : [],
+//     },
+//   ];
+// });
+
+console.log(props.config, 77777777);
 </script>
 
 <style lang="scss" scoped>

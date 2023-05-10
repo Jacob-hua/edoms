@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-04 10:10:59
+ * @LastEditTime: 2023-05-09 16:00:56
 -->
 <template>
   <div style="min-width: 522px; min-height: 246px">
@@ -52,7 +52,7 @@ const props = defineProps<{
   config: MEnergyMonitoring;
 }>();
 
-console.log(props.config);
+console.log(props.config, 666666);
 
 const { request } = useApp(props);
 

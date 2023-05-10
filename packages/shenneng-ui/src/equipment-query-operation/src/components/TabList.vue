@@ -1,6 +1,6 @@
 <template>
   <div v-if="props.list.length" class="tab-list">
-    <div v-if="isShow" class="to-left icon-style" @click="handelrToScroll(-1)">{{ String('<') }}</div>
+    <div v-show="isShow" class="to-left icon-style" @click="handelrToScroll(-1)">{{ String('<') }}</div>
     <div class="tab-wrapper" :style="{ width: isShow ? '' : '100%', marginLeft: isShow ? '' : '0px' }">
       <div class="scroll-wrapper" :style="{ transform: `translateX(${-scrollDis}px)` }">
         <div v-for="itm in props.list" :key="itm.value" class="list-item">
@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div v-if="isShow" class="to-right icon-style" @click="handelrToScroll(1)">
+    <div v-show="isShow" class="to-right icon-style" @click="handelrToScroll(1)">
       {{ String('>') }}
     </div>
   </div>
@@ -58,16 +58,17 @@ const handlerToChange = (itm: { [key: string]: any }) => {
 const getDomRect = () => {
   const domPer = document.getElementsByClassName('tab-list')[0];
   const domFt = document.getElementsByClassName('tab-wrapper')[0];
+  panIndex.value = 0;
   if (!domPer) return;
   domList = Array.from(domPer.getElementsByClassName('list-item'));
   const domPerRect = domPer.getBoundingClientRect();
-  perHasWidth.value = domFt.getBoundingClientRect().width;
+  perHasWidth.value = domFt.getBoundingClientRect().width - 2 * 22 - 8;
   for (let i = 0; i < domList.length; i++) {
     const width = domList[i].getBoundingClientRect().width;
     scrollWidth.value += width;
-    if (!panIndex.value && scrollWidth.value > perHasWidth.value) {
+    if (!panIndex.value && scrollWidth.value >= perHasWidth.value) {
       panIndex.value = i;
-      distanceDes.value = scrollWidth.value - perHasWidth.value - 1;
+      distanceDes.value = scrollWidth.value - perHasWidth.value;
     }
   }
   // 判断是否具备滚动的条件
@@ -117,6 +118,9 @@ watch(
   () => props.list,
   (newV: Array<{ [key: string]: string | number }>) => {
     currentIdx.value = newV[0]?.value;
+    queueMicrotask(() => {
+      getDomRect();
+    });
   }
 );
 </script>
