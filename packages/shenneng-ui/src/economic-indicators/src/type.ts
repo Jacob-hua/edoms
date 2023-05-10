@@ -8,7 +8,11 @@ export enum MEconomicIndicator {
   /** 单位制冷成本 */
   COOL_COST = 'cost',
   /** 单位制冷能耗 */
-  ENERGY_CONSUMPTION = 'energy',
+  COOL_ENERGY_CONSUMPTION = 'energy',
+  /** 单位制热成本 */
+  HEAT_COST = 'cost',
+  /** 单位制热能耗 */
+  HEAT_ENERGY_CONSUMPTION = 'energy',
 }
 
 export interface ThresholdConfig {
