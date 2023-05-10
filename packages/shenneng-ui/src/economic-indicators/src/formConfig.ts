@@ -36,13 +36,11 @@ export default async (request: Request) => [
     text: '标题',
     name: 'title',
     type: 'string',
-    defaultValue: '经济指标',
   },
   {
     text: '子标题',
     name: 'subTitle',
     type: 'string',
-    defaultValue: 'Energy efficiency monitoring',
   },
   {
     text: '轮询间隔',
@@ -54,19 +52,12 @@ export default async (request: Request) => [
     append: 's',
   },
   {
-    text: '展示个数',
-    name: 'visibleNumber',
-    type: 'number',
-    min: 0,
-    max: 4,
-  },
-  {
     text: '监测指标',
     name: 'indicators',
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加指标',
-    maxItems: 4,
+    maxItems: 10,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {

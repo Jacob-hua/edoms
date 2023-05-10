@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-09 15:29:27
+ * @LastEditTime: 2023-05-10 16:03:44
 -->
 <template>
   <div class="wrap-table">
@@ -45,9 +45,6 @@
             </el-form-item>
           </el-col>
           <div class="button">导出</div>
-          <!-- <el-col :span="2">
-            <el-button type="primary">导出</el-button>
-          </el-col> -->
         </el-row>
       </el-form>
       <div class="table">
@@ -56,7 +53,7 @@
           stripe
           :style="{ ...state.tableStyle }"
           :header-cell-style="{
-            background: 'rgba(17,22,30,1)',
+            background: 'rgba(9, 13, 18, 1)',
             color: '#EAF5FF',
             textAlign: 'center',
           }"
@@ -139,7 +136,6 @@ const state: any = reactive({
   tableStyle: {
     width: '100%',
     height: '637px',
-    // backgroundColor: 'rgba(9, 13, 18, 0.9)',
     textAlign: 'center',
     '--el-table-border-color': 'none',
   },
@@ -179,9 +175,6 @@ onMounted(() => {
 .el-table__expanded-cell {
   background-color: transparent;
 }
-// :deep .el-table--striped tr {
-//   background-color: green !important;
-// }
 .el-table::before {
   //最下面的白线
   background-color: transparent;
@@ -193,7 +186,7 @@ onMounted(() => {
   background: rgba(8, 11, 15, 1);
 }
 ::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: rgba($color: #11161e, $alpha: 0.9);
+  background: rgba($color: #090d12, $alpha: 0.9);
 }
 
 ::v-deep .el-table--border .el-table__cell {
