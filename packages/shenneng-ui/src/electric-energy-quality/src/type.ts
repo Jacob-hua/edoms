@@ -18,6 +18,8 @@ export interface ElectricEnergyQuality extends MComponent {
   unit: string;
   /**轮询间隔时间 */
   intervalDelay: number;
+  /**考核基准 */
+  examine: number;
   /**三相电流颜色 */
   currentLa: string;
   currentLb: string;

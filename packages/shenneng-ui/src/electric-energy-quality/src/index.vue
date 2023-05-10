@@ -18,7 +18,6 @@
                 <span>三相不平衡</span>
               </span>
             </template>
-            <!-- <PowerFactor></PowerFactor> -->
             <ThreePhaseUnbalance :config="config"></ThreePhaseUnbalance>
           </el-tab-pane>
           <el-tab-pane class="tab">
@@ -27,8 +26,7 @@
                 <span>功率因素</span>
               </span>
             </template>
-            <PowerFactor></PowerFactor>
-            <!-- <ThreePhaseUnbalance></ThreePhaseUnbalance> -->
+            <PowerFactor :config="config"></PowerFactor>
           </el-tab-pane>
           <el-tab-pane class="tab" label="电压分析">
             <VoltagAnalysis></VoltagAnalysis>

@@ -102,25 +102,17 @@ watch(
         {
           name: 'Access From',
           type: 'pie',
-          radius: ['40%', '70%'],
+          radius: ['40%', '65%'],
           top: 40,
-          avoidLabelOverlap: false,
           label: {
             show: true,
             position: 'outside',
             formatter: '{d}%',
             color: '#fff',
           },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: 40,
-              fontWeight: 'bold',
-            },
-          },
           labelLine: {
             show: true,
-            length: 10,
+            length: 5,
             length2: 5,
           },
           data: [

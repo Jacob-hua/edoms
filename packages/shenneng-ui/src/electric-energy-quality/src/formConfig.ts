@@ -59,21 +59,9 @@ export default async (request: Request) => [
     name: 'threePhasRate',
     type: 'colorPicker',
   },
-  // {
-  //   text: '负载率',
-  //   name: 'load',
-  //   type: 'groupList',
-  //   maxItems: 2,
-  //   items: [
-  //     {
-  //       text: '标签',
-  //       name: 'label',
-  //     },
-  //     {
-  //       text: '曲线颜色',
-  //       name: 'color',
-  //       type: 'colorPicker',
-  //     },
-  //   ],
-  // },
+  {
+    text: '考核基准',
+    name: 'examine',
+    type: 'number',
+  },
 ];

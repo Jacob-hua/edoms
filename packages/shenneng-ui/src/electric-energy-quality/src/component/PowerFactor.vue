@@ -77,12 +77,14 @@ import { ref } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import { ElectricEnergyQuality } from '../type';
 
 import CalculationSheet from './CalculationSheet.vue';
 import TimeCalendar from './TimeCalendar.vue';
-// defineProps<{
-//   option: ECOption;
-// }>();
+const props = defineProps<{
+  config: ElectricEnergyQuality;
+}>();
+console.log(props.config);
 const dialogVisible = ref<boolean>(false);
 const nowDialog = ref<boolean>(false);
 const selectShow = ref<boolean>(false);
@@ -98,33 +100,38 @@ const dataValue = ref<string>(dataOptions[0].value);
 const title = ref<string>('');
 // 散点图数据
 const dataAll = [
-  [
-    [10.0, 8.04],
-    [8.0, 6.95],
-    [13.0, 7.58],
-    [9.0, 8.81],
-    [11.0, 8.33],
-    [14.0, 9.96],
-    [6.0, 7.24],
-    [4.0, 4.26],
-    [12.0, 10.84],
-    [7.0, 4.82],
-    [5.0, 5.68],
-  ],
-  [
-    [10.0, 9.14],
-    [8.0, 8.14],
-    [13.0, 8.74],
-    [9.0, 8.77],
-    [11.0, 9.26],
-    [14.0, 8.1],
-    [6.0, 6.13],
-    [4.0, 3.1],
-    [12.0, 9.13],
-    [7.0, 7.26],
-    [5.0, 4.74],
-  ],
+  [20, 69],
+  [32, 18],
+  [65, 54],
+  [44, 65],
+  [35, 47],
+  [78, 35],
+  [12, 65],
+  [55, 77],
+  [60, 33],
+  [44, 55],
+  [25, 20],
+  [69, 20],
+  [18, 32],
+  [54, 65],
+  [65, 44],
+  [47, 35],
+  [35, 78],
+  [65, 12],
+  [77, 55],
+  [33, 60],
+  [55, 44],
+  [20, 25],
 ];
+const maxArr = ref<any>([]);
+const minArr = ref<any>([]);
+dataAll.forEach((item) => {
+  if (item[1] > props.config.examine) {
+    maxArr.value.push(item);
+  } else {
+    minArr.value.push(item);
+  }
+});
 // 月度功率因素统计
 const option_chart = ref<ECOption>({});
 option_chart.value = {
@@ -171,6 +178,7 @@ const changeDilog = (val: string) => {
     nowDialog.value = true;
     selectShow.value = false;
     title.value = '功率因数-月曲线分析';
+    checkList.value = ['箱线图', '插值波动', 'Max曲线', 'Min曲线', '均值曲线'];
     // 月曲线分析图表
     optionMonth_chart.value = {
       xAxis: {
@@ -255,6 +263,24 @@ const changeDilog = (val: string) => {
           ],
           smooth: true,
           symbolSize: 0,
+          markLine: {
+            lineStyle: {
+              color: '#0E9CFF',
+              width: 1,
+              type: 'dashed',
+            },
+            label: {
+              show: false,
+            },
+            data: [
+              {
+                name: '考核基准',
+                yAxis: props.config.examine,
+              },
+            ],
+            silent: true,
+            symbol: 'none',
+          },
         },
         {
           name: 'Max曲线',
@@ -355,13 +381,22 @@ const changeDilog = (val: string) => {
           smooth: true,
           symbolSize: 0,
           markLine: {
+            lineStyle: {
+              color: '#0E9CFF',
+              width: 1,
+              type: 'dashed',
+            },
+            label: {
+              show: false,
+            },
             data: [
               {
                 name: '考核基准',
-                yAxis: 50,
+                yAxis: props.config.examine,
               },
             ],
             silent: true,
+            symbol: 'none',
           },
         },
         {
@@ -381,8 +416,11 @@ const changeDilog = (val: string) => {
     // 数据分析
     optionMonth_chart.value = {
       xAxis: {
-        type: 'category',
-        data: ['0~10%', '10~20%', '20~30%', '30~40%', '40~50%', '50~60%', '60~70%', '70~80%', '80~90%', '90~10%0'],
+        type: 'value',
+        data: ['0~10%', '10~20%', '20~30%', '30~40%', '40~50%', '50~60%', '60~70%', '70~80%', '80~90%', '90~100%'],
+        splitLine: {
+          show: false,
+        },
       },
       tooltip: {
         trigger: 'axis',
@@ -404,35 +442,35 @@ const changeDilog = (val: string) => {
         },
       },
       grid: { top: '30px', left: '30px', right: '30px', bottom: '30px' },
-      color: ['rgba(65,228,222,0.5)', 'rgba(215,40,36,0.5)'],
+      color: ['rgba(65,228,222,0.7)', 'rgba(215,40,36,0.7)'],
       series: [
         {
           symbolSize: 20,
-          data: dataAll[0],
+          data: maxArr.value,
           type: 'scatter',
           markLine: {
+            lineStyle: {
+              color: '#0E9CFF',
+              width: 1,
+              type: 'dashed',
+            },
+            label: {
+              show: false,
+            },
             data: [
               {
                 name: '考核基准',
-                yAxis: 6,
+                yAxis: props.config.examine,
               },
             ],
             silent: true,
+            symbol: 'none',
           },
         },
         {
           symbolSize: 20,
-          data: dataAll[1],
+          data: minArr.value,
           type: 'scatter',
-          markLine: {
-            data: [
-              {
-                name: '考核基准',
-                yAxis: 6,
-              },
-            ],
-            silent: true,
-          },
         },
       ],
     };
