@@ -38,7 +38,7 @@ import ElectricImg from './assets/electric.png';
 import ColdEnergyImg from './assets/energy.png';
 import HeatEnergyImg from './assets/heat_energy.png';
 import apiFactory from './api';
-import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig, ParameterItem } from './type';
+import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig } from './type';
 
 export interface Indicator {
   icon: string;
@@ -58,7 +58,7 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchIndicatorData } = apiFactory(request);
+const { fetchRealData } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
@@ -110,24 +110,18 @@ watch(
   }
 );
 
-const updateIndicatorsData = async () => {
-  const dataList: ParameterItem[] = indicatorConfigs.value.map(
-    ({ instance, property }): ParameterItem => ({
-      deviceCode: instance[instance.length - 1],
-      propCodeList: [property],
-    })
-  );
+const updateRealData = async () => {
+  const dataCodes: string[] = indicatorConfigs.value.map(({ property }): string => property);
 
-  if (dataList.length === 0) {
+  if (dataCodes.length === 0) {
     return;
   }
 
-  const result = await fetchIndicatorData({ dataList });
-
-  result.forEach(({ dataValue, deviceCode, propCode }) => {
+  const result = await fetchRealData({ dataCodes });
+  result.forEach(({ propVal, propCode }) => {
     const targetIndexs: number[] = [];
-    indicatorConfigs.value.forEach(({ instance, property }, index) => {
-      if (instance[instance.length - 1] === deviceCode && property === propCode) {
+    indicatorConfigs.value.forEach(({ property }, index) => {
+      if (property === propCode) {
         targetIndexs.push(index);
       }
     });
@@ -137,12 +131,11 @@ const updateIndicatorsData = async () => {
     targetIndexs.forEach((targetIndex) => {
       const indicatorConfig = indicatorConfigs.value[targetIndex];
       const indicator = indicators.value[targetIndex];
-      indicator.parameter = formatPrecision(dataValue, indicatorConfig.precision);
-      indicator.displayParameter = `${String(formatPrecision(dataValue, indicatorConfig.precision))} ${
+      indicator.parameter = formatPrecision(Number(propVal), indicatorConfig.precision);
+      indicator.displayParameter = `${String(formatPrecision(Number(propVal), indicatorConfig.precision))} ${
         indicatorConfig.unit
       }`;
       indicator.parameterStyle = calculateParameterStyle(indicator, indicatorConfig);
-      indicator.deviceCode = deviceCode;
       indicator.propCode = propCode;
       indicator.precision = indicatorConfig.precision;
       indicator.unit = indicatorConfig.unit;
@@ -150,7 +143,7 @@ const updateIndicatorsData = async () => {
   });
 };
 
-useIntervalAsync(updateIndicatorsData, intervalDelay.value);
+useIntervalAsync(updateRealData, intervalDelay.value);
 
 function getIconByIndicatorType(type: MEconomicIndicator) {
   const iconClassify = {
