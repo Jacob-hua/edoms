@@ -196,6 +196,11 @@ const componentGroupList: ComponentGroup[] = [
         type: 'energy-monitoring',
       },
       {
+        icon: 'diannengzhiliang',
+        text: '电能质量',
+        type: 'electric-energy-quality',
+      },
+      {
         icon: 'yunxingfenxi',
         text: '运行分析（弹窗）',
         type: 'operations-analysis',
