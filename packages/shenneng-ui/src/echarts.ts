@@ -1,4 +1,4 @@
-import { BarChart, LineChart, PieChart } from 'echarts/charts';
+import { BarChart, LineChart, PieChart, ScatterChart } from 'echarts/charts';
 import {
   DatasetComponent,
   GridComponent,
@@ -27,6 +27,7 @@ echarts.use([
   ToolboxComponent,
   LegendComponent,
   PieChart,
+  ScatterChart,
 ]);
 
 export default echarts;

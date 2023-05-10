@@ -151,6 +151,13 @@ watch(
         type: 'value',
         name: 'B',
         data: ['2', '4', '6', '8'],
+        splitLine: {
+          lineStyle: {
+            type: 'dashed',
+            color: '#1A242B',
+            width: 1,
+          },
+        },
       },
       color: [props.config.currentLa, props.config.currentLb, props.config.currentLc],
       series: [
@@ -159,18 +166,21 @@ watch(
           data: [1, 4, 1, 5, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
+          symbolSize: 0,
         },
         {
           name: 'Lb',
           data: [1, 2, 3, 2, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
+          symbolSize: 0,
         },
         {
           name: 'Lc',
           data: [2, 6, 2, 6, 2, 6, 2, 6],
           type: 'line',
           smooth: true,
+          symbolSize: 0,
         },
       ],
     };
@@ -194,11 +204,25 @@ watch(
           type: 'value',
           name: 'B',
           data: ['2', '4', '6', '8'],
+          splitLine: {
+            lineStyle: {
+              type: 'dashed',
+              color: '#1A242B',
+              width: 1,
+            },
+          },
         },
         {
           type: 'category',
           name: '%',
           data: ['20%', '40%', '60%', '80%'],
+          splitLine: {
+            lineStyle: {
+              type: 'dashed',
+              color: '#1A242B',
+              width: 1,
+            },
+          },
         },
       ],
       color: [props.config.loadRate, props.config.threePhasRate],
@@ -208,12 +232,14 @@ watch(
           data: [1, 4, 1, 5, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
+          symbolSize: 0,
         },
         {
           name: '三相不平衡率',
           data: [1, 2, 3, 2, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
+          symbolSize: 0,
         },
       ],
     };

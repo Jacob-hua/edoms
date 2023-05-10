@@ -32,9 +32,9 @@ import { ECOption } from '../../../types';
 
 import Statistics from './Statistics.vue';
 import TimeCalendar from './TimeCalendar.vue';
-defineProps<{
-  option: ECOption;
-}>();
+// defineProps<{
+//   option: ECOption;
+// }>();
 const option_chart = ref<ECOption>({});
 option_chart.value = {
   title: {
