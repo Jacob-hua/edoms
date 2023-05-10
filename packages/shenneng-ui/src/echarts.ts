@@ -3,6 +3,7 @@ import {
   DatasetComponent,
   GridComponent,
   LegendComponent,
+  MarkLineComponent,
   TitleComponent,
   ToolboxComponent,
   TooltipComponent,
@@ -26,6 +27,7 @@ echarts.use([
   CanvasRenderer,
   ToolboxComponent,
   LegendComponent,
+  MarkLineComponent,
 ]);
 
 export default echarts;

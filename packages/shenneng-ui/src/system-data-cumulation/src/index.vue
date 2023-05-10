@@ -27,21 +27,9 @@ const handlerToOperate = (itm: { [key: string]: any }) => {
 };
 
 onMounted(() => {
-  props.config.dateTypeList = [
-    {
-      key: '日',
-      value: 'day',
-    },
-    {
-      key: '月',
-      value: 'month',
-    },
-    {
-      key: '年',
-      value: 'year',
-    },
-  ];
-  handlerToOperate(props.config.dateTypeList[0]);
+  if (props.config.dateTypeList && props.config.dateTypeList[0]) {
+    handlerToOperate(props.config.dateTypeList[0]);
+  }
 });
 </script>
 

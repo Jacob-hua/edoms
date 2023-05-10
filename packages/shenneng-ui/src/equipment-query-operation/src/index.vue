@@ -28,7 +28,9 @@ const handlerToOperate = (itm: { [key: string]: any }) => {
 };
 
 onMounted(() => {
-  handlerToOperate(props.config.equipmentTypeList[0]);
+  if (props.config.equipmentTypeList && props.config.equipmentTypeList[0]) {
+    handlerToOperate(props.config.equipmentTypeList[0]);
+  }
 });
 
 console.log(props);
@@ -39,5 +41,6 @@ console.log(props);
   width: 100%;
   height: 100%;
   padding: 0 10px;
+  box-sizing: border-box;
 }
 </style>

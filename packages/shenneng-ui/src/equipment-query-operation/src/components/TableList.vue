@@ -12,7 +12,13 @@
         </div>
       </div>
       <div class="right-content">
-        <div v-for="(eq, idx) in state.dataList.equipmentList[ctIndex].queryList" :key="idx" class="itm-content">
+        <div
+          v-for="(eq, idx) in state.dataList.equipmentList[ctIndex]
+            ? state.dataList.equipmentList[ctIndex].queryList
+            : []"
+          :key="idx"
+          class="itm-content"
+        >
           <div class="top-ft">
             <span class="font" :style="{ color: eq.color }">{{ eq.data }}</span>
             <span class="unit">{{ eq.queryUnit }}</span>

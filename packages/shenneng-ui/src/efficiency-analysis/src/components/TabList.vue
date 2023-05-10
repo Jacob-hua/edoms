@@ -4,8 +4,9 @@
     <div class="tab-wrapper" :style="{ width: isShow ? '' : '100%', marginLeft: isShow ? '' : '0px' }">
       <div class="scroll-wrapper" :style="{ transform: `translateX(${-scrollDis}px)` }">
         <div v-for="itm in props.list" :key="itm.value" class="list-item">
-          <div :class="['itm-key', currentIdx === itm.value ? 'active' : '']" @click="handlerToChange(itm)">
-            {{ itm.key }}
+          <div class="itm-key">
+            <span class="count-font">{{ 1332.1 }}</span>
+            <div class="count-unit">今日制热功率（kWh）</div>
           </div>
         </div>
       </div>
@@ -28,9 +29,9 @@ const props = withDefaults(
   }
 );
 
-const emits = defineEmits<{
-  (e: 'operate', itm: { [key: string]: any }): void;
-}>();
+// const emits = defineEmits<{
+//   (e: 'operate', itm: { [key: string]: any }): void;
+// }>();
 
 let domList: Array<Element> = [];
 
@@ -50,10 +51,10 @@ const panIndex = ref<number>(0);
 // 滚动第一个的差值
 const distanceDes = ref<number>(0);
 
-const handlerToChange = (itm: { [key: string]: any }) => {
-  currentIdx.value = itm.value;
-  emits('operate', itm);
-};
+// const handlerToChange = (itm: { [key: string]: any }) => {
+//   currentIdx.value = itm.value;
+//   emits('operate', itm);
+// };
 
 const getDomRect = () => {
   const domPer = document.getElementsByClassName('tab-list')[0];
@@ -128,7 +129,7 @@ watch(
 <style lang="scss" scoped>
 .tab-list {
   width: 100%;
-  height: 34px;
+  height: 80px;
   margin: 10px 0;
   pointer-events: all;
   // background-color: antiquewhite;
@@ -136,14 +137,14 @@ watch(
   justify-content: space-between;
   padding: 5px 0px;
   box-sizing: border-box;
-  border-top: 1px solid rgba(0, 163, 255, 0.3);
-  border-bottom: 1px solid rgba(0, 163, 255, 0.3);
+  // border-top: 1px solid rgba(0, 163, 255, 0.3);
+  // border-bottom: 1px solid rgba(0, 163, 255, 0.3);
   position: relative;
   .icon-style {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 50px;
     text-align: center;
-    line-height: 22px;
+    line-height: 50px;
     background-color: rgba(0, 163, 255, 0.1);
     position: absolute;
     color: rgba(255, 255, 255, 1);
@@ -152,16 +153,16 @@ watch(
     user-select: none;
     &.to-left {
       left: 0;
-      top: 6px;
+      top: 15px;
     }
     &.to-right {
       right: 0;
-      top: 6px;
+      top: 15px;
     }
   }
   .tab-wrapper {
     width: calc(100% - 22px - 22px - 8px);
-    height: 22px;
+    height: 80px;
     overflow: hidden;
     margin-left: 26px;
     .scroll-wrapper {
@@ -170,27 +171,37 @@ watch(
       display: flex;
       flex-wrap: nowrap;
       .list-item {
-        padding: 0 10px;
+        padding: 0 16px;
         box-sizing: border-box;
-        height: 22px;
-        border-left: 1px solid rgba(0, 163, 255, 0.3);
-        &:last-child {
-          border-right: 1px solid rgba(0, 163, 255, 0.3);
-        }
+        height: 80px;
+        // border-left: 1px solid rgba(0, 163, 255, 0.3);
+        // &:last-child {
+        //   border-right: 1px solid rgba(0, 163, 255, 0.3);
+        // }
         .itm-key {
-          width: 92px;
-          height: 22px;
-          background-color: rgba(0, 163, 255, 0.1);
+          width: 190px;
+          height: 80px;
+          // background-color: rgba(0, 163, 255, 0.1);
+          background-image: url('../assets/tab-bg-st.png');
+          background-size: 100% 100%;
           text-align: center;
-          line-height: 22px;
-          margin: 0 auto;
-          cursor: pointer;
-          color: rgba(196, 229, 248, 1);
-          font-size: 14px;
-          box-sizing: border-box;
-          &.active {
-            color: #fff;
-            border: 1px solid rgba(0, 163, 255, 1);
+          line-height: 44px;
+          // margin: 0 auto;
+          // cursor: pointer;
+          // color: rgba(196, 229, 248, 1);
+          // font-size: 14px;
+          // box-sizing: border-box;
+          .count-font {
+            color: rgba(65, 228, 222, 1);
+            font-size: 26px;
+          }
+          .count-unit {
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            color: rgba(234, 245, 255, 1);
+            font-size: 16px;
           }
         }
       }

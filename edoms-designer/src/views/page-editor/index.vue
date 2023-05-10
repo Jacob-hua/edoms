@@ -311,6 +311,11 @@ watch(
             'economic-indicators',
             'operational-analysis',
             'energy-monitoring',
+            'warning-table-list',
+            'equipment-query-operation',
+            'system-data-cumulation',
+            'operations-analysis',
+            'efficiency-analysis',
             // 'intelligence-report',
           ].includes(component)
         ) {
