@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 17:16:51
+ * @LastEditTime: 2023-05-10 14:01:45
 -->
 <template>
   <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="822" min-height="367">
@@ -144,9 +144,15 @@ const updateParameterData = async () => {
 };
 const { flush } = useIntervalAsync(updateParameterData, intervalDelay.value);
 
+// const updateLineData = () => {
+//   const dataList = parameterConfigs.value;
+//   console.log('我是曲线数据', dataList, activeIndicatorConfig.value);
+// };
+
 watch(
   () => activeIndicatorConfig.value,
   () => {
+    // updateLineData();
     flush();
   }
 );
@@ -196,12 +202,18 @@ function generateOption(series: any[] = []): ECOption {
       axisTick: {
         show: false,
       },
+      axisLine: {
+        lineStyle: {
+          color: 'rgba(164, 218, 255, 0.2)',
+        },
+      },
       interval: 2,
       axisLabel: {
         formatter: '{HH}:{mm}',
         interval: 2,
         color: '#FFFFFF',
         fontSize: 10,
+        fontWeight: 300,
       },
     },
     yAxis: {
@@ -210,7 +222,7 @@ function generateOption(series: any[] = []): ECOption {
       splitLine: {
         lineStyle: {
           type: 'dashed',
-          color: '#ffffff45',
+          color: 'rgba(164, 218, 255, 0.16)',
         },
       },
       axisLine: {

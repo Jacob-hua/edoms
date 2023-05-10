@@ -9,7 +9,7 @@
               <span class="parameter">{{ item.parameter }}</span>
               <span class="unit">{{ item.unit }}</span>
             </div>
-            <div class="bottom">
+            <div class="bottom overflow-ellipsis">
               {{ item.label }}
             </div>
           </div>
@@ -222,43 +222,22 @@ watch(
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.operation {
-  font-size: 28px;
-  cursor: pointer;
-  position: relative;
-  top: -10px;
-  width: 20px;
-  height: 20px;
-  color: #ffffff85;
-  text-align: center;
-}
-
-.dis-operation {
-  font-size: 28px;
-  position: relative;
-  top: -10px;
-  width: 20px;
-  height: 20px;
-  color: #ffffff45;
-  text-align: center;
-  cursor: default;
-}
-
 .economic-indicators {
   display: flex;
   width: 100%;
   flex-wrap: wrap;
   align-items: flex-start;
   height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   .wrap-info {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
-    width: 50%;
-    height: 50%;
+    min-width: 261px;
+    min-height: 100px;
     // background-color: red;
     img {
       width: 50px;
@@ -297,27 +276,13 @@ watch(
         height: 50%;
         font-size: 14px;
         color: #ffffff;
+        font-weight: 300;
         text-align: left;
         display: flex;
         align-items: center;
+        opacity: 0.6;
       }
     }
-    // width: 72px;
-    // margin: 4px;
-
-    // .parameter {
-    //   font-size: 14px;
-    //   margin-bottom: 8px;
-    //   width: 100%;
-    //   text-align: center;
-    //   font-weight: bold;
-
-    //   .data-value {
-    //     overflow: hidden;
-    //     text-overflow: ellipsis;
-    //     white-space: nowrap;
-    //   }
-    // }
 
     .label {
       font-size: 14px;

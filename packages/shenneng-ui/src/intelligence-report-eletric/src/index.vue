@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-28 16:10:52
+ * @LastEditTime: 2023-05-10 14:34:47
 -->
 <template>
   <div class="wrap-intell">
@@ -78,7 +78,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     min-width: 117px;
     min-height: 80px;
     background: rgba(0, 163, 255, 0.06);
-    //   border: 1px solid #051823;
+    border: 1px solid #051823;
     display: flex;
     flex-direction: column;
     align-items: center;
