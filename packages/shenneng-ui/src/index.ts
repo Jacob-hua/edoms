@@ -27,6 +27,7 @@ import IntelligenceReportHeat from './intelligence-report-heat';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
+import OperationsAnalysisHeat from './operations-analysis-heat';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
@@ -80,6 +81,7 @@ const ui: Record<string, any> = {
   suspendedWindow: SuspendedWindow,
   intelligenceReportHeat: IntelligenceReportHeat,
   intelligenceReportCold: IntelligenceReportCold,
+  operationsAnalysisHeat: OperationsAnalysisHeat,
 };
 
 export default ui;
