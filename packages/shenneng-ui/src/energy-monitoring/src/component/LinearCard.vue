@@ -2,7 +2,7 @@
   <div ref="colorCardRef" class="color-card-wrapper">
     <div class="color">
       <div
-        v-for="index in config.bisectionNumber - 1"
+        v-for="index in bisectionNumber - 1"
         :key="index"
         :style="calculateDistance(index)"
         class="division-wrapper"
@@ -32,19 +32,28 @@ const props = defineProps<{
   actualValue: number;
 }>();
 
+const bisectionNumber = computed<number>(() => (props.config.bisectionNumber ? props.config.bisectionNumber : 11));
+console.log(bisectionNumber, '我是等分数量');
+
 const colorCardRef = ref<HTMLElement>();
 
 const colorCardWidth = ref<number>(0);
 
 const attributeLeft = computed<string>(
-  () => `linear-gradient(90deg, ${props.config.medium[0].color}, ${props.config.good[0].color})`
+  () =>
+    `linear-gradient(90deg, ${
+      props.config.medium && props.config.medium.length > 0 ? props.config.medium[0].color : '#E76A2F'
+    }, ${props.config.good && props.config.good.length > 0 ? props.config.good[0].color : '#938748'})`
 );
 const attributeRight = computed<string>(
-  () => `linear-gradient(90deg, ${props.config.good[0].color}, ${props.config.excellent[0].color})`
+  () =>
+    `linear-gradient(90deg, ${
+      props.config.good && props.config.good.length > 0 ? props.config.good[0].color : '#938748'
+    }, ${props.config.excellent && props.config.excellent.length > 0 ? props.config.excellent[0].color : '#36A763'})`
 );
 
 const positionDistance = computed<number>(
-  () => (colorCardWidth.value - (props.config.bisectionNumber - 1) * 15) / props.config.bisectionNumber
+  () => (colorCardWidth.value - (bisectionNumber.value - 1) * 15) / bisectionNumber.value
 );
 // 监听html元素变化
 const colorCardObserver = new ResizeObserver(() => {

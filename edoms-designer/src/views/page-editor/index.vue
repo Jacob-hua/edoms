@@ -317,6 +317,10 @@ watch(
             'operations-analysis',
             'efficiency-analysis',
             // 'intelligence-report',
+            'suspended-window',
+            'intelligence-report-heat',
+            'intelligence-report-eletric',
+            'intelligence-report-cold',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');

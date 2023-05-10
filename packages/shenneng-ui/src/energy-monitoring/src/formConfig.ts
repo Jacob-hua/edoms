@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-28 15:02:57
+ * @LastEditTime: 2023-05-09 11:00:12
  */
 import { Request } from '@edoms/editor';
 
@@ -35,25 +35,23 @@ export default async (request: Request) => [
     defaultValue: 'COP',
   },
   /** 注入业务组件的共通字段 */
-  ...(await useInstanceConfig(request, 'operational-analysis')),
+  ...(await useInstanceConfig(request, 'energy-monitoring')),
   {
     text: '最小值',
     name: 'minValue',
-    defaultValue: '',
   },
   {
     text: '最大值',
     name: 'maxValue',
-    defaultValue: '',
   },
   {
     type: 'number',
     name: 'bisectionNumber',
     text: '等分数量',
     min: 1,
-    max: 10,
+    max: 12,
     step: 1,
-    defaultValue: 5,
+    defaultValue: 11,
   },
   {
     text: '游标',
@@ -73,12 +71,10 @@ export default async (request: Request) => [
       {
         text: '最小值',
         name: 'minValue',
-        defaultValue: '',
       },
       {
         text: '最大值',
         name: 'maxValue',
-        defaultValue: '',
       },
       {
         text: '颜色',
@@ -100,12 +96,10 @@ export default async (request: Request) => [
       {
         text: '最小值',
         name: 'minValue',
-        defaultValue: '',
       },
       {
         text: '最大值',
         name: 'maxValue',
-        defaultValue: '',
       },
       {
         text: '颜色',
@@ -127,12 +121,10 @@ export default async (request: Request) => [
       {
         text: '最小值',
         name: 'minValue',
-        defaultValue: '',
       },
       {
         text: '最大值',
         name: 'maxValue',
-        defaultValue: '',
       },
       {
         text: '颜色',
