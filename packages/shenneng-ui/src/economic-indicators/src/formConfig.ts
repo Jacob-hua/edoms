@@ -10,16 +10,24 @@ const indicatorTypes = [
     value: MEconomicIndicator.ELECTRICITY_CONSUMPTION,
   },
   {
-    text: '单位制冷成本',
-    value: MEconomicIndicator.COOL_COST,
-  },
-  {
     text: '电费',
     value: MEconomicIndicator.ELECTRIC,
   },
   {
+    text: '单位制冷成本',
+    value: MEconomicIndicator.COOL_COST,
+  },
+  {
     text: '单位制冷能耗',
-    value: MEconomicIndicator.ENERGY_CONSUMPTION,
+    value: MEconomicIndicator.COOL_ENERGY_CONSUMPTION,
+  },
+  {
+    text: '单位制热成本',
+    value: MEconomicIndicator.HEAT_COST,
+  },
+  {
+    text: '单位制热能耗',
+    value: MEconomicIndicator.HEAT_ENERGY_CONSUMPTION,
   },
 ];
 
@@ -42,13 +50,6 @@ export default async (request: Request) => [
     step: 1,
     defaultValue: 10,
     append: 's',
-  },
-  {
-    text: '展示个数',
-    name: 'visibleNumber',
-    type: 'number',
-    min: 0,
-    max: 4,
   },
   {
     text: '监测指标',

@@ -59,7 +59,7 @@ export interface Indicator {
   displayParameter: string;
   parameterStyle: {};
   label: string;
-  deviceCode: string;
+  deviceCode?: string;
   propCode: string;
   unit: string;
   precision: string;
@@ -72,7 +72,7 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchIndicatorData, fetchHistoryData } = apiFactory(request);
+const { fetchIndicatorData, fetchCurveData } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
@@ -101,7 +101,7 @@ const intervalDelay = computed<number>(() => {
 const operatable = computed(() => (restIndicators.value.length ? 'operation' : 'dis-operation'));
 
 const xAxisMax = computed(() => {
-  const defaultMaxTime = dateRange(new Date(), 'day').end;
+  const defaultMaxTime = dateRange(selectDate.value, 'day').end;
   if (magictype.value === 'line') {
     return defaultMaxTime;
   } else if (magictype.value === 'bar') {
@@ -168,6 +168,13 @@ const options = computed<ECOption>(() => {
     }),
   };
 });
+
+watch(
+  () => options.value,
+  () => {
+    console.log(options.value, 'options');
+  }
+);
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
@@ -236,7 +243,42 @@ const updateIndicatorsData = async () => {
   });
 };
 
+// const updateRealData = async () => {
+//   const dataCodes: string[] = indicatorConfigs.value.map(({ property }): string => property);
+
+//   if (dataCodes.length === 0) {
+//     return;
+//   }
+
+//   const result = await fetchRealData({ dataCodes });
+//   console.log(result);
+//   result.forEach(({ propVal, propCode }) => {
+//     const targetIndexs: number[] = [];
+//     indicatorConfigs.value.forEach(({ property }, index) => {
+//       if (property === propCode) {
+//         targetIndexs.push(index);
+//       }
+//     });
+//     if (targetIndexs.length <= 0) {
+//       return;
+//     }
+//     targetIndexs.forEach((targetIndex) => {
+//       const indicatorConfig = indicatorConfigs.value[targetIndex];
+//       const indicator = indicators.value[targetIndex];
+//       indicator.parameter = formatPrecision(Number(propVal), indicatorConfig.precision);
+//       indicator.displayParameter = `${String(formatPrecision(Number(propVal), indicatorConfig.precision))} ${
+//         indicatorConfig.unit
+//       }`;
+//       indicator.parameterStyle = calculateParameterStyle(indicator, indicatorConfig);
+//       indicator.propCode = propCode;
+//       indicator.precision = indicatorConfig.precision;
+//       indicator.unit = indicatorConfig.unit;
+//     });
+//   });
+// };
+
 useIntervalAsync(updateIndicatorsData, intervalDelay.value);
+// useIntervalAsync(updateRealData, intervalDelay.value);
 
 function getIconByIndicatorType(type: MEnvironmentIndicator) {
   const iconClassify = {
@@ -262,26 +304,35 @@ function calculateParameterStyle(indicator: Indicator, config: MIndicatorItemCon
 }
 
 const getHistoryData = async (date: Date) => {
-  const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD HH:mm:ss');
-  const result = await fetchHistoryData({
+  const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD');
+  // const { start, end } = dateRange(date, 'day', true);
+  // const result = await fetchHistoryData({
+  //   startTime: start,
+  //   endTime: end,
+  //   interval: '1h',
+  //   type: 'dev',
+  //   dataList: [
+  //     {
+  //       deviceCode: activeIndicator.value?.deviceCode ?? '',
+  //       propCode: activeIndicator.value?.propCode ?? '',
+  //     },
+  //   ],
+  // });
+  const result = await fetchCurveData({
     startTime: start,
     endTime: end,
-    interval: '1h',
-    type: 'dev',
-    dataList: [
-      {
-        deviceCode: activeIndicator.value?.deviceCode ?? '',
-        propCode: activeIndicator.value?.propCode ?? '',
-      },
-    ],
+    dataCodes: activeIndicator.value?.propCode ? [activeIndicator.value?.propCode] : [],
+    tsUnit: 'H',
+    ts: '1',
   });
 
+  console.log(result, '=-=-=-=-=');
   chartSeries.value = result.map(({ dataList }, index) => ({
     name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
     type: magictype.value,
     showSymbol: false,
     data: dataList.map(({ time, value }) => [
-      stringToDate(time),
+      new Date(Number(time)),
       formatPrecision(+value, activeIndicator.value?.precision ?? ''),
     ]),
     itemStyle: {

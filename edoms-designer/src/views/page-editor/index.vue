@@ -311,6 +311,7 @@ watch(
             'economic-indicators',
             'operational-analysis',
             'energy-monitoring',
+            'electric-energy-quality',
             'warning-table-list',
             'equipment-query-operation',
             'system-data-cumulation',

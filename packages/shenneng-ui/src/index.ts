@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-18 13:24:10
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-09 15:00:46
+ * @LastEditTime: 2023-05-10 09:43:09
  */
 import Button from './button';
 import Charts from './charts';
@@ -12,6 +12,7 @@ import Container from './container';
 import DynamicMonitoring from './dynamic-monitoring';
 import EconomicIndicators from './economic-indicators';
 import EfficiencyAnalysis from './efficiency-analysis';
+import ElectricEnergyQuality from './electric-energy-quality';
 import EnergyEfficiencyMonitoring from './energy-efficiency-monitoring';
 import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
@@ -74,8 +75,8 @@ const ui: Record<string, any> = {
   systemDataCumulation: SystemDataCumulation,
   operationalAnalysis: OperationalAnalysis,
   energyMonitoring: EnergyMonitoring,
+  electricEnergyQuality: ElectricEnergyQuality,
   operationsAnalysis: OperationsAnalysis,
-  // intelligenceReport: IntelligenceReport,
   efficiencyAnalysis: EfficiencyAnalysis,
   intelligenceReportEletric: IntelligenceReportEletric,
   suspendedWindow: SuspendedWindow,
