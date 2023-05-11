@@ -5,13 +5,11 @@ export enum MEconomicIndicator {
   ELECTRIC = 'electric',
   /** 用电量 */
   ELECTRICITY_CONSUMPTION = 'consumption',
-  /** 单位制冷成本 */
-  COOL_COST = 'cost',
-  /** 单位制冷能耗 */
-  COOL_ENERGY_CONSUMPTION = 'energy',
-  /** 单位制热成本 */
-  HEAT_COST = 'cost',
-  /** 单位制热能耗 */
+  /** 成本 */
+  COST = 'cost',
+  /** 制冷量 */
+  COOL_ENERGY_CONSUMPTION = 'cold',
+  /** 能耗 */
   HEAT_ENERGY_CONSUMPTION = 'energy',
 }
 

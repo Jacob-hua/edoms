@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-09 15:35:47
+ * @LastEditTime: 2023-05-10 17:22:10
 -->
 <template>
   <div class="wrap-table">
@@ -97,22 +97,22 @@ onMounted(() => {
   //最下面的白线
   background-color: transparent;
 }
-::v-deep .el-table tr {
+:deep .el-table tr {
   background-color: transparent !important;
 }
-::v-deep .el-table .el-table__body tr.el-table__row td {
+:deep .el-table .el-table__body tr.el-table__row td {
   background: #030507;
 }
-::v-deep .el-table--enable-row-transition .el-table__body td.el-table__cell {
+:deep .el-table--enable-row-transition .el-table__body td.el-table__cell {
   border-bottom: 1px solid rgba($color: #1d2634, $alpha: 0.6) !important;
   border-right: 1px solid rgba($color: #1d2634, $alpha: 0.6) !important;
 }
-::v-deep .el-table--border .el-table__cell {
+:deep .el-table--border .el-table__cell {
   border-bottom: 1px solid #41444c !important;
   border-right: 1px solid #41444c !important;
 }
 
-::v-deep .el-table--border,
+:deep .el-table--border,
 .el-table--group {
   border: 1px solid #41444c !important;
 }

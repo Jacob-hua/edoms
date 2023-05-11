@@ -10,6 +10,8 @@ export default {
   visibleNumber: 4,
   style: {
     width: '522',
-    height: '241',
+    height: '141',
   },
+  title: '经济指标',
+  subTitle: 'Economic indicators',
 };

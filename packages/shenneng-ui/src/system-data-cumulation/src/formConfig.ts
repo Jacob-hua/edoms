@@ -9,7 +9,7 @@ const calculateTypes = [
   },
   {
     text: '环比',
-    value: 'MOM',
+    value: 'QOQ',
   },
   {
     text: '同比',
@@ -21,92 +21,21 @@ const calculateTypes = [
   },
 ];
 
-const options = [
-  {
-    label: '四则运算',
-    value: [
-      {
-        label: '加(+)',
-        value: 'x+y',
-      },
-      {
-        label: '减(-)',
-        value: 'x-y',
-      },
-      {
-        label: '乘(*)',
-        value: 'x*y',
-      },
-      {
-        label: '除(/)',
-        value: 'x/y',
-      },
-      {
-        label: '取余(%)',
-        value: 'x%y',
-      },
-    ],
-  },
-  {
-    label: '三角函数',
-    value: [
-      {
-        label: '圆周(Π)',
-        value: 'pi',
-      },
-      {
-        label: '正弦函数(sin)',
-        value: 'sin(x)',
-      },
-      {
-        label: '余弦函数(cos)',
-        value: 'cos(x)',
-      },
-      {
-        label: '正切函数(tan)',
-        value: 'tan(x)',
-      },
-      {
-        label: '余切函数(cot)',
-        value: 'cot(x)',
-      },
-    ],
-  },
-  {
-    label: '对数',
-    value: [
-      {
-        label: 'log',
-        value: 'log(x,y)',
-      },
-      {
-        label: 'lg',
-        value: 'lg(x)',
-      },
-      {
-        label: 'ln',
-        value: 'ln(x)',
-      },
-    ],
-  },
-  {
-    label: '其他',
-    value: [
-      {
-        label: '绝对值(|x|)',
-        value: 'abs(x)',
-      },
-      {
-        label: '阶乘(!)',
-        value: 'x!',
-      },
-    ],
-  },
-];
-
 export default async (request: Request) => {
   // const useInstance = await useInstanceConfig(request, 'system-cumulative-data');
   return [
+    {
+      text: '标题',
+      name: 'title',
+      type: 'string',
+      defaultValue: '系统累计数据',
+    },
+    {
+      text: '子标题',
+      name: 'subTitle',
+      type: 'string',
+      defaultValue: 'System cumulative data',
+    },
     {
       text: '轮询间隔',
       name: 'intervalDelay',
@@ -178,31 +107,6 @@ export default async (request: Request) => {
               value: '0.00000001',
             },
           ],
-        },
-        {
-          text: '变量',
-          name: 'variables',
-          type: 'groupList',
-          labelWidth: '50px',
-          addButtonText: '添加变量',
-          maxItems: 10,
-          title: (model: any, index: number | string) => `# ${index} ${model.variable ?? ''}`,
-          items: [
-            {
-              text: '变量名',
-              name: 'variable',
-              type: 'text',
-              defaultValue: '',
-            },
-            ...(await useInstanceConfig(request, 'system-cumulative-data')).slice(0, 5),
-          ],
-        },
-        {
-          text: '表达式',
-          type: 'formula',
-          name: 'expression',
-          options: options,
-          defaultValue: '',
         },
         {
           text: '计算方式',

@@ -179,22 +179,22 @@ onMounted(() => {
   //最下面的白线
   background-color: transparent;
 }
-::v-deep .el-table tr {
+:deep .el-table tr {
   background-color: transparent !important;
 }
-::v-deep .el-table .el-table__body tr.el-table__row td {
+:deep .el-table .el-table__body tr.el-table__row td {
   background: rgba(8, 11, 15, 1);
 }
-::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
+:deep .el-table--striped .el-table__body tr.el-table__row--striped td {
   background: rgba($color: #090d12, $alpha: 0.9);
 }
 
-::v-deep .el-table--border .el-table__cell {
+:deep .el-table--border .el-table__cell {
   border-bottom: 1px solid #41444c !important;
   border-right: 1px solid #41444c !important;
 }
 
-::v-deep .el-table--border,
+:deep .el-table--border,
 .el-table--group {
   border: 1px solid #41444c !important;
 }

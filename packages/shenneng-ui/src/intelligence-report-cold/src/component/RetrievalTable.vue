@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-09 17:16:59
+ * @LastEditTime: 2023-05-10 17:23:47
 -->
 <template>
   <div class="wrap-table">
@@ -218,29 +218,29 @@ onMounted(() => {
   background-color: transparent;
 }
 
-::v-deep .el-table tr {
+:deep .el-table tr {
   background-color: transparent !important;
 }
 .el-table::before {
   //最下面的白线
   background-color: transparent;
 }
-::v-deep .el-table .el-table__body tr.el-table__row td {
+:deep .el-table .el-table__body tr.el-table__row td {
   background: #030507;
 }
-::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
+:deep .el-table--striped .el-table__body tr.el-table__row--striped td {
   background: rgba($color: #11161e, $alpha: 1);
 }
 
-::v-deep .el-table--enable-row-transition .el-table__body td.el-table__cell {
+:deep .el-table--enable-row-transition .el-table__body td.el-table__cell {
   border-bottom: 1px solid rgba($color: #1d2634, $alpha: 0.6) !important;
   border-right: 1px solid rgba($color: #1d2634, $alpha: 0.6) !important;
 }
 
-::v-deep .el-table .cell {
+:deep .el-table .cell {
   padding: 0;
 }
-::v-deep .el-scrollbar__view {
+:deep .el-scrollbar__view {
   display: block !important;
 }
 
@@ -259,23 +259,23 @@ onMounted(() => {
   overflow: visible;
 }
 
-// ::v-deep .el-table--border .el-table__cell {
+// :deep .el-table--border .el-table__cell {
 //   border-bottom: 1px solid #41444c !important;
 //   border-right: 1px solid #41444c !important;
 // }
 
-::v-deep .el-table--border,
+:deep .el-table--border,
 .el-table--group {
   border: 1px solid #41444c !important;
 }
 
-:deep(.el-textarea__inner) {
+:deep .el-textarea__inner {
   box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
   resize: none;
   cursor: default;
 }
 
-:deep(.el-input__wrapper) {
+:deep .el-input__wrapper {
   box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
   cursor: default;
   background-color: rgba(5, 7, 10, 0.95);
