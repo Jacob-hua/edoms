@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-10 16:31:10
+ * @LastEditTime: 2023-05-11 11:42:01
  */
 import { Request } from '@edoms/editor';
 
@@ -48,7 +48,7 @@ export default async (request: Request) => [
         labelWidth: '50px',
         addButtonText: '添加指标',
         movable: false,
-        maxItems: 3,
+        maxItems: 10,
         title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
         items: [
           {
@@ -63,6 +63,7 @@ export default async (request: Request) => [
             text: '曲线颜色',
             name: 'color',
             type: 'colorPicker',
+            defaultValue: '#287CE8',
           },
         ],
       },
@@ -87,7 +88,7 @@ export default async (request: Request) => [
         labelWidth: '50px',
         addButtonText: '添加指标',
         movable: false,
-        maxItems: 3,
+        maxItems: 10,
         title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
         items: [
           {

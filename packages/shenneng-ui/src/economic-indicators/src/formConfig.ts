@@ -14,19 +14,15 @@ const indicatorTypes = [
     value: MEconomicIndicator.ELECTRIC,
   },
   {
-    text: '单位制冷成本',
-    value: MEconomicIndicator.COOL_COST,
+    text: '成本',
+    value: MEconomicIndicator.COST,
   },
   {
-    text: '单位制冷能耗',
+    text: '制冷量',
     value: MEconomicIndicator.COOL_ENERGY_CONSUMPTION,
   },
   {
-    text: '单位制热成本',
-    value: MEconomicIndicator.HEAT_COST,
-  },
-  {
-    text: '单位制热能耗',
+    text: '能耗',
     value: MEconomicIndicator.HEAT_ENERGY_CONSUMPTION,
   },
 ];

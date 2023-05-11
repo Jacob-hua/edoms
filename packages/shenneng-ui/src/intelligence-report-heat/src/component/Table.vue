@@ -140,26 +140,26 @@ onMounted(() => {
   background-color: transparent;
 }
 
-::v-deep .el-table tr {
+:deep .el-table tr {
   background-color: transparent !important;
 }
 .el-table::before {
   //最下面的白线
   background-color: transparent;
 }
-::v-deep .el-table .el-table__body tr.el-table__row td {
+:deep .el-table .el-table__body tr.el-table__row td {
   background: rgba(8, 11, 15, 1);
 }
-::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
+:deep .el-table--striped .el-table__body tr.el-table__row--striped td {
   background: rgba($color: #11161e, $alpha: 0.9);
 }
 
-::v-deep .el-table--border .el-table__cell {
+:deep .el-table--border .el-table__cell {
   border-bottom: 1px solid #41444c !important;
   border-right: 1px solid #41444c !important;
 }
 
-::v-deep .el-table--border,
+:deep .el-table--border,
 .el-table--group {
   border: 1px solid #41444c !important;
 }
@@ -193,17 +193,17 @@ onMounted(() => {
   border: 1px solid #454e72;
 }
 
-::v-deep .el-pagination.is-background .btn-next,
-::v-deep .el-pagination.is-background .btn-prev,
-::v-deep.el-pagination.is-background .btn-prev:disabled,
-::v-deep .el-pagination.is-background .btn-next:disabled,
-::v-deep .el-pagination.is-background .el-pager li {
+:deep .el-pagination.is-background .btn-next,
+:deep .el-pagination.is-background .btn-prev,
+:deep.el-pagination.is-background .btn-prev:disabled,
+:deep .el-pagination.is-background .btn-next:disabled,
+:deep .el-pagination.is-background .el-pager li {
   background-color: transparent !important;
   //   border: 0.0625rem solid #4a4a4a;
   color: #ffffff !important;
 }
 
-::v-deep .el-pagination.is-background .el-pager li.is-active {
+:deep .el-pagination.is-background .el-pager li.is-active {
   background-color: #00a3ff !important;
 }
 
