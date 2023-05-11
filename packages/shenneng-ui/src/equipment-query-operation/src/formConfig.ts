@@ -1,8 +1,14 @@
-import { Request } from '@edoms/editor';
-
-import useInstanceConfig from '../../useInstanceConfig';
-
-export default async (request: Request) => [
+export default async () => [
+  {
+    text: '标题',
+    name: 'title',
+    type: 'string',
+  },
+  {
+    text: '子标题',
+    name: 'subTitle',
+    type: 'string',
+  },
   {
     text: '轮询间隔',
     name: 'intervalDelay',
@@ -17,7 +23,7 @@ export default async (request: Request) => [
     name: 'equipmentTypeList',
     type: 'groupList',
     labelWidth: '80px',
-    addButtonText: '添加设备',
+    addButtonText: '添加组',
     items: [
       {
         name: 'key',
@@ -25,16 +31,11 @@ export default async (request: Request) => [
         type: 'text',
       },
       {
-        name: 'value',
-        text: '类型编码',
-        type: 'text',
-      },
-      ...(await useInstanceConfig(request, 'warning-table-list')),
-      {
         name: 'equipmentList',
         text: '设备参数',
         type: 'groupList',
         enableFullscreen: true,
+        addButtonText: '添加设备',
         fixed: false,
         items: [
           {
@@ -49,13 +50,12 @@ export default async (request: Request) => [
             text: '设备编码',
             type: 'text',
           },
-          ...(await useInstanceConfig(request, 'equipment-operating-parameter')),
           {
-            label: '参数指标',
-            name: 'queryList',
-            text: '参数指标',
-            type: 'table',
+            name: 'pointList',
+            text: '点位名称',
+            type: 'groupList',
             enableFullscreen: true,
+            addButtonText: '添加点位',
             fixed: false,
             items: [
               {
@@ -89,28 +89,4 @@ export default async (request: Request) => [
       },
     ],
   },
-  // {
-  //   text: '表格字段',
-  //   name: 'tableTitleList',
-  //   type: 'groupList',
-  //   labelWidth: '80px',
-  //   addButtonText: '添加列',
-  //   items: [
-  //     {
-  //       name: 'key',
-  //       text: '名称',
-  //       type: 'text',
-  //     },
-  //     {
-  //       name: 'value',
-  //       text: '值',
-  //       type: 'text',
-  //     },
-  //     {
-  //       name: 'width',
-  //       text: '宽度(%)',
-  //       type: 'text',
-  //     },
-  //   ],
-  // },
 ];

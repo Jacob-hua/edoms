@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard title="设备运行参数" subtitle="Equipment operation parameters" min-width="522" min-height="261">
+  <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="522" min-height="261">
     <div class="warning-table-list">
       <!-- :list="props.config.equipmentTypeList" -->
       <TabList :list="props.config.equipmentTypeList" @operate="handlerToOperate" />
@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
 
@@ -26,6 +26,13 @@ const tableWrapper = ref<any>(null);
 const handlerToOperate = (itm: { [key: string]: any }) => {
   tableWrapper.value.changeType(itm);
 };
+
+watch(
+  () => props.config,
+  (props) => {
+    tableWrapper.value.changeType(props.equipmentTypeList[0]);
+  }
+);
 
 onMounted(() => {
   if (props.config.equipmentTypeList && props.config.equipmentTypeList[0]) {

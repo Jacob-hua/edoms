@@ -14,7 +14,7 @@
       <div class="right-content">
         <div
           v-for="(eq, idx) in state.dataList.equipmentList[ctIndex]
-            ? state.dataList.equipmentList[ctIndex].queryList
+            ? state.dataList.equipmentList[ctIndex].pointList
             : []"
           :key="idx"
           class="itm-content"
@@ -42,7 +42,6 @@ const state = reactive<{
 }>({
   dataList: {},
 });
-
 const changeType = (itm: { [key: string]: string | number | Array<QueryList> }) => {
   state.dataList = itm;
   ctIndex.value = 0;
@@ -73,18 +72,21 @@ defineExpose({
   overflow: hidden;
   overflow-y: auto;
   position: relative;
+
   .content-wrapper {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: space-between;
     box-sizing: border-box;
+
     .left-content {
       width: 22%;
       height: 100%;
       overflow: hidden;
       border-right: 1px solid rgba(0, 163, 255, 0.1);
       overflow-y: auto;
+
       .itm-tab {
         width: 90%;
         height: 22px;
@@ -97,12 +99,14 @@ defineExpose({
         font-size: 12px;
         color: rgba(196, 229, 248, 1);
         cursor: pointer;
+
         &.active {
           color: #fff;
           background-image: url('../assets/tab-act.png');
         }
       }
     }
+
     .left-content::-webkit-scrollbar {
       width: 3px;
       height: 1px;
@@ -119,6 +123,7 @@ defineExpose({
       border-radius: 3px;
       background: transparent;
     }
+
     .right-content {
       width: 78%;
       padding-left: 2%;
@@ -127,6 +132,7 @@ defineExpose({
       display: flex;
       // justify-content: space-between;
       flex-wrap: wrap;
+
       .itm-content {
         width: 30%;
         height: 62px;
@@ -136,20 +142,24 @@ defineExpose({
         padding: 10px 20px;
         box-sizing: border-box;
         text-align: center;
+
         .top-ft {
           vertical-align: bottom;
+
           .font {
             color: rgba(0, 255, 240, 1);
             font-size: 20px;
             font-family: MicrosoftYaHei;
             margin-right: 5px;
           }
+
           .unit {
             color: rgba(196, 229, 248, 1);
             font-size: 16px;
             font-family: MicrosoftYaHei;
           }
         }
+
         .bottom-name {
           margin-top: 13px;
           color: rgba(196, 229, 248, 1);
