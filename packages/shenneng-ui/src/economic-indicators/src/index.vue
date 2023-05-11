@@ -238,6 +238,7 @@ watch(
       .bottom {
         width: 100%;
         height: 50%;
+        margin-top: 10px;
         font-size: 14px;
         color: #ffffff;
         font-weight: 300;

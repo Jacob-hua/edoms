@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-10 14:48:07
+ * @LastEditTime: 2023-05-11 18:52:26
 -->
 <template>
   <div class="wrap-table">
@@ -76,7 +76,7 @@ import { ElForm } from '@edoms/design';
 import { tableData, titleData } from '../mock';
 import { MIntelligenceReport, MQueryForm } from '../type';
 
-const props = defineProps<{
+defineProps<{
   config: MIntelligenceReport;
 }>();
 
@@ -114,13 +114,13 @@ const changeTab = (index: number) => {
 const handleTableData = () => {
   state.titleList = titleData;
   state.tableData = tableData;
-  if (props.config.buildings.length > 0) {
-    props.config.buildings.forEach((item: any) => {
-      state.tabs.push({
-        name: item.label,
-      });
-    });
-  }
+  //   if (props.config.buildings.length > 0) {
+  //     props.config.buildings.forEach((item: any) => {
+  //       state.tabs.push({
+  //         name: item.label,
+  //       });
+  //     });
+  //   }
 };
 
 const emit = defineEmits(['closeTable']);
