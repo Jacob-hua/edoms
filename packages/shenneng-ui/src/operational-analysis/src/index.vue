@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-10 14:01:45
+ * @LastEditTime: 2023-05-11 15:32:52
 -->
 <template>
   <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="822" min-height="367">
@@ -23,6 +23,7 @@
         :option="option"
         :parameter-configs="parameterConfigs"
         @change-system-config="handleChangeSystemConfig"
+        @change-active-tab="changeActiveTab"
       >
       </SystemParameter>
 
@@ -38,9 +39,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
-import { dateRange, formatCurrentDateRange, formatPrecision, stringToDate } from '@edoms/utils';
+import { dateRange, formatDateRange, formatPrecision } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import { ECOption } from '../../types';
@@ -58,7 +59,8 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchHistoryData } = apiFactory(request);
+// const { fetchHistoryData } = apiFactory(request);
+const { fetchCurveData } = apiFactory(request);
 
 const categories = ref([
   {
@@ -78,7 +80,7 @@ const option = ref<ECOption>({});
 
 const isCurve = ref<boolean>(false);
 
-const lineUnit = ref<string[]>([]);
+// const lineUnit = ref<string[]>([]);
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
@@ -109,46 +111,99 @@ const changeTab = (name: string) => {
   if (activeCategory.value === name) return;
   activeCategory.value = name;
 };
-
-const updateParameterData = async () => {
-  const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
-  const result = await fetchHistoryData({
+const activeTab = ref<number>(0);
+const changeActiveTab = (index: number) => {
+  activeTab.value = index;
+};
+const getHistoryData = async (date: Date) => {
+  const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD');
+  const data = parameterConfigs.value;
+  if (data.length === 0) return;
+  const result = await fetchCurveData({
     startTime: start,
     endTime: end,
-    interval: '1h',
-    type: 'dev',
-    dataList: Array.from(activeIndicatorConfig.value.values()).map(({ instance, property }) => ({
-      deviceCode: instance[instance.length - 1],
-      propCode: property,
-    })),
+    // dataCodes: dataList[activeTab.value].indicators.propCode ? [activeIndicator.value?.propCode] : [],
+    dataCodes: data[activeTab.value].indicators.map((e: any) => e.property),
+    tsUnit: 'H',
+    ts: '1',
   });
 
+  console.log(result, activeIndicatorConfig.value, '=-=-=-=-=');
   let chartSeries = [];
-  chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
-    const activeIndicator = activeIndicatorConfig.value.get(`${insCode}:${propCode}`);
-    const name = activeIndicator?.label;
-    lineUnit.value.push(activeIndicator?.unit ?? '');
+  chartSeries = result.map(({ propCode, dataList }, index) => {
+    const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
+    const name = data[activeTab.value].indicators[codeIndex]?.label;
+    const color = data[activeTab.value].indicators[codeIndex]?.color;
     return {
       name: name ? name : `未命名${index}`,
       type: 'line',
       showSymbol: false,
       smooth: isCurve.value,
-      color: activeIndicator?.color,
-      data: dataList.map(({ time, value }) => [
-        stringToDate(time),
-        formatPrecision(+value, activeIndicator?.precision ?? ''),
-      ]),
+      color: color,
+      data: dataList
+        .map(({ value }) => [
+          //   stringToDate(time),
+          formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
+        ])
+        .flat(),
     };
+    // if(codeIndex > -1) {
+
+    // }
+    // const activeIndicator = activeIndicatorConfig.value.get(`${propCode}`);
+    // const name = activeIndicator?.label;
+    // lineUnit.value.push(activeIndicator?.unit ?? '');
+    // return {
+    //   name: name ? name : `未命名${index}`,
+    //   type: 'line',
+    //   showSymbol: false,
+    //   smooth: isCurve.value,
+    //   color: activeIndicator?.color,
+    //   data: dataList.map(({ time, value }) => [
+    //     stringToDate(time),
+    //     formatPrecision(+value, activeIndicator?.precision ?? ''),
+    //   ]),
+    // };
   });
   option.value = generateOption(chartSeries);
+  console.log('我是曲线数据', option.value);
 };
-const { flush } = useIntervalAsync(updateParameterData, intervalDelay.value);
+//   option.value = generateOption(chartSeries);
+//   console.log('我是曲线数据', option.value);
+//   chartSeries.value = result.map(({ dataList }, index) => ({
+//     name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
+//     type: magictype.value,
+//     showSymbol: false,
+//     data: dataList.map(({ time, value }) => [
+//       new Date(Number(time)),
+//       formatPrecision(+value, activeIndicator.value?.precision ?? ''),
+//     ]),
+//     itemStyle: {
+//       color: activeIndicator.value?.lineColor,
+//     },
+//   }));
+// };
+const { flush } = useIntervalAsync(getHistoryData, intervalDelay.value);
 
 // const updateLineData = () => {
 //   const dataList = parameterConfigs.value;
-//   console.log('我是曲线数据', dataList, activeIndicatorConfig.value);
+//   if (dataList.length === 0) return;
+//   //   console.log('我是曲线数据', dataList, activeIndicatorConfig.value);
+//   const chartSeries: any = [];
+//   dataList[activeTab.value].indicators.forEach((item: any, index: number) => {
+//     chartSeries.push({
+//       name: item.label ? item.label : `未命名${index}`,
+//       type: 'line',
+//       showSymbol: false,
+//       smooth: isCurve.value,
+//       color: item.color,
+//       data: getRandomData(),
+//     });
+//   });
+//   option.value = generateOption(chartSeries);
+//   console.log('我是曲线数据', option.value);
+//   //   const ydata = getRandomData();
 // };
-
 watch(
   () => activeIndicatorConfig.value,
   () => {
@@ -175,14 +230,14 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      formatter: (params: any) => {
-        let content = params[0].axisValueLabel;
-        for (const i in params) {
-          content +=
-            '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
-        }
-        return content;
-      },
+      //   formatter: (params: any) => {
+      //     let content = params[0].axisValueLabel;
+      //     for (const i in params) {
+      //       content +=
+      //         '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
+      //     }
+      //     return content;
+      //   },
     },
     grid: {
       left: '3%',
@@ -192,6 +247,7 @@ function generateOption(series: any[] = []): ECOption {
       containLabel: true,
     },
     xAxis: {
+      //   data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
       type: 'time',
       min: dateRange(new Date(), 'day').start,
       max: dateRange(new Date(), 'day').end,
@@ -241,6 +297,10 @@ function generateOption(series: any[] = []): ECOption {
     series,
   };
 }
+
+onMounted(() => {
+  //   updateLineData();
+});
 </script>
 
 <style lang="scss" scoped>

@@ -8,7 +8,7 @@
 <template>
   <div class="level-wrapper">
     <div class="level-top">
-      <div class="level-value overflow-ellipsis" :title="`${actualValue}`">{{ actualValue || '高' }}</div>
+      <div class="level-value overflow-ellipsis" :title="`${actualValue}`">高</div>
     </div>
     <div class="level-bottom">能效等级</div>
   </div>

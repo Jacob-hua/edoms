@@ -34,6 +34,10 @@ export interface MEnergyMonitoring extends MComponent {
   unit: string;
   /**轮询间隔时间 */
   intervalDelay: number;
+  /** 属性类型 */
+  propertyType: string;
+  /** 属性 */
+  property: string;
   excellent: MParameterItemConfig[];
   good: MParameterItemConfig[];
   medium: MParameterItemConfig[];
@@ -51,6 +55,15 @@ export interface EfficiencyData {
   insCode: string;
   /** 能效监测值 */
   efficiencyNum: string;
+}
+
+export interface IndicatorDataItem {
+  /** 数据值 */
+  dataValue: number;
+  /** 属性code */
+  propCode: string;
+  /** 设备code */
+  deviceCode: string;
 }
 
 export interface HistoryParameterItem {
@@ -72,6 +85,17 @@ export interface FetchHistoryDataReq {
   /** 属性数据 */
   dataList: HistoryParameterItem[];
 }
+export interface ParameterItem {
+  /** 设备实例code */
+  deviceCode: string;
+  /** 属性code列表 */
+  propCodeList: string[];
+}
+
+export interface FetchEnvMonitoringReq {
+  /** 属性数据 */
+  dataList: ParameterItem[];
+}
 
 export interface HistoryData {
   /** 实例Code */
@@ -87,11 +111,61 @@ export interface HistoryData {
   }>;
 }
 
+export interface FetchCumulativeDataReq {
+  calcType: string;
+  dataCodes: string[];
+  endTime: number;
+  startTime: number;
+}
+
+export interface FetchRealDataReq {
+  dataCodes: string[];
+}
+
+export interface CumulativeData {
+  propCode: string;
+  propValue: string;
+}
+
+export interface RealData {
+  propCode: string;
+  propVal: string;
+}
+
+export interface FetchCurveDataReq {
+  dataCodes: string[];
+  endTime: string;
+  startTime: string;
+  ts: string;
+  tsUnit: string;
+}
+
+export interface CurveData {
+  /** 属性Code */
+  propCode: string;
+  /** 数据列表 */
+  dataList: Array<{
+    /** 时间 */
+    time: string;
+    /** 数值 */
+    value: string;
+  }>;
+}
+
 export type FetchHistoryDataRes = HistoryData[];
 
-export type FetchEfficiencyRes = EfficiencyData[];
+export type FetchEnvMonitoringRes = IndicatorDataItem[];
+
+export type FetchRealDataRes = RealData[];
+
+export type FetchCumulativeDataRes = CumulativeData[];
+
+export type FetchCurveDataRes = CurveData[];
 
 export interface Apis {
-  fetchEfficiencyData: (data: FetchEfficiencyReq) => Promise<FetchEfficiencyRes>;
+  fetchIndicatorData: (data: FetchEnvMonitoringReq) => Promise<FetchEnvMonitoringRes>;
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
+  fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
+  fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
+  fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
 }

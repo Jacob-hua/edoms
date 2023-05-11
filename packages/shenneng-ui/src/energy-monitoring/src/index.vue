@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-09 16:00:56
+ * @LastEditTime: 2023-05-11 11:03:26
 -->
 <template>
   <div style="min-width: 522px; min-height: 246px">
@@ -46,17 +46,15 @@ import ColorLegend from './component/ColorLegend.vue';
 import LevelCard from './component/LevelCard.vue';
 import LinearCard from './component/LinearCard.vue';
 import apiFactory from './api';
-import { FetchEfficiencyReq, MEnergyMonitoring } from './type';
+import { MEnergyMonitoring } from './type';
 
 const props = defineProps<{
   config: MEnergyMonitoring;
 }>();
 
-console.log(props.config, 666666);
-
 const { request } = useApp(props);
 
-const { fetchEfficiencyData } = apiFactory(request);
+const { fetchRealData } = apiFactory(request);
 
 const actualValue = ref<number>(0);
 const energyConfig = computed<MEnergyMonitoring>(() => props.config);
@@ -71,16 +69,15 @@ const updateEfficiencyData = async () => {
   if (!energyConfig.value.instance) {
     return;
   }
-  const param: FetchEfficiencyReq = {
-    insCodeList: [energyConfig.value.instance[energyConfig.value.instance.length - 1]],
-    propCode: 'COP',
-  };
-  const result = await fetchEfficiencyData(param);
-  result.forEach(({ insCode, efficiencyNum }) => {
-    if (insCode !== energyConfig.value.instance[energyConfig.value.instance.length - 1]) {
-      return;
-    }
-    actualValue.value = +formatPrecision(Number(efficiencyNum), energyConfig.value.precision);
+  const dataCodes: string[] = [energyConfig.value.property];
+
+  if (dataCodes.length === 0) {
+    return;
+  }
+
+  const result = await fetchRealData({ dataCodes });
+  result.forEach(({ propVal }) => {
+    actualValue.value = +formatPrecision(Number(propVal), energyConfig.value.precision);
   });
 };
 
