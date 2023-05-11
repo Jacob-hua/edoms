@@ -52,8 +52,12 @@ const attributeRight = computed<string>(
     }, ${props.config.excellent && props.config.excellent.length > 0 ? props.config.excellent[0].color : '#36A763'})`
 );
 
+const divideWidth = computed<any>(() => (colorCardWidth.value / (bisectionNumber.value * 2)).toFixed(2));
+
 const positionDistance = computed<number>(
-  () => (colorCardWidth.value - (bisectionNumber.value - 1) * 15) / bisectionNumber.value
+  //     const totalWidth = colorCardWidth.value;
+  //   const divideWidth: any = (totalWidth / (bisectionNumber.value * 2)).toFixed(2);
+  () => (colorCardWidth.value - (bisectionNumber.value - 1) * divideWidth.value) / bisectionNumber.value
 );
 // 监听html元素变化
 const colorCardObserver = new ResizeObserver(() => {
@@ -76,14 +80,23 @@ onUnmounted(() => {
 });
 
 const calculateDistance = (index: number): StyleValue => {
+  //   const totalWidth = colorCardWidth.value;
+  //   const divideWidth: any = (totalWidth / (bisectionNumber.value * 2)).toFixed(2);
   return {
-    left: `${positionDistance.value * index + (index - 1) * 15}px`,
+    left: `${positionDistance.value * index + (index - 1) * divideWidth.value}px`,
+    width: `${divideWidth.value}px`,
   };
 };
 
+// const calculateWidth = (): Record<string, any> => {
+//   return {
+//     width: '50%',
+//   };
+// };
+
 const calculatePosition = (inputValue: string | number): number => {
   if (Number(inputValue) >= Number(props.config.maxValue)) {
-    return colorCardWidth.value;
+    return colorCardWidth.value - divideWidth.value;
   }
 
   if (Number(inputValue) <= Number(props.config.minValue)) {
@@ -125,7 +138,7 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
     }
     .division-wrapper {
       position: absolute;
-      width: 15px;
+      //   width: 15px;
       height: 100%;
       background-color: rgba(31, 30, 29, 1);
     }

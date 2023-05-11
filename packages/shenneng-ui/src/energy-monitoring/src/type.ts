@@ -2,9 +2,9 @@ import { MComponent } from '@edoms/schema';
 
 export interface MParameterItemConfig {
   /** 最小值 */
-  minValue: string;
+  minValue: string | number;
   /** 最大值 */
-  maxValue: string;
+  maxValue: string | number;
   /** 颜色 */
   color: string;
 }
