@@ -1,6 +1,6 @@
 <template>
   <div v-show="props.tableData.length" class="table-list">
-    <div v-for="(itm, idx) in state.tableDataList" :key="idx" class="table-item-list">
+    <div v-for="(itm, idx) in tableData" :key="idx" class="table-item-list">
       <div class="left-ft"></div>
       <div class="right-content">
         <div class="name">{{ itm.label }}</div>
@@ -8,16 +8,16 @@
           <span class="value">{{ itm.dataValue ?? '--' }}</span>
           <span class="unit">{{ itm.unit }}</span>
         </div>
-        <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'MOM'" class="font-value-turn">
-          <span class="font">{{ `${state.dateType.key}环比` }}</span>
+        <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'QOQ'" class="font-value-turn">
+          <span class="font">{{ `${state.dateType}环比` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
-          <span class="value-to" :style="{ color: getStyle(itm, 'momTrend') }">{{ itm.momRatio }}%</span>
-          <span v-show="itm.momTrend === 'flat'" class="turn-flat">--</span>
-          <span v-show="itm.momTrend === 'up'" class="turn-up"></span>
-          <span v-show="itm.momTrend === 'down'" class="turn-down"></span>
+          <span class="value-to" :style="{ color: getStyle(itm, 'qoqTrend') }">{{ itm.qoqRatio }}%</span>
+          <span v-show="itm.qoqTrend === 'flat'" class="turn-flat">--</span>
+          <span v-show="itm.qoqTrend === 'up'" class="turn-up"></span>
+          <span v-show="itm.qoqTrend === 'down'" class="turn-down"></span>
         </div>
         <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'YOY'" class="font-value-turn">
-          <span class="font">{{ `${state.dateType.key}同比` }}</span>
+          <span class="font">{{ `${state.dateType}同比` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
           <span class="value-to" :style="{ color: getStyle(itm, 'yoyTrend') }">{{ itm.yoyRatio }}%</span>
           <span v-show="itm.yoyTrend === 'flat'" class="turn-flat">--</span>
@@ -30,21 +30,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, reactive, withDefaults } from 'vue';
+import { computed, reactive, withDefaults } from 'vue';
 
 import { Category } from '../type';
 
 interface CumulativeList extends Category {
   dataValue: string;
-  momRatio: string;
-  momTrend: 'up' | 'down' | 'flat';
+  qoqRatio: string;
+  qoqTrend: 'up' | 'down' | 'flat';
   yoyRatio: string;
   yoyTrend: 'up' | 'down' | 'flat';
 }
 
 const props = withDefaults(
   defineProps<{
-    tableData: Array<Category>;
+    tableData: Array<CumulativeList>;
   }>(),
   {
     tableData: () => [],
@@ -52,30 +52,9 @@ const props = withDefaults(
 );
 
 const state = reactive<{
-  tableDataList: Array<CumulativeList>;
-  optionsList: Array<{ [key: string]: string }>;
-  dateType: { [key: string]: string };
+  dateType: string;
 }>({
-  tableDataList: [],
-  optionsList: [
-    {
-      text: '无',
-      value: 'NONE',
-    },
-    {
-      text: '环比',
-      value: 'MOM',
-    },
-    {
-      text: '同比',
-      value: 'YOY',
-    },
-    {
-      text: '全部',
-      value: 'ALL',
-    },
-  ],
-  dateType: {},
+  dateType: '日',
 });
 
 const getStyle = computed(() => (itm: any, type: string) => {
@@ -94,23 +73,9 @@ const getStyle = computed(() => (itm: any, type: string) => {
 //   }
 // });
 
-const changeType = (itm: { [key: string]: any }) => {
-  console.log('接口调用', itm);
+const changeType = (itm: string) => {
   state.dateType = itm;
 };
-
-onBeforeMount(() => {
-  props.tableData.forEach((itm: Category) => {
-    state.tableDataList.push({
-      ...itm,
-      dataValue: '555',
-      momRatio: '1',
-      momTrend: 'down',
-      yoyRatio: '33',
-      yoyTrend: 'down',
-    });
-  });
-});
 
 defineExpose({
   changeType,

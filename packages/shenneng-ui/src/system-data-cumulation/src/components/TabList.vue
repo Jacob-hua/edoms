@@ -16,7 +16,20 @@ const props = withDefaults(
     list: Array<{ [key: string]: string | number }>;
   }>(),
   {
-    list: () => [],
+    list: () => [
+      {
+        key: '日',
+        value: 'day',
+      },
+      {
+        key: '月',
+        value: 'month',
+      },
+      {
+        key: '年',
+        value: 'year',
+      },
+    ],
   }
 );
 

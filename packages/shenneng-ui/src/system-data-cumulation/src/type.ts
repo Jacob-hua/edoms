@@ -30,10 +30,6 @@ export interface Category {
   ratioPrecision: string;
   /** 单位 */
   unit: string;
-  /** 变量列表 */
-  variables: Variable[];
-  /** 表达式 */
-  expression: string;
   /** 比例计算方式 */
   calculateType: string;
 }
@@ -41,6 +37,10 @@ export interface Category {
 export interface MCumulativeConfig extends MComponent {
   /**轮询间隔时间 */
   intervalDelay: number;
+  /** 子标题 */
+  title: string;
+  /** 子标题 */
+  subTitle: string;
   /** 累计列表 */
   category: Category[];
 }
@@ -52,16 +52,8 @@ export interface CumulativeDataReq {
   calculateType: string;
   /** 数据标识 */
   identify: string;
-  /** 数据参数 */
-  variables: any;
-  /** 计算公式 */
-  expression: string;
-  /** 实例Code */
-  insCode: string;
   /** 属性Code */
   propCode: string;
-  /** 实例类型 */
-  type: string;
 }
 
 export interface CumulativeDataRes {
@@ -70,9 +62,9 @@ export interface CumulativeDataRes {
   /** 当前值 */
   dataValue: string;
   /**环比比例 */
-  momRatio: string;
+  qoqRatio: string;
   /** 环比趋势 */
-  momTrend: 'up' | 'down' | 'flat';
+  qoqTrend: 'up' | 'down' | 'flat';
   /** 同比比例 */
   yoyRatio: string;
   /** 同比趋势 */
