@@ -106,7 +106,7 @@ watch(
   padding: 10px 28px;
   box-sizing: border-box;
   background-color: rgba(0, 163, 255, 0.1);
-  border: 1px solid rgba(11, 17, 25, 0.3);
+  //   border: 1px solid rgba(11, 17, 25, 0.3);
   .top-bg {
     width: 60px;
     height: 42px;

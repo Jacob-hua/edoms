@@ -170,41 +170,6 @@ function calculateParameterStyle(indicator: Indicator, config: MIndicatorItemCon
   return result;
 }
 
-// const getHistoryData = async (date: Date) => {
-//   const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD HH:mm:ss');
-//   const result = await fetchHistoryData({
-//     startTime: start,
-//     endTime: end,
-//     interval: '1h',
-//     type: 'dev',
-//     dataList: [
-//       {
-//         deviceCode: activeIndicator.value?.deviceCode ?? '',
-//         propCode: activeIndicator.value?.propCode ?? '',
-//       },
-//     ],
-//   });
-
-//   chartSeries.value = result.map(({ dataList }, index) => ({
-//     name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
-//     type: magictype.value,
-//     showSymbol: false,
-//     data: dataList.map(({ time, value }) => [
-//       stringToDate(time),
-//       formatPrecision(+value, activeIndicator.value?.precision ?? ''),
-//     ]),
-//     itemStyle: {
-//       color: activeIndicator.value?.lineColor,
-//     },
-//   }));
-// };
-
-// const handleDisplayCharts = (item: Indicator) => {
-//   activeIndicator.value = item;
-//   dialogTitle.value = item.label;
-//   getHistoryData(new Date());
-//   chartDialogVisible.value = true;
-// };
 watch(
   () => chartDialogVisible.value,
   (visible) => {
