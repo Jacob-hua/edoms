@@ -21,7 +21,7 @@
         >
           <div class="top-ft">
             <span class="font" :style="{ color: eq.color }">{{ eq.data }}</span>
-            <span class="unit">{{ eq.queryUnit }}</span>
+            <span class="unit">{{ eq.unit }}</span>
           </div>
           <div class="bottom-name">{{ eq.queryName }}</div>
         </div>
@@ -47,8 +47,8 @@ const changeType = (itm: { [key: string]: string | number | Array<QueryList> }) 
   ctIndex.value = 0;
   // 后期接口对应
   state.dataList.equipmentList.forEach((itm: { [key: string]: string | Array<QueryList> }) => {
-    if (Array.isArray(itm.queryList)) {
-      itm.queryList.forEach((query: { [key: string]: any }) => {
+    if (Array.isArray(itm.pointList)) {
+      itm.pointList.forEach((query: { [key: string]: any }) => {
         query.data = 25;
       });
     }

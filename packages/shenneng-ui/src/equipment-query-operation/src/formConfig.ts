@@ -1,4 +1,7 @@
-export default async () => [
+import { Request } from '@edoms/editor';
+
+import useInstanceConfig from '../../useInstanceConfig';
+export default async (request: Request) => [
   {
     text: '标题',
     name: 'title',
@@ -64,18 +67,7 @@ export default async () => [
                 text: '参数名称',
                 type: 'text',
               },
-              {
-                label: '参数单位',
-                name: 'queryUnit',
-                text: '参数单位',
-                type: 'text',
-              },
-              {
-                label: '接口字段',
-                name: 'queryApi',
-                text: '接口字段',
-                type: 'text',
-              },
+              ...(await useInstanceConfig(request, 'equipment-query-operation')),
               {
                 label: '颜色',
                 name: 'color',
