@@ -26,7 +26,7 @@ export default async (request: Request) => [
     type: 'number',
     min: 1,
     step: 1,
-    defaultValue: 10,
+    defaultValue: 30,
     append: 's',
   },
   {
@@ -103,6 +103,7 @@ export default async (request: Request) => [
             text: '曲线颜色',
             name: 'color',
             type: 'colorPicker',
+            defaultValue: '#287CE8',
           },
         ],
       },

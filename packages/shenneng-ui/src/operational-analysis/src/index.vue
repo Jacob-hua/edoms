@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-11 15:32:52
+ * @LastEditTime: 2023-05-11 17:20:41
 -->
 <template>
   <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="822" min-height="367">
@@ -78,8 +78,6 @@ const categories = ref([
 const activeCategory = ref<string>('systems');
 const option = ref<ECOption>({});
 
-const isCurve = ref<boolean>(false);
-
 // const lineUnit = ref<string[]>([]);
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
@@ -122,13 +120,11 @@ const getHistoryData = async (date: Date) => {
   const result = await fetchCurveData({
     startTime: start,
     endTime: end,
-    // dataCodes: dataList[activeTab.value].indicators.propCode ? [activeIndicator.value?.propCode] : [],
-    dataCodes: data[activeTab.value].indicators.map((e: any) => e.property),
+    dataCodes: Array.from(activeIndicatorConfig.value.values()).map(({ property }) => property),
     tsUnit: 'H',
     ts: '1',
   });
-
-  console.log(result, activeIndicatorConfig.value, '=-=-=-=-=');
+  console.log('当前选中数据', activeIndicatorConfig.value);
   let chartSeries = [];
   chartSeries = result.map(({ propCode, dataList }, index) => {
     const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
@@ -138,14 +134,12 @@ const getHistoryData = async (date: Date) => {
       name: name ? name : `未命名${index}`,
       type: 'line',
       showSymbol: false,
-      smooth: isCurve.value,
+      smooth: true,
       color: color,
-      data: dataList
-        .map(({ value }) => [
-          //   stringToDate(time),
-          formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
-        ])
-        .flat(),
+      data: dataList.map(({ time, value }) => [
+        new Date(Number(time)),
+        formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
+      ]),
     };
     // if(codeIndex > -1) {
 
@@ -299,7 +293,7 @@ function generateOption(series: any[] = []): ECOption {
 }
 
 onMounted(() => {
-  //   updateLineData();
+  flush();
 });
 </script>
 
