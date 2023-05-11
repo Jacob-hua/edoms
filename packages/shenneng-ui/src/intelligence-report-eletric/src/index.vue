@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-10 14:34:47
+ * @LastEditTime: 2023-05-11 19:18:55
 -->
 <template>
   <div class="wrap-intell">
@@ -116,6 +116,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     height: 786px;
     background: rgba($color: #000000, $alpha: 0.9);
     border: 1px solid #013460;
+    z-index: 10;
   }
 }
 </style>

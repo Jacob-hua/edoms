@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-11 17:20:41
+ * @LastEditTime: 2023-05-11 18:58:40
 -->
 <template>
   <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="822" min-height="367">
@@ -124,7 +124,7 @@ const getHistoryData = async (date: Date) => {
     tsUnit: 'H',
     ts: '1',
   });
-  console.log('当前选中数据', activeIndicatorConfig.value);
+  //   console.log('当前选中数据', activeIndicatorConfig.value);
   let chartSeries = [];
   chartSeries = result.map(({ propCode, dataList }, index) => {
     const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
@@ -141,63 +141,12 @@ const getHistoryData = async (date: Date) => {
         formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
       ]),
     };
-    // if(codeIndex > -1) {
-
-    // }
-    // const activeIndicator = activeIndicatorConfig.value.get(`${propCode}`);
-    // const name = activeIndicator?.label;
-    // lineUnit.value.push(activeIndicator?.unit ?? '');
-    // return {
-    //   name: name ? name : `未命名${index}`,
-    //   type: 'line',
-    //   showSymbol: false,
-    //   smooth: isCurve.value,
-    //   color: activeIndicator?.color,
-    //   data: dataList.map(({ time, value }) => [
-    //     stringToDate(time),
-    //     formatPrecision(+value, activeIndicator?.precision ?? ''),
-    //   ]),
-    // };
   });
   option.value = generateOption(chartSeries);
-  console.log('我是曲线数据', option.value);
+  //   console.log('我是曲线数据', option.value);
 };
-//   option.value = generateOption(chartSeries);
-//   console.log('我是曲线数据', option.value);
-//   chartSeries.value = result.map(({ dataList }, index) => ({
-//     name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
-//     type: magictype.value,
-//     showSymbol: false,
-//     data: dataList.map(({ time, value }) => [
-//       new Date(Number(time)),
-//       formatPrecision(+value, activeIndicator.value?.precision ?? ''),
-//     ]),
-//     itemStyle: {
-//       color: activeIndicator.value?.lineColor,
-//     },
-//   }));
-// };
 const { flush } = useIntervalAsync(getHistoryData, intervalDelay.value);
 
-// const updateLineData = () => {
-//   const dataList = parameterConfigs.value;
-//   if (dataList.length === 0) return;
-//   //   console.log('我是曲线数据', dataList, activeIndicatorConfig.value);
-//   const chartSeries: any = [];
-//   dataList[activeTab.value].indicators.forEach((item: any, index: number) => {
-//     chartSeries.push({
-//       name: item.label ? item.label : `未命名${index}`,
-//       type: 'line',
-//       showSymbol: false,
-//       smooth: isCurve.value,
-//       color: item.color,
-//       data: getRandomData(),
-//     });
-//   });
-//   option.value = generateOption(chartSeries);
-//   console.log('我是曲线数据', option.value);
-//   //   const ydata = getRandomData();
-// };
 watch(
   () => activeIndicatorConfig.value,
   () => {
