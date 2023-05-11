@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard title="设备运行参数" subtitle="Equipment operation parameters" min-width="522" min-height="261">
+  <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="522" min-height="261">
     <div class="warning-table-list">
       <!-- :list="props.config.equipmentTypeList" -->
       <TabList :list="props.config.equipmentTypeList" @operate="handlerToOperate" />
@@ -9,24 +9,54 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
+import useApp from '../../useApp';
+import useIntervalAsync from '../../useIntervalAsync';
 
 import TableList from './components/TableList.vue';
 import TabList from './components/TabList.vue';
+import apiFactory from './api';
 import { EqDataList } from './type';
 
 const props = defineProps<{
   config: EqDataList;
 }>();
 
+const indicatorConfigs = computed<EqDataList[]>(() => props.config.indicators ?? []);
+const intervalDelay = computed<number>(() => {
+  if (typeof props.config.intervalDelay !== 'number') {
+    return 10;
+  }
+  return props.config.intervalDelay;
+});
+const { request } = useApp(props);
+const { fetchRealData } = apiFactory(request);
 const tableWrapper = ref<any>(null);
 
 const handlerToOperate = (itm: { [key: string]: any }) => {
   tableWrapper.value.changeType(itm);
 };
 
+watch(
+  () => props.config,
+  (props) => {
+    tableWrapper.value.changeType(props.equipmentTypeList[0]);
+  }
+);
+
+// 请求数据
+const updateParameterData = async () => {
+  const dataCodes: string[] = indicatorConfigs.value.map(({ property }): string => property);
+  if (dataCodes.length === 0) {
+    return;
+  }
+  console.log(dataCodes);
+  const result = await fetchRealData({ dataCodes });
+  console.log(result);
+};
+useIntervalAsync(updateParameterData, intervalDelay.value);
 onMounted(() => {
   if (props.config.equipmentTypeList && props.config.equipmentTypeList[0]) {
     handlerToOperate(props.config.equipmentTypeList[0]);
