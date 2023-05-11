@@ -235,6 +235,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '运行分析(热 弹窗)',
         type: 'operations-analysis-heat',
       },
+      {
+        icon: 'duoxiangnengxiao',
+        text: '负荷预测(冷 弹窗)',
+        type: 'load-forecasting',
+      },
     ],
   },
 ];

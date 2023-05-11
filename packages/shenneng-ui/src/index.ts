@@ -25,6 +25,7 @@ import IndicatorLight from './indicator-light';
 import IntelligenceReportCold from './intelligence-report-cold';
 import IntelligenceReportEletric from './intelligence-report-eletric';
 import IntelligenceReportHeat from './intelligence-report-heat';
+import LoadForecasting from './loadForecasting';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
@@ -83,6 +84,7 @@ const ui: Record<string, any> = {
   intelligenceReportHeat: IntelligenceReportHeat,
   intelligenceReportCold: IntelligenceReportCold,
   operationsAnalysisHeat: OperationsAnalysisHeat,
+  loadForecasting: LoadForecasting,
 };
 
 export default ui;
