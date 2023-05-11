@@ -1,6 +1,6 @@
 <template>
-  <div style="min-width: 522px; min-height: 241px">
-    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="241">
+  <div style="min-width: 522px; min-height: 141px">
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="141">
       <div class="economic-indicators">
         <div v-for="(item, index) in initIndicators" :key="index" class="wrap-info">
           <img :src="item.icon" alt="" />
@@ -148,10 +148,10 @@ useIntervalAsync(updateRealData, intervalDelay.value);
 function getIconByIndicatorType(type: MEconomicIndicator) {
   const iconClassify = {
     [MEconomicIndicator.ELECTRICITY_CONSUMPTION]: ConsumptionImg,
-    [MEconomicIndicator.COOL_COST]: CostImg,
+    [MEconomicIndicator.COST]: CostImg,
     [MEconomicIndicator.ELECTRIC]: ElectricImg,
     [MEconomicIndicator.COOL_ENERGY_CONSUMPTION]: ColdEnergyImg,
-    [MEconomicIndicator.HEAT_COST]: CostImg,
+    // [MEconomicIndicator.HEAT_COST]: CostImg,
     [MEconomicIndicator.HEAT_ENERGY_CONSUMPTION]: HeatEnergyImg,
   };
   return iconClassify[type];
@@ -217,7 +217,6 @@ watch(
 
 <style lang="scss" scoped>
 .overflow-ellipsis {
-  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -226,7 +225,7 @@ watch(
   display: flex;
   width: 100%;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
@@ -242,7 +241,7 @@ watch(
     img {
       width: 50px;
       height: 50px;
-      margin-left: 60px;
+      margin-left: 40px;
     }
     .wrap-conent {
       padding-left: 15px;

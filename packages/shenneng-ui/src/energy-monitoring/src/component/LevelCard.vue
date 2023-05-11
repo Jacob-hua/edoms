@@ -3,12 +3,12 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 17:19:02
+ * @LastEditTime: 2023-05-11 17:47:43
 -->
 <template>
   <div class="level-wrapper">
     <div class="level-top">
-      <div class="level-value overflow-ellipsis" :title="`${actualValue}`">{{ actualValue || '高' }}</div>
+      <div class="level-value overflow-ellipsis">{{ getCurrentLevel() }}</div>
     </div>
     <div class="level-bottom">能效等级</div>
   </div>
@@ -16,10 +16,39 @@
 
 <script lang="ts" setup>
 import { MEnergyMonitoring } from '../type';
-defineProps<{
+const props = defineProps<{
   config: MEnergyMonitoring;
   actualValue: number;
 }>();
+
+const getCurrentLevel = () => {
+  let level: string = '';
+  if (
+    props.config.medium &&
+    props.config.medium.length > 0 &&
+    props.actualValue >= Number(props.config.medium[0].minValue) &&
+    props.actualValue < Number(props.config.medium[0].maxValue)
+  ) {
+    level = '中等';
+  } else if (
+    props.config.good &&
+    props.config.good.length > 0 &&
+    props.actualValue >= Number(props.config.good[0].minValue) &&
+    props.actualValue < Number(props.config.good[0].maxValue)
+  ) {
+    level = '优异';
+  } else if (
+    props.config.excellent &&
+    props.config.excellent.length > 0 &&
+    props.actualValue >= Number(props.config.excellent[0].minValue) &&
+    props.actualValue < Number(props.config.excellent[0].maxValue)
+  ) {
+    level = '良好';
+  } else {
+    level = '中等';
+  }
+  return level;
+};
 </script>
 
 <style lang="scss" scoped>

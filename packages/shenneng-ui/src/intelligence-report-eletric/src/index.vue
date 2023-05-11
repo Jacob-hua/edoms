@@ -78,7 +78,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     min-width: 117px;
     min-height: 80px;
     background: rgba(0, 163, 255, 0.06);
-    border: 1px solid #051823;
+    // border: 1px solid #051823;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -92,6 +92,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
       background: rgba(0, 114, 179, 0.4);
       border: 1px solid #0072b3;
       border-radius: 4px;
+      box-sizing: border-box;
       .icon-report {
         width: 22px;
         height: 24px;

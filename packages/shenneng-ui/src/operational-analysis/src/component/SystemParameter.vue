@@ -36,6 +36,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: 'changeSystemConfig', value: Map<string, MIndicatorItemConfig>): void;
+  (event: 'changeActiveTab', value: number): void;
 }>();
 
 const activeTab = ref<number>(0);
@@ -43,6 +44,7 @@ const activeTab = ref<number>(0);
 const changeTab = (index: number) => {
   if (activeTab.value === index) return;
   activeTab.value = index;
+  emit('changeActiveTab', activeTab.value);
 };
 
 // const activeParameter = ref<string>('0');
