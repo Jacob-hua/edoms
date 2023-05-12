@@ -114,7 +114,7 @@ class App extends EventEmitter {
     const whiteList = ['zIndex', 'opacity', 'fontWeight'];
     Object.entries(styleObj).forEach(([key, value]) => {
       if (key === 'backgroundImage') {
-        value && (results[key] = fillBackgroundImage(value));
+        value && (results[key] = fillBackgroundImage(this.generateImageSrc(value[0])));
       } else if (key === 'transform' && typeof value !== 'string') {
         const values = Object.entries(value as Record<string, string>)
           .map(([transformKey, transformValue]) => {
@@ -138,11 +138,11 @@ class App extends EventEmitter {
 
   public generateImageSrc(fileStruct: FileStruct): string {
     const isLocalPreview = getUrlParam('localPreview');
-    const { fileName, fileSuffix, url } = fileStruct;
+    const { fileSuffix, url } = fileStruct;
     if (isLocalPreview) {
       return `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview?contentId=${url}`;
     }
-    return `${window.location.origin}/static/${fileName}${fileSuffix}`;
+    return `${window.location.origin}/static/${url}${fileSuffix}`;
   }
 
   /**
