@@ -7,19 +7,19 @@
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">0</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
           <p>变动范围：3~4%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">0</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
           <p>变动范围：2~3%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">0</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
           <p>变动范围：1.5~2%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">0</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
           <p>变动范围：≤1.5%</p>
         </div>
       </div>
@@ -31,19 +31,19 @@
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">0</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
           <p>变动范围：3~4%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">1</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">1</span>次</p>
           <p>变动范围：2~3%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">27</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">27</span>次</p>
           <p>变动范围：1.5~2%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">421</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">421</span>次</p>
           <p>变动范围：≤1.5%</p>
         </div>
       </div>
@@ -55,19 +55,19 @@
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">0</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
           <p>变动范围：3~4%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">1</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">1</span>次</p>
           <p>变动范围：2~3%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">27</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">27</span>次</p>
           <p>变动范围：1.5~2%</p>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 20px">421</span>次</p>
+          <p><span style="color: #41e4de; font-size: 24px">421</span>次</p>
           <p>变动范围：≤1.5%</p>
         </div>
       </div>
@@ -83,23 +83,29 @@
   margin-right: 30px;
   background: rgba(9, 15, 23, 0.3);
   border-bottom: 1px solid #212c3c;
+
   .fluctuation:nth-child(n + 2) {
     margin-top: 30px;
   }
+
   .fluctuation:first-child {
     margin-top: 10px;
   }
+
   .fluctuation {
-    height: 188px;
+    height: 182px;
     border: 1px solid #212c3c;
+
     .fluctuation_tie {
       height: 51px;
       border-bottom: 1px solid #1d2634;
       line-height: 51px;
+      display: flex;
 
       .icon-left {
-        margin-left: 18px;
-        margin-right: 16px;
+        width: 18px;
+        height: 18px;
+        margin: 18px;
       }
 
       .elefont {
@@ -117,13 +123,19 @@
       .con_sub {
         width: 150px;
         height: 76px;
-        background: rgba(9, 15, 23, 0.3);
-        border: 1px solid #042c42;
-        border-radius: 4px;
         margin: auto;
         text-align: center;
-        line-height: 32px;
-        color: #b7c4d1;
+        font-size: 14px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #eaf5ff;
+        background: #03121c;
+        border: 1px solid #02263b;
+        border-radius: 0px 4px 0px 4px;
+
+        p {
+          margin-top: 13px;
+        }
       }
     }
   }
