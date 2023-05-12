@@ -30,8 +30,8 @@ import { inject, ref, watch } from 'vue';
 import { Delete } from '@element-plus/icons-vue';
 
 import { ElButton, ElIcon, ElTooltip } from '@edoms/design';
-import { getByPath } from '@edoms/utils';
 
+// import { getByPath } from '@edoms/utils';
 import { FileStruct, FormState, UploadConfig } from '../schema';
 import { useAddField } from '../utils/useAddField';
 import useSelectFile from '../utils/useSelectFile';
@@ -59,18 +59,32 @@ const { loading: selectLoading, execute: selectExecute } = useSelectFile();
 const files = ref<Map<string, FileStruct>>(new Map<string, FileStruct>());
 
 watch(
-  () => props.model.id,
-  () => {
-    files.value.clear();
-    const values = getByPath(props.model, props.prop, []);
+  () => [props.name],
+  ([name]) => {
+    const values = props.model[name];
     if (Array.isArray(values)) {
-      values.forEach((item: FileStruct) => {
+      files.value.clear();
+      for (const item of values) {
         files.value.set(item.fileName, item);
-      });
+      }
     }
   },
   { immediate: true }
 );
+
+// watch(
+//   () => props.model.id,
+//   () => {
+//     files.value.clear();
+//     const values = getByPath(props.model, props.prop, []);
+//     if (Array.isArray(values)) {
+//       values.forEach((item: FileStruct) => {
+//         files.value.set(item.fileName, item);
+//       });
+//     }
+//   },
+//   { immediate: true }
+// );
 
 watch(
   () => Array.from(files.value.values()).filter(({ status }) => status === 'done'),
