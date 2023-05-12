@@ -143,6 +143,15 @@ option_chart.value = {
   tooltip: {
     trigger: 'axis',
   },
+  legend: {
+    top: '5%',
+    left: 'center',
+    itemWidth: 8,
+    itemHeight: 8,
+    textStyle: {
+      color: '#fff',
+    },
+  },
   yAxis: {
     type: 'value',
     name: '月度功率因素统计',
@@ -165,6 +174,10 @@ option_chart.value = {
       name: '考核基准：0.9',
       data: [50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100],
       type: 'bar',
+      itemStyle: {
+        borderWidth: 1,
+        borderColor: '#287CE8',
+      },
       barWidth: 16,
       barGap: 70,
     },
@@ -572,7 +585,8 @@ const tableData = [
   padding: 0;
   width: 1480px;
   height: 52px;
-  background: #06172d;
+  background-image: url('../../assets/title-bg.png');
+  background-size: 100% 100%;
   border-bottom: 1px solid #013460;
 }
 

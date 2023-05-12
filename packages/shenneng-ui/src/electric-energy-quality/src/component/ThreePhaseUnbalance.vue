@@ -13,32 +13,29 @@
         <div class="grid-content ep-bg-purple-light" />
         <div class="row-right">
           <p>
-            <span style="color: #41e4de; font-size: 20px">{{ item.position.time }}</span
+            <span style="color: #41e4de; font-size: 24px">{{ item.position.time }}</span
             >小时
           </p>
           <p>当月累计时长</p>
         </div>
         <div class="row-right" style="margin: 20px 0px 20px 20px">
           <p>
-            <span style="color: #41e4de; font-size: 20px">{{ item.position.day }}</span
+            <span style="color: #41e4de; font-size: 24px">{{ item.position.day }}</span
             >天
           </p>
           <p>当月天数</p>
         </div>
         <div class="row-right">
           <p>
-            <span style="color: #41e4de; font-size: 20px">{{ item.position.max_rate }}</span
+            <span style="color: #41e4de; font-size: 24px">{{ item.position.max_rate }}</span
             >%
           </p>
           <p>最大不平衡率</p>
         </div>
       </el-col>
     </el-row>
-    <ProportionChart
-      class="echart"
-      style="width: 300px; border-right: 1px solid #212c3c"
-      :option="option_prop"
-    ></ProportionChart>
+    <ProportionChart class="echart" style="width: 300px; border-right: 1px solid #212c3c" :option="option_prop">
+    </ProportionChart>
     <CurrentChart class="echart" :option="option_current"></CurrentChart>
     <LoadChart class="echart" :option="option_load"></LoadChart>
   </div>
@@ -276,6 +273,7 @@ const categories = ref([
 .dataEchart {
   height: 316px;
   border: 1px solid #212c3c;
+  background: rgba(9, 15, 23, 0.3);
   margin: 30px 30px;
 
   .row-bg {
@@ -292,16 +290,19 @@ const categories = ref([
     .row-right {
       width: 130px;
       height: 76px;
-      line-height: 35px;
       text-align: center;
       font-size: 14px;
       font-family: Microsoft YaHei;
       font-weight: 400;
       color: #eaf5ff;
-      background: rgba(3, 18, 28, 1);
-      border: 1px solid #0072b3;
-      border-radius: 4px;
+      background: #03121c;
+      border: 1px solid #02263b;
+      border-radius: 0px 4px 0px 4px;
       margin-left: 20px;
+
+      p {
+        margin-top: 13px;
+      }
     }
   }
 

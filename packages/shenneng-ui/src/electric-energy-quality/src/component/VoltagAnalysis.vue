@@ -18,6 +18,7 @@
 
     <div class="wrapper-con">
       <div class="wrapper-con-right">
+        <div class="wrapper-tie"><span>vGB/T12326-2008《电能质量：电压波动和闪变》</span></div>
         <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
       </div>
     </div>
@@ -37,15 +38,6 @@ import TimeCalendar from './TimeCalendar.vue';
 // }>();
 const option_chart = ref<ECOption>({});
 option_chart.value = {
-  title: {
-    text: 'vGB/T12326-2008《电能质量：电压波动和闪变》',
-    left: 'center',
-    textStyle: {
-      color: '#C4E5F8',
-      fontWeight: '600',
-      fontSize: '16',
-    },
-  },
   xAxis: {
     type: 'category',
     data: ['-10.0%', '-5.0%', '-3.0%', '-2.0%', '-1.0%', '-2.0%', '-3.0%', '-5.0%', '-10.0%'],
@@ -59,19 +51,44 @@ option_chart.value = {
       fontWeight: 400,
       color: '#EAF5FF',
     },
+    splitLine: {
+      lineStyle: {
+        type: 'dashed',
+        color: '#1A242B',
+        width: 1,
+      },
+    },
   },
   series: [
     {
       data: [
-        { value: 50, itemStyle: { color: 'rgba(194, 3, 3, 0.5)' } },
-        { value: 100, itemStyle: { color: 'rgba(255, 102, 0, 0.5)' } },
-        { value: 150, itemStyle: { color: 'rgba(230, 138, 1, 0.5)' } },
-        { value: 200, itemStyle: { color: 'rgba(255, 255, 0, 0.5)' } },
-        { value: 250, itemStyle: { color: 'rgba(0, 255, 0, 0.5)' } },
-        { value: 200, itemStyle: { color: 'rgba(255, 255, 0, 0.5)' } },
-        { value: 150, itemStyle: { color: 'rgba(230, 138, 1, 0.5)' } },
-        { value: 100, itemStyle: { color: 'rgba(255, 102, 0, 0.5)' } },
-        { value: 50, itemStyle: { color: 'rgba(194, 3, 3, 0.5)' } },
+        { value: 50, itemStyle: { color: 'rgba(194, 3, 3, 0.5)', borderWidth: 1, borderColor: 'rgba(194, 3, 3, 1)' } },
+        {
+          value: 100,
+          itemStyle: { color: 'rgba(255, 102, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(255, 102, 0, 1)' },
+        },
+        {
+          value: 150,
+          itemStyle: { color: 'rgba(230, 138, 1, 0.5)', borderWidth: 1, borderColor: 'rgba(230, 138, 1, 1)' },
+        },
+        {
+          value: 200,
+          itemStyle: { color: 'rgba(255, 255, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(255, 255, 0, 1)' },
+        },
+        { value: 250, itemStyle: { color: 'rgba(0, 255, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(0, 255, 0, 1)' } },
+        {
+          value: 200,
+          itemStyle: { color: 'rgba(255, 255, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(255, 255, 0, 1)' },
+        },
+        {
+          value: 150,
+          itemStyle: { color: 'rgba(230, 138, 1, 0.5)', borderWidth: 1, borderColor: 'rgba(230, 138, 1, 1)' },
+        },
+        {
+          value: 100,
+          itemStyle: { color: 'rgba(255, 102, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(255, 102, 0, 1)' },
+        },
+        { value: 50, itemStyle: { color: 'rgba(194, 3, 3, 0.5)', borderWidth: 1, borderColor: 'rgba(194, 3, 3, 1)' } },
       ],
       label: {
         show: true,
@@ -100,6 +117,10 @@ const activeName = ref('day');
   content: none;
 }
 
+:deep(.el-tabs__active-bar) {
+  background: #00a3ff;
+}
+
 .wrapper {
   height: 688px;
   margin: 0px 30px 0px 30px;
@@ -125,9 +146,24 @@ const activeName = ref('day');
       background: rgba(9, 15, 23, 0.3);
       border: 1px solid #212c3c;
 
+      .wrapper-tie {
+        width: 399px;
+        height: 36px;
+        box-sizing: border-box;
+        border-radius: 2px;
+        margin: 20px auto;
+        font-size: 16px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #c4e5f8;
+        line-height: 36px;
+        background: #030e16;
+        text-align: center;
+      }
+
       .charts {
         width: 958px;
-        height: 610px;
+        height: 576px;
       }
     }
   }
