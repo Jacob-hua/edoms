@@ -85,7 +85,7 @@ const stageRect = ref({
   height: 1080,
 });
 
-const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
+const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html?localPreview=1`;
 
 const idPrefix = 'edoms';
 
