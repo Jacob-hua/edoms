@@ -3,24 +3,24 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-10 16:03:44
+ * @LastEditTime: 2023-05-12 15:35:40
 -->
 <template>
   <div class="wrap-table">
     <div class="header">
       <img src="../assets/dialog_icon_report.png" alt="" class="icon-report" />
       <div class="label">{{ config.title }}</div>
-      <div class="close" @click="closeTable"></div>
+      <div class="close" @click.stop="closeTable"></div>
     </div>
     <div class="report">
-      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="75px">
-        <el-row :gutter="10">
-          <el-col :span="6">
+      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="40px">
+        <el-row :gutter="2">
+          <el-col :span="3" :offset="4">
             <el-form-item label="">
-              <el-date-picker v-model="state.queryForm.date" />
+              <el-date-picker v-model="state.queryForm.date" type="date" :default-value="dateFormat(new Date())" />
             </el-form-item>
           </el-col>
-          <el-col :span="4" :offset="6">
+          <el-col :span="4">
             <el-form-item label="">
               <el-select v-model="state.queryForm.station">
                 <el-option
@@ -79,6 +79,7 @@
 import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
+import { dateFormat } from '@edoms/utils';
 
 import mockData from '../mock';
 import { MIntelligenceReport, MQueryForm } from '../type';
@@ -186,7 +187,7 @@ onMounted(() => {
   background: rgba(8, 11, 15, 1);
 }
 :deep .el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: rgba($color: #090d12, $alpha: 0.9);
+  background: rgba($color: #11161e, $alpha: 0.9);
 }
 
 :deep .el-table--border .el-table__cell {

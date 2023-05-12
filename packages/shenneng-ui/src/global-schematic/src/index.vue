@@ -1,9 +1,9 @@
 <template>
-  <img ref="imgRef" :src="imgSrc" />
+  <img :src="imgSrc" />
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { formatPrecision } from '@edoms/utils';
 
@@ -24,11 +24,7 @@ const node = app?.page?.getNode(props.config.id);
 
 const { fetchIndicatorData } = apiFactory(request);
 
-const imgRef = ref<HTMLImageElement>();
-
-const imgSrc = ref<string>(props.config.src?.[0] ?? '');
-
-const imgFileUrl = ref<string>('');
+const imgSrc = ref<string>(AltImg);
 
 const indicatorData = ref<IndicatorData>({});
 
@@ -48,11 +44,7 @@ watch(
       imgSrc.value = AltImg;
       return;
     }
-
-    const url = value[0].url;
-    const suffix = value[0].fileSuffix;
-    imgFileUrl.value = url;
-    imgSrc.value = `${window.location.origin}/static/${url}${suffix}`;
+    imgSrc.value = app?.generateImageSrc(props.config.src[0]) ?? AltImg;
   },
   { immediate: true }
 );
@@ -84,16 +76,4 @@ const updateIndicatorsData = async () => {
 };
 
 useIntervalAsync(updateIndicatorsData, intervalDelay.value);
-
-onMounted(() => {
-  imgRef.value?.addEventListener('error', handleImgError);
-});
-
-onUnmounted(() => {
-  imgRef.value?.removeEventListener('error', handleImgError);
-});
-
-function handleImgError() {
-  imgSrc.value = `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview/?contentId=${imgFileUrl.value}`;
-}
 </script>

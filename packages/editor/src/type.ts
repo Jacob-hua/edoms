@@ -14,6 +14,10 @@ import type { PropsService } from './services/props';
 import type { StorageService } from './services/storage';
 import type { UiService } from './services/ui';
 
+export type FillFormConfig =
+  | FormConfig
+  | ((request?: Request, uploadPreviewFile?: string) => Promise<FormConfig> | FormConfig);
+
 export interface RequestProps {
   resourceId: string;
   data?: Record<string | number | symbol, any>;
