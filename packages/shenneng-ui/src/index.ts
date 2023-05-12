@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-18 13:24:10
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-10 09:43:09
+ * @LastEditTime: 2023-05-12 15:04:40
  */
 import Button from './button';
 import Charts from './charts';
@@ -30,6 +30,7 @@ import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
 import OperationsAnalysisHeat from './operations-analysis-heat';
+import OptimalRegulationHeat from './optimal-regulation-heat';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
@@ -85,6 +86,7 @@ const ui: Record<string, any> = {
   intelligenceReportCold: IntelligenceReportCold,
   operationsAnalysisHeat: OperationsAnalysisHeat,
   loadForecasting: LoadForecasting,
+  optimalRegulationHeat: OptimalRegulationHeat,
 };
 
 export default ui;

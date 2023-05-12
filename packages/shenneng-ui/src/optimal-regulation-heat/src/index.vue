@@ -3,19 +3,19 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 09:45:52
+ * @LastEditTime: 2023-05-12 15:01:39
 -->
 <template>
   <div class="wrap-intell" @click="changeReport">
     <div class="wrap-report">
       <div class="wrap-icon">
-        <img class="icon-report" src="./assets/icon_report.png" alt="" />
+        <img class="icon-report" src="./assets/icon_optimal.png" alt="" />
       </div>
       <div class="label">{{ config.title }}</div>
     </div>
-    <div v-if="showReport" class="dialog-table">
+    <!-- <div v-if="showReport" class="dialog-table">
       <Table :config="config" @close-table="showReport = false"></Table>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -25,7 +25,7 @@ import { computed, ref } from 'vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-import Table from './component/Table.vue';
+// import Table from './component/Table.vue';
 import apiFactory from './api';
 import { FetchEfficiencyReq, MIntelligenceReport } from './type';
 
