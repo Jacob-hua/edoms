@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 
 import { Callback, CodeBlockDSL, EventAction, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
-import { setUrlParam } from '@edoms/utils';
+import { getUrlParam, setUrlParam } from '@edoms/utils';
 
 import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
@@ -24,6 +24,19 @@ interface EventCache {
   eventConfig: EventItemConfig;
   fromCpt: any;
   props?: MethodProps;
+}
+
+export interface FileStruct {
+  /** 文件名称 */
+  fileName: string;
+  /** 文件类型 */
+  fileType: string;
+  /** 文件后缀 */
+  fileSuffix: string;
+  /** 文件状态 */
+  status: 'done' | 'uploading' | 'error';
+  /** 文件url */
+  url: string;
 }
 
 class App extends EventEmitter {
@@ -102,7 +115,7 @@ class App extends EventEmitter {
     const whiteList = ['zIndex', 'opacity', 'fontWeight'];
     Object.entries(styleObj).forEach(([key, value]) => {
       if (key === 'backgroundImage') {
-        value && (results[key] = fillBackgroundImage(value));
+        value && (results[key] = fillBackgroundImage(this.generateImageSrc(value[0])));
       } else if (key === 'transform' && typeof value !== 'string') {
         const values = Object.entries(value as Record<string, string>)
           .map(([transformKey, transformValue]) => {
@@ -122,6 +135,15 @@ class App extends EventEmitter {
     });
 
     return results;
+  }
+
+  public generateImageSrc(fileStruct: FileStruct): string {
+    const isLocalPreview = getUrlParam('localPreview');
+    const { fileSuffix, url } = fileStruct;
+    if (isLocalPreview) {
+      return `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview?contentId=${url}`;
+    }
+    return `${window.location.origin}/static/${url}${fileSuffix}`;
   }
 
   /**

@@ -3,6 +3,7 @@ import { EventAction, Id, MApp, NodeType } from '@edoms/schema';
 
 import editorService from '../services/editor';
 import eventsService from '../services/events';
+import type { FillFormConfig, Request } from '../type';
 
 const BorderStyleOptions = [
   {
@@ -59,7 +60,7 @@ const propertyConfig = (config: FormConfig = []) => [
   ...config,
 ];
 
-const styleConfig = () => [
+const styleConfig = (request?: Request, uploadPreviewFile?: string) => [
   {
     name: 'style',
     items: [
@@ -245,6 +246,21 @@ const styleConfig = () => [
           {
             name: 'backgroundImage',
             text: '图片',
+            type: 'upload',
+            listType: 'picture',
+            basePreviewUrl: uploadPreviewFile,
+            accepts: ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP'],
+            upload: async (value: any, prop: string, mForm: any) => {
+              return (
+                request &&
+                (await request({
+                  resourceId: 'global-schematic:upload',
+                  data: value,
+                  prop,
+                  formValue: mForm.values,
+                }))
+              );
+            },
           },
           {
             name: 'backgroundColor',
@@ -533,25 +549,33 @@ const eventConfig = () => [
  * @param config 组件属性配置
  * @returns Object
  */
-export const fillConfig = (config: FormConfig = []) => [
-  {
-    type: 'tab',
-    items: [
-      {
-        title: '属性',
-        labelWidth: '70px',
-        items: [...propertyConfig(config)],
-      },
-      {
-        title: '样式',
-        labelWidth: '70px',
-        items: [...styleConfig()],
-      },
-      {
-        title: '事件',
-        labelWidth: '70px',
-        items: [...eventConfig()],
-      },
-    ],
-  },
-];
+export const fillConfig = async (config: FillFormConfig, request?: Request, uploadPreviewFile?: string) => {
+  let componentConfig = [];
+  if (typeof config === 'function') {
+    componentConfig = await config(request, uploadPreviewFile);
+  } else {
+    componentConfig = Array.isArray(config) ? config : [config];
+  }
+  return [
+    {
+      type: 'tab',
+      items: [
+        {
+          title: '属性',
+          labelWidth: '70px',
+          items: [...propertyConfig(componentConfig)],
+        },
+        {
+          title: '样式',
+          labelWidth: '70px',
+          items: [...styleConfig(request, uploadPreviewFile)],
+        },
+        {
+          title: '事件',
+          labelWidth: '70px',
+          items: [...eventConfig()],
+        },
+      ],
+    },
+  ];
+};
