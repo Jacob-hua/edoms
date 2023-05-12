@@ -45,6 +45,7 @@ class App extends EventEmitter {
   public store = new Store();
 
   constructor(options: AppOptionsConfig) {
+    console.log(options);
     super();
 
     this.env = new Env(options.ua);
@@ -129,6 +130,7 @@ class App extends EventEmitter {
    * @param curPage 当前页面id
    */
   public setConfig(config: MApp, curPage?: Id) {
+    console.log(config, curPage);
     this.config = config;
     this.codeDsl = config.codeBlocks;
     this.pages = new Map();

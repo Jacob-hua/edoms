@@ -3,13 +3,13 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-11 09:56:26
+ * @LastEditTime: 2023-05-12 11:31:38
 -->
 <template>
-  <div class="wrap-intell">
+  <div class="wrap-intell" @click="changeReport">
     <div class="wrap-report">
       <div class="wrap-icon">
-        <img class="icon-report" src="./assets/icon_report.png" alt="" @click="changeReport" />
+        <img class="icon-report" src="./assets/icon_report.png" alt="" />
       </div>
       <div class="label">{{ config.title }}</div>
     </div>
@@ -17,7 +17,7 @@
       <div class="header">
         <img src="./assets/dialog_icon_report.png" alt="" class="icon-report" />
         <div class="label">{{ config.title }}</div>
-        <div class="close" @click="showReport = false"></div>
+        <div class="close" @click.stop="showReport = false"></div>
       </div>
       <div class="scroll-table">
         <div class="day-table">
@@ -98,14 +98,21 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-select__popper) {
+  background-color: rgba(5, 7, 10, 0.8) !important;
+}
+:deep(.el-popper) {
+  border: 1px solid #454e72 !important;
+}
 .wrap-intell {
-  width: 100%;
-  height: 100%;
+  min-width: 117px;
+  min-height: 80px;
   position: relative;
+  cursor: pointer;
   .wrap-report {
-    min-width: 117px;
-    min-height: 80px;
-    background: rgba(0, 163, 255, 0.06);
+    width: 100%;
+    height: 100%;
+    // background: rgba(0, 163, 255, 0.06);
     // border: 1px solid #051823;
     display: flex;
     flex-direction: column;
@@ -114,6 +121,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     .wrap-icon {
       width: 60px;
       height: 42px;
+      margin-top: 1px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -124,12 +132,11 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
       .icon-report {
         width: 22px;
         height: 24px;
-        cursor: pointer;
       }
     }
 
     .label {
-      margin-top: 5px;
+      margin-top: 7px;
       font-size: 14px;
       color: #ffffff;
       font-weight: 300;
@@ -144,6 +151,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     height: 945px;
     background: rgba($color: #000000, $alpha: 0.9);
     border: 1px solid #013460;
+    z-index: 10;
     .header {
       position: relative;
       width: 100%;
@@ -217,7 +225,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     height: 710px;
     background: #000000;
     border: 1px solid #013460;
-    z-index: 10;
+    z-index: 12;
   }
 }
 </style>

@@ -57,21 +57,6 @@ const legend = ref<any[]>([
   },
 ]);
 
-// const legends = computed<any[]>(() => [
-//   {
-//     name: '中等',
-//     data: props.config.medium[0],
-//   },
-//   {
-//     name: '良好',
-//     data: props.config.good[0],
-//   },
-//   {
-//     name: '优异',
-//     data: props.config.excellent[0],
-//   },
-// ]);
-
 watch(
   () => props.config,
   (newConfig: MEnergyMonitoring) => {
@@ -80,25 +65,6 @@ watch(
     if (newConfig.excellent && newConfig.excellent.length > 0) legend.value[2].data = newConfig.excellent[0];
   }
 );
-
-// const legends = computed<any[]>(() => {
-//   return [
-//     {
-//       name: '中等',
-//       data: props.config.medium ? props.config.medium[0] : [],
-//     },
-//     {
-//       name: '良好',
-//       data: props.config.good ? props.config.good[0] : [],
-//     },
-//     {
-//       name: '优异',
-//       data: props.config.excellent ? props.config.excellent[0] : [],
-//     },
-//   ];
-// });
-
-console.log(props.config, 77777777);
 </script>
 
 <style lang="scss" scoped>
