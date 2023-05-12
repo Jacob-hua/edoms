@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 11:49:42
+ * @LastEditTime: 2023-05-12 18:08:54
 -->
 <template>
   <div class="wrap-table">
@@ -21,6 +21,7 @@
           </el-col>
           <el-col :span="4">
             <el-form-item label="范围选择">
+              <!-- <Select width="130px" :options="state.rangeOption"></Select> -->
               <el-select v-model="state.queryForm.range" placehoder="请选择">
                 <el-option
                   v-for="item in state.rangeOption"
@@ -81,6 +82,7 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
 
+// import Select from '../../../common/Select.vue';
 import { dayData, leftDayTitle, leftMonthTitle, monthData } from '../mock';
 import { MIntelligenceReport, MTableQueryForm } from '../type';
 
@@ -116,7 +118,7 @@ const state: any = reactive({
   ],
   tableStyle: {
     width: '100%',
-    maxHeight: '194px',
+    maxHeight: '196px',
     fontSize: '14px',
     textAlign: 'center',
     color: '#C7C7C7',

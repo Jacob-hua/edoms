@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 11:10:06
+ * @LastEditTime: 2023-05-12 16:36:01
 -->
 <template>
   <div class="wrap-table">
@@ -19,15 +19,25 @@
         label-width="80px"
         :label-position="'right'"
       >
-        <el-row :gutter="1">
+        <el-row>
           <el-col :span="3">
             <el-form-item label="起始日期">
-              <el-date-picker v-model="state.queryForm.startDate" type="day" />
+              <el-date-picker
+                v-model="state.queryForm.startDate"
+                placeholder="开始时间"
+                style="width: 130px"
+                type="day"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="3">
             <el-form-item label="—" label-width="35px">
-              <el-date-picker v-model="state.queryForm.endDate" type="day" />
+              <el-date-picker
+                v-model="state.queryForm.endDate"
+                placeholder="结束时间"
+                style="width: 130px"
+                type="day"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="3">
@@ -35,9 +45,9 @@
               <el-input v-model="state.queryForm.minTem" placeholder="请输入最小值℃" />
             </el-form-item>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="2">
             <el-form-item label="—" label-width="35px">
-              <el-input v-model="state.queryForm.minTem" placeholder="请输入最大值℃" />
+              <el-input v-model="state.queryForm.minTem" style="width: 132px" placeholder="请输入最大值℃" />
             </el-form-item>
           </el-col>
           <el-col :span="3">
@@ -47,7 +57,11 @@
           </el-col>
           <el-col :span="3">
             <el-form-item label="—" label-width="35px">
-              <el-input v-model="state.queryForm.minTargetHumidity" placeholder="请输入最大值%rh" />
+              <el-input
+                v-model="state.queryForm.minTargetHumidity"
+                style="width: 132px"
+                placeholder="请输入最大值%rh"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="3">
