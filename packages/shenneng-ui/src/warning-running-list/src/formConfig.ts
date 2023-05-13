@@ -1,5 +1,12 @@
 import { Request } from '@editor/type';
+
+const fetchInstances = async (request: Request, componentName: string): Promise<any[]> =>
+  (await request({
+    resourceId: `${componentName}:instance`,
+  })) ?? [];
+
 export default async (request: Request) => {
+  const instances = await fetchInstances(request, `warning-running-list`);
   return [
     {
       text: '轮询间隔',
@@ -24,12 +31,7 @@ export default async (request: Request) => {
       type: 'cascader',
       filterable: true,
       checkStrictly: true,
-      options: async () =>
-        (await (
-          request({
-            resourceId: `warning-running-list:instance`,
-          }) as Function
-        )()) ?? [],
+      options: instances,
     },
     {
       text: '时间范围',
