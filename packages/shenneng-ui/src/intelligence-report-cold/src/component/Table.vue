@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-09 14:27:05
+ * @LastEditTime: 2023-05-12 18:08:54
 -->
 <template>
   <div class="wrap-table">
@@ -21,7 +21,8 @@
           </el-col>
           <el-col :span="4">
             <el-form-item label="范围选择">
-              <el-select v-model="state.queryForm.range">
+              <!-- <Select width="130px" :options="state.rangeOption"></Select> -->
+              <el-select v-model="state.queryForm.range" placehoder="请选择">
                 <el-option
                   v-for="item in state.rangeOption"
                   :key="item.label"
@@ -32,7 +33,7 @@
             </el-form-item>
           </el-col>
           <div class="button">查询</div>
-          <div class="button">导出</div>
+          <div class="button button-export">导出</div>
         </el-row>
       </el-form>
       <div class="table">
@@ -81,6 +82,7 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
 
+// import Select from '../../../common/Select.vue';
 import { dayData, leftDayTitle, leftMonthTitle, monthData } from '../mock';
 import { MIntelligenceReport, MTableQueryForm } from '../type';
 
@@ -116,7 +118,7 @@ const state: any = reactive({
   ],
   tableStyle: {
     width: '100%',
-    maxHeight: '194px',
+    maxHeight: '196px',
     fontSize: '14px',
     textAlign: 'center',
     color: '#C7C7C7',
@@ -233,10 +235,19 @@ onMounted(() => {
   box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
   border: 1px solid #454e72;
 }
-:deep .el-popper.is-light {
-  border: 1px solid #454e72;
+:deep .el-select-dropdown {
+  background-color: rgba(5, 7, 10, 0.8) !important;
 }
-
+:deep(.el-popper.is-light) {
+  border: 1px solid #454e72 !important;
+}
+:deep(.el-select-dropdown) {
+  background: rgba(21, 43, 94, 0.3);
+  margin: 0px;
+  border: 0px;
+  border-radius: 0px;
+  left: 0px !important;
+}
 .wrap-table {
   width: 100%;
   height: 100%;
@@ -277,9 +288,9 @@ onMounted(() => {
       margin-top: 20px;
       .button {
         margin-left: 20px;
-        width: 80px;
+        width: 100px;
         height: 32px;
-        background: rgba(0, 163, 255, 0.26);
+        background: rgba(0, 163, 255, 0.6);
         border: 1px solid #007bc0;
         border-radius: 4px;
         text-align: center;
@@ -289,6 +300,12 @@ onMounted(() => {
         line-height: 32px;
         margin-right: 30px;
         cursor: pointer;
+      }
+      .button-export {
+        width: 80px;
+        position: absolute;
+        right: 0;
+        background: rgba(0, 163, 255, 0.26);
       }
     }
     .table {

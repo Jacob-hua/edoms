@@ -2,16 +2,16 @@
   <div class="wrapper_left_last">
     <div class="balance">本月结算</div>
     <div class="th_index">
-      <div style="margin-bottom: 40px">
-        <p><span style="color: #41e4de; font-size: 20px">-5372</span>元</p>
+      <div style="margin-bottom: 42px">
+        <p><span style="color: #41e4de; font-size: 24px">-5372</span>元</p>
         <p>奖惩电费</p>
       </div>
-      <div style="margin-bottom: 40px">
-        <p><span style="color: #41e4de; font-size: 20px">0.98</span></p>
+      <div style="margin-bottom: 42px">
+        <p><span style="color: #41e4de; font-size: 24px">0.98</span></p>
         <p>平均功率因素</p>
       </div>
       <div>
-        <p><span style="color: #d72824; font-size: 20px">0.59</span></p>
+        <p><span style="color: #d72824; font-size: 24px">0.59</span></p>
         <p>最小功率因素</p>
       </div>
     </div>
@@ -23,31 +23,51 @@
       <div class="alculation_con">
         <el-row>
           <el-col :span="12">
-            <div style="text-align: center" class="grid-content ep-bg-purple">
-              <p>有功功率电量：<span>74.934</span>万kWh</p>
-              <p>无功功率电量：<span>7.297</span>万kWh</p>
-              <p>功率因素：<img src="" alt="" srcset="" />=<span>1</span></p>
-              <p>惩奖系数：<span>-0.75</span></p>
-            </div>
+            <table>
+              <tr>
+                <td class="frist_d">有功功率电量：</td>
+                <td class="second_d"><span>74.934</span>万kWh</td>
+              </tr>
+              <tr>
+                <td class="frist_d">无功功率电量：</td>
+                <td class="second_d"><span>7.297</span>万kWh</td>
+              </tr>
+              <tr>
+                <td class="frist_d">功率因素：</td>
+                <td class="second_d"><img src="" alt="" srcset="" />=<span>1</span></td>
+              </tr>
+              <tr>
+                <td class="frist_d">惩奖系数：</td>
+                <td class="second_d"><span>-0.75</span></td>
+              </tr>
+            </table>
           </el-col>
           <el-col :span="12">
-            <div style="text-align: left" class="grid-content ep-bg-purple-light">
-              <p>惩奖电费：<span>-10524.26</span></p>
-              <p>考核基准：<span>0.9</span></p>
-              <p
-                style="
-                  width: 100px;
-                  height: 28px;
-                  line-height: 28px;
-                  background: #031825;
-                  cursor: pointer;
-                  text-align: center;
-                  border-radius: 2px;
-                "
-              >
-                <img src="" alt="" srcset="" />查对标
-              </p>
-            </div>
+            <table>
+              <tr>
+                <td class="frist_d">惩奖电费：</td>
+                <td class="second_d"><span>-10524.26</span></td>
+              </tr>
+              <tr>
+                <td class="frist_d">考核基准：</td>
+                <td class="second_d"><span>0.9</span></td>
+              </tr>
+              <tr style="margin-left: 50px">
+                <td
+                  style="
+                    width: 100px;
+                    height: 28px;
+                    line-height: 28px;
+                    background: #031825;
+                    cursor: pointer;
+                    text-align: center;
+                    border-radius: 2px;
+                  "
+                >
+                  <img src="" alt="" srcset="" />查对标
+                </td>
+              </tr>
+            </table>
           </el-col>
         </el-row>
       </div>
@@ -61,7 +81,6 @@
 .wrapper_left_last {
   height: 310px;
   margin-bottom: 40px;
-  background: rgba(9, 15, 23, 0.3);
   display: flex;
 
   .balance {
@@ -85,13 +104,20 @@
     div {
       width: 130px;
       height: 76px;
-      background: rgba(9, 15, 23, 0.3);
-      border: 1px solid #042c42;
-      border-radius: 4px;
       margin: auto;
       text-align: center;
-      line-height: 32px;
-      color: #b7c4d1;
+      font-size: 14px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #eaf5ff;
+      background: #03121c;
+      border: 1px solid #02263b;
+      border-radius: 0px 4px 0px 4px;
+      box-sizing: border-box;
+
+      p {
+        margin-top: 13px;
+      }
     }
   }
 
@@ -109,11 +135,39 @@
       font-family: Microsoft YaHei;
       font-weight: 400;
       color: #eaf5ff;
+      display: flex;
 
       .alculation_icon {
         width: 18px;
         height: 18px;
-        margin: 0px 18px;
+        margin: 18px;
+      }
+    }
+
+    .alculation_con {
+      height: 260px;
+
+      tr {
+        margin-top: 38px;
+        color: #eaf5ff;
+        display: block;
+        margin-left: 20px;
+
+        .frist_d {
+          text-align: right;
+          width: 100px;
+        }
+
+        .second_d {
+          text-align: left;
+
+          span {
+            font-size: 14px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #41e4de;
+          }
+        }
       }
     }
   }

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-18 13:24:10
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-10 09:43:09
+ * @LastEditTime: 2023-05-12 15:04:40
  */
 import Button from './button';
 import Charts from './charts';
@@ -21,15 +21,16 @@ import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
 import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
-import IndicatorLight from './indicator-light';
 import IntelligenceReportCold from './intelligence-report-cold';
 import IntelligenceReportEletric from './intelligence-report-eletric';
 import IntelligenceReportHeat from './intelligence-report-heat';
 import LoadForecasting from './loadForecasting';
+import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
 import OperationsAnalysisHeat from './operations-analysis-heat';
+import OptimalRegulationHeat from './optimal-regulation-heat';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
@@ -58,7 +59,7 @@ const ui: Record<string, any> = {
   settingParameter: SettingParameter,
   systemOperatingParameters: SystemOperatingParameters,
   globalSchematic: GlobalSchematic,
-  indicatorLight: IndicatorLight,
+  multicolorPolymorphicLight: MulticolorPolymorphicLight,
   warningRunningList: WarningRunningList,
   runningParameters: RunningParameters,
   energyEfficiencyMonitoring: EnergyEfficiencyMonitoring,
@@ -85,6 +86,7 @@ const ui: Record<string, any> = {
   intelligenceReportCold: IntelligenceReportCold,
   operationsAnalysisHeat: OperationsAnalysisHeat,
   loadForecasting: LoadForecasting,
+  optimalRegulationHeat: OptimalRegulationHeat,
 };
 
 export default ui;

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-10 17:23:47
+ * @LastEditTime: 2023-05-12 16:36:01
 -->
 <template>
   <div class="wrap-table">
@@ -12,16 +12,32 @@
       <div class="label">检索报表</div>
     </div>
     <div class="report">
-      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="70px">
+      <el-form
+        ref="queryRef"
+        v-model="state.queryForm"
+        class="condition-form"
+        label-width="80px"
+        :label-position="'right'"
+      >
         <el-row>
           <el-col :span="3">
             <el-form-item label="起始日期">
-              <el-date-picker v-model="state.queryForm.startDate" type="day" />
+              <el-date-picker
+                v-model="state.queryForm.startDate"
+                placeholder="开始时间"
+                style="width: 130px"
+                type="day"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="3">
             <el-form-item label="—" label-width="35px">
-              <el-date-picker v-model="state.queryForm.endDate" type="day" />
+              <el-date-picker
+                v-model="state.queryForm.endDate"
+                placeholder="结束时间"
+                style="width: 130px"
+                type="day"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="3">
@@ -29,9 +45,9 @@
               <el-input v-model="state.queryForm.minTem" placeholder="请输入最小值℃" />
             </el-form-item>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="2">
             <el-form-item label="—" label-width="35px">
-              <el-input v-model="state.queryForm.minTem" placeholder="请输入最大值℃" />
+              <el-input v-model="state.queryForm.minTem" style="width: 132px" placeholder="请输入最大值℃" />
             </el-form-item>
           </el-col>
           <el-col :span="3">
@@ -41,16 +57,27 @@
           </el-col>
           <el-col :span="3">
             <el-form-item label="—" label-width="35px">
-              <el-input v-model="state.queryForm.minTargetHumidity" placeholder="请输入最大值%rh" />
+              <el-input
+                v-model="state.queryForm.minTargetHumidity"
+                style="width: 132px"
+                placeholder="请输入最大值%rh"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="3">
             <el-form-item label="范围选择">
-              <el-date-picker v-model="state.queryForm.date" type="day" />
+              <el-select v-model="state.queryForm.range" placehoder="请选择">
+                <el-option
+                  v-for="item in state.rangeOption"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <div class="button">查询</div>
-          <div class="button">导出</div>
+          <div class="button button-export">导出</div>
         </el-row>
       </el-form>
       <div class="table">
@@ -123,10 +150,18 @@ const state: any = reactive({
   leftTitle: [],
   rightTitle: [],
   tableData: [],
-  tabs: [
+  rangeOption: [
     {
-      name: '全部',
-      type: 'all',
+      label: '全部',
+      value: 'all',
+    },
+    {
+      label: '楼1',
+      value: 'building1',
+    },
+    {
+      label: '楼2',
+      value: 'building2',
     },
   ],
   tableStyle: {
@@ -298,6 +333,10 @@ onMounted(() => {
   border: 1px solid #454e72;
 }
 
+// :deep(.el-form-item__label) {
+//   justify-content: flex-start;
+// }
+
 .wrap-table {
   width: 100%;
   height: 100%;
@@ -336,11 +375,12 @@ onMounted(() => {
     .condition-form {
       height: 60px;
       margin-top: 20px;
+      margin-left: 30px;
       .button {
         margin-left: 20px;
-        width: 80px;
+        width: 100px;
         height: 32px;
-        background: rgba(0, 163, 255, 0.26);
+        background: rgba(0, 163, 255, 0.6);
         border: 1px solid #007bc0;
         border-radius: 4px;
         text-align: center;
@@ -349,6 +389,10 @@ onMounted(() => {
         color: #eaf5ff;
         line-height: 32px;
         cursor: pointer;
+      }
+      .button-export {
+        width: 80px;
+        background: rgba(0, 163, 255, 0.26);
       }
     }
     .table {

@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 
 import { Callback, CodeBlockDSL, EventAction, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
-import { setUrlParam } from '@edoms/utils';
+import { getUrlParam, setUrlParam } from '@edoms/utils';
 
 import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
@@ -26,6 +26,19 @@ interface EventCache {
   props?: MethodProps;
 }
 
+export interface FileStruct {
+  /** 文件名称 */
+  fileName: string;
+  /** 文件类型 */
+  fileType: string;
+  /** 文件后缀 */
+  fileSuffix: string;
+  /** 文件状态 */
+  status: 'done' | 'uploading' | 'error';
+  /** 文件url */
+  url: string;
+}
+
 class App extends EventEmitter {
   public config: MApp | undefined;
   public env;
@@ -45,6 +58,7 @@ class App extends EventEmitter {
   public store = new Store();
 
   constructor(options: AppOptionsConfig) {
+    console.log(options);
     super();
 
     this.env = new Env(options.ua);
@@ -100,8 +114,14 @@ class App extends EventEmitter {
 
     const whiteList = ['zIndex', 'opacity', 'fontWeight'];
     Object.entries(styleObj).forEach(([key, value]) => {
-      if (key === 'backgroundImage') {
-        value && (results[key] = fillBackgroundImage(value));
+      if (key === 'backgroundImage' && value) {
+        if (typeof value === 'string') {
+          results[key] = fillBackgroundImage(value);
+        } else if (Array.isArray(value) && value.length > 0) {
+          results[key] = fillBackgroundImage(this.generateImageSrc(value[0]));
+        } else {
+          results[key] = '';
+        }
       } else if (key === 'transform' && typeof value !== 'string') {
         const values = Object.entries(value as Record<string, string>)
           .map(([transformKey, transformValue]) => {
@@ -123,12 +143,22 @@ class App extends EventEmitter {
     return results;
   }
 
+  public generateImageSrc(fileStruct: FileStruct): string {
+    const isLocalPreview = getUrlParam('localPreview');
+    const { fileSuffix, url } = fileStruct;
+    if (isLocalPreview) {
+      return `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview?contentId=${url}`;
+    }
+    return `${window.location.origin}/static/${url}${fileSuffix}`;
+  }
+
   /**
    * 设置dsl
    * @param config dsl跟节点
    * @param curPage 当前页面id
    */
   public setConfig(config: MApp, curPage?: Id) {
+    console.log(config, curPage);
     this.config = config;
     this.codeDsl = config.codeBlocks;
     this.pages = new Map();

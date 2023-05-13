@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: lihao
+ * @Date: 2023-04-24 11:07:18
+ * @LastEditors: lihao
+ * @LastEditTime: 2023-05-12 18:03:41
+ */
 import { BarChart, LineChart, PieChart, ScatterChart } from 'echarts/charts';
 import {
   DatasetComponent,
@@ -27,7 +34,6 @@ echarts.use([
   CanvasRenderer,
   ToolboxComponent,
   LegendComponent,
-  PieChart,
   ScatterChart,
   MarkLineComponent,
 ]);

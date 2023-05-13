@@ -3,13 +3,13 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-11 19:18:55
+ * @LastEditTime: 2023-05-12 09:52:50
 -->
 <template>
-  <div class="wrap-intell">
+  <div class="wrap-intell" @click="changeReport">
     <div class="wrap-report">
       <div class="wrap-icon">
-        <img class="icon-report" src="./assets/icon_report.png" alt="" @click="changeReport" />
+        <img class="icon-report" src="./assets/icon_report.png" alt="" />
       </div>
       <div class="label">{{ config.title }}</div>
     </div>
@@ -42,6 +42,7 @@ const showReport = ref<boolean>(false);
 const changeReport = () => {
   showReport.value = true;
 };
+
 const intelligenceReport = computed<MIntelligenceReport>(() => props.config);
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -71,21 +72,23 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
 
 <style lang="scss" scoped>
 .wrap-intell {
-  width: 100%;
-  height: 100%;
+  min-width: 117px;
+  min-height: 80px;
   position: relative;
   .wrap-report {
-    min-width: 117px;
-    min-height: 80px;
-    background: rgba(0, 163, 255, 0.06);
+    width: 100%;
+    height: 100%;
+    // background: rgba(0, 163, 255, 0.06);
     // border: 1px solid #051823;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
     .wrap-icon {
       width: 60px;
       height: 42px;
+      margin-top: 1px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -96,12 +99,11 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
       .icon-report {
         width: 22px;
         height: 24px;
-        cursor: pointer;
       }
     }
 
     .label {
-      margin-top: 5px;
+      margin-top: 7px;
       font-size: 14px;
       color: #ffffff;
       font-weight: 300;

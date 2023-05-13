@@ -85,7 +85,7 @@ const stageRect = ref({
   height: 1080,
 });
 
-const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html`;
+const runtimeUrl = `${VITE_RUNTIME_PATH}/playground/index.html?localPreview=1`;
 
 const idPrefix = 'edoms';
 
@@ -322,6 +322,7 @@ watch(
             'intelligence-report-heat',
             'intelligence-report-eletric',
             'intelligence-report-cold',
+            'optimal-regulation-heat',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');
@@ -407,7 +408,6 @@ const getParameterConfig = () => {
   const list: ParameterList[] = [];
   components?.forEach((item) => {
     if (item.type === 'setting-parameter') {
-      console.log(item.parameters, 111111111);
       if (!item.parameters || item.parameters.length <= 0) return;
       list.push({
         componentType: String(item.type),

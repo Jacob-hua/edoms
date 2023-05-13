@@ -1,13 +1,14 @@
 <template>
   <div class="block">
-    <el-date-picker v-model="value1" :default-value="new Date()" type="date" />
+    <el-date-picker v-model="value1" type="date" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+// import { ref } from 'vue';
 
-const value1 = ref('');
+// const value1 = ref('');
+const value1 = new Date();
 </script>
 
 <style lang="scss" scoped>

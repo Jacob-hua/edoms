@@ -5,7 +5,7 @@ import type { FormConfig } from '@edoms/form';
 import type { MComponent, MNode } from '@edoms/schema';
 import { toLine } from '@edoms/utils';
 
-import type { PropsState, Request } from '../type';
+import type { FillFormConfig, PropsState, Request } from '../type';
 import { fillConfig } from '../utils/props';
 
 import BaseService from './BaseService';
@@ -42,8 +42,8 @@ export class PropsService extends BaseService {
     this.emit('props-configs-change');
   }
 
-  public async fillConfig(config: FormConfig) {
-    return fillConfig(config);
+  public async fillConfig(config: FillFormConfig, request?: Request, uploadPreviewFile?: string) {
+    return fillConfig(config, request, uploadPreviewFile);
   }
 
   /**
@@ -51,19 +51,8 @@ export class PropsService extends BaseService {
    * @param type 组件类型
    * @param config 组件属性表单配置
    */
-  public async setPropsConfig(
-    type: string,
-    config: FormConfig | ((request?: Request, uploadPreviewFile?: string) => Promise<FormConfig> | FormConfig),
-    request?: Request,
-    uploadPreviewFile?: string
-  ) {
-    let componentConfig = [];
-    if (typeof config === 'function') {
-      componentConfig = await config(request, uploadPreviewFile);
-    } else {
-      componentConfig = Array.isArray(config) ? config : [config];
-    }
-    this.state.propsConfigMap[type] = await this.fillConfig(componentConfig);
+  public async setPropsConfig(type: string, config: FillFormConfig, request?: Request, uploadPreviewFile?: string) {
+    this.state.propsConfigMap[type] = await this.fillConfig(config, request, uploadPreviewFile);
   }
 
   /**

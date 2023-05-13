@@ -122,8 +122,8 @@ const componentGroupList: ComponentGroup[] = [
       // },
       {
         icon: 'zhishideng',
-        text: '指示灯',
-        type: 'indicator-light',
+        text: '多色多态指示灯',
+        type: 'multicolor-polymorphic-light',
       },
       // {
       //   icon: 'canshuquxian',
@@ -259,6 +259,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'duoxiangnengxiao',
         text: '负荷预测(冷 弹窗)',
         type: 'load-forecasting',
+      },
+      {
+        icon: 'duoxiangnengxiao',
+        text: '优化调控',
+        type: 'optimal-regulation-heat',
       },
     ],
   },

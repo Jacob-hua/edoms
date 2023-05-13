@@ -86,7 +86,7 @@ onMounted(() => {
     background-color: rgba(3, 5, 7, 1);
     border-radius: 4px;
     border: 1px solid rgba(69, 78, 114, 1);
-    padding: 10px 20px;
+    padding: 8px 20px;
     box-sizing: border-box;
     cursor: pointer;
     .font-value {

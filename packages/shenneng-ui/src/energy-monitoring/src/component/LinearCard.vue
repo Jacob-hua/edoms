@@ -33,7 +33,6 @@ const props = defineProps<{
 }>();
 
 const bisectionNumber = computed<number>(() => (props.config.bisectionNumber ? props.config.bisectionNumber : 11));
-console.log(bisectionNumber, '我是等分数量');
 
 const colorCardRef = ref<HTMLElement>();
 

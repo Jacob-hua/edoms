@@ -1,6 +1,6 @@
 <template>
-  <div class="load-forecasting-cold">
-    <div class="icon-font-st" @click="handlerToShow($event, true)">
+  <div class="load-forecasting-cold" @click="handlerToShow($event, true)">
+    <div class="icon-font-st">
       <div class="top-bg"></div>
       <div class="bottom-font">负荷预测</div>
     </div>
@@ -180,15 +180,32 @@ watch(
 
 <style lang="scss" scoped>
 .load-forecasting-cold {
-  overflow: hidden;
+  min-width: 117px;
+  min-height: 80px;
+  // position: relative;
+  // padding: 10px 28px;
+
   .icon-font-st {
-    width: 117px;
-    height: 82px;
-    position: relative;
-    padding: 10px 28px;
     box-sizing: border-box;
     background-color: rgba(0, 163, 255, 0.1);
-    border: 1px solid rgba(11, 17, 25, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    // min-width: 117px;
+    // min-height: 80px;
+    // // position: relative;
+    // // padding: 10px 28px;
+    // box-sizing: border-box;
+    // background-color: rgba(0, 163, 255, 0.1);
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
+    // border: 1px solid rgba(11, 17, 25, 0.3);
     .top-bg {
       width: 60px;
       height: 42px;

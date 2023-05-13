@@ -6,5 +6,6 @@ export interface AnaItem {
 }
 
 export interface AnaItemConfigs extends MComponent {
+  title: string;
   warningList: AnaItem[];
 }

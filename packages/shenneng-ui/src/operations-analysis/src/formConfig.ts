@@ -13,6 +13,11 @@ export default async (request: Request) => [
     append: 's',
   },
   {
+    text: '标题',
+    name: 'title',
+    type: 'string',
+  },
+  {
     text: '设备分类',
     name: 'calculateType',
     type: 'select',

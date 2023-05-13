@@ -1,6 +1,6 @@
 <template>
   <div style="min-width: 522px; min-height: 141px">
-    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="141">
+    <BusinessCard :config="config" min-width="522" min-height="141">
       <div class="economic-indicators">
         <div v-for="(item, index) in initIndicators" :key="index" class="wrap-info">
           <img :src="item.icon" alt="" />
@@ -63,6 +63,9 @@ const { fetchRealData } = apiFactory(request);
 const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
 const restIndicators = ref<Indicator[]>([]);
+// const cssBackgroundColor = computed<string>(() =>
+//   props.config.style?.backgroundColor ? props.config.style?.backgroundColor : 'rgba(31, 30, 29, 1)'
+// );
 // const activeIndicator = ref<Indicator>();
 
 // const dialogTitle = ref<string>('');
@@ -187,6 +190,7 @@ watch(
   white-space: nowrap;
 }
 .economic-indicators {
+  //   background-color: v-bind(cssBackgroundColor);
   display: flex;
   width: 100%;
   flex-wrap: wrap;

@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: lihao
+ * @Date: 2023-05-10 09:41:38
+ * @LastEditors: lihao
+ * @LastEditTime: 2023-05-12 17:45:34
+-->
 <template>
   <div class="efficency-analysis" @click="handlerToShow($event, true)">
     <div class="top-bg"></div>
@@ -59,7 +66,7 @@ const TabOptions = ref<Array<{ [key: string]: string }>>([
     value: 'system',
   },
   {
-    key: '制冷检测',
+    key: '制冷监测',
     value: 'cold',
   },
   {
@@ -100,10 +107,14 @@ watch(
 
 <style lang="scss" scoped>
 .efficency-analysis {
-  width: 117px;
-  height: 82px;
-  position: relative;
-  padding: 10px 28px;
+  min-width: 117px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  //   position: relative;
+  //   padding: 10px 28px;
   box-sizing: border-box;
   background-color: rgba(0, 163, 255, 0.1);
   //   border: 1px solid rgba(11, 17, 25, 0.3);

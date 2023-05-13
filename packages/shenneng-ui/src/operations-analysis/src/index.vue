@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: lihao
+ * @Date: 2023-05-04 14:00:36
+ * @LastEditors: lihao
+ * @LastEditTime: 2023-05-12 18:15:33
+-->
 <template>
   <div class="operations-analysis" @click="handlerToShow($event, true)">
     <div class="top-bg"></div>
@@ -14,7 +21,7 @@
         <div class="sub-title">
           <div class="left-title-font">
             <span class="font-icon"></span>
-            <span class="font-value">{{ '--' }}运行分析</span>
+            <span class="font-value">{{ config.title }}</span>
           </div>
           <div class="right-select">
             <span class="label-select">分析周期：</span>
@@ -48,7 +55,7 @@
                 <TabList :list="itm.timeUse" />
               </div>
               <div class="load-rate-ana" :style="{ width: tableTitleList[3].width }">
-                <ChartData :list="itm.rateAna" :options="props.config.indicators" />
+                <ChartData :list="itm.rateAna" :options="{}" />
               </div>
             </div>
           </div>
@@ -64,8 +71,7 @@ import { ref, watch } from 'vue';
 import ChartData from './components/chartData.vue';
 import TabList from './components/TabList.vue';
 import { AnaItemConfigs } from './type';
-
-const props = defineProps<{
+defineProps<{
   config: AnaItemConfigs;
 }>();
 
@@ -246,13 +252,16 @@ watch(
 
 <style lang="scss" scoped>
 .operations-analysis {
-  width: 117px;
-  height: 82px;
-  position: relative;
-  padding: 10px 28px;
-  box-sizing: border-box;
+  min-width: 117px;
+  min-height: 80px;
+  //   position: relative;
+  //   padding: 10px 28px;
+  //   box-sizing: border-box;
   background-color: rgba(0, 163, 255, 0.1);
-  border: 1px solid rgba(11, 17, 25, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   .top-bg {
     width: 60px;
     height: 42px;
@@ -265,11 +274,22 @@ watch(
     box-sizing: border-box;
     border-radius: 3px;
     cursor: pointer;
+    // position: absolute;
+    // left: 50%;
+    // margin-left: -30px;
+    // margin-top: 3.5%;
   }
   .bottom-font {
+    // width: 60px;
+    // height: 16px;
     color: rgba(255, 255, 255, 1);
     font-size: 14px;
     margin-top: 6px;
+    // left: 50%;
+    // position: absolute;
+    // margin-left: -30px;
+    // margin-top: calc(3.5% + 42px + 5px);
+    // text-align: center;
   }
   .model-wrapper-gtst {
     position: fixed;
