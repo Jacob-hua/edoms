@@ -4,8 +4,8 @@
       <img class="icon-left" src="../assets/image/icon_left.png" alt="" />
       <img class="icon-bg" src="../assets/image/bg_icon.png" alt="" />
       <div class="title-wrapper">
-        <span class="title">{{ config.title }}</span>
-        <span class="subtitle">{{ config.subtitle }}</span>
+        <span class="title">{{ config.title ?? title }}</span>
+        <span class="subtitle">{{ config.subtitle ?? subtitle }}</span>
       </div>
       <div class="operation-wrapper">
         <slot name="operation"></slot>
@@ -59,9 +59,9 @@ const minHeight = computed<number | undefined>(() => {
 });
 
 const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.value}px` : 'auto'));
-const cssBackgroundColor = computed<string>(() =>
-  props.config.style.backgroundColor ? props.config.style.backgroundColor : 'rgba(31, 30, 29, 1)'
-);
+// const cssBackgroundColor = computed<string>(() =>
+//   props.config.style.backgroundColor ? props.config.style.backgroundColor : 'rgba(31, 30, 29, 1)'
+// );
 </script>
 
 <style lang="scss">
@@ -118,13 +118,10 @@ const cssBackgroundColor = computed<string>(() =>
   }
 }
 .business-wrapper-body {
-  background-color: v-bind(cssBackgroundColor);
-  //   background-color: red;
+  background-color: inherit;
   overflow: hidden;
   flex-grow: 1;
   display: flex;
   border-bottom: 1px solid rgba($color: #215898, $alpha: 0.5);
-  //   align-items: center;
-  //   padding: 0 16px;
 }
 </style>
