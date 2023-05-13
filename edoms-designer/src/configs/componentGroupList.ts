@@ -123,7 +123,7 @@ const componentGroupList: ComponentGroup[] = [
       {
         icon: 'zhishideng',
         text: '指示灯',
-        type: 'indicator-light',
+        type: 'multicolor-led-light',
       },
       // {
       //   icon: 'canshuquxian',
