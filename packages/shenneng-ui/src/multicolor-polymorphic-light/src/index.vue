@@ -63,9 +63,6 @@ watch(
   display: flex;
   justify-content: space-around;
   padding: 2px;
-  border: 1px solid #fff;
-  border-radius: 3px;
-  background-color: #000;
 }
 .light {
   width: 15px;

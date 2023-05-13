@@ -48,8 +48,6 @@ const app = new Core({
   designWidth,
 });
 
-console.log(app, 'hhhhhhhhhhhhhhhhhhhhhhhhhh');
-
 edomsApp.config.globalProperties.app = app;
 edomsApp.provide('app', app);
 
