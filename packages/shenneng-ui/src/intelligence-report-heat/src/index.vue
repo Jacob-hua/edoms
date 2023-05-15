@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-15 10:06:48
+ * @LastEditTime: 2023-05-15 15:44:56
 -->
 <template>
   <div class="wrap-intell" @click="changeReport">
@@ -110,14 +110,21 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   }
   .dialog-table {
     position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 1800px;
-    height: 945px;
-    background: rgba($color: #000000, $alpha: 0.9);
-    border: 1px solid #013460;
-    z-index: 15;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    // position: fixed;
+    // left: 50%;
+    // top: 50%;
+    // transform: translate(-50%, -50%);
+    // width: 1800px;
+    // height: 945px;
+    // background: rgba($color: #000000, $alpha: 0.9);
+    // border: 1px solid #013460;
+    // z-index: 15;
   }
 }
 </style>

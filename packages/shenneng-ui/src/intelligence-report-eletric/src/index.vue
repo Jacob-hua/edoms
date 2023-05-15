@@ -110,15 +110,22 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     }
   }
   .dialog-table {
+    // position: fixed;
+    // left: 50%;
+    // top: 50%;
+    // transform: translate(-50%, -50%);
+    // width: 1480px;
+    // height: 786px;
+    // background: rgba($color: #000000, $alpha: 0.9);
+    // border: 1px solid #013460;
+    // z-index: 15;
     position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 1480px;
-    height: 786px;
-    background: rgba($color: #000000, $alpha: 0.9);
-    border: 1px solid #013460;
-    z-index: 15;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
   }
 }
 </style>

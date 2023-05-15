@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-15 09:35:10
+ * @LastEditTime: 2023-05-15 15:57:31
 -->
 <template>
   <div class="wrap-intell" @click="changeReport">
@@ -14,20 +14,22 @@
       <div class="label">{{ config.title }}</div>
     </div>
     <div v-if="showReport" class="dialog-table">
-      <div class="header">
-        <img src="./assets/dialog_icon_report.png" alt="" class="icon-report" />
-        <div class="label">{{ config.title }}</div>
-        <div class="close" @click.stop="showReport = false"></div>
-      </div>
-      <div class="scroll-table">
-        <div class="day-table">
-          <Table :config="config" :type="'day'"></Table>
+      <div class="table">
+        <div class="header">
+          <img src="./assets/dialog_icon_report.png" alt="" class="icon-report" />
+          <div class="label">{{ config.title }}</div>
+          <div class="close" @click.stop="showReport = false"></div>
         </div>
-        <div class="month-table">
-          <Table :config="config" :type="'month'"></Table>
-        </div>
-        <div class="retrieval-table">
-          <RetrievalTable :config="config" @show-detail-table="showDetailTable"></RetrievalTable>
+        <div class="scroll-table">
+          <div class="day-table">
+            <Table :config="config" :type="'day'"></Table>
+          </div>
+          <div class="month-table">
+            <Table :config="config" :type="'month'"></Table>
+          </div>
+          <div class="retrieval-table">
+            <RetrievalTable :config="config" @show-detail-table="showDetailTable"></RetrievalTable>
+          </div>
         </div>
       </div>
     </div>
@@ -144,14 +146,32 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   }
   .dialog-table {
     position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 1720px;
-    height: 945px;
-    background: rgba($color: #000000, $alpha: 0.9);
-    border: 1px solid #013460;
-    z-index: 10;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    .table {
+      position: absolute;
+      left: 50%;
+      margin-left: -860px;
+      margin-top: 50px;
+      width: 1720px;
+      height: 945px;
+      background: rgba($color: #000000, $alpha: 0.9);
+      border: 1px solid #013460;
+      z-index: 15;
+    }
+    // position: fixed;
+    // left: 50%;
+    // top: 50%;
+    // transform: translate(-50%, -50%);
+    // width: 1720px;
+    // height: 945px;
+    // background: rgba($color: #000000, $alpha: 0.9);
+    // border: 1px solid #013460;
+    // z-index: 10;
     .header {
       position: relative;
       width: 100%;
@@ -225,7 +245,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     height: 710px;
     background: #000000;
     border: 1px solid #013460;
-    z-index: 15;
+    z-index: 20;
   }
 }
 </style>

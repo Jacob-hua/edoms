@@ -1,10 +1,12 @@
 <template>
-  <div style="min-width: 214px; min-height: 45px">
-    <div class="wrap-window">
-      <div v-for="item in initIndicators" :key="item.label" class="wrap-list">
-        <div class="label overflow-ellipsis">{{ item.label }}</div>
-        <div class="wrap-val">
-          <div class="val"></div>
+  <div class="wrap-suspended" style="min-width: 214px; min-height: 45px">
+    <div class="wrap-trigger">
+      <div class="wrap-window">
+        <div v-for="item in initIndicators" :key="item.label" class="wrap-list">
+          <div class="label overflow-ellipsis">{{ item.label }}</div>
+          <div class="wrap-val">
+            <div class="val"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -108,46 +110,100 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
-.wrap-window {
+.wrap {
+  /* 背景色 */
+  background: transparent !important;
+  border: none !important;
+}
+/* 下方是去除三角箭头的代码 */
+.wrap[x-placement^='top'] .popper__arrow::after {
+  border: none !important;
+  border-bottom-color: rgba(3, 56, 106, 0.75) !important;
+}
+
+.wrap[x-placement^='top'] .popper__arrow {
+  border: none !important;
+  border-bottom-color: rgba(3, 56, 106, 0.75) !important;
+}
+
+:deep(.el-popper.is-light) {
+  border: none !important;
+  background: transparent !important;
+}
+// 悬浮提示组件
+.el-popover {
+  padding: 10px !important;
+  font-size: 14px !important;
+  border: none !important;
+  background-color: rgba(3, 56, 106, 0.75) !important;
+}
+.el-popper[x-placement^='top'] .popper__arrow::after {
+  border: none !important;
+  //   border-top-color: rgba(3, 56, 106, 0.75) !important;
+}
+.el-popover.popper {
+  padding: 12px 0;
+}
+.m-2 {
   width: 100%;
-  max-height: 225px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background: rgba(12, 16, 21, 0.92);
-  border: 1px solid #022e46;
-  .wrap-list {
+  height: 100%;
+  opacity: 0;
+}
+.wrap-suspended {
+  position: relative;
+  .wrap-trigger {
+    position: relative;
     width: 100%;
-    min-height: 45px;
-    display: flex;
-    align-items: center;
-    .label {
-      box-sizing: border-box;
-      width: 56%;
-      text-align: right;
-      padding-left: 23px;
-      padding-right: 12px;
-      font-weight: 300;
-      color: #00fff0;
-      font-size: 12px;
-    }
-    .overflow-ellipsis {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .wrap-val {
-      width: 44%;
-      .val {
-        width: 73%;
-        min-height: 28px;
-        background: rgba(24, 38, 45, 0.8);
-        border: 1px solid #aaaaaa;
-        border-radius: 2px;
+    height: 100%;
+
+    .wrap-window {
+      opacity: 0;
+      position: absolute;
+      bottom: 102%;
+      width: 100%;
+      max-height: 225px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: rgba(12, 16, 21, 0.92);
+      border: 1px solid #022e46;
+      .wrap-list {
+        width: 100%;
+        min-height: 45px;
         display: flex;
         align-items: center;
-        justify-content: center;
+        .label {
+          box-sizing: border-box;
+          width: 56%;
+          text-align: right;
+          padding-left: 23px;
+          padding-right: 12px;
+          font-weight: 300;
+          color: #00fff0;
+          font-size: 12px;
+        }
+        .overflow-ellipsis {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .wrap-val {
+          width: 44%;
+          .val {
+            width: 73%;
+            min-height: 28px;
+            background: rgba(24, 38, 45, 0.8);
+            border: 1px solid #aaaaaa;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
       }
     }
+  }
+  .wrap-trigger:hover .wrap-window {
+    opacity: 1;
   }
 }
 </style>
