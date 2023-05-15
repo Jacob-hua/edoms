@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 11:31:38
+ * @LastEditTime: 2023-05-15 09:35:10
 -->
 <template>
   <div class="wrap-intell" @click="changeReport">
@@ -225,7 +225,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     height: 710px;
     background: #000000;
     border: 1px solid #013460;
-    z-index: 12;
+    z-index: 15;
   }
 }
 </style>
