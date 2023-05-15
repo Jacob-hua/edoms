@@ -168,7 +168,7 @@ const componentGroupList: ComponentGroup[] = [
       {
         icon: 'gaojing',
         text: '告警列表',
-        type: 'warning-running-list',
+        type: 'warning-table-list',
       },
       {
         icon: 'donghuanjiance',
