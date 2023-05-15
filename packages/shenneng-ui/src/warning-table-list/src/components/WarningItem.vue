@@ -14,7 +14,7 @@
         <div class="warning-device">
           {{ item.title }}
         </div>
-        <div class="warning-content">{{ item.content }}风往南覅own佛南覅欧文佛i问范围内发票皮肤就佩服你问</div>
+        <div class="warning-content">{{ item.content }}</div>
       </div>
       <div class="button-container">
         <span v-if="item.status === 'unconfirm'" class="button-wrapper">
