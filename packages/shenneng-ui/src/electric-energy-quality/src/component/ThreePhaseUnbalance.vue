@@ -12,25 +12,25 @@
       <el-col :span="8">
         <div class="grid-content ep-bg-purple-light" />
         <div class="row-right">
-          <p>
+          <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.time }}</span
             >小时
-          </p>
-          <p>当月累计时长</p>
+          </div>
+          <div>当月累计时长</div>
         </div>
         <div class="row-right" style="margin: 20px 0px 20px 20px">
-          <p>
+          <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.day }}</span
             >天
-          </p>
-          <p>当月天数</p>
+          </div>
+          <div>当月天数</div>
         </div>
         <div class="row-right">
-          <p>
+          <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.max_rate }}</span
             >%
-          </p>
-          <p>最大不平衡率</p>
+          </div>
+          <div>最大不平衡率</div>
         </div>
       </el-col>
     </el-row>
@@ -300,7 +300,7 @@ const categories = ref([
       border-radius: 0px 4px 0px 4px;
       margin-left: 20px;
 
-      p {
+      div {
         margin-top: 13px;
       }
     }
