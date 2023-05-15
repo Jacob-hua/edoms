@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard :config="config" :title="config.title" :subtitle="config.subTitle" min-width="480" min-height="538">
+  <BusinessCard :config="config" :title="config.title" :subtitle="config.subTitle" min-width="480" min-height="366">
     <div class="warning-wrapper">
       <div class="warning-list-header">
         <div
@@ -95,7 +95,7 @@ const headerData: HeaderData[] = [
   },
   {
     name: '一般警告',
-    className: 'blue',
+    className: 'green',
   },
 ];
 const { request } = useApp(props);
@@ -231,12 +231,13 @@ provide('confirmedAlarmList', confirmedAlarmList);
   align-items: center;
   justify-content: space-around;
   height: 34px;
-  margin: 10px 12px;
+  margin: 10px 12px 0;
   border-top: 1px solid rgba(0, 163, 255, 0.3);
   border-bottom: 1px solid rgba(0, 163, 255, 0.3);
   .list-item {
     height: 22px;
     border-left: 1px solid rgba(0, 163, 255, 0.3);
+    margin: 5px 0;
     &:last-child {
       border-right: 1px solid rgba(0, 163, 255, 0.3);
     }
