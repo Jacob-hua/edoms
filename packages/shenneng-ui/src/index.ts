@@ -21,11 +21,11 @@ import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
 import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
-import IndicatorLight from './indicator-light';
 import IntelligenceReportCold from './intelligence-report-cold';
 import IntelligenceReportEletric from './intelligence-report-eletric';
 import IntelligenceReportHeat from './intelligence-report-heat';
 import LoadForecasting from './loadForecasting';
+import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
@@ -59,7 +59,7 @@ const ui: Record<string, any> = {
   settingParameter: SettingParameter,
   systemOperatingParameters: SystemOperatingParameters,
   globalSchematic: GlobalSchematic,
-  indicatorLight: IndicatorLight,
+  multicolorPolymorphicLight: MulticolorPolymorphicLight,
   warningRunningList: WarningRunningList,
   runningParameters: RunningParameters,
   energyEfficiencyMonitoring: EnergyEfficiencyMonitoring,

@@ -1,4 +1,15 @@
+import { MComponent } from '@edoms/schema';
+
 export type ClassName = 'red' | 'orange' | 'blue';
+
+export interface MWarningRunningList extends MComponent {
+  speed: number;
+  isScroll: boolean;
+  intervalDelay: number;
+  instance: string[];
+  timeSpan: number;
+  isVirtual: string;
+}
 
 export interface InitAlarmReq {
   sysInsCode: string;

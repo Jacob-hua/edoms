@@ -60,7 +60,6 @@ const idList = ref<Array<string>>([
 
 const initData = (type: string) => {
   const dom = document.getElementById(type);
-  console.log(dom, '=================');
   const chart = echarts.init(dom as HTMLElement);
   const options = {
     series: [
