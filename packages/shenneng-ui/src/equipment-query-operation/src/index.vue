@@ -40,9 +40,9 @@ const handlerToOperate = (itm: { [key: string]: any }) => {
 };
 
 watch(
-  () => props.config,
-  (props) => {
-    tableWrapper.value.changeType(props.equipmentTypeList[0]);
+  () => props.config.equipmentTypeList,
+  () => {
+    tableWrapper.value.changeType(props.config.equipmentTypeList[0]);
   }
 );
 
