@@ -2,10 +2,10 @@
   <div class="wrap-suspended" style="min-width: 214px; min-height: 45px">
     <div class="wrap-trigger">
       <div class="wrap-window">
-        <div v-for="item in initIndicators" :key="item.label" class="wrap-list">
+        <div v-for="(item, index) in initIndicators" :key="item.label" class="wrap-list">
           <div class="label overflow-ellipsis">{{ item.label }}</div>
-          <div class="wrap-val">
-            <div class="val"></div>
+          <div :class="index % 2 == 0 ? 'green' : 'red'" class="wrap-val">
+            <div class="val">{{ item.value }}</div>
           </div>
         </div>
       </div>
@@ -31,6 +31,7 @@ export interface Indicator {
   propCode: string;
   unit: string;
   precision: string;
+  value: string | number;
 }
 
 const props = defineProps<{
@@ -52,12 +53,16 @@ const intervalDelay = computed<number>(() => {
   }
   return props.config.intervalDelay;
 });
+const getRandomValue = () => {
+  return (Math.random() * 100).toFixed(2);
+};
 
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
     initIndicators.value = indicatorConfigs.map(({ label, instance, property, unit, precision }) => ({
       label,
+      value: getRandomValue(),
       parameter: '',
       deviceCode: instance[instance.length - 1],
       propCode: property,
@@ -198,6 +203,12 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
             align-items: center;
             justify-content: center;
           }
+        }
+        .green {
+          color: rgba(69, 205, 37, 1);
+        }
+        .red {
+          color: rgba(215, 40, 36, 1);
         }
       }
     }
