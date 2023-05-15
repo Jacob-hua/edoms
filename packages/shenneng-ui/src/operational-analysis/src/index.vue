@@ -3,10 +3,10 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-11 18:58:40
+ * @LastEditTime: 2023-05-15 09:10:17
 -->
 <template>
-  <BusinessCard :config="config" min-width="822" min-height="367">
+  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrap-header">
         <div class="wrap-divide">

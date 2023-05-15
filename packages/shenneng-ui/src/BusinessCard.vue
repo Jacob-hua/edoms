@@ -4,8 +4,8 @@
       <img class="icon-left" src="../assets/image/icon_left.png" alt="" />
       <img class="icon-bg" src="../assets/image/bg_icon.png" alt="" />
       <div class="title-wrapper">
-        <span class="title">{{ config.title ?? title }}</span>
-        <span class="subtitle">{{ config.subtitle ?? subtitle }}</span>
+        <span class="title">{{ title }}</span>
+        <span class="subtitle">{{ subtitle }}</span>
       </div>
       <div class="operation-wrapper">
         <slot name="operation"></slot>
@@ -30,8 +30,7 @@ const props = defineProps<{
   subtitle?: string;
   minWidth?: string | number;
   minHeight?: string | number;
-  backgroundColor?: string;
-  config?: any;
+  //   config?: any;
 }>();
 
 const wrapper = ref<HTMLElement | null>(null);
@@ -60,7 +59,7 @@ const minHeight = computed<number | undefined>(() => {
 
 const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.value}px` : 'auto'));
 // const cssBackgroundColor = computed<string>(() =>
-//   props.config.style.backgroundColor ? props.config.style.backgroundColor : 'rgba(31, 30, 29, 1)'
+//     (props.config && props.config.style.backgroundColor ? props.config.style.backgroundColor : 'rgba(31, 30, 29, 1)'
 // );
 </script>
 
@@ -118,6 +117,7 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
   }
 }
 .business-wrapper-body {
+  //   background-color: v-bind(cssBackgroundColor);
   background-color: inherit;
   overflow: hidden;
   flex-grow: 1;
