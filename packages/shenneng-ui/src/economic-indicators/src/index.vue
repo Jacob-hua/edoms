@@ -1,6 +1,6 @@
 <template>
   <div style="min-width: 522px; min-height: 141px">
-    <BusinessCard :config="config" min-width="522" min-height="141">
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="141">
       <div class="economic-indicators">
         <div v-for="(item, index) in initIndicators" :key="index" class="wrap-info">
           <img :src="item.icon" alt="" />
