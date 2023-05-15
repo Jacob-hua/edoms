@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 09:57:32
+ * @LastEditTime: 2023-05-15 15:50:54
 -->
 <template>
   <div class="wrap-table">
@@ -208,11 +208,20 @@ onMounted(() => {
 }
 
 .wrap-table {
-  width: 100%;
-  height: 100%;
+  //   width: 100%;
+  //   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: absolute;
+  left: 50%;
+  margin-left: -900px;
+  margin-top: 100px;
+  width: 1800px;
+  height: 945px;
+  background: rgba($color: #000000, $alpha: 0.9);
+  border: 1px solid #013460;
+  z-index: 15;
   .header {
     position: relative;
     width: 100%;
