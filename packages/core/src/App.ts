@@ -114,9 +114,14 @@ class App extends EventEmitter {
 
     const whiteList = ['zIndex', 'opacity', 'fontWeight'];
     Object.entries(styleObj).forEach(([key, value]) => {
-      if (key === 'backgroundImage') {
-        value &&
-          (results[key] = fillBackgroundImage(typeof value === 'string' ? value : this.generateImageSrc(value[0])));
+      if (key === 'backgroundImage' && value) {
+        if (typeof value === 'string') {
+          results[key] = fillBackgroundImage(value);
+        } else if (Array.isArray(value) && value.length > 0) {
+          results[key] = fillBackgroundImage(this.generateImageSrc(value[0]));
+        } else {
+          results[key] = '';
+        }
       } else if (key === 'transform' && typeof value !== 'string') {
         const values = Object.entries(value as Record<string, string>)
           .map(([transformKey, transformValue]) => {

@@ -46,7 +46,6 @@ export default () => {
 
   const requestPoints = async (data: ListPointReq) => {
     const pointCodes = await modelApi.listPointCode(data);
-    console.log(pointCodes);
     return pointCodes?.map(({ label, value, unit }: ListPointResItem) => ({ text: label, value, unit }));
   };
 

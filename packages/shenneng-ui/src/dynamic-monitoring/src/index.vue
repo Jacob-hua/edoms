@@ -326,7 +326,6 @@ const getHistoryData = async (date: Date) => {
     ts: '1',
   });
 
-  console.log(result, '=-=-=-=-=');
   chartSeries.value = result.map(({ dataList }, index) => ({
     name: activeIndicator.value?.label ? activeIndicator.value.label : `未命名${index}`,
     type: magictype.value,

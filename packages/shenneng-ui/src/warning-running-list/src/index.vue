@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard title="告警列表" subtitle="RUNNING PARAMETERS" min-width="392" min-height="538">
+  <BusinessCard :config="config" title="告警列表" subtitle="RUNNING PARAMETERS" min-width="392" min-height="400">
     <div class="warning-wrapper">
       <div class="warning-list-header">
         <div
@@ -31,41 +31,21 @@ import useIntervalAsync from '../../useIntervalAsync';
 
 import WarningList from './component/WarningList.vue';
 import warningApi from './api';
-import { Alarm, AlarmList, ClassName, InitAlarmRes } from './type';
-
-export interface MConfig {
-  speed: number;
-  isScroll: boolean;
-  intervalDelay: number;
-  instance: string[];
-  timeSpan: number;
-  isVirtual: string;
-}
+import { Alarm, AlarmList, ClassName, InitAlarmRes, MWarningRunningList } from './type';
 
 interface HeaderData {
   name: string;
   className: ClassName;
 }
 
-const props = withDefaults(
-  defineProps<{
-    config: MConfig;
-  }>(),
-  {
-    config: () => ({
-      speed: 12,
-      isScroll: true,
-      intervalDelay: 5000,
-      instance: [],
-      timeSpan: 1,
-      isVirtual: '0',
-    }),
-  }
-);
+const props = defineProps<{
+  config: MWarningRunningList;
+}>();
+
 const config = ref({
   speed: 12,
   isScroll: true,
-}) as Ref<MConfig>;
+}) as Ref<MWarningRunningList>;
 
 watch(
   () => props.config,
@@ -204,7 +184,7 @@ watch(
 );
 
 provide<Ref<ClassName>>('textColor', activeClassName);
-provide<Ref<MConfig>>('config', config);
+provide<Ref<MWarningRunningList>>('config', config);
 provide('commonAlarm', commonAlarm);
 provide('importantAlarm', importantAlarm);
 provide('seriousAlarm', seriousAlarm);

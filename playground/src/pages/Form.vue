@@ -45,9 +45,6 @@ const config = ref([
         }, 9000);
       });
     },
-    onChange: () => {
-      console.log('=======');
-    },
   },
   {
     text: '文本',
