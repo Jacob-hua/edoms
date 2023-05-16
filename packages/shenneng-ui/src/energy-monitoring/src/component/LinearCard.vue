@@ -7,8 +7,9 @@
         :style="calculateDistance(index)"
         class="division-wrapper"
       ></div>
-      <div class="left"></div>
-      <div class="right"></div>
+      <div class="left" :style="`width:${getWidth('left')}`"></div>
+      <div class="center" :style="`width:${getWidth('center')}`"></div>
+      <div class="right" :style="`width:${getWidth('right')}`"></div>
     </div>
     <div class="value">
       <div class="cursor"></div>
@@ -38,18 +39,76 @@ const colorCardRef = ref<HTMLElement>();
 
 const colorCardWidth = ref<number>(0);
 
+const total = computed<number>(() => Number(props.config.maxValue) - Number(props.config.minValue));
+
+const getWidth = (pos: string) => {
+  let width = '33.3%';
+  //   console.log(total.value, 22222);
+  if (isNaN(total.value) || total.value <= 0) return '33.3%';
+  const leftVal = Number(props.config.medium[0].maxValue) - Number(props.config.medium[0].minValue);
+  const centerVal = Number(props.config.good[0].maxValue) - Number(props.config.good[0].minValue);
+  const rightVal = Number(props.config.excellent[0].maxValue) - Number(props.config.excellent[0].minValue);
+
+  const totalVal = leftVal + centerVal + rightVal;
+
+  const leftWidth = leftVal / totalVal;
+  const centerWidth = centerVal / totalVal;
+  const rightWidth = rightVal / totalVal;
+  switch (pos) {
+    case 'left':
+      width = leftWidth * 100 + '%';
+      break;
+    case 'center':
+      width = centerWidth * 100 + '%';
+      break;
+    case 'right':
+      width = rightWidth * 100 + '%';
+      break;
+
+    default:
+      break;
+  }
+  return width;
+};
+
+const getColor = (color: string) => {
+  if (!color) return '';
+  const arr = color.split(',');
+  arr[arr.length - 1] = arr[arr.length - 1].replace('1', '0.3');
+  console.log(arr.join(','));
+  return arr.join(',');
+};
+
 const attributeLeft = computed<string>(
   () =>
-    `linear-gradient(90deg, ${
-      props.config.medium && props.config.medium.length > 0 ? props.config.medium[0].color : '#E76A2F'
-    }, ${props.config.good && props.config.good.length > 0 ? props.config.good[0].color : '#938748'})`
+    `linear-gradient(90deg, ${props.config.medium[0].color || 'rgba(231, 106, 47,1)'}, ${
+      getColor(props.config.medium[0].color) || 'rgba(231, 106, 47,0.3)'
+    })`
+);
+const attributeCenter = computed<string>(
+  () =>
+    `linear-gradient(90deg, ${props.config.good[0].color || 'rgba(147, 135, 72,1)'}, ${
+      getColor(props.config.good[0].color) || 'rgba(147, 135, 72,0.3)'
+    })`
 );
 const attributeRight = computed<string>(
   () =>
-    `linear-gradient(90deg, ${
-      props.config.good && props.config.good.length > 0 ? props.config.good[0].color : '#938748'
-    }, ${props.config.excellent && props.config.excellent.length > 0 ? props.config.excellent[0].color : '#36A763'})`
+    `linear-gradient(90deg, ${getColor(props.config.excellent[0].color) || 'rgba(54, 167, 99,0.3)'}, ${
+      props.config.excellent[0].color || 'rgba(54, 167, 99,1)'
+    })`
 );
+// const attributeLeft = computed<string>(
+//   () =>
+//     `linear-gradient(90deg, ${
+//       props.config.medium && props.config.medium.length > 0 ? props.config.medium[0].color : '#E76A2F'
+//     }, ${props.config.good && props.config.good.length > 0 ? props.config.good[0].color : '#938748'})`
+// );
+// const attributeRight = computed<string>(
+//   () =>
+//     `linear-gradient(90deg, ${
+//       props.config.good && props.config.good.length > 0 ? props.config.good[0].color : '#938748'
+//     }, ${props.config.excellent && props.config.excellent.length > 0 ? props.config.excellent[0].color : '#36A763'})`
+// );
 
 const divideWidth = computed<any>(() => (colorCardWidth.value / (bisectionNumber.value * 2)).toFixed(2));
 
@@ -119,6 +178,7 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: inherit;
   .color {
     position: relative;
     width: 100%;
@@ -126,12 +186,16 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
     display: flex;
     // background-color: green;
     .left {
-      width: 50%;
+      //   width: 50%;
       height: 100%;
       background-image: v-bind(attributeLeft);
     }
+    .center {
+      height: 100%;
+      background-image: v-bind(attributeCenter);
+    }
     .right {
-      width: 50%;
+      //   width: 50%;
       height: 100%;
       background-image: v-bind(attributeRight);
     }
@@ -139,7 +203,7 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
       position: absolute;
       //   width: 15px;
       height: 100%;
-      background-color: rgba(31, 30, 29, 1);
+      background-color: black;
     }
   }
   .value {

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 18:08:54
+ * @LastEditTime: 2023-05-16 13:56:28
 -->
 <template>
   <div class="wrap-table">
@@ -16,20 +16,12 @@
         <el-row :gutter="2">
           <el-col :span="4">
             <el-form-item label="时间选择">
-              <el-date-picker v-model="state.queryForm.date" type="day" />
+              <el-date-picker v-model="state.queryForm.date" type="day" placeholder="请选择日期" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="范围选择">
-              <!-- <Select width="130px" :options="state.rangeOption"></Select> -->
-              <el-select v-model="state.queryForm.range" placehoder="请选择">
-                <el-option
-                  v-for="item in state.rangeOption"
-                  :key="item.label"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
+              <Select width="180px" :options="state.rangeOption" @change-item="changeRange"></Select>
             </el-form-item>
           </el-col>
           <div class="button">查询</div>
@@ -82,7 +74,7 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
 
-// import Select from '../../../common/Select.vue';
+import Select from '../../../common/Select.vue';
 import { dayData, leftDayTitle, leftMonthTitle, monthData } from '../mock';
 import { MIntelligenceReport, MTableQueryForm } from '../type';
 
@@ -126,6 +118,10 @@ const state: any = reactive({
   },
 });
 
+const changeRange = (val: string | number) => {
+  state.queryForm.range = val;
+};
+
 // const groupArrayByKey = (arr: any, key: any) => {
 //   return arr.reduce((t: any, v: any) => (!t[v[key]] && (t[v[key]] = []), t[v[key]].push(v), t), {});
 // };
@@ -157,12 +153,6 @@ const handleTableData = () => {
   }
   state.tableData = arr;
 };
-
-// const emit = defineEmits(['closeTable']);
-
-// const closeTable = () => {
-//   emit('closeTable');
-// };
 
 onMounted(() => {
   handleTableData();

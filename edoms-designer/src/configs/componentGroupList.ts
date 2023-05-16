@@ -241,11 +241,6 @@ const componentGroupList: ComponentGroup[] = [
         type: 'intelligence-report-heat',
       },
       {
-        icon: 'duoxiangnengxiao',
-        text: '运行分析',
-        type: 'operations-analysis-heat',
-      },
-      {
         icon: 'nengxiaoguankong',
         text: '能效分析',
         type: 'efficiency-analysis',
