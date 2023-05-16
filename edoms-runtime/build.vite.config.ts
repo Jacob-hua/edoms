@@ -1,6 +1,7 @@
 import path from 'path';
 
 import { ConfigEnv, defineConfig, loadEnv, UserConfigExport } from 'vite';
+import htmlConfig from 'vite-plugin-html-config';
 import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 
@@ -115,6 +116,18 @@ const buildOfflineConfig: UserConfigExport = (config: ConfigEnv) => {
   return {
     plugins: [
       vue(),
+      htmlConfig({
+        scripts: [
+          {
+            async: false,
+            src: './dsl.js',
+          },
+          {
+            async: false,
+            src: './config.js',
+          },
+        ],
+      }),
       legacy({
         targets: ['defaults', 'not IE 11'],
       }),
