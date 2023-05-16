@@ -25,7 +25,7 @@ const alarmMap = {
   // 重要
   orange: importantAlarm as Ref<AlarmList>,
   // 一般
-  blue: commonAlarm as Ref<AlarmList>,
+  green: commonAlarm as Ref<AlarmList>,
 };
 
 const dataSource = computed(() => alarmMap[textColor.value]?.value?.list);

@@ -14,9 +14,7 @@
         <div class="warning-device">
           {{ item.title }}
         </div>
-        <div class="warning-content">
-          {{ item.content }}
-        </div>
+        <div class="warning-content">{{ item.content }}</div>
       </div>
       <div class="button-container">
         <span v-if="item.status === 'unconfirm'" class="button-wrapper">
@@ -29,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, Ref } from 'vue';
+import { computed, inject, Ref } from 'vue';
 
 import { ElButton } from '@edoms/design';
 
@@ -50,6 +48,18 @@ export interface Warning {
   // 是否展开
   expend?: boolean;
 }
+
+const colorList = {
+  red: '#D72824',
+  orange: '#C1721D',
+  green: '#38AE1C',
+};
+
+const bgColorList = {
+  red: '#D7282410',
+  orange: '#C1721D10',
+  green: '#38AE1C10',
+};
 
 withDefaults(
   defineProps<{
@@ -73,11 +83,13 @@ const emit = defineEmits<{
   (event: 'ignoreWarning', value: number): void;
 }>();
 
-const textColor = inject<Ref<ClassName>>('textColor');
+const textColor = inject<Ref<ClassName>>('textColor') as Ref<ClassName>;
 const confirmedAlarmList = inject<Function>('confirmedAlarmList') as Function;
+const warningColor = computed(() => colorList[textColor.value]);
 const handleShowSurplus = (alarm: Warning) => {
   alarm.expend = !alarm.expend;
 };
+const warningBgColor = computed(() => bgColorList[textColor.value]);
 const handleIgnore = (alarmId: number) => {
   emit('ignoreWarning', alarmId);
 };
@@ -90,9 +102,6 @@ const handleConfirm = async (alarm: Warning) => {
 </script>
 
 <style lang="scss" scoped>
-.type {
-  color: v-bind(textColor);
-}
 .warning-wrapper {
   padding: 0 10px;
 
@@ -101,14 +110,17 @@ const handleConfirm = async (alarm: Warning) => {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(0, 163, 255, 0.14);
-    height: 52px;
+    height: 55px;
 
     .warning-type {
       height: 24px;
       border-radius: 3px;
       line-height: 24px;
-      color: rgba(215, 40, 36, 1);
-      border: 1px solid rgba(215, 40, 36, 1);
+      color: v-bind(warningColor);
+      border: 1px solid v-bind(warningColor);
+      background: v-bind(warningBgColor);
+      width: 60px;
+      text-align: center;
     }
 
     .discover {
@@ -120,23 +132,33 @@ const handleConfirm = async (alarm: Warning) => {
     justify-content: flex-end;
 
     :deep(.el-button--primary) {
-      --el-button-bg-color: #409eff;
-      --el-button-border-color: #409eff;
+      --el-button-bg-color: #1173ec20;
+      --el-button-border-color: #1173ec;
+      --el-button-text-color: #c4e5f8;
     }
     :deep(.el-button) {
-      --el-button-hover-text-color: #606266;
-      line-height: 28px;
+      --el-button-bg-color: #00a3ff10;
+      border: 1px solid #083149;
+      color: #cccccc;
+      height: 24px;
+      line-height: 24px;
     }
   }
   .body {
+    display: flex;
+    flex-direction: column;
     font-size: 12px;
+    padding: 14px 0;
     border-bottom: 1px solid rgba(0, 163, 255, 0.14);
 
     .warning-detail {
-      .warning-device {
-      }
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      width: 95%;
+      margin-bottom: 18px;
 
-      .warning-content {
+      div {
+        line-height: 150%;
       }
     }
   }

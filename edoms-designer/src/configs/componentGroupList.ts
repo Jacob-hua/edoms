@@ -125,6 +125,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '多色多态指示灯',
         type: 'multicolor-polymorphic-light',
       },
+      {
+        icon: 'zhishideng',
+        text: '多色单态指示灯',
+        type: 'multicolor-single-light',
+      },
       // {
       //   icon: 'canshuquxian',
       //   text: '参数曲线',
@@ -168,7 +173,7 @@ const componentGroupList: ComponentGroup[] = [
       {
         icon: 'gaojing',
         text: '告警列表',
-        type: 'warning-running-list',
+        type: 'warning-table-list',
       },
       {
         icon: 'donghuanjiance',
