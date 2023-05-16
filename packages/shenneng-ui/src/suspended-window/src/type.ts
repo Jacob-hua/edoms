@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-04 10:49:22
+ * @LastEditTime: 2023-05-16 08:50:03
  */
 import { MComponent } from '@edoms/schema';
 
@@ -121,12 +121,61 @@ export interface HistoryData {
   }>;
 }
 
+export interface FetchCumulativeDataReq {
+  calcType: string;
+  dataCodes: string[];
+  endTime: number;
+  startTime: number;
+}
+
+export interface FetchRealDataReq {
+  dataCodes: string[];
+}
+
+export interface CumulativeData {
+  propCode: string;
+  propValue: string;
+}
+
+export interface RealData {
+  propCode: string;
+  propVal: string;
+}
+
+export interface FetchCurveDataReq {
+  dataCodes: string[];
+  endTime: string;
+  startTime: string;
+  ts: string;
+  tsUnit: string;
+}
+
+export interface CurveData {
+  /** 属性Code */
+  propCode: string;
+  /** 数据列表 */
+  dataList: Array<{
+    /** 时间 */
+    time: string;
+    /** 数值 */
+    value: string;
+  }>;
+}
+
 export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEnvMonitoringRes = IndicatorDataItem[];
-export type FetchEfficiencyRes = EfficiencyData[];
+
+export type FetchRealDataRes = RealData[];
+
+export type FetchCumulativeDataRes = CumulativeData[];
+
+export type FetchCurveDataRes = CurveData[];
 
 export interface Apis {
   fetchIndicatorData: (data: FetchEnvMonitoringReq) => Promise<FetchEnvMonitoringRes>;
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
+  fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
+  fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
+  fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
 }

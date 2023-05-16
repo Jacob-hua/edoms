@@ -5,7 +5,7 @@
         <div v-for="(item, index) in initIndicators" :key="item.label" class="wrap-list">
           <div class="label overflow-ellipsis">{{ item.label }}</div>
           <div :class="index % 2 == 0 ? 'green' : 'red'" class="wrap-val">
-            <div class="val">{{ item.value }}</div>
+            <div class="val">{{ item.parameter }}</div>
           </div>
         </div>
       </div>
@@ -22,7 +22,7 @@ import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
 import apiFactory from './api';
-import { MIndicatorItemConfig, MSuspendedWindow, ParameterItem } from './type';
+import { MIndicatorItemConfig, MSuspendedWindow } from './type';
 
 export interface Indicator {
   parameter: string;
@@ -40,7 +40,8 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchIndicatorData } = apiFactory(request);
+// const { fetchIndicatorData } = apiFactory(request);
+const { fetchRealData } = apiFactory(request);
 
 const initIndicators = ref<Indicator[]>([]);
 
@@ -76,34 +77,28 @@ watch(
 );
 
 const updateIndicatorsData = async () => {
-  const dataList: ParameterItem[] = indicatorConfigs.value.map(
-    ({ instance, property }): ParameterItem => ({
-      deviceCode: instance[instance.length - 1],
-      propCodeList: [property],
-    })
-  );
+  const dataCodes: string[] = indicatorConfigs.value.map((item: any) => item.property);
 
-  if (dataList.length === 0) {
+  if (dataCodes.length === 0) {
     return;
   }
 
-  const result = await fetchIndicatorData({ dataList });
+  const result = await fetchRealData({ dataCodes });
 
-  result.forEach(({ dataValue, deviceCode, propCode }) => {
+  result.forEach(({ propCode, propVal }) => {
     const targetIndexs: number[] = [];
-    indicatorConfigs.value.forEach(({ instance, property }, index) => {
-      if (instance[instance.length - 1] === deviceCode && property === propCode) {
+    indicatorConfigs.value.forEach(({ property }, index) => {
+      if (property === propCode) {
         targetIndexs.push(index);
       }
     });
-    if (targetIndexs.length <= 0) {
+    if (targetIndexs.length === 0) {
       return;
     }
     targetIndexs.forEach((targetIndex) => {
       const indicatorConfig = indicatorConfigs.value[targetIndex];
       const indicator = initIndicators.value[targetIndex];
-      indicator.parameter = formatPrecision(dataValue, indicatorConfig.precision);
-      indicator.deviceCode = deviceCode;
+      indicator.parameter = formatPrecision(Number(propVal), indicatorConfig.precision);
       indicator.propCode = propCode;
       indicator.precision = indicatorConfig.precision;
       indicator.unit = indicatorConfig.unit;
@@ -115,45 +110,6 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
-.wrap {
-  /* 背景色 */
-  background: transparent !important;
-  border: none !important;
-}
-/* 下方是去除三角箭头的代码 */
-.wrap[x-placement^='top'] .popper__arrow::after {
-  border: none !important;
-  border-bottom-color: rgba(3, 56, 106, 0.75) !important;
-}
-
-.wrap[x-placement^='top'] .popper__arrow {
-  border: none !important;
-  border-bottom-color: rgba(3, 56, 106, 0.75) !important;
-}
-
-:deep(.el-popper.is-light) {
-  border: none !important;
-  background: transparent !important;
-}
-// 悬浮提示组件
-.el-popover {
-  padding: 10px !important;
-  font-size: 14px !important;
-  border: none !important;
-  background-color: rgba(3, 56, 106, 0.75) !important;
-}
-.el-popper[x-placement^='top'] .popper__arrow::after {
-  border: none !important;
-  //   border-top-color: rgba(3, 56, 106, 0.75) !important;
-}
-.el-popover.popper {
-  padding: 12px 0;
-}
-.m-2 {
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-}
 .wrap-suspended {
   position: relative;
   .wrap-trigger {

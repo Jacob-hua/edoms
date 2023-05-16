@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-15 15:50:54
+ * @LastEditTime: 2023-05-16 09:10:08
 -->
 <template>
   <div class="wrap-table">
@@ -17,7 +17,7 @@
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="日期选择：">
-              <el-date-picker v-model="state.queryForm.date" />
+              <el-date-picker v-model="state.queryForm.date" placeholder="请选择日期" />
             </el-form-item>
           </el-col>
           <div class="button">查询</div>
