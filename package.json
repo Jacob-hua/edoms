@@ -6,11 +6,9 @@
   "scripts": {
     "bootstrap": "pnpm i && pnpm build",
     "designer": "pnpm --filter \"edoms-runtime\" --filter \"edoms-designer\" dev",
-    "playground": "pnpm --filter \"edoms-runtime\" --filter \"playground\" dev",
     "build": "pnpm --filter \"@edoms/*\" build",
     "build:designer": "pnpm --filter \"edoms-runtime\" build:admin && pnpm --filter \"edoms-designer\" build",
     "build:runtime:offline": "pnpm --filter \"edoms-runtime\" build:page:offline",
-    "build:playground": "pnpm --filter \"edoms-runtime\" build && pnpm --filter \"playground\" build",
     "clean": "pnpm clean:top && pnpm clean:modules",
     "clean:top": "rimraf */**/dist */**/types */dist coverage dwt*",
     "clean:modules": "rimraf node_modules **/node_modules **/**/node_modules",
