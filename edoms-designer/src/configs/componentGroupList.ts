@@ -245,11 +245,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report-heat',
       },
-      {
-        icon: 'duoxiangnengxiao',
-        text: '运行分析',
-        type: 'operations-analysis-heat',
-      },
+      // {
+      //   icon: 'duoxiangnengxiao',
+      //   text: '运行分析',
+      //   type: 'operations-analysis-heat',
+      // },
       {
         icon: 'nengxiaoguankong',
         text: '能效分析',

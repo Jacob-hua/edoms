@@ -1,6 +1,6 @@
 <template>
-  <div class="load-forecasting-cold" @click="handlerToShow($event, true)">
-    <div class="icon-font-st">
+  <div class="load-forecasting-cold">
+    <div class="icon-font-st" @click="handlerToShow($event, true)">
       <div class="top-bg"></div>
       <div class="bottom-font">负荷预测</div>
     </div>
@@ -90,11 +90,11 @@ const isShowModel = ref<boolean>(false);
 
 const isShowOptions = ref<boolean>(false);
 
-const dateValue = ref<string>();
+const dateValue = ref<Date | string>(new Date());
 
-const innerValue = ref<string>();
+const innerValue = ref<Date | string>(new Date());
 
-const timeValue = ref<string>();
+const timeValue = ref<string>('60');
 
 const disRate = ref<number>(10);
 
@@ -165,6 +165,13 @@ const handlerToDetail = (item: { [key: string]: string | number }) => {
   console.log(item);
   titleFont.value = '详情';
 };
+
+watch(
+  () => titleFont.value,
+  (newV) => {
+    console.log(newV);
+  }
+);
 
 watch(
   () => isShowModel.value,
@@ -339,7 +346,16 @@ watch(
             }
             :deep(.el-input__wrapper) {
               background-color: rgba(3, 5, 7, 1);
-              border: 1px solid rgba(33, 44, 60, 1);
+              border: 1px solid rgb(69, 78, 114);
+              box-shadow: none;
+            }
+            // :deep(.el-input__wrapper) {
+            //   background-color: rgba(3, 5, 7, 1);
+            //   border: 1px solid rgba(33, 44, 60, 1);
+            //   box-shadow: none;
+            // }
+            :deep(.el-input__wrapper:hover) {
+              box-shadow: none !important;
             }
             :deep(.el-input__inner) {
               color: #fff;
@@ -388,7 +404,11 @@ watch(
           }
           :deep(.el-input__wrapper) {
             background-color: rgba(3, 5, 7, 1);
-            border: 1px solid rgba(33, 44, 60, 1);
+            border: 1px solid rgb(69, 78, 114);
+            box-shadow: none;
+          }
+          :deep(.el-input__wrapper:hover) {
+            box-shadow: none !important;
           }
           :deep(.el-input__inner) {
             color: #fff;

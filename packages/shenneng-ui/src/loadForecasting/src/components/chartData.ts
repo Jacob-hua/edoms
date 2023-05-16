@@ -45,7 +45,21 @@ export default {
       color: '#eff7ff',
       fontWeight: 'bold',
     },
-    data: ['实际值', '预测值'],
+    // data: ['实际值', '预测值'],
+    data: [
+      {
+        name: '实际值',
+        itemStyle: {
+          borderColor: 'rgba(40, 124, 231, 1)',
+        },
+      },
+      {
+        name: '预测值',
+        itemStyle: {
+          borderColor: 'rgba(65, 228, 222, 1)',
+        },
+      },
+    ],
   },
   grid: {
     top: '15%',
@@ -143,24 +157,6 @@ export default {
         borderWidth: 2,
         color: 'rgba(40, 124, 232, 1)',
         borderColor: '#fff',
-        // normal: {
-        //   lineStyle: {
-        //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //       {
-        //         offset: 0,
-        //         color: 'rgba(40, 124, 232, 1)',
-        //       },
-        //       {
-        //         offset: 0.5,
-        //         color: 'rgba(40, 124, 232, 1)',
-        //       },
-        //       {
-        //         offset: 1,
-        //         color: 'rgba(40, 124, 232, 1)',
-        //       },
-        //     ]),
-        //   },
-        // },
       },
       lineStyle: {
         normal: {
@@ -182,24 +178,6 @@ export default {
         borderWidth: 2,
         color: 'rgba(65, 228, 222, 1)',
         borderColor: '#fff',
-        // normal: {
-        //   lineStyle: {
-        //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //       {
-        //         offset: 0,
-        //         color: 'rgba(65, 228, 222, 1)',
-        //       },
-        //       {
-        //         offset: 0.5,
-        //         color: 'rgba(65, 228, 222, 1)',
-        //       },
-        //       {
-        //         offset: 1,
-        //         color: 'rgba(65, 228, 222, 1)',
-        //       },
-        //     ]),
-        //   },
-        // },
       },
       lineStyle: {
         normal: {

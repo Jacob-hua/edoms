@@ -305,7 +305,7 @@ watch(
       position: absolute;
       left: 50%;
       margin-left: -765px;
-      margin-top: 199px;
+      margin-top: 80px;
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
@@ -414,7 +414,7 @@ watch(
             background-color: rgba(3, 5, 7, 1);
             border-radius: 4px;
             border: 1px solid rgba(69, 78, 114, 1);
-            padding: 10px 20px;
+            padding: 7px 20px;
             box-sizing: border-box;
             cursor: pointer;
             .font-value {
