@@ -130,7 +130,10 @@ const buildOfflineConfig: UserConfigExport = (config: ConfigEnv) => {
       emptyOutDir: true,
       sourcemap: true,
       rollupOptions: {
-        input: path.resolve(process.cwd(), `./${type}/index.html`),
+        input: {
+          main: path.resolve(process.cwd(), `./${type}/main.ts`),
+          index: path.resolve(process.cwd(), `./${type}/index.html`),
+        },
       },
       outDir: path.resolve(process.cwd(), `${env.VITE_OUT_DIR}`),
       chunkSizeWarningLimit: 1500,
