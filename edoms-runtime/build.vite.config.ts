@@ -57,8 +57,6 @@ const buildLibsConfig: UserConfigExport = (config: ConfigEnv) => {
  */
 const buildRendererConfig: UserConfigExport = (config: ConfigEnv) => {
   const { type, env } = handleModeEnv(config);
-  const base = `${env.VITE_BASE_URL}/${type}/`;
-  const outDir = path.resolve(process.cwd(), `${env.VITE_OUT_DIR}/${type}`);
   return {
     plugins: [
       vue(),
@@ -66,13 +64,9 @@ const buildRendererConfig: UserConfigExport = (config: ConfigEnv) => {
         targets: ['defaults', 'not IE 11'],
       }),
     ],
-
     root: path.resolve(__dirname, `./${type}/`),
-
     publicDir: path.resolve(__dirname, './config'),
-
-    base,
-
+    base: `${env.VITE_BASE_URL}/${type}/`,
     build: {
       emptyOutDir: true,
       sourcemap: false,
@@ -97,7 +91,7 @@ const buildRendererConfig: UserConfigExport = (config: ConfigEnv) => {
         },
         input: path.resolve(process.cwd(), `./${type}/index.html`),
       },
-      outDir,
+      outDir: path.resolve(process.cwd(), `${env.VITE_OUT_DIR}/${type}`),
     },
   };
 };
@@ -110,9 +104,6 @@ const buildRendererConfig: UserConfigExport = (config: ConfigEnv) => {
  */
 const buildOfflineConfig: UserConfigExport = (config: ConfigEnv) => {
   const { type, env } = handleModeEnv(config);
-  const base = `${env.VITE_BASE_URL}`;
-
-  const outDir = path.resolve(process.cwd(), `${env.VITE_OUT_DIR}`);
   return {
     plugins: [
       vue(),
@@ -132,20 +123,17 @@ const buildOfflineConfig: UserConfigExport = (config: ConfigEnv) => {
         targets: ['defaults', 'not IE 11'],
       }),
     ],
-
     root: `./${type}/`,
-
     publicDir: path.resolve(__dirname, './config'),
-
-    base,
-
+    base: `${env.VITE_BASE_URL}`,
     build: {
       emptyOutDir: true,
       sourcemap: true,
       rollupOptions: {
         input: path.resolve(process.cwd(), `./${type}/index.html`),
       },
-      outDir,
+      outDir: path.resolve(process.cwd(), `${env.VITE_OUT_DIR}`),
+      chunkSizeWarningLimit: 1500,
     },
   };
 };
