@@ -7,7 +7,7 @@
     "bootstrap": "pnpm i && pnpm build",
     "designer": "pnpm --filter \"edoms-runtime\" --filter \"edoms-designer\" dev",
     "build": "pnpm --filter \"@edoms/*\" build",
-    "build:designer": "pnpm --filter \"edoms-runtime\" build:preview && pnpm --filter \"edoms-designer\" build",
+    "build:designer": "pnpm --filter \"edoms-runtime\" build:pre && pnpm --filter \"edoms-designer\" build",
     "build:runtime:offline": "pnpm --filter \"edoms-runtime\" build:page:offline",
     "clean": "pnpm clean:top && pnpm clean:modules",
     "clean:top": "rimraf */**/dist */**/types */dist coverage dwt*",
