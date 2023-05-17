@@ -9,12 +9,14 @@ export interface QueryList {
 }
 
 export interface EqData {
+  [x: string]: any;
   eqCode: string;
   eqName: string;
   pointList?: Array<QueryList>;
 }
 
 export interface EqAllList {
+  [x: string]: any;
   key: string;
   equipmentList: Array<EqData>;
 }

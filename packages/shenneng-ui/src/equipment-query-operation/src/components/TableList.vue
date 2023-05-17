@@ -35,6 +35,9 @@ import { reactive, ref } from 'vue';
 
 import { QueryList } from '../type';
 
+const emit = defineEmits<{
+  (event: 'ctIndex', val: number): void;
+}>();
 const ctIndex = ref<number>(0);
 
 const state = reactive<{
@@ -42,22 +45,15 @@ const state = reactive<{
 }>({
   dataList: {},
 });
-const changeType = (itm: { [key: string]: string | number | Array<QueryList> }) => {
+const changeType = (itm: { [key: string]: string | number | Array<QueryList> }, val: number) => {
   state.dataList = itm;
-  ctIndex.value = 0;
-  // 后期接口对应
-  state.dataList.equipmentList.forEach((itm: { [key: string]: string | Array<QueryList> }) => {
-    if (Array.isArray(itm.pointList)) {
-      itm.pointList.forEach((query: { [key: string]: any }) => {
-        query.data = 25;
-      });
-    }
-  });
+  ctIndex.value = val;
 };
 
 const handkerToChange = (idx: number) => {
   if (idx === ctIndex.value) return;
   ctIndex.value = idx;
+  emit('ctIndex', ctIndex.value);
 };
 
 defineExpose({
