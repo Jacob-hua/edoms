@@ -26,6 +26,7 @@ import IntelligenceReportEletric from './intelligence-report-eletric';
 import IntelligenceReportHeat from './intelligence-report-heat';
 import LoadForecasting from './loadForecasting';
 import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
+import MulticolorSingleLight from './multicolor-single-light';
 import MultipleEnergyMonitoring from './multiple-energy-monitoring';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
@@ -60,6 +61,7 @@ const ui: Record<string, any> = {
   systemOperatingParameters: SystemOperatingParameters,
   globalSchematic: GlobalSchematic,
   multicolorPolymorphicLight: MulticolorPolymorphicLight,
+  multicolorSingleLight: MulticolorSingleLight,
   warningRunningList: WarningRunningList,
   runningParameters: RunningParameters,
   energyEfficiencyMonitoring: EnergyEfficiencyMonitoring,

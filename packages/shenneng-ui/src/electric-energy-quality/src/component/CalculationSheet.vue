@@ -2,17 +2,17 @@
   <div class="wrapper_left_last">
     <div class="balance">本月结算</div>
     <div class="th_index">
-      <div style="margin-bottom: 42px">
-        <p><span style="color: #41e4de; font-size: 24px">-5372</span>元</p>
-        <p>奖惩电费</p>
+      <div class="th_index_con" style="margin-bottom: 42px">
+        <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
+        <div>奖惩电费</div>
       </div>
-      <div style="margin-bottom: 42px">
-        <p><span style="color: #41e4de; font-size: 24px">0.98</span></p>
-        <p>平均功率因素</p>
+      <div class="th_index_con" style="margin-bottom: 42px">
+        <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
+        <div>平均功率因素</div>
       </div>
-      <div>
-        <p><span style="color: #d72824; font-size: 24px">0.59</span></p>
-        <p>最小功率因素</p>
+      <div class="th_index_con">
+        <div><span style="color: #d72824; font-size: 24px">0.59</span></div>
+        <div>最小功率因素</div>
       </div>
     </div>
     <div class="alculation_sheet">
@@ -101,7 +101,7 @@
   .th_index {
     width: 130px;
 
-    div {
+    .th_index_con {
       width: 130px;
       height: 76px;
       margin: auto;
@@ -115,7 +115,7 @@
       border-radius: 0px 4px 0px 4px;
       box-sizing: border-box;
 
-      p {
+      div {
         margin-top: 13px;
       }
     }

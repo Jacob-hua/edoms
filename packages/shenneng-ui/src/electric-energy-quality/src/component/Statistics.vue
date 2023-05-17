@@ -7,20 +7,20 @@
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
-          <p>变动范围：3~4%</p>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
+          <div>变动范围：3~4%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
-          <p>变动范围：2~3%</p>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
+          <div>变动范围：2~3%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
-          <p>变动范围：1.5~2%</p>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
+          <div>变动范围：1.5~2%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
-          <p>变动范围：≤1.5%</p>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
+          <div>变动范围：≤1.5%</div>
         </div>
       </div>
     </div>
@@ -31,20 +31,20 @@
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
-          <p>变动范围：3~4%</p>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
+          <div>变动范围：3~4%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">1</span>次</p>
-          <p>变动范围：2~3%</p>
+          <div><span style="color: #41e4de; font-size: 24px">1</span>次</div>
+          <div>变动范围：2~3%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">27</span>次</p>
-          <p>变动范围：1.5~2%</p>
+          <div><span style="color: #41e4de; font-size: 24px">27</span>次</div>
+          <div>变动范围：1.5~2%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">421</span>次</p>
-          <p>变动范围：≤1.5%</p>
+          <div><span style="color: #41e4de; font-size: 24px">421</span>次</div>
+          <div>变动范围：≤1.5%</div>
         </div>
       </div>
     </div>
@@ -55,20 +55,20 @@
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">0</span>次</p>
-          <p>变动范围：3~4%</p>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
+          <div>变动范围：3~4%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">1</span>次</p>
-          <p>变动范围：2~3%</p>
+          <div><span style="color: #41e4de; font-size: 24px">1</span>次</div>
+          <div>变动范围：2~3%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">27</span>次</p>
-          <p>变动范围：1.5~2%</p>
+          <div><span style="color: #41e4de; font-size: 24px">27</span>次</div>
+          <div>变动范围：1.5~2%</div>
         </div>
         <div class="con_sub">
-          <p><span style="color: #41e4de; font-size: 24px">421</span>次</p>
-          <p>变动范围：≤1.5%</p>
+          <div><span style="color: #41e4de; font-size: 24px">421</span>次</div>
+          <div>变动范围：≤1.5%</div>
         </div>
       </div>
     </div>
@@ -133,7 +133,7 @@
         border: 1px solid #02263b;
         border-radius: 0px 4px 0px 4px;
 
-        p {
+        div {
           margin-top: 13px;
         }
       }

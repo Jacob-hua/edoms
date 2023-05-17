@@ -3,17 +3,22 @@
     <section class="header">
       <div>
         <div class="back-btn" @click="goBack">
-          <el-icon :size="23"><ArrowLeft /></el-icon>
+          <el-icon :size="23">
+            <ArrowLeft />
+          </el-icon>
           <span>{{ appName }}</span>
         </div>
         <SwitchVersion v-model="version" :application-id="applicationId" title="切换版本">
           <div class="version-btn">
             <span>{{ version?.name }}</span>
-            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+            <el-icon class="el-icon--right">
+              <ArrowDown />
+            </el-icon>
           </div>
         </SwitchVersion>
       </div>
       <div>
+        <el-button type="primary" text bg size="large" :icon="FullScreen" @click="handlePreview">预览</el-button>
         <el-button type="primary" text bg size="large" :icon="Edit" @click="handleEdit">编辑</el-button>
         <el-button type="primary" text bg size="large" :icon="DocumentAdd" @click="handleNewVersion">
           新建版本
@@ -68,7 +73,7 @@
 <script lang="ts" setup name="Page">
 import { onActivated, ref, shallowRef, unref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { DocumentAdd, Download, Edit } from '@element-plus/icons-vue';
+import { DocumentAdd, Download, Edit, FullScreen } from '@element-plus/icons-vue';
 
 import { MPage } from '@edoms/schema';
 
@@ -91,6 +96,8 @@ const gridListRef = ref();
 
 const appName = ref<string>('');
 
+const applicationAddress = ref<string>('');
+
 const version = ref<VersionModel>();
 
 const active = ref<MPage>();
@@ -107,11 +114,11 @@ watch(
     if (!applicationId) {
       return;
     }
-    const { name, defaultVersionId, defaultVersionName, defaultVersionContentId } = await applicationApi.getApplication(
-      {
+    const { name, defaultVersionId, defaultVersionName, defaultVersionContentId, serviceAddress } =
+      await applicationApi.getApplication({
         applicationId,
-      }
-    );
+      });
+    applicationAddress.value = serviceAddress;
     appName.value = name;
     version.value = {
       versionId: defaultVersionId,
@@ -155,6 +162,14 @@ const handleReload = () => {
   gridListRef.value?.reload();
 };
 
+const previewPath = import.meta.env.VITE_PREVIEW_PATH;
+
+// 预览
+const handlePreview = () => {
+  const previewUrl = `${previewPath}${applicationAddress.value}/${version.value?.versionId ?? ''}`;
+  window.open(previewUrl);
+};
+// 编辑
 const handleEdit = () => {
   router.push({
     path: '/editor',

@@ -16,7 +16,7 @@ export interface MWarningConfigs extends MComponent {
   timeSpan: number;
 }
 
-export type ClassName = 'red' | 'orange' | 'blue';
+export type ClassName = 'red' | 'orange' | 'green';
 
 export interface InitAlarmReq {
   sysInsCode: string;
