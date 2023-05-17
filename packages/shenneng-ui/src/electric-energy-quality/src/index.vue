@@ -4,14 +4,14 @@
       <div class="wrap-icon">
         <img class="icon-report" src="../assets/icon2.png" alt="" />
       </div>
-      <div class="label">电能质量</div>
+      <div class="label">{{ config.title }}</div>
     </div>
     <div v-if="showElectric" class="wrap-dialog">
       <div class="wrap-body">
         <div class="wrap-body-top">
           <div style="margin: 15px; display: flex">
             <img class="icon-left" src="../assets/icon.png" alt="" />
-            <span class="elefont">电能质量</span>
+            <span class="elefont">{{ config.title }}</span>
           </div>
           <div class="right-close" @click="changeElectric(false)"></div>
         </div>
@@ -28,7 +28,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>功率因素</span>
+                  <span>功率因数</span>
                 </span>
               </template>
               <PowerFactor :config="config"></PowerFactor>

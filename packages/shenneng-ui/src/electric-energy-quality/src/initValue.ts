@@ -1,4 +1,5 @@
 export default {
+  title: '电能质量',
   type: 'electric-energy-quality',
   // 三相电颜色
   currentLa: 'rgba(40, 124, 231, 1)',

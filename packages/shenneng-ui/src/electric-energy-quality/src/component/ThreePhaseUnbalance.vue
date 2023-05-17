@@ -133,12 +133,20 @@ watch(
       },
       xAxis: {
         type: 'category',
-        name: 'A',
         data: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        axisTick: {
+          show: false,
+        },
       },
       yAxis: {
         type: 'value',
-        name: 'B',
+        name: 'A',
+        nameGap: 15,
+        offset: 15,
+        nameTextStyle: {
+          align: 'right',
+          padding: 7,
+        },
         data: ['2', '4', '6', '8'],
         splitLine: {
           lineStyle: {
@@ -185,13 +193,21 @@ watch(
       },
       xAxis: {
         type: 'category',
-        name: 'A',
         data: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        axisTick: {
+          show: false,
+        },
       },
       yAxis: [
         {
           type: 'value',
-          name: 'B',
+          name: 'A',
+          nameGap: 15,
+          offset: 15,
+          nameTextStyle: {
+            align: 'right',
+            padding: 7,
+          },
           data: ['2', '4', '6', '8'],
           splitLine: {
             lineStyle: {
@@ -204,7 +220,19 @@ watch(
         {
           type: 'category',
           name: '%',
-          data: ['20%', '40%', '60%', '80%'],
+          nameGap: 15,
+          offset: 15,
+          nameTextStyle: {
+            align: 'left',
+            padding: 7,
+          },
+          axisLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+          data: ['0%', '20%', '40%', '60%', '80%'],
           splitLine: {
             lineStyle: {
               type: 'dashed',
@@ -229,6 +257,26 @@ watch(
           type: 'line',
           smooth: true,
           symbolSize: 0,
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                {
+                  offset: 0,
+                  color: 'rgba(40, 124, 232, 0.16)', // 0% 处的颜色
+                },
+                {
+                  offset: 1,
+                  color: 'rgba(40, 124, 232, 0)', // 100% 处的颜色
+                },
+              ],
+              global: false, // 缺省为 false
+            },
+          },
         },
       ],
     };

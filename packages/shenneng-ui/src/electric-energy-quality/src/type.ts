@@ -6,6 +6,8 @@ export interface MParameterItemConfig {
 }
 
 export interface ElectricEnergyQuality extends MComponent {
+  /** 标题 */
+  title: string;
   /** 实例类型 */
   instanceType: string;
 
