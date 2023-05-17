@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper_left_last">
-    <div class="balance">本月结算</div>
+    <div class="balance">{{ props.option.title }}</div>
     <div class="th_index">
       <div class="th_index_con" style="margin-bottom: 42px">
         <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
@@ -8,11 +8,11 @@
       </div>
       <div class="th_index_con" style="margin-bottom: 42px">
         <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
-        <div>平均功率因素</div>
+        <div>平均功率因数</div>
       </div>
       <div class="th_index_con">
         <div><span style="color: #d72824; font-size: 24px">0.59</span></div>
-        <div>最小功率因素</div>
+        <div>最小功率因数</div>
       </div>
     </div>
     <div class="alculation_sheet">
@@ -33,7 +33,7 @@
                 <td class="second_d"><span>7.297</span>万kWh</td>
               </tr>
               <tr>
-                <td class="frist_d">功率因素：</td>
+                <td class="frist_d">功率因数：</td>
                 <td class="second_d"><img src="" alt="" srcset="" />=<span>1</span></td>
               </tr>
               <tr>
@@ -75,7 +75,13 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const props = defineProps<{
+  option: any;
+}>();
+
+console.log(props);
+</script>
 
 <style lang="scss" scoped>
 .wrapper_left_last {

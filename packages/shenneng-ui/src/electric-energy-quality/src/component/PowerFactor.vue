@@ -2,10 +2,10 @@
   <div class="wrapper">
     <div class="wrapper_left">
       <div class="wrapper_left_last">
-        <CalculationSheet></CalculationSheet>
+        <CalculationSheet :option="lastMouth"></CalculationSheet>
       </div>
       <div style="margin-top: 40px" class="wrapper_left_last">
-        <CalculationSheet></CalculationSheet>
+        <CalculationSheet :option="nextMouth"></CalculationSheet>
       </div>
     </div>
     <div class="wrapper_right">
@@ -84,6 +84,12 @@ import TimeCalendar from './TimeCalendar.vue';
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
+const lastMouth = {
+  title: '上月结算',
+};
+const nextMouth = {
+  title: '本月结算',
+};
 console.log(props.config);
 const dialogVisible = ref<boolean>(false);
 const nowDialog = ref<boolean>(false);
@@ -132,12 +138,23 @@ dataAll.forEach((item) => {
     minArr.value.push(item);
   }
 });
-// 月度功率因素统计
+// 月度功率因数统计
 const option_chart = ref<ECOption>({});
 option_chart.value = {
+  grid: {
+    left: 24,
+    bottom: 28,
+    right: 20,
+  },
   xAxis: {
     type: 'category',
     data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    axisLine: {
+      show: false,
+    },
+    axisTick: {
+      show: false,
+    },
   },
   color: 'rgba(40,124,232,0.5)',
   tooltip: {
@@ -154,8 +171,10 @@ option_chart.value = {
   },
   yAxis: {
     type: 'value',
-    name: '月度功率因素统计',
+    name: '月度功率因数统计',
     nameTextStyle: {
+      lineHeight: 28,
+      padding: [0, 0, 0, 100],
       fontSize: '14',
       fontFamily: 'Microsoft YaHei',
       fontWeight: 400,
@@ -168,11 +187,14 @@ option_chart.value = {
         width: 1,
       },
     },
+    axisLabel: {
+      show: false,
+    },
   },
   series: [
     {
       name: '考核基准：0.9',
-      data: [50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100],
+      data: [0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1],
       type: 'bar',
       itemStyle: {
         borderWidth: 1,
@@ -258,21 +280,55 @@ const changeDilog = (val: string) => {
       series: [
         {
           name: '箱线图',
+          type: 'candlestick',
+          color: 'rgba(40,124,232,0.3)',
+          data: [
+            [85, 86, 70, 86],
+            [85, 86, 75, 86],
+            [85, 86, 60, 86],
+            [85, 86, 55, 86],
+            [85, 86, 70, 86],
+            [85, 86, 75, 86],
+            [85, 86, 70, 86],
+            [85, 86, 65, 86],
+            [85, 86, 70, 86],
+            [85, 86, 65, 86],
+            [85, 86, 55, 86],
+            [85, 86, 60, 86],
+            [85, 86, 70, 86],
+            [85, 86, 75, 86],
+            [85, 86, 60, 86],
+            [85, 86, 70, 86],
+            [85, 86, 55, 86],
+          ],
+          itemStyle: {
+            color: 'rgba(40, 124, 232, 0.3)',
+            borderWidth: 1,
+            borderColor: '#287CE8',
+          },
+        },
+        {
+          name: '插值波动',
           type: 'bar',
           data: [
             5, 10, 15, 6, 11, 16, 7, 12, 17, 8, 13, 18, 9, 14, 19, 5, 10, 15, 6, 11, 16, 7, 12, 17, 8, 13, 18, 9, 14,
             19, 23,
           ],
+          itemStyle: {
+            color: 'rgba(40, 124, 232, 0.3)',
+            borderWidth: 1,
+            borderColor: '#287CE8',
+          },
           barWidth: 16,
           barGap: 35,
         },
         {
-          name: '插值波动',
+          name: 'Max曲线',
           type: 'line',
-          color: '#0C7AC8',
+          color: '#207C44',
           data: [
-            55, 58, 15, 36, 53, 40, 64, 42, 27, 55, 43, 78, 39, 44, 59, 65, 50, 45, 56, 71, 66, 47, 52, 67, 68, 33, 28,
-            49, 34, 79, 53,
+            25, 28, 55, 46, 33, 80, 74, 52, 37, 58, 63, 48, 29, 54, 69, 75, 56, 35, 52, 73, 69, 41, 50, 61, 64, 23, 22,
+            45, 33, 71, 52,
           ],
           smooth: true,
           symbolSize: 0,
@@ -294,17 +350,6 @@ const changeDilog = (val: string) => {
             silent: true,
             symbol: 'none',
           },
-        },
-        {
-          name: 'Max曲线',
-          type: 'line',
-          color: '#207C44',
-          data: [
-            25, 28, 55, 46, 33, 80, 74, 52, 37, 58, 63, 48, 29, 54, 69, 75, 56, 35, 52, 73, 69, 41, 50, 61, 64, 23, 22,
-            45, 33, 71, 52,
-          ],
-          smooth: true,
-          symbolSize: 0,
         },
         {
           name: 'Min曲线',
@@ -662,7 +707,6 @@ const tableData = [
           font-family: Microsoft YaHei;
           font-weight: 400;
           color: #eaf5ff;
-          margin-left: 30px;
           margin-bottom: 18px;
         }
       }

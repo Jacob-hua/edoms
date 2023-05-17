@@ -4,7 +4,7 @@
     <div class="tab-wrapper" :style="{ width: isShow ? '' : '100%', marginLeft: isShow ? '' : '0px' }">
       <div class="scroll-wrapper" :style="{ transform: `translateX(${-scrollDis}px)` }">
         <div v-for="(itm, ind) in props.list" :key="itm.value" class="list-item">
-          <div :class="['itm-key', currentIdx === itm.value ? 'active' : '']" @click="handlerToChange(itm, ind)">
+          <div :class="['itm-key', currentIdx === itm.key ? 'active' : '']" @click="handlerToChange(itm, ind)">
             {{ itm.key }}
           </div>
         </div>
@@ -51,7 +51,7 @@ const panIndex = ref<number>(0);
 const distanceDes = ref<number>(0);
 
 const handlerToChange = (itm: { [key: string]: any }, val: number) => {
-  currentIdx.value = itm.value;
+  currentIdx.value = itm.key;
   emits('operate', itm, val);
 };
 
@@ -105,7 +105,7 @@ const handelrToScroll = (idx: number) => {
 };
 
 onBeforeMount(() => {
-  currentIdx.value = props.list[0]?.value;
+  currentIdx.value = props.list[0]?.key;
 });
 
 onMounted(() => {
@@ -117,7 +117,7 @@ onMounted(() => {
 watch(
   () => props.list,
   (newV: Array<{ [key: string]: string | number }>) => {
-    currentIdx.value = newV[0]?.value;
+    currentIdx.value = newV[0]?.key;
     queueMicrotask(() => {
       getDomRect();
     });

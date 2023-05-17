@@ -5,7 +5,7 @@
  * @LastEditors: lihao
  * @LastEditTime: 2023-05-12 18:03:41
  */
-import { BarChart, LineChart, PieChart, ScatterChart } from 'echarts/charts';
+import { BarChart, CandlestickChart, LineChart, PieChart, ScatterChart } from 'echarts/charts';
 import {
   DatasetComponent,
   GridComponent,
@@ -36,6 +36,7 @@ echarts.use([
   LegendComponent,
   ScatterChart,
   MarkLineComponent,
+  CandlestickChart,
 ]);
 
 export default echarts;
