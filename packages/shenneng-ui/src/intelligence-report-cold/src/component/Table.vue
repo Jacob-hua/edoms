@@ -87,7 +87,7 @@ const queryRef = ref(ElForm);
 
 const state: any = reactive({
   queryForm: {
-    date: '',
+    date: new Date(),
     range: '',
   } as MTableQueryForm,
   testData: [],

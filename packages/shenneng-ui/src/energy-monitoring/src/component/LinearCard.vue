@@ -43,7 +43,6 @@ const total = computed<number>(() => Number(props.config.maxValue) - Number(prop
 
 const getWidth = (pos: string) => {
   let width = '33.3%';
-  //   console.log(total.value, 22222);
   if (isNaN(total.value) || total.value <= 0) return '33.3%';
   const leftVal = Number(props.config.medium[0].maxValue) - Number(props.config.medium[0].minValue);
   const centerVal = Number(props.config.good[0].maxValue) - Number(props.config.good[0].minValue);
@@ -97,18 +96,6 @@ const attributeRight = computed<string>(
       props.config.excellent[0].color || 'rgba(54, 167, 99,1)'
     })`
 );
-// const attributeLeft = computed<string>(
-//   () =>
-//     `linear-gradient(90deg, ${
-//       props.config.medium && props.config.medium.length > 0 ? props.config.medium[0].color : '#E76A2F'
-//     }, ${props.config.good && props.config.good.length > 0 ? props.config.good[0].color : '#938748'})`
-// );
-// const attributeRight = computed<string>(
-//   () =>
-//     `linear-gradient(90deg, ${
-//       props.config.good && props.config.good.length > 0 ? props.config.good[0].color : '#938748'
-//     }, ${props.config.excellent && props.config.excellent.length > 0 ? props.config.excellent[0].color : '#36A763'})`
-// );
 
 const divideWidth = computed<any>(() => (colorCardWidth.value / (bisectionNumber.value * 2)).toFixed(2));
 
