@@ -14,6 +14,7 @@ const app = inject<Core | undefined>('app');
 const pageConfig = ref(app?.page?.data || {});
 
 const dsl = ref<MApp>();
+console.log('======>', import.meta.env);
 
 onMounted(() => {
   const isLocalPreview = getUrlParam('localPreview');
