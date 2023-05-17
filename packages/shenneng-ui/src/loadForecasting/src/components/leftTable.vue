@@ -75,7 +75,7 @@ import { onMounted, onUnmounted, reactive, ref } from 'vue';
 //   }
 // );
 
-const pickerDate = ref<string>();
+const pickerDate = ref<string | Date>(new Date());
 
 const totalPage = ref<number>(4);
 
@@ -174,9 +174,22 @@ onUnmounted(() => {});
       cursor: pointer;
       margin-left: 20px;
     }
+    // :deep(.el-input__wrapper) {
+    //   background-color: rgba(3, 5, 7, 1);
+    //   border: 1px solid rgba(33, 44, 60, 1);
+    // }
     :deep(.el-input__wrapper) {
       background-color: rgba(3, 5, 7, 1);
-      border: 1px solid rgba(33, 44, 60, 1);
+      border: 1px solid rgb(69, 78, 114);
+      box-shadow: none;
+    }
+    // :deep(.el-input__wrapper) {
+    //   background-color: rgba(3, 5, 7, 1);
+    //   border: 1px solid rgba(33, 44, 60, 1);
+    //   box-shadow: none;
+    // }
+    :deep(.el-input__wrapper:hover) {
+      box-shadow: none !important;
     }
     :deep(.el-input__inner) {
       color: #fff;

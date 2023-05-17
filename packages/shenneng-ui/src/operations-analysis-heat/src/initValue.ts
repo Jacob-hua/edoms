@@ -2,6 +2,6 @@ export default {
   type: 'warning-table-list',
   style: {
     width: '117',
-    height: '82',
+    height: '80',
   },
 };

@@ -1,11 +1,24 @@
+<!--
+ * @Description: 
+ * @Author: lihao
+ * @Date: 2023-05-12 16:36:57
+ * @LastEditors: lihao
+ * @LastEditTime: 2023-05-16 10:03:16
+-->
 <template>
-  <div class="wrap-select">
+  <div class="wrap-select" :style="`width:${width}px;`">
     <div class="wrap-value" @click="showOption = !showOption">
-      <div class="value">{{ value }}</div>
+      <div class="value">{{ label || '请选择' }}</div>
       <div class="arrow" :class="{ active: showOption }"></div>
     </div>
     <div v-if="showOption" class="wrap-option">
-      <div v-for="(item, index) in options" :key="index" class="list">
+      <div
+        v-for="(item, index) in options"
+        :key="index"
+        class="list"
+        :class="{ active: activeIndex === index }"
+        @click="changeSelect(item, index)"
+      >
         {{ item.label }}
       </div>
     </div>
@@ -30,6 +43,21 @@ withDefaults(
 );
 
 const showOption = ref<boolean>(false);
+const activeIndex = ref<number>(-1);
+const label = ref<string | number>('');
+
+const emit = defineEmits(['changeItem']);
+
+// const closeTable = () => {
+//   emit('closeTable');
+// };
+const changeSelect = (item: any, index: number) => {
+  if (activeIndex.value === index) return;
+  activeIndex.value = index;
+  showOption.value = false;
+  label.value = item.label;
+  emit('changeItem', item.value);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -40,6 +68,9 @@ const showOption = ref<boolean>(false);
   background: #030507;
   border: 1px solid #454e72;
   border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #ffffff;
   .wrap-value {
     width: 100%;
     height: 100%;
@@ -48,17 +79,17 @@ const showOption = ref<boolean>(false);
     justify-content: space-between;
     .value {
       padding-left: 10px;
-      font-size: 14px;
       font-family: Microsoft YaHei;
-      font-weight: 400;
-      color: #ffffff;
     }
     .arrow {
-      padding-right: 10px;
-      background: url('../../assets/image/arrow_up.png');
+      width: 10px;
+      height: 10px;
+      margin-right: 10px;
+      background: url('../../assets/image/arrow_down.png');
       background-size: 100% 100%;
       &.active {
-        background: url('../../assets/image/arrow_down.png');
+        background: url('../../assets/image/arrow_up.png');
+        background-size: 100% 100%;
       }
     }
   }
@@ -66,21 +97,23 @@ const showOption = ref<boolean>(false);
     position: absolute;
     margin-top: 5px;
     width: 100%;
-    height: 96px;
-    background-color: rgba(9, 15, 23, 1);
+    height: 120px;
+    background-color: #1f2734;
+    border-radius: 4px;
     // background: #030507;
     overflow-x: hidden;
     overflow-y: auto;
     z-index: 99;
     .list {
       width: 100%;
-      height: 32px;
+      height: 40px;
       display: flex;
       padding-left: 10px;
       align-items: center;
       color: #ffffff;
-      &:hover {
-        background-color: green;
+      &:hover,
+      &.active {
+        background-color: #2c3647;
       }
     }
   }

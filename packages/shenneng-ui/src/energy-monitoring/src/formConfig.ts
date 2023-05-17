@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 14:31:42
+ * @LastEditTime: 2023-05-16 16:25:22
  */
 import { Request } from '@edoms/editor';
 
@@ -80,7 +80,7 @@ export default async (request: Request) => [
         text: '颜色',
         name: 'color',
         type: 'colorPicker',
-        defaultValue: '#E76A2F',
+        defaultValue: 'rgb(231, 106, 47,1)',
       },
     ],
   },
@@ -105,7 +105,7 @@ export default async (request: Request) => [
         text: '颜色',
         name: 'color',
         type: 'colorPicker',
-        defaultValue: '#938748',
+        defaultValue: 'rgba(147, 135, 72,1)',
       },
     ],
   },
@@ -130,7 +130,7 @@ export default async (request: Request) => [
         text: '颜色',
         name: 'color',
         type: 'colorPicker',
-        defaultValue: '#36A763',
+        defaultValue: 'rgba(54, 167, 99,1)',
       },
     ],
   },

@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: lihao
+ * @Date: 2023-05-11 15:36:20
+ * @LastEditors: lihao
+ * @LastEditTime: 2023-05-16 11:00:33
+-->
 <template>
   <div class="operations-analysis-heat" @click="handlerToShow($event, true)">
     <div class="top-bg"></div>
@@ -519,13 +526,23 @@ watch(
 
 <style lang="scss" scoped>
 .operations-analysis-heat {
-  width: 117px;
-  height: 82px;
-  position: relative;
-  padding: 10px 28px;
-  box-sizing: border-box;
+  min-width: 117px;
+  min-height: 80px;
+  //   position: relative;
+  //   padding: 10px 28px;
+  //   box-sizing: border-box;
   background-color: rgba(0, 163, 255, 0.1);
-  border: 1px solid rgba(11, 17, 25, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  //   width: 117px;
+  //   height: 82px;
+  //   position: relative;
+  //   padding: 10px 28px;
+  //   box-sizing: border-box;
+  //   background-color: rgba(0, 163, 255, 0.1);
+  //   border: 1px solid rgba(11, 17, 25, 0.3);
   .top-bg {
     width: 60px;
     height: 42px;

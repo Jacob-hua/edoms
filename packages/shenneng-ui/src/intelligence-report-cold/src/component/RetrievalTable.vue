@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 16:36:01
+ * @LastEditTime: 2023-05-16 11:45:16
 -->
 <template>
   <div class="wrap-table">
@@ -66,14 +66,7 @@
           </el-col>
           <el-col :span="3">
             <el-form-item label="范围选择">
-              <el-select v-model="state.queryForm.range" placehoder="请选择">
-                <el-option
-                  v-for="item in state.rangeOption"
-                  :key="item.label"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
+              <Select width="120px" :options="state.rangeOption" @change-item="changeRange"></Select>
             </el-form-item>
           </el-col>
           <div class="button">查询</div>
@@ -127,6 +120,7 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
 
+import Select from '../../../common/Select.vue';
 import { retrievalData, retrievalTitle } from '../mock';
 import { MIntelligenceReport, MQueryForm } from '../type';
 
@@ -173,6 +167,10 @@ const state: any = reactive({
     '--el-table-border-color': 'none',
   },
 });
+
+const changeRange = (val: string | number) => {
+  state.queryForm.range = val;
+};
 
 const getRowStyle = (params: any) => {
   const rowStyle: any = { height: '48px', textAlign: 'center' };

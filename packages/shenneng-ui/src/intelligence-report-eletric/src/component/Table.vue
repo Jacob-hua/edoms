@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-15 15:52:20
+ * @LastEditTime: 2023-05-16 09:54:05
 -->
 <template>
   <div class="wrap-table">
@@ -17,31 +17,38 @@
         <el-row :gutter="2">
           <el-col :span="3" :offset="4">
             <el-form-item label="">
-              <el-date-picker v-model="state.queryForm.date" type="date" :default-value="dateFormat(new Date())" />
+              <el-date-picker
+                v-model="state.queryForm.date"
+                type="date"
+                :default-value="dateFormat(new Date())"
+                placeholder="请选择日期"
+              />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <el-form-item label="">
-              <el-select v-model="state.queryForm.station">
+              <Select :width="148" :options="state.stationOptions" @change-item="changeStation"></Select>
+              <!-- <el-select v-model="state.queryForm.station">
                 <el-option
                   v-for="item in state.stationOptions"
                   :key="item.label"
                   :label="item.label"
                   :value="item.value"
                 />
-              </el-select>
+              </el-select> -->
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <el-form-item label="">
-              <el-select v-model="state.queryForm.device">
+              <Select :width="148" :options="state.deviceOptions" @change-item="changeDevice"></Select>
+              <!-- <el-select v-model="state.queryForm.device">
                 <el-option
                   v-for="item in state.deviceOptions"
                   :key="item.label"
                   :label="item.label"
                   :value="item.value"
                 />
-              </el-select>
+              </el-select> -->
             </el-form-item>
           </el-col>
           <div class="button">导出</div>
@@ -81,6 +88,7 @@ import { onMounted, reactive, ref } from 'vue';
 import { ElForm } from '@edoms/design';
 import { dateFormat } from '@edoms/utils';
 
+import Select from '../../../common/Select.vue';
 import mockData from '../mock';
 import { MIntelligenceReport, MQueryForm } from '../type';
 defineProps<{
@@ -141,6 +149,14 @@ const state: any = reactive({
     '--el-table-border-color': 'none',
   },
 });
+
+const changeStation = (val: string | number) => {
+  state.queryForm.station = val;
+};
+
+const changeDevice = (val: string | number) => {
+  state.queryForm.device = val;
+};
 
 const handleTableData = () => {
   state.titleList = state.testData[0].device;
