@@ -54,16 +54,16 @@ const intervalDelay = computed<number>(() => {
   }
   return props.config.intervalDelay;
 });
-const getRandomValue = () => {
-  return (Math.random() * 100).toFixed(2);
-};
+// const getRandomValue = () => {
+//   return (Math.random() * 100).toFixed(2);
+// };
 
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
     initIndicators.value = indicatorConfigs.map(({ label, instance, property, unit, precision }) => ({
       label,
-      value: getRandomValue(),
+      value: '',
       parameter: '',
       deviceCode: instance[instance.length - 1],
       propCode: property,

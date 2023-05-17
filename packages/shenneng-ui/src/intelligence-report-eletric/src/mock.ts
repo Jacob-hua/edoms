@@ -13,7 +13,7 @@ const mockData = [
       },
       {
         name: '002电压线',
-        data: { TEST1: 10, TEST2: 20, TEST3: 30, TEST4: 40 },
+        data: { 'EP+': 10, 'EP-': 20, 'EQ+': 30, 'EQ-': 40 },
       },
       {
         name: '003电压线',
