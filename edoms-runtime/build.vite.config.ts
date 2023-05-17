@@ -113,10 +113,6 @@ const buildOfflineConfig: UserConfigExport = (config: ConfigEnv) => {
             async: false,
             src: './dsl.js',
           },
-          {
-            async: false,
-            src: './config.js',
-          },
         ],
       }),
       legacy({
