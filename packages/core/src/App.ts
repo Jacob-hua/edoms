@@ -13,7 +13,6 @@ import { calculateMethodProps, fillBackgroundImage, isNumber, style2Obj } from '
 interface AppOptionsConfig {
   ua?: string;
   config?: MApp;
-  platform?: 'editor' | 'mobile' | 'tv' | 'pc';
   jsEngine?: 'browser' | 'hippy';
   designWidth?: number;
   curPage?: Id;
@@ -47,7 +46,6 @@ class App extends EventEmitter {
 
   public page: Page | undefined;
 
-  public platform = 'mobile';
   public jsEngine = 'browser';
   public designWidth = 375;
 
@@ -64,24 +62,21 @@ class App extends EventEmitter {
     this.env = new Env(options.ua);
     // 代码块描述内容在dsl codeBlocks字段
     this.codeDsl = options.config?.codeBlocks;
-    options.platform && (this.platform = options.platform);
     options.jsEngine && (this.jsEngine = options.jsEngine);
     options.designWidth && (this.designWidth = options.designWidth);
 
-    // 根据屏幕大小计算出跟节点的font-size，用于rem样式的适配
-    if (this.platform === 'mobile' || this.platform === 'editor') {
-      const calcFontsize = () => {
-        const { width } = document.documentElement.getBoundingClientRect();
-        const fontSize = width / (this.designWidth / 100);
-        document.documentElement.style.fontSize = `${fontSize}px`;
-      };
+    // 根据屏幕大小计算出根节点的font-size，用于rem样式的适配
+    const calcFontsize = () => {
+      const { width } = document.documentElement.getBoundingClientRect();
+      const fontSize = width / (this.designWidth / 100);
+      document.documentElement.style.fontSize = `${fontSize}px`;
+    };
 
-      calcFontsize();
+    calcFontsize();
 
-      document.body.style.fontSize = '14px';
+    document.body.style.fontSize = '14px';
 
-      globalThis.addEventListener('resize', calcFontsize);
-    }
+    globalThis.addEventListener('resize', calcFontsize);
 
     if (options.transformStyle) {
       this.transformStyle = options.transformStyle;

@@ -23,7 +23,6 @@ const designWidth = document.documentElement.getBoundingClientRect().width;
 const app = new Core({
   designWidth,
   config: root.value,
-  platform: 'editor',
 });
 
 window.appInstance = app;
