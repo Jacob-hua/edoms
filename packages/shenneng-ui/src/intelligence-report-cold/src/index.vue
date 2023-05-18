@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-15 15:57:31
+ * @LastEditTime: 2023-05-17 14:01:21
 -->
 <template>
   <div class="wrap-intell" @click="changeReport">

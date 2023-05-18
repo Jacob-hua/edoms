@@ -3,6 +3,11 @@ import { Request } from '@edoms/editor';
 import useInstanceConfig from '../../useInstanceConfig';
 
 export default async (request: Request) => [
+  {
+    text: '标题',
+    name: 'title',
+    type: 'string',
+  },
   /** 注入业务组件的共通字段 */
   ...(await useInstanceConfig(request, 'electric-energy-quality')),
   {
