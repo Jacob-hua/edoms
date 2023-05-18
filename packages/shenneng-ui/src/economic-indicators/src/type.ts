@@ -13,17 +13,6 @@ export enum MEconomicIndicator {
   HEAT_ENERGY_CONSUMPTION = 'energy',
 }
 
-export interface ThresholdConfig {
-  //**阈值最小值 */
-  minValue: number;
-  /**阈值最大值 */
-  maxValue: number;
-  /**告警等级 */
-  alarmLevel: string;
-  /**颜色 */
-  alarmColor: string;
-}
-
 export interface MIndicatorItemConfig {
   /** 监测指标 */
   type: MEconomicIndicator;
@@ -37,8 +26,6 @@ export interface MIndicatorItemConfig {
   propertyType: string;
   /** 属性 */
   property: string;
-  /**阈值配置 */
-  thresholdConfigs: ThresholdConfig[];
   /** 精度 */
   precision: string;
   /** 单位 */

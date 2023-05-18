@@ -1,11 +1,14 @@
 <template>
-  <div class="wrap-suspended" style="min-width: 214px; min-height: 45px">
+  <div class="wrap-suspended">
     <div class="wrap-trigger">
       <div class="wrap-window">
         <div v-for="(item, index) in initIndicators" :key="item.label" class="wrap-list">
           <div class="label overflow-ellipsis">{{ item.label }}</div>
-          <div :class="index % 2 == 0 ? 'green' : 'red'" class="wrap-val">
-            <div class="val">{{ item.parameter }}</div>
+          <div class="wrap-val">
+            <div class="val">
+              <span :class="index % 2 == 0 ? 'green' : 'red'" class="parameter">{{ item.parameter }} </span>
+              <span class="unit">{{ item.unit }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -112,6 +115,8 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
 <style lang="scss" scoped>
 .wrap-suspended {
   position: relative;
+  width: 214px;
+  height: 45px;
   .wrap-trigger {
     position: relative;
     width: 100%;
@@ -134,7 +139,7 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
         align-items: center;
         .label {
           box-sizing: border-box;
-          width: 56%;
+          width: calc(100% - 120px);
           text-align: right;
           padding-left: 23px;
           padding-right: 12px;
@@ -148,9 +153,11 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
           white-space: nowrap;
         }
         .wrap-val {
-          width: 44%;
+          width: 120px;
+          display: flex;
+          align-items: center;
           .val {
-            width: 73%;
+            width: 100px;
             min-height: 28px;
             background: rgba(24, 38, 45, 0.8);
             border: 1px solid #aaaaaa;
@@ -158,13 +165,28 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
             display: flex;
             align-items: center;
             justify-content: center;
+            .parameter {
+              width: 65px;
+              height: 100%;
+              text-align: right;
+            }
+            .green {
+              color: rgba(69, 205, 37, 1);
+            }
+            .red {
+              color: rgba(215, 40, 36, 1);
+            }
+            .unit {
+              margin-left: 5px;
+              text-align: left;
+              width: 40px;
+              height: 100%;
+              font-size: 14px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #ffffff;
+            }
           }
-        }
-        .green {
-          color: rgba(69, 205, 37, 1);
-        }
-        .red {
-          color: rgba(215, 40, 36, 1);
         }
       }
     }
