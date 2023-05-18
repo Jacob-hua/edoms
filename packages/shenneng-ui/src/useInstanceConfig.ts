@@ -30,7 +30,7 @@ export type InstanceItem = 'instance' | 'propertyType' | 'property' | 'unit' | '
 export default async (request: Request, componentName: string, hiddenItems: InstanceItem[] = []) => {
   // fetchProperties(request, componentName, formValue, prop)
   const instances = await fetchInstances(request, componentName);
-  let pointList: any[] = [];
+  // let pointList: any[] = [];
   return [
     {
       name: 'instance',
@@ -42,7 +42,7 @@ export default async (request: Request, componentName: string, hiddenItems: Inst
       display: () => !hiddenItems.includes('instance'),
       onChange: async (mForm: any, value: any, { model }: any) => {
         const modelInstance = getSelectedInstance(value, instances);
-        pointList = [];
+        // pointList = [];
         model.instanceType = modelInstance?.type;
         model.instanceName = modelInstance?.label;
         model.propertyType = '';
@@ -65,10 +65,10 @@ export default async (request: Request, componentName: string, hiddenItems: Inst
       text: '属性',
       type: 'radio-group',
       display: () => !hiddenItems.includes('propertyType'),
-      onChange: async (mForm: any, value: any, { formValue, prop, model }: any) => {
-        if (model.instance.length) {
-          pointList = await fetchProperties(request, componentName, formValue, prop);
-        }
+      onChange: async (mForm: any, value: any, { model }: any) => {
+        // if (model.instance.length) {
+        //   pointList = await fetchProperties(request, componentName, formValue, prop);
+        // }
         model.property = '';
         model.unit = '';
       },
@@ -92,7 +92,9 @@ export default async (request: Request, componentName: string, hiddenItems: Inst
       text: '点位',
       type: 'select',
       display: () => !hiddenItems.includes('property'),
-      options: () => pointList,
+      options: async (mForm: any, { formValue, prop }: any) => {
+        return fetchProperties(request, componentName, formValue, prop);
+      },
       onChange: async (mForm: any, value: any, { formValue, prop, model }: any) => {
         model.unit = getSelectedProperty(value, await fetchProperties(request, componentName, formValue, prop))?.unit;
       },

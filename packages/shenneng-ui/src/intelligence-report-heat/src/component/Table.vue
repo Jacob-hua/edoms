@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-16 09:10:08
+ * @LastEditTime: 2023-05-17 15:02:56
 -->
 <template>
   <div class="wrap-table">
@@ -84,7 +84,7 @@ const queryRef = ref(ElForm);
 
 const state: any = reactive({
   queryForm: {
-    date: '',
+    date: new Date(),
   } as MQueryForm,
   testData: [],
   titleList: [],

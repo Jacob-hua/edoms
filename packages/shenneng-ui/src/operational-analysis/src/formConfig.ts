@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 13:59:51
+ * @LastEditTime: 2023-05-18 09:15:27
  */
 import { Request } from '@edoms/editor';
 
@@ -64,6 +64,7 @@ export default async (request: Request) => [
             name: 'color',
             type: 'colorPicker',
             defaultValue: '#287CE8',
+            labelWidth: '70px',
           },
         ],
       },
@@ -104,6 +105,7 @@ export default async (request: Request) => [
             name: 'color',
             type: 'colorPicker',
             defaultValue: '#287CE8',
+            labelWidth: '70px',
           },
         ],
       },
