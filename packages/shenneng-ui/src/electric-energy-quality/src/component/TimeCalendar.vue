@@ -1,11 +1,15 @@
 <template>
   <div class="block">
-    <el-date-picker v-model="value1" type="date" @change="selectDate" />
+    <el-date-picker v-model="value1" :type="timeType.option" @change="selectDate" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+const timeType = defineProps<{
+  option: string;
+}>();
+console.log(timeType.option);
 const value1 = ref(new Date());
 const selectDate = () => {
   console.log(value1);
