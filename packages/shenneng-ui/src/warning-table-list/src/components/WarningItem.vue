@@ -110,7 +110,7 @@ const handleConfirm = async (alarm: Warning) => {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(0, 163, 255, 0.14);
-    height: 55px;
+    height: 53px;
     cursor: pointer;
 
     .warning-type {
