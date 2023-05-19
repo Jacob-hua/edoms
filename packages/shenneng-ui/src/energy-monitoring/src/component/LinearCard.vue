@@ -77,8 +77,8 @@ const getWidth = (pos: string) => {
   return width;
 };
 
-const getColor = (arrcolor: any[]) => {
-  if (arrcolor.length === 0 || arrcolor[0].color == '') return '';
+const getColor = (arrcolor: any) => {
+  if (!arrcolor || arrcolor.length === 0 || arrcolor[0].color == '') return '';
   const arr = arrcolor[0].color.split(',');
   arr[arr.length - 1] = arr[arr.length - 1].replace('1', '0.3');
   console.log(arr.join(','));
@@ -88,19 +88,20 @@ const getColor = (arrcolor: any[]) => {
 const attributeLeft = computed<string>(
   () =>
     `linear-gradient(90deg, ${
-      (props.config.medium.length > 0 && props.config.medium[0].color) || 'rgba(231, 106, 47,1)'
+      (props.config.medium && props.config.medium.length > 0 && props.config.medium[0].color) || 'rgba(231, 106, 47,1)'
     }, ${getColor(props.config.medium) || 'rgba(231, 106, 47,0.3)'})`
 );
 const attributeCenter = computed<string>(
   () =>
     `linear-gradient(90deg, ${
-      (props.config.good.length > 0 && props.config.good[0].color) || 'rgba(147, 135, 72,1)'
+      (props.config.medium && props.config.good.length > 0 && props.config.good[0].color) || 'rgba(147, 135, 72,1)'
     }, ${getColor(props.config.good) || 'rgba(147, 135, 72,0.3)'})`
 );
 const attributeRight = computed<string>(
   () =>
     `linear-gradient(90deg, ${getColor(props.config.excellent) || 'rgba(54, 167, 99,0.3)'}, ${
-      (props.config.excellent.length > 0 && props.config.excellent[0].color) || 'rgba(54, 167, 99,1)'
+      (props.config.medium && props.config.excellent.length > 0 && props.config.excellent[0].color) ||
+      'rgba(54, 167, 99,1)'
     })`
 );
 
@@ -117,6 +118,7 @@ const colorCardObserver = new ResizeObserver(() => {
 });
 
 onMounted(() => {
+  console.log(22222, props.config);
   if (!colorCardRef.value) {
     return;
   }
