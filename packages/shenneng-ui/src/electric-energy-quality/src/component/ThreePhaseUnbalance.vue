@@ -127,8 +127,8 @@ watch(
         backgroundColor: 'rgba(11,34,52,0.9)',
         borderColor: '#204C6F',
         borderWidth: 1,
-        formatter: (params) => {
-          let tip = '';
+        formatter: (params: any) => {
+          let tip: string = '';
           if (params != null && params.length > 0) {
             tip +=
               '<div style="width:105px;height:90px"><span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">三相电流</span><br />';
@@ -210,8 +210,8 @@ watch(
         borderColor: '#204C6F',
         borderWidth: 1,
         padding: 15,
-        formatter: (params) => {
-          let tip = '';
+        formatter: (params: any) => {
+          let tip: string = '';
           if (params != null && params.length > 0) {
             tip += '<div style="width: 130px;height: 45px">';
             for (let index = 0; index < params.length; index++) {

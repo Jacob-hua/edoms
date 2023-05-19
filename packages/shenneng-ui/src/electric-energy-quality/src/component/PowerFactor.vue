@@ -159,6 +159,29 @@ option_chart.value = {
   color: 'rgba(40,124,232,0.5)',
   tooltip: {
     trigger: 'axis',
+    backgroundColor: 'rgba(11,34,52,0.9)',
+    borderColor: '#204C6F',
+    borderWidth: 1,
+    formatter: (params: any) => {
+      let tip: string = '';
+      if (params != null && params.length > 0) {
+        tip += '<div>';
+        for (let index = 0; index < params.length; index++) {
+          tip +=
+            '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].name +
+            '</p><p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].seriesName.split('：')[0] +
+            '：</span><span style="color: #287CE7;font-size: 12px;font-weight: 400;">' +
+            params[index].seriesName.split('：')[1] +
+            '：' +
+            params[index].value +
+            '</span></p>';
+        }
+        tip += '</div>';
+      }
+      return tip;
+    },
   },
   legend: {
     top: '5%',
@@ -252,10 +275,58 @@ const changeDilog = (val: string) => {
           '30',
           '31',
         ],
+        axisTick: {
+          show: false,
+        },
       },
       color: 'rgba(40,124,232,0.5)',
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            console.log(params);
+            tip += '<div>';
+            for (let index = 0; index < params.length; index++) {
+              if (params[index].seriesName === '箱线图') {
+                tip +=
+                  '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+                  params[index].seriesName +
+                  '：</p><p style="margin-left: 5px;color: #F5F7FA">开盘值：<span style="color:' +
+                  params[index].color +
+                  '">' +
+                  params[index].value[1] +
+                  '<span></p><p style="margin-left: 5px;color: #F5F7FA">封盘值：<span style="color:' +
+                  params[index].color +
+                  '">' +
+                  params[index].value[2] +
+                  '</span></p><p style="margin-left: 5px;color: #F5F7FA">最大值：<span style="color:' +
+                  params[index].color +
+                  '">' +
+                  params[index].value[4] +
+                  '</span></p><p style="margin-left: 5px;color: #F5F7FA">最小值：<span style="color:' +
+                  params[index].color +
+                  '">' +
+                  params[index].value[3] +
+                  '</span></p>';
+              } else {
+                tip +=
+                  '<p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+                  params[index].seriesName +
+                  '：</span><span style="color:' +
+                  params[index].color +
+                  ';font-size: 12px;font-weight: 400;">' +
+                  params[index].value +
+                  '</span></p>';
+              }
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       legend: {
         show: false,
@@ -410,10 +481,34 @@ const changeDilog = (val: string) => {
           '23',
           '24',
         ],
+        axisTick: {
+          show: false,
+        },
       },
       color: 'rgba(40,124,232,0.5)',
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            tip += '<div>';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<p><span style="color: #F5F7FA">' +
+                params[index].seriesName +
+                '：</span><span style="color:' +
+                params[index].color +
+                '">' +
+                params[index].value +
+                '%</span></p>';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       yAxis: {
         type: 'value',
@@ -437,7 +532,10 @@ const changeDilog = (val: string) => {
           name: '负载率',
           type: 'line',
           color: '#40E0DA',
-          data: [55, 58, 15, 36, 53, 40, 64, 42, 27, 55, 43, 78, 39, 44, 59, 65, 50, 45, 56, 71, 66, 47, 52, 67, 68],
+          data: [
+            0.55, 0.58, 0.15, 0.36, 0.53, 0.4, 0.64, 0.42, 0.27, 0.55, 0.43, 0.78, 0.39, 0.44, 0.59, 0.65, 0.5, 0.45,
+            0.56, 0.71, 0.66, 0.47, 0.52, 0.67, 0.68,
+          ],
           smooth: true,
           symbolSize: 0,
           markLine: {
@@ -463,7 +561,10 @@ const changeDilog = (val: string) => {
           name: '三相不平衡率',
           type: 'line',
           color: '#246ECE',
-          data: [25, 28, 55, 46, 33, 80, 74, 52, 37, 58, 63, 48, 29, 54, 69, 75, 56, 35, 52, 73, 69, 41, 50, 61, 64],
+          data: [
+            0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35,
+            0.52, 0.73, 0.69, 0.41, 0.5, 0.61, 0.64,
+          ],
           smooth: true,
           symbolSize: 0,
         },
@@ -490,6 +591,27 @@ const changeDilog = (val: string) => {
       },
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            tip += '<div><p style="color: #F5F7FA">功率因数：</p>';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<p>' +
+                params[index].marker +
+                '<span style="color:' +
+                params[index].color +
+                '">' +
+                params[index].value[1] +
+                '</span></p>';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       yAxis: {
         type: 'value',
@@ -751,7 +873,7 @@ const tableData = [
       font-family: Microsoft YaHei;
       font-weight: 400;
       color: #ffffff;
-      line-height: 100px;
+      line-height: 80px;
     }
 
     .time {
@@ -807,11 +929,14 @@ const tableData = [
   inset: 330px auto auto 1438px !important;
   // margin-top: 0px !important;
   background-color: #030507;
+
   .el-popper__arrow::before {
     content: none;
   }
+
   .el-select-dropdown__list {
     margin: 0 !important;
+
     .el-select-dropdown__item {
       border-bottom: 1px solid #454e72;
       background-color: #030507;
