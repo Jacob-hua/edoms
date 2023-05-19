@@ -3,17 +3,17 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-19 10:50:51
+ * @LastEditTime: 2023-05-19 12:29:15
 -->
 <template>
   <div class="legend-wrapper">
     <div v-for="item in legend" :key="item.name" class="legend">
       <div class="legend-top">
-        <div class="color" :style="`background: ${item.data[0].color}`"></div>
-        <div class="value" :style="`color: ${item.data[0].color}`">
-          <span class="min"> {{ item.data[0].minValue }} </span>
+        <div class="color" :style="`background: ${item.data.color}`"></div>
+        <div class="value" :style="`color: ${item.data.color}`">
+          <span class="min"> {{ item.data.minValue }} </span>
           <span class="symbol">~</span>
-          <span class="max"> {{ item.data[0].maxValue }}</span>
+          <span class="max"> {{ item.data.maxValue }}</span>
         </div>
       </div>
       <div class="legend-bottom">{{ item.name }}</div>
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 import { MEnergyMonitoring } from '../type';
 
@@ -45,14 +45,14 @@ const legend = ref<any[]>([
   },
 ]);
 
-// watch(
-//   () => props.config,
-//   (newConfig: MEnergyMonitoring) => {
-//     if (newConfig.medium && newConfig.medium.length > 0) legend.value[0].data = newConfig.medium[0];
-//     if (newConfig.good && newConfig.good.length > 0) legend.value[1].data = newConfig.good[0];
-//     if (newConfig.excellent && newConfig.excellent.length > 0) legend.value[2].data = newConfig.excellent[0];
-//   }
-// );
+watch(
+  () => props.config,
+  (newConfig: MEnergyMonitoring) => {
+    if (newConfig.medium && newConfig.medium.length > 0) legend.value[0].data = newConfig.medium[0];
+    if (newConfig.good && newConfig.good.length > 0) legend.value[1].data = newConfig.good[0];
+    if (newConfig.excellent && newConfig.excellent.length > 0) legend.value[2].data = newConfig.excellent[0];
+  }
+);
 </script>
 
 <style lang="scss" scoped>
