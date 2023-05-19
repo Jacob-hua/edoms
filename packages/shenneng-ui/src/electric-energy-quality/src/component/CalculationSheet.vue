@@ -38,8 +38,8 @@
                   <div class="formula">
                     Cos&phi;=
                     <div class="formula_numerator">74.934</div>
-                    <div style="font-size: 20px">/</div>
-                    <div class="formula_denominator"><span style="color: #eaf5ff">&radic; </span>74.934² + 7.297²</div>
+                    <div style="font-size: 12px">/</div>
+                    <div class="formula_denominator"><span style="color: #eaf5ff">&radic; </span>74.934²+7.297²</div>
                   </div>
                 </td>
               </tr>

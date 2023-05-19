@@ -64,7 +64,7 @@ defineExpose({
 <style lang="scss" scoped>
 .table-list {
   width: 100%;
-  height: calc(100% - 54px);
+  // height: calc(100% - 54px);
   overflow: hidden;
   overflow-y: auto;
   position: relative;
