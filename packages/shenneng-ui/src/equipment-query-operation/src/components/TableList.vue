@@ -64,7 +64,7 @@ defineExpose({
 <style lang="scss" scoped>
 .table-list {
   width: 100%;
-  height: calc(100% - 65px);
+  height: calc(100% - 54px);
   overflow: hidden;
   overflow-y: auto;
   position: relative;
@@ -89,7 +89,7 @@ defineExpose({
         background-image: url('../assets/tab-def.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
-        margin-bottom: 24px;
+        margin-top: 20px;
         text-align: center;
         line-height: 22px;
         font-size: 12px;
@@ -132,15 +132,16 @@ defineExpose({
       .itm-content {
         width: 30%;
         height: 62px;
-        margin-right: 3.333%;
-        margin-bottom: 20px;
+        margin-left: 3.333%;
+        margin-top: 10px;
         background-color: rgba(0, 163, 255, 0.06);
-        padding: 10px 20px;
         box-sizing: border-box;
         text-align: center;
 
         .top-ft {
+          height: 20px;
           vertical-align: bottom;
+          margin-top: 10px;
 
           .font {
             color: rgba(0, 255, 240, 1);
@@ -157,7 +158,7 @@ defineExpose({
         }
 
         .bottom-name {
-          margin-top: 13px;
+          margin-top: 10px;
           color: rgba(196, 229, 248, 1);
           font-size: 12px;
           font-family: MicrosoftYaHei;

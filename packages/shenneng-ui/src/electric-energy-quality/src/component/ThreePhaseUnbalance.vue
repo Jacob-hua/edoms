@@ -124,6 +124,28 @@ watch(
     option_current.value = {
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params) => {
+          let tip = '';
+          if (params != null && params.length > 0) {
+            tip +=
+              '<div style="width:105px;height:90px"><span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">三相电流</span><br />';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
+                params[index].seriesName +
+                ':</span><span style="line-height:18px;margin-left:8px;color:' +
+                params[index].color +
+                '">' +
+                params[index].value +
+                'A</span> <br />';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       legend: {
         data: ['La', 'Lb', 'Lc'],
@@ -184,6 +206,28 @@ watch(
     option_load.value = {
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        padding: 15,
+        formatter: (params) => {
+          let tip = '';
+          if (params != null && params.length > 0) {
+            tip += '<div style="width: 130px;height: 45px">';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<p><span style="color:#F5F7FA;font-size:12px;font-weight:400">' +
+                params[index].seriesName +
+                ':</span><span style="margin-left:8px;color:' +
+                params[index].color +
+                ';font-size:12px;font-weight:400">' +
+                params[index].value +
+                '%</span></p>';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       legend: {
         data: ['负载率', '三相不平衡率'],

@@ -129,7 +129,7 @@ watch(
 .tab-list {
   width: 100%;
   height: 34px;
-  margin: 10px 0;
+  margin-top: 10px;
   pointer-events: all;
   // background-color: antiquewhite;
   display: flex;
