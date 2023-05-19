@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-19 12:29:15
+ * @LastEditTime: 2023-05-19 14:46:59
 -->
 <template>
   <div class="legend-wrapper">
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import { MEnergyMonitoring } from '../type';
 
@@ -33,15 +33,27 @@ const props = defineProps<{
 const legend = ref<any[]>([
   {
     name: '中等',
-    data: props.config.medium,
+    data: {
+      minValue: 1,
+      maxValue: 2,
+      color: '#E76A2F',
+    },
   },
   {
     name: '良好',
-    data: props.config.good,
+    data: {
+      minValue: 2,
+      maxValue: 3,
+      color: '#938748',
+    },
   },
   {
     name: '优异',
-    data: props.config.excellent,
+    data: {
+      minValue: 3,
+      maxValue: 4,
+      color: '#36A763',
+    },
   },
 ]);
 
@@ -53,6 +65,19 @@ watch(
     if (newConfig.excellent && newConfig.excellent.length > 0) legend.value[2].data = newConfig.excellent[0];
   }
 );
+
+onMounted(() => {
+  if (props.config.medium && props.config.medium.length > 0) {
+    legend.value[0].data = props.config.medium[0];
+  }
+  if (props.config.good && props.config.good.length > 0) {
+    legend.value[0].data = props.config.good[0];
+  }
+  if (props.config.medium && props.config.medium.length > 0) {
+    legend.value[0].data = props.config.good[0];
+  }
+  //   console.log(legend.value);
+});
 </script>
 
 <style lang="scss" scoped>

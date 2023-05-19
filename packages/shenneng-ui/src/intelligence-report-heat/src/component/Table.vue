@@ -15,7 +15,7 @@
     <div class="report">
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
         <el-row :gutter="10">
-          <el-col :span="6">
+          <el-col :span="4" :offset="1">
             <el-form-item label="日期选择：">
               <el-date-picker v-model="state.queryForm.date" placeholder="请选择日期" />
             </el-form-item>
