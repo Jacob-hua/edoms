@@ -155,11 +155,11 @@ const componentGroupList: ComponentGroup[] = [
       //   text: '多项能效监测',
       //   type: 'multiple-energy-monitoring',
       // },
-      // {
-      //   icon: 'shishigongkuang',
-      //   text: '运行工况',
-      //   type: 'equipment-condition',
-      // },
+      {
+        icon: 'shishigongkuang',
+        text: '运行工况',
+        type: 'equipment-condition',
+      },
       // {
       //   icon: 'leijishuju',
       //   text: '系统累计数据',
