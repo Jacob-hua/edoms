@@ -80,10 +80,6 @@ watch(
     console.log(props.config);
     const propColor = getpropColor(props.config.proportion);
     option_prop.value = {
-      tooltip: {
-        trigger: 'item',
-        confine: true,
-      },
       legend: {
         // data: propName,
         top: '5%',
