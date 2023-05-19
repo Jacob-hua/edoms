@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-17 15:06:34
+ * @LastEditTime: 2023-05-18 17:41:30
 -->
 <template>
   <div class="wrap-table">
@@ -15,7 +15,7 @@
     <div class="report">
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="40px">
         <el-row :gutter="1">
-          <el-col :span="3">
+          <el-col :span="3" :offset="1">
             <el-form-item label="">
               <el-date-picker
                 v-model="state.queryForm.date"
