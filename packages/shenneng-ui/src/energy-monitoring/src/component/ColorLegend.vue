@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-06 10:04:19
+ * @LastEditTime: 2023-05-19 14:46:59
 -->
 <template>
   <div class="legend-wrapper">
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import { MEnergyMonitoring } from '../type';
 
@@ -65,6 +65,19 @@ watch(
     if (newConfig.excellent && newConfig.excellent.length > 0) legend.value[2].data = newConfig.excellent[0];
   }
 );
+
+onMounted(() => {
+  if (props.config.medium && props.config.medium.length > 0) {
+    legend.value[0].data = props.config.medium[0];
+  }
+  if (props.config.good && props.config.good.length > 0) {
+    legend.value[0].data = props.config.good[0];
+  }
+  if (props.config.medium && props.config.medium.length > 0) {
+    legend.value[0].data = props.config.good[0];
+  }
+  //   console.log(legend.value);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -74,6 +87,7 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
+
   .legend {
     height: 100%;
     flex: 1;
@@ -81,18 +95,21 @@ watch(
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     .legend-top {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
       height: 50%;
+
       .color {
         width: 12px;
         height: 12px;
         margin-right: 10px;
         border-radius: 2px;
       }
+
       .value {
         font-size: 14px;
         font-weight: 400px;
@@ -101,6 +118,7 @@ watch(
         justify-content: center;
       }
     }
+
     .legend-bottom {
       display: flex;
       align-items: center;

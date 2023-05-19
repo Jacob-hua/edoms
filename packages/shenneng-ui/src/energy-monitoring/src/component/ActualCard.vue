@@ -3,12 +3,12 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 15:34:15
+ * @LastEditTime: 2023-05-19 10:18:49
 -->
 <template>
   <div class="actual-wrapper">
     <div class="actual-top">
-      <div class="actual-value overflow-ellipsis" :title="`${actualValue}`">{{ actualValue }}</div>
+      <div class="actual-value overflow-ellipsis">{{ actualValue }}</div>
       <div class="actual-unit overflow-ellipsis" :title="config.energyName">{{ config.energyName }}</div>
     </div>
     <div class="actual-bottom">当前系统能效</div>
