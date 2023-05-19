@@ -24,9 +24,15 @@ const selectDate = () => {
 }
 
 :deep(.el-input__wrapper) {
+  padding-right: 30px;
+  position: relative;
   background-color: #030507;
 }
 
+:deep(.el-input__prefix) {
+  position: absolute;
+  right: 0px;
+}
 .block {
   padding-top: 25px;
   text-align: center;

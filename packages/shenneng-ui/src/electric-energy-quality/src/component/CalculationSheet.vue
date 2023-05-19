@@ -17,7 +17,7 @@
     </div>
     <div class="alculation_sheet">
       <div class="alculation_tie">
-        <img class="alculation_icon" src="../../assets/icon.png" />
+        <img class="alculation_icon" src="../../assets/jisuan.png" />
         <span>计算书</span>
       </div>
       <div class="alculation_con">
@@ -34,7 +34,7 @@
               </tr>
               <tr>
                 <td class="frist_d">功率因数：</td>
-                <td class="second_d"><img src="" alt="" srcset="" />=<span>1</span></td>
+                <td class="second_d"><img src="" alt="" srcset="" /></td>
               </tr>
               <tr>
                 <td class="frist_d">惩奖系数：</td>
@@ -64,7 +64,12 @@
                     border-radius: 2px;
                   "
                 >
-                  <img src="" alt="" srcset="" />查对标
+                  <img
+                    style="width: 16px; height: 16px; margin: 7px 15px"
+                    src="../../assets/dui.png"
+                    alt=""
+                    srcset=""
+                  />查对标
                 </td>
               </tr>
             </table>
