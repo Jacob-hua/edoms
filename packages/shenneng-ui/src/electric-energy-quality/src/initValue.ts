@@ -10,7 +10,7 @@ export default {
   // 三相不平衡率颜色
   threePhasRate: 'rgba(56, 174, 28, 1)',
   // 审核基准
-  examine: '50',
+  examine: '0.5',
   proportion: [
     {
       label: '<15%',
@@ -32,6 +32,6 @@ export default {
   style: {
     width: '117',
     height: '80',
-    backgroundColor: 'rgba(0, 163, 255, 0.1)',
+    backgroundColor: 'rgba(0, 163, 255, 0.06)',
   },
 };

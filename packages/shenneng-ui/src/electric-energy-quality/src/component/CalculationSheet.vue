@@ -22,7 +22,7 @@
       </div>
       <div class="alculation_con">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="14">
             <table>
               <tr>
                 <td class="frist_d">有功功率电量：</td>
@@ -32,17 +32,24 @@
                 <td class="frist_d">无功功率电量：</td>
                 <td class="second_d"><span>7.297</span>万kWh</td>
               </tr>
-              <tr>
+              <tr style="margin-top: 28px">
                 <td class="frist_d">功率因数：</td>
-                <td class="second_d"><img src="" alt="" srcset="" /></td>
+                <td class="second_d">
+                  <div class="formula">
+                    Cos&phi;=
+                    <div class="formula_numerator">74.934</div>
+                    <div style="font-size: 20px">/</div>
+                    <div class="formula_denominator"><span style="color: #eaf5ff">&radic; </span>74.934² + 7.297²</div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr style="margin-top: 28px">
                 <td class="frist_d">惩奖系数：</td>
                 <td class="second_d"><span>-0.75</span></td>
               </tr>
             </table>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="10">
             <table>
               <tr>
                 <td class="frist_d">惩奖电费：</td>
@@ -177,6 +184,22 @@ console.log(props);
             font-family: Microsoft YaHei;
             font-weight: 400;
             color: #41e4de;
+          }
+
+          .formula {
+            display: flex;
+            height: 32px;
+            line-height: 32px;
+
+            .formula_numerator {
+              font-size: 12px;
+              line-height: 20px;
+            }
+
+            .formula_denominator {
+              font-size: 12px;
+              line-height: 44px;
+            }
           }
         }
       }

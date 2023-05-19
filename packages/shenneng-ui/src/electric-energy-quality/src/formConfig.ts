@@ -1,15 +1,15 @@
-import { Request } from '@edoms/editor';
+// import { Request } from '@edoms/editor';
 
-import useInstanceConfig from '../../useInstanceConfig';
+// import useInstanceConfig from '../../useInstanceConfig';
 
-export default async (request: Request) => [
+export default async () => [
   {
     text: '标题',
     name: 'title',
     type: 'string',
   },
   /** 注入业务组件的共通字段 */
-  ...(await useInstanceConfig(request, 'electric-energy-quality')),
+  // ...(await useInstanceConfig(request, 'electric-energy-quality')),
   {
     text: '轮询间隔',
     name: 'intervalDelay',
