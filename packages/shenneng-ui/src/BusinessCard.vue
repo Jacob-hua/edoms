@@ -122,6 +122,6 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
   overflow: hidden;
   flex-grow: 1;
   display: flex;
-  border-bottom: 1px solid rgba($color: #215898, $alpha: 0.5);
+  border: 1px solid rgba($color: #215898, $alpha: 0.5);
 }
 </style>

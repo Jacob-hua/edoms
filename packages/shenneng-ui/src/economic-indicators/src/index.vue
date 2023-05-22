@@ -152,7 +152,7 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
-    min-width: 261px;
+    min-width: 259px;
     min-height: 100px;
     img {
       width: 50px;

@@ -320,6 +320,8 @@ watch(
             // 'intelligence-report',
             'suspended-window',
             'intelligence-report-heat',
+            'intelligence-report-water',
+            'intelligence-report-cloud',
             'intelligence-report-eletric',
             'intelligence-report-cold',
             'optimal-regulation-heat',
