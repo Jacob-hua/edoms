@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-18 13:24:10
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 15:04:40
+ * @LastEditTime: 2023-05-22 09:36:44
  */
 import Button from './button';
 import Charts from './charts';
@@ -21,9 +21,11 @@ import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
 import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
+import IntelligenceReportCloud from './intelligence-report-cloud';
 import IntelligenceReportCold from './intelligence-report-cold';
 import IntelligenceReportEletric from './intelligence-report-eletric';
 import IntelligenceReportHeat from './intelligence-report-heat';
+import IntelligenceReportWater from './intelligence-report-water';
 import LoadForecasting from './loadForecasting';
 import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MulticolorSingleLight from './multicolor-single-light';
@@ -89,6 +91,8 @@ const ui: Record<string, any> = {
   operationsAnalysisHeat: OperationsAnalysisHeat,
   loadForecasting: LoadForecasting,
   optimalRegulationHeat: OptimalRegulationHeat,
+  intelligenceReportWater: IntelligenceReportWater,
+  intelligenceReportCloud: IntelligenceReportCloud,
 };
 
 export default ui;
