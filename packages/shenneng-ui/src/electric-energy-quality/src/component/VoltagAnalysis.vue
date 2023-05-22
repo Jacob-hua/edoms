@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="wrapper-tab">
       <!-- <div class="calendar">日历插件</div> -->
-      <TimeCalendar class="calendar"></TimeCalendar>
+      <TimeCalendar :option="timeType" class="calendar"></TimeCalendar>
       <el-tabs v-model="activeName" class="demo-tabs">
         <el-tab-pane label="今日统计" name="day">
           <Statistics></Statistics>
@@ -19,6 +19,10 @@
     <div class="wrapper-con">
       <div class="wrapper-con-right">
         <div class="wrapper-tie"><span>vGB/T12326-2008《电能质量：电压波动和闪变》</span></div>
+        <div class="wrapper-icon">
+          <img class="icon" src="../../assets/dian.png" alt="" />
+          <span class="elefont">电压波动分析</span>
+        </div>
         <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
       </div>
     </div>
@@ -36,27 +40,35 @@ import TimeCalendar from './TimeCalendar.vue';
 // defineProps<{
 //   option: ECOption;
 // }>();
+const timeType = ref<string>('date');
 const option_chart = ref<ECOption>({});
 option_chart.value = {
+  grid: {
+    left: 24,
+    bottom: 42,
+    right: 20,
+  },
   xAxis: {
     type: 'category',
-    data: ['-10.0%', '-5.0%', '-3.0%', '-2.0%', '-1.0%', '-2.0%', '-3.0%', '-5.0%', '-10.0%'],
+    data: ['-10.0%', '-5.0%', '-3.0%', '-2.0%', '0.0%', '+2.0%', '+3.0%', '+5.0%', '+10.0%'],
+    axisTick: {
+      show: false,
+    },
   },
   yAxis: {
     type: 'value',
-    name: '电压波动分析',
-    nameTextStyle: {
-      fontSize: '16',
-      fontFamily: 'Microsoft YaHei',
-      fontWeight: 400,
-      color: '#EAF5FF',
-    },
     splitLine: {
       lineStyle: {
         type: 'dashed',
         color: '#1A242B',
         width: 1,
       },
+    },
+    axisLine: {
+      show: false,
+    },
+    axisLabel: {
+      show: false,
     },
   },
   series: [
@@ -91,6 +103,7 @@ option_chart.value = {
         { value: 50, itemStyle: { color: 'rgba(194, 3, 3, 0.5)', borderWidth: 1, borderColor: 'rgba(194, 3, 3, 1)' } },
       ],
       label: {
+        color: '#EAF5FF',
         show: true,
         position: 'top',
       },
@@ -119,6 +132,10 @@ const activeName = ref('day');
 
 :deep(.el-tabs__active-bar) {
   background: #00a3ff;
+}
+
+:deep(.el-tabs__item) {
+  color: #eaf5ff;
 }
 
 .wrapper {
@@ -161,9 +178,23 @@ const activeName = ref('day');
         text-align: center;
       }
 
+      .wrapper-icon {
+        height: 20px;
+        line-height: 20px;
+        color: #eaf5ff;
+        font-size: 16px;
+        margin-left: 24px;
+        .icon {
+          width: 18px;
+          height: 18px;
+        }
+        .elefont {
+          margin-left: 10px;
+        }
+      }
       .charts {
         width: 958px;
-        height: 576px;
+        height: 500px;
       }
     }
   }
@@ -171,7 +202,6 @@ const activeName = ref('day');
 
 .demo-tabs > .el-tabs__content {
   padding: 32px;
-  color: #6b778c;
   font-size: 32px;
   font-weight: 600;
 }

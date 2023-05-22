@@ -80,10 +80,6 @@ watch(
     console.log(props.config);
     const propColor = getpropColor(props.config.proportion);
     option_prop.value = {
-      tooltip: {
-        trigger: 'item',
-        confine: true,
-      },
       legend: {
         // data: propName,
         top: '5%',
@@ -124,6 +120,28 @@ watch(
     option_current.value = {
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            tip +=
+              '<div style="width:105px;height:90px"><span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">三相电流</span><br />';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
+                params[index].seriesName +
+                ':</span><span style="line-height:18px;margin-left:8px;color:' +
+                params[index].color +
+                '">' +
+                params[index].value +
+                'A</span> <br />';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       legend: {
         data: ['La', 'Lb', 'Lc'],
@@ -133,12 +151,20 @@ watch(
       },
       xAxis: {
         type: 'category',
-        name: 'A',
         data: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        axisTick: {
+          show: false,
+        },
       },
       yAxis: {
         type: 'value',
-        name: 'B',
+        name: 'A',
+        nameGap: 15,
+        offset: 15,
+        nameTextStyle: {
+          align: 'right',
+          padding: 7,
+        },
         data: ['2', '4', '6', '8'],
         splitLine: {
           lineStyle: {
@@ -176,6 +202,28 @@ watch(
     option_load.value = {
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        padding: 15,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            tip += '<div style="width: 130px;height: 45px">';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<p><span style="color:#F5F7FA;font-size:12px;font-weight:400">' +
+                params[index].seriesName +
+                ':</span><span style="margin-left:8px;color:' +
+                params[index].color +
+                ';font-size:12px;font-weight:400">' +
+                params[index].value +
+                '%</span></p>';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       legend: {
         data: ['负载率', '三相不平衡率'],
@@ -185,13 +233,21 @@ watch(
       },
       xAxis: {
         type: 'category',
-        name: 'A',
         data: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        axisTick: {
+          show: false,
+        },
       },
       yAxis: [
         {
           type: 'value',
-          name: 'B',
+          name: 'A',
+          nameGap: 15,
+          offset: 15,
+          nameTextStyle: {
+            align: 'right',
+            padding: 7,
+          },
           data: ['2', '4', '6', '8'],
           splitLine: {
             lineStyle: {
@@ -204,7 +260,19 @@ watch(
         {
           type: 'category',
           name: '%',
-          data: ['20%', '40%', '60%', '80%'],
+          nameGap: 15,
+          offset: 15,
+          nameTextStyle: {
+            align: 'left',
+            padding: 7,
+          },
+          axisLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+          data: ['0%', '20%', '40%', '60%', '80%'],
           splitLine: {
             lineStyle: {
               type: 'dashed',
@@ -229,6 +297,26 @@ watch(
           type: 'line',
           smooth: true,
           symbolSize: 0,
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                {
+                  offset: 0,
+                  color: 'rgba(40, 124, 232, 0.16)', // 0% 处的颜色
+                },
+                {
+                  offset: 1,
+                  color: 'rgba(40, 124, 232, 0)', // 100% 处的颜色
+                },
+              ],
+              global: false, // 缺省为 false
+            },
+          },
         },
       ],
     };

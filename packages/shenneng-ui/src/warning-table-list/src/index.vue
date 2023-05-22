@@ -203,26 +203,8 @@ provide('confirmedAlarmList', confirmedAlarmList);
 </script>
 
 <style lang="scss" scoped>
-@keyframes circle {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  25% {
-    transform: scale(0);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.3);
-  }
-}
-
 .warning-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   width: 100%;
-  height: 100%;
 }
 
 .warning-list-header {
@@ -265,8 +247,4 @@ provide('confirmedAlarmList', confirmedAlarmList);
   justify-content: center;
   max-height: 86%;
 }
-// .active {
-//   color: #ffffff85 !important;
-//   border: 1px solid rgba(0, 163, 255, 1) !important;
-// }
 </style>

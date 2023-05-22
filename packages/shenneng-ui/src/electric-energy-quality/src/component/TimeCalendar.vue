@@ -1,14 +1,19 @@
 <template>
   <div class="block">
-    <el-date-picker v-model="value1" type="date" />
+    <el-date-picker v-model="value1" :type="timeType.option" @change="selectDate" />
   </div>
 </template>
 
 <script lang="ts" setup>
-// import { ref } from 'vue';
-
-// const value1 = ref('');
-const value1 = new Date();
+import { ref } from 'vue';
+const timeType = defineProps<{
+  option: string;
+}>();
+console.log(timeType.option);
+const value1 = ref(new Date());
+const selectDate = () => {
+  console.log(value1);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -19,9 +24,15 @@ const value1 = new Date();
 }
 
 :deep(.el-input__wrapper) {
+  padding-right: 30px;
+  position: relative;
   background-color: #030507;
 }
 
+:deep(.el-input__prefix) {
+  position: absolute;
+  right: 0px;
+}
 .block {
   padding-top: 25px;
   text-align: center;

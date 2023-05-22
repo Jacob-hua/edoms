@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper_left_last">
-    <div class="balance">本月结算</div>
+    <div class="balance">{{ props.option.title }}</div>
     <div class="th_index">
       <div class="th_index_con" style="margin-bottom: 42px">
         <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
@@ -8,21 +8,21 @@
       </div>
       <div class="th_index_con" style="margin-bottom: 42px">
         <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
-        <div>平均功率因素</div>
+        <div>平均功率因数</div>
       </div>
       <div class="th_index_con">
         <div><span style="color: #d72824; font-size: 24px">0.59</span></div>
-        <div>最小功率因素</div>
+        <div>最小功率因数</div>
       </div>
     </div>
     <div class="alculation_sheet">
       <div class="alculation_tie">
-        <img class="alculation_icon" src="../../assets/icon.png" />
+        <img class="alculation_icon" src="../../assets/jisuan.png" />
         <span>计算书</span>
       </div>
       <div class="alculation_con">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="14">
             <table>
               <tr>
                 <td class="frist_d">有功功率电量：</td>
@@ -32,17 +32,24 @@
                 <td class="frist_d">无功功率电量：</td>
                 <td class="second_d"><span>7.297</span>万kWh</td>
               </tr>
-              <tr>
-                <td class="frist_d">功率因素：</td>
-                <td class="second_d"><img src="" alt="" srcset="" />=<span>1</span></td>
+              <tr style="margin-top: 28px">
+                <td class="frist_d">功率因数：</td>
+                <td class="second_d">
+                  <div class="formula">
+                    Cos&phi;=
+                    <div class="formula_numerator">74.934</div>
+                    <div style="font-size: 20px">/</div>
+                    <div class="formula_denominator"><span style="color: #eaf5ff">&radic; </span>74.934² + 7.297²</div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr style="margin-top: 28px">
                 <td class="frist_d">惩奖系数：</td>
                 <td class="second_d"><span>-0.75</span></td>
               </tr>
             </table>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="10">
             <table>
               <tr>
                 <td class="frist_d">惩奖电费：</td>
@@ -64,7 +71,12 @@
                     border-radius: 2px;
                   "
                 >
-                  <img src="" alt="" srcset="" />查对标
+                  <img
+                    style="width: 16px; height: 16px; margin: 7px 15px"
+                    src="../../assets/dui.png"
+                    alt=""
+                    srcset=""
+                  />查对标
                 </td>
               </tr>
             </table>
@@ -75,7 +87,13 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const props = defineProps<{
+  option: any;
+}>();
+
+console.log(props);
+</script>
 
 <style lang="scss" scoped>
 .wrapper_left_last {
@@ -166,6 +184,22 @@
             font-family: Microsoft YaHei;
             font-weight: 400;
             color: #41e4de;
+          }
+
+          .formula {
+            display: flex;
+            height: 32px;
+            line-height: 32px;
+
+            .formula_numerator {
+              font-size: 12px;
+              line-height: 20px;
+            }
+
+            .formula_denominator {
+              font-size: 12px;
+              line-height: 44px;
+            }
           }
         }
       }

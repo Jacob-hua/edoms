@@ -2274,7 +2274,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: registry.npmmirror.com/vite/3.2.3_@types+node@15.14.9
+      vite: registry.npmmirror.com/vite/3.2.3_svlawd4gt46rjvvwyhhlknsdbq
       vue: registry.npmmirror.com/vue/3.2.44
     dev: true
 
