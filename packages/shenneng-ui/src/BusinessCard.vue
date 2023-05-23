@@ -65,9 +65,10 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
 
 <style lang="scss">
 .business-wrapper {
-  display: grid;
-  align-content: start;
-  // flex-direction: column;
+  // display: grid;
+  // align-content: start;
+  display: flex;
+  flex-direction: column;
   border-radius: 3px;
   min-width: v-bind(cssMinWidth);
   min-height: v-bind(cssMinHeight);
@@ -119,12 +120,10 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
   }
 }
 .business-wrapper-body {
-  //   background-color: v-bind(cssBackgroundColor);
-  // height: 100%;
+  height: 100%;
   background-color: inherit;
   overflow: hidden;
-  // flex-grow: 1;
   display: flex;
-  // border-bottom: 1px solid rgba($color: #215898, $alpha: 0.5);
+  border: 1px solid rgba($color: #215898, $alpha: 0.5);
 }
 </style>

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-15 09:10:17
+ * @LastEditTime: 2023-05-22 16:14:49
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
@@ -108,12 +108,16 @@ const handleChangeEquipmentConfig = (conf: Map<string, MIndicatorItemConfig>) =>
 const changeTab = (name: string) => {
   if (activeCategory.value === name) return;
   activeCategory.value = name;
+  getHistoryData();
 };
 const activeTab = ref<number>(0);
 const changeActiveTab = (index: number) => {
   activeTab.value = index;
+  getHistoryData();
 };
-const getHistoryData = async (date: Date) => {
+const getHistoryData = async () => {
+  const date = new Date();
+  option.value = {};
   const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD');
   const data = parameterConfigs.value;
   if (data.length === 0) return;
@@ -151,7 +155,7 @@ watch(
   () => activeIndicatorConfig.value,
   () => {
     // updateLineData();
-    flush();
+    getHistoryData();
   }
 );
 
@@ -255,7 +259,7 @@ onMounted(() => {
 .wrap-body {
   width: 100%;
   //   height: 300px;
-  border: 1px solid rgba($color: #215898, $alpha: 0.5);
+  //   border: 1px solid rgba($color: #215898, $alpha: 0.5);
   .wrap-header {
     margin-left: 20px;
     margin-top: 10px;
