@@ -16,7 +16,6 @@ import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
 import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
-import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
 import IntelligenceReportCloud from './intelligence-report-cloud';
 import IntelligenceReportCold from './intelligence-report-cold';
@@ -50,7 +49,6 @@ const ui: Record<string, any> = {
   globalSchematic: GlobalSchematic,
   multicolorPolymorphicLight: MulticolorPolymorphicLight,
   multicolorSingleLight: MulticolorSingleLight,
-  globalSchematicChart: GlobalSchematicChart,
   charts: Charts,
   equipmentCondition: EquipmentCondition,
   economicIndicators: EconomicIndicators,
