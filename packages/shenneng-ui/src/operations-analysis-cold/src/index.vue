@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-05-11 15:36:20
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-16 11:00:33
+ * @LastEditTime: 2023-05-23 17:43:42
 -->
 <template>
   <div class="operations-analysis-heat" @click="handlerToShow($event, true)">
@@ -61,26 +61,26 @@ const TabOptions = ref<Array<{ [key: string]: string }>>([
     value: 'all',
   },
   {
-    key: '热源泵',
-    value: 'heatPump',
+    key: '冷却泵',
+    value: 'coldPump',
   },
-  // {
-  //   key: '流量计',
-  //   value: 'flow',
-  // },
   {
-    key: '水泵',
-    value: 'waterPump',
+    key: '冷却塔',
+    value: 'coldTower',
+  },
+  {
+    key: '冷水机组',
+    value: 'coldSet',
   },
 ]);
 
 const dataList = ref<Array<{ [key: string]: any }>>([
   {
-    name: '1#空气热源泵',
-    type: 'heatPump',
+    name: '1#冷却泵',
+    type: 'coldPump',
     chartList: [
       {
-        name: '进水温度',
+        name: '频率',
         value: '0°C',
         maxValue: 30,
         chartData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -101,7 +101,7 @@ const dataList = ref<Array<{ [key: string]: any }>>([
         ],
       },
       {
-        name: '出水温度',
+        name: '运行功率',
         value: '41°C',
         maxValue: 50,
         chartData: [11, 2, 3, 4, 51, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -121,14 +121,35 @@ const dataList = ref<Array<{ [key: string]: any }>>([
           '13:00',
         ],
       },
+      {
+        name: '运行电流',
+        value: '41°C',
+        maxValue: 50,
+        chartData: [2, 5, 8, 42, 51, 26, 37, 48, 19, 10, 51, 22, 33],
+        xAisData: [
+          '01:00',
+          '02:00',
+          '03:00',
+          '04:00',
+          '05:00',
+          '06:00',
+          '07:00',
+          '08:00',
+          '09:00',
+          '10:00',
+          '11:00',
+          '12:00',
+          '13:00',
+        ],
+      },
     ],
   },
   {
-    name: '2#空气热源泵',
-    type: 'heatPump',
+    name: '2#冷却泵',
+    type: 'coldPump',
     chartList: [
       {
-        name: '进水温度',
+        name: '频率',
         value: '0°C',
         maxValue: 20,
         chartData: [13, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -149,7 +170,7 @@ const dataList = ref<Array<{ [key: string]: any }>>([
         ],
       },
       {
-        name: '出水温度',
+        name: '运行功率',
         value: '30°C',
         maxValue: 40,
         chartData: [1, 26, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -169,14 +190,35 @@ const dataList = ref<Array<{ [key: string]: any }>>([
           '13:00',
         ],
       },
+      {
+        name: '运行电流',
+        value: '41°C',
+        maxValue: 50,
+        chartData: [2, 5, 8, 42, 51, 26, 37, 48, 19, 10, 51, 22, 33],
+        xAisData: [
+          '01:00',
+          '02:00',
+          '03:00',
+          '04:00',
+          '05:00',
+          '06:00',
+          '07:00',
+          '08:00',
+          '09:00',
+          '10:00',
+          '11:00',
+          '12:00',
+          '13:00',
+        ],
+      },
     ],
   },
   {
-    name: '3#空气热源泵',
-    type: 'heatPump',
+    name: '1#冷却塔',
+    type: 'coldTower',
     chartList: [
       {
-        name: '进水温度',
+        name: '频率',
         value: '0°C',
         maxValue: 30,
         chartData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -197,7 +239,7 @@ const dataList = ref<Array<{ [key: string]: any }>>([
         ],
       },
       {
-        name: '出水温度',
+        name: '运行功率',
         value: '35°C',
         maxValue: 50,
         chartData: [21, 22, 32, 24, 25, 16, 17, 18, 19, 10, 11, 12, 13],
@@ -220,11 +262,53 @@ const dataList = ref<Array<{ [key: string]: any }>>([
     ],
   },
   {
-    name: '4#空气热源泵',
-    type: 'heatPump',
+    name: '1#冷水机组',
+    type: 'coldSet',
     chartList: [
       {
-        name: '进水温度',
+        name: '冷凝器进出水温度',
+        value: '0°C',
+        maxValue: 40,
+        chartData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+        xAisData: [
+          '01:00',
+          '02:00',
+          '03:00',
+          '04:00',
+          '05:00',
+          '06:00',
+          '07:00',
+          '08:00',
+          '09:00',
+          '10:00',
+          '11:00',
+          '12:00',
+          '13:00',
+        ],
+      },
+      {
+        name: '蒸发器进出水温度',
+        value: '0°C',
+        maxValue: 40,
+        chartData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+        xAisData: [
+          '01:00',
+          '02:00',
+          '03:00',
+          '04:00',
+          '05:00',
+          '06:00',
+          '07:00',
+          '08:00',
+          '09:00',
+          '10:00',
+          '11:00',
+          '12:00',
+          '13:00',
+        ],
+      },
+      {
+        name: '负载率',
         value: '0°C',
         maxValue: 40,
         chartData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -248,7 +332,7 @@ const dataList = ref<Array<{ [key: string]: any }>>([
   },
   {
     name: '1#水箱蓄水泵',
-    type: 'waterPump',
+    type: 'coldSet',
     chartList: [
       {
         name: '负载率',
@@ -296,7 +380,7 @@ const dataList = ref<Array<{ [key: string]: any }>>([
   },
   {
     name: '2#水箱蓄水泵',
-    type: 'waterPump',
+    type: 'coldSet',
     chartList: [
       {
         name: '负载率',
@@ -344,7 +428,7 @@ const dataList = ref<Array<{ [key: string]: any }>>([
   },
   {
     name: '3#水箱蓄水泵',
-    type: 'waterPump',
+    type: 'coldSet',
     chartList: [
       {
         name: '负载率',
@@ -392,7 +476,7 @@ const dataList = ref<Array<{ [key: string]: any }>>([
   },
   {
     name: '4#水箱蓄水泵',
-    type: 'waterPump',
+    type: 'coldSet',
     chartList: [
       {
         name: '负载率',
@@ -440,7 +524,7 @@ const dataList = ref<Array<{ [key: string]: any }>>([
   },
   {
     name: '5#水箱蓄水泵',
-    type: 'waterPump',
+    type: 'coldSet',
     chartList: [
       {
         name: '负载率',

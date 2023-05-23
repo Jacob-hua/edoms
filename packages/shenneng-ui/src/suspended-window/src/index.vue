@@ -3,7 +3,14 @@
     <div class="wrap-trigger">
       <div class="wrap-window">
         <div v-for="(item, index) in initIndicators" :key="item.label" class="wrap-list">
-          <div class="label overflow-ellipsis">{{ item.label }}</div>
+          <div class="label overflow-ellipsis">
+            <LongText
+              :content="item.label"
+              :content-style="{ width: 'inherit', fontSize: 'inherit', textAlign: 'center' }"
+            ></LongText>
+          </div>
+
+          <!-- <div class="label overflow-ellipsis">{{ item.label }}</div> -->
           <div class="wrap-val">
             <div class="val">
               <span :class="index % 2 == 0 ? 'green' : 'red'" class="parameter">{{ item.parameter }} </span>
@@ -21,6 +28,7 @@ import { computed, ref, watch } from 'vue';
 
 import { formatPrecision } from '@edoms/utils';
 
+import LongText from '../../LongText.vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
@@ -30,7 +38,6 @@ import { MIndicatorItemConfig, MSuspendedWindow } from './type';
 export interface Indicator {
   parameter: string;
   label: string;
-  deviceCode: string;
   propCode: string;
   unit: string;
   precision: string;
@@ -57,18 +64,14 @@ const intervalDelay = computed<number>(() => {
   }
   return props.config.intervalDelay;
 });
-// const getRandomValue = () => {
-//   return (Math.random() * 100).toFixed(2);
-// };
 
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
-    initIndicators.value = indicatorConfigs.map(({ label, instance, property, unit, precision }) => ({
+    initIndicators.value = indicatorConfigs.map(({ label, property, unit, precision }) => ({
       label,
       value: '',
       parameter: '',
-      deviceCode: instance[instance.length - 1],
       propCode: property,
       unit: unit,
       precision: precision,
@@ -139,18 +142,16 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
         align-items: center;
         .label {
           box-sizing: border-box;
-          width: calc(100% - 120px);
+          width: 112px;
           text-align: right;
-          padding-left: 23px;
+          padding-left: 10px;
           padding-right: 12px;
           font-weight: 300;
           color: #00fff0;
           font-size: 12px;
         }
         .overflow-ellipsis {
-          overflow: hidden;
           text-overflow: ellipsis;
-          white-space: nowrap;
         }
         .wrap-val {
           width: 140px;

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-22 16:14:49
+ * @LastEditTime: 2023-05-23 13:44:27
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
@@ -78,7 +78,7 @@ const categories = ref([
 const activeCategory = ref<string>('systems');
 const option = ref<ECOption>({});
 
-// const lineUnit = ref<string[]>([]);
+const lineUnit = ref<string[]>([]);
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
@@ -134,6 +134,7 @@ const getHistoryData = async () => {
     const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
     const name = data[activeTab.value].indicators[codeIndex]?.label;
     const color = data[activeTab.value].indicators[codeIndex]?.color;
+    lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
     return {
       name: name ? name : `未命名${index}`,
       type: 'line',
@@ -177,14 +178,14 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      //   formatter: (params: any) => {
-      //     let content = params[0].axisValueLabel;
-      //     for (const i in params) {
-      //       content +=
-      //         '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
-      //     }
-      //     return content;
-      //   },
+      formatter: (params: any) => {
+        let content = params[0].axisValueLabel;
+        for (const i in params) {
+          content +=
+            '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
+        }
+        return content;
+      },
     },
     grid: {
       left: '3%',
