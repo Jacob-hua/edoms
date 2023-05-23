@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-19 14:46:59
+ * @LastEditTime: 2023-05-23 09:45:06
 -->
 <template>
   <div class="legend-wrapper">
@@ -71,10 +71,10 @@ onMounted(() => {
     legend.value[0].data = props.config.medium[0];
   }
   if (props.config.good && props.config.good.length > 0) {
-    legend.value[0].data = props.config.good[0];
+    legend.value[1].data = props.config.good[0];
   }
-  if (props.config.medium && props.config.medium.length > 0) {
-    legend.value[0].data = props.config.good[0];
+  if (props.config.excellent && props.config.excellent.length > 0) {
+    legend.value[2].data = props.config.excellent[0];
   }
   //   console.log(legend.value);
 });

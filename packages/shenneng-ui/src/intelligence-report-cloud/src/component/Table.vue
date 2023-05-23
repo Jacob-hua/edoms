@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-22 14:07:01
+ * @LastEditTime: 2023-05-23 09:36:08
 -->
 <template>
   <div class="wrap-table">
@@ -17,16 +17,11 @@
         <el-row>
           <el-col :span="4" :offset="1">
             <el-form-item label="日期选择：">
-              <el-date-picker
-                v-model="state.queryForm.startDate"
-                popper-class="wrap-date"
-                placeholder="请选择日期"
-                @change="changeDate"
-              />
+              <el-date-picker v-model="state.queryForm.startDate" placeholder="请选择日期" @change="changeDate" />
             </el-form-item>
           </el-col>
-          <el-col :span="3" label-width="50px">
-            <el-form-item label="—">
+          <el-col :span="3">
+            <el-form-item label="—" label-width="40px">
               <el-date-picker v-model="state.queryForm.endDate" placeholder="请选择日期" @change="changeDate" />
             </el-form-item>
           </el-col>
@@ -110,7 +105,7 @@ const state: any = reactive({
   ],
   tableStyle: {
     width: '100%',
-    height: '604px',
+    height: '589px',
     fontSize: '14px',
     textAlign: 'center',
     '--el-table-border-color': 'none',
@@ -344,7 +339,6 @@ onMounted(() => {
     .table {
       width: 96%;
       margin-left: 2%;
-      margin-top: 30px;
     }
     .wrap-page {
       width: 50%;
