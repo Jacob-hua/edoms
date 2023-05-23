@@ -22,8 +22,20 @@ defineProps<{
 </script>
 
 <style lang="scss" scoped>
-.charts {
-  width: 485px;
-  height: 280px;
+.wrapper {
+  margin: auto;
+
+  .echart {
+    margin-left: 22px;
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #eaf5ff;
+  }
+
+  .charts {
+    width: 487px;
+    height: 276px;
+  }
 }
 </style>

@@ -1,13 +1,6 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-24 11:45:45
- * @LastEditors: lihao
- * @LastEditTime: 2023-04-25 16:01:29
--->
 <template>
   <div class="wrapper">
-    <div class="echart" style="width: 485px">电流</div>
+    <div class="echart">电流</div>
     <EdomsCharts class="charts" :option="option"></EdomsCharts>
   </div>
 </template>
@@ -22,8 +15,20 @@ defineProps<{
 </script>
 
 <style lang="scss" scoped>
-.charts {
-  width: 485px;
-  height: 280px;
+.wrapper {
+  margin: auto;
+
+  .echart {
+    margin-left: 22px;
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #eaf5ff;
+  }
+
+  .charts {
+    width: 487px;
+    height: 276px;
+  }
 }
 </style>
