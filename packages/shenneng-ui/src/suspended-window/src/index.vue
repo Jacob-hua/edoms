@@ -126,7 +126,7 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
       opacity: 0;
       position: absolute;
       bottom: 102%;
-      width: 100%;
+      width: 260px;
       max-height: 225px;
       overflow-x: hidden;
       overflow-y: auto;
@@ -153,11 +153,12 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
           white-space: nowrap;
         }
         .wrap-val {
-          width: 120px;
+          width: 140px;
           display: flex;
           align-items: center;
+          margin-right: 10px;
           .val {
-            width: 100px;
+            width: 135px;
             min-height: 28px;
             background: rgba(24, 38, 45, 0.8);
             border: 1px solid #aaaaaa;
@@ -179,7 +180,7 @@ useIntervalAsync(updateIndicatorsData, intervalDelay.value);
             .unit {
               margin-left: 5px;
               text-align: left;
-              width: 40px;
+              width: 65px;
               height: 100%;
               font-size: 14px;
               font-family: Microsoft YaHei;
