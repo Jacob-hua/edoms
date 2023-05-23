@@ -141,8 +141,9 @@ const getClass = computed(() => (code: string | number, type: string) => {
       height: 18px;
       vertical-align: middle;
       .font-ft-st {
+        vertical-align: text-top;
         color: rgba(234, 245, 255, 1);
-        font-size: 14px;
+        font-size: 15px;
       }
       .font-rate {
         color: rgba(65, 228, 222, 1);

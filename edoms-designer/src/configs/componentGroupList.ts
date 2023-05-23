@@ -267,6 +267,26 @@ const componentGroupList: ComponentGroup[] = [
       },
     ],
   },
+  {
+    title: '运行监测-给水',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-water',
+      },
+    ],
+  },
+  {
+    title: '运行监测-风',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-cloud',
+      },
+    ],
+  },
 ];
 
 export default componentGroupList;
