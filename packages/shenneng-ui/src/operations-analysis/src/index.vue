@@ -126,7 +126,7 @@ const tableDataList = ref<Array<any>>([
     unit: '万kWh',
     dataValue: 0.444,
     timeUse: {
-      rate: 0.52,
+      rate: 2,
       list: [
         { key: '谷', value: 0.15, code: 'gu' },
         { key: '平', value: 0.25, code: 'ping' },
@@ -150,7 +150,7 @@ const tableDataList = ref<Array<any>>([
     unit: '万kWh',
     dataValue: 0.444,
     timeUse: {
-      rate: 0.52,
+      rate: 1,
       list: [
         { key: '谷', value: 0.25, code: 'gu' },
         { key: '平', value: 0.25, code: 'ping' },
@@ -174,7 +174,7 @@ const tableDataList = ref<Array<any>>([
     unit: '万kWh',
     dataValue: 0.444,
     timeUse: {
-      rate: 0.52,
+      rate: 5,
       list: [
         { key: '谷', value: 0.05, code: 'gu' },
         { key: '平', value: 0.25, code: 'ping' },
@@ -198,7 +198,7 @@ const tableDataList = ref<Array<any>>([
     unit: '万kWh',
     dataValue: 0.444,
     timeUse: {
-      rate: 0.52,
+      rate: 2,
       list: [
         { key: '谷', value: 0.15, code: 'gu' },
         { key: '平', value: 0.3, code: 'ping' },

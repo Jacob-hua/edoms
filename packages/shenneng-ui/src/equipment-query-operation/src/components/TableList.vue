@@ -35,6 +35,9 @@ import { reactive, ref } from 'vue';
 
 import { QueryList } from '../type';
 
+const emit = defineEmits<{
+  (event: 'ctIndex', val: number): void;
+}>();
 const ctIndex = ref<number>(0);
 
 const state = reactive<{
@@ -42,22 +45,15 @@ const state = reactive<{
 }>({
   dataList: {},
 });
-const changeType = (itm: { [key: string]: string | number | Array<QueryList> }) => {
+const changeType = (itm: { [key: string]: string | number | Array<QueryList> }, val: number) => {
   state.dataList = itm;
-  ctIndex.value = 0;
-  // 后期接口对应
-  state.dataList.equipmentList.forEach((itm: { [key: string]: string | Array<QueryList> }) => {
-    if (Array.isArray(itm.pointList)) {
-      itm.pointList.forEach((query: { [key: string]: any }) => {
-        query.data = 25;
-      });
-    }
-  });
+  ctIndex.value = val;
 };
 
 const handkerToChange = (idx: number) => {
   if (idx === ctIndex.value) return;
   ctIndex.value = idx;
+  emit('ctIndex', ctIndex.value);
 };
 
 defineExpose({
@@ -68,7 +64,7 @@ defineExpose({
 <style lang="scss" scoped>
 .table-list {
   width: 100%;
-  height: calc(100% - 65px);
+  height: calc(100% - 54px);
   overflow: hidden;
   position: relative;
 
@@ -93,7 +89,7 @@ defineExpose({
         background-image: url('../assets/tab-def.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
-        margin-bottom: 24px;
+        margin-top: 20px;
         text-align: center;
         line-height: 22px;
         font-size: 12px;
@@ -140,12 +136,13 @@ defineExpose({
         margin-right: 3.333%;
         margin-bottom: 30px;
         background-color: rgba(0, 163, 255, 0.06);
-        padding: 10px 20px;
         box-sizing: border-box;
         text-align: center;
 
         .top-ft {
+          height: 20px;
           vertical-align: bottom;
+          margin-top: 10px;
 
           .font {
             color: rgba(0, 255, 240, 1);
@@ -162,7 +159,7 @@ defineExpose({
         }
 
         .bottom-name {
-          margin-top: 13px;
+          margin-top: 10px;
           color: rgba(196, 229, 248, 1);
           font-size: 12px;
           font-family: MicrosoftYaHei;

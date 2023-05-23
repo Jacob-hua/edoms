@@ -3,8 +3,8 @@
     <div v-show="isShow" class="to-left icon-style" @click="handelrToScroll(-1)">{{ String('<') }}</div>
     <div class="tab-wrapper" :style="{ width: isShow ? '' : '100%', marginLeft: isShow ? '' : '0px' }">
       <div class="scroll-wrapper" :style="{ transform: `translateX(${-scrollDis}px)` }">
-        <div v-for="itm in props.list" :key="itm.value" class="list-item">
-          <div :class="['itm-key', currentIdx === itm.value ? 'active' : '']" @click="handlerToChange(itm)">
+        <div v-for="(itm, ind) in props.list" :key="itm.value" class="list-item">
+          <div :class="['itm-key', currentIdx === itm.key ? 'active' : '']" @click="handlerToChange(itm, ind)">
             {{ itm.key }}
           </div>
         </div>
@@ -29,7 +29,7 @@ const props = withDefaults(
 );
 
 const emits = defineEmits<{
-  (e: 'operate', itm: { [key: string]: any }): void;
+  (e: 'operate', itm: { [key: string]: any }, val: number): void;
 }>();
 
 let domList: Array<Element> = [];
@@ -50,9 +50,9 @@ const panIndex = ref<number>(0);
 // 滚动第一个的差值
 const distanceDes = ref<number>(0);
 
-const handlerToChange = (itm: { [key: string]: any }) => {
-  currentIdx.value = itm.value;
-  emits('operate', itm);
+const handlerToChange = (itm: { [key: string]: any }, val: number) => {
+  currentIdx.value = itm.key;
+  emits('operate', itm, val);
 };
 
 const getDomRect = () => {
@@ -105,7 +105,7 @@ const handelrToScroll = (idx: number) => {
 };
 
 onBeforeMount(() => {
-  currentIdx.value = props.list[0]?.value;
+  currentIdx.value = props.list[0]?.key;
 });
 
 onMounted(() => {
@@ -117,7 +117,7 @@ onMounted(() => {
 watch(
   () => props.list,
   (newV: Array<{ [key: string]: string | number }>) => {
-    currentIdx.value = newV[0]?.value;
+    currentIdx.value = newV[0]?.key;
     queueMicrotask(() => {
       getDomRect();
     });
@@ -129,7 +129,7 @@ watch(
 .tab-list {
   width: 100%;
   height: 34px;
-  margin: 10px 0;
+  margin-top: 10px;
   pointer-events: all;
   // background-color: antiquewhite;
   display: flex;

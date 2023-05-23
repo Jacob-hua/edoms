@@ -3,12 +3,14 @@
     <div class="left-chart">
       <div class="chart-left-wrapper">
         <div :id="idList[0]" class="chart-ct"></div>
+        <span class="chart-num">{{ getNum(props.list.max) }}</span>
       </div>
       <span class="font-chart">Max</span>
     </div>
     <div class="middle-chart">
       <div class="chart-right-wrapper">
         <div :id="idList[1]" class="chart-ct"></div>
+        <span class="chart-num">{{ getNum(props.list.min) }}</span>
       </div>
       <span class="font-chart">Min</span>
     </div>
@@ -77,6 +79,10 @@ const initData = (type: string) => {
   chart.setOption(options);
 };
 
+const getNum = (num: number) => {
+  return (num * 100).toFixed(2) + '%';
+};
+
 onMounted(() => {
   initData(idList.value[0]);
   initData(idList.value[1]);
@@ -102,10 +108,20 @@ console.log(props);
     .chart-right-wrapper {
       width: 90px;
       height: 90px;
+      text-align: center;
+      line-height: 90px;
       margin-bottom: 16px;
+      position: relative;
       .chart-ct {
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 90px;
         height: 90px;
+      }
+      .chart-num {
+        color: #ffffff;
+        font-size: 15px;
       }
     }
   }

@@ -310,7 +310,7 @@ watch(
             'equipment-operating-parameter',
             'economic-indicators',
             'operational-analysis',
-            'energy-monitoring',
+            // 'energy-monitoring',
             'electric-energy-quality',
             'warning-table-list',
             'equipment-query-operation',
@@ -331,7 +331,7 @@ watch(
           const domainPath = prop.substring(0, pathLastIndex);
           model = getByPath(props.formValue ?? {}, domainPath, '');
         }
-        if (['energy-efficiency-monitoring'].includes(component)) {
+        if (['energy-efficiency-monitoring', 'energy-monitoring'].includes(component)) {
           model = props.formValue;
         }
         if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {

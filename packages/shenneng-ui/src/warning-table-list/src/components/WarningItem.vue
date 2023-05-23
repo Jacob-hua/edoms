@@ -1,10 +1,10 @@
 <template>
   <div class="warning-wrapper">
-    <div class="warning-item">
+    <div class="warning-item" @click="handleShowSurplus(item)">
       <span class="warning-type">{{ item.type }}</span>
       <span class="warning-title">{{ item.title }}</span>
       <span class="warning-date">{{ item.date }}</span>
-      <span class="discover" @click="handleShowSurplus(item)">
+      <span class="discover">
         <img v-show="item.expend" src="../assets/to-not-col.png" />
         <img v-show="!item.expend" src="../assets/to-col.png" />
       </span>
@@ -110,7 +110,8 @@ const handleConfirm = async (alarm: Warning) => {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(0, 163, 255, 0.14);
-    height: 55px;
+    height: 53px;
+    cursor: pointer;
 
     .warning-type {
       height: 24px;
@@ -121,10 +122,6 @@ const handleConfirm = async (alarm: Warning) => {
       background: v-bind(warningBgColor);
       width: 60px;
       text-align: center;
-    }
-
-    .discover {
-      cursor: pointer;
     }
   }
   .button-wrapper {
