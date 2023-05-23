@@ -134,7 +134,8 @@
         border-radius: 0px 4px 0px 4px;
 
         div {
-          margin-top: 13px;
+          height: 37px;
+          line-height: 37px;
         }
       }
     }

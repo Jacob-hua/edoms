@@ -2,11 +2,11 @@
   <div class="wrapper_left_last">
     <div class="balance">{{ props.option.title }}</div>
     <div class="th_index">
-      <div class="th_index_con" style="margin-bottom: 42px">
+      <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
         <div>奖惩电费</div>
       </div>
-      <div class="th_index_con" style="margin-bottom: 42px">
+      <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
         <div>平均功率因数</div>
       </div>
@@ -22,7 +22,7 @@
       </div>
       <div class="alculation_con">
         <el-row>
-          <el-col :span="14">
+          <el-col :span="12">
             <table>
               <tr>
                 <td class="frist_d">有功功率电量：</td>
@@ -35,12 +35,7 @@
               <tr style="margin-top: 28px">
                 <td class="frist_d">功率因数：</td>
                 <td class="second_d">
-                  <div class="formula">
-                    Cos&phi;=
-                    <div class="formula_numerator">74.934</div>
-                    <div style="font-size: 12px">/</div>
-                    <div class="formula_denominator"><span style="color: #eaf5ff">&radic; </span>74.934²+7.297²</div>
-                  </div>
+                  <Formula :option="formulaData"></Formula>
                 </td>
               </tr>
               <tr style="margin-top: 28px">
@@ -49,7 +44,7 @@
               </tr>
             </table>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="12">
             <table>
               <tr>
                 <td class="frist_d">惩奖电费：</td>
@@ -88,11 +83,15 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
+
+import Formula from './Formula.vue';
 const props = defineProps<{
   option: any;
 }>();
-
-console.log(props);
+const formulaData = computed(() => {
+  return 'Cos\\varphi=\\frac{74.934}{\\sqrt{74.934^2+7.297^2}}';
+});
 </script>
 
 <style lang="scss" scoped>
@@ -118,11 +117,13 @@ console.log(props);
 
   .th_index {
     width: 130px;
+    display: grid;
+    grid-template-rows: repeat(3, 33.3%);
+    gap: 13px;
 
     .th_index_con {
       width: 130px;
       height: 76px;
-      margin: auto;
       text-align: center;
       font-size: 14px;
       font-family: Microsoft YaHei;
@@ -184,22 +185,6 @@ console.log(props);
             font-family: Microsoft YaHei;
             font-weight: 400;
             color: #41e4de;
-          }
-
-          .formula {
-            display: flex;
-            height: 32px;
-            line-height: 32px;
-
-            .formula_numerator {
-              font-size: 12px;
-              line-height: 20px;
-            }
-
-            .formula_denominator {
-              font-size: 12px;
-              line-height: 44px;
-            }
           }
         }
       }

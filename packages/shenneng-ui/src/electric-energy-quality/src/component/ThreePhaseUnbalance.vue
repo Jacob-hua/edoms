@@ -1,43 +1,48 @@
 <template>
   <div v-for="item in categories" :key="item.name" class="dataEchart">
-    <el-row class="row-bg">
-      <el-col :span="10">
-        <div class="grid-content ep-bg-purple row-bg-left" />
-        <p style="color: #fff; font-size: 14px; text-align: center">{{ item.position.label }}</p>
-        <p style="color: #fff; font-size: 14px; text-align: center">
-          <span style="color: #00fff0; font-size: 20px">{{ item.position.value }}</span
-          >kv
-        </p>
-      </el-col>
-      <el-col :span="8">
-        <div class="grid-content ep-bg-purple-light" />
-        <div class="row-right">
+    <div class="dataEchart_frist">
+      <div class="df_left">
+        <p class="position_data">{{ item.position.label }}</p>
+        <div class="value_data_con">
+          <p class="value_data">
+            <span>{{ item.position.value }}</span
+            >kv
+          </p>
+        </div>
+      </div>
+      <div class="text_clm">
+        <div class="text_row">
           <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.time }}</span
             >小时
           </div>
           <div>当月累计时长</div>
         </div>
-        <div class="row-right" style="margin: 20px 0px 20px 20px">
+        <div class="text_row">
           <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.day }}</span
             >天
           </div>
           <div>当月天数</div>
         </div>
-        <div class="row-right">
+        <div class="text_row">
           <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.max_rate }}</span
             >%
           </div>
           <div>最大不平衡率</div>
         </div>
-      </el-col>
-    </el-row>
-    <ProportionChart class="echart" style="width: 300px; border-right: 1px solid #212c3c" :option="option_prop">
-    </ProportionChart>
-    <CurrentChart class="echart" :option="option_current"></CurrentChart>
-    <LoadChart class="echart" :option="option_load"></LoadChart>
+      </div>
+    </div>
+    <div class="dataEchart_second">
+      <ProportionChart :option="option_prop"> </ProportionChart>
+    </div>
+    <div style="margin: 20px">
+      <CurrentChart :option="option_current"></CurrentChart>
+    </div>
+    <div style="margin: 20px">
+      <LoadChart :option="option_load"></LoadChart>
+    </div>
   </div>
 </template>
 
@@ -174,6 +179,7 @@ watch(
           },
         },
       },
+      grid: { top: '30px', left: '20px', right: '20px', bottom: '44px' },
       color: [props.config.currentLa, props.config.currentLb, props.config.currentLc],
       series: [
         {
@@ -282,6 +288,7 @@ watch(
           },
         },
       ],
+      grid: { top: '30px', left: '20px', right: '20px', bottom: '44px' },
       color: [props.config.loadRate, props.config.threePhasRate],
       series: [
         {
@@ -359,46 +366,80 @@ const categories = ref([
 
 <style lang="scss" scoped>
 .dataEchart {
-  height: 316px;
+  display: grid;
+  grid-template-columns: 344px 340px 527px 527px;
+  grid-template-rows: 316px;
+  margin: 30px;
   border: 1px solid #212c3c;
   background: rgba(9, 15, 23, 0.3);
-  margin: 30px 30px;
 
-  .row-bg {
-    width: 304px;
-    height: 280px;
-    margin: 20px;
-    float: left;
-    border-right: 1px solid #212c3c;
+  .dataEchart_frist {
+    margin: 20px 0px;
+    border-right: 1px solid #1d2634;
+    display: grid;
+    grid-template-columns: 50% 50%;
 
-    .row-bg-left {
-      margin-top: 90%;
+    .df_left {
+      margin: auto;
+
+      .position_data {
+        color: #fff;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .value_data_con {
+        width: 100%;
+        height: 100%;
+
+        .value_data {
+          color: #fff;
+          font-size: 14px;
+          text-align: center;
+          width: 80px;
+          height: 36px;
+          background: #030e16;
+          border-radius: 2px;
+          margin-top: 13px;
+          line-height: 36px;
+          transform: translateX(-50%);
+          margin-left: 50%;
+
+          span {
+            color: #00fff0;
+            font-size: 20px;
+          }
+        }
+      }
     }
 
-    .row-right {
-      width: 130px;
-      height: 76px;
-      text-align: center;
-      font-size: 14px;
-      font-family: Microsoft YaHei;
-      font-weight: 400;
-      color: #eaf5ff;
-      background: #03121c;
-      border: 1px solid #02263b;
-      border-radius: 0px 4px 0px 4px;
-      margin-left: 20px;
+    .text_clm {
+      display: grid;
+      grid-template-rows: repeat(3, 33.3%);
 
-      div {
-        margin-top: 13px;
+      .text_row {
+        width: 130px;
+        height: 76px;
+        margin: auto;
+        background: #03121c;
+        border: 1px solid #022438;
+        border-radius: 0 4px 0 4px;
+        text-align: center;
+
+        div {
+          margin-top: 13px;
+          font-size: 14px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #eaf5ff;
+        }
       }
     }
   }
 
-  .echart {
-    float: left;
-    height: 280px;
-    margin: 20px 20px 20px 0px;
-    color: #eaf5ff;
+  .dataEchart_second {
+    margin: 20px 0px;
+    border-right: 1px solid #1d2634;
   }
 }
 </style>
