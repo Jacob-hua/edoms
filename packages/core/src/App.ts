@@ -58,7 +58,6 @@ class App extends EventEmitter {
   public store = new Store();
 
   constructor(options: AppOptionsConfig) {
-    console.log(options);
     super();
 
     this.env = new Env(options.ua);
