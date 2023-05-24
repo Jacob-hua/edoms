@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-23 09:51:16
+ * @LastEditTime: 2023-05-24 14:13:47
 -->
 <template>
   <div class="wrap-table">
@@ -78,7 +78,7 @@ const state: any = reactive({
   tableData: [],
   tableStyle: {
     width: '100%',
-    height: '639px',
+    height: '539px',
     fontSize: '14px',
     textAlign: 'center',
     '--el-table-border-color': 'none',
@@ -160,6 +160,8 @@ onMounted(() => {
 
   .el-input__inner {
     cursor: default !important;
+    font-weight: 400;
+    color: #ffffff;
   }
 }
 :deep(.el-select .el-input.is-focus .el-input__wrapper) {
@@ -196,10 +198,10 @@ onMounted(() => {
   overflow: hidden;
   position: absolute;
   left: 50%;
-  margin-left: -900px;
-  margin-top: 100px;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 1800px;
-  height: 882px;
+  height: 782px;
   background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
   z-index: 15;
