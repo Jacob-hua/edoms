@@ -283,27 +283,27 @@ const titleData = [
     width: '125',
   },
   {
-    name: '单体一供水温度 \n（℃）',
+    name: '单体一回水温度 \n（℃）',
     value: 'value8',
     width: '125',
   },
   {
-    name: '单体一供水温度 \n（℃）',
+    name: '单体一瞬时流量 \n（℃）',
     value: 'value9',
     width: '125',
   },
   {
-    name: '单体一供水温度 \n（℃）',
+    name: '单体一累计流量 \n（℃）',
     value: 'value10',
     width: '125',
   },
   {
-    name: '单体一供水温度 \n（℃）',
+    name: '单体一瞬时热量 \n（℃）',
     value: 'value11',
     width: '125',
   },
   {
-    name: '单体一供水温度 \n（℃）',
+    name: '单体一累计热量 \n（℃）',
     value: 'value12',
     width: '125',
   },

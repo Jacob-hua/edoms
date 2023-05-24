@@ -215,6 +215,8 @@ onMounted(() => {
 
   .el-input__inner {
     cursor: default !important;
+    font-weight: 400;
+    color: #ffffff;
   }
 }
 :deep(.el-select .el-input.is-focus .el-input__wrapper) {

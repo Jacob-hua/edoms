@@ -3,12 +3,19 @@
  * @Author: lihao
  * @Date: 2023-05-10 09:41:38
  * @LastEditors: lihao
+ * @LastEditTime: 2023-05-24 09:25:55
+-->
+<!--
+ * @Description: 
+ * @Author: lihao
+ * @Date: 2023-05-10 09:41:38
+ * @LastEditors: lihao
  * @LastEditTime: 2023-05-12 17:45:34
 -->
 <template>
   <div class="efficency-analysis" @click="handlerToShow($event, true)">
     <div class="top-bg"></div>
-    <div class="bottom-font">能效分析</div>
+    <div class="bottom-font">{{ config.title }}</div>
     <div v-show="isShowModel" class="model-wrapper-ftst">
       <div class="model-content">
         <div class="content-title">
@@ -50,11 +57,11 @@ import coldTab from './components/coldTab.vue';
 import fuelTab from './components/fuelTab.vue';
 import systemTab from './components/systemTab.vue';
 import TabList from './components/TabList.vue';
-// import { AnaItemConfigs } from './type';
+import { AnaItemConfigs } from './type';
 
-// const props = defineProps<{
-//   config: AnaItemConfigs;
-// }>();
+defineProps<{
+  config: AnaItemConfigs;
+}>();
 
 // console.log(props);
 
@@ -147,10 +154,12 @@ watch(
     .model-content {
       width: 1484px;
       height: 788px;
-      position: absolute;
+      position: fixed;
       left: 50%;
-      margin-left: -765px;
-      margin-top: 199px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      //   margin-left: -765px;
+      //   margin-top: 199px;
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
