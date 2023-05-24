@@ -75,7 +75,6 @@ import NavMenu from './layouts/NavMenu.vue';
 import PropsPanel from './layouts/PropsPanel.vue';
 import Sidebar from './layouts/sidebar/Sidebar.vue';
 import Workspace from './layouts/workspace/Workspace.vue';
-import codeBlockService from './services/codeBlock';
 import componentListService from './services/componentList';
 import editorService from './services/editor';
 import eventsService from './services/events';
@@ -224,7 +223,6 @@ onUnmounted(() => {
   uiService.destroy();
   componentListService.destroy();
   storageService.destroy();
-  codeBlockService.destroy();
 });
 
 const services: Services = {
@@ -235,7 +233,6 @@ const services: Services = {
   editorService,
   uiService,
   storageService,
-  codeBlockService,
 };
 
 const stageOptions = reactive({

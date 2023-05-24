@@ -3,7 +3,7 @@ import { App } from 'vue';
 import { ContentType, EdomsRequestConfig, EdomsRequestFunc, EdomsResponseData, Request } from '@edoms/utils';
 
 const service = new Request({
-  baseURL: import.meta.env.VITE_BASE_API ?? (window as any).VITE_CONFIG.baseApi,
+  baseURL: '/runtime-api/edoms/run-time',
   timeout: 1000 * 10,
   retry: 2,
   retryDelay: 1000,

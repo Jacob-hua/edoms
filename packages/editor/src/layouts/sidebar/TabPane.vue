@@ -30,24 +30,6 @@
         <component v-else-if="config.slots?.layerPanelHeader" :is="config.slots.layerPanelHeader" />
       </template>
 
-      <template v-if="data === 'code-block' || config.slots?.codeBlockPanelHeader" #code-block-panel-header>
-        <slot v-if="data === 'code-block'" name="code-block-panel-header"></slot>
-        <component v-else-if="config.slots?.codeBlockPanelHeader" :is="config.slots.codeBlockPanelHeader" />
-      </template>
-
-      <template v-if="data === 'code-block' || config.slots?.codeBlockPanelTool" #code-block-panel-tool="{ id, data }">
-        <slot v-if="data === 'code-block'" :id="id" name="code-block-panel-tool" :data="data"></slot>
-        <component v-else-if="config.slots?.codeBlockPanelTool" :is="config.slots.codeBlockPanelTool" />
-      </template>
-
-      <template
-        v-if="data === 'code-block' || config.slots?.codeBlockEditPanelHeader"
-        #code-block-edit-panel-header="{ id }"
-      >
-        <slot v-if="data === 'code-block'" :id="id" name="code-block-edit-panel-header"></slot>
-        <component v-else-if="config.slots?.codeBlockEditPanelHeader" :is="config.slots.codeBlockEditPanelHeader" />
-      </template>
-
       <template
         v-if="data === 'layer' || config.slots?.layerNodeContent"
         #layer-node-content="{ data: nodeData, node }"
@@ -66,14 +48,13 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { Coin, EditPen, Files } from '@element-plus/icons-vue';
+import { Coin, Files } from '@element-plus/icons-vue';
 
 import { ElTabPane } from '@edoms/design';
 
 import MIcon from '../../components/Icon.vue';
 import { SideComponent, SideItem } from '../../type';
 
-import CodeBlockList from './code-block/CodeBlockList.vue';
 import ComponentListPanel from './ComponentListPanel.vue';
 import LayerPanel from './LayerPanel.vue';
 
@@ -101,14 +82,6 @@ const config = computed<SideComponent | undefined>(() => {
         icon: Files,
         text: '已选组件',
         component: LayerPanel,
-        slots: {},
-      };
-    case 'code-block':
-      return {
-        type: 'component',
-        icon: EditPen,
-        text: '代码编辑',
-        component: CodeBlockList,
         slots: {},
       };
     default:
