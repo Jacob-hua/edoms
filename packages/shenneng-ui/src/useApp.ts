@@ -35,7 +35,7 @@ export default (props: any) => {
     node?.emit('destroy');
   });
 
-  const provideMethod = (methodName: string, callback: Callback, depends?: string[] | undefined): Callback => {
+  function provideMethod(methodName: string, callback: Callback, depends?: string[] | undefined): Callback {
     if (!instance.methods) {
       instance.methods = {
         ...useCommonMethod(props),
@@ -46,7 +46,7 @@ export default (props: any) => {
     }
     instance.methods[methodName] = callback;
     return callback;
-  };
+  }
 
   return {
     app,
