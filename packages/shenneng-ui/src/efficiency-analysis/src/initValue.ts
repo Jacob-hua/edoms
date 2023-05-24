@@ -4,4 +4,5 @@ export default {
     width: '117',
     height: '80',
   },
+  title: '能效分析',
 };

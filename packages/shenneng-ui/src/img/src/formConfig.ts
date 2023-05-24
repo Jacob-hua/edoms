@@ -7,7 +7,7 @@ export default (request: Request, uploadPreviewFile: string) => [
     type: 'upload',
     listType: 'picture',
     basePreviewUrl: uploadPreviewFile,
-    accepts: ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP'],
+    accepts: ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.PNG', '.JPG', '.JPEG', '.GIF', '.WEBP', '.svg'],
     upload: async (value: any, prop: string, mForm: any) => {
       return await request({
         resourceId: 'global-schematic:upload',

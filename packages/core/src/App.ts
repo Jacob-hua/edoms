@@ -1,9 +1,8 @@
 import { EventEmitter } from 'events';
 
-import { Callback, CodeBlockDSL, EventAction, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
+import { Callback, EventAction, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
 import { getUrlParam, setUrlParam } from '@edoms/utils';
 
-import Env from './Env';
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
 import type Node from './Node';
 import Page from './Page';
@@ -40,8 +39,6 @@ export interface FileStruct {
 
 class App extends EventEmitter {
   public config: MApp | undefined;
-  public env;
-  public codeDsl: CodeBlockDSL | undefined;
   public pages = new Map<Id, Page>();
 
   public page: Page | undefined;
@@ -56,12 +53,7 @@ class App extends EventEmitter {
   public store = new Store();
 
   constructor(options: AppOptionsConfig) {
-    console.log(options);
     super();
-
-    this.env = new Env(options.ua);
-    // 代码块描述内容在dsl codeBlocks字段
-    this.codeDsl = options.config?.codeBlocks;
     options.jsEngine && (this.jsEngine = options.jsEngine);
     options.designWidth && (this.designWidth = options.designWidth);
 
@@ -155,7 +147,6 @@ class App extends EventEmitter {
   public setConfig(config: MApp, curPage?: Id) {
     console.log(config, curPage);
     this.config = config;
-    this.codeDsl = config.codeBlocks;
     this.pages = new Map();
     config.items?.forEach((page) => {
       this.pages.set(

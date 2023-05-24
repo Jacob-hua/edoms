@@ -1,12 +1,11 @@
 import { reactive, toRaw } from 'vue';
 import { cloneDeep, mergeWith, uniq } from 'lodash-es';
 
-import type { CodeBlockDSL, Id, MApp, MComponent, MContainer, MNode, MPage } from '@edoms/schema';
+import type { Id, MApp, MComponent, MContainer, MNode, MPage } from '@edoms/schema';
 import { NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 import { getNodePath, isNumber, isPage, isPop } from '@edoms/utils';
 
-import codeBlockService from '../services/codeBlock';
 import historyService, { StepValue } from '../services/history';
 import storageService, { Protocol } from '../services/storage';
 import type { AddMNode, EditorNodeInfo, PastePosition, StoreState } from '../type';
@@ -419,9 +418,6 @@ export class EditorService extends BaseService {
     }
 
     this.addModifiedNodeId(parent.id);
-
-    // 通知codeBlockService解除绑定关系
-    codeBlockService.deleteCompsInRelation(node);
   }
 
   /**
@@ -761,26 +757,6 @@ export class EditorService extends BaseService {
 
   public resetModifiedNodeId() {
     this.get<Map<Id, Id>>('modifiedNodeIds').clear();
-  }
-
-  /**
-   * 从dsl中的codeBlocks字段读取活动的代码块
-   * @returns {CodeBlockDSL | null}
-   */
-  public async getCodeDsl(): Promise<CodeBlockDSL | null> {
-    const root = this.get<MApp | null>('root');
-    if (!root) return null;
-    return root.codeBlocks || null;
-  }
-
-  /**
-   * 设置代码块到dsl的codeBlocks字段
-   * @param {CodeBlockDSL} codeDsl 代码DSL
-   * @returns {void}
-   */
-  public async setCodeDsl(codeDsl: CodeBlockDSL): Promise<void> {
-    if (!this.state.root) return;
-    this.state.root.codeBlocks = codeDsl;
   }
 
   private addModifiedNodeId(id: Id) {

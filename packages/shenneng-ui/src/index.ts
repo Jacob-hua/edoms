@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-18 13:24:10
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-22 09:36:44
+ * @LastEditTime: 2023-05-23 17:10:14
  */
 import Button from './button';
 import Charts from './charts';
@@ -16,7 +16,6 @@ import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
 import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
-import GlobalSchematicChart from './global-schematic-chart';
 import Img from './img';
 import IntelligenceReportCloud from './intelligence-report-cloud';
 import IntelligenceReportCold from './intelligence-report-cold';
@@ -28,6 +27,7 @@ import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MulticolorSingleLight from './multicolor-single-light';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
+import OperationsAnalysisCold from './operations-analysis-cold';
 import OperationsAnalysisHeat from './operations-analysis-heat';
 import OperationsAnalysisWater from './operations-analysis-water';
 import OptimalRegulationHeat from './optimal-regulation-heat';
@@ -51,7 +51,6 @@ const ui: Record<string, any> = {
   globalSchematic: GlobalSchematic,
   multicolorPolymorphicLight: MulticolorPolymorphicLight,
   multicolorSingleLight: MulticolorSingleLight,
-  globalSchematicChart: GlobalSchematicChart,
   charts: Charts,
   equipmentCondition: EquipmentCondition,
   economicIndicators: EconomicIndicators,
@@ -73,6 +72,7 @@ const ui: Record<string, any> = {
   optimalRegulationHeat: OptimalRegulationHeat,
   intelligenceReportWater: IntelligenceReportWater,
   intelligenceReportCloud: IntelligenceReportCloud,
+  operationsAnalysisCold: OperationsAnalysisCold,
 };
 
 export default ui;

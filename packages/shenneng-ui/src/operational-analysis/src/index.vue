@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-22 16:14:49
+ * @LastEditTime: 2023-05-24 13:51:18
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
@@ -32,6 +32,7 @@
         :option="option"
         :parameter-configs="parameterConfigs"
         @change-equipment-config="handleChangeEquipmentConfig"
+        @change-active-tab="changeActiveTab"
       >
       </EquipmentParameter>
     </div>
@@ -78,7 +79,7 @@ const categories = ref([
 const activeCategory = ref<string>('systems');
 const option = ref<ECOption>({});
 
-// const lineUnit = ref<string[]>([]);
+const lineUnit = ref<string[]>([]);
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
@@ -108,6 +109,8 @@ const handleChangeEquipmentConfig = (conf: Map<string, MIndicatorItemConfig>) =>
 const changeTab = (name: string) => {
   if (activeCategory.value === name) return;
   activeCategory.value = name;
+  activeTab.value = 0;
+  //   option.value = {};
   getHistoryData();
 };
 const activeTab = ref<number>(0);
@@ -118,22 +121,24 @@ const changeActiveTab = (index: number) => {
 const getHistoryData = async () => {
   const date = new Date();
   option.value = {};
+  lineUnit.value = [];
   const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD');
   const data = parameterConfigs.value;
   if (data.length === 0) return;
   const result = await fetchCurveData({
     startTime: start,
     endTime: end,
-    dataCodes: Array.from(activeIndicatorConfig.value.values()).map(({ property }) => property),
+    dataCodes: data[activeTab.value].indicators.map((e: any) => e.property),
+    // dataCodes: Array.from(activeIndicatorConfig.value.values()).map(({ property }) => property),
     tsUnit: 'H',
     ts: '1',
   });
-  //   console.log('当前选中数据', activeIndicatorConfig.value);
   let chartSeries = [];
   chartSeries = result.map(({ propCode, dataList }, index) => {
     const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
     const name = data[activeTab.value].indicators[codeIndex]?.label;
     const color = data[activeTab.value].indicators[codeIndex]?.color;
+    lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
     return {
       name: name ? name : `未命名${index}`,
       type: 'line',
@@ -177,14 +182,14 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      //   formatter: (params: any) => {
-      //     let content = params[0].axisValueLabel;
-      //     for (const i in params) {
-      //       content +=
-      //         '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
-      //     }
-      //     return content;
-      //   },
+      formatter: (params: any) => {
+        let content = params[0].axisValueLabel;
+        for (const i in params) {
+          const unit = lineUnit.value[Number(i)] ? lineUnit.value[Number(i)] : '';
+          content += '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + unit;
+        }
+        return content;
+      },
     },
     grid: {
       left: '3%',
