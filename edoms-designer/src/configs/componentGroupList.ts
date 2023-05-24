@@ -215,6 +215,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report-water',
       },
+      {
+        icon: 'xitong',
+        text: '运行分析',
+        type: 'operations-analysis-water',
+      },
     ],
   },
   {

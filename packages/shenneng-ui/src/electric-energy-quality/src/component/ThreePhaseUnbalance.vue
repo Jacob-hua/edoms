@@ -50,7 +50,7 @@
 import { ref, watch } from 'vue';
 
 // import useIntervalAsync from '../../../useIntervalAsync';
-import { ECOption } from '../../..//types';
+import { ECOption } from '../../../types';
 import { ElectricEnergyQuality } from '../type';
 
 import CurrentChart from './CurrentChart.vue';
@@ -164,8 +164,8 @@ watch(
       yAxis: {
         type: 'value',
         name: 'A',
-        nameGap: 15,
-        offset: 15,
+        // nameGap: 15,
+        // offset: 15,
         nameTextStyle: {
           align: 'right',
           padding: 7,
@@ -179,7 +179,7 @@ watch(
           },
         },
       },
-      grid: { top: '30px', left: '20px', right: '20px', bottom: '44px' },
+      grid: { top: '35px', left: '20px', right: '20px', bottom: '44px' },
       color: [props.config.currentLa, props.config.currentLb, props.config.currentLc],
       series: [
         {
@@ -248,8 +248,8 @@ watch(
         {
           type: 'value',
           name: 'A',
-          nameGap: 15,
-          offset: 15,
+          // nameGap: 15,
+          // offset: 15,
           nameTextStyle: {
             align: 'right',
             padding: 7,
@@ -266,8 +266,8 @@ watch(
         {
           type: 'category',
           name: '%',
-          nameGap: 15,
-          offset: 15,
+          // nameGap: 15,
+          // offset: 15,
           nameTextStyle: {
             align: 'left',
             padding: 7,
@@ -288,7 +288,7 @@ watch(
           },
         },
       ],
-      grid: { top: '30px', left: '20px', right: '20px', bottom: '44px' },
+      grid: { top: '35px', left: '15px', right: '32px', bottom: '44px' },
       color: [props.config.loadRate, props.config.threePhasRate],
       series: [
         {
