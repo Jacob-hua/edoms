@@ -25,6 +25,7 @@ import IntelligenceReportWater from './intelligence-report-water';
 import LoadForecasting from './loadForecasting';
 import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MulticolorSingleLight from './multicolor-single-light';
+import MulticolorTextLight from './multicolor-text-light';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
 import OperationsAnalysisHeat from './operations-analysis-heat';
@@ -49,6 +50,7 @@ const ui: Record<string, any> = {
   globalSchematic: GlobalSchematic,
   multicolorPolymorphicLight: MulticolorPolymorphicLight,
   multicolorSingleLight: MulticolorSingleLight,
+  multicolorTextLight: MulticolorTextLight,
   charts: Charts,
   equipmentCondition: EquipmentCondition,
   economicIndicators: EconomicIndicators,
