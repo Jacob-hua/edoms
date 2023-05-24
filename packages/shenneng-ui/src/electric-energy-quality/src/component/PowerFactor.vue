@@ -2,10 +2,10 @@
   <div class="wrapper">
     <div class="wrapper_left">
       <div class="wrapper_left_last">
-        <CalculationSheet></CalculationSheet>
+        <CalculationSheet :option="lastMouth"></CalculationSheet>
       </div>
       <div style="margin-top: 40px" class="wrapper_left_last">
-        <CalculationSheet></CalculationSheet>
+        <CalculationSheet :option="nextMouth"></CalculationSheet>
       </div>
     </div>
     <div class="wrapper_right">
@@ -49,7 +49,7 @@
         <div class="dialog_top">
           <div class="time">
             <span>配电室</span>
-            <TimeCalendar></TimeCalendar>
+            <TimeCalendar :option="timeType"></TimeCalendar>
           </div>
           <div v-if="nowDialog" class="boxCheck">
             <el-checkbox-group v-model="checkList" @change="selectType">
@@ -59,7 +59,7 @@
             </el-checkbox-group>
           </div>
           <div v-if="selectShow" class="boxSelect">
-            <el-select v-model="dataValue" class="m-2" placeholder="Select">
+            <el-select v-model="dataValue" popper-class="select" class="m-2" placeholder="Select">
               <el-option v-for="item in dataOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </div>
@@ -84,12 +84,18 @@ import TimeCalendar from './TimeCalendar.vue';
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
-console.log(props.config);
+const lastMouth = {
+  title: '上月结算',
+};
+const nextMouth = {
+  title: '本月结算',
+};
+const timeType = ref<string>('date');
 const dialogVisible = ref<boolean>(false);
 const nowDialog = ref<boolean>(false);
 const selectShow = ref<boolean>(false);
-const checkTypeList = ['箱线图', '插值波动', 'Max曲线', 'Min曲线', '均值曲线'];
-const checkList = ref<any>(['箱线图', '插值波动', 'Max曲线', 'Min曲线', '均值曲线']);
+const checkTypeList = ['箱线图', '差值波动', 'Max曲线', 'Min曲线', '均值曲线'];
+const checkList = ref<any>(['箱线图', '差值波动', 'Max曲线', 'Min曲线', '均值曲线']);
 const dataOptions = [
   { value: 'load', label: '功率因数-负载率' },
   { value: 'hour', label: '功率因数-时间（小时）' },
@@ -100,28 +106,28 @@ const dataValue = ref<string>(dataOptions[0].value);
 const title = ref<string>('');
 // 散点图数据
 const dataAll = [
-  [20, 69],
-  [32, 18],
-  [65, 54],
-  [44, 65],
-  [35, 47],
-  [78, 35],
-  [12, 65],
-  [55, 77],
-  [60, 33],
-  [44, 55],
-  [25, 20],
-  [69, 20],
-  [18, 32],
-  [54, 65],
-  [65, 44],
-  [47, 35],
-  [35, 78],
-  [65, 12],
-  [77, 55],
-  [33, 60],
-  [55, 44],
-  [20, 25],
+  [20, 0.69],
+  [32, 0.18],
+  [65, 0.54],
+  [44, 0.65],
+  [35, 0.47],
+  [78, 0.35],
+  [12, 0.65],
+  [55, 0.77],
+  [60, 0.33],
+  [44, 0.55],
+  [25, 0.2],
+  [69, 0.2],
+  [18, 0.32],
+  [54, 0.65],
+  [65, 0.44],
+  [47, 0.35],
+  [35, 0.78],
+  [65, 0.12],
+  [77, 0.55],
+  [33, 0.6],
+  [55, 0.44],
+  [20, 0.25],
 ];
 const maxArr = ref<any>([]);
 const minArr = ref<any>([]);
@@ -132,16 +138,50 @@ dataAll.forEach((item) => {
     minArr.value.push(item);
   }
 });
-// 月度功率因素统计
+// 月度功率因数统计
 const option_chart = ref<ECOption>({});
 option_chart.value = {
+  grid: {
+    left: 24,
+    bottom: 28,
+    right: 20,
+  },
   xAxis: {
     type: 'category',
     data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    axisLine: {
+      show: false,
+    },
+    axisTick: {
+      show: false,
+    },
   },
   color: 'rgba(40,124,232,0.5)',
   tooltip: {
     trigger: 'axis',
+    backgroundColor: 'rgba(11,34,52,0.9)',
+    borderColor: '#204C6F',
+    borderWidth: 1,
+    formatter: (params: any) => {
+      let tip: string = '';
+      if (params != null && params.length > 0) {
+        tip += '<div>';
+        for (let index = 0; index < params.length; index++) {
+          tip +=
+            '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].name +
+            '</p><p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].seriesName.split('：')[0] +
+            '：</span><span style="color: #287CE7;font-size: 12px;font-weight: 400;">' +
+            params[index].seriesName.split('：')[1] +
+            '：' +
+            params[index].value +
+            '</span></p>';
+        }
+        tip += '</div>';
+      }
+      return tip;
+    },
   },
   legend: {
     top: '5%',
@@ -154,8 +194,10 @@ option_chart.value = {
   },
   yAxis: {
     type: 'value',
-    name: '月度功率因素统计',
+    name: '月度功率因数统计',
     nameTextStyle: {
+      lineHeight: 28,
+      padding: [0, 0, 0, 100],
       fontSize: '14',
       fontFamily: 'Microsoft YaHei',
       fontWeight: 400,
@@ -168,11 +210,14 @@ option_chart.value = {
         width: 1,
       },
     },
+    axisLabel: {
+      show: false,
+    },
   },
   series: [
     {
       name: '考核基准：0.9',
-      data: [50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100],
+      data: [0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1],
       type: 'bar',
       itemStyle: {
         borderWidth: 1,
@@ -188,10 +233,11 @@ const optionMonth_chart = ref<ECOption>({});
 const changeDilog = (val: string) => {
   dialogVisible.value = true;
   if (val === 'month') {
+    timeType.value = 'month';
     nowDialog.value = true;
     selectShow.value = false;
     title.value = '功率因数-月曲线分析';
-    checkList.value = ['箱线图', '插值波动', 'Max曲线', 'Min曲线', '均值曲线'];
+    checkList.value = ['箱线图', '差值波动', 'Max曲线', 'Min曲线', '均值曲线'];
     // 月曲线分析图表
     optionMonth_chart.value = {
       xAxis: {
@@ -229,14 +275,63 @@ const changeDilog = (val: string) => {
           '30',
           '31',
         ],
+        axisTick: {
+          show: false,
+        },
       },
       color: 'rgba(40,124,232,0.5)',
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            console.log(params);
+            tip += '<div>';
+            for (let index = 0; index < params.length; index++) {
+              if (params[index].seriesName === '箱线图') {
+                // 勿删  图例待确认？
+                /*tip +=
+                  '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+                  params[index].seriesName +
+                  '：</p><p style="margin-left: 5px;color: #F5F7FA">开盘值：<span style="color:' +
+                  params[index].color +
+                  '">' +
+                  params[index].value[1] +
+                  '<span></p><p style="margin-left: 5px;color: #F5F7FA">封盘值：<span style="color:' +
+                  params[index].color +
+                  '">' +
+                  params[index].value[2] +
+                  '</span></p><p style="margin-left: 5px;color: #F5F7FA">最大值：<span style="color:' +
+                  params[index].color +
+                  '">' +
+                  params[index].value[4] +
+                  '</span></p><p style="margin-left: 5px;color: #F5F7FA">最小值：<span style="color:' +
+                  params[index].color +
+                  '">' +
+                  params[index].value[3] +
+                  '</span></p>';*/
+              } else {
+                tip +=
+                  '<p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+                  params[index].seriesName +
+                  '：</span><span style="color:' +
+                  params[index].color +
+                  ';font-size: 12px;font-weight: 400;">' +
+                  params[index].value +
+                  '</span></p>';
+              }
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       legend: {
         show: false,
-        selected: { 箱线图: true, 插值波动: true, Max曲线: true, Min曲线: true, 均值曲线: true },
+        selected: { 箱线图: true, 差值波动: true, Max曲线: true, Min曲线: true, 均值曲线: true },
       },
       yAxis: {
         type: 'value',
@@ -258,21 +353,55 @@ const changeDilog = (val: string) => {
       series: [
         {
           name: '箱线图',
+          type: 'candlestick',
+          color: 'rgba(40,124,232,0.3)',
+          data: [
+            [0.85, 0.86, 0.7, 0.86],
+            [0.85, 0.86, 0.75, 0.86],
+            [0.85, 0.86, 0.6, 0.86],
+            [0.85, 0.86, 0.55, 0.86],
+            [0.85, 0.86, 0.7, 0.86],
+            [0.85, 0.86, 0.75, 0.86],
+            [0.85, 0.86, 0.7, 0.86],
+            [0.85, 0.86, 0.65, 0.86],
+            [0.85, 0.86, 0.7, 0.86],
+            [0.85, 0.86, 0.65, 0.86],
+            [0.85, 0.86, 0.55, 0.86],
+            [0.85, 0.86, 0.6, 0.86],
+            [0.85, 0.86, 0.7, 0.86],
+            [0.85, 0.86, 0.75, 0.86],
+            [0.85, 0.86, 0.6, 0.86],
+            [0.85, 0.86, 0.7, 0.86],
+            [0.85, 0.86, 0.55, 0.86],
+          ],
+          itemStyle: {
+            color: 'rgba(40, 124, 232, 0.3)',
+            borderWidth: 1,
+            borderColor: '#287CE8',
+          },
+        },
+        {
+          name: '差值波动',
           type: 'bar',
           data: [
-            5, 10, 15, 6, 11, 16, 7, 12, 17, 8, 13, 18, 9, 14, 19, 5, 10, 15, 6, 11, 16, 7, 12, 17, 8, 13, 18, 9, 14,
-            19, 23,
+            0.3, 0.1, 0.15, 0.3, 0.11, 0.16, 0.2, 0.2, 0.17, 0.4, 0.13, 0.18, 0.3, 0.14, 0.19, 0.2, 0.1, 0.15, 0.6,
+            0.11, 0.16, 0.7, 0.12, 0.17, 0.8, 0.13, 0.18, 0.9, 0.14, 0.19, 0.23,
           ],
+          itemStyle: {
+            color: 'rgba(40, 124, 232, 0.3)',
+            borderWidth: 1,
+            borderColor: '#287CE8',
+          },
           barWidth: 16,
           barGap: 35,
         },
         {
-          name: '插值波动',
+          name: 'Max曲线',
           type: 'line',
-          color: '#0C7AC8',
+          color: '#207C44',
           data: [
-            55, 58, 15, 36, 53, 40, 64, 42, 27, 55, 43, 78, 39, 44, 59, 65, 50, 45, 56, 71, 66, 47, 52, 67, 68, 33, 28,
-            49, 34, 79, 53,
+            0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35,
+            0.52, 0.73, 0.69, 0.41, 0.5, 0.61, 0.64, 0.23, 0.22, 0.45, 0.33, 0.71, 0.52,
           ],
           smooth: true,
           symbolSize: 0,
@@ -296,23 +425,12 @@ const changeDilog = (val: string) => {
           },
         },
         {
-          name: 'Max曲线',
-          type: 'line',
-          color: '#207C44',
-          data: [
-            25, 28, 55, 46, 33, 80, 74, 52, 37, 58, 63, 48, 29, 54, 69, 75, 56, 35, 52, 73, 69, 41, 50, 61, 64, 23, 22,
-            45, 33, 71, 52,
-          ],
-          smooth: true,
-          symbolSize: 0,
-        },
-        {
           name: 'Min曲线',
           type: 'line',
           color: '#30A9A5',
           data: [
-            29, 38, 25, 36, 83, 70, 64, 42, 34, 55, 64, 28, 39, 50, 65, 55, 20, 35, 36, 51, 60, 47, 59, 57, 60, 32, 58,
-            44, 34, 59, 43,
+            0.29, 0.38, 0.25, 0.36, 0.83, 0.7, 0.64, 0.42, 0.34, 0.55, 0.64, 0.28, 0.39, 0.5, 0.65, 0.55, 0.2, 0.35,
+            0.36, 0.51, 0.6, 0.47, 0.59, 0.57, 0.6, 0.32, 0.58, 0.44, 0.34, 0.59, 0.43,
           ],
           smooth: true,
           symbolSize: 0,
@@ -321,8 +439,8 @@ const changeDilog = (val: string) => {
           name: '均值曲线',
           type: 'line',
           data: [
-            36, 78, 22, 56, 23, 60, 54, 24, 35, 55, 43, 68, 79, 54, 49, 65, 52, 43, 54, 75, 67, 45, 51, 64, 65, 43, 58,
-            79, 34, 71, 43,
+            0.36, 0.78, 0.22, 0.56, 0.23, 0.6, 0.54, 0.24, 0.35, 0.55, 0.43, 0.68, 0.79, 0.54, 0.49, 0.65, 0.52, 0.43,
+            0.54, 0.75, 0.67, 0.45, 0.51, 0.64, 0.65, 0.43, 0.58, 0.79, 0.34, 0.71, 0.43,
           ],
           smooth: true,
           symbolSize: 0,
@@ -330,6 +448,7 @@ const changeDilog = (val: string) => {
       ],
     };
   } else if (val === 'day') {
+    timeType.value = 'date';
     nowDialog.value = false;
     selectShow.value = false;
     title.value = '功率因数-日曲线分析';
@@ -363,10 +482,34 @@ const changeDilog = (val: string) => {
           '23',
           '24',
         ],
+        axisTick: {
+          show: false,
+        },
       },
       color: 'rgba(40,124,232,0.5)',
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            tip += '<div>';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<p><span style="color: #F5F7FA">' +
+                params[index].seriesName +
+                '：</span><span style="color:' +
+                params[index].color +
+                '">' +
+                params[index].value +
+                '%</span></p>';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       yAxis: {
         type: 'value',
@@ -390,7 +533,10 @@ const changeDilog = (val: string) => {
           name: '负载率',
           type: 'line',
           color: '#40E0DA',
-          data: [55, 58, 15, 36, 53, 40, 64, 42, 27, 55, 43, 78, 39, 44, 59, 65, 50, 45, 56, 71, 66, 47, 52, 67, 68],
+          data: [
+            0.55, 0.58, 0.15, 0.36, 0.53, 0.4, 0.64, 0.42, 0.27, 0.55, 0.43, 0.78, 0.39, 0.44, 0.59, 0.65, 0.5, 0.45,
+            0.56, 0.71, 0.66, 0.47, 0.52, 0.67, 0.68,
+          ],
           smooth: true,
           symbolSize: 0,
           markLine: {
@@ -416,13 +562,17 @@ const changeDilog = (val: string) => {
           name: '三相不平衡率',
           type: 'line',
           color: '#246ECE',
-          data: [25, 28, 55, 46, 33, 80, 74, 52, 37, 58, 63, 48, 29, 54, 69, 75, 56, 35, 52, 73, 69, 41, 50, 61, 64],
+          data: [
+            0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35,
+            0.52, 0.73, 0.69, 0.41, 0.5, 0.61, 0.64,
+          ],
           smooth: true,
           symbolSize: 0,
         },
       ],
     };
   } else {
+    timeType.value = 'date';
     nowDialog.value = false;
     selectShow.value = true;
     title.value = '功率因数-数据分析';
@@ -430,13 +580,39 @@ const changeDilog = (val: string) => {
     optionMonth_chart.value = {
       xAxis: {
         type: 'value',
-        data: ['0~10%', '10~20%', '20~30%', '30~40%', '40~50%', '50~60%', '60~70%', '70~80%', '80~90%', '90~100%'],
+        axisLabel: {
+          formatter: '{value}%',
+        },
         splitLine: {
+          show: false,
+        },
+        axisTick: {
           show: false,
         },
       },
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            tip += '<div><p style="color: #F5F7FA">功率因数：</p>';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<p>' +
+                params[index].marker +
+                '<span style="color:' +
+                params[index].color +
+                '">' +
+                params[index].value[1] +
+                '</span></p>';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
       },
       yAxis: {
         type: 'value',
@@ -453,8 +629,14 @@ const changeDilog = (val: string) => {
             width: 1,
           },
         },
+        axisLine: {
+          show: false,
+        },
+        axisTick: {
+          show: false,
+        },
       },
-      grid: { top: '30px', left: '30px', right: '30px', bottom: '30px' },
+      grid: { top: '30px', left: '55px', right: '30px', bottom: '51px' },
       color: ['rgba(65,228,222,0.7)', 'rgba(215,40,36,0.7)'],
       series: [
         {
@@ -601,6 +783,10 @@ const tableData = [
   }
 }
 
+:deep(.el-popper.is-pure) {
+  inset: 330px 265px auto auto !important;
+}
+
 .wrapper {
   height: 660px;
   margin: 30px 30px;
@@ -662,7 +848,6 @@ const tableData = [
           font-family: Microsoft YaHei;
           font-weight: 400;
           color: #eaf5ff;
-          margin-left: 30px;
           margin-bottom: 18px;
         }
       }
@@ -689,7 +874,7 @@ const tableData = [
       font-family: Microsoft YaHei;
       font-weight: 400;
       color: #ffffff;
-      line-height: 100px;
+      line-height: 80px;
     }
 
     .time {
@@ -709,16 +894,17 @@ const tableData = [
       height: 32px;
       margin-right: 30px;
       background: #030507;
+      box-sizing: border-box;
     }
   }
 
   .dialog_con .chartMonth {
     width: 1420px;
-    height: 500px;
+    height: 550px;
 
     .chartsCon {
       width: 1420px;
-      height: 500px;
+      height: 550px;
     }
   }
 }
@@ -736,5 +922,28 @@ const tableData = [
   background: rgba(9, 15, 23, 0.3);
   padding: 0px;
   margin: 30px;
+}
+</style>
+
+<style lang="scss">
+.select {
+  inset: 330px auto auto 1438px !important;
+  // margin-top: 0px !important;
+  background-color: #030507;
+
+  .el-popper__arrow::before {
+    content: none;
+  }
+
+  .el-select-dropdown__list {
+    margin: 0 !important;
+
+    .el-select-dropdown__item {
+      border-bottom: 1px solid #454e72;
+      background-color: #030507;
+      padding: 0 !important;
+      text-align: center;
+    }
+  }
 }
 </style>

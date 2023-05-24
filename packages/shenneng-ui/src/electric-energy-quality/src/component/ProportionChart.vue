@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
-    <div style="width: 300px; border-right: 1px solid #212c3c">占比分布</div>
-    <EdomsCharts class="charts" :option="option"></EdomsCharts>
+    <div class="wrapper_zhan">占比分布</div>
+    <EdomsCharts class="wrapper_chart" :option="option"></EdomsCharts>
   </div>
 </template>
 
@@ -16,8 +16,20 @@ console.log(props.option);
 </script>
 
 <style lang="scss" scoped>
-.charts {
-  width: 300px;
-  height: 280px;
+.wrapper {
+  margin: auto;
+
+  .wrapper_zhan {
+    margin-left: 22px;
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #eaf5ff;
+  }
+
+  .wrapper_chart {
+    width: 340px;
+    height: 276px;
+  }
 }
 </style>

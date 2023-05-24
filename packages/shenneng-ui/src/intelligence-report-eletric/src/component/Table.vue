@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-16 09:54:05
+ * @LastEditTime: 2023-05-18 17:41:30
 -->
 <template>
   <div class="wrap-table">
@@ -14,18 +14,18 @@
     </div>
     <div class="report">
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="40px">
-        <el-row :gutter="2">
-          <el-col :span="3" :offset="4">
+        <el-row :gutter="1">
+          <el-col :span="3" :offset="1">
             <el-form-item label="">
               <el-date-picker
                 v-model="state.queryForm.date"
                 type="date"
-                :default-value="dateFormat(new Date())"
                 placeholder="请选择日期"
+                @change="changeDate"
               />
             </el-form-item>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="3" :offset="12">
             <el-form-item label="">
               <Select :width="148" :options="state.stationOptions" @change-item="changeStation"></Select>
               <!-- <el-select v-model="state.queryForm.station">
@@ -86,7 +86,7 @@
 import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
-import { dateFormat } from '@edoms/utils';
+import { dateFormat, formatDate } from '@edoms/utils';
 
 import Select from '../../../common/Select.vue';
 import mockData from '../mock';
@@ -99,7 +99,7 @@ const queryRef = ref(ElForm);
 
 const state: any = reactive({
   queryForm: {
-    date: '',
+    date: new Date(),
     station: 'station1',
     device: 'device1',
   } as MQueryForm,
@@ -149,6 +149,10 @@ const state: any = reactive({
     '--el-table-border-color': 'none',
   },
 });
+
+const changeDate = (val: any) => {
+  console.log(dateFormat(val), formatDate(state.queryForm.date, 'YYYY-MM-DD'), 2222222);
+};
 
 const changeStation = (val: string | number) => {
   state.queryForm.station = val;

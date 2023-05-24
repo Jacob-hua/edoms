@@ -8,7 +8,7 @@
 <template>
   <div class="operations-analysis-heat" @click="handlerToShow($event, true)">
     <div class="top-bg"></div>
-    <div class="bottom-font">运行分析</div>
+    <div class="bottom-font">{{ config.title }}</div>
     <div v-show="isShowModel" class="model-wrapper-ftst">
       <div class="model-content">
         <div class="content-title">
@@ -45,11 +45,11 @@ import { computed, ref, watch } from 'vue';
 // import fuelTab from './components/fuelTab.vue';
 // import systemTab from './components/systemTab.vue';
 import TabList from './components/TabList.vue';
-// import { AnaItemConfigs } from './type';
+import { AnaItemConfigs } from './type';
 
-// const props = defineProps<{
-//   config: AnaItemConfigs;
-// }>();
+defineProps<{
+  config: AnaItemConfigs;
+}>();
 
 // console.log(props);
 

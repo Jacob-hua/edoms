@@ -3,66 +3,69 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-16 09:10:08
+ * @LastEditTime: 2023-05-22 18:11:01
 -->
 <template>
   <div class="wrap-table">
-    <div class="header">
-      <img src="../assets/dialog_icon_report.png" alt="" class="icon-report" />
-      <div class="label">{{ config.title }}</div>
-      <div class="close" @click.stop="closeTable"></div>
-    </div>
-    <div class="report">
-      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
-        <el-row :gutter="10">
-          <el-col :span="6">
-            <el-form-item label="日期选择：">
-              <el-date-picker v-model="state.queryForm.date" placeholder="请选择日期" />
-            </el-form-item>
-          </el-col>
-          <div class="button">查询</div>
-          <div class="button button-export">导出</div>
-        </el-row>
-      </el-form>
-      <div class="wrap-tab">
-        <div class="tab">
-          <div
-            v-for="(item, index) in state.tabs"
-            :key="item.name"
-            class="button"
-            :class="{ active: activeTab === index }"
-            @click="changeTab(index)"
-          >
-            {{ item.name }}
+    <div class="scroll-table">
+      <div class="header">
+        <img src="../assets/dialog_icon_report.png" alt="" class="icon-report" />
+        <div class="label">{{ config.title }}</div>
+        <div class="close" @click.stop="closeTable"></div>
+      </div>
+
+      <div class="report">
+        <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
+          <el-row :gutter="10">
+            <el-col :span="4" :offset="1">
+              <el-form-item label="日期选择：">
+                <el-date-picker v-model="state.queryForm.date" placeholder="请选择日期" />
+              </el-form-item>
+            </el-col>
+            <div class="button">查询</div>
+            <div class="button button-export">导出</div>
+          </el-row>
+        </el-form>
+        <div class="wrap-tab">
+          <div class="tab">
+            <div
+              v-for="(item, index) in state.tabs"
+              :key="item.name"
+              class="button"
+              :class="{ active: activeTab === index }"
+              @click="changeTab(index)"
+            >
+              {{ item.name }}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="table">
-        <el-table
-          :data="state.tableData"
-          stripe
-          :style="{ ...state.tableStyle }"
-          :header-cell-style="{
-            background: 'rgba(17,22,30,1)',
-            color: '#EAF5FF',
-            textAlign: 'center',
-          }"
-          :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
-          :row-style="{ height: '50px' }"
-        >
-          <el-table-column type="index" label="序号" width="60"></el-table-column>
-          <el-table-column
-            v-for="item in state.titleList"
-            :key="item.name"
-            :prop="item.value"
-            :label="item.name"
-            :width="item.width"
+        <div class="table">
+          <el-table
+            :data="state.tableData"
+            stripe
+            :style="{ ...state.tableStyle }"
+            :header-cell-style="{
+              background: 'rgba(17,22,30,1)',
+              color: '#EAF5FF',
+              textAlign: 'center',
+            }"
+            :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
+            :row-style="{ height: '50px' }"
           >
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="wrap-page">
-        <el-pagination :background="'rgba(0, 0, 0, 0.9)'" layout="prev, pager, next,total" :total="50" />
+            <el-table-column type="index" label="序号" width="60"></el-table-column>
+            <el-table-column
+              v-for="item in state.titleList"
+              :key="item.name"
+              :prop="item.value"
+              :label="item.name"
+              :width="item.width"
+            >
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="wrap-page">
+          <el-pagination :background="'rgba(0, 0, 0, 0.9)'" layout="prev, pager, next,total" :total="50" />
+        </div>
       </div>
     </div>
   </div>
@@ -84,7 +87,7 @@ const queryRef = ref(ElForm);
 
 const state: any = reactive({
   queryForm: {
-    date: '',
+    date: new Date(),
   } as MQueryForm,
   testData: [],
   titleList: [],
@@ -208,120 +211,137 @@ onMounted(() => {
 }
 
 .wrap-table {
-  //   width: 100%;
-  //   height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: absolute;
+  position: fixed;
   left: 50%;
-  margin-left: -900px;
-  margin-top: 100px;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 1800px;
-  height: 945px;
+  height: 792px;
   background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
+  //   width: 100%;
+  //   height: 100%;
+  //   display: flex;
+  //   flex-direction: column;
+  //   overflow: hidden;
+  //   position: absolute;
+  //   left: 50%;
+  //   margin-left: -900px;
+  //   margin-top: 100px;
+  //   width: 1800px;
+  //   height: 945px;
+  //   background: rgba($color: #000000, $alpha: 0.9);
+  //   border: 1px solid #013460;
   z-index: 15;
-  .header {
-    position: relative;
-    width: 100%;
-    min-height: 52px;
-    display: flex;
-    align-items: center;
-    background: url(../assets/bg_header.png);
-    background-size: cover;
-    .icon-report {
-      width: 22px;
-      height: 24px;
-      margin-left: 21px;
-      margin-right: 16px;
-      background: url(../assets/dialog_icon_report.png);
-      background-size: cover;
-    }
-    .label {
-      color: #eaf5ff;
-      font-size: 18px;
-      font-weight: 400;
-    }
-    .close {
-      position: absolute;
-      right: 20px;
-      top: 19px;
-      width: 14px;
-      height: 14px;
-      cursor: pointer;
-      background: url(../assets/icon_close.png);
-      background-size: cover;
-    }
-  }
-  .report {
-    flex-grow: 1;
-    width: 100%;
-    .condition-form {
-      height: 60px;
-      margin-top: 20px;
-      border-bottom: 1px solid #1d2634;
-      .button {
-        margin-left: 20px;
-        width: 100px;
-        height: 32px;
-        background: rgba(0, 163, 255, 0.26);
-        border: 1px solid #007bc0;
-        border-radius: 4px;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 400;
-        color: #eaf5ff;
-        line-height: 32px;
-        margin-right: 30px;
-        cursor: pointer;
-      }
-      .button-export {
-        width: 80px;
-        position: absolute;
-        right: 0;
-        background: rgba(0, 163, 255, 0.26);
-      }
-    }
-    .wrap-tab {
-      width: 100%;
-      .tab {
-        margin-left: 30px;
-        margin-top: 31px;
-        margin-bottom: 21px;
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-        font-weight: 400;
-        text-align: center;
-        line-height: 36px;
-        .button {
-          width: 100px;
-          height: 36px;
-          margin-right: 10px;
-          background: rgba($color: #00a3ff, $alpha: 0.12);
-          color: #eaf5ff;
-          cursor: pointer;
+  overflow: hidden;
 
-          &.active {
+  .scroll-table {
+    width: 100%;
+    height: 800px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    .header {
+      position: relative;
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      background: url(../assets/bg_header.png);
+      background-size: cover;
+      .icon-report {
+        width: 22px;
+        height: 24px;
+        margin-left: 21px;
+        margin-right: 16px;
+        background: url(../assets/dialog_icon_report.png);
+        background-size: cover;
+      }
+      .label {
+        color: #eaf5ff;
+        font-size: 18px;
+        font-weight: 400;
+      }
+      .close {
+        position: absolute;
+        right: 20px;
+        top: 19px;
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+        background: url(../assets/icon_close.png);
+        background-size: cover;
+      }
+    }
+    .report {
+      flex-grow: 1;
+      width: 100%;
+      .condition-form {
+        height: 60px;
+        margin-top: 20px;
+        border-bottom: 1px solid #1d2634;
+        .button {
+          margin-left: 20px;
+          width: 100px;
+          height: 32px;
+          background: rgba(0, 163, 255, 0.26);
+          border: 1px solid #007bc0;
+          border-radius: 4px;
+          text-align: center;
+          font-size: 16px;
+          font-weight: 400;
+          color: #eaf5ff;
+          line-height: 32px;
+          margin-right: 30px;
+          cursor: pointer;
+        }
+        .button-export {
+          width: 80px;
+          position: absolute;
+          right: 0;
+          background: rgba(0, 163, 255, 0.26);
+        }
+      }
+      .wrap-tab {
+        width: 100%;
+        .tab {
+          margin-left: 30px;
+          margin-top: 31px;
+          margin-bottom: 21px;
+          display: flex;
+          align-items: center;
+          font-size: 16px;
+          font-weight: 400;
+          text-align: center;
+          line-height: 36px;
+          .button {
             width: 100px;
-            height: 34px;
-            background: rgba(0, 163, 255, 0.26);
-            border: 1px solid #007bc0;
-            color: #ffffff;
+            height: 36px;
+            margin-right: 10px;
+            background: rgba($color: #00a3ff, $alpha: 0.12);
+            color: #eaf5ff;
+            cursor: pointer;
+
+            &.active {
+              width: 100px;
+              height: 34px;
+              background: rgba(0, 163, 255, 0.26);
+              border: 1px solid #007bc0;
+              color: #ffffff;
+            }
           }
         }
       }
-    }
-    .table {
-      width: 96%;
-      margin-left: 2%;
-    }
-    .wrap-page {
-      width: 50%;
-      height: 50px;
-      margin-left: 60%;
-      padding: 16px 16px;
+      .table {
+        width: 96%;
+        margin-left: 2%;
+      }
+      .wrap-page {
+        width: 50%;
+        height: 50px;
+        margin-left: 60%;
+        padding: 16px 16px;
+      }
     }
   }
 }

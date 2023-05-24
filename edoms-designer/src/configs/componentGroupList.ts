@@ -90,36 +90,11 @@ const componentGroupList: ComponentGroup[] = [
   {
     title: '共通组件',
     items: [
-      // {
-      //   icon: 'donghuanjiance',
-      //   text: '动环监测',
-      //   type: 'dynamic-monitoring',
-      // },
-      // {
-      //   icon: 'shedingcanshu',
-      //   text: '设定参数',
-      //   type: 'setting-parameter',
-      // },
-      // {
-      //   icon: 'xitong',
-      //   text: '系统运行参数',
-      //   type: 'system-operating-parameters',
-      // },
       {
         icon: 'shiyitu',
         text: '全局示意图',
         type: 'global-schematic',
       },
-      // {
-      //   icon: 'gaojing',
-      //   text: '告警列表',
-      //   type: 'warning-running-list',
-      // },
-      // {
-      //   icon: 'nengxiaoguankong',
-      //   text: '能效监测',
-      //   type: 'energy-efficiency-monitoring',
-      // },
       {
         icon: 'zhishideng',
         text: '多色多态指示灯',
@@ -130,46 +105,6 @@ const componentGroupList: ComponentGroup[] = [
         text: '多色单态指示灯',
         type: 'multicolor-single-light',
       },
-      // {
-      //   icon: 'canshuquxian',
-      //   text: '参数曲线',
-      //   type: 'running-parameters',
-      // },
-      // {
-      //   icon: 'tianqi',
-      //   text: '时间天气',
-      //   type: 'time-weather',
-      // },
-      // {
-      //   icon: 'jiankong',
-      //   text: '监控视频',
-      //   type: 'video',
-      // },
-      // {
-      //   icon: 'xuanfu',
-      //   text: '移动悬浮',
-      //   type: 'global-schematic-chart',
-      // },
-      // {
-      //   icon: 'duoxiangnengxiao',
-      //   text: '多项能效监测',
-      //   type: 'multiple-energy-monitoring',
-      // },
-      // {
-      //   icon: 'shishigongkuang',
-      //   text: '运行工况',
-      //   type: 'equipment-condition',
-      // },
-      // {
-      //   icon: 'leijishuju',
-      //   text: '系统累计数据',
-      //   type: 'system-cumulative-data',
-      // },
-      // {
-      //   icon: 'shebei',
-      //   text: '设备运行参数',
-      //   type: 'equipment-operating-parameter',
-      // },
       {
         icon: 'gaojing',
         text: '告警列表',
@@ -235,6 +170,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report-cold',
       },
+      {
+        icon: 'duoxiangnengxiao',
+        text: '运行分析(冷 弹窗)',
+        type: 'operations-analysis-cold',
+      },
     ],
   },
   {
@@ -264,6 +204,26 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'duoxiangnengxiao',
         text: '优化调控',
         type: 'optimal-regulation-heat',
+      },
+    ],
+  },
+  {
+    title: '运行监测-给水',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-water',
+      },
+    ],
+  },
+  {
+    title: '运行监测-风',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-cloud',
       },
     ],
   },

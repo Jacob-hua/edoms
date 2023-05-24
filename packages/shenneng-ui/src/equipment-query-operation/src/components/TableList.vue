@@ -35,6 +35,9 @@ import { reactive, ref } from 'vue';
 
 import { QueryList } from '../type';
 
+const emit = defineEmits<{
+  (event: 'ctIndex', val: number): void;
+}>();
 const ctIndex = ref<number>(0);
 
 const state = reactive<{
@@ -42,22 +45,15 @@ const state = reactive<{
 }>({
   dataList: {},
 });
-const changeType = (itm: { [key: string]: string | number | Array<QueryList> }) => {
+const changeType = (itm: { [key: string]: string | number | Array<QueryList> }, val: number) => {
   state.dataList = itm;
-  ctIndex.value = 0;
-  // 后期接口对应
-  state.dataList.equipmentList.forEach((itm: { [key: string]: string | Array<QueryList> }) => {
-    if (Array.isArray(itm.pointList)) {
-      itm.pointList.forEach((query: { [key: string]: any }) => {
-        query.data = 25;
-      });
-    }
-  });
+  ctIndex.value = val;
 };
 
 const handkerToChange = (idx: number) => {
   if (idx === ctIndex.value) return;
   ctIndex.value = idx;
+  emit('ctIndex', ctIndex.value);
 };
 
 defineExpose({
@@ -68,9 +64,8 @@ defineExpose({
 <style lang="scss" scoped>
 .table-list {
   width: 100%;
-  height: calc(100% - 65px);
+  // height: calc(100% - 54px);
   overflow: hidden;
-  overflow-y: auto;
   position: relative;
 
   .content-wrapper {
@@ -81,6 +76,7 @@ defineExpose({
     box-sizing: border-box;
 
     .left-content {
+      margin-top: 14px;
       width: 22%;
       height: 100%;
       overflow: hidden;
@@ -89,11 +85,11 @@ defineExpose({
 
       .itm-tab {
         width: 90%;
-        height: 22px;
+        height: 24px;
         background-image: url('../assets/tab-def.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
-        margin-bottom: 24px;
+        margin-top: 20px;
         text-align: center;
         line-height: 22px;
         font-size: 12px;
@@ -127,24 +123,26 @@ defineExpose({
     .right-content {
       width: 78%;
       padding-left: 2%;
-      padding-top: 10px;
+      padding-top: 20px;
       box-sizing: border-box;
       display: flex;
       // justify-content: space-between;
       flex-wrap: wrap;
+      overflow-y: auto;
 
       .itm-content {
         width: 30%;
         height: 62px;
         margin-right: 3.333%;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
         background-color: rgba(0, 163, 255, 0.06);
-        padding: 10px 20px;
         box-sizing: border-box;
         text-align: center;
 
         .top-ft {
+          height: 20px;
           vertical-align: bottom;
+          margin-top: 10px;
 
           .font {
             color: rgba(0, 255, 240, 1);
@@ -161,7 +159,7 @@ defineExpose({
         }
 
         .bottom-name {
-          margin-top: 13px;
+          margin-top: 10px;
           color: rgba(196, 229, 248, 1);
           font-size: 12px;
           font-family: MicrosoftYaHei;

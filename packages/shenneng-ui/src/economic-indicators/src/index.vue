@@ -28,14 +28,10 @@ import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-// import GasImg from './assets/gas.svg';
-// import LiquidDepthImg from './assets/liquidDepth.svg';
-// import MoistureImg from './assets/moisture.svg';
-// import TemperatureImg from './assets/temperature.svg';
-import ConsumptionImg from './assets/consumption.png';
 import CostImg from './assets/cost.png';
 import ElectricImg from './assets/electric.png';
 import ColdEnergyImg from './assets/energy.png';
+import ConsumptionImg from './assets/energy_consumption.png';
 import HeatEnergyImg from './assets/heat_energy.png';
 import apiFactory from './api';
 import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig } from './type';
@@ -43,10 +39,7 @@ import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig } from '.
 export interface Indicator {
   icon: string;
   parameter: string | number;
-  displayParameter: string;
-  parameterStyle: {};
   label: string;
-  deviceCode: string;
   propCode: string;
   unit: string;
   precision: string;
@@ -63,20 +56,6 @@ const { fetchRealData } = apiFactory(request);
 const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
 const restIndicators = ref<Indicator[]>([]);
-// const cssBackgroundColor = computed<string>(() =>
-//   props.config.style?.backgroundColor ? props.config.style?.backgroundColor : 'rgba(31, 30, 29, 1)'
-// );
-// const activeIndicator = ref<Indicator>();
-
-// const dialogTitle = ref<string>('');
-// const options = ref<ECOption>({});
-
-// const chartSeries = ref<any[]>([]);
-
-const chartDialogVisible = ref<boolean>(false);
-const selectDate = ref(new Date());
-
-// const magictype = ref<string>('line');
 
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
 const intervalDelay = computed<number>(() => {
@@ -89,13 +68,10 @@ const intervalDelay = computed<number>(() => {
 watch(
   () => indicatorConfigs.value,
   (indicatorConfigs) => {
-    indicators.value = indicatorConfigs.map(({ label, type, instance, property, unit, precision }) => ({
+    indicators.value = indicatorConfigs.map(({ label, type, property, unit, precision }) => ({
       label,
-      parameter: Math.floor(Math.random() * 10000),
-      displayParameter: '',
-      parameterStyle: { color: '#00ff00' },
+      parameter: '',
       icon: getIconByIndicatorType(type),
-      deviceCode: instance[instance.length - 1],
       propCode: property,
       unit: unit,
       precision: precision,
@@ -135,10 +111,6 @@ const updateRealData = async () => {
       const indicatorConfig = indicatorConfigs.value[targetIndex];
       const indicator = indicators.value[targetIndex];
       indicator.parameter = formatPrecision(Number(propVal), indicatorConfig.precision);
-      indicator.displayParameter = `${String(formatPrecision(Number(propVal), indicatorConfig.precision))} ${
-        indicatorConfig.unit
-      }`;
-      indicator.parameterStyle = calculateParameterStyle(indicator, indicatorConfig);
       indicator.propCode = propCode;
       indicator.precision = indicatorConfig.precision;
       indicator.unit = indicatorConfig.unit;
@@ -154,33 +126,10 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     [MEconomicIndicator.COST]: CostImg,
     [MEconomicIndicator.ELECTRIC]: ElectricImg,
     [MEconomicIndicator.COOL_ENERGY_CONSUMPTION]: ColdEnergyImg,
-    // [MEconomicIndicator.HEAT_COST]: CostImg,
     [MEconomicIndicator.HEAT_ENERGY_CONSUMPTION]: HeatEnergyImg,
   };
   return iconClassify[type];
 }
-
-function calculateParameterStyle(indicator: Indicator, config: MIndicatorItemConfig) {
-  const { thresholdConfigs } = config;
-  const parameter = Number(indicator.parameter);
-  const result = { color: '#00ff00' };
-  thresholdConfigs.forEach(({ minValue, maxValue, alarmColor }) => {
-    if (parameter >= minValue && parameter < maxValue) {
-      result.color = alarmColor;
-      return;
-    }
-  });
-  return result;
-}
-
-watch(
-  () => chartDialogVisible.value,
-  (visible) => {
-    if (!visible) {
-      selectDate.value = new Date();
-    }
-  }
-);
 </script>
 
 <style lang="scss" scoped>
@@ -190,7 +139,6 @@ watch(
   white-space: nowrap;
 }
 .economic-indicators {
-  //   background-color: v-bind(cssBackgroundColor);
   display: flex;
   width: 100%;
   flex-wrap: wrap;
@@ -204,9 +152,8 @@ watch(
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
-    min-width: 261px;
+    min-width: 259px;
     min-height: 100px;
-    // background-color: red;
     img {
       width: 50px;
       height: 50px;
@@ -216,7 +163,6 @@ watch(
       padding-left: 15px;
       width: 60%;
       height: 50%;
-      //   background-color: green;
       display: flex;
       flex-direction: column;
       align-items: center;

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-15 09:10:17
+ * @LastEditTime: 2023-05-23 13:44:27
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
@@ -78,7 +78,7 @@ const categories = ref([
 const activeCategory = ref<string>('systems');
 const option = ref<ECOption>({});
 
-// const lineUnit = ref<string[]>([]);
+const lineUnit = ref<string[]>([]);
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   const result = props.config[activeCategory.value];
@@ -108,12 +108,16 @@ const handleChangeEquipmentConfig = (conf: Map<string, MIndicatorItemConfig>) =>
 const changeTab = (name: string) => {
   if (activeCategory.value === name) return;
   activeCategory.value = name;
+  getHistoryData();
 };
 const activeTab = ref<number>(0);
 const changeActiveTab = (index: number) => {
   activeTab.value = index;
+  getHistoryData();
 };
-const getHistoryData = async (date: Date) => {
+const getHistoryData = async () => {
+  const date = new Date();
+  option.value = {};
   const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD');
   const data = parameterConfigs.value;
   if (data.length === 0) return;
@@ -130,6 +134,7 @@ const getHistoryData = async (date: Date) => {
     const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
     const name = data[activeTab.value].indicators[codeIndex]?.label;
     const color = data[activeTab.value].indicators[codeIndex]?.color;
+    lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
     return {
       name: name ? name : `未命名${index}`,
       type: 'line',
@@ -151,7 +156,7 @@ watch(
   () => activeIndicatorConfig.value,
   () => {
     // updateLineData();
-    flush();
+    getHistoryData();
   }
 );
 
@@ -173,14 +178,14 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
-      //   formatter: (params: any) => {
-      //     let content = params[0].axisValueLabel;
-      //     for (const i in params) {
-      //       content +=
-      //         '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
-      //     }
-      //     return content;
-      //   },
+      formatter: (params: any) => {
+        let content = params[0].axisValueLabel;
+        for (const i in params) {
+          content +=
+            '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + lineUnit.value[Number(i)];
+        }
+        return content;
+      },
     },
     grid: {
       left: '3%',
@@ -255,7 +260,7 @@ onMounted(() => {
 .wrap-body {
   width: 100%;
   //   height: 300px;
-  border: 1px solid rgba($color: #215898, $alpha: 0.5);
+  //   border: 1px solid rgba($color: #215898, $alpha: 0.5);
   .wrap-header {
     margin-left: 20px;
     margin-top: 10px;

@@ -9,7 +9,7 @@ import { MComponent } from '@edoms/schema';
 
 export interface MQueryForm {
   /** 当前时间 */
-  date: string;
+  date: string | Date;
   /** 楼 */
   building: string;
   /** 室 */
@@ -29,7 +29,7 @@ export interface MQueryForm {
 }
 
 export interface MTableQueryForm {
-  date: string;
+  date: string | Date;
   range: string;
 }
 

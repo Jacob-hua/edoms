@@ -1,23 +1,23 @@
 <template>
   <div class="wrapper_left_last">
-    <div class="balance">本月结算</div>
+    <div class="balance">{{ props.option.title }}</div>
     <div class="th_index">
-      <div class="th_index_con" style="margin-bottom: 42px">
+      <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
         <div>奖惩电费</div>
       </div>
-      <div class="th_index_con" style="margin-bottom: 42px">
+      <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
-        <div>平均功率因素</div>
+        <div>平均功率因数</div>
       </div>
       <div class="th_index_con">
         <div><span style="color: #d72824; font-size: 24px">0.59</span></div>
-        <div>最小功率因素</div>
+        <div>最小功率因数</div>
       </div>
     </div>
     <div class="alculation_sheet">
       <div class="alculation_tie">
-        <img class="alculation_icon" src="../../assets/icon.png" />
+        <img class="alculation_icon" src="../../assets/jisuan.png" />
         <span>计算书</span>
       </div>
       <div class="alculation_con">
@@ -32,11 +32,13 @@
                 <td class="frist_d">无功功率电量：</td>
                 <td class="second_d"><span>7.297</span>万kWh</td>
               </tr>
-              <tr>
-                <td class="frist_d">功率因素：</td>
-                <td class="second_d"><img src="" alt="" srcset="" />=<span>1</span></td>
+              <tr style="margin-top: 28px">
+                <td class="frist_d">功率因数：</td>
+                <td class="second_d">
+                  <Formula :option="formulaData"></Formula>
+                </td>
               </tr>
-              <tr>
+              <tr style="margin-top: 28px">
                 <td class="frist_d">惩奖系数：</td>
                 <td class="second_d"><span>-0.75</span></td>
               </tr>
@@ -64,7 +66,12 @@
                     border-radius: 2px;
                   "
                 >
-                  <img src="" alt="" srcset="" />查对标
+                  <img
+                    style="width: 16px; height: 16px; margin: 7px 15px"
+                    src="../../assets/dui.png"
+                    alt=""
+                    srcset=""
+                  />查对标
                 </td>
               </tr>
             </table>
@@ -75,7 +82,17 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { computed } from 'vue';
+
+import Formula from './Formula.vue';
+const props = defineProps<{
+  option: any;
+}>();
+const formulaData = computed(() => {
+  return 'Cos\\varphi=\\frac{74.934}{\\sqrt{74.934^2+7.297^2}}';
+});
+</script>
 
 <style lang="scss" scoped>
 .wrapper_left_last {
@@ -100,11 +117,13 @@
 
   .th_index {
     width: 130px;
+    display: grid;
+    grid-template-rows: repeat(3, 33.3%);
+    gap: 13px;
 
     .th_index_con {
       width: 130px;
       height: 76px;
-      margin: auto;
       text-align: center;
       font-size: 14px;
       font-family: Microsoft YaHei;
