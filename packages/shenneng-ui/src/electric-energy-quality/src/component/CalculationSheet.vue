@@ -2,11 +2,11 @@
   <div class="wrapper_left_last">
     <div class="balance">{{ props.option.title }}</div>
     <div class="th_index">
-      <div class="th_index_con" style="margin-bottom: 42px">
+      <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
         <div>奖惩电费</div>
       </div>
-      <div class="th_index_con" style="margin-bottom: 42px">
+      <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
         <div>平均功率因数</div>
       </div>
@@ -32,11 +32,13 @@
                 <td class="frist_d">无功功率电量：</td>
                 <td class="second_d"><span>7.297</span>万kWh</td>
               </tr>
-              <tr>
+              <tr style="margin-top: 28px">
                 <td class="frist_d">功率因数：</td>
-                <td class="second_d"><img src="" alt="" srcset="" /></td>
+                <td class="second_d">
+                  <Formula :option="formulaData"></Formula>
+                </td>
               </tr>
-              <tr>
+              <tr style="margin-top: 28px">
                 <td class="frist_d">惩奖系数：</td>
                 <td class="second_d"><span>-0.75</span></td>
               </tr>
@@ -81,11 +83,15 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
+
+import Formula from './Formula.vue';
 const props = defineProps<{
   option: any;
 }>();
-
-console.log(props);
+const formulaData = computed(() => {
+  return 'Cos\\varphi=\\frac{74.934}{\\sqrt{74.934^2+7.297^2}}';
+});
 </script>
 
 <style lang="scss" scoped>
@@ -111,11 +117,13 @@ console.log(props);
 
   .th_index {
     width: 130px;
+    display: grid;
+    grid-template-rows: repeat(3, 33.3%);
+    gap: 13px;
 
     .th_index_con {
       width: 130px;
       height: 76px;
-      margin: auto;
       text-align: center;
       font-size: 14px;
       font-family: Microsoft YaHei;

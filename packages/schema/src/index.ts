@@ -106,8 +106,6 @@ export interface MApp extends MComponent {
   type: NodeType.ROOT;
   /** */
   items: MPage[];
-  /** 代码块 */
-  codeBlocks?: CodeBlockDSL;
   index?: Id;
   tenantId?: string;
   referenceResource?: {
@@ -115,17 +113,6 @@ export interface MApp extends MComponent {
   };
 }
 
-export interface CodeBlockDSL {
-  [id: string]: CodeBlockContent;
-}
-
-export interface CodeBlockContent {
-  /** 代码块名称 */
-  name: string;
-  /** 代码块内容 */
-  content: any;
-  [key: string]: any;
-}
 export interface PastePosition {
   left?: number;
   top?: number;

@@ -161,6 +161,7 @@ const changeElectric = (val: boolean) => {
     transform: translate(-50%, -50%);
     width: 1800px;
     height: 840px;
+    border: 1px solid #013460;
     min-width: 822px;
     min-height: 364px;
 
@@ -200,6 +201,7 @@ const changeElectric = (val: boolean) => {
       width: 100%;
       height: 788px;
       background-color: rgba(0, 0, 0, 1);
+      overflow: hidden;
 
       .el-tabs--border-card {
         background-color: rgba(0, 0, 0, 1);

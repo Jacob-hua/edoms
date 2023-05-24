@@ -2,16 +2,7 @@
   <div class="edoms-editor">
     <slot name="nav" class="edoms-editor-nav-menu"></slot>
 
-    <edoms-code-editor
-      v-if="showSrc"
-      class="edoms-editor-content"
-      :init-values="root"
-      :options="codeOptions"
-      @save="saveCode"
-    ></edoms-code-editor>
-
     <Layout
-      v-else
       v-model:left="columnWidth.left"
       v-model:right="columnWidth.right"
       v-loading="loading"
@@ -48,7 +39,6 @@
 import { computed, inject, ref, watch } from 'vue';
 
 import { ElScrollbar } from '@edoms/design';
-import type { MApp } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 
 import { GetColumnWidth, Services } from '../type';
@@ -72,11 +62,9 @@ const { editorService, uiService } = inject<Services>('services') || {};
 
 const loading = ref<boolean>(true);
 
-const root = computed(() => editorService?.get<MApp>('root'));
 const nodes = computed(() => editorService?.get<Node[]>('nodes') || []);
 
 const pageLength = computed(() => editorService?.get<number>('pageLength') || 0);
-const showSrc = computed(() => uiService?.get<boolean>('showSrc'));
 const stage = computed(() => editorService?.get<StageCore>('stage'));
 
 const LEFT_COLUMN_WIDTH_STORAGE_KEY = '$EdomsEditorLeftColumnWidthData';
@@ -148,14 +136,5 @@ watch(
 
 const columnWidthChange = (columnWidth: GetColumnWidth) => {
   uiService?.set('columnWidth', columnWidth);
-};
-
-const saveCode = (value: string) => {
-  try {
-    // eslint-disable-next-line no-eval
-    editorService?.set('root', eval(value));
-  } catch (e: any) {
-    console.error(e);
-  }
 };
 </script>

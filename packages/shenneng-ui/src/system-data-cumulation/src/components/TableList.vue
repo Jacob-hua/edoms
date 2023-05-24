@@ -115,13 +115,13 @@ defineExpose({
       .name {
         height: 40px;
         line-height: 40px;
-        width: 25%;
+        width: 23%;
         color: rgba(196, 229, 248, 1);
         font-size: 14px;
         font-family: MicrosoftYaHei;
       }
       .value-unit {
-        width: 20%;
+        width: 17%;
         height: 40px;
         font-size: 14px;
         line-height: 40px;
@@ -134,7 +134,7 @@ defineExpose({
         }
       }
       .font-value-turn {
-        width: 25%;
+        width: 30%;
         height: 40px;
         font-size: 14px;
         line-height: 40px;

@@ -292,7 +292,8 @@ const changeDilog = (val: string) => {
             tip += '<div>';
             for (let index = 0; index < params.length; index++) {
               if (params[index].seriesName === '箱线图') {
-                tip +=
+                // 勿删  图例待确认？
+                /*tip +=
                   '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
                   params[index].seriesName +
                   '：</p><p style="margin-left: 5px;color: #F5F7FA">开盘值：<span style="color:' +
@@ -311,7 +312,7 @@ const changeDilog = (val: string) => {
                   params[index].color +
                   '">' +
                   params[index].value[3] +
-                  '</span></p>';
+                  '</span></p>';*/
               } else {
                 tip +=
                   '<p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +

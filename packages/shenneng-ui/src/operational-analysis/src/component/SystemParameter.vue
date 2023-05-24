@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-04-26 15:36:40
+ * @LastEditTime: 2023-05-22 15:11:44
 -->
 <template>
   <div class="wrapper">
@@ -71,15 +71,16 @@ watch(
 
 <style lang="scss" scoped>
 .wrapper {
-  height: calc(100% - 31px);
+  height: calc(100% - 41px);
   display: flex;
   box-sizing: border-box;
   width: 100%;
   .left-tab {
     min-width: 110px;
-    height: 95%;
+    height: calc(100% - 20px);
     width: 13.4%;
     margin-left: 20px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -89,7 +90,7 @@ watch(
     .button-tab {
       width: calc(100% - 10px);
       height: 24px;
-      margin-top: 20px;
+      margin-bottom: 20px;
       line-height: 24px;
       cursor: pointer;
       background: url('../assets/button_default.png') no-repeat;

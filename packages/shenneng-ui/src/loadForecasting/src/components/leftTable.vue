@@ -197,7 +197,7 @@ onUnmounted(() => {});
   }
   .table-wrapper {
     width: 100%;
-    height: 332px;
+    height: 289px;
     padding: 0 12px;
     box-sizing: border-box;
     overflow: hidden;

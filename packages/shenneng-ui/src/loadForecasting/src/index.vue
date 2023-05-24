@@ -1,8 +1,15 @@
+<!--
+ * @Description: 
+ * @Author: lihao
+ * @Date: 2023-05-11 20:22:57
+ * @LastEditors: lihao
+ * @LastEditTime: 2023-05-24 09:38:20
+-->
 <template>
   <div class="load-forecasting-cold">
     <div class="icon-font-st" @click="handlerToShow($event, true)">
       <div class="top-bg"></div>
-      <div class="bottom-font">负荷预测</div>
+      <div class="bottom-font">{{ config.title }}</div>
     </div>
     <div v-show="isShowModel" class="model-wrapper-ftst">
       <div class="model-content">
@@ -83,6 +90,11 @@ import ChartData from './components/chartData.vue';
 import FormList from './components/formList.vue';
 import LeftTable from './components/leftTable.vue';
 import RightTable from './components/rightTable.vue';
+import { AnaItemConfigs } from './type';
+
+defineProps<{
+  config: AnaItemConfigs;
+}>();
 
 const titleFont = ref<string>('负荷预测');
 
@@ -242,11 +254,13 @@ watch(
     z-index: 1000;
     .model-content {
       width: 1800px;
-      height: 860px;
-      position: absolute;
+      height: 800px;
+      position: fixed;
       left: 50%;
-      margin-left: -900px;
-      margin-top: 70px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      //   margin-left: -900px;
+      //   margin-top: 70px;
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
@@ -306,7 +320,7 @@ watch(
           }
           .bottom-table {
             width: 100%;
-            height: 66%;
+            height: 67%;
             margin-top: 2%;
           }
         }

@@ -42,15 +42,18 @@ const { fetchRealData } = apiFactory(request);
 const tableWrapper = ref<any>(null);
 
 const handlerToOperate = (itm: { [key: string]: any }, val: number) => {
+  console.log(itm);
   if (val === fristIndex.value) return;
   fristIndex.value = val;
   secondIndex.value = 0;
-  tableWrapper.value.changeType(itm, secondIndex.value);
+  // tableWrapper.value.changeType(itm, secondIndex.value);
+  updateParameterData();
 };
 const handlerToctIndex = (val: number) => {
   secondIndex.value = val;
+  updateParameterData();
 };
-// 监听子tab栏数据变化tableWrapper.value.ctIndex  更新secondIndex的值？？？？
+
 watch(
   () => props.config.equipmentTypeList,
   () => {

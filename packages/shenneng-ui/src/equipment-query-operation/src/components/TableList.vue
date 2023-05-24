@@ -64,9 +64,8 @@ defineExpose({
 <style lang="scss" scoped>
 .table-list {
   width: 100%;
-  height: calc(100% - 54px);
+  // height: calc(100% - 54px);
   overflow: hidden;
-  overflow-y: auto;
   position: relative;
 
   .content-wrapper {
@@ -77,6 +76,7 @@ defineExpose({
     box-sizing: border-box;
 
     .left-content {
+      margin-top: 14px;
       width: 22%;
       height: 100%;
       overflow: hidden;
@@ -85,7 +85,7 @@ defineExpose({
 
       .itm-tab {
         width: 90%;
-        height: 22px;
+        height: 24px;
         background-image: url('../assets/tab-def.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
@@ -123,17 +123,18 @@ defineExpose({
     .right-content {
       width: 78%;
       padding-left: 2%;
-      padding-top: 10px;
+      padding-top: 20px;
       box-sizing: border-box;
       display: flex;
       // justify-content: space-between;
       flex-wrap: wrap;
+      overflow-y: auto;
 
       .itm-content {
         width: 30%;
         height: 62px;
-        margin-left: 3.333%;
-        margin-top: 10px;
+        margin-right: 3.333%;
+        margin-bottom: 30px;
         background-color: rgba(0, 163, 255, 0.06);
         box-sizing: border-box;
         text-align: center;

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-27 10:04:26
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 09:52:50
+ * @LastEditTime: 2023-05-23 11:18:29
 -->
 <template>
   <div class="wrap-intell" @click="changeReport">
@@ -20,22 +20,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
-import useApp from '../../useApp';
-import useIntervalAsync from '../../useIntervalAsync';
-
+// import useApp from '../../useApp';
+// import useIntervalAsync from '../../useIntervalAsync';
 import Table from './component/Table.vue';
-import apiFactory from './api';
-import { FetchEfficiencyReq, MIntelligenceReport } from './type';
+// import apiFactory from './api';
+import { MIntelligenceReport } from './type';
 
-const props = defineProps<{
+defineProps<{
   config: MIntelligenceReport;
 }>();
 
-const { request } = useApp(props);
+// const { request } = useApp(props);
 
-const { fetchEfficiencyData } = apiFactory(request);
+// const { fetchEfficiencyData } = apiFactory(request);
 
 const showReport = ref<boolean>(false);
 
@@ -43,31 +42,31 @@ const changeReport = () => {
   showReport.value = true;
 };
 
-const intelligenceReport = computed<MIntelligenceReport>(() => props.config);
-const intervalDelay = computed<number>(() => {
-  if (typeof props.config.intervalDelay !== 'number') {
-    return 10;
-  }
-  return props.config.intervalDelay;
-});
+// const intelligenceReport = computed<MIntelligenceReport>(() => props.config);
+// const intervalDelay = computed<number>(() => {
+//   if (typeof props.config.intervalDelay !== 'number') {
+//     return 10;
+//   }
+//   return props.config.intervalDelay;
+// });
 
-const updateEfficiencyData = async () => {
-  if (!intelligenceReport.value.instance) {
-    return;
-  }
-  const param: FetchEfficiencyReq = {
-    insCodeList: [intelligenceReport.value.instance[intelligenceReport.value.instance.length - 1]],
-    propCode: '',
-  };
-  const result = await fetchEfficiencyData(param);
-  result.forEach(({ insCode }) => {
-    if (insCode !== intelligenceReport.value.instance[intelligenceReport.value.instance.length - 1]) {
-      return;
-    }
-  });
-};
+// const updateEfficiencyData = async () => {
+//   if (!intelligenceReport.value.instance) {
+//     return;
+//   }
+//   const param: FetchEfficiencyReq = {
+//     insCodeList: [intelligenceReport.value.instance[intelligenceReport.value.instance.length - 1]],
+//     propCode: '',
+//   };
+//   const result = await fetchEfficiencyData(param);
+//   result.forEach(({ insCode }) => {
+//     if (insCode !== intelligenceReport.value.instance[intelligenceReport.value.instance.length - 1]) {
+//       return;
+//     }
+//   });
+// };
 
-useIntervalAsync(updateEfficiencyData, intervalDelay.value);
+// useIntervalAsync(updateEfficiencyData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
