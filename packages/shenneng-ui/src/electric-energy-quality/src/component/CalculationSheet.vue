@@ -22,7 +22,7 @@
       </div>
       <div class="alculation_con">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="14">
             <table>
               <tr>
                 <td class="frist_d">有功功率电量：</td>
@@ -44,7 +44,7 @@
               </tr>
             </table>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="10">
             <table>
               <tr>
                 <td class="frist_d">惩奖电费：</td>
