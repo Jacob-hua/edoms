@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-19 10:29:09
+ * @LastEditTime: 2023-05-24 17:49:21
 -->
 <template>
   <div style="min-width: 522px; min-height: 246px">
@@ -35,7 +35,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-// import { formatPrecision } from '@edoms/utils';
+import { formatPrecision } from '@edoms/utils';
+
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
@@ -77,7 +78,8 @@ const updateEfficiencyData = async () => {
   const result = await fetchRealData({ dataCodes });
   result.forEach(() => {
     // actualValue.value = +formatPrecision(Number(propVal), energyConfig.value.precision);
-    actualValue.value = Number((Math.random() * 7).toFixed(2));
+    console.log(energyConfig.value.precision);
+    actualValue.value = +formatPrecision(Math.random() * 7, energyConfig.value.precision);
   });
 };
 

@@ -117,7 +117,7 @@ const cssBackgroundColor = computed<string>(() => (showDetail.value ? 'rgba(0, 0
   .wrap-report {
     width: 100%;
     height: 100%;
-    background: rgba(0, 163, 255, 0.1);
+    // background: rgba(0, 163, 255, 0.1);
     // border: 1px solid #051823;
     display: flex;
     flex-direction: column;
