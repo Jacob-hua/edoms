@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-18 09:15:27
+ * @LastEditTime: 2023-05-25 15:03:47
  */
 import { Request } from '@edoms/editor';
 
@@ -30,11 +30,11 @@ export default async (request: Request) => [
     append: 's',
   },
   {
-    text: '系统曲线',
-    name: 'systems',
+    text: '一级分类',
+    name: 'classify',
     type: 'groupList',
     labelWidth: '70px',
-    addButtonText: '添加类别',
+    addButtonText: '添加分类',
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
@@ -42,73 +42,128 @@ export default async (request: Request) => [
         name: 'label',
       },
       {
-        name: 'indicators',
-        text: '指标',
+        text: '二级分类',
+        name: 'tabName',
         type: 'groupList',
-        labelWidth: '50px',
-        addButtonText: '添加指标',
-        movable: false,
-        maxItems: 10,
-        title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
+        labelWidth: '70px',
+        addButtonText: '添加类别',
+        title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
         items: [
           {
-            name: 'label',
             text: '标签',
-            type: 'text',
-            trim: true,
+            name: 'label',
           },
-          /** 注入业务组件的共通字段 */
-          ...(await useInstanceConfig(request, 'operational-analysis')),
           {
-            text: '曲线颜色',
-            name: 'color',
-            type: 'colorPicker',
-            defaultValue: '#287CE8',
-            labelWidth: '70px',
+            name: 'indicators',
+            text: '指标',
+            type: 'groupList',
+            labelWidth: '50px',
+            addButtonText: '添加指标',
+            movable: false,
+            maxItems: 10,
+            title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
+            items: [
+              {
+                name: 'label',
+                text: '标签',
+                type: 'text',
+                trim: true,
+              },
+              /** 注入业务组件的共通字段 */
+              ...(await useInstanceConfig(request, 'operational-analysis')),
+              {
+                text: '曲线颜色',
+                name: 'color',
+                type: 'colorPicker',
+                defaultValue: '#287CE8',
+                labelWidth: '70px',
+              },
+            ],
           },
         ],
       },
     ],
   },
-  {
-    text: '设备曲线',
-    name: 'equipments',
-    type: 'groupList',
-    labelWidth: '70px',
-    addButtonText: '添加类别',
-    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
-    items: [
-      {
-        text: '标签',
-        name: 'label',
-      },
-      {
-        name: 'indicators',
-        text: '指标',
-        type: 'groupList',
-        labelWidth: '50px',
-        addButtonText: '添加指标',
-        movable: false,
-        maxItems: 10,
-        title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
-        items: [
-          {
-            name: 'label',
-            text: '标签',
-            type: 'text',
-            trim: true,
-          },
-          /** 注入业务组件的共通字段 */
-          ...(await useInstanceConfig(request, 'operational-analysis')),
-          {
-            text: '曲线颜色',
-            name: 'color',
-            type: 'colorPicker',
-            defaultValue: '#287CE8',
-            labelWidth: '70px',
-          },
-        ],
-      },
-    ],
-  },
+  //   {
+  //     text: '系统曲线',
+  //     name: 'systems',
+  //     type: 'groupList',
+  //     labelWidth: '70px',
+  //     addButtonText: '添加类别',
+  //     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+  //     items: [
+  //       {
+  //         text: '标签',
+  //         name: 'label',
+  //       },
+  //       {
+  //         name: 'indicators',
+  //         text: '指标',
+  //         type: 'groupList',
+  //         labelWidth: '50px',
+  //         addButtonText: '添加指标',
+  //         movable: false,
+  //         maxItems: 10,
+  //         title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
+  //         items: [
+  //           {
+  //             name: 'label',
+  //             text: '标签',
+  //             type: 'text',
+  //             trim: true,
+  //           },
+  //           /** 注入业务组件的共通字段 */
+  //           ...(await useInstanceConfig(request, 'operational-analysis')),
+  //           {
+  //             text: '曲线颜色',
+  //             name: 'color',
+  //             type: 'colorPicker',
+  //             defaultValue: '#287CE8',
+  //             labelWidth: '70px',
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     text: '设备曲线',
+  //     name: 'equipments',
+  //     type: 'groupList',
+  //     labelWidth: '70px',
+  //     addButtonText: '添加类别',
+  //     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+  //     items: [
+  //       {
+  //         text: '标签',
+  //         name: 'label',
+  //       },
+  //       {
+  //         name: 'indicators',
+  //         text: '指标',
+  //         type: 'groupList',
+  //         labelWidth: '50px',
+  //         addButtonText: '添加指标',
+  //         movable: false,
+  //         maxItems: 10,
+  //         title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
+  //         items: [
+  //           {
+  //             name: 'label',
+  //             text: '标签',
+  //             type: 'text',
+  //             trim: true,
+  //           },
+  //           /** 注入业务组件的共通字段 */
+  //           ...(await useInstanceConfig(request, 'operational-analysis')),
+  //           {
+  //             text: '曲线颜色',
+  //             name: 'color',
+  //             type: 'colorPicker',
+  //             defaultValue: '#287CE8',
+  //             labelWidth: '70px',
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
 ];

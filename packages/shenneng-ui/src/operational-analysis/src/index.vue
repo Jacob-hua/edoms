@@ -3,38 +3,45 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 13:51:18
+ * @LastEditTime: 2023-05-25 17:05:41
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrap-header">
-        <div class="wrap-divide">
+        <!-- <div class="wrap-divide">
           <div v-for="item in [0, 1, 2]" :key="item" class="divide"></div>
-        </div>
-        <div v-for="item in categories" :key="item.label" class="wrap-tab">
-          <div class="tab" :class="{ active: activeCategory === item.name }" @click="changeTab(item.name)">
-            {{ item.label }}
+        </div> -->
+        <div v-show="showLeft" class="caret-left btn" @click="moveMethod('left')"></div>
+        <div id="scrollRef" ref="scrollMain" class="wrap-scroll">
+          <div
+            ref="wrap"
+            class="list-tab"
+            :style="{ 'margin-left': distance + 'px', width: (scrollMainWidth / 2) * categories.length + 'px' }"
+          >
+            <div v-for="(item, index) in categories" :key="item.label" class="wrap-tab">
+              <div class="tab" :class="{ active: activeCategory === index }" @click="changeTab(index)">
+                {{ item.label }}
+              </div>
+            </div>
           </div>
         </div>
+        <div v-show="showRight" class="caret-right btn" @click="moveMethod('right')"></div>
       </div>
-      <SystemParameter
-        v-if="activeCategory === 'systems'"
-        :option="option"
-        :parameter-configs="parameterConfigs"
-        @change-system-config="handleChangeSystemConfig"
-        @change-active-tab="changeActiveTab"
-      >
-      </SystemParameter>
-
-      <EquipmentParameter
-        v-if="activeCategory === 'equipments'"
-        :option="option"
-        :parameter-configs="parameterConfigs"
-        @change-equipment-config="handleChangeEquipmentConfig"
-        @change-active-tab="changeActiveTab"
-      >
-      </EquipmentParameter>
+      <div class="wrapper">
+        <div class="left-tab">
+          <div
+            v-for="({ label }, index) in parameterConfigs"
+            :key="index"
+            class="button-tab"
+            :class="{ active: activeTab === index }"
+            @click="changeActiveTab(index)"
+          >
+            {{ label }}
+          </div>
+        </div>
+        <EdomsCharts class="charts" :option="option"></EdomsCharts>
+      </div>
     </div>
   </BusinessCard>
 </template>
@@ -45,12 +52,13 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { dateRange, formatDateRange, formatPrecision } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
+import EdomsCharts from '../../EdomsCharts.vue';
 import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-import EquipmentParameter from './component/EquipmentParameter.vue';
-import SystemParameter from './component/SystemParameter.vue';
+// import EquipmentParameter from './component/EquipmentParameter.vue';
+// import SystemParameter from './component/SystemParameter.vue';
 import apiFactory from './api';
 import { MIndicatorItemConfig, MOperationalParameters, MParameterItemConfig } from './type';
 
@@ -58,31 +66,24 @@ const props = defineProps<{
   config: MOperationalParameters;
 }>();
 
+const scrollMain = ref();
+const wrap = ref();
+// const scrollLeft = ref(0);
+
 const { request } = useApp(props);
 
 // const { fetchHistoryData } = apiFactory(request);
 const { fetchCurveData } = apiFactory(request);
 
-const categories = ref([
-  {
-    label: '系统曲线',
-    name: 'systems',
-  },
-  {
-    label: '设备曲线',
-    name: 'equipments',
-  },
-]);
+const categories = computed<any[]>(() => props.config.classify);
 
-// const activeTab = ref<number>(0);
-
-const activeCategory = ref<string>('systems');
+const activeCategory = ref<number>(0);
 const option = ref<ECOption>({});
 
 const lineUnit = ref<string[]>([]);
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
-  const result = props.config[activeCategory.value];
+  const result = props.config.classify[activeCategory.value].tabName;
   if (result) {
     return result;
   }
@@ -97,18 +98,9 @@ const intervalDelay = computed<number>(() => {
   }
   return props.config.intervalDelay;
 });
-
-const handleChangeSystemConfig = (conf: Map<string, MIndicatorItemConfig>) => {
-  activeIndicatorConfig.value = conf;
-};
-
-const handleChangeEquipmentConfig = (conf: Map<string, MIndicatorItemConfig>) => {
-  activeIndicatorConfig.value = conf;
-};
-
-const changeTab = (name: string) => {
-  if (activeCategory.value === name) return;
-  activeCategory.value = name;
+const changeTab = (index: number) => {
+  if (activeCategory.value === index) return;
+  activeCategory.value = index;
   activeTab.value = 0;
   //   option.value = {};
   getHistoryData();
@@ -250,8 +242,54 @@ function generateOption(series: any[] = []): ECOption {
   };
 }
 
+const scrollMainWidth = ref<number>(0);
+const scollWith = ref<number>(0);
+const wrapWith = ref<number>(0);
+// const navWidth = ref<number>(0);
+const showLeft = ref<boolean>(false);
+const showRight = ref<boolean>(false);
+const distance = ref<number>(0);
+const tabWidth = computed(() => scrollMainWidth.value / 2 + 'px');
+
+const moveMethod = (flag: string) => {
+  // 移动
+  distance.value += flag === 'left' ? -(scrollMainWidth.value / 2) : scrollMainWidth.value / 2;
+  console.log(distance.value);
+  convertArrow();
+};
+const convertArrow = () => {
+  /**
+   * 左箭头：滚动区域 - 隐藏区域 < 可视区域
+   * true：隐藏左箭头(右侧导航已全显示)
+   * false：显示左箭头(右侧导航未全显示)
+   */
+  wrapWith.value = (scrollMainWidth.value / 2) * categories.value.length;
+  const rollWidth = wrapWith.value - Math.abs(distance.value);
+  showLeft.value = rollWidth <= scollWith.value ? false : true;
+  //  右箭头
+  showRight.value = distance.value == 0 ? false : true;
+};
+// 监听html元素变化
+const colorCardObserver = new ResizeObserver(() => {
+  scrollMainWidth.value = scrollMain.value?.clientWidth ?? 0;
+  //   tabWidth.value = scrollMainWidth.value / 2 + 'px';
+  //   console.log(tabWidth.value);
+});
+
 onMounted(() => {
   flush();
+  if (!scrollMain.value) {
+    return;
+  }
+  scrollMainWidth.value = scrollMain.value.clientWidth;
+  //   tabWidth = scrollMainWidth.value / 2 + 'px';
+  colorCardObserver.observe(scrollMain.value);
+  scollWith.value = scrollMain.value.offsetWidth;
+  wrapWith.value = wrap.value.offsetWidth;
+  //   navWidth.value = document.getElementsByClassName('wrap-tab')[0].offsetWidth ?? 0;
+  wrapWith.value <= scollWith.value && (showLeft.value = false);
+  showRight.value = categories.value.length > 2 ? true : false;
+  convertArrow();
 });
 </script>
 
@@ -275,47 +313,104 @@ onMounted(() => {
     display: flex;
     align-items: center;
     position: relative;
-    //   justify-content: center;
-    .wrap-divide {
+    .btn {
+      height: 0;
+      width: 0;
+      cursor: pointer;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+    .caret-left {
       position: absolute;
       left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      pointer-events: all;
-      .divide {
-        width: 1px;
-        height: 12px;
-        background-color: rgba($color: #00a3ff, $alpha: 0.3);
-      }
+      border-left: 8px solid transparent;
+      border-right: 8px solid;
+      border-right-color: #ffffff85;
     }
-    .wrap-tab {
-      width: 50%;
-      min-height: 20px;
-      font-size: 14px;
-      text-align: center;
-      line-height: 20px;
-      pointer-events: all;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .tab {
-        min-width: 260px;
-        height: 100%;
-        background: rgba($color: #00a3ff, $alpha: 0.1);
-        color: #c4e5f8;
-        cursor: pointer;
-        &.active {
-          background: rgba(0, 163, 255, 0.16);
-          border: 1px solid #007bc0;
-          color: #ffffff;
+
+    .wrap-scroll {
+      display: inline-block;
+      width: calc(100% - 10px);
+      overflow: hidden;
+      vertical-align: bottom;
+      //   width: 100%;
+      //   overflow: hidden;
+      //   display: flex;
+      //   align-items: center;
+      //   margin: 0 10px;
+      .list-tab {
+        width: max-content;
+        .wrap-tab {
+          //   width: 385px;
+          width: v-bind(tabWidth);
+          float: left;
+          //   text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .tab {
+            min-height: 20px;
+            min-width: 260px;
+            background: rgba($color: #00a3ff, $alpha: 0.1);
+            color: #c4e5f8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &.active {
+              background: rgba(0, 163, 255, 0.16);
+              border: 1px solid #007bc0;
+              color: #ffffff;
+            }
+          }
         }
       }
     }
+
+    .caret-right {
+      position: absolute;
+      right: 0;
+      border-right: 8px solid transparent;
+      border-left: 8px solid;
+      border-left-color: #ffffff85;
+    }
+  }
+  .wrapper {
+    height: calc(100% - 41px);
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    .left-tab {
+      min-width: 110px;
+      height: calc(100% - 20px);
+      width: 13.4%;
+      margin-left: 20px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      .button-tab {
+        width: calc(100% - 10px);
+        height: 24px;
+        margin-bottom: 20px;
+        line-height: 24px;
+        cursor: pointer;
+        background: url('./assets/button_default.png') no-repeat;
+        background-size: cover;
+
+        &.active {
+          background: url('./assets/button_active.png') no-repeat;
+          background-size: cover;
+        }
+      }
+    }
+  }
+  .charts {
+    flex-grow: 1;
+    height: 100%;
   }
 }
 </style>
