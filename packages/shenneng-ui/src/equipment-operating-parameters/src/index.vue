@@ -12,7 +12,7 @@
       <div class="equipment-list">
         <div class="caret-left btn" @click="leftSlid"></div>
         <div ref="scrollRef" class="scroll-wrapper">
-          <div class="list-box">
+          <div class="list-tab">
             <div v-for="(item, index) in equipments" :key="index" class="item" @click="handleChangeEquipment(index)">
               <span
                 class="overflow-ellipsis"
