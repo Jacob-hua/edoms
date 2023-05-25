@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-25 18:12:54
+ * @LastEditTime: 2023-05-25 18:48:55
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
@@ -17,7 +17,10 @@
           <div
             ref="wrap"
             class="list-tab"
-            :style="{ 'margin-left': distance + 'px', width: (scrollMainWidth / 2) * categories.length + 'px' }"
+            :style="{
+              'margin-left': distance + 'px',
+              width: listTabWidth,
+            }"
           >
             <div v-for="(item, index) in categories" :key="item.label" class="wrap-tab">
               <div class="tab" :class="{ active: activeCategory === index }" @click="changeTab(index)">
@@ -76,6 +79,7 @@ const { request } = useApp(props);
 const { fetchCurveData } = apiFactory(request);
 
 const categories = computed<any[]>(() => props.config.classify);
+console.log(categories.value);
 
 const activeCategory = ref<number>(0);
 const option = ref<ECOption>({});
@@ -83,6 +87,7 @@ const option = ref<ECOption>({});
 const lineUnit = ref<string[]>([]);
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
+  if (!props.config.classify) return [];
   if (props.config.classify.length == 0) return [];
   const result = props.config.classify[activeCategory.value].tabName;
   if (result) {
@@ -251,6 +256,10 @@ const showLeft = ref<boolean>(false);
 const showRight = ref<boolean>(false);
 const distance = ref<number>(0);
 const tabWidth = computed(() => scrollMainWidth.value / 2 + 'px');
+
+const listTabWidth = computed(
+  () => (scrollMainWidth.value / 2) * (categories.value ? categories.value.length : 0) + 'px'
+);
 
 const moveMethod = (flag: string) => {
   // 移动
