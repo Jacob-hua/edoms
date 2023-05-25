@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div class="click-wrapper" @click="visible = true">
+    <div class="icon"></div>
+    <span>{{ config.title }}</span>
     <ElDrawer v-model="visible" direction="btt" size="95%">
       <template #header="{ titleId, titleClass }: any">
         <div :id="titleId" class="drawer-header" :class="titleClass" @click="visible = false">{{ config.title }}</div>
@@ -27,7 +29,6 @@
         ></ConditionCard>
       </div>
     </ElDrawer>
-    <div class="click-wrapper" @click="visible = true">{{ config.title }}</div>
   </div>
 </template>
 
@@ -105,28 +106,28 @@ $tabPanColor: #999999;
 $tabPanActiveColor: #00ffff;
 $borderColor: #505152;
 
-:deep(.el-drawer) {
-  --el-drawer-bg-color: rgb(19, 20, 21);
-}
-:deep(.el-drawer__header) {
-  margin-bottom: 25px;
-  padding: 0;
-}
-:deep(.el-drawer__body) {
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
 .click-wrapper {
-  width: inherit;
-  height: inherit;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  color: inherit;
-  font-weight: inherit;
-  font-size: inherit;
-  padding: 0 14px;
+  .icon {
+    width: 60px;
+    height: 42px;
+    background-color: rgba(0, 114, 179, 0.3);
+    background-image: url('./assets/outer-bg.png');
+    background-size: 24px 24px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border: 1px solid #0072b3;
+    box-sizing: border-box;
+    border-radius: 3px;
+  }
+
+  & > span {
+    padding-top: 9px;
+  }
 }
 .drawer-header {
   background-color: rgb(41, 41, 42);
