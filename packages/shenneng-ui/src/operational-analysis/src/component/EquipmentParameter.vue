@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-22 15:40:13
+ * @LastEditTime: 2023-05-24 10:17:40
 -->
 <template>
   <div class="wrapper">
@@ -36,11 +36,13 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: 'changeEquipmentConfig', value: Map<string, MIndicatorItemConfig>): void;
+  (event: 'changeActiveTab', value: number): void;
 }>();
 const activeTab = ref<number>(0);
 const changeTab = (index: number) => {
   if (activeTab.value === index) return;
   activeTab.value = index;
+  emit('changeActiveTab', activeTab.value);
 };
 
 const activeIndicatorConfig = computed<Map<string, MIndicatorItemConfig>>(() => {

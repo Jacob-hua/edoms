@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-16 11:45:16
+ * @LastEditTime: 2023-05-24 14:10:52
 -->
 <template>
   <div class="wrap-table">
@@ -317,6 +317,8 @@ onMounted(() => {
 
   .el-input__inner {
     cursor: default !important;
+    font-weight: 400;
+    color: #ffffff;
   }
 }
 :deep(.el-select .el-input.is-focus .el-input__wrapper) {

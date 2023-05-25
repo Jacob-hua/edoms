@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-22 18:11:01
+ * @LastEditTime: 2023-05-24 14:08:47
 -->
 <template>
   <div class="wrap-table">
@@ -97,6 +97,18 @@ const state: any = reactive({
       name: '全部',
       type: 'all',
     },
+    {
+      name: '单体一',
+      type: 'all',
+    },
+    {
+      name: '保障楼',
+      type: 'all',
+    },
+    {
+      name: '研发楼',
+      type: 'all',
+    },
   ],
   tableStyle: {
     width: '100%',
@@ -182,6 +194,8 @@ onMounted(() => {
 
   .el-input__inner {
     cursor: default !important;
+    font-weight: 400;
+    color: #ffffff;
   }
 }
 :deep(.el-select .el-input.is-focus .el-input__wrapper) {
@@ -247,14 +261,14 @@ onMounted(() => {
       min-height: 52px;
       display: flex;
       align-items: center;
-      background: url(../assets/bg_header.png);
+      background-image: url('../assets/bg_header.png');
       background-size: cover;
       .icon-report {
         width: 22px;
         height: 24px;
         margin-left: 21px;
         margin-right: 16px;
-        background: url(../assets/dialog_icon_report.png);
+        background-image: url('../assets/dialog_icon_report.png');
         background-size: cover;
       }
       .label {
@@ -269,7 +283,7 @@ onMounted(() => {
         width: 14px;
         height: 14px;
         cursor: pointer;
-        background: url(../assets/icon_close.png);
+        background-image: url('../assets/icon_close.png');
         background-size: cover;
       }
     }
@@ -284,7 +298,7 @@ onMounted(() => {
           margin-left: 20px;
           width: 100px;
           height: 32px;
-          background: rgba(0, 163, 255, 0.26);
+          background: rgba(0, 163, 255, 0.6);
           border: 1px solid #007bc0;
           border-radius: 4px;
           text-align: center;
@@ -294,12 +308,6 @@ onMounted(() => {
           line-height: 32px;
           margin-right: 30px;
           cursor: pointer;
-        }
-        .button-export {
-          width: 80px;
-          position: absolute;
-          right: 0;
-          background: rgba(0, 163, 255, 0.26);
         }
       }
       .wrap-tab {

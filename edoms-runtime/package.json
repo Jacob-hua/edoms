@@ -1,54 +1,55 @@
 {
-    "name": "edoms-runtime",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "dev": "npm run build:libs && vite --config dev.vite.config.ts",
-        "build": "npm run build:libs && npm run build:page && npm run build:playground",
-        "build:admin": "npm run build:libs:admin && npm run build:page:admin && npm run build:playground:admin",
-        "build:page": "vite --config build.vite.config.ts build --mode page",
-        "build:playground": "vite --config build.vite.config.ts build --mode playground",
-        "build:page:admin": "npm run build:libs && vite --config build.vite.config.ts build --mode page:admin",
-        "build:page:offline": "npm run build:libs && vite --config build.vite.config.ts build --mode page:offline",
-        "build:playground:admin": "npm run build:libs && vite --config build.vite.config.ts build --mode playground:admin",
-        "build:libs": "edoms entry && npm run build:config && npm run build:value && npm run build:event",
-        "build:libs:admin": "edoms entry && npm run build:config:admin && npm run build:value:admin && npm run build:event:admin",
-        "build:config": "vite --config build.vite.config.ts build --mode config",
-        "build:value": "vite --config build.vite.config.ts build --mode value",
-        "build:event": "vite --config build.vite.config.ts build --mode event",
-        "build:config:admin": "vite --config build.vite.config.ts build --mode config:admin",
-        "build:value:admin": "vite --config build.vite.config.ts build --mode value:admin",
-        "build:event:admin": "vite --config build.vite.config.ts build --mode event:admin"
-    },
-    "dependencies": {
-        "@edoms/cli": "workspace:^0.0.1",
-        "@edoms/core": "workspace:^0.0.1",
-        "@edoms/design": "workspace:^0.0.1",
-        "@edoms/element-plus-adapter": "workspace:^0.0.1",
-        "@edoms/schema": "workspace:^0.0.1",
-        "@edoms/stage": "workspace:^0.0.1",
-        "@edoms/shenneng-ui": "workspace:^0.0.1",
-        "@edoms/utils": "workspace:^0.0.1",
-        "element-plus": "^2.2.25",
-        "hls.js": "^1.3.3",
-        "terser": "^5.14.2",
-        "video.js": "^8.0.4",
-        "vue": "^3.2.37"
-    },
-    "peerDependencies": {
-        "vue": "^3.2.37"
-    },
-    "devDependencies": {
-        "@types/node": "^15.12.4",
-        "@vitejs/plugin-legacy": "^2.3.1",
-        "@vitejs/plugin-vue": "^3.1.0",
-        "@vue/compiler-sfc": "^3.2.37",
-        "@vue/test-utils": "^2.0.0",
-        "recast": "^0.20.4",
-        "rollup": "^2.25.0",
-        "sass": "^1.35.1",
-        "typescript": "^4.3.4",
-        "vite": "^3.1.3",
-        "vue-tsc": "^1.0.8"
-    }
+  "name": "edoms-runtime",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "npm run build:libs:dev && vite --config dev.vite.config.ts --mode dev",
+    "build:dev": "npm run build:libs:dev && npm run build:page:dev && npm run build:playground:dev",
+    "build:pre": "npm run build:libs:pre && npm run build:page:pre && npm run build:playground:pre",
+    "build:page:dev": "vite --config build.vite.config.ts build --mode page:dev",
+    "build:playground:dev": "vite --config build.vite.config.ts build --mode playground:dev",
+    "build:page:pre": "npm run build:libs:pre && vite --config build.vite.config.ts build --mode page:pre",
+    "build:page:offline": "npm run build:libs:pre && vite --config build.vite.config.ts build --mode page:offline",
+    "build:playground:pre": "npm run build:libs:pre && vite --config build.vite.config.ts build --mode playground:pre",
+    "build:libs:dev": "edoms entry && npm run build:config:dev && npm run build:value:dev && npm run build:event:dev",
+    "build:libs:pre": "edoms entry && npm run build:config:pre && npm run build:value:pre && npm run build:event:pre",
+    "build:config:dev": "vite --config build.vite.config.ts build --mode config:dev",
+    "build:value:dev": "vite --config build.vite.config.ts build --mode value:dev",
+    "build:event:dev": "vite --config build.vite.config.ts build --mode event:dev",
+    "build:config:pre": "vite --config build.vite.config.ts build --mode config:pre",
+    "build:value:pre": "vite --config build.vite.config.ts build --mode value:pre",
+    "build:event:pre": "vite --config build.vite.config.ts build --mode event:pre"
+  },
+  "dependencies": {
+    "@edoms/cli": "workspace:^0.0.1",
+    "@edoms/core": "workspace:^0.0.1",
+    "@edoms/design": "workspace:^0.0.1",
+    "@edoms/element-plus-adapter": "workspace:^0.0.1",
+    "@edoms/schema": "workspace:^0.0.1",
+    "@edoms/shenneng-ui": "workspace:^0.0.1",
+    "@edoms/stage": "workspace:^0.0.1",
+    "@edoms/utils": "workspace:^0.0.1",
+    "element-plus": "^2.2.25",
+    "hls.js": "^1.3.3",
+    "terser": "^5.14.2",
+    "video.js": "^8.0.4",
+    "vue": "^3.2.37"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.4",
+    "@vitejs/plugin-legacy": "^2.3.1",
+    "@vitejs/plugin-vue": "^3.1.0",
+    "@vue/compiler-sfc": "^3.2.37",
+    "@vue/test-utils": "^2.0.0",
+    "recast": "^0.20.4",
+    "rollup": "^2.25.0",
+    "sass": "^1.35.1",
+    "typescript": "^4.3.4",
+    "vite": "^3.1.3",
+    "vite-plugin-html-config": "^1.0.11",
+    "vue-tsc": "^1.0.8"
+  }
 }

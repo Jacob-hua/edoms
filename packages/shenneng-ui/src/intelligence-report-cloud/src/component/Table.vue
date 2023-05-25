@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-23 09:36:08
+ * @LastEditTime: 2023-05-24 14:11:24
 -->
 <template>
   <div class="wrap-table">
@@ -198,6 +198,8 @@ onMounted(() => {
 
   .el-input__inner {
     cursor: default !important;
+    font-weight: 400;
+    color: #ffffff;
   }
 }
 :deep(.el-select .el-input.is-focus .el-input__wrapper) {
@@ -233,10 +235,12 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   left: 50%;
-  margin-left: -740px;
-  margin-top: 100px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  //   margin-left: -740px;
+  //   margin-top: 100px;
   width: 1480px;
   height: 786px;
   background: rgba($color: #000000, $alpha: 0.9);
@@ -248,14 +252,14 @@ onMounted(() => {
     min-height: 52px;
     display: flex;
     align-items: center;
-    background: url(../assets/bg_header.png);
+    background-image: url('../assets/bg_header.png');
     background-size: cover;
     .icon-report {
       width: 22px;
       height: 24px;
       margin-left: 21px;
       margin-right: 16px;
-      background: url(../assets/dialog_icon_report.png);
+      background-image: url('../assets/dialog_icon_report.png');
       background-size: cover;
     }
     .label {
@@ -270,7 +274,7 @@ onMounted(() => {
       width: 14px;
       height: 14px;
       cursor: pointer;
-      background: url(../assets/icon_close.png);
+      background-image: url('../assets/icon_close.png');
       background-size: cover;
     }
   }

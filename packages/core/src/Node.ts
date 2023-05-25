@@ -1,7 +1,5 @@
 import { EventEmitter } from 'events';
 
-import { isEmpty } from 'lodash-es';
-
 import type { EventItemConfig, MComponent, MContainer, MNodeInstance, MPage } from '@edoms/schema';
 
 import type App from './App';
@@ -51,7 +49,6 @@ class Node extends EventEmitter {
   private listenLifeSafe() {
     this.once('created', async (instance: MNodeInstance) => {
       this.instance = instance;
-      await this.runCodeBlock('created');
     });
 
     this.once('mounted', async (instance: MNodeInstance) => {
@@ -62,8 +59,6 @@ class Node extends EventEmitter {
       for (let eventConfig = eventConfigQueue.shift(); eventConfig; eventConfig = eventConfigQueue.shift()) {
         this.app.eventHandler(eventConfig.eventConfig, eventConfig.fromCpt, eventConfig.props);
       }
-
-      await this.runCodeBlock('mounted');
     });
 
     this.on('updated', this.updateInstance);
@@ -71,15 +66,6 @@ class Node extends EventEmitter {
 
   public updateInstance(instance?: MNodeInstance) {
     this.instance = instance;
-  }
-
-  private async runCodeBlock(hook: string) {
-    if (!Array.isArray(this.data[hook]) || !this.app.codeDsl || isEmpty(this.app?.codeDsl)) return;
-    for (const codeId of this.data[hook]) {
-      if (this.app.codeDsl[codeId] && typeof this.app?.codeDsl[codeId]?.content === 'function') {
-        await this.app.codeDsl[codeId].content(this);
-      }
-    }
   }
 }
 

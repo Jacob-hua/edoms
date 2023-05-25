@@ -1,6 +1,6 @@
 <template>
-  <div class="electric-con">
-    <div class="electric" @click="changeElectric(true)">
+  <div class="electric-con" @click="changeElectric($event, true)">
+    <div class="electric">
       <div class="wrap-icon">
         <img class="icon-report" src="../assets/icon2.png" alt="" />
       </div>
@@ -13,7 +13,7 @@
             <img class="icon-left" src="../assets/icon.png" alt="" />
             <span class="elefont">{{ config.title }}</span>
           </div>
-          <div class="right-close" @click="changeElectric(false)"></div>
+          <div class="right-close" @click="changeElectric($event, false)"></div>
         </div>
         <div class="wrap-body-bottom">
           <el-tabs type="border-card">
@@ -61,7 +61,8 @@ defineProps<{
 }>();
 
 const showElectric = ref<boolean>(false);
-const changeElectric = (val: boolean) => {
+const changeElectric = (e: any, val: boolean) => {
+  e.stopPropagation();
   showElectric.value = val;
 };
 </script>
@@ -102,43 +103,41 @@ const changeElectric = (val: boolean) => {
 
 .electric-con {
   min-width: 117px;
-  min-height: 82px;
+  min-height: 80px;
   position: relative;
+  cursor: pointer;
 
   .electric {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // justify-content: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     .wrap-icon {
       width: 60px;
       height: 42px;
-      box-sizing: border-box;
+      margin-top: 1px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: rgba(0, 114, 179, 0.4);
       border: 1px solid #0072b3;
       border-radius: 4px;
+      box-sizing: border-box;
 
       .icon-report {
-        width: 26px;
-        height: 26px;
+        width: 22px;
+        height: 24px;
       }
     }
 
     .label {
-      margin-top: 5px;
+      margin-top: 7px;
       font-size: 14px;
       color: #ffffff;
       font-weight: 300;
-      text-align: center;
     }
   }
 }
@@ -161,6 +160,7 @@ const changeElectric = (val: boolean) => {
     transform: translate(-50%, -50%);
     width: 1800px;
     height: 840px;
+    border: 1px solid #013460;
     min-width: 822px;
     min-height: 364px;
 
@@ -200,6 +200,7 @@ const changeElectric = (val: boolean) => {
       width: 100%;
       height: 788px;
       background-color: rgba(0, 0, 0, 1);
+      overflow: hidden;
 
       .el-tabs--border-card {
         background-color: rgba(0, 0, 0, 1);

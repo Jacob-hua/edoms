@@ -170,6 +170,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report-cold',
       },
+      {
+        icon: 'duoxiangnengxiao',
+        text: '运行分析(冷 弹窗)',
+        type: 'operations-analysis-cold',
+      },
     ],
   },
   {
@@ -209,6 +214,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'xitong',
         text: '智能报告',
         type: 'intelligence-report-water',
+      },
+      {
+        icon: 'yunxingfenxi',
+        text: '运行分析',
+        type: 'operations-analysis-water',
       },
     ],
   },
