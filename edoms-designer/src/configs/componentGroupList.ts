@@ -230,6 +230,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report-cloud',
       },
+      {
+        icon: 'zhishideng',
+        text: '图片指示灯',
+        type: 'multicolor-image-light',
+      },
     ],
   },
 ];
