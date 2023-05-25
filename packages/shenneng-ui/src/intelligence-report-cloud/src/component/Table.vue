@@ -252,14 +252,14 @@ onMounted(() => {
     min-height: 52px;
     display: flex;
     align-items: center;
-    background: url(../assets/bg_header.png);
+    background-image: url('../assets/bg_header.png');
     background-size: cover;
     .icon-report {
       width: 22px;
       height: 24px;
       margin-left: 21px;
       margin-right: 16px;
-      background: url(../assets/dialog_icon_report.png);
+      background-image: url('../assets/dialog_icon_report.png');
       background-size: cover;
     }
     .label {
@@ -274,7 +274,7 @@ onMounted(() => {
       width: 14px;
       height: 14px;
       cursor: pointer;
-      background: url(../assets/icon_close.png);
+      background-image: url('../assets/icon_close.png');
       background-size: cover;
     }
   }

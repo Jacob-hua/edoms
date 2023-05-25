@@ -67,7 +67,7 @@ const ui: Record<string, any> = {
   intelligenceReportHeat: IntelligenceReportHeat,
   intelligenceReportCold: IntelligenceReportCold,
   operationsAnalysisHeat: OperationsAnalysisHeat,
-  OperationsAnalysisWater: OperationsAnalysisWater,
+  operationsAnalysisWater: OperationsAnalysisWater,
   loadForecasting: LoadForecasting,
   optimalRegulationHeat: OptimalRegulationHeat,
   intelligenceReportWater: IntelligenceReportWater,

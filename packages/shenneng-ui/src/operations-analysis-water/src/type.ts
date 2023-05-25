@@ -7,7 +7,7 @@
  */
 import { MComponent } from '@edoms/schema';
 
-export interface MIntelligenceReport extends MComponent {
+export interface OperationsAnalysisWater extends MComponent {
   /**轮询间隔时间 */
   intervalDelay: number;
   /** 标题 */

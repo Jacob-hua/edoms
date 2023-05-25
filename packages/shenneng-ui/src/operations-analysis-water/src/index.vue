@@ -1,7 +1,11 @@
 <template>
   <div class="operations-analysis-water" @click="handlerToShow($event, true)">
-    <div class="top-bg"></div>
-    <div class="bottom-font">{{ config.title }}</div>
+    <div class="wrap-report">
+      <div class="wrap-icon">
+        <img class="icon-report" src="./assets/outer-bg.png" alt="" />
+      </div>
+      <div class="label">{{ config.title }}</div>
+    </div>
     <div v-show="isShowModel" class="model-wrapper-ftst">
       <div class="model-content">
         <div class="content-title">
@@ -61,10 +65,10 @@ import { ref } from 'vue';
 import { ECOption } from '../../types';
 
 import Charts from './components/Chartcom.vue';
-import { MIntelligenceReport } from './type';
+import { OperationsAnalysisWater } from './type';
 
 defineProps<{
-  config: MIntelligenceReport;
+  config: OperationsAnalysisWater;
 }>();
 const isShowModel = ref<boolean>(false);
 const handlerToShow = (e: any, bl: boolean) => {
@@ -771,32 +775,41 @@ const getThreeData = (symbol: string) => {
 }
 
 .operations-analysis-water {
-  min-width: 117px;
   min-height: 80px;
-  background-color: rgba(0, 163, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  .top-bg {
-    width: 60px;
-    height: 42px;
-    background-color: rgba(0, 114, 179, 0.3);
-    background-image: url('../src/assets/outer-bg.png');
-    background-size: 24px 24px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    border: 1px solid rgba(0, 114, 179, 1);
-    box-sizing: border-box;
-    border-radius: 3px;
+  position: relative;
+  .wrap-report {
+    width: 100%;
+    height: 100%;
+    // background: rgba(0, 163, 255, 0.06);
+    // border: 1px solid #051823;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-  }
+    .wrap-icon {
+      width: 60px;
+      height: 42px;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 114, 179, 0.4);
+      border: 1px solid #0072b3;
+      border-radius: 4px;
+      box-sizing: border-box;
+      .icon-report {
+        width: 22px;
+        height: 24px;
+      }
+    }
 
-  .bottom-font {
-    color: rgba(255, 255, 255, 1);
-    font-size: 14px;
-    margin-top: 6px;
+    .label {
+      margin-top: 7px;
+      font-size: 14px;
+      color: #ffffff;
+      font-weight: 300;
+    }
   }
 
   .model-wrapper-ftst {
