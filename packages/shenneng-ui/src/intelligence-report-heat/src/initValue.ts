@@ -10,7 +10,7 @@ export default {
   style: {
     width: '117',
     height: '80',
-    backgroundColor: 'rgba(0, 163, 255, 0.06)',
+    backgroundColor: 'rgba(0, 163, 255, 0.1)',
   },
   title: '智能报告',
 };

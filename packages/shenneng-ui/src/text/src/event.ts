@@ -6,6 +6,11 @@ export default {
       props: ['visible'],
     },
     {
+      label: '设置样式',
+      value: 'setStyle',
+      props: ['style'],
+    },
+    {
       label: '设置文本',
       value: 'setText',
       props: ['text'],
