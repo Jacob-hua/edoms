@@ -106,6 +106,11 @@ const componentGroupList: ComponentGroup[] = [
         type: 'multicolor-single-light',
       },
       {
+        icon: 'zhishideng',
+        text: '图片单态指示灯',
+        type: 'multicolor-image-light',
+      },
+      {
         icon: 'gaojing',
         text: '告警列表',
         type: 'warning-table-list',
@@ -229,11 +234,6 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'xitong',
         text: '智能报告',
         type: 'intelligence-report-cloud',
-      },
-      {
-        icon: 'zhishideng',
-        text: '图片指示灯',
-        type: 'multicolor-image-light',
       },
     ],
   },
