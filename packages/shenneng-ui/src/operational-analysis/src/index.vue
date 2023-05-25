@@ -3,15 +3,15 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-25 17:05:41
+ * @LastEditTime: 2023-05-25 17:34:12
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrap-header">
-        <!-- <div class="wrap-divide">
+        <div class="wrap-divide">
           <div v-for="item in [0, 1, 2]" :key="item" class="divide"></div>
-        </div> -->
+        </div>
         <div v-show="showLeft" class="caret-left btn" @click="moveMethod('left')"></div>
         <div id="scrollRef" ref="scrollMain" class="wrap-scroll">
           <div
@@ -313,6 +313,20 @@ onMounted(() => {
     display: flex;
     align-items: center;
     position: relative;
+
+    .wrap-divide {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .divide {
+        width: 1px;
+        height: 12px;
+        background-color: rgba($color: #00a3ff, $alpha: 0.3);
+      }
+    }
     .btn {
       height: 0;
       width: 0;
@@ -322,7 +336,7 @@ onMounted(() => {
     }
     .caret-left {
       position: absolute;
-      left: 0;
+      left: -20px;
       border-left: 8px solid transparent;
       border-right: 8px solid;
       border-right-color: #ffffff85;
@@ -369,7 +383,7 @@ onMounted(() => {
 
     .caret-right {
       position: absolute;
-      right: 0;
+      right: -20px;
       border-right: 8px solid transparent;
       border-left: 8px solid;
       border-left-color: #ffffff85;
