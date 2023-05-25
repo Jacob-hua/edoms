@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-25 17:34:12
+ * @LastEditTime: 2023-05-25 18:12:54
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
@@ -83,6 +83,7 @@ const option = ref<ECOption>({});
 const lineUnit = ref<string[]>([]);
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
+  if (props.config.classify.length == 0) return [];
   const result = props.config.classify[activeCategory.value].tabName;
   if (result) {
     return result;
@@ -321,6 +322,7 @@ onMounted(() => {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      pointer-events: none;
       .divide {
         width: 1px;
         height: 12px;
