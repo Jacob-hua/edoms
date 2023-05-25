@@ -222,8 +222,8 @@ const componentGroupList: ComponentGroup[] = [
       },
       {
         icon: 'zhishideng',
-        text: '文本指示灯',
-        type: 'multicolor-text-light',
+        text: '图片指示灯',
+        type: 'multicolor-image-light',
       },
     ],
   },

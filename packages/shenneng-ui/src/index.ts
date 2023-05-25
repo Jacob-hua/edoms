@@ -23,9 +23,10 @@ import IntelligenceReportEletric from './intelligence-report-eletric';
 import IntelligenceReportHeat from './intelligence-report-heat';
 import IntelligenceReportWater from './intelligence-report-water';
 import LoadForecasting from './loadForecasting';
+import MulticolorImageLight from './multicolor-image-light';
 import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MulticolorSingleLight from './multicolor-single-light';
-import MulticolorTextLight from './multicolor-text-light';
+// import MulticolorTextLight from './multicolor-text-light';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
 import OperationsAnalysisHeat from './operations-analysis-heat';
@@ -48,9 +49,10 @@ const ui: Record<string, any> = {
   checkbox: Checkbox,
   overlay: Overlay,
   globalSchematic: GlobalSchematic,
+  multicolorImageLight: MulticolorImageLight,
   multicolorPolymorphicLight: MulticolorPolymorphicLight,
   multicolorSingleLight: MulticolorSingleLight,
-  multicolorTextLight: MulticolorTextLight,
+  // multicolorTextLight: MulticolorTextLight,
   charts: Charts,
   equipmentCondition: EquipmentCondition,
   economicIndicators: EconomicIndicators,
