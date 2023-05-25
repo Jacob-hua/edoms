@@ -117,7 +117,7 @@ const cssBackgroundColor = computed<string>(() => (showDetail.value ? 'rgba(0, 0
   .wrap-report {
     width: 100%;
     height: 100%;
-    background: rgba(0, 163, 255, 0.1);
+    // background: rgba(0, 163, 255, 0.1);
     // border: 1px solid #051823;
     display: flex;
     flex-direction: column;
@@ -186,14 +186,14 @@ const cssBackgroundColor = computed<string>(() => (showDetail.value ? 'rgba(0, 0
         min-height: 52px;
         display: flex;
         align-items: center;
-        background: url(./assets/bg_header.png);
+        background-image: url('./assets/bg_header.png');
         background-size: cover;
         .icon-report {
           width: 22px;
           height: 24px;
           margin-left: 21px;
           margin-right: 16px;
-          background: url(./assets/dialog_icon_report.png);
+          background-image: url('./assets/dialog_icon_report.png');
           background-size: cover;
         }
         .label {
@@ -208,7 +208,7 @@ const cssBackgroundColor = computed<string>(() => (showDetail.value ? 'rgba(0, 0
           width: 14px;
           height: 14px;
           cursor: pointer;
-          background: url(./assets/icon_close.png);
+          background-image: url('./assets/icon_close.png');
           background-size: cover;
         }
       }
