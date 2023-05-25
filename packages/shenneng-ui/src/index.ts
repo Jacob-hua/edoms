@@ -26,7 +26,6 @@ import LoadForecasting from './loadForecasting';
 import MulticolorImageLight from './multicolor-image-light';
 import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MulticolorSingleLight from './multicolor-single-light';
-// import MulticolorTextLight from './multicolor-text-light';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
 import OperationsAnalysisCold from './operations-analysis-cold';
@@ -54,7 +53,6 @@ const ui: Record<string, any> = {
   multicolorImageLight: MulticolorImageLight,
   multicolorPolymorphicLight: MulticolorPolymorphicLight,
   multicolorSingleLight: MulticolorSingleLight,
-  // multicolorTextLight: MulticolorTextLight,
   charts: Charts,
   equipmentCondition: EquipmentCondition,
   economicIndicators: EconomicIndicators,
