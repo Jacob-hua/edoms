@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 14:11:24
+ * @LastEditTime: 2023-05-25 17:54:46
 -->
 <template>
   <div class="wrap-table">
@@ -16,7 +16,7 @@
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form">
         <el-row>
           <el-col :span="4" :offset="1">
-            <el-form-item label="日期选择：">
+            <el-form-item label="时间：">
               <el-date-picker v-model="state.queryForm.startDate" placeholder="请选择日期" @change="changeDate" />
             </el-form-item>
           </el-col>
@@ -27,7 +27,12 @@
           </el-col>
           <el-col :span="4" :offset="1">
             <el-form-item label="空调机组">
-              <Select width="180px" :options="state.option" @change-item="changeOption"></Select>
+              <Select
+                width="180px"
+                :options="state.option"
+                :default-value="'全部'"
+                @change-item="changeOption"
+              ></Select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -84,12 +89,16 @@ const state: any = reactive({
   queryForm: {
     startDate: new Date(curDate.getTime() - 24 * 60 * 60 * 1000),
     endDate: curDate,
-    kt: '',
+    kt: 'all',
   } as MQueryForm,
   testData: [],
   titleList: [],
   tableData: [],
   option: [
+    {
+      label: '全部',
+      value: 'all',
+    },
     {
       label: '空调机组1',
       value: 'kt1',
