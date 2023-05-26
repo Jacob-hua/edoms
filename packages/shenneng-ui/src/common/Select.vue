@@ -61,7 +61,7 @@ const changeSelect = (item: any, index: number) => {
 };
 
 onMounted(() => {
-  selectedValue.value = props.defaultValue;
+  selectedValue.value = props.defaultValue ?? '请选择';
 });
 </script>
 
