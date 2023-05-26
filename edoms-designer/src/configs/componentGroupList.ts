@@ -240,11 +240,6 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report-cloud',
       },
-      {
-        icon: 'yunxingfenxi',
-        text: '运行分析（光伏）',
-        type: 'operations-analysis-pv',
-      },
     ],
   },
   {
@@ -254,6 +249,11 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'xitong',
         text: '智能报告',
         type: 'intelligence-report-pv',
+      },
+      {
+        icon: 'yunxingfenxi',
+        text: '运行分析（光伏）',
+        type: 'operations-analysis-pv',
       },
     ],
   },
