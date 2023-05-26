@@ -1,10 +1,20 @@
 <template>
   <div class="click-wrapper" @click="visible = true">
-    <div class="icon"></div>
-    <span>{{ config.title }}</span>
-    <ElDrawer v-model="visible" direction="btt" size="95%">
+    <div class="wrap-report">
+      <div class="wrap-icon">
+        <img class="icon-report" src="./assets/outer-bg.png" alt="" />
+      </div>
+      <div class="label">{{ config.title }}</div>
+    </div>
+    <ElDrawer v-model="visible" direction="btt" size="90%">
       <template #header="{ titleId, titleClass }: any">
-        <div :id="titleId" class="drawer-header" :class="titleClass" @click="visible = false">{{ config.title }}</div>
+        <div :id="titleId" class="drawer-header" :class="titleClass">
+          <div class="bgcontent">
+            <img src="./assets/model-icon.png" alt="" class="icon-report" />
+            <span class="label">{{ config.title }}</span>
+          </div>
+          <div class="close" @click="visible = false"></div>
+        </div>
       </template>
       <div class="eq-wrapper">
         <div ref="groupTabsRef" class="group-tabs">
@@ -14,10 +24,7 @@
             :class="activeName === group ? ['group-tab-pane', 'group-tab-pane-active'] : ['group-tab-pane']"
             @click="handleGroupTabChange(group)"
           >
-            <LongText
-              :content="group"
-              :content-style="{ width: 'inherit', fontSize: 'inherit', textAlign: 'center' }"
-            ></LongText>
+            {{ group }}
           </button>
         </div>
         <ConditionCard
@@ -26,7 +33,8 @@
           :condition="condition"
           :interval-delay="config.intervalDelay"
           :request="request"
-        ></ConditionCard>
+        >
+        </ConditionCard>
       </div>
     </ElDrawer>
   </div>
@@ -37,7 +45,6 @@ import { computed, onUnmounted, ref, watch } from 'vue';
 
 import { ElDrawer } from '@edoms/design';
 
-import LongText from '../../LongText.vue';
 import useApp from '../../useApp';
 
 import ConditionCard from './component/ConditionCard.vue';
@@ -107,67 +114,141 @@ $tabPanActiveColor: #00ffff;
 $borderColor: #505152;
 
 .click-wrapper {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  .icon {
-    width: 60px;
-    height: 42px;
-    background-color: rgba(0, 114, 179, 0.3);
-    background-image: url('./assets/outer-bg.png');
-    background-size: 24px 24px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    border: 1px solid #0072b3;
-    box-sizing: border-box;
-    border-radius: 3px;
-  }
+  min-width: 117px;
+  min-height: 80px;
+  position: relative;
 
-  & > span {
-    padding-top: 9px;
+  .wrap-report {
+    width: 100%;
+    height: 100%;
+    // background: rgba(0, 163, 255, 0.1);
+    // border: 1px solid #051823;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    .wrap-icon {
+      width: 60px;
+      height: 42px;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 114, 179, 0.4);
+      border: 1px solid #0072b3;
+      border-radius: 4px;
+      box-sizing: border-box;
+
+      .icon-report {
+        width: 22px;
+        height: 24px;
+      }
+    }
+
+    .label {
+      margin-top: 7px;
+      font-size: 14px;
+      color: #ffffff;
+      font-weight: 300;
+    }
   }
+}
+
+:deep(.el-drawer.btt, .el-drawer.ttb) {
+  width: 1800px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #000;
+  border: 1px solid #013460;
+}
+
+:deep(.el-drawer__header) {
+  padding: 0;
+  margin: 0;
+}
+
+:deep(.el-drawer__body) {
+  padding: 30px;
 }
 .drawer-header {
-  background-color: rgb(41, 41, 42);
-  height: 60px;
-  line-height: 60px;
-  padding: 0 14px;
+  height: 52px;
+  line-height: 52px;
   color: #ffffff;
-  font-weight: bold;
+  font-weight: 400;
   font-size: 16px;
-  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  background-image: url('./assets/bg_header.png');
+  background-size: cover;
+  border-bottom: 1px solid #013460;
+
+  .bgcontent {
+    width: 100%;
+    height: 100%;
+
+    .icon-report {
+      width: 24px;
+      height: 24px;
+      margin: 20px;
+    }
+
+    .label {
+      color: #eaf5ff;
+      font-size: 18px;
+      font-weight: 400;
+    }
+  }
+
+  .close {
+    width: 14px;
+    height: 14px;
+    background-image: url('./assets/icon_close.png');
+    background-size: 14px 14px;
+    background-repeat: no-repeat;
+    margin-top: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+  }
 }
+
 .eq-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   row-gap: 20px;
-  column-gap: 12px;
+  column-gap: 30px;
 }
+
 .group-tabs {
   grid-column: 1 / span 2;
   white-space: nowrap;
   overflow-x: scroll;
   overflow-y: hidden;
+
   &::-webkit-scrollbar {
     display: none;
   }
 }
+
 .group-tab-pane {
-  width: 86px;
-  height: 42px;
-  line-height: 40px;
-  background: $tabPanBg;
-  border: 1px solid $borderColor;
-  border-radius: 3px;
-  color: $tabPanColor;
-  margin-right: 4px;
+  width: 120px;
+  height: 36px;
+  line-height: 36px;
+  font-size: 16px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #eaf5ff;
+  background: #00141f;
+  border: 0;
+  margin-right: 10px;
 
   &-active {
-    border-bottom: 2px solid $tabPanActiveColor;
-    color: $tabPanActiveColor;
-    background-color: transparent;
+    background: #002a42;
+    border: 1px solid #007bc0;
+    color: #ffffff;
   }
 }
 </style>

@@ -290,21 +290,23 @@ $borderColor: #505152;
 $eqBg: #272727;
 $eqTitleColor: #ffffff;
 $eqIndicatorColor: #999999;
+
 :deep(.el-input) {
   --el-input-bg-color: transparent;
   --el-input-border-color: #505152;
   --el-input-text-color: #ffffff;
 }
+
 :deep(.el-select) {
   background-color: transparent;
   --el-select-input-focus-border-color: #ffffff;
 }
+
 .eq-condition {
-  width: 912px;
+  width: 855px;
   height: 340px;
-  background-color: $eqBg;
-  border-radius: 3px;
-  border: 1px solid $borderColor;
+  background: rgba(9, 15, 23, 0.3);
+  border: 1px solid #212c3c;
   display: grid;
   grid-template-rows: 40px 1fr;
   grid-template-columns: 164px 1fr;
@@ -313,21 +315,25 @@ $eqIndicatorColor: #999999;
   column-gap: 30px;
   box-sizing: border-box;
 }
+
 .eq-title {
   color: $eqTitleColor;
   font-size: 14px;
   line-height: 40px;
 }
+
 .eq-indicators {
   grid-column: 1 / span 1;
   grid-row: 2;
   display: flex;
   flex-direction: column;
   overflow: auto;
+
   &::-webkit-scrollbar {
     display: none;
   }
 }
+
 .eq-indicator {
   display: flex;
   border: 1px solid $borderColor;
@@ -335,13 +341,16 @@ $eqIndicatorColor: #999999;
   color: $eqIndicatorColor;
   margin-top: 4px;
   line-height: 30px;
+
   .label {
     border-right: 1px solid $borderColor;
   }
+
   .value {
     flex-grow: 1;
   }
 }
+
 .eq-indicator-tabs {
   grid-column: 2;
   grid-row: 1;
@@ -362,6 +371,7 @@ $eqIndicatorColor: #999999;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     &::after {
       content: '';
       margin-top: 2px;
@@ -369,6 +379,7 @@ $eqIndicatorColor: #999999;
     }
   }
 }
+
 .eq-indicator-tab-active {
   color: #ffffff !important;
 
@@ -381,6 +392,7 @@ $eqIndicatorColor: #999999;
     border-radius: 1px;
   }
 }
+
 .eq-indicator-chart {
   grid-row: 2;
   grid-column: 2;
