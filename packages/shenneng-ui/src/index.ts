@@ -29,6 +29,7 @@ import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
 import OperationsAnalysisCold from './operations-analysis-cold';
 import OperationsAnalysisHeat from './operations-analysis-heat';
+import OperationsAnalysisPv from './operations-analysis-pv';
 import OperationsAnalysisWater from './operations-analysis-water';
 import OptimalRegulationHeat from './optimal-regulation-heat';
 import Overlay from './overlay';
@@ -68,6 +69,7 @@ const ui: Record<string, any> = {
   intelligenceReportCold: IntelligenceReportCold,
   operationsAnalysisHeat: OperationsAnalysisHeat,
   operationsAnalysisWater: OperationsAnalysisWater,
+  operationsAnalysisPv: OperationsAnalysisPv,
   loadForecasting: LoadForecasting,
   optimalRegulationHeat: OptimalRegulationHeat,
   intelligenceReportWater: IntelligenceReportWater,
