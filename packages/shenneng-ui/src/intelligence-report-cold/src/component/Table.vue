@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-18 17:43:10
+ * @LastEditTime: 2023-05-26 15:12:17
 -->
 <template>
   <div class="wrap-table">
@@ -21,7 +21,12 @@
           </el-col>
           <el-col :span="4">
             <el-form-item label="范围选择">
-              <Select width="180px" :options="state.rangeOption" @change-item="changeRange"></Select>
+              <Select
+                width="180px"
+                :options="state.rangeOption"
+                :default-value="'全部'"
+                @change-item="changeRange"
+              ></Select>
             </el-form-item>
           </el-col>
           <div class="button">查询</div>
@@ -355,7 +360,7 @@ onMounted(() => {
         }
       }
       .right-table {
-        width: 1153px;
+        max-width: 1153px;
         border-top: 1px solid rgba($color: #1d2634, $alpha: 0.6);
         // flex-grow: 1;
       }

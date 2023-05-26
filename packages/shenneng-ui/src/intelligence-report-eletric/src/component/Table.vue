@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 09:44:52
+ * @LastEditTime: 2023-05-26 16:05:59
 -->
 <template>
   <div class="wrap-table">
@@ -27,28 +27,22 @@
           </el-col>
           <el-col :span="3" :offset="12">
             <el-form-item label="">
-              <Select :width="148" :options="state.stationOptions" @change-item="changeStation"></Select>
-              <!-- <el-select v-model="state.queryForm.station">
-                <el-option
-                  v-for="item in state.stationOptions"
-                  :key="item.label"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select> -->
+              <Select
+                :width="148"
+                :options="state.stationOptions"
+                :default-value="'一号配电室'"
+                @change-item="changeStation"
+              ></Select>
             </el-form-item>
           </el-col>
           <el-col :span="3">
             <el-form-item label="">
-              <Select :width="148" :options="state.deviceOptions" @change-item="changeDevice"></Select>
-              <!-- <el-select v-model="state.queryForm.device">
-                <el-option
-                  v-for="item in state.deviceOptions"
-                  :key="item.label"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select> -->
+              <Select
+                :width="148"
+                :options="state.deviceOptions"
+                :default-value="'电压配电柜一'"
+                @change-item="changeDevice"
+              ></Select>
             </el-form-item>
           </el-col>
           <div class="button">导出</div>
