@@ -25,6 +25,18 @@ const indicatorTypes = [
     text: '能耗',
     value: MEconomicIndicator.HEAT_ENERGY_CONSUMPTION,
   },
+  {
+    text: '温度',
+    value: MEconomicIndicator.TEMPERATURE,
+  },
+  {
+    text: '湿度',
+    value: MEconomicIndicator.HUMIDITY,
+  },
+  {
+    text: '辐照量',
+    value: MEconomicIndicator.EXPOSURE,
+  },
 ];
 
 export default async (request: Request) => [

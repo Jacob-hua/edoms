@@ -237,6 +237,16 @@ const componentGroupList: ComponentGroup[] = [
       },
     ],
   },
+  {
+    title: '运行监测-光伏',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-pv',
+      },
+    ],
+  },
 ];
 
 export default componentGroupList;
