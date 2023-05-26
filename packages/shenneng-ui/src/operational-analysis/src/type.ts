@@ -33,6 +33,8 @@ export interface MOperationalParameters extends MComponent {
   title: string;
   /** 子标题 */
   subTitle: string;
+  /** 一级分类名称 */
+  classify: any[];
   /** 系统曲线 */
   systems: MParameterItemConfig[];
   /** 设备曲线 */

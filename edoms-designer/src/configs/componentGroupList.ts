@@ -106,6 +106,11 @@ const componentGroupList: ComponentGroup[] = [
         type: 'multicolor-single-light',
       },
       {
+        icon: 'zhishideng',
+        text: '图片单态指示灯',
+        type: 'multicolor-image-light',
+      },
+      {
         icon: 'gaojing',
         text: '告警列表',
         type: 'warning-table-list',
@@ -239,6 +244,16 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'yunxingfenxi',
         text: '运行分析（光伏）',
         type: 'operations-analysis-pv',
+      },
+    ],
+  },
+  {
+    title: '运行监测-光伏',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-pv',
       },
     ],
   },

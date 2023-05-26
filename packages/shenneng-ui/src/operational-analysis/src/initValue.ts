@@ -6,4 +6,5 @@ export default {
   },
   title: '运行分析',
   subTitle: 'Operation analysis',
+  classify: [],
 };
