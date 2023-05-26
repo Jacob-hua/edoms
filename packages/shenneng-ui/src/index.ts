@@ -5,6 +5,7 @@
  * @LastEditors: lihao
  * @LastEditTime: 2023-05-23 17:10:14
  */
+import AssetInformationPv from './asset-information-pv';
 import Button from './button';
 import Charts from './charts';
 import Checkbox from './checkbox';
@@ -41,6 +42,7 @@ import Text from './text';
 import WarningTableList from './warning-table-list';
 
 const ui: Record<string, any> = {
+  assetInformationPv: AssetInformationPv,
   page: Page,
   container: Container,
   button: Button,

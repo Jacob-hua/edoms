@@ -145,6 +145,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '悬浮窗',
         type: 'suspended-window',
       },
+      {
+        icon: 'xitong',
+        text: '资产信息',
+        type: 'asset-information-pv',
+      },
     ],
   },
   {
