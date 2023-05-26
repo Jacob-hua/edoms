@@ -221,120 +221,254 @@ const handleClickS = (event: any) => {
 
 // 获取charts数据
 const getData = (symbol: string) => {
-  if (symbol === 'day' && activeNameF.value === 'power-gen') {
-    timeType.value = 'date';
-    option.value = {
-      grid: {
-        top: 30,
-        left: 30,
-        right: 30,
-      },
-      xAxis: {
-        type: 'category',
-        name: '时',
-        data: [
-          '1',
-          '2',
-          '3',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          '11',
-          '12',
-          '13',
-          '14',
-          '15',
-          '16',
-          '17',
-          '18',
-          '19',
-          '20',
-          '21',
-          '22',
-          '23',
-          '24',
-        ],
-        axisTick: {
-          show: false,
+  if (activeNameF.value === 'power-gen') {
+    if (symbol === 'day') {
+      timeType.value = 'date';
+      option.value = {
+        grid: {
+          top: 30,
+          left: 30,
+          right: 30,
         },
-      },
-      color: ['#287CE8', '#00FFF0'],
-      tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(11,34,52,0.9)',
-        borderColor: '#204C6F',
-        borderWidth: 1,
-        formatter: (params: any) => {
-          let tip: string = '';
-          if (params != null && params.length > 0) {
-            tip += '<div><p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' + params[0].name + '：00</p>';
-            for (let index = 0; index < params.length; index++) {
-              tip +=
-                '<p>' +
-                params[index].marker +
-                '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                params[index].seriesName +
-                '：' +
-                params[index].value +
-                'kWh</span></p>';
-            }
-            tip += '</div>';
-          }
-          return tip;
-        },
-      },
-      legend: {
-        bottom: '0%',
-        left: 'center',
-        itemWidth: 15,
-        itemHeight: 8,
-        textStyle: {
-          color: '#fff',
-        },
-      },
-      yAxis: {
-        type: 'value',
-        name: 'kWh',
-        nameTextStyle: {
-          // lineHeight: 28,
-          // padding: [0, 0, 0, 100],
-          fontSize: '14',
-          fontFamily: 'Microsoft YaHei',
-          fontWeight: 400,
-          color: '#EAF5FF',
-        },
-        splitLine: {
-          lineStyle: {
-            type: 'dashed',
-            color: '#1A242B',
-            width: 1,
+        xAxis: {
+          type: 'category',
+          name: '时',
+          data: [
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10',
+            '11',
+            '12',
+            '13',
+            '14',
+            '15',
+            '16',
+            '17',
+            '18',
+            '19',
+            '20',
+            '21',
+            '22',
+            '23',
+            '24',
+          ],
+          axisTick: {
+            show: false,
           },
         },
-        axisLine: {
-          show: true,
+        color: ['#00FFF0', '#287CE8'],
+        tooltip: {
+          trigger: 'axis',
+          backgroundColor: 'rgba(11,34,52,0.9)',
+          borderColor: '#204C6F',
+          borderWidth: 1,
+          formatter: (params: any) => {
+            let tip: string = '';
+            if (params != null && params.length > 0) {
+              tip += '<div><p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' + params[0].name + '：00</p>';
+              for (let index = 0; index < params.length; index++) {
+                tip +=
+                  '<p>' +
+                  params[index].marker +
+                  '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+                  params[index].seriesName +
+                  '：' +
+                  params[index].value +
+                  'kWh</span></p>';
+              }
+              tip += '</div>';
+            }
+            return tip;
+          },
         },
-      },
-      series: [
-        {
-          name: '总览',
-          data: [15, 25, 22, 33, 24, 37, 41, 21, 23, 36, 45, 10, 25, 41, 38, 29, 6, 43, 35, 28, 33, 37, 45, 20],
-          type: 'line',
-          smooth: true,
-          symbolSize: 0,
+        legend: {
+          bottom: '0%',
+          left: 'center',
+          itemWidth: 15,
+          itemHeight: 8,
+          textStyle: {
+            color: '#fff',
+          },
         },
-        {
-          name: '装机量',
-          data: [35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35],
-          type: 'line',
-          smooth: true,
-          symbolSize: 0,
+        yAxis: {
+          type: 'value',
+          name: 'kWh',
+          nameTextStyle: {
+            // lineHeight: 28,
+            // padding: [0, 0, 0, 100],
+            fontSize: '14',
+            fontFamily: 'Microsoft YaHei',
+            fontWeight: 400,
+            color: '#EAF5FF',
+          },
+          splitLine: {
+            lineStyle: {
+              type: 'dashed',
+              color: '#1A242B',
+              width: 1,
+            },
+          },
+          axisLine: {
+            show: true,
+          },
         },
-      ],
-    };
+        series: [
+          {
+            name: '总览',
+            data: [15, 25, 22, 33, 24, 37, 41, 21, 23, 36, 45, 10, 25, 41, 38, 29, 6, 43, 35, 28, 33, 37, 45, 20],
+            type: 'line',
+            smooth: true,
+            symbolSize: 0,
+          },
+          {
+            name: '装机量',
+            data: [35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35],
+            type: 'line',
+            smooth: true,
+            symbolSize: 0,
+          },
+        ],
+      };
+    } else {
+      timeType.value = 'month';
+      option.value = {
+        grid: {
+          top: 30,
+          left: 30,
+          right: 30,
+        },
+        xAxis: {
+          type: 'category',
+          name: '日',
+          data: [
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10',
+            '11',
+            '12',
+            '13',
+            '14',
+            '15',
+            '16',
+            '17',
+            '18',
+            '19',
+            '20',
+            '21',
+            '22',
+            '23',
+            '24',
+            '25',
+            '26',
+            '27',
+            '28',
+            '29',
+            '30',
+            '31',
+          ],
+          axisTick: {
+            show: false,
+          },
+        },
+        color: ['rgba(40,124,232,0.5)', '#176CF4'],
+        tooltip: {
+          trigger: 'axis',
+          backgroundColor: 'rgba(11,34,52,0.9)',
+          borderColor: '#204C6F',
+          borderWidth: 1,
+          formatter: (params: any) => {
+            let tip: string = '';
+            if (params != null && params.length > 0) {
+              tip +=
+                '<div><p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">2023-5-' + params[0].name + '</p>';
+              for (let index = 0; index < params.length; index++) {
+                tip +=
+                  '<p>' +
+                  params[index].marker +
+                  '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+                  params[index].seriesName +
+                  '：' +
+                  params[index].value +
+                  'kWh</span></p>';
+              }
+              tip += '</div>';
+            }
+            return tip;
+          },
+        },
+        legend: {
+          bottom: '0%',
+          left: 'center',
+          itemWidth: 15,
+          itemHeight: 8,
+          textStyle: {
+            color: '#fff',
+          },
+        },
+        yAxis: {
+          type: 'value',
+          name: 'kWh',
+          nameTextStyle: {
+            // lineHeight: 28,
+            // padding: [0, 0, 0, 100],
+            fontSize: '14',
+            fontFamily: 'Microsoft YaHei',
+            fontWeight: 400,
+            color: '#EAF5FF',
+          },
+          splitLine: {
+            lineStyle: {
+              type: 'dashed',
+              color: '#1A242B',
+              width: 1,
+            },
+          },
+          axisLine: {
+            show: true,
+          },
+        },
+        series: [
+          {
+            name: '总览',
+            data: [
+              25, 37, 25, 37, 25, 38, 20, 25, 37, 30, 25, 35, 20, 22, 35, 43, 38, 41, 25, 28, 40, 22, 32, 24, 33, 42,
+              50, 32, 21, 32, 28,
+            ],
+            type: 'bar',
+            itemStyle: {
+              borderWidth: 1,
+              borderColor: '#287CE8',
+            },
+            barWidth: 16,
+            barGap: 70,
+          },
+          {
+            name: '装机量',
+            data: [
+              35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
+              35, 35, 35, 35, 35,
+            ],
+            type: 'line',
+            smooth: true,
+            symbolSize: 0,
+          },
+        ],
+      };
+    }
   } else if (symbol === 'day') {
     timeType.value = 'date';
     option.value = {
