@@ -324,6 +324,7 @@ watch(
             'intelligence-report-cloud',
             'intelligence-report-eletric',
             'intelligence-report-cold',
+            'intelligence-report-pv',
             'optimal-regulation-heat',
           ].includes(component)
         ) {

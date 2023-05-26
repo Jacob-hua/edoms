@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 14:13:47
+ * @LastEditTime: 2023-05-26 11:49:22
 -->
 <template>
   <div class="wrap-table">
@@ -13,6 +13,16 @@
       <div class="close" @click.stop="closeTable"></div>
     </div>
     <div class="report">
+      <div class="wrap-tab">
+        <div
+          v-for="(item, index) in state.tabs"
+          :key="item"
+          :class="['tab', { active: activeTab === index }]"
+          @click="changeTab(index)"
+        >
+          {{ item }}
+        </div>
+      </div>
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
         <el-row :gutter="10">
           <el-col :span="4" :offset="1">
@@ -61,7 +71,7 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
 
-import { tableData, titleData } from '../mock';
+import { tableData, tableData1, titleData } from '../mock';
 import { MIntelligenceReport, MQueryForm } from '../type';
 
 defineProps<{
@@ -74,7 +84,18 @@ const state: any = reactive({
   queryForm: {
     date: new Date(),
   } as MQueryForm,
-  testData: [],
+  tabs: [
+    '全部',
+    '单体一',
+    '单体二',
+    '研发楼西',
+    '研发楼北',
+    '研发楼东',
+    '研发楼南',
+    '光伏幕墙',
+    '光伏车棚',
+    '全站数据',
+  ],
   titleList: [],
   tableData: [],
   tableStyle: {
@@ -90,6 +111,12 @@ const state: any = reactive({
 
 // state.queryForm.date = new Date(curDate.getTime() - 24 * 60 * 60 * 1000); //前一天
 
+const activeTab = ref<number>(0);
+const changeTab = (index: number) => {
+  if (activeTab.value === index) return;
+  activeTab.value = index;
+  state.tableData = index % 2 === 0 ? tableData : tableData1;
+};
 const handleTableData = () => {
   state.titleList = titleData;
   state.tableData = tableData;
@@ -201,7 +228,7 @@ onMounted(() => {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 1800px;
+  width: 1630px;
   height: 793px;
   background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
@@ -241,16 +268,42 @@ onMounted(() => {
   .report {
     flex-grow: 1;
     width: 100%;
+    .wrap-tab {
+      width: calc(100% - 60px);
+      height: 56px;
+      margin-left: 30px;
+      border-bottom: 1px solid rgba($color: #4d505f, $alpha: 1);
+      display: flex;
+      .tab {
+        height: 55px;
+        min-width: 71px;
+        margin-right: 50px;
+        font-size: 16px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #eaf5ff;
+        opacity: 0.5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        &.active {
+          opacity: 1;
+          border-bottom: 2px solid #00a3ff;
+        }
+      }
+    }
     .condition-form {
-      height: 60px;
+      height: 56px;
       margin-top: 20px;
-      border-bottom: 1px solid #1d2634;
       .button {
-        margin-left: 20px;
-        width: 100px;
+        position: absolute;
+        right: 140px;
+        // margin-left: 20px;
+        width: 80px;
         height: 32px;
-        background: rgba(0, 163, 255, 0.26);
-        border: 1px solid #007bc0;
+        background: rgba(0, 163, 255, 0.2);
+        border: 1px solid #00a3ff;
         border-radius: 4px;
         text-align: center;
         font-size: 16px;
@@ -261,46 +314,12 @@ onMounted(() => {
         cursor: pointer;
       }
       .button-export {
-        width: 80px;
-        position: absolute;
-        right: 0;
-        background: rgba(0, 163, 255, 0.26);
-      }
-    }
-    .wrap-tab {
-      width: 100%;
-      .tab {
-        margin-left: 30px;
-        margin-top: 31px;
-        margin-bottom: 21px;
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-        font-weight: 400;
-        text-align: center;
-        line-height: 36px;
-        .button {
-          width: 100px;
-          height: 36px;
-          margin-right: 10px;
-          background: rgba($color: #00a3ff, $alpha: 0.12);
-          color: #eaf5ff;
-          cursor: pointer;
-
-          &.active {
-            width: 100px;
-            height: 34px;
-            background: rgba(0, 163, 255, 0.26);
-            border: 1px solid #007bc0;
-            color: #ffffff;
-          }
-        }
+        right: 20px;
       }
     }
     .table {
       width: 96%;
       margin-left: 2%;
-      margin-top: 30px;
     }
     .wrap-page {
       width: 50%;

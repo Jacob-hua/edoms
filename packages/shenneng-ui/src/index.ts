@@ -21,6 +21,7 @@ import IntelligenceReportCloud from './intelligence-report-cloud';
 import IntelligenceReportCold from './intelligence-report-cold';
 import IntelligenceReportEletric from './intelligence-report-eletric';
 import IntelligenceReportHeat from './intelligence-report-heat';
+import IntelligenceReportPv from './intelligence-report-pv';
 import IntelligenceReportWater from './intelligence-report-water';
 import LoadForecasting from './loadForecasting';
 import MulticolorImageLight from './multicolor-image-light';
@@ -75,6 +76,7 @@ const ui: Record<string, any> = {
   intelligenceReportWater: IntelligenceReportWater,
   intelligenceReportCloud: IntelligenceReportCloud,
   operationsAnalysisCold: OperationsAnalysisCold,
+  intelligenceReportPv: IntelligenceReportPv,
 };
 
 export default ui;

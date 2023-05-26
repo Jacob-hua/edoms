@@ -11,6 +11,12 @@ export enum MEconomicIndicator {
   COOL_ENERGY_CONSUMPTION = 'cold',
   /** 能耗 */
   HEAT_ENERGY_CONSUMPTION = 'energy',
+  /** 温度 */
+  TEMPERATURE = 'temperature',
+  /** 湿度 */
+  HUMIDITY = 'humidity',
+  /** 辐照量 */
+  EXPOSURE = 'exposure',
 }
 
 export interface MIndicatorItemConfig {

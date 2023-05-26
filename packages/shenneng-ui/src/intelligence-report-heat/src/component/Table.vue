@@ -3,17 +3,16 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 14:08:47
+ * @LastEditTime: 2023-05-26 14:03:32
 -->
 <template>
   <div class="wrap-table">
+    <div class="header">
+      <img src="../assets/dialog_icon_report.png" alt="" class="icon-report" />
+      <div class="label">{{ config.title }}</div>
+      <div class="close" @click.stop="closeTable"></div>
+    </div>
     <div class="scroll-table">
-      <div class="header">
-        <img src="../assets/dialog_icon_report.png" alt="" class="icon-report" />
-        <div class="label">{{ config.title }}</div>
-        <div class="close" @click.stop="closeTable"></div>
-      </div>
-
       <div class="report">
         <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
           <el-row :gutter="10">
@@ -233,60 +232,44 @@ onMounted(() => {
   height: 792px;
   background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
-  //   width: 100%;
-  //   height: 100%;
-  //   display: flex;
-  //   flex-direction: column;
-  //   overflow: hidden;
-  //   position: absolute;
-  //   left: 50%;
-  //   margin-left: -900px;
-  //   margin-top: 100px;
-  //   width: 1800px;
-  //   height: 945px;
-  //   background: rgba($color: #000000, $alpha: 0.9);
-  //   border: 1px solid #013460;
   z-index: 15;
   overflow: hidden;
-
+  .header {
+    position: relative;
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    background-image: url('../assets/bg_header.png');
+    background-size: cover;
+    .icon-report {
+      width: 22px;
+      height: 24px;
+      margin-left: 21px;
+      margin-right: 16px;
+      background-image: url('../assets/dialog_icon_report.png');
+      background-size: cover;
+    }
+    .label {
+      color: #eaf5ff;
+      font-size: 18px;
+      font-weight: 400;
+    }
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 19px;
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+      background-image: url('../assets/icon_close.png');
+      background-size: cover;
+    }
+  }
   .scroll-table {
     width: 100%;
-    height: 800px;
+    height: 780px;
     overflow: auto;
-    display: flex;
-    flex-direction: column;
-    .header {
-      position: relative;
-      width: 100%;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      background-image: url('../assets/bg_header.png');
-      background-size: cover;
-      .icon-report {
-        width: 22px;
-        height: 24px;
-        margin-left: 21px;
-        margin-right: 16px;
-        background-image: url('../assets/dialog_icon_report.png');
-        background-size: cover;
-      }
-      .label {
-        color: #eaf5ff;
-        font-size: 18px;
-        font-weight: 400;
-      }
-      .close {
-        position: absolute;
-        right: 20px;
-        top: 19px;
-        width: 14px;
-        height: 14px;
-        cursor: pointer;
-        background-image: url('../assets/icon_close.png');
-        background-size: cover;
-      }
-    }
     .report {
       flex-grow: 1;
       width: 100%;
