@@ -146,9 +146,9 @@ const componentGroupList: ComponentGroup[] = [
         type: 'suspended-window',
       },
       {
-        icon: 'xitong',
-        text: '资产信息',
-        type: 'asset-information-pv',
+        icon: 'shishigongkuang',
+        text: '设备工况',
+        type: 'equipment-condition',
       },
     ],
   },
@@ -239,6 +239,26 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'xitong',
         text: '智能报告',
         type: 'intelligence-report-cloud',
+      },
+    ],
+  },
+  {
+    title: '运行监测-光伏',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-pv',
+      },
+      {
+        icon: 'yunxingfenxi',
+        text: '运行分析（光伏）',
+        type: 'operations-analysis-pv',
+      },
+      {
+        icon: 'xitong',
+        text: '资产信息',
+        type: 'asset-information-pv',
       },
     ],
   },

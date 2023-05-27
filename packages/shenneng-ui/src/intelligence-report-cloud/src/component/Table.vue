@@ -46,6 +46,7 @@
             background: 'rgba(17,22,30,1)',
             color: '#EAF5FF',
             textAlign: 'center',
+            height: '50px',
           }"
           :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
           :row-style="{ height: '50px' }"
@@ -114,7 +115,7 @@ const state: any = reactive({
   ],
   tableStyle: {
     width: '100%',
-    height: '589px',
+    height: '597px',
     fontSize: '14px',
     textAlign: 'center',
     '--el-table-border-color': 'none',
@@ -251,7 +252,7 @@ onMounted(() => {
   //   margin-left: -740px;
   //   margin-top: 100px;
   width: 1480px;
-  height: 786px;
+  height: 793px;
   background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
   z-index: 15;
@@ -291,7 +292,7 @@ onMounted(() => {
     flex-grow: 1;
     width: 100%;
     .condition-form {
-      height: 60px;
+      height: 55px;
       margin-top: 20px;
       //   border-bottom: 1px solid #1d2634;
       .wrap-date {

@@ -22,6 +22,7 @@ import IntelligenceReportCloud from './intelligence-report-cloud';
 import IntelligenceReportCold from './intelligence-report-cold';
 import IntelligenceReportEletric from './intelligence-report-eletric';
 import IntelligenceReportHeat from './intelligence-report-heat';
+import IntelligenceReportPv from './intelligence-report-pv';
 import IntelligenceReportWater from './intelligence-report-water';
 import LoadForecasting from './loadForecasting';
 import MulticolorImageLight from './multicolor-image-light';
@@ -31,6 +32,7 @@ import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
 import OperationsAnalysisCold from './operations-analysis-cold';
 import OperationsAnalysisHeat from './operations-analysis-heat';
+import OperationsAnalysisPv from './operations-analysis-pv';
 import OperationsAnalysisWater from './operations-analysis-water';
 import OptimalRegulationHeat from './optimal-regulation-heat';
 import Overlay from './overlay';
@@ -72,11 +74,13 @@ const ui: Record<string, any> = {
   intelligenceReportCold: IntelligenceReportCold,
   operationsAnalysisHeat: OperationsAnalysisHeat,
   operationsAnalysisWater: OperationsAnalysisWater,
+  operationsAnalysisPv: OperationsAnalysisPv,
   loadForecasting: LoadForecasting,
   optimalRegulationHeat: OptimalRegulationHeat,
   intelligenceReportWater: IntelligenceReportWater,
   intelligenceReportCloud: IntelligenceReportCloud,
   operationsAnalysisCold: OperationsAnalysisCold,
+  intelligenceReportPv: IntelligenceReportPv,
 };
 
 export default ui;
