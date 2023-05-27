@@ -1,5 +1,5 @@
 export default {
-  type: 'operations-analysis-water',
+  type: 'asset-information-pv',
   title: '资产信息',
   style: {
     width: '117',
