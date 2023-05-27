@@ -5,5 +5,5 @@ export default {
     height: '80',
     backgroundColor: 'rgba(0, 163, 255, 0.06)',
   },
-  title: '运行分析',
+  title: '能耗分析',
 };
