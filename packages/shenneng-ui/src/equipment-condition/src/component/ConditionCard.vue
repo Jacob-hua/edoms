@@ -2,9 +2,10 @@
   <div class="eq-condition">
     <div class="eq-title">{{ condition.label }}</div>
     <div class="eq-indicators">
-      <div v-for="({ label, displayParameter, unit }, index) in realTimeIndicators" :key="index" class="eq-indicator">
-        <LongText class="label" :content="label" :content-style="indicatorTitleStyle"></LongText>
-        <LongText class="value" :content="displayParameter" :content-style="indicatorValueStyle"></LongText>
+      <div v-for="({ label, unit }, index) in realTimeIndicators" :key="index" class="eq-indicator">
+        <!-- <LongText class="label" :content="label" :content-style="indicatorTitleStyle"></LongText> -->
+        <!-- <LongText class="value" :content="displayParameter" :content-style="indicatorValueStyle"></LongText> -->
+        <span class="lab-sty">{{ label }}</span>
         <span :style="indicatorValueStyle">{{ unit }}</span>
       </div>
     </div>
@@ -15,7 +16,8 @@
         :class="indicator.label === activeTabIndicator ? ['eq-indicator-tab-active'] : []"
         @click="handleIndicatorTabChange(indicator)"
       >
-        <LongText :content="indicator.label" :content-style="{ fontSize: '14px' }"></LongText>
+        {{ indicator.label }}
+        <!-- <LongText :content="indicator.label" :content-style="{ fontSize: '14px' }"></LongText> -->
       </button>
       <ElSelect
         v-if="otherIndicators.length"
@@ -50,11 +52,10 @@ import {
 } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
-import LongText from '../../../LongText.vue';
 import { ECOption } from '../../../types';
 import useIntervalAsync from '../../../useIntervalAsync';
 import apiFactory from '../api';
-import { MConditionItemConfig, MIndicatorItemConfig, ParameterItem } from '../type';
+import { MConditionItemConfig, MIndicatorItemConfig } from '../type';
 
 export interface Indicator {
   parameter: string;
@@ -73,7 +74,7 @@ const props = defineProps<{
   request?: EdomsRequestFunc;
 }>();
 
-const { fetchHistoryData, fetchRealTimeData } = apiFactory(props.request);
+const { fetchHistoryData, fetchRealData } = apiFactory(props.request);
 
 const indicators = ref<MIndicatorItemConfig[]>([]);
 
@@ -89,22 +90,17 @@ const activeIndicator = ref<Indicator>();
 
 const chartsOption = ref<ECOption>({});
 
-const indicatorTitleStyle = computed<Record<string, any> | undefined>(() => ({
-  fontSize: '14px',
-  textAlign: 'center',
-  width: '100px',
-}));
-
 const indicatorValueStyle = computed<Record<string, any> | undefined>(() =>
   props.condition.color
-    ? { color: props.condition.color, fontSize: '8px', textAlign: 'center' }
-    : { fontSize: '8px', textAlign: 'center' }
+    ? { color: props.condition.color, fontSize: '14px', textAlign: 'center', width: '50%' }
+    : { fontSize: '14px', textAlign: 'center', width: '50%' }
 );
 
 watch(
   () => props.condition.indicators,
   (value) => {
     realTimeIndicators.value = value.map((indicator) => getIndicator(indicator));
+    console.log(realTimeIndicators.value);
     indicators.value = value.slice(0, 5);
     otherIndicators.value = value.slice(5);
 
@@ -122,7 +118,11 @@ const updateIndicatorsData = () => {
   if (!activeIndicator.value?.deviceCode || !activeIndicator.value?.propCode) {
     return;
   }
+  const dataCodes: string[] = indicators.value.map(({ property }): string => property);
 
+  if (dataCodes.length === 0) {
+    return;
+  }
   const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
   fetchHistoryData({
     startTime: start,
@@ -148,24 +148,13 @@ const updateIndicatorsData = () => {
     chartsOption.value = generateOption(chartSeries ?? []);
   });
 
-  fetchRealTimeData({
-    dataList: indicators.value.reduce(
-      (dataList, { instance, property }) => [
-        ...dataList,
-        {
-          deviceCode: instance[instance.length - 1],
-          propCodeList: [property],
-        },
-      ],
-      [] as ParameterItem[]
-    ),
-  }).then((realTimeResult) => {
+  fetchRealData({ dataCodes }).then((realTimeResult) => {
     realTimeResult.forEach((result) => {
       for (const realTimeIndicator of realTimeIndicators.value) {
-        if (realTimeIndicator.deviceCode === result.deviceCode && realTimeIndicator.propCode === result.propCode) {
-          realTimeIndicator.parameter = `${result.dataValue}`;
+        if (realTimeIndicator.deviceCode === result.propCode && realTimeIndicator.propCode === result.propCode) {
+          realTimeIndicator.parameter = `${result.propVal}`;
           realTimeIndicator.displayParameter = `${String(
-            formatPrecision(result.dataValue, realTimeIndicator.precision)
+            formatPrecision(result.propVal, realTimeIndicator.precision)
           )}`;
         }
       }
@@ -285,7 +274,7 @@ function getIndicator(indicatorConfig: MIndicatorItemConfig): Indicator {
 </style>
 
 <style lang="scss" scoped>
-$borderColor: #505152;
+$borderColor: #212b3b;
 
 $eqBg: #272727;
 $eqTitleColor: #ffffff;
@@ -293,13 +282,18 @@ $eqIndicatorColor: #999999;
 
 :deep(.el-input) {
   --el-input-bg-color: transparent;
-  --el-input-border-color: #505152;
+  --el-input-border-color: #212b3b;
   --el-input-text-color: #ffffff;
 }
 
 :deep(.el-select) {
+  margin: auto;
   background-color: transparent;
   --el-select-input-focus-border-color: #ffffff;
+}
+
+:deep(.select-trigger) {
+  width: 90%;
 }
 
 .eq-condition {
@@ -308,18 +302,19 @@ $eqIndicatorColor: #999999;
   background: rgba(9, 15, 23, 0.3);
   border: 1px solid #212c3c;
   display: grid;
-  grid-template-rows: 40px 1fr;
-  grid-template-columns: 164px 1fr;
-  padding: 30px 16px;
-  row-gap: 4px;
-  column-gap: 30px;
+  grid-template-rows: 62px 1fr;
+  grid-template-columns: 240px 1fr;
   box-sizing: border-box;
 }
 
 .eq-title {
   color: $eqTitleColor;
+  height: 62px;
+  border-bottom: 1px solid #1d2634;
   font-size: 14px;
-  line-height: 40px;
+  line-height: 62px;
+  padding-left: 20px;
+  box-sizing: border-box;
 }
 
 .eq-indicators {
@@ -328,6 +323,7 @@ $eqIndicatorColor: #999999;
   display: flex;
   flex-direction: column;
   overflow: auto;
+  padding: 20px;
 
   &::-webkit-scrollbar {
     display: none;
@@ -337,10 +333,19 @@ $eqIndicatorColor: #999999;
 .eq-indicator {
   display: flex;
   border: 1px solid $borderColor;
-  border-radius: 3px;
-  color: $eqIndicatorColor;
-  margin-top: 4px;
+  background: rgba(20, 27, 37, 0.4);
+  margin-bottom: 10px;
   line-height: 30px;
+
+  .lab-sty {
+    width: 50%;
+    text-align: center;
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #eaf5ff;
+    border-right: 1px solid $borderColor;
+  }
 
   .label {
     border-right: 1px solid $borderColor;
@@ -352,11 +357,13 @@ $eqIndicatorColor: #999999;
 }
 
 .eq-indicator-tabs {
+  height: 62px;
+  border-bottom: 1px solid #1d2634;
   grid-column: 2;
   grid-row: 1;
-
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  box-sizing: border-box;
 
   &-more {
     width: 100%;
@@ -386,9 +393,9 @@ $eqIndicatorColor: #999999;
   &::after {
     content: '';
     display: inline-block;
-    width: 60px;
+    width: 36px;
     height: 2px;
-    background-color: #ffffff;
+    background: #00a3ff;
     border-radius: 1px;
   }
 }

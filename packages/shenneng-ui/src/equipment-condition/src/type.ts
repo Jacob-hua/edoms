@@ -103,9 +103,19 @@ export interface IndicatorDataItem {
   deviceCode: string;
 }
 
+export interface RealData {
+  propCode: string;
+  propVal: number;
+}
+
+export interface FetchRealDataReq {
+  dataCodes: string[];
+}
+
 export type FetchRealTimeDataRes = IndicatorDataItem[];
+export type FetchRealDataRes = RealData[];
 
 export interface Apis {
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
-  fetchRealTimeData: (data: FetchRealTimeDataReq) => Promise<FetchRealTimeDataRes>;
+  fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
 }

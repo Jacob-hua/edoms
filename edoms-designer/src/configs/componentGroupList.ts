@@ -252,8 +252,23 @@ const componentGroupList: ComponentGroup[] = [
       },
       {
         icon: 'yunxingfenxi',
-        text: '运行分析（光伏）',
+        text: '运行分析',
         type: 'operations-analysis-pv',
+      },
+    ],
+  },
+  {
+    title: '运行监测-充电',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-charge',
+      },
+      {
+        icon: 'yunxingfenxi',
+        text: '运行分析',
+        type: 'operations-analysis-charge',
       },
     ],
   },
