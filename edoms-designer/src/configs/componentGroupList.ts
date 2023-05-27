@@ -255,6 +255,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '运行分析（光伏）',
         type: 'operations-analysis-pv',
       },
+      {
+        icon: 'xitong',
+        text: '资产信息',
+        type: 'asset-information-pv',
+      },
     ],
   },
 ];
