@@ -41,7 +41,7 @@
                   <img src="./assets/byq.png" alt="" />
                 </div>
                 <div class="equipment-title">
-                  <span>研发楼西逆变压器</span>
+                  <span>{{ equipName }}</span>
                 </div>
               </div>
             </el-card>
@@ -98,7 +98,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 import { MAssetInformationConfig } from './type';
 
@@ -128,6 +128,7 @@ const options = ref([
   },
 ]);
 const selectValue = ref();
+selectValue.value = options.value[0].value;
 const informations = reactive({
   assetInformation: [
     {
@@ -243,6 +244,12 @@ const informations = reactive({
       value: '——',
     },
   ],
+});
+
+const equipName = computed(() => {
+  const selectOption = options.value.find(({ value }) => value === selectValue.value);
+  console.log(selectOption);
+  return selectOption?.label;
 });
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
