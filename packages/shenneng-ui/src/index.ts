@@ -45,6 +45,7 @@ import SuspendedWindow from './suspended-window';
 import SystemDataCumulation from './system-data-cumulation';
 import Text from './text';
 import WarningTableList from './warning-table-list';
+// import OperationRecords from './operation-records';
 
 const ui: Record<string, any> = {
   assetInformationPv: AssetInformationPv,
@@ -64,6 +65,7 @@ const ui: Record<string, any> = {
   equipmentCondition: EquipmentCondition,
   economicIndicators: EconomicIndicators,
   warningTableList: WarningTableList,
+  // OperationRecords: OperationRecords,
   equipmentQueryOperation: EquipmentQueryOperation,
   systemDataCumulation: SystemDataCumulation,
   operationalAnalysis: OperationalAnalysis,

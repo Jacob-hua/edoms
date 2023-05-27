@@ -150,6 +150,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '设备工况',
         type: 'equipment-condition',
       },
+      // {
+      //   icon: 'caozuojilu',
+      //   text: '操作记录',
+      //   type: 'operation-records',
+      // },
     ],
   },
   {
@@ -274,16 +279,6 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'xitong',
         text: '设备监测',
         type: 'equipment-monitoring-charge',
-      },
-    ],
-  },
-  {
-    title: '运行监测-充电',
-    items: [
-      {
-        icon: 'xitong',
-        text: '智能报告',
-        type: 'intelligence-report-charge',
       },
       {
         icon: 'yunxingfenxi',
