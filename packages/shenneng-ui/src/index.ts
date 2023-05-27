@@ -15,7 +15,7 @@ import EfficiencyAnalysis from './efficiency-analysis';
 import ElectricEnergyQuality from './electric-energy-quality';
 import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
-import EquipmentMonitoringCharge from './equipment-monitoring-charge';
+// import EquipmentMonitoringCharge from './equipment-monitoring-charge';
 import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
 import Img from './img';
@@ -30,6 +30,7 @@ import LoadForecasting from './loadForecasting';
 import MulticolorImageLight from './multicolor-image-light';
 import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MulticolorSingleLight from './multicolor-single-light';
+import OperationRecords from './operation-records';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
 import OperationsAnalysisCharge from './operations-analysis-charge';
@@ -45,7 +46,6 @@ import SuspendedWindow from './suspended-window';
 import SystemDataCumulation from './system-data-cumulation';
 import Text from './text';
 import WarningTableList from './warning-table-list';
-// import OperationRecords from './operation-records';
 
 const ui: Record<string, any> = {
   assetInformationPv: AssetInformationPv,
@@ -65,7 +65,7 @@ const ui: Record<string, any> = {
   equipmentCondition: EquipmentCondition,
   economicIndicators: EconomicIndicators,
   warningTableList: WarningTableList,
-  // OperationRecords: OperationRecords,
+  OperationRecords: OperationRecords,
   equipmentQueryOperation: EquipmentQueryOperation,
   systemDataCumulation: SystemDataCumulation,
   operationalAnalysis: OperationalAnalysis,
@@ -87,7 +87,7 @@ const ui: Record<string, any> = {
   intelligenceReportCloud: IntelligenceReportCloud,
   operationsAnalysisCold: OperationsAnalysisCold,
   intelligenceReportPv: IntelligenceReportPv,
-  equipmentMonitoringCharge: EquipmentMonitoringCharge,
+  // equipmentMonitoringCharge: EquipmentMonitoringCharge,
   intelligenceReportCharge: IntelligenceReportCharge,
 };
 

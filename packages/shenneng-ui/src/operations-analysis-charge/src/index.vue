@@ -133,6 +133,7 @@ const getChartData = () => {
       ],
       axisLabel: {
         interval: 0,
+        fontSize: 10,
       },
       axisTick: {
         show: false,
@@ -193,6 +194,9 @@ const getChartData = () => {
           width: 1,
         },
       },
+      axisLabel: {
+        fontSize: 10,
+      },
       axisLine: {
         show: true,
       },
@@ -240,6 +244,7 @@ const getChartData = () => {
       ],
       axisLabel: {
         interval: 0,
+        fontSize: 10,
       },
       axisTick: {
         show: false,
@@ -296,6 +301,9 @@ const getChartData = () => {
           color: '#1A242B',
           width: 1,
         },
+      },
+      axisLabel: {
+        fontSize: 10,
       },
       axisLine: {
         show: true,
