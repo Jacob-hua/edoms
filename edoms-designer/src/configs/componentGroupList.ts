@@ -255,6 +255,26 @@ const componentGroupList: ComponentGroup[] = [
         text: '运行分析',
         type: 'operations-analysis-pv',
       },
+      {
+        icon: 'xitong',
+        text: '资产信息',
+        type: 'asset-information-pv',
+      },
+    ],
+  },
+  {
+    title: '运行监测-充电桩',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-charge',
+      },
+      {
+        icon: 'xitong',
+        text: '设备监测',
+        type: 'equipment-monitoring-charge',
+      },
     ],
   },
   {

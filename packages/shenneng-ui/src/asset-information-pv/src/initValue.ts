@@ -1,9 +1,9 @@
 export default {
-  type: 'warning-table-list',
+  type: 'asset-information-pv',
+  title: '资产信息',
   style: {
     width: '117',
     height: '80',
     backgroundColor: 'rgba(0, 163, 255, 0.06)',
   },
-  title: '能耗分析',
 };

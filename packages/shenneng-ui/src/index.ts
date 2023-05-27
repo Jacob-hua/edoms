@@ -5,6 +5,7 @@
  * @LastEditors: lihao
  * @LastEditTime: 2023-05-23 17:10:14
  */
+import AssetInformationPv from './asset-information-pv';
 import Button from './button';
 import Charts from './charts';
 import Checkbox from './checkbox';
@@ -14,9 +15,11 @@ import EfficiencyAnalysis from './efficiency-analysis';
 import ElectricEnergyQuality from './electric-energy-quality';
 import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
+import EquipmentMonitoringCharge from './equipment-monitoring-charge';
 import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
 import Img from './img';
+import IntelligenceReportCharge from './intelligence-report-charge';
 import IntelligenceReportCloud from './intelligence-report-cloud';
 import IntelligenceReportCold from './intelligence-report-cold';
 import IntelligenceReportEletric from './intelligence-report-eletric';
@@ -44,6 +47,7 @@ import Text from './text';
 import WarningTableList from './warning-table-list';
 
 const ui: Record<string, any> = {
+  assetInformationPv: AssetInformationPv,
   page: Page,
   container: Container,
   button: Button,
@@ -81,6 +85,8 @@ const ui: Record<string, any> = {
   intelligenceReportCloud: IntelligenceReportCloud,
   operationsAnalysisCold: OperationsAnalysisCold,
   intelligenceReportPv: IntelligenceReportPv,
+  equipmentMonitoringCharge: EquipmentMonitoringCharge,
+  intelligenceReportCharge: IntelligenceReportCharge,
 };
 
 export default ui;

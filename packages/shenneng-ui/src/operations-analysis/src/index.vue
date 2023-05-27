@@ -18,7 +18,7 @@
         <div class="content-title">
           <div class="left-title-font">
             <span class="font-icon"></span>
-            <span class="font-value">运行分析</span>
+            <span class="font-value">{{ config.title }}</span>
           </div>
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
