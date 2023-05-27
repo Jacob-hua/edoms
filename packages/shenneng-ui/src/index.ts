@@ -32,6 +32,7 @@ import MulticolorPolymorphicLight from './multicolor-polymorphic-light';
 import MulticolorSingleLight from './multicolor-single-light';
 import OperationalAnalysis from './operational-analysis';
 import OperationsAnalysis from './operations-analysis';
+import OperationsAnalysisCharge from './operations-analysis-charge';
 import OperationsAnalysisCold from './operations-analysis-cold';
 import OperationsAnalysisHeat from './operations-analysis-heat';
 import OperationsAnalysisPv from './operations-analysis-pv';
@@ -77,6 +78,7 @@ const ui: Record<string, any> = {
   operationsAnalysisHeat: OperationsAnalysisHeat,
   operationsAnalysisWater: OperationsAnalysisWater,
   operationsAnalysisPv: OperationsAnalysisPv,
+  operationsAnalysisCharge: OperationsAnalysisCharge,
   loadForecasting: LoadForecasting,
   optimalRegulationHeat: OptimalRegulationHeat,
   intelligenceReportWater: IntelligenceReportWater,
