@@ -100,12 +100,12 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 
-import { OperationsAnalysisWater } from './type';
+import { MAssetInformationConfig } from './type';
 
 defineProps<{
-  config: OperationsAnalysisWater;
+  config: MAssetInformationConfig;
 }>();
-const isShowModel = ref<boolean>(true);
+const isShowModel = ref<boolean>(false);
 const activeName = ref('nbq');
 const tabTypes = ref([
   {
@@ -127,7 +127,7 @@ const options = ref([
     value: 'dongni',
   },
 ]);
-const selectValue = ref('');
+const selectValue = ref();
 const informations = reactive({
   assetInformation: [
     {
@@ -363,6 +363,15 @@ const handlerToShow = (e: any, bl: boolean) => {
         display: flex;
         flex-flow: column;
 
+        :deep(.el-tabs__nav-wrap) {
+          --el-border-color-light: #4d505f;
+          --el-text-color-primary: #eaf5ff50;
+          --el-color-primary: #eaf5ff;
+          // &::after {
+          //   background-color: var(--el-border-color-light);
+          // }
+        }
+
         .tab-content {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
@@ -384,6 +393,7 @@ const handlerToShow = (e: any, bl: boolean) => {
                 background-color: transparent;
                 --el-border-color: #454e72;
                 --el-input-border-color: #454e72;
+                --el-select-input-focus-border-color: #454e72;
               }
             }
 
@@ -405,8 +415,19 @@ const handlerToShow = (e: any, bl: boolean) => {
           }
 
           .info-card {
+            display: flex;
+            flex-flow: column;
             color: #eaf5ff50;
+
+            :deep(.el-card__header) {
+              --el-card-border-color: #1d2634;
+            }
             .card-header {
+              display: grid;
+              grid-auto-flow: column;
+              justify-content: center;
+              align-items: center;
+              grid-column-gap: 5px;
               i {
                 width: 21px;
                 height: 18px;
@@ -426,17 +447,30 @@ const handlerToShow = (e: any, bl: boolean) => {
               }
             }
 
+            :deep(.el-card__body) {
+              display: flex;
+              flex-flow: column;
+              flex-grow: 1;
+            }
+
             .card-content {
               display: grid;
               grid-auto-flow: row;
               grid-row-gap: 20px;
               grid-template-rows: repeat(9, 1fr);
+              flex-grow: 1;
 
               .row {
                 display: flex;
                 background: rgba(20, 27, 37, 0.8);
                 border: 1px solid #212b3b;
                 text-align: center;
+                align-items: center;
+
+                :deep(.el-divider) {
+                  --el-border-color: #212b3b;
+                  height: 100%;
+                }
 
                 .col-left {
                   width: 36%;
