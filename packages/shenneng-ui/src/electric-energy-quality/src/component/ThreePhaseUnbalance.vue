@@ -149,7 +149,7 @@ watch(
         },
       },
       legend: {
-        data: ['La', 'Lb', 'Lc'],
+        data: ['Ia', 'Ib', 'Ic'],
         textStyle: {
           color: '#fff',
         },
@@ -183,21 +183,21 @@ watch(
       color: [props.config.currentLa, props.config.currentLb, props.config.currentLc],
       series: [
         {
-          name: 'La',
+          name: 'Ia',
           data: [1, 4, 1, 5, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
           symbolSize: 0,
         },
         {
-          name: 'Lb',
+          name: 'Ib',
           data: [1, 2, 3, 2, 1, 4, 1, 5],
           type: 'line',
           smooth: true,
           symbolSize: 0,
         },
         {
-          name: 'Lc',
+          name: 'Ic',
           data: [2, 6, 2, 6, 2, 6, 2, 6],
           type: 'line',
           smooth: true,
@@ -339,7 +339,7 @@ const categories = ref([
     label2: '电流',
     label3: '负载率',
     position: {
-      label: 'AH6 B楼1#变压器',
+      label: '4#变压器',
       value: 10,
       time: 377,
       day: 16,
@@ -352,7 +352,7 @@ const categories = ref([
     label2: '电流',
     label3: '负载率',
     position: {
-      label: 'AH7 B楼1#变压器',
+      label: '5#变压器',
       value: 10,
       time: 377,
       day: 16,
