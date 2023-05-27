@@ -6,7 +6,7 @@
  * @LastEditTime: 2023-05-25 18:48:55
 -->
 <template>
-  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
+  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="367">
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrap-header">
         <div class="wrap-divide">
@@ -201,19 +201,20 @@ function generateOption(series: any[] = []): ECOption {
       type: 'time',
       min: dateRange(new Date(), 'day').start,
       max: dateRange(new Date(), 'day').end,
-      maxInterval: 3600 * 1000,
+      maxInterval: 3600 * 1000 * 3,
       splitLine: {
         show: false,
       },
       axisTick: {
         show: false,
+        interval: 2,
       },
       axisLine: {
         lineStyle: {
           color: 'rgba(164, 218, 255, 0.2)',
         },
       },
-      interval: 2,
+      interval: 3600 * 1000 * 2,
       axisLabel: {
         formatter: '{HH}:{mm}',
         interval: 2,
