@@ -121,6 +121,7 @@ defineExpose({
         font-family: MicrosoftYaHei;
       }
       .value-unit {
+        white-space: nowrap;
         width: 17%;
         height: 40px;
         font-size: 14px;

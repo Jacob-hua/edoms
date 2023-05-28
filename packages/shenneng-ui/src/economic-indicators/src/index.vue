@@ -58,7 +58,6 @@ const { fetchRealData } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
-const restIndicators = ref<Indicator[]>([]);
 
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
 const intervalDelay = computed<number>(() => {
@@ -79,13 +78,7 @@ watch(
       unit: unit,
       precision: precision,
     }));
-    if (indicators.value.length > 5) {
-      initIndicators.value = indicators.value.slice(0, 5);
-      restIndicators.value = indicators.value.slice(5);
-    } else {
-      initIndicators.value = indicators.value;
-      restIndicators.value = [];
-    }
+    initIndicators.value = indicators.value;
   },
   {
     immediate: true,
