@@ -139,12 +139,12 @@ const tableDataList = ref<Array<any>>([
       ],
     },
     rateAna: {
-      max: 0.55,
-      min: 0.11,
+      max: 0.8,
+      min: 0.2,
       list: [
-        { key: '过载', dis: '5', times: '3' },
-        { key: '重载', dis: '5', times: '3' },
-        { key: '轻载', dis: '5', times: '3' },
+        { key: '过载', dis: '0', times: '0' },
+        { key: '重载', dis: '36', times: '127' },
+        { key: '轻载', dis: '37', times: '511' },
       ],
     },
   },
@@ -154,7 +154,7 @@ const tableDataList = ref<Array<any>>([
     unit: '万kWh',
     dataValue: 0,
     timeUse: {
-      rate: 1,
+      rate: 0,
       list: [
         { key: '谷', value: 0, code: 'gu' },
         { key: '平', value: 0, code: 'ping' },
@@ -163,12 +163,12 @@ const tableDataList = ref<Array<any>>([
       ],
     },
     rateAna: {
-      max: 0.55,
-      min: 0.11,
+      max: 0,
+      min: 0,
       list: [
-        { key: '过载', dis: '5', times: '3' },
-        { key: '重载', dis: '5', times: '3' },
-        { key: '轻载', dis: '5', times: '3' },
+        { key: '过载', dis: '0', times: '0' },
+        { key: '重载', dis: '0', times: '0' },
+        { key: '轻载', dis: '0', times: '0' },
       ],
     },
   },
