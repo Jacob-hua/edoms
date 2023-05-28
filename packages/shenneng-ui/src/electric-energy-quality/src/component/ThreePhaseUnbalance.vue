@@ -38,10 +38,10 @@
       <ProportionChart :option="option_prop"> </ProportionChart>
     </div>
     <div style="margin: 20px">
-      <CurrentChart :option="option_current"></CurrentChart>
+      <CurrentChart :option="item.name === 'four' ? option_current4 : option_current5"></CurrentChart>
     </div>
     <div style="margin: 20px">
-      <LoadChart :option="option_load"></LoadChart>
+      <LoadChart :option="item.name === 'four' ? option_load4 : option_load5"></LoadChart>
     </div>
   </div>
 </template>
@@ -70,9 +70,11 @@ const props = defineProps<{
 // 占比分布
 const option_prop = ref<ECOption>({});
 // 电流
-const option_current = ref<ECOption>({});
+const option_current4 = ref<ECOption>({});
+const option_current5 = ref<ECOption>({});
 // 负载率
-const option_load = ref<ECOption>({});
+const option_load4 = ref<ECOption>({});
+const option_load5 = ref<ECOption>({});
 // 获取饼图颜色
 const getpropColor = (series: any[] = []) => {
   return series.map(({ color }) => color);
@@ -126,7 +128,7 @@ watch(
         },
       ],
     };
-    option_current.value = {
+    option_current4.value = {
       tooltip: {
         trigger: 'axis',
         backgroundColor: 'rgba(11,34,52,0.9)',
@@ -183,7 +185,7 @@ watch(
           },
         },
       },
-      grid: { top: '35px', left: '20px', right: '20px', bottom: '44px' },
+      grid: { top: '35px', left: '30px', right: '30px', bottom: '44px' },
       color: [props.config.currentLa, props.config.currentLb, props.config.currentLc],
       series: [
         {
@@ -209,7 +211,90 @@ watch(
         },
       ],
     };
-    option_load.value = {
+    option_current5.value = {
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            tip +=
+              '<div style="width:105px;height:90px"><span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">三相电流</span><br />';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
+                params[index].seriesName +
+                ':</span><span style="line-height:18px;margin-left:8px;color:' +
+                params[index].color +
+                '">' +
+                params[index].value +
+                'A</span> <br />';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
+      },
+      legend: {
+        data: ['Ia', 'Ib', 'Ic'],
+        textStyle: {
+          color: '#fff',
+        },
+      },
+      xAxis: {
+        type: 'category',
+        data: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        axisTick: {
+          show: false,
+        },
+      },
+      yAxis: {
+        type: 'value',
+        name: 'A',
+        // nameGap: 15,
+        // offset: 15,
+        nameTextStyle: {
+          align: 'right',
+          padding: 7,
+        },
+        // data: ['2', '4', '6', '8'],
+        splitLine: {
+          lineStyle: {
+            type: 'dashed',
+            color: '#1A242B',
+            width: 1,
+          },
+        },
+      },
+      grid: { top: '35px', left: '30px', right: '30px', bottom: '44px' },
+      color: [props.config.currentLa, props.config.currentLb, props.config.currentLc],
+      series: [
+        {
+          name: 'Ia',
+          data: [0, 0, 0, 0, 0, 0, 0, 0],
+          type: 'line',
+          smooth: true,
+          symbolSize: 0,
+        },
+        {
+          name: 'Ib',
+          data: [0, 0, 0, 0, 0, 0, 0, 0],
+          type: 'line',
+          smooth: true,
+          symbolSize: 0,
+        },
+        {
+          name: 'Ic',
+          data: [0, 0, 0, 0, 0, 0, 0, 0],
+          type: 'line',
+          smooth: true,
+          symbolSize: 0,
+        },
+      ],
+    };
+    option_load4.value = {
       tooltip: {
         trigger: 'axis',
         backgroundColor: 'rgba(11,34,52,0.9)',
@@ -251,7 +336,132 @@ watch(
       yAxis: [
         {
           type: 'value',
-          name: 'A',
+          name: '%',
+          // nameGap: 15,
+          // offset: 15,
+          nameTextStyle: {
+            align: 'right',
+            padding: 7,
+          },
+          // data: ['2', '4', '6', '8'],
+          data: ['0', '20', '40', '60', '80', '100'],
+          splitLine: {
+            lineStyle: {
+              type: 'dashed',
+              color: '#1A242B',
+              width: 1,
+            },
+          },
+        },
+        {
+          type: 'category',
+          name: '%',
+          // nameGap: 15,
+          // offset: 15,
+          nameTextStyle: {
+            align: 'left',
+            padding: 7,
+          },
+          axisLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+          data: ['0', '20', '40', '60', '80', '100'],
+          splitLine: {
+            lineStyle: {
+              type: 'dashed',
+              color: '#1A242B',
+              width: 1,
+            },
+          },
+        },
+      ],
+      grid: { top: '35px', left: '35px', right: '35px', bottom: '44px' },
+      color: [props.config.loadRate, props.config.threePhasRate],
+      series: [
+        {
+          name: '负载率',
+          data: [
+            40.12128769, 33.735780675, 42.592085488, 36.602015599, 36.8932692, 35.80097567, 46.652001007, 42.6578128,
+          ],
+          type: 'line',
+          smooth: true,
+          symbolSize: 0,
+        },
+        {
+          name: '三相不平衡率',
+          data: [15.3978635, 22.1156983, 19.1727799, 19.3278177, 26.1765207, 22.3943031, 13.307268, 12.6976074],
+          type: 'line',
+          smooth: true,
+          symbolSize: 0,
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                {
+                  offset: 0,
+                  color: 'rgba(40, 124, 232, 0.16)', // 0% 处的颜色
+                },
+                {
+                  offset: 1,
+                  color: 'rgba(40, 124, 232, 0)', // 100% 处的颜色
+                },
+              ],
+              global: false, // 缺省为 false
+            },
+          },
+        },
+      ],
+    };
+    option_load5.value = {
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(11,34,52,0.9)',
+        borderColor: '#204C6F',
+        borderWidth: 1,
+        padding: 15,
+        formatter: (params: any) => {
+          let tip: string = '';
+          if (params != null && params.length > 0) {
+            tip += '<div style="width: 130px;height: 45px">';
+            for (let index = 0; index < params.length; index++) {
+              tip +=
+                '<p><span style="color:#F5F7FA;font-size:12px;font-weight:400">' +
+                params[index].seriesName +
+                ':</span><span style="margin-left:8px;color:' +
+                params[index].color +
+                ';font-size:12px;font-weight:400">' +
+                params[index].value +
+                '%</span></p>';
+            }
+            tip += '</div>';
+          }
+          return tip;
+        },
+      },
+      legend: {
+        data: ['负载率', '三相不平衡率'],
+        textStyle: {
+          color: '#fff',
+        },
+      },
+      xAxis: {
+        type: 'category',
+        data: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        axisTick: {
+          show: false,
+        },
+      },
+      yAxis: [
+        {
+          type: 'value',
+          name: '%',
           // nameGap: 15,
           // offset: 15,
           nameTextStyle: {
@@ -282,7 +492,7 @@ watch(
           axisTick: {
             show: false,
           },
-          data: ['0%', '20%', '40%', '60%', '80%'],
+          data: ['0', '20', '40', '60', '80', '100'],
           splitLine: {
             lineStyle: {
               type: 'dashed',
@@ -292,19 +502,19 @@ watch(
           },
         },
       ],
-      grid: { top: '35px', left: '15px', right: '32px', bottom: '44px' },
+      grid: { top: '35px', left: '30px', right: '30px', bottom: '44px' },
       color: [props.config.loadRate, props.config.threePhasRate],
       series: [
         {
           name: '负载率',
-          data: [10.12128769, 9.735780675, 8.592085488, 9.602015599, 8.68932692, 8.580097567, 8.652001007, 10.6578128],
+          data: [0, 0, 0, 0, 0, 0, 0, 0],
           type: 'line',
           smooth: true,
           symbolSize: 0,
         },
         {
           name: '三相不平衡率',
-          data: [0.153978635, 0.421156983, 0.191727799, 0.093278177, 0.341765207, 0.223943031, 0.13307268, 0.126976074],
+          data: [0, 0, 0, 0, 0, 0, 0, 0],
           type: 'line',
           smooth: true,
           symbolSize: 0,
@@ -349,7 +559,7 @@ const categories = ref([
       day: 28,
       max_rate: 9.52,
     },
-    name: 'systems',
+    name: 'four',
   },
   {
     label1: '占比分布',
@@ -362,7 +572,7 @@ const categories = ref([
       day: 0,
       max_rate: 0,
     },
-    name: 'systems',
+    name: 'five',
   },
 ]);
 // useIntervalAsync(updateEfficiencyData, intervalDelay.value);
