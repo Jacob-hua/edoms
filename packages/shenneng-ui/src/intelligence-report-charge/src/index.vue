@@ -6,53 +6,38 @@
       </div>
       <div class="label">{{ config.title }}</div>
     </div>
+
     <div v-show="isShowModel" class="model-wrapper-ftst">
       <div class="model-content">
         <div class="content-title">
           <div class="left-title-font">
             <span class="font-icon"></span>
-            <span class="font-value">运行分析</span>
+            <span class="font-value">{{ config.title }}</span>
           </div>
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
+
         <div class="content-data">
           <div class="frist-tab">
             <el-tabs v-model="activeNameF" class="tab demo-tabs" type="card" @tab-click="handleClickF">
-              <el-tab-pane label="发电量分析" name="power-qua"></el-tab-pane>
-              <el-tab-pane label="发电功率分析" name="power-gen"></el-tab-pane>
+              <el-tab-pane label="运行报告" name="power-qua"></el-tab-pane>
+              <el-tab-pane label="经营报告" name="power-gen"></el-tab-pane>
+              <el-tab-pane label="设备报告" name="power-equ"></el-tab-pane>
             </el-tabs>
           </div>
-          <div class="second-tab">
-            <el-tabs v-model="activeNameS" class="demo-tabs" @tab-click="handleClickS">
-              <el-tab-pane label="日曲线" name="day"> </el-tab-pane>
-              <el-tab-pane label="月曲线" name="month"> </el-tab-pane>
-              <el-tab-pane v-if="activeNameF === 'power-qua'" label="年曲线" name="year"> </el-tab-pane>
-            </el-tabs>
-          </div>
+
           <div class="select-gro">
             <div v-show="activeNameF === 'power-qua' ? true : false" class="dataTotal">
-              <p v-show="activeNameS === 'month' ? true : false">当月发电量：<span>4553.97kWh</span></p>
-              <p v-if="activeNameS === 'month' || activeNameS === 'year'">累计发电量：<span>224191.59kWh</span></p>
-              <p v-if="activeNameS === 'month' || activeNameS === 'year'">装机容量：<span>194.4kW</span></p>
+              <RunReport />
             </div>
-            <div class="other" style="display: flex">
-              <el-select
-                v-model="value"
-                popper-class="select-sty"
-                style="margin-right: 20px"
-                class="m-2"
-                placeholder="Select"
-              >
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-              <div class="selest-time">
-                <span>日期选择：</span>
-                <TimeCalendar :option="timeType"></TimeCalendar>
-              </div>
+
+            <div v-show="activeNameF === 'power-gen' ? true : false" class="dataTotal">
+              <OperationReport />
             </div>
-          </div>
-          <div class="chart-pv">
-            <EdomsCharts class="charts" :option="option"></EdomsCharts>
+
+            <div v-show="activeNameF === 'power-equ' ? true : false" class="dataTotal">
+              <EquipReport />
+            </div>
           </div>
         </div>
       </div>
@@ -63,16 +48,17 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-import EdomsCharts from '../../EdomsCharts.vue';
-import { ECOption } from '../../types';
-
-import TimeCalendar from './components/TimeCalendar.vue';
+// import EdomsCharts from '../../EdomsCharts.vue';
+import EquipReport from './components/EquipReport.vue';
+import OperationReport from './components/OperationReport.vue';
+import RunReport from './components/RunReport.vue';
+// import TimeCalendar from './components/TimeCalendar.vue';
 import { OperationsAnalysisPv } from './type';
 
 defineProps<{
   config: OperationsAnalysisPv;
 }>();
-const option = ref<ECOption>({});
+
 const isShowModel = ref<boolean>(false);
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
@@ -81,125 +67,14 @@ const handlerToShow = (e: any, bl: boolean) => {
 const timeType = ref<string>('date');
 const activeNameF = ref('power-qua');
 const activeNameS = ref('day');
-const value = ref('all');
+// const value = ref('all');
 
-option.value = {
-  grid: {
-    top: 30,
-    left: 30,
-    right: 30,
-  },
-  xAxis: {
-    type: 'category',
-    name: '时',
-    data: [
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '11',
-      '12',
-      '13',
-      '14',
-      '15',
-      '16',
-      '17',
-      '18',
-      '19',
-      '20',
-      '21',
-      '22',
-      '23',
-      '24',
-    ],
-    axisTick: {
-      show: false,
-    },
-  },
-  color: 'rgba(40,124,232,0.5)',
-  tooltip: {
-    trigger: 'axis',
-    backgroundColor: 'rgba(11,34,52,0.9)',
-    borderColor: '#204C6F',
-    borderWidth: 1,
-    formatter: (params: any) => {
-      let tip: string = '';
-      if (params != null && params.length > 0) {
-        tip += '<div>';
-        for (let index = 0; index < params.length; index++) {
-          tip +=
-            '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-            params[index].name +
-            '：00</p><p>' +
-            params[index].marker +
-            '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-            params[index].seriesName +
-            '：' +
-            params[index].value +
-            'kWh</span></p>';
-        }
-        tip += '</div>';
-      }
-      return tip;
-    },
-  },
-  legend: {
-    bottom: '0%',
-    left: 'center',
-    itemWidth: 15,
-    itemHeight: 8,
-    textStyle: {
-      color: '#fff',
-    },
-  },
-  yAxis: {
-    type: 'value',
-    name: 'kWh',
-    nameTextStyle: {
-      // lineHeight: 28,
-      // padding: [0, 0, 0, 100],
-      fontSize: '14',
-      fontFamily: 'Microsoft YaHei',
-      fontWeight: 400,
-      color: '#EAF5FF',
-    },
-    splitLine: {
-      lineStyle: {
-        type: 'dashed',
-        color: '#1A242B',
-        width: 1,
-      },
-    },
-    axisLine: {
-      show: true,
-    },
-  },
-  series: [
-    {
-      name: '总览',
-      data: [25, 37, 25, 37, 25, 38, 20, 25, 37, 30, 25, 35, 20, 22, 35, 43, 38, 41, 25, 28, 40, 22, 32, 24],
-      type: 'bar',
-      itemStyle: {
-        borderWidth: 1,
-        borderColor: '#287CE8',
-      },
-      barWidth: 16,
-      barGap: 70,
-    },
-  ],
-};
-const options = [
-  {
-    value: 'all',
-    label: '总览',
-  },
-];
+// const options = [
+//   {
+//     value: 'all',
+//     label: '总览',
+//   },
+// ];
 // 切换发电量/功率
 const handleClickF = (event: any) => {
   if (activeNameF.value === event.paneName) {
@@ -211,589 +86,28 @@ const handleClickF = (event: any) => {
   getData(activeNameS.value);
 };
 // 切换日/月/年曲线
-const handleClickS = (event: any) => {
-  if (activeNameS.value === event.paneName) {
-    return;
-  }
-  activeNameS.value = event.paneName;
-  getData(activeNameS.value);
-};
+// const handleClickS = (event: any) => {
+//   if (activeNameS.value === event.paneName) {
+//     return;
+//   }
+//   activeNameS.value = event.paneName;
+//   getData(activeNameS.value);
+// };
 
 // 获取charts数据
 const getData = (symbol: string) => {
   if (activeNameF.value === 'power-gen') {
     if (symbol === 'day') {
       timeType.value = 'date';
-      option.value = {
-        grid: {
-          top: 30,
-          left: 30,
-          right: 30,
-        },
-        xAxis: {
-          type: 'category',
-          name: '时',
-          data: [
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            '10',
-            '11',
-            '12',
-            '13',
-            '14',
-            '15',
-            '16',
-            '17',
-            '18',
-            '19',
-            '20',
-            '21',
-            '22',
-            '23',
-            '24',
-          ],
-          axisTick: {
-            show: false,
-          },
-        },
-        color: ['#00FFF0', '#287CE8'],
-        tooltip: {
-          trigger: 'axis',
-          backgroundColor: 'rgba(11,34,52,0.9)',
-          borderColor: '#204C6F',
-          borderWidth: 1,
-          formatter: (params: any) => {
-            let tip: string = '';
-            if (params != null && params.length > 0) {
-              tip += '<div><p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' + params[0].name + '：00</p>';
-              for (let index = 0; index < params.length; index++) {
-                tip +=
-                  '<p>' +
-                  params[index].marker +
-                  '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                  params[index].seriesName +
-                  '：' +
-                  params[index].value +
-                  'kWh</span></p>';
-              }
-              tip += '</div>';
-            }
-            return tip;
-          },
-        },
-        legend: {
-          bottom: '0%',
-          left: 'center',
-          itemWidth: 15,
-          itemHeight: 8,
-          textStyle: {
-            color: '#fff',
-          },
-        },
-        yAxis: {
-          type: 'value',
-          name: 'kWh',
-          nameTextStyle: {
-            // lineHeight: 28,
-            // padding: [0, 0, 0, 100],
-            fontSize: '14',
-            fontFamily: 'Microsoft YaHei',
-            fontWeight: 400,
-            color: '#EAF5FF',
-          },
-          splitLine: {
-            lineStyle: {
-              type: 'dashed',
-              color: '#1A242B',
-              width: 1,
-            },
-          },
-          axisLine: {
-            show: true,
-          },
-        },
-        series: [
-          {
-            name: '总览',
-            data: [15, 25, 22, 33, 24, 37, 41, 21, 23, 36, 45, 10, 25, 41, 38, 29, 6, 43, 35, 28, 33, 37, 45, 20],
-            type: 'line',
-            smooth: true,
-            symbolSize: 0,
-          },
-          {
-            name: '装机量',
-            data: [35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35],
-            type: 'line',
-            smooth: true,
-            symbolSize: 0,
-          },
-        ],
-      };
     } else {
       timeType.value = 'month';
-      option.value = {
-        grid: {
-          top: 30,
-          left: 30,
-          right: 30,
-        },
-        xAxis: {
-          type: 'category',
-          name: '日',
-          data: [
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            '10',
-            '11',
-            '12',
-            '13',
-            '14',
-            '15',
-            '16',
-            '17',
-            '18',
-            '19',
-            '20',
-            '21',
-            '22',
-            '23',
-            '24',
-            '25',
-            '26',
-            '27',
-            '28',
-            '29',
-            '30',
-            '31',
-          ],
-          axisTick: {
-            show: false,
-          },
-        },
-        color: ['rgba(40,124,232,0.5)', '#176CF4'],
-        tooltip: {
-          trigger: 'axis',
-          backgroundColor: 'rgba(11,34,52,0.9)',
-          borderColor: '#204C6F',
-          borderWidth: 1,
-          formatter: (params: any) => {
-            let tip: string = '';
-            if (params != null && params.length > 0) {
-              tip +=
-                '<div><p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">2023-5-' + params[0].name + '</p>';
-              for (let index = 0; index < params.length; index++) {
-                tip +=
-                  '<p>' +
-                  params[index].marker +
-                  '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                  params[index].seriesName +
-                  '：' +
-                  params[index].value +
-                  'kWh</span></p>';
-              }
-              tip += '</div>';
-            }
-            return tip;
-          },
-        },
-        legend: {
-          bottom: '0%',
-          left: 'center',
-          itemWidth: 15,
-          itemHeight: 8,
-          textStyle: {
-            color: '#fff',
-          },
-        },
-        yAxis: {
-          type: 'value',
-          name: 'kWh',
-          nameTextStyle: {
-            // lineHeight: 28,
-            // padding: [0, 0, 0, 100],
-            fontSize: '14',
-            fontFamily: 'Microsoft YaHei',
-            fontWeight: 400,
-            color: '#EAF5FF',
-          },
-          splitLine: {
-            lineStyle: {
-              type: 'dashed',
-              color: '#1A242B',
-              width: 1,
-            },
-          },
-          axisLine: {
-            show: true,
-          },
-        },
-        series: [
-          {
-            name: '总览',
-            data: [
-              25, 37, 25, 37, 25, 38, 20, 25, 37, 30, 25, 35, 20, 22, 35, 43, 38, 41, 25, 28, 40, 22, 32, 24, 33, 42,
-              50, 32, 21, 32, 28,
-            ],
-            type: 'bar',
-            itemStyle: {
-              borderWidth: 1,
-              borderColor: '#287CE8',
-            },
-            barWidth: 16,
-            barGap: 70,
-          },
-          {
-            name: '装机量',
-            data: [
-              35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-              35, 35, 35, 35, 35,
-            ],
-            type: 'line',
-            smooth: true,
-            symbolSize: 0,
-          },
-        ],
-      };
     }
   } else if (symbol === 'day') {
     timeType.value = 'date';
-    option.value = {
-      grid: {
-        top: 30,
-        left: 30,
-        right: 30,
-      },
-      xAxis: {
-        type: 'category',
-        name: '时',
-        data: [
-          '1',
-          '2',
-          '3',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          '11',
-          '12',
-          '13',
-          '14',
-          '15',
-          '16',
-          '17',
-          '18',
-          '19',
-          '20',
-          '21',
-          '22',
-          '23',
-          '24',
-        ],
-        axisTick: {
-          show: false,
-        },
-      },
-      color: 'rgba(40,124,232,0.5)',
-      tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(11,34,52,0.9)',
-        borderColor: '#204C6F',
-        borderWidth: 1,
-        formatter: (params: any) => {
-          console.log(params);
-          let tip: string = '';
-          if (params != null && params.length > 0) {
-            tip += '<div>';
-            for (let index = 0; index < params.length; index++) {
-              tip +=
-                '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                params[index].name +
-                '：00</p><p>' +
-                params[index].marker +
-                '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                params[index].seriesName +
-                '：' +
-                params[index].value +
-                'kWh</span></p>';
-            }
-            tip += '</div>';
-          }
-          return tip;
-        },
-      },
-      legend: {
-        bottom: '0%',
-        left: 'center',
-        itemWidth: 15,
-        itemHeight: 8,
-        textStyle: {
-          color: '#fff',
-        },
-      },
-      yAxis: {
-        type: 'value',
-        name: 'kWh',
-        nameTextStyle: {
-          // lineHeight: 28,
-          // padding: [0, 0, 0, 100],
-          fontSize: '14',
-          fontFamily: 'Microsoft YaHei',
-          fontWeight: 400,
-          color: '#EAF5FF',
-        },
-        splitLine: {
-          lineStyle: {
-            type: 'dashed',
-            color: '#1A242B',
-            width: 1,
-          },
-        },
-        axisLine: {
-          show: true,
-        },
-      },
-      series: [
-        {
-          name: '总览',
-          data: [25, 37, 25, 37, 25, 38, 20, 25, 37, 30, 25, 35, 20, 22, 35, 43, 38, 41, 25, 28, 40, 22, 32, 24],
-          type: 'bar',
-          itemStyle: {
-            borderWidth: 1,
-            borderColor: '#287CE8',
-          },
-          barWidth: 16,
-          barGap: 70,
-        },
-      ],
-    };
   } else if (symbol === 'month') {
     timeType.value = 'month';
-    option.value = {
-      grid: {
-        top: 30,
-        left: 30,
-        right: 30,
-      },
-      xAxis: {
-        type: 'category',
-        name: '日',
-        data: [
-          '1',
-          '2',
-          '3',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          '11',
-          '12',
-          '13',
-          '14',
-          '15',
-          '16',
-          '17',
-          '18',
-          '19',
-          '20',
-          '21',
-          '22',
-          '23',
-          '24',
-          '25',
-          '26',
-          '27',
-          '28',
-          '29',
-          '30',
-          '31',
-        ],
-        axisTick: {
-          show: false,
-        },
-      },
-      color: 'rgba(40,124,232,0.5)',
-      tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(11,34,52,0.9)',
-        borderColor: '#204C6F',
-        borderWidth: 1,
-        formatter: (params: any) => {
-          let tip: string = '';
-          if (params != null && params.length > 0) {
-            tip += '<div>';
-            for (let index = 0; index < params.length; index++) {
-              tip +=
-                '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">2023-5-' +
-                params[index].name +
-                '</p><p>' +
-                params[index].marker +
-                '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                params[index].seriesName +
-                '：' +
-                params[index].value +
-                'kWh</span></p>';
-            }
-            tip += '</div>';
-          }
-          return tip;
-        },
-      },
-      legend: {
-        bottom: '0%',
-        left: 'center',
-        itemWidth: 15,
-        itemHeight: 8,
-        textStyle: {
-          color: '#fff',
-        },
-      },
-      yAxis: {
-        type: 'value',
-        name: 'kWh',
-        nameTextStyle: {
-          // lineHeight: 28,
-          // padding: [0, 0, 0, 100],
-          fontSize: '14',
-          fontFamily: 'Microsoft YaHei',
-          fontWeight: 400,
-          color: '#EAF5FF',
-        },
-        splitLine: {
-          lineStyle: {
-            type: 'dashed',
-            color: '#1A242B',
-            width: 1,
-          },
-        },
-        axisLine: {
-          show: true,
-        },
-      },
-      series: [
-        {
-          name: '总览',
-          data: [
-            25, 37, 25, 37, 25, 38, 20, 25, 37, 30, 25, 35, 20, 22, 35, 43, 38, 41, 25, 28, 40, 22, 32, 24, 33, 42, 50,
-            32, 21, 32, 28,
-          ],
-          type: 'bar',
-          itemStyle: {
-            borderWidth: 1,
-            borderColor: '#287CE8',
-          },
-          barWidth: 16,
-          barGap: 70,
-        },
-      ],
-    };
   } else {
     timeType.value = 'year';
-    option.value = {
-      grid: {
-        top: 30,
-        left: 30,
-        right: 30,
-      },
-      xAxis: {
-        type: 'category',
-        name: '月',
-        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-        axisTick: {
-          show: false,
-        },
-      },
-      color: 'rgba(40,124,232,0.5)',
-      tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(11,34,52,0.9)',
-        borderColor: '#204C6F',
-        borderWidth: 1,
-        formatter: (params: any) => {
-          let tip: string = '';
-          if (params != null && params.length > 0) {
-            tip += '<div>';
-            for (let index = 0; index < params.length; index++) {
-              tip +=
-                '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">2023-' +
-                params[index].name +
-                '</p><p>' +
-                params[index].marker +
-                '<span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                params[index].seriesName +
-                '：' +
-                params[index].value +
-                'kWh</span></p>';
-            }
-            tip += '</div>';
-          }
-          return tip;
-        },
-      },
-      legend: {
-        bottom: '0%',
-        left: 'center',
-        itemWidth: 15,
-        itemHeight: 8,
-        textStyle: {
-          color: '#fff',
-        },
-      },
-      yAxis: {
-        type: 'value',
-        name: 'kWh',
-        nameTextStyle: {
-          // lineHeight: 28,
-          // padding: [0, 0, 0, 100],
-          fontSize: '14',
-          fontFamily: 'Microsoft YaHei',
-          fontWeight: 400,
-          color: '#EAF5FF',
-        },
-        splitLine: {
-          lineStyle: {
-            type: 'dashed',
-            color: '#1A242B',
-            width: 1,
-          },
-        },
-        axisLine: {
-          show: true,
-        },
-      },
-      series: [
-        {
-          name: '总览',
-          data: [25, 37, 25, 37, 25, 38, 20, 25, 37, 30, 25, 35],
-          type: 'bar',
-          itemStyle: {
-            borderWidth: 1,
-            borderColor: '#287CE8',
-          },
-          barWidth: 16,
-          barGap: 70,
-        },
-      ],
-    };
   }
 };
 </script>
@@ -988,12 +302,16 @@ const getData = (symbol: string) => {
         .select-gro {
           display: flex;
           width: 100%;
-          height: 36px;
+          // height: 36px;
+          height: 100%;
           line-height: 36px;
+          box-sizing: border-box;
+          padding-bottom: 20px;
 
           .dataTotal {
             display: flex;
-
+            width: 100%;
+            height: 100%;
             p {
               font-size: 16px;
               font-family: Microsoft YaHei;
