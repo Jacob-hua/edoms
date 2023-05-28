@@ -11,15 +11,25 @@
       <div>
         <span>开关状态：</span>
         <div class="mb-2 flex items-center text-sm">
-          <el-radio-group v-model="cardData.option.value.switch" class="ml-4">
-            <el-radio label="1" size="large">开</el-radio>
-            <el-radio label="0" size="large">关</el-radio>
+          <el-radio-group :key="radioNum" v-model="cardData.option.value.switch" class="ml-4">
+            <el-radio style="margin-right: 20px" label="1" size="small">开</el-radio>
+            <el-radio label="0" size="small">关</el-radio>
           </el-radio-group>
         </div>
       </div>
-      <div>
+      <div v-if="cardData.option.value.state === 'normal'">
+        <span>当前充电：</span>
+        <div>
+          <span style="width: 44px; display: inline-block; height: 13px; background: #2fda2f"></span
+          ><span
+            style="width: 23px; height: 13px; display: inline-block; background: #68696a; margin-right: 10px"
+          ></span
+          >{{ cardData.option.value.charging }}%
+        </div>
+      </div>
+      <div v-if="cardData.option.value.state !== 'normal'">
         <span>当前状态：</span>
-        <div></div>
+        <div :class="cardData.option.value.class">{{ cardData.option.value.state }}</div>
       </div>
       <div>
         <span>剩余时间：</span>
@@ -35,14 +45,45 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs } from 'vue';
+import { ref, toRefs } from 'vue';
+const radioNum = ref(-1);
 const config = defineProps<{
   option: any;
 }>();
 const cardData = toRefs(config);
+radioNum.value = Math.random();
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-radio.el-radio--large) {
+  height: 27px !important;
+  margin-right: 20px !important;
+}
+
+:deep(.el-radio__input.is-checked .el-radio__inner) {
+  border-color: #2fda2f;
+  background-color: #2fda2f;
+}
+
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+  border-color: #00a3ff;
+  background-color: #00a3ff;
+}
+
+:deep(.el-checkbox.el-checkbox--large .el-checkbox__inner) {
+  border-color: #00a3ff;
+  background-color: #090f17;
+}
+
+.red {
+  color: #ff0000;
+}
+.green {
+  color: #2dd1c0;
+}
+.yellow {
+  color: #d1b02d;
+}
 .wrapper {
   width: 270px;
   height: 150px;
@@ -64,10 +105,11 @@ const cardData = toRefs(config);
     font-family: Microsoft YaHei;
     font-weight: 400;
     color: #eaf5ff;
+  }
 
-    div {
-      line-height: 27px;
-    }
+  .info > div {
+    line-height: 27px;
+    display: flex;
   }
 }
 </style>
