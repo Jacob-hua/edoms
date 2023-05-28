@@ -278,7 +278,7 @@ const handlerToShow = (e: any, bl: boolean) => {
 
     .model-content {
       width: 1480px;
-      height: 90%;
+      height: 800px;
       position: absolute;
       left: 50%;
       top: 50%;
