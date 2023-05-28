@@ -61,7 +61,11 @@ import ProportionChart from './ProportionChart.vue';
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
-console.log(props.config.proportion);
+// const byq4_current = {
+//   Ia: [291.2841, 279.9651, 248.0136, 277.4367, 249.8106, 248.2334, 249.5328, 307.9369],
+//   Ib: [292.6177, 280.9302, 247.5605, 276.8418, 250.9959, 247.2667, 249.6436, 308.0461],
+//   Ic: [292.6016, 282.2231, 248.5004, 277.256, 251.6891, 247.5361, 250.0867, 306.9834],
+// };
 // const { request } = useApp(props);
 // 占比分布
 const option_prop = ref<ECOption>({});
@@ -170,7 +174,7 @@ watch(
           align: 'right',
           padding: 7,
         },
-        data: ['2', '4', '6', '8'],
+        // data: ['2', '4', '6', '8'],
         splitLine: {
           lineStyle: {
             type: 'dashed',
@@ -184,21 +188,21 @@ watch(
       series: [
         {
           name: 'Ia',
-          data: [1, 4, 1, 5, 1, 4, 1, 5],
+          data: [291.2841, 279.9651, 248.0136, 277.4367, 249.8106, 248.2334, 249.5328, 307.9369],
           type: 'line',
           smooth: true,
           symbolSize: 0,
         },
         {
           name: 'Ib',
-          data: [1, 2, 3, 2, 1, 4, 1, 5],
+          data: [292.6177, 280.9302, 247.5605, 276.8418, 250.9959, 247.2667, 249.6436, 308.0461],
           type: 'line',
           smooth: true,
           symbolSize: 0,
         },
         {
           name: 'Ic',
-          data: [2, 6, 2, 6, 2, 6, 2, 6],
+          data: [292.6016, 282.2231, 248.5004, 277.256, 251.6891, 247.5361, 250.0867, 306.9834],
           type: 'line',
           smooth: true,
           symbolSize: 0,
@@ -254,7 +258,7 @@ watch(
             align: 'right',
             padding: 7,
           },
-          data: ['2', '4', '6', '8'],
+          // data: ['2', '4', '6', '8'],
           splitLine: {
             lineStyle: {
               type: 'dashed',
@@ -293,14 +297,14 @@ watch(
       series: [
         {
           name: '负载率',
-          data: [1, 4, 1, 5, 1, 4, 1, 5],
+          data: [10.12128769, 9.735780675, 8.592085488, 9.602015599, 8.68932692, 8.580097567, 8.652001007, 10.6578128],
           type: 'line',
           smooth: true,
           symbolSize: 0,
         },
         {
           name: '三相不平衡率',
-          data: [1, 2, 3, 2, 1, 4, 1, 5],
+          data: [0.153978635, 0.421156983, 0.191727799, 0.093278177, 0.341765207, 0.223943031, 0.13307268, 0.126976074],
           type: 'line',
           smooth: true,
           symbolSize: 0,
@@ -340,9 +344,9 @@ const categories = ref([
     label3: '负载率',
     position: {
       label: '4#变压器',
-      value: 10,
-      time: 377,
-      day: 16,
+      value: 20,
+      time: 693,
+      day: 28,
       max_rate: 9.52,
     },
     name: 'systems',
@@ -353,10 +357,10 @@ const categories = ref([
     label3: '负载率',
     position: {
       label: '5#变压器',
-      value: 10,
-      time: 377,
-      day: 16,
-      max_rate: 9.52,
+      value: 20,
+      time: 0,
+      day: 0,
+      max_rate: 0,
     },
     name: 'systems',
   },
