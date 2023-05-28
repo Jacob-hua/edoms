@@ -3,7 +3,7 @@
     <div class="warning-item" @click="handleShowSurplus(item)">
       <span class="warning-type">{{ item.type }}</span>
       <span class="warning-title">{{ item.title }}</span>
-      <span class="warning-date">{{ item.date }}</span>
+      <span class="warning-date">{{ formatDate(item.date, 'MM-DD HH:mm') }}</span>
       <span class="discover">
         <img v-show="item.expend" src="../assets/to-not-col.png" />
         <img v-show="!item.expend" src="../assets/to-col.png" />
@@ -30,6 +30,7 @@
 import { computed, inject, Ref } from 'vue';
 
 import { ElButton } from '@edoms/design';
+import { formatDate } from '@edoms/utils';
 
 import { ClassName } from '../type';
 export interface Warning {
@@ -106,7 +107,9 @@ const handleConfirm = async (alarm: Warning) => {
   padding: 0 10px;
 
   .warning-item {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 10px;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(0, 163, 255, 0.14);
@@ -122,6 +125,12 @@ const handleConfirm = async (alarm: Warning) => {
       background: v-bind(warningBgColor);
       width: 60px;
       text-align: center;
+    }
+
+    .warning-title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
   .button-wrapper {
