@@ -1,11 +1,6 @@
 <template>
   <div class="block">
-    <el-date-picker
-      v-model="value1"
-      :type="timeType.option.type"
-      :disabled-date="disabledDateFun"
-      @change="selectDate"
-    />
+    <el-date-picker v-model="value1" :type="timeType.option" :disabled-date="disabledDateFun" @change="selectDate" />
   </div>
 </template>
 
@@ -20,7 +15,7 @@ const timeType = defineProps<{
 const value1 = ref(new Date('2023-05-15 00:00:00'));
 const selectDate = (time: Record<string, any>) => {
   console.log(time.getDate());
-  if (timeType.option.type !== 'date') {
+  if (timeType.option !== 'date') {
     return;
   }
   emit('ctTime', time);

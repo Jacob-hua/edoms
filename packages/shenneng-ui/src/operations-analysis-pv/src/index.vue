@@ -79,7 +79,7 @@ const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
   isShowModel.value = bl;
 };
-const timeType = { type: 'date', defaultTime: new Date('2023-05-15 00:00:00') };
+const timeType = ref('date');
 const activeNameF = ref('power-qua');
 const activeNameS = ref('day');
 const value = ref('all');
@@ -209,18 +209,26 @@ const handleClickS = (event: any) => {
     return;
   }
   activeNameS.value = event.paneName;
-  getData(activeNameS.value);
+  if (event.paneName === 'day') {
+    changeTime(defaultTime.value);
+    timeWrapper.value.setDefultTime(defaultTime.value);
+  } else if (event.paneName === 'month') {
+    timeWrapper.value.setDefultTime(new Date('2023-05'));
+    getData(activeNameS.value);
+  } else {
+    getData(activeNameS.value);
+  }
 };
 
 // 获取charts数据
 const getData = (symbol: string) => {
   if (activeNameF.value === 'power-gen') {
     if (symbol === 'day') {
-      timeType.type = 'date';
+      timeType.value = 'date';
       option.value = {
         grid: {
-          top: 30,
-          left: 30,
+          top: 40,
+          left: 40,
           right: 30,
         },
         xAxis: {
@@ -296,7 +304,7 @@ const getData = (symbol: string) => {
           nameTextStyle: {
             // lineHeight: 28,
             // padding: [0, 0, 0, 100],
-            fontSize: '14',
+            fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
             color: '#EAF5FF',
@@ -333,11 +341,11 @@ const getData = (symbol: string) => {
         ],
       };
     } else {
-      timeType.type = 'month';
+      timeType.value = 'month';
       option.value = {
         grid: {
-          top: 30,
-          left: 30,
+          top: 40,
+          left: 40,
           right: 30,
         },
         xAxis: {
@@ -421,7 +429,7 @@ const getData = (symbol: string) => {
           nameTextStyle: {
             // lineHeight: 28,
             // padding: [0, 0, 0, 100],
-            fontSize: '14',
+            fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
             color: '#EAF5FF',
@@ -464,11 +472,11 @@ const getData = (symbol: string) => {
     }
   } else {
     if (symbol === 'day') {
-      timeType.type = 'date';
+      timeType.value = 'date';
       option.value = {
         grid: {
-          top: 30,
-          left: 30,
+          top: 40,
+          left: 40,
           right: 30,
         },
         xAxis: {
@@ -547,7 +555,7 @@ const getData = (symbol: string) => {
           nameTextStyle: {
             // lineHeight: 28,
             // padding: [0, 0, 0, 100],
-            fontSize: '14',
+            fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
             color: '#EAF5FF',
@@ -578,11 +586,11 @@ const getData = (symbol: string) => {
         ],
       };
     } else if (symbol === 'month') {
-      timeType.type = 'month';
+      timeType.value = 'month';
       option.value = {
         grid: {
-          top: 30,
-          left: 30,
+          top: 40,
+          left: 40,
           right: 30,
         },
         xAxis: {
@@ -667,7 +675,7 @@ const getData = (symbol: string) => {
           nameTextStyle: {
             // lineHeight: 28,
             // padding: [0, 0, 0, 100],
-            fontSize: '14',
+            fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
             color: '#EAF5FF',
@@ -698,11 +706,11 @@ const getData = (symbol: string) => {
         ],
       };
     } else {
-      timeType.type = 'year';
+      timeType.value = 'year';
       option.value = {
         grid: {
-          top: 30,
-          left: 30,
+          top: 40,
+          left: 40,
           right: 30,
         },
         xAxis: {
@@ -755,7 +763,7 @@ const getData = (symbol: string) => {
           nameTextStyle: {
             // lineHeight: 28,
             // padding: [0, 0, 0, 100],
-            fontSize: '14',
+            fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
             color: '#EAF5FF',
