@@ -285,6 +285,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '运行分析',
         type: 'operations-analysis-charge',
       },
+      {
+        icon: 'chongdiankongzhi',
+        text: '充电控制',
+        type: 'control-charge',
+      },
     ],
   },
 ];

@@ -1,4 +1,7 @@
-export default async () => {
+import { Request } from '@editor/type';
+
+import useInstanceConfig from '../../useInstanceConfig';
+export default async (request: Request) => {
   return [
     {
       text: '标题',
@@ -21,5 +24,6 @@ export default async () => {
       defaultValue: 10,
       append: 's',
     },
+    ...(await useInstanceConfig(request, 'warning-table-list', ['property', 'propertyType', 'unit', 'precision'])),
   ];
 };

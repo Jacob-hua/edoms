@@ -12,8 +12,10 @@
 import { provide, Ref, ref, watch } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
+import useApp from '../../useApp';
 
 import WarningList from './components/WarningList.vue';
+import warningApi from './api';
 import { ClassName } from './type';
 
 export interface MConfig {
@@ -26,7 +28,6 @@ export interface MConfig {
   timeSpan: number;
   isVirtual: string;
 }
-
 const props = withDefaults(
   defineProps<{
     config: MConfig;
@@ -44,6 +45,21 @@ const props = withDefaults(
     }),
   }
 );
+const activeClassName = ref<ClassName>('red');
+const commonAlarm = ref();
+const { request } = useApp(props);
+
+const { fetchInitAlarmList } = warningApi(request);
+
+const initAlarmList = async () => {
+  const result = await fetchInitAlarmList({
+    dataCode: props.config.instance?.at(-1) as unknown as string,
+    timeSpan: props.config.timeSpan,
+    isVirtual: props.config.isVirtual ?? '1',
+  });
+  commonAlarm.value = result;
+};
+initAlarmList();
 const config = ref({
   speed: 12,
   isScroll: true,
@@ -61,44 +77,41 @@ watch(
     immediate: true,
   }
 );
-
-const activeClassName = ref<ClassName>('red');
-const commonAlarm = ref();
-const getOperationData = async () => {
-  commonAlarm.value = [
-    {
-      date: '02-15 16:31',
-      title: '5#变压器20kV出线柜断路由器',
-      content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
-    },
-    {
-      date: '02-15 16:31',
-      title: '5#变压器20kV出线柜断路由器',
-      content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
-    },
-    {
-      date: '02-15 16:31',
-      title: '5#变压器20kV出线柜断路由器',
-      content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
-    },
-    {
-      date: '02-15 16:31',
-      title: '5#变压器20kV出线柜断路由器',
-      content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
-    },
-    {
-      date: '02-15 16:31',
-      title: '5#变压器20kV出线柜断路由器',
-      content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
-    },
-    {
-      date: '02-15 16:31',
-      title: '5#变压器20kV出线柜断路由器',
-      content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
-    },
-  ];
-};
-getOperationData();
+// const getOperationData = async () => {
+//   commonAlarm.value = [
+//     {
+//       date: '02-15 16:31',
+//       title: '5#变压器20kV出线柜断路由器',
+//       content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
+//     },
+//     {
+//       date: '02-15 16:31',
+//       title: '5#变压器20kV出线柜断路由器',
+//       content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
+//     },
+//     {
+//       date: '02-15 16:31',
+//       title: '5#变压器20kV出线柜断路由器',
+//       content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
+//     },
+//     {
+//       date: '02-15 16:31',
+//       title: '5#变压器20kV出线柜断路由器',
+//       content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
+//     },
+//     {
+//       date: '02-15 16:31',
+//       title: '5#变压器20kV出线柜断路由器',
+//       content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
+//     },
+//     {
+//       date: '02-15 16:31',
+//       title: '5#变压器20kV出线柜断路由器',
+//       content: '5#变压器20kV出线柜断路由器遥控合闸信号下发',
+//     },
+//   ];
+// };
+// getOperationData();
 provide<Ref<ClassName>>('textColor', activeClassName);
 provide<Ref<MConfig>>('config', config);
 provide('commonAlarm', commonAlarm);

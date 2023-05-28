@@ -19,7 +19,7 @@ export interface MWarningConfigs extends MComponent {
 export type ClassName = 'red' | 'orange' | 'green';
 
 export interface InitAlarmReq {
-  sysInsCode: string;
+  dataCode: string;
   timeSpan: number;
   isVirtual: string;
 }
@@ -44,6 +44,6 @@ export interface Alarm {
 
 export interface Apis {
   fetchInitAlarmList: (data: InitAlarmReq) => Promise<InitAlarmRes>;
-  fetchNewAlarmList: (data: Pick<InitAlarmReq, 'sysInsCode' | 'isVirtual'>) => Promise<InitAlarmRes>;
+  fetchNewAlarmList: (data: Pick<InitAlarmReq, 'dataCode' | 'isVirtual'>) => Promise<InitAlarmRes>;
   confirmedAlarmList: () => Promise<string>;
 }

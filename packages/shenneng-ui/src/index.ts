@@ -10,6 +10,7 @@ import Button from './button';
 import Charts from './charts';
 import Checkbox from './checkbox';
 import Container from './container';
+import ControlCharge from './control-charge';
 import EconomicIndicators from './economic-indicators';
 import EfficiencyAnalysis from './efficiency-analysis';
 import ElectricEnergyQuality from './electric-energy-quality';
@@ -65,7 +66,7 @@ const ui: Record<string, any> = {
   equipmentCondition: EquipmentCondition,
   economicIndicators: EconomicIndicators,
   warningTableList: WarningTableList,
-  OperationRecords: OperationRecords,
+  operationRecords: OperationRecords,
   equipmentQueryOperation: EquipmentQueryOperation,
   systemDataCumulation: SystemDataCumulation,
   operationalAnalysis: OperationalAnalysis,
@@ -89,6 +90,7 @@ const ui: Record<string, any> = {
   intelligenceReportPv: IntelligenceReportPv,
   // equipmentMonitoringCharge: EquipmentMonitoringCharge,
   intelligenceReportCharge: IntelligenceReportCharge,
+  controlCharge: ControlCharge,
 };
 
 export default ui;
