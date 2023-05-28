@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, withDefaults } from 'vue';
+import { onMounted, ref } from 'vue';
 import * as echarts from 'echarts/core';
 // import EdomsCharts from '../../../EdomsCharts.vue';
 // import { ECOption } from '../../../types';
@@ -38,29 +38,20 @@ import * as echarts from 'echarts/core';
 //   { key: '轻载', dis: '5', times: '3' },
 // ],
 
-const props = withDefaults(
-  defineProps<{
-    list: {
-      max: number;
-      min: number;
-      list: Array<{ [key: string]: string | number }>;
-    };
-  }>(),
-  {
-    list: () => ({
-      max: 0,
-      min: 0,
-      list: [],
-    }),
-  }
-);
+const props = defineProps<{
+  list: {
+    max: number;
+    min: number;
+    list: Array<{ [key: string]: string | number }>;
+  };
+}>();
 
 const idList = ref<Array<string>>([
   Math.random().toString().substring(3, 30),
   Math.random().toString().substring(3, 30),
 ]);
 
-const initData = (type: string) => {
+const initData = (type: string, val: number) => {
   const dom = document.getElementById(type);
   const chart = echarts.init(dom as HTMLElement);
   const options = {
@@ -70,8 +61,8 @@ const initData = (type: string) => {
         type: 'pie',
         radius: ['72%', '90%'],
         data: [
-          { value: 40, itemStyle: { color: '#00A3FF' } },
-          { value: 100 - 40, itemStyle: { color: '#1A2E41' } },
+          { value: val, itemStyle: { color: '#00A3FF' } },
+          { value: 100 - val, itemStyle: { color: '#1A2E41' } },
         ],
       },
     ],
@@ -84,8 +75,8 @@ const getNum = (num: number) => {
 };
 
 onMounted(() => {
-  initData(idList.value[0]);
-  initData(idList.value[1]);
+  initData(idList.value[0], props.list.max * 100);
+  initData(idList.value[1], props.list.min * 100);
 });
 
 console.log(props);
