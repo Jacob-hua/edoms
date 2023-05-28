@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard :config="config" :title="config.title" :subtitle="config.subTitle" min-width="480" min-height="366">
+  <BusinessCard :config="config" :title="config.title" :subtitle="config.subTitle" min-width="400" min-height="366">
     <div class="warning-wrapper">
       <div class="warning-list-header">
         <div
