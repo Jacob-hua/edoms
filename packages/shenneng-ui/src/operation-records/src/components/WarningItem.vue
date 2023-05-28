@@ -1,8 +1,8 @@
 <template>
   <div class="warning-wrapper">
     <div class="warning-item" @click="handleShowSurplus(item)">
-      <span class="warning-title">{{ item.title }}</span>
-      <span class="warning-date">{{ item.date }}</span>
+      <span class="warning-title">{{ item.content }}</span>
+      <span class="warning-date">{{ item.time }}</span>
       <span class="discover">
         <img v-show="item.expend" src="../assets/to-not-col.png" />
         <img v-show="!item.expend" src="../assets/to-col.png" />
@@ -25,7 +25,7 @@ export interface Warning {
   // 告警Id
   id: number;
   // 告警日期
-  date: string;
+  time: string;
   //告警类型
   type: string;
   // 告警信息摘要
@@ -57,7 +57,7 @@ withDefaults(
   {
     item: () => ({
       id: new Date().getTime(),
-      date: '-',
+      time: '-',
       type: '-',
       title: '-',
       content: '-',

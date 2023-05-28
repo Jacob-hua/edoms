@@ -13,7 +13,7 @@ export default (request?: EdomsRequestFunc): Apis => ({
     }
     try {
       const { result } = await request<InitAlarmReq, InitAlarmRes>({
-        url: '/operation-monitor/init-alarm-list',
+        url: '/OperationalMonitorCommon/getOperationRecord',
         method: 'GET',
         data,
       });
