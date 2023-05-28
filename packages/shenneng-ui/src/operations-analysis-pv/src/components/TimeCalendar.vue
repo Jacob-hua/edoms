@@ -1,19 +1,46 @@
 <template>
   <div class="block">
-    <el-date-picker v-model="value1" :type="timeType.option" @change="selectDate" />
+    <el-date-picker
+      v-model="value1"
+      :type="timeType.option.type"
+      :disabled-date="disabledDateFun"
+      @change="selectDate"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-
-const timeType = defineProps<{
-  option: string;
+const emit = defineEmits<{
+  (event: 'ctTime', time: Record<string, any>): void;
 }>();
-const value1 = ref(new Date());
-const selectDate = () => {
-  console.log(value1);
+const timeType = defineProps<{
+  option: any;
+}>();
+const value1 = ref(new Date('2023-05-15 00:00:00'));
+const selectDate = (time: Record<string, any>) => {
+  console.log(time.getDate());
+  if (timeType.option.type !== 'date') {
+    return;
+  }
+  emit('ctTime', time);
 };
+const disabledDateFun = (time: Record<string, any>): boolean => {
+  if (
+    time.getTime() < new Date('2023-05-21 00:00:00').getTime() &&
+    time.getTime() > new Date('2023-05-14 00:00:00').getTime()
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+};
+const setDefultTime = () => {
+  value1.value = new Date('2023-05-15 00:00:00');
+};
+defineExpose({
+  setDefultTime,
+});
 </script>
 
 <style lang="scss" scoped>
