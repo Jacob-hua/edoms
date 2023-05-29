@@ -275,11 +275,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report-charge',
       },
-      // {
-      //   icon: 'xitong',
-      //   text: '设备监测',
-      //   type: 'equipment-monitoring-charge',
-      // },
+      {
+        icon: 'xitong',
+        text: '设备监测',
+        type: 'equipment-monitoring-charge',
+      },
       {
         icon: 'yunxingfenxi',
         text: '运行分析',

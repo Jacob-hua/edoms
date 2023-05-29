@@ -1,5 +1,11 @@
 <template>
-  <div class="operations-analysis-water">
+  <div class="operations-analysis-water" @click="handlerToShow($event, true)">
+    <div class="wrap-report">
+      <div class="wrap-icon">
+        <img class="icon-report" src="./assets/model-icon.png" alt="" />
+      </div>
+      <div class="label">{{ config.title }}</div>
+    </div>
     <div v-show="isShowModel" class="model-wrapper-ftst">
       <div class="model-content">
         <div class="content-title">
@@ -10,45 +16,38 @@
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
         <div class="content-data">
-          <div class="device-info"></div>
+          <div class="device-info">
+            <div class="info-station">{{ eq_data.eq_station }}</div>
+            <div class="info-information">
+              <div class="info-tit">设备名称：</div>
+              <div class="info-val">{{ eq_data.eq_name }}</div>
+            </div>
+            <div class="info-information">
+              <div class="info-tit">运行状态：</div>
+              <div class="info-val">{{ eq_data.eq_satus }}</div>
+            </div>
+            <div class="info-information">
+              <div class="info-tit">厂家联系人：</div>
+              <div class="info-val">{{ eq_data.manufacturer }}</div>
+            </div>
+          </div>
           <div class="tab-content">
-            <div class="equipment-select-card card-box">
-              <div class="img-content">
-                <div class="img-box">
-                  <img src="./assets/byq.png" alt="" />
-                </div>
-                <div class="equipment-title">
-                  <span>{{ equipName }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="info-card card-box">
-              <div class="card-title"></div>
-              <div class="card-content">
-                <div v-for="(item, index) in informations.assetInformation" :key="index" class="row">
-                  <div class="col-left">{{ item.label }}</div>
-                  <el-divider direction="vertical" />
-                  <div class="col-right">{{ item.value }}</div>
+            <div class="card-box">
+              <div class="card-tit">设备动态图</div>
+              <div class="card-con">
+                <div
+                  style="text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)"
+                >
+                  <img src="./assets/station.png" alt="" />
                 </div>
               </div>
             </div>
-            <div class="info-card card-box">
-              <div class="card-title"></div>
-              <div class="card-content">
-                <div v-for="(item, index) in informations.factoryParameter" :key="index" class="row">
-                  <div class="col-left">{{ item.label }}</div>
-                  <el-divider direction="vertical" />
-                  <div class="col-right">{{ item.value }}</div>
-                </div>
-              </div>
-            </div>
-            <div class="info-card card-box">
-              <div class="card-title"></div>
-              <div class="card-content">
-                <div v-for="(item, index) in informations.runningParameter" :key="index" class="row">
-                  <div class="col-left">{{ item.label }}</div>
-                  <el-divider direction="vertical" />
-                  <div class="col-right">{{ item.value }}</div>
+            <div v-for="item in eq_data.eq_list" :key="item.paramsName" class="info-card card-box">
+              <div class="card-tit">{{ item.paramsName }}</div>
+              <div class="card-con">
+                <div v-for="query in item.list" :key="query.param" class="con-item">
+                  <div class="item-left">{{ query.param }}</div>
+                  <div class="item-right">{{ query.val }}</div>
                 </div>
               </div>
             </div>
@@ -60,7 +59,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
+import { ref } from 'vue';
 
 import { MAssetInformationConfig } from './type';
 
@@ -68,143 +67,176 @@ defineProps<{
   config: MAssetInformationConfig;
 }>();
 const isShowModel = ref<boolean>(false);
-const options = ref([
-  {
-    label: '研发楼西逆变压器',
-    value: 'xini',
-  },
-  {
-    label: '研发楼东逆变压器',
-    value: 'dongni',
-  },
-]);
-const selectValue = ref();
-selectValue.value = options.value[0].value;
-const informations = reactive({
-  assetInformation: [
-    {
-      label: '生产厂家',
-      value: '——',
-    },
-    {
-      label: '资产编号',
-      value: '——',
-    },
-    {
-      label: '资产类型',
-      value: '——',
-    },
-    {
-      label: '资产名称',
-      value: '——',
-    },
-    {
-      label: '资产所属',
-      value: '——',
-    },
-    {
-      label: '资产状态',
-      value: '——',
-    },
-    {
-      label: '生产厂家',
-      value: '——',
-    },
-    {
-      label: '设备型号',
-      value: '——',
-    },
-    {
-      label: '购入时间',
-      value: '——',
-    },
-  ],
-  factoryParameter: [
-    {
-      label: '额定发电电流',
-      value: '50A',
-    },
-    {
-      label: '系统电压',
-      value: '192V',
-    },
-    {
-      label: '额定电流',
-      value: '50A',
-    },
-    {
-      label: '最大电流',
-      value: '51A',
-    },
-    {
-      label: '发电模式',
-      value: 'MPPT自动最大功率点跟',
-    },
-    {
-      label: '启动时间',
-      value: '＜10s',
-    },
-    {
-      label: '静态功耗',
-      value: '＜2w',
-    },
-    {
-      label: '整机效率',
-      value: '＞96.5%',
-    },
-    {
-      label: '冷却方式',
-      value: '风冷',
-    },
-  ],
-  runningParameter: [
-    {
-      label: '参数01',
-      value: '——',
-    },
-    {
-      label: '参数02',
-      value: '——',
-    },
-    {
-      label: '参数03',
-      value: '——',
-    },
-    {
-      label: '参数04',
-      value: '97.7',
-    },
-    {
-      label: '参数05',
-      value: '——',
-    },
-    {
-      label: '参数06',
-      value: '——',
-    },
-    {
-      label: '参数07',
-      value: '——',
-    },
-    {
-      label: '参数08',
-      value: '——',
-    },
-    {
-      label: '参数09',
-      value: '——',
-    },
-  ],
-});
-
-const equipName = computed(() => {
-  const selectOption = options.value.find(({ value }) => value === selectValue.value);
-  console.log(selectOption);
-  return selectOption?.label;
-});
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
   isShowModel.value = bl;
+};
+const eq_data = {
+  eq_station: '充电系统/1-1#充电桩',
+  eq_name: '60KW双向V2G充电桩',
+  eq_satus: '正常运行',
+  manufacturer: '李四   136-3690-6785',
+  eq_list: [
+    {
+      paramsName: '铭牌参数',
+      list: [
+        {
+          param: '生产厂家',
+          val: '上海利百威',
+        },
+        {
+          param: '设备型号',
+          val: '60kW',
+        },
+        {
+          param: '计量精度',
+          val: '1级',
+        },
+        {
+          param: '充电枪配置',
+          val: '单枪',
+        },
+        {
+          param: '充电接口',
+          val: '满足GBT',
+        },
+        {
+          param: '启动方式',
+          val: '扫码、插电',
+        },
+        {
+          param: '组网方式',
+          val: '以太网',
+        },
+        {
+          param: '使用寿命',
+          val: '5000h',
+        },
+        {
+          param: '充放电次数',
+          val: '10000',
+        },
+      ],
+    },
+    {
+      paramsName: '出厂参数',
+      list: [
+        {
+          param: 'AC-DC功率',
+          val: '60kW',
+        },
+        {
+          param: 'AC-DC输入电压',
+          val: '342~415Vac',
+        },
+        {
+          param: 'AC-DC输入电流',
+          val: 'Imax=92A',
+        },
+        {
+          param: 'AC-DC输出电压',
+          val: '200~750Vdc',
+        },
+        {
+          param: 'AC-DC输出电流',
+          val: 'Imax=100A',
+        },
+        {
+          param: 'DC-AC功率',
+          val: '60kW',
+        },
+        {
+          param: 'DC-AC输入电压',
+          val: '300~750Vdc',
+        },
+        {
+          param: 'DC-AC输入电流',
+          val: 'Imax=100A',
+        },
+        {
+          param: 'DC-AC输出电压',
+          val: '380Vac',
+        },
+        {
+          param: 'DC-AC输出电流',
+          val: 'Imax=120A',
+        },
+        {
+          param: '工作温度',
+          val: '-20~55℃',
+        },
+        {
+          param: '防护等级',
+          val: '1级',
+        },
+        {
+          param: '整机效率（满载）',
+          val: '≥96%',
+        },
+      ],
+    },
+    {
+      paramsName: '设置参数',
+      list: [],
+    },
+    {
+      paramsName: '运行参数',
+      list: [
+        {
+          param: 'AC-DC功率',
+          val: '60kW',
+        },
+        {
+          param: 'AC-DC输入电压',
+          val: '--',
+        },
+        {
+          param: 'AC-DC输入电流',
+          val: '--',
+        },
+        {
+          param: 'AC-DC输出电压',
+          val: '--',
+        },
+        {
+          param: 'AC-DC输出电流',
+          val: '--',
+        },
+        {
+          param: 'DC-AC功率',
+          val: '--',
+        },
+        {
+          param: 'DC-AC输入电压',
+          val: '--',
+        },
+        {
+          param: 'DC-AC输入电流',
+          val: '--',
+        },
+        {
+          param: 'DC-AC输出电压',
+          val: '--',
+        },
+        {
+          param: 'DC-AC输出电流',
+          val: '--',
+        },
+        {
+          param: '工作温度',
+          val: '--',
+        },
+        {
+          param: '防护等级',
+          val: '--',
+        },
+        {
+          param: '整机效率（满载）',
+          val: '--',
+        },
+      ],
+    },
+  ],
 };
 </script>
 
@@ -212,6 +244,7 @@ const handlerToShow = (e: any, bl: boolean) => {
 .operations-analysis-water {
   min-height: 80px;
   position: relative;
+
   .wrap-report {
     width: 100%;
     height: 100%;
@@ -222,6 +255,7 @@ const handlerToShow = (e: any, bl: boolean) => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
     .wrap-icon {
       width: 60px;
       height: 42px;
@@ -233,6 +267,7 @@ const handlerToShow = (e: any, bl: boolean) => {
       border: 1px solid #0072b3;
       border-radius: 4px;
       box-sizing: border-box;
+
       .icon-report {
         width: 22px;
         height: 24px;
@@ -257,8 +292,8 @@ const handlerToShow = (e: any, bl: boolean) => {
     z-index: 1000;
 
     .model-content {
-      width: 1520px;
-      height: 95%;
+      width: 1480px;
+      height: 800px;
       position: absolute;
       left: 50%;
       top: 50%;
@@ -314,9 +349,9 @@ const handlerToShow = (e: any, bl: boolean) => {
       }
 
       .content-data {
-        width: calc(100% - 60px);
-        height: calc(100% - 112px);
-        margin: 10px 30px 30px;
+        width: 100%;
+        height: calc(100% - 52px);
+        // margin: 10px 30px 30px;
         overflow-y: scroll;
         display: flex;
         flex-flow: column;
@@ -330,112 +365,104 @@ const handlerToShow = (e: any, bl: boolean) => {
           // }
         }
 
+        .device-info {
+          width: 100%;
+          height: 64px;
+          box-sizing: border-box;
+          padding: 0px 30px;
+          border-bottom: 1px solid #1d2634;
+          display: flex;
+          line-height: 64px;
+
+          .info-station {
+            margin-right: 140px;
+            font-size: 16px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #eaf5ff;
+          }
+
+          .info-information {
+            display: flex;
+            margin-right: 80px;
+
+            .info-tit {
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #eaf5ff;
+            }
+
+            .info-val {
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #2dd12d;
+            }
+          }
+        }
+
         .tab-content {
+          height: calc(100% - 90px);
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          grid-column-gap: 30px;
+          grid-template-columns: repeat(5, 1fr);
+          grid-column-gap: 23px;
           flex-grow: 1;
+          padding: 0px 30px;
+          box-sizing: border-box;
+          margin-top: 23px;
 
           .card-box {
-            margin: 20px 0 0px;
-            background: #0d1118;
-            border: 1px solid #1d2634;
-            text-align: center;
-          }
+            height: calc(100% - 45px);
 
-          .equipment-select-card {
-            color: #eaf5ff;
-            :deep(.el-select) {
+            .card-tit {
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #eaf5ff;
+              margin-bottom: 16px;
+            }
+
+            .card-con {
               width: 100%;
-              .el-input__wrapper {
-                background-color: transparent;
-                --el-border-color: #454e72;
-                --el-input-border-color: #454e72;
-                --el-select-input-focus-border-color: #454e72;
-              }
-            }
-
-            :deep(.el-card__body) {
-              height: 100%;
+              height: calc(100% - 64px);
+              background: rgba(9, 15, 23, 0.3);
+              border: 1px solid #212c3c;
               box-sizing: border-box;
-              display: flex;
-              flex-flow: column;
-            }
-            .img-content {
-              flex-grow: 1;
-              display: flex;
-              flex-flow: column;
-              justify-content: center;
-              .img-box {
-                border: 1px dashed #eaf5ff50;
-              }
-            }
-          }
+              padding: 14px;
+              overflow-y: scroll;
+              position: relative;
 
-          .info-card {
-            display: flex;
-            flex-flow: column;
-            color: #eaf5ff50;
-
-            :deep(.el-card__header) {
-              --el-card-border-color: #1d2634;
-            }
-            .card-header {
-              display: grid;
-              grid-auto-flow: column;
-              justify-content: center;
-              align-items: center;
-              grid-column-gap: 5px;
-              i {
-                width: 21px;
-                height: 18px;
-                display: inline-block;
-              }
-
-              .asset-icon {
-                background: url('./assets/zichan.png') no-repeat;
-              }
-
-              .factory-icon {
-                background: url('./assets/chuchangcanshu.png') no-repeat;
-              }
-
-              .running-icon {
-                background: url('./assets/yunxingcanshu.png') no-repeat;
-              }
-            }
-
-            :deep(.el-card__body) {
-              display: flex;
-              flex-flow: column;
-              flex-grow: 1;
-            }
-
-            .card-content {
-              display: grid;
-              grid-auto-flow: row;
-              grid-row-gap: 20px;
-              grid-template-rows: repeat(9, 1fr);
-              flex-grow: 1;
-
-              .row {
+              .con-item {
                 display: flex;
-                background: rgba(20, 27, 37, 0.8);
-                border: 1px solid #212b3b;
-                text-align: center;
-                align-items: center;
+                width: 100%;
+                height: 40px;
+                justify-content: space-between;
+                margin-bottom: 6px;
+                border: 1px solid #666666;
+                line-height: 40px;
 
-                :deep(.el-divider) {
-                  --el-border-color: #212b3b;
-                  height: 100%;
+                .item-left {
+                  font-size: 14px;
+                  font-family: Microsoft YaHei;
+                  font-weight: 400;
+                  color: #aaaaaa;
+                  background: #030507;
+                  border-right: 1px solid #666666;
+                  text-align: center;
                 }
 
-                .col-left {
-                  width: 36%;
+                .item-right {
+                  font-size: 14px;
+                  font-family: Microsoft YaHei;
+                  font-weight: 400;
+                  color: #2fda2f;
+                  background: rgba(255, 255, 255, 0.1);
+                  text-align: center;
                 }
 
-                .col-right {
-                  width: 64%;
+                div {
+                  width: 50%;
                 }
               }
             }
