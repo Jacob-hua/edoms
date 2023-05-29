@@ -2,11 +2,13 @@
   <div class="eq-condition">
     <div class="eq-title">{{ condition.label }}</div>
     <div class="eq-indicators">
-      <div v-for="({ label, unit }, index) in realTimeIndicators" :key="index" class="eq-indicator">
+      <div v-for="({ label, displayParameter, unit }, index) in realTimeIndicators" :key="index" class="eq-indicator">
         <!-- <LongText class="label" :content="label" :content-style="indicatorTitleStyle"></LongText> -->
-        <!-- <LongText class="value" :content="displayParameter" :content-style="indicatorValueStyle"></LongText> -->
         <span class="lab-sty">{{ label }}</span>
-        <span :style="indicatorValueStyle">{{ unit }}</span>
+        <div :style="indicatorValueStyle">
+          <LongText class="value" :content="displayParameter" :content-style="indicatorValueStyle"></LongText>
+          <span>{{ unit }}</span>
+        </div>
       </div>
     </div>
     <div class="eq-indicator-tabs">
@@ -52,6 +54,7 @@ import {
 } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
+import LongText from '../../../LongText.vue';
 import { ECOption } from '../../../types';
 import useIntervalAsync from '../../../useIntervalAsync';
 import apiFactory from '../api';
@@ -92,8 +95,8 @@ const chartsOption = ref<ECOption>({});
 
 const indicatorValueStyle = computed<Record<string, any> | undefined>(() =>
   props.condition.color
-    ? { color: props.condition.color, fontSize: '14px', textAlign: 'center', width: '50%' }
-    : { fontSize: '14px', textAlign: 'center', width: '50%' }
+    ? { display: 'flex', color: props.condition.color, fontSize: '14px', textAlign: 'center', width: '50%' }
+    : { display: 'flex', fontSize: '14px', textAlign: 'center', width: '50%' }
 );
 
 watch(
@@ -151,7 +154,7 @@ const updateIndicatorsData = () => {
   fetchRealData({ dataCodes }).then((realTimeResult) => {
     realTimeResult.forEach((result) => {
       for (const realTimeIndicator of realTimeIndicators.value) {
-        if (realTimeIndicator.deviceCode === result.propCode && realTimeIndicator.propCode === result.propCode) {
+        if (realTimeIndicator.propCode === result.propCode) {
           realTimeIndicator.parameter = `${result.propVal}`;
           realTimeIndicator.displayParameter = `${String(
             formatPrecision(result.propVal, realTimeIndicator.precision)
@@ -159,6 +162,7 @@ const updateIndicatorsData = () => {
         }
       }
     });
+    console.log(realTimeIndicators);
   });
 };
 

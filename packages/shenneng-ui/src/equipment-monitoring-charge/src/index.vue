@@ -1,11 +1,5 @@
 <template>
   <div class="operations-analysis-water" @click="handlerToShow($event, true)">
-    <div class="wrap-report">
-      <div class="wrap-icon">
-        <img class="icon-report" src="./assets/model-icon.png" alt="" />
-      </div>
-      <div class="label">{{ config.title }}</div>
-    </div>
     <div v-show="isShowModel" class="model-wrapper-ftst">
       <div class="model-content">
         <div class="content-title">
@@ -242,7 +236,8 @@ const eq_data = {
 
 <style lang="scss" scoped>
 .operations-analysis-water {
-  min-height: 80px;
+  min-height: 60px;
+  min-width: 60px;
   position: relative;
 
   .wrap-report {
