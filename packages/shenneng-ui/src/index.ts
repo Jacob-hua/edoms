@@ -16,7 +16,7 @@ import EfficiencyAnalysis from './efficiency-analysis';
 import ElectricEnergyQuality from './electric-energy-quality';
 import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
-// import EquipmentMonitoringCharge from './equipment-monitoring-charge';
+import EquipmentMonitoringCharge from './equipment-monitoring-charge';
 import EquipmentQueryOperation from './equipment-query-operation';
 import GlobalSchematic from './global-schematic';
 import Img from './img';
@@ -88,7 +88,7 @@ const ui: Record<string, any> = {
   intelligenceReportCloud: IntelligenceReportCloud,
   operationsAnalysisCold: OperationsAnalysisCold,
   intelligenceReportPv: IntelligenceReportPv,
-  // equipmentMonitoringCharge: EquipmentMonitoringCharge,
+  equipmentMonitoringCharge: EquipmentMonitoringCharge,
   intelligenceReportCharge: IntelligenceReportCharge,
   controlCharge: ControlCharge,
 };
