@@ -18,7 +18,7 @@
         <div class="content-title">
           <div class="left-title-font">
             <span class="font-icon"></span>
-            <span class="font-value">运行分析</span>
+            <span class="font-value">{{ config.title }}</span>
           </div>
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
@@ -125,98 +125,50 @@ const dateValue = ref<string>('日');
 
 const tableDataList = ref<Array<any>>([
   {
-    unitName: 'AH14 B楼4#变压器',
+    unitName: '4#变压器',
     unitType: '出线柜1',
     unit: '万kWh',
-    dataValue: 0.444,
+    dataValue: 34,
     timeUse: {
-      rate: 2,
+      rate: 1.72,
       list: [
-        { key: '谷', value: 0.15, code: 'gu' },
-        { key: '平', value: 0.25, code: 'ping' },
-        { key: '峰', value: 0.3, code: 'feng' },
-        { key: '尖', value: 0.3, code: 'jian' },
+        { key: '谷', value: 0.18, code: 'gu' },
+        { key: '平', value: 0.39, code: 'ping' },
+        { key: '峰', value: 0.31, code: 'feng' },
+        { key: '尖', value: 0.12, code: 'jian' },
       ],
     },
     rateAna: {
-      max: 0.55,
-      min: 0.11,
+      max: 0.8,
+      min: 0.2,
       list: [
-        { key: '过载', dis: '5', times: '3' },
-        { key: '重载', dis: '5', times: '3' },
-        { key: '轻载', dis: '5', times: '3' },
+        { key: '过载', dis: '0', times: '0' },
+        { key: '重载', dis: '36', times: '127' },
+        { key: '轻载', dis: '37', times: '511' },
       ],
     },
   },
   {
-    unitName: 'AH15 B楼4#变压器',
+    unitName: '5#变压器',
     unitType: '出线柜2',
     unit: '万kWh',
-    dataValue: 0.444,
+    dataValue: 0,
     timeUse: {
-      rate: 1,
+      rate: 0,
       list: [
-        { key: '谷', value: 0.25, code: 'gu' },
-        { key: '平', value: 0.25, code: 'ping' },
-        { key: '峰', value: 0.25, code: 'feng' },
-        { key: '尖', value: 0.25, code: 'jian' },
+        { key: '谷', value: 0, code: 'gu' },
+        { key: '平', value: 0, code: 'ping' },
+        { key: '峰', value: 0, code: 'feng' },
+        { key: '尖', value: 0, code: 'jian' },
       ],
     },
     rateAna: {
-      max: 0.55,
-      min: 0.11,
+      max: 0,
+      min: 0,
       list: [
-        { key: '过载', dis: '5', times: '3' },
-        { key: '重载', dis: '5', times: '3' },
-        { key: '轻载', dis: '5', times: '3' },
-      ],
-    },
-  },
-  {
-    unitName: 'AH16 B楼4#变压器',
-    unitType: '出线柜3',
-    unit: '万kWh',
-    dataValue: 0.444,
-    timeUse: {
-      rate: 5,
-      list: [
-        { key: '谷', value: 0.05, code: 'gu' },
-        { key: '平', value: 0.25, code: 'ping' },
-        { key: '峰', value: 0.25, code: 'feng' },
-        { key: '尖', value: 0.45, code: 'jian' },
-      ],
-    },
-    rateAna: {
-      max: 0.55,
-      min: 0.11,
-      list: [
-        { key: '过载', dis: '5', times: '3' },
-        { key: '重载', dis: '5', times: '3' },
-        { key: '轻载', dis: '5', times: '3' },
-      ],
-    },
-  },
-  {
-    unitName: 'AH17 B楼4#变压器',
-    unitType: '出线柜4',
-    unit: '万kWh',
-    dataValue: 0.444,
-    timeUse: {
-      rate: 2,
-      list: [
-        { key: '谷', value: 0.15, code: 'gu' },
-        { key: '平', value: 0.3, code: 'ping' },
-        { key: '峰', value: 0.3, code: 'feng' },
-        { key: '尖', value: 0.25, code: 'jian' },
-      ],
-    },
-    rateAna: {
-      max: 0.55,
-      min: 0.11,
-      list: [
-        { key: '过载', dis: '5', times: '3' },
-        { key: '重载', dis: '5', times: '3' },
-        { key: '轻载', dis: '5', times: '3' },
+        { key: '过载', dis: '0', times: '0' },
+        { key: '重载', dis: '0', times: '0' },
+        { key: '轻载', dis: '0', times: '0' },
       ],
     },
   },

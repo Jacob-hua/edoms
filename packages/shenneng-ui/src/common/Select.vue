@@ -3,12 +3,12 @@
  * @Author: lihao
  * @Date: 2023-05-12 16:36:57
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-16 10:03:16
+ * @LastEditTime: 2023-05-25 17:50:55
 -->
 <template>
   <div class="wrap-select" :style="`width:${width}px;`">
     <div class="wrap-value" @click="showOption = !showOption">
-      <div class="value">{{ label || '请选择' }}</div>
+      <div class="value">{{ selectedValue || '请选择' }}</div>
       <div class="arrow" :class="{ active: showOption }"></div>
     </div>
     <div v-if="showOption" class="wrap-option">
@@ -26,15 +26,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     width?: string | number;
     height?: string | number;
     options?: Array<{ [key: string]: string | number }>;
     itemHeight?: string | number;
     value?: string | number;
+    defaultValue?: string | number;
   }>(),
   {
     width: () => '100%',
@@ -44,7 +45,7 @@ withDefaults(
 
 const showOption = ref<boolean>(false);
 const activeIndex = ref<number>(-1);
-const label = ref<string | number>('');
+const selectedValue = ref<string | number>('');
 
 const emit = defineEmits(['changeItem']);
 
@@ -55,9 +56,13 @@ const changeSelect = (item: any, index: number) => {
   if (activeIndex.value === index) return;
   activeIndex.value = index;
   showOption.value = false;
-  label.value = item.label;
+  selectedValue.value = item.label;
   emit('changeItem', item.value);
 };
+
+onMounted(() => {
+  selectedValue.value = props.defaultValue ?? '请选择';
+});
 </script>
 
 <style lang="scss" scoped>

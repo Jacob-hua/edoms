@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 14:10:52
+ * @LastEditTime: 2023-05-26 14:35:38
 -->
 <template>
   <div class="wrap-table">
@@ -66,7 +66,12 @@
           </el-col>
           <el-col :span="3">
             <el-form-item label="范围选择">
-              <Select width="120px" :options="state.rangeOption" @change-item="changeRange"></Select>
+              <Select
+                width="120px"
+                :options="state.rangeOption"
+                :default-value="'全部'"
+                @change-item="changeRange"
+              ></Select>
             </el-form-item>
           </el-col>
           <div class="button">查询</div>

@@ -1,6 +1,6 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, FetchHistoryDataReq, FetchHistoryDataRes, FetchRealTimeDataReq, FetchRealTimeDataRes } from './type';
+import { Apis, FetchHistoryDataReq, FetchHistoryDataRes, FetchRealDataReq, FetchRealDataRes } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchHistoryData: async (data: FetchHistoryDataReq): Promise<FetchHistoryDataRes> => {
@@ -18,13 +18,13 @@ export default (request?: EdomsRequestFunc): Apis => ({
       return [];
     }
   },
-  fetchRealTimeData: async (data: FetchRealTimeDataReq): Promise<FetchRealTimeDataRes> => {
+  fetchRealData: async (data: FetchRealDataReq): Promise<FetchRealDataRes> => {
     if (!request) {
       return [];
     }
     try {
-      const { result } = await request<FetchRealTimeDataReq, FetchRealTimeDataRes>({
-        url: '/operation-monitor/real-time-data',
+      const { result } = await request<FetchRealDataReq, FetchRealDataRes>({
+        url: '/OperationalMonitorCommon/realData',
         method: 'POST',
         data,
       });

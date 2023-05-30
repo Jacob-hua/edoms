@@ -32,7 +32,10 @@ import CostImg from './assets/cost.png';
 import ElectricImg from './assets/electric.png';
 import ColdEnergyImg from './assets/energy.png';
 import ConsumptionImg from './assets/energy_consumption.png';
+import ExposureImg from './assets/exposure.png';
 import HeatEnergyImg from './assets/heat_energy.png';
+import HumidityImg from './assets/humidity.png';
+import TemperatureImg from './assets/temperature.png';
 import apiFactory from './api';
 import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig } from './type';
 
@@ -55,7 +58,6 @@ const { fetchRealData } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
-const restIndicators = ref<Indicator[]>([]);
 
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
 const intervalDelay = computed<number>(() => {
@@ -76,13 +78,7 @@ watch(
       unit: unit,
       precision: precision,
     }));
-    if (indicators.value.length > 5) {
-      initIndicators.value = indicators.value.slice(0, 5);
-      restIndicators.value = indicators.value.slice(5);
-    } else {
-      initIndicators.value = indicators.value;
-      restIndicators.value = [];
-    }
+    initIndicators.value = indicators.value;
   },
   {
     immediate: true,
@@ -127,6 +123,9 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     [MEconomicIndicator.ELECTRIC]: ElectricImg,
     [MEconomicIndicator.COOL_ENERGY_CONSUMPTION]: ColdEnergyImg,
     [MEconomicIndicator.HEAT_ENERGY_CONSUMPTION]: HeatEnergyImg,
+    [MEconomicIndicator.TEMPERATURE]: TemperatureImg,
+    [MEconomicIndicator.HUMIDITY]: HumidityImg,
+    [MEconomicIndicator.EXPOSURE]: ExposureImg,
   };
   return iconClassify[type];
 }

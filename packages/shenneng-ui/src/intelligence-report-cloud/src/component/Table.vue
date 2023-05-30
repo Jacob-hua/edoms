@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 14:11:24
+ * @LastEditTime: 2023-05-25 17:54:46
 -->
 <template>
   <div class="wrap-table">
@@ -16,7 +16,7 @@
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form">
         <el-row>
           <el-col :span="4" :offset="1">
-            <el-form-item label="日期选择：">
+            <el-form-item label="时间：">
               <el-date-picker v-model="state.queryForm.startDate" placeholder="请选择日期" @change="changeDate" />
             </el-form-item>
           </el-col>
@@ -27,7 +27,12 @@
           </el-col>
           <el-col :span="4" :offset="1">
             <el-form-item label="空调机组">
-              <Select width="180px" :options="state.option" @change-item="changeOption"></Select>
+              <Select
+                width="180px"
+                :options="state.option"
+                :default-value="'全部'"
+                @change-item="changeOption"
+              ></Select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -41,6 +46,7 @@
             background: 'rgba(17,22,30,1)',
             color: '#EAF5FF',
             textAlign: 'center',
+            height: '50px',
           }"
           :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
           :row-style="{ height: '50px' }"
@@ -84,12 +90,16 @@ const state: any = reactive({
   queryForm: {
     startDate: new Date(curDate.getTime() - 24 * 60 * 60 * 1000),
     endDate: curDate,
-    kt: '',
+    kt: 'all',
   } as MQueryForm,
   testData: [],
   titleList: [],
   tableData: [],
   option: [
+    {
+      label: '全部',
+      value: 'all',
+    },
     {
       label: '空调机组1',
       value: 'kt1',
@@ -105,7 +115,7 @@ const state: any = reactive({
   ],
   tableStyle: {
     width: '100%',
-    height: '589px',
+    height: '597px',
     fontSize: '14px',
     textAlign: 'center',
     '--el-table-border-color': 'none',
@@ -242,7 +252,7 @@ onMounted(() => {
   //   margin-left: -740px;
   //   margin-top: 100px;
   width: 1480px;
-  height: 786px;
+  height: 793px;
   background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
   z-index: 15;
@@ -282,7 +292,7 @@ onMounted(() => {
     flex-grow: 1;
     width: 100%;
     .condition-form {
-      height: 60px;
+      height: 55px;
       margin-top: 20px;
       //   border-bottom: 1px solid #1d2634;
       .wrap-date {

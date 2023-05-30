@@ -33,6 +33,7 @@
             background: 'rgba(17,22,30,1)',
             color: '#EAF5FF',
             textAlign: 'center',
+            height: '50px',
           }"
           :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
           :row-style="{ height: '50px' }"
@@ -78,7 +79,7 @@ const state: any = reactive({
   tableData: [],
   tableStyle: {
     width: '100%',
-    height: '539px',
+    height: '550px',
     fontSize: '14px',
     textAlign: 'center',
     '--el-table-border-color': 'none',
@@ -201,7 +202,7 @@ onMounted(() => {
   top: 50%;
   transform: translate(-50%, -50%);
   width: 1800px;
-  height: 782px;
+  height: 793px;
   background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
   z-index: 15;

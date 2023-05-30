@@ -112,6 +112,7 @@ defineExpose({
       justify-content: space-between;
       padding: 0 19px;
       box-sizing: border-box;
+      white-space: nowrap;
       .name {
         height: 40px;
         line-height: 40px;

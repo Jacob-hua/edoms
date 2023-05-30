@@ -106,6 +106,11 @@ const componentGroupList: ComponentGroup[] = [
         type: 'multicolor-single-light',
       },
       {
+        icon: 'zhishideng',
+        text: '图片单态指示灯',
+        type: 'multicolor-image-light',
+      },
+      {
         icon: 'gaojing',
         text: '告警列表',
         type: 'warning-table-list',
@@ -139,6 +144,16 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'xuanfu',
         text: '悬浮窗',
         type: 'suspended-window',
+      },
+      {
+        icon: 'shishigongkuang',
+        text: '设备工况',
+        type: 'equipment-condition',
+      },
+      {
+        icon: 'caozuojilu',
+        text: '操作记录',
+        type: 'operation-records',
       },
     ],
   },
@@ -230,10 +245,50 @@ const componentGroupList: ComponentGroup[] = [
         text: '智能报告',
         type: 'intelligence-report-cloud',
       },
+    ],
+  },
+  {
+    title: '运行监测-光伏',
+    items: [
       {
-        icon: 'zhishideng',
-        text: '图片指示灯',
-        type: 'multicolor-image-light',
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-pv',
+      },
+      {
+        icon: 'yunxingfenxi',
+        text: '运行分析',
+        type: 'operations-analysis-pv',
+      },
+      {
+        icon: 'xitong',
+        text: '资产信息',
+        type: 'asset-information-pv',
+      },
+    ],
+  },
+  {
+    title: '运行监测-充电桩',
+    items: [
+      {
+        icon: 'xitong',
+        text: '智能报告',
+        type: 'intelligence-report-charge',
+      },
+      {
+        icon: 'xitong',
+        text: '设备监测',
+        type: 'equipment-monitoring-charge',
+      },
+      {
+        icon: 'yunxingfenxi',
+        text: '运行分析',
+        type: 'operations-analysis-charge',
+      },
+      {
+        icon: 'chongdiankongzhi',
+        text: '充电控制',
+        type: 'control-charge',
       },
     ],
   },

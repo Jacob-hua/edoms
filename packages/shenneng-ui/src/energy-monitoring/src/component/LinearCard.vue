@@ -7,9 +7,7 @@
         :style="calculateDistance(index)"
         class="division-wrapper"
       ></div>
-      <div class="left" :style="`width:${getWidth('left')}`"></div>
-      <div class="center" :style="`width:${getWidth('center')}`"></div>
-      <div class="right" :style="`width:${getWidth('right')}`"></div>
+      <div class="gradient"></div>
     </div>
     <div class="value">
       <div class="cursor"></div>
@@ -41,9 +39,9 @@ const colorCardWidth = ref<number>(0);
 
 const total = computed<number>(() => Number(props.config.maxValue) - Number(props.config.minValue));
 
-const getWidth = (pos: string) => {
-  let width = '33.3%';
-  if (isNaN(total.value) || total.value <= 0) return '33.3%';
+const getWidth = (pos: string): number => {
+  let width = 33.3;
+  if (isNaN(total.value) || total.value <= 0) return 33.3;
   const leftVal =
     props.config.medium.length > 0
       ? Number(props.config.medium[0].maxValue) - Number(props.config.medium[0].minValue)
@@ -62,47 +60,36 @@ const getWidth = (pos: string) => {
   const rightWidth = rightVal / totalVal;
   switch (pos) {
     case 'left':
-      width = leftWidth * 100 + '%';
+      width = leftWidth * 100;
       break;
     case 'center':
-      width = centerWidth * 100 + '%';
+      width = centerWidth * 100;
       break;
     case 'right':
-      width = rightWidth * 100 + '%';
+      width = rightWidth * 100;
       break;
 
     default:
       break;
   }
+  console.log(pos, width);
   return width;
 };
 
 const getColor = (arrcolor: any) => {
   if (!arrcolor || arrcolor.length === 0 || arrcolor[0].color == '') return '';
   const arr = arrcolor[0].color.split(',');
-  arr[arr.length - 1] = arr[arr.length - 1].replace('1', '0.3');
+  arr[arr.length - 1] = '0.6)';
   console.log(arr.join(','));
   return arr.join(',');
 };
 
-const attributeLeft = computed<string>(
+const attributeGradient = computed<string>(
   () =>
-    `linear-gradient(90deg, ${
-      (props.config.medium && props.config.medium.length > 0 && props.config.medium[0].color) || 'rgba(231, 106, 47,1)'
-    }, ${getColor(props.config.medium) || 'rgba(231, 106, 47,0.3)'})`
-);
-const attributeCenter = computed<string>(
-  () =>
-    `linear-gradient(90deg, ${
-      (props.config.medium && props.config.good.length > 0 && props.config.good[0].color) || 'rgba(147, 135, 72,1)'
-    }, ${getColor(props.config.good) || 'rgba(147, 135, 72,0.3)'})`
-);
-const attributeRight = computed<string>(
-  () =>
-    `linear-gradient(90deg, ${getColor(props.config.excellent) || 'rgba(54, 167, 99,0.3)'}, ${
-      (props.config.medium && props.config.excellent.length > 0 && props.config.excellent[0].color) ||
-      'rgba(54, 167, 99,1)'
-    })`
+    `linear-gradient(90deg, ${props.config.medium[0].color || 'rgba(231, 106, 47,1)'} 0%,
+    ${props.config.good[0].color || 'rgba(231, 106, 47,1)'} ${getWidth('left')}%,
+    ${getColor(props.config.excellent) || 'rgba(54, 167, 99,0.6)'} ${getWidth('left') + getWidth('center')}%,
+    ${props.config.excellent[0].color || 'rgba(54, 167, 99,1)'}  100%`
 );
 
 const divideWidth = computed<any>(() => (colorCardWidth.value / (bisectionNumber.value * 2)).toFixed(2));
@@ -181,19 +168,10 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
     height: 60%;
     display: flex;
     // background-color: green;
-    .left {
-      //   width: 50%;
+    .gradient {
+      width: 100%;
       height: 100%;
-      background-image: v-bind(attributeLeft);
-    }
-    .center {
-      height: 100%;
-      background-image: v-bind(attributeCenter);
-    }
-    .right {
-      //   width: 50%;
-      height: 100%;
-      background-image: v-bind(attributeRight);
+      background-image: v-bind(attributeGradient);
     }
     .division-wrapper {
       position: absolute;

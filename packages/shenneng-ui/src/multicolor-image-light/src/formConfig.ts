@@ -17,10 +17,6 @@ export default async (request: Request, uploadPreviewFile: string) => [
     title: (model: any, index: number | string) => `# ${index}`,
     items: [
       {
-        text: '文本',
-        name: 'text',
-      },
-      {
         text: '图片资源',
         name: 'src',
         type: 'upload',
