@@ -1,10 +1,8 @@
 import { MComponent } from '@edoms/schema';
 
-export interface MImgItem {
-  src: any[];
-  maxValue: number;
-  minValue: number;
-  text: string;
+export interface ImgItem {
+  src: string;
+  alt: string;
 }
 
 export interface MIndicatorItemConfig {
@@ -25,7 +23,7 @@ export interface MIndicatorItemConfig {
 }
 
 export interface MCarousel extends MComponent {
-  imgs: MImgItem[];
+  imgs: any[];
   intervalDelay: number;
   indicators: MIndicatorItemConfig[];
 }
