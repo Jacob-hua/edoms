@@ -34,7 +34,6 @@ export default async (request: Request, uploadPreviewFile: string) => [
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加指标',
-    maxItems: 10,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
