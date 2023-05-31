@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-25 17:54:46
+ * @LastEditTime: 2023-05-31 15:26:46
 -->
 <template>
   <div class="wrap-table">
@@ -237,6 +237,10 @@ onMounted(() => {
 
 :deep(.el-date-table__row .current) {
   color: #606266;
+}
+
+:deep(.el-form-item__label) {
+  color: #7b8aaa;
 }
 
 .wrap-table {
