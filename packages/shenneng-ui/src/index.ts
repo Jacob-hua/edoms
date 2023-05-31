@@ -7,6 +7,7 @@
  */
 import AssetInformationPv from './asset-information-pv';
 import Button from './button';
+import Carousel from './carousel';
 import Charts from './charts';
 import Checkbox from './checkbox';
 import Container from './container';
@@ -91,6 +92,7 @@ const ui: Record<string, any> = {
   equipmentMonitoringCharge: EquipmentMonitoringCharge,
   intelligenceReportCharge: IntelligenceReportCharge,
   controlCharge: ControlCharge,
+  carousel: Carousel,
 };
 
 export default ui;
