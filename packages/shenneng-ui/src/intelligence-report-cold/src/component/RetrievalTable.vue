@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-26 14:35:38
+ * @LastEditTime: 2023-05-31 15:24:24
 -->
 <template>
   <div class="wrap-table">
@@ -338,9 +338,9 @@ onMounted(() => {
   border: 1px solid #454e72;
 }
 
-// :deep(.el-form-item__label) {
-//   justify-content: flex-start;
-// }
+:deep(.el-form-item__label) {
+  color: #eaf5ff;
+}
 
 .wrap-table {
   width: 100%;
