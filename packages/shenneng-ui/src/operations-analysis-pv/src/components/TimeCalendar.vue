@@ -1,6 +1,12 @@
 <template>
   <div class="block">
-    <el-date-picker v-model="value1" :type="timeType.option" :disabled-date="disabledDateFun" @change="selectDate" />
+    <el-date-picker
+      v-model="value1"
+      :teleported="false"
+      :type="timeType.option"
+      :disabled-date="disabledDateFun"
+      @change="selectDate"
+    />
   </div>
 </template>
 
@@ -55,9 +61,15 @@ defineExpose({
   position: absolute;
   right: 0px;
 }
+
 :deep(.el-input__inner) {
   color: #ffffff;
 }
+
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  color: #030507 !important;
+}
+
 .block {
   text-align: center;
 }

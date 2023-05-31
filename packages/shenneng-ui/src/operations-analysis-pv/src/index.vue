@@ -38,6 +38,7 @@
             <div class="other" style="display: flex">
               <el-select
                 v-model="value"
+                :teleported="false"
                 popper-class="select-sty"
                 style="margin-right: 20px"
                 class="m-2"
@@ -282,7 +283,10 @@ const getData = (symbol: string) => {
                   params[index].seriesName +
                   '：' +
                   params[index].value +
-                  'kWh</span></p>';
+                  // params[index].seriesName != '总览' ? '' : 'kWh' +
+                  '' +
+                  (params[index].seriesName != '总览' ? '' : 'kWh') +
+                  '</span></p>';
               }
               tip += '</div>';
             }
@@ -307,7 +311,7 @@ const getData = (symbol: string) => {
             fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
-            color: '#EAF5FF',
+            color: '#9F9FA0',
           },
           splitLine: {
             lineStyle: {
@@ -319,10 +323,13 @@ const getData = (symbol: string) => {
           axisLine: {
             show: true,
           },
+          axisLabel: {
+            color: '#9F9FA0',
+          },
         },
         series: [
           {
-            name: '发电功率',
+            name: '总览',
             data: seriesData2,
             type: 'line',
             smooth: true,
@@ -407,7 +414,9 @@ const getData = (symbol: string) => {
                   params[index].seriesName +
                   '：' +
                   params[index].value +
-                  'kWh</span></p>';
+                  '' +
+                  (params[index].seriesName != '总览' ? '' : 'kWh') +
+                  '</span></p>';
               }
               tip += '</div>';
             }
@@ -432,7 +441,7 @@ const getData = (symbol: string) => {
             fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
-            color: '#EAF5FF',
+            color: '#9F9FA0',
           },
           splitLine: {
             lineStyle: {
@@ -444,10 +453,13 @@ const getData = (symbol: string) => {
           axisLine: {
             show: true,
           },
+          axisLabel: {
+            color: '#9F9FA0',
+          },
         },
         series: [
           {
-            name: '发电功率',
+            name: '总览',
             data: seriesPowerMonthData.five,
             type: 'bar',
             itemStyle: {
@@ -558,7 +570,7 @@ const getData = (symbol: string) => {
             fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
-            color: '#EAF5FF',
+            color: '#9F9FA0',
           },
           splitLine: {
             lineStyle: {
@@ -569,6 +581,9 @@ const getData = (symbol: string) => {
           },
           axisLine: {
             show: true,
+          },
+          axisLabel: {
+            color: '#9F9FA0',
           },
         },
         series: [
@@ -678,7 +693,7 @@ const getData = (symbol: string) => {
             fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
-            color: '#EAF5FF',
+            color: '#9F9FA0',
           },
           splitLine: {
             lineStyle: {
@@ -689,6 +704,9 @@ const getData = (symbol: string) => {
           },
           axisLine: {
             show: true,
+          },
+          axisLabel: {
+            color: '#9F9FA0',
           },
         },
         series: [
@@ -766,7 +784,7 @@ const getData = (symbol: string) => {
             fontSize: '12',
             fontFamily: 'Microsoft YaHei',
             fontWeight: 400,
-            color: '#EAF5FF',
+            color: '#9F9FA0',
           },
           splitLine: {
             lineStyle: {
@@ -777,6 +795,9 @@ const getData = (symbol: string) => {
           },
           axisLine: {
             show: true,
+          },
+          axisLabel: {
+            color: '#9F9FA0',
           },
         },
         series: [
@@ -866,6 +887,27 @@ getData('day');
   background: #010101;
   border: 1px solid #454e72;
   border-radius: 4px;
+  box-shadow: none;
+}
+
+:deep(.el-input__inner) {
+  color: #ffffff;
+}
+
+:deep(.el-popper) {
+  border-radius: 0;
+}
+
+:deep(.el-popper.is-pure) {
+  inset: auto !important;
+}
+
+:deep(.el-select-dropdown__list) {
+  margin: auto !important;
+}
+
+:deep(.el-popper__arrow::before) {
+  content: none;
 }
 
 .operations-analysis-pv {
@@ -1013,6 +1055,18 @@ getData('day');
             position: absolute;
             right: 30px;
 
+            .select-sty {
+              inset: auto !important;
+              background-color: #030507;
+
+              .el-select-dropdown__item {
+                border-bottom: 1px solid #454e72;
+                background-color: #030507;
+                padding: 0 !important;
+                text-align: center;
+              }
+            }
+
             .selest-time {
               display: flex;
 
@@ -1035,28 +1089,6 @@ getData('day');
           }
         }
       }
-    }
-  }
-}
-</style>
-
-<style lang="scss">
-.select-sty {
-  inset: 226px auto auto 1176px !important;
-  background-color: #030507;
-
-  .el-popper__arrow::before {
-    content: none;
-  }
-
-  .el-select-dropdown__list {
-    margin: 0 !important;
-
-    .el-select-dropdown__item {
-      border-bottom: 1px solid #454e72;
-      background-color: #030507;
-      padding: 0 !important;
-      text-align: center;
     }
   }
 }
