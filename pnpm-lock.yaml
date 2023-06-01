@@ -591,6 +591,9 @@ importers:
       '@edoms/utils':
         specifier: workspace:^0.0.1
         version: link:../utils
+      '@element-plus/icons-vue':
+        specifier: ^2.0.9
+        version: 2.0.10(vue@3.2.44)
       delegate:
         specifier: ^3.2.0
         version: registry.npmmirror.com/delegate@3.2.0
@@ -856,6 +859,14 @@ packages:
 
   /@daybrush/utils@1.10.0:
     resolution: {integrity: sha512-IDT0DWAGcjxb2+WMr8pHrVTkHVKdilBumX1SubXJUlowN4rMSLphwDxvMNfv+vQOrdCPXSoPVZ3mhfrHsQ9Xow==}
+    dev: false
+
+  /@element-plus/icons-vue@2.0.10(vue@3.2.44):
+    resolution: {integrity: sha512-ygEZ1mwPjcPo/OulhzLE7mtDrQBWI8vZzEWSNB2W/RNCRjoQGwbaK4N8lV4rid7Ts4qvySU3njMN7YCiSlSaTQ==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      vue: registry.npmmirror.com/vue@3.2.44
     dev: false
 
   /@esbuild/android-arm@0.15.13:

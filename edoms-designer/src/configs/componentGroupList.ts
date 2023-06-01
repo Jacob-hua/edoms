@@ -292,6 +292,16 @@ const componentGroupList: ComponentGroup[] = [
       },
     ],
   },
+  {
+    title: '运行监测-储能',
+    items: [
+      {
+        icon: 'feijiashezhi',
+        text: '费价设置',
+        type: 'fee-setting-energy',
+      },
+    ],
+  },
 ];
 
 export default componentGroupList;
