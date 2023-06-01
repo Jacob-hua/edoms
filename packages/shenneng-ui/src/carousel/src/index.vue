@@ -1,104 +1,104 @@
 <template>
-  <div class="slider">
-    <div ref="slidesContainer" class="slides" @mousemove="handleMouseMove" @mouseleave="resetSlider">
-      <div
-        v-for="(slide, index) in slides"
-        :key="index"
-        class="slide"
-        :style="{ backgroundImage: `url(${slide})` }"
-      ></div>
-      <div class="indicators">
-        <div
-          v-for="(slide, index) in slides"
-          :key="index"
-          class="indicator"
-          :class="{ active: currentIndex === index }"
-          @click="goToSlide(index)"
-        ></div>
+  <div class="carousel-wrapper">
+    <div ref="slidesRef" class="slides">
+      <div v-for="(src, index) in imgs" :key="index" class="slide">
+        <img :src="src" />
       </div>
+    </div>
+    <div class="control-wrapper">
+      <div
+        v-for="(_, index) in imgs"
+        :key="index"
+        :class="{
+          dot: true,
+          active: index === activeImgIndex,
+        }"
+        @click="activeImgIndex = index"
+      ></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
-const slides = [
-  'http://pic1.win4000.com/wallpaper/7/55f7dc5a2025a.jpg',
-  'http://pic1.win4000.com/wallpaper/7/55f666fccf3c9.jpg',
-  'http://pic1.win4000.com/wallpaper/7/55f666c9dd2f4.jpg',
-];
+const imgs = ref<string[]>([
+  'https://img1.baidu.com/it/u=1525818566,3553142770&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500',
+  'https://img0.baidu.com/it/u=2971860837,688680294&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
+  'https://img2.baidu.com/it/u=897481939,1199174386&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=313',
+]);
 
-const currentIndex = ref(0);
-const slidesContainer = ref<HTMLElement>();
+const slidesRef = ref<HTMLElement>();
 
-const handleMouseMove = (event: MouseEvent) => {
-  if (!slidesContainer.value) {
+const activeImgIndex = ref<number>(0);
+
+const slidesLeft = computed<number>(() =>
+  slidesRef.value ? activeImgIndex.value * slidesRef.value.clientWidth * -1 : 0
+);
+
+const handlePreImg = () => {
+  if (activeImgIndex.value === 0) {
     return;
   }
-  const width = slidesContainer.value.offsetWidth;
-  const x = event.pageX - slidesContainer.value.offsetLeft;
-  const percentage = (x / width) * 100;
-  currentIndex.value = Math.floor(percentage / (100 / slides.length));
+  activeImgIndex.value -= 1;
 };
 
-const resetSlider = () => {
-  currentIndex.value = 0;
-};
-
-const goToSlide = (index: number) => {
-  currentIndex.value = index;
-};
-
-onMounted(() => {
-  if (!slidesContainer.value) {
+const handleNextImg = () => {
+  if (activeImgIndex.value === imgs.value.length - 1) {
     return;
   }
-  slidesContainer.value.addEventListener('mousemove', handleMouseMove);
-});
+  activeImgIndex.value += 1;
+};
 
-onUnmounted(() => {
-  if (!slidesContainer.value) {
-    return;
-  }
-  slidesContainer.value.removeEventListener('mousemove', handleMouseMove);
+defineExpose({
+  preImg: handlePreImg,
+  nextImg: handleNextImg,
 });
 </script>
 
-<style scoped>
-.slider {
-  position: relative;
-}
-
-.slides {
-  display: flex;
+<style scoped lang="scss">
+.carousel-wrapper {
   overflow: hidden;
 }
-
+.slides {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  left: calc(v-bind(slidesLeft) * 1px);
+  transition: left 1s ease-in-out;
+  display: flex;
+}
 .slide {
-  flex: 0 0 100%;
-  height: 100px;
-  background-size: cover;
-}
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
 
-.indicators {
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+.control-wrapper {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 
-.indicator {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: gray;
-  margin: 5px;
-  cursor: pointer;
-}
+  & .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgb(139, 141, 141);
+    opacity: 0.3;
+    margin: 4px;
+    cursor: pointer;
+    transition: opacity 1s ease-in-out;
+  }
 
-.indicator.active {
-  background-color: black;
+  & .active {
+    opacity: 1;
+  }
 }
 </style>
