@@ -18,6 +18,7 @@ import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
 import EquipmentMonitoringCharge from './equipment-monitoring-charge';
 import EquipmentQueryOperation from './equipment-query-operation';
+import FeeSettingEnergy from './fee-setting-energy';
 import GlobalSchematic from './global-schematic';
 import Img from './img';
 import IntelligenceReportCharge from './intelligence-report-charge';
@@ -92,6 +93,7 @@ const ui: Record<string, any> = {
   equipmentMonitoringCharge: EquipmentMonitoringCharge,
   intelligenceReportCharge: IntelligenceReportCharge,
   controlCharge: ControlCharge,
+  feeSettingEnergy: FeeSettingEnergy,
   runningParameterEnergy: RunningParameterEnergy,
 };
 
