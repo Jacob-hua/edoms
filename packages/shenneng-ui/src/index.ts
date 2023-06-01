@@ -44,6 +44,7 @@ import OptimalRegulationHeat from './optimal-regulation-heat';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
+import RunningParameterEnergy from './running-parameter-energy';
 import SuspendedWindow from './suspended-window';
 import SystemDataCumulation from './system-data-cumulation';
 import Text from './text';
@@ -93,6 +94,7 @@ const ui: Record<string, any> = {
   intelligenceReportCharge: IntelligenceReportCharge,
   controlCharge: ControlCharge,
   feeSettingEnergy: FeeSettingEnergy,
+  runningParameterEnergy: RunningParameterEnergy,
 };
 
 export default ui;
