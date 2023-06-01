@@ -6,40 +6,40 @@
     <div class="info">
       <div>
         <span>设备名称：</span>
-        <span>{{ cardData.option.value.name }}</span>
+        <span>{{ config.option.name }}</span>
       </div>
       <div>
         <span>开关状态：</span>
         <div class="mb-2 flex items-center text-sm">
-          <el-radio-group :key="radioNum" v-model="cardData.option.value.switch" class="ml-4">
+          <el-radio-group :key="radioNum" v-model="config.option.switch" class="ml-4">
             <el-radio style="margin-right: 20px" label="1" size="small">开</el-radio>
             <el-radio label="0" size="small">关</el-radio>
           </el-radio-group>
         </div>
       </div>
-      <div v-if="cardData.option.value.state === 'normal'">
+      <div v-if="config.option.state === 'normal'">
         <span>当前充电：</span>
         <div>
           <span style="width: 44px; display: inline-block; height: 13px; background: #2fda2f"></span
           ><span
             style="width: 23px; height: 13px; display: inline-block; background: #68696a; margin-right: 10px"
           ></span
-          >{{ cardData.option.value.charging }}%
+          >{{ config.option.charging }}%
         </div>
       </div>
-      <div v-if="cardData.option.value.state !== 'normal'">
+      <div v-if="config.option.state !== 'normal'">
         <span>当前状态：</span>
-        <div :class="cardData.option.value.class">{{ cardData.option.value.state }}</div>
+        <div :class="config.option.class">{{ config.option.state }}</div>
       </div>
       <div>
         <span>剩余时间：</span>
         <span style="font-size: 12px; font-family: Microsoft YaHei; font-weight: 400; color: #2fda2f">{{
-          cardData.option.value.remainder
+          config.option.remainder
         }}</span>
       </div>
     </div>
     <div class="select">
-      <el-checkbox v-model="cardData.option.value.select" label="" size="large" />
+      <el-checkbox v-model="config.option.checked" label="" size="large" @change="checkedChange" />
     </div>
   </div>
 </template>
@@ -50,7 +50,12 @@ const radioNum = ref(-1);
 const config = defineProps<{
   option: any;
 }>();
-const cardData = toRefs(config);
+const { option } = toRefs(config);
+console.log(option);
+
+const checkedChange = () => {
+  console.log(option);
+};
 radioNum.value = Math.random();
 </script>
 

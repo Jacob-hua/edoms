@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-26 11:49:22
+ * @LastEditTime: 2023-05-31 15:26:05
 -->
 <template>
   <div class="wrap-table">
@@ -216,6 +216,10 @@ onMounted(() => {
 
 :deep .el-pagination.is-background .el-pager li.is-active {
   background-color: #00a3ff !important;
+}
+
+:deep(.el-form-item__label) {
+  color: #7b8aaa;
 }
 
 .wrap-table {

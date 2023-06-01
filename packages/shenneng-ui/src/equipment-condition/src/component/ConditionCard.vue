@@ -1,12 +1,18 @@
 <template>
   <div class="eq-condition">
-    <div class="eq-title">{{ condition.label }}</div>
+    <div class="eq-title">
+      <div><img src="../assets/eq.png" alt="" /></div>
+      <div style="margin-left: 13px">
+        {{ condition.label }}
+      </div>
+    </div>
     <div class="eq-indicators">
       <div v-for="({ label, displayParameter, unit }, index) in realTimeIndicators" :key="index" class="eq-indicator">
         <!-- <LongText class="label" :content="label" :content-style="indicatorTitleStyle"></LongText> -->
         <span class="lab-sty">{{ label }}</span>
         <div :style="indicatorValueStyle">
-          <LongText class="value" :content="displayParameter" :content-style="indicatorValueStyle"></LongText>
+          <!-- <LongText class="value" :content="displayParameter"></LongText> -->
+          <span>{{ displayParameter }}</span>
           <span>{{ unit }}</span>
         </div>
       </div>
@@ -24,6 +30,8 @@
       <ElSelect
         v-if="otherIndicators.length"
         v-model="activeOtherIndicator"
+        :teleported="false"
+        popper-class="select"
         class="eq-indicator-tabs-more"
         placeholder="其他参数"
         @change="handleOtherIndicatorChange"
@@ -54,7 +62,6 @@ import {
 } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
-import LongText from '../../../LongText.vue';
 import { ECOption } from '../../../types';
 import useIntervalAsync from '../../../useIntervalAsync';
 import apiFactory from '../api';
@@ -95,8 +102,8 @@ const chartsOption = ref<ECOption>({});
 
 const indicatorValueStyle = computed<Record<string, any> | undefined>(() =>
   props.condition.color
-    ? { display: 'flex', color: props.condition.color, fontSize: '14px', textAlign: 'center', width: '50%' }
-    : { display: 'flex', fontSize: '14px', textAlign: 'center', width: '50%' }
+    ? { width: '50%', color: props.condition.color, fontSize: '14px', textAlign: 'center' }
+    : { width: '50%', fontSize: '14px', textAlign: 'center' }
 );
 
 watch(
@@ -121,7 +128,7 @@ const updateIndicatorsData = () => {
   if (!activeIndicator.value?.deviceCode || !activeIndicator.value?.propCode) {
     return;
   }
-  const dataCodes: string[] = indicators.value.map(({ property }): string => property);
+  const dataCodes: string[] = realTimeIndicators.value.map(({ propCode }): string => propCode);
 
   if (dataCodes.length === 0) {
     return;
@@ -151,18 +158,21 @@ const updateIndicatorsData = () => {
     chartsOption.value = generateOption(chartSeries ?? []);
   });
 
+  console.log(dataCodes);
   fetchRealData({ dataCodes }).then((realTimeResult) => {
     realTimeResult.forEach((result) => {
       for (const realTimeIndicator of realTimeIndicators.value) {
         if (realTimeIndicator.propCode === result.propCode) {
           realTimeIndicator.parameter = `${result.propVal}`;
           realTimeIndicator.displayParameter = `${String(
-            formatPrecision(result.propVal, realTimeIndicator.precision)
+            formatPrecision(result.propVal === null ? 0 : result.propVal, realTimeIndicator.precision)
           )}`;
         }
       }
     });
-    console.log(realTimeIndicators);
+    console.log('realTimeResult:' + realTimeResult);
+
+    console.log('realTimeIndicators' + realTimeIndicators.value);
   });
 };
 
@@ -203,9 +213,9 @@ function generateOption(series: any[] = []): ECOption {
       },
     },
     grid: {
-      left: '8%',
-      right: '1%',
-      top: 30,
+      left: 20,
+      right: 20,
+      top: 40,
       bottom: 20,
       containLabel: true,
     },
@@ -216,14 +226,17 @@ function generateOption(series: any[] = []): ECOption {
       splitLine: {
         show: false,
       },
-      interval: 2,
       axisLabel: {
         formatter: '{HH}:{mm}',
-        interval: 2,
+      },
+      axisTick: {
+        show: false,
+        interval: 1,
       },
     },
     yAxis: {
       type: 'value',
+      name: '单位',
       boundaryGap: [0, '100%'],
       splitLine: {
         lineStyle: {
@@ -232,7 +245,7 @@ function generateOption(series: any[] = []): ECOption {
         },
       },
       axisLine: {
-        show: true,
+        show: false,
       },
     },
     series,
@@ -300,6 +313,23 @@ $eqIndicatorColor: #999999;
   width: 90%;
 }
 
+:deep(.el-popper.is-pure) {
+  inset: auto !important;
+  width: 90%;
+}
+
+:deep(.el-select-dropdown__list) {
+  margin: auto !important;
+}
+
+:deep(.el-popper__arrow::before) {
+  content: none;
+}
+
+:deep(.el-select-dropdown) {
+  // width: 100%;
+  min-width: 100% !important;
+}
 .eq-condition {
   width: 855px;
   height: 340px;
@@ -318,6 +348,7 @@ $eqIndicatorColor: #999999;
   font-size: 14px;
   line-height: 62px;
   padding-left: 20px;
+  display: flex;
   box-sizing: border-box;
 }
 
@@ -349,6 +380,7 @@ $eqIndicatorColor: #999999;
     font-weight: 400;
     color: #eaf5ff;
     border-right: 1px solid $borderColor;
+    opacity: 0.5;
   }
 
   .label {
@@ -356,7 +388,8 @@ $eqIndicatorColor: #999999;
   }
 
   .value {
-    flex-grow: 1;
+    // flex-grow: 1;
+    width: 50px;
   }
 }
 
@@ -372,6 +405,15 @@ $eqIndicatorColor: #999999;
   &-more {
     width: 100%;
     background-color: transparent;
+  }
+
+  .select {
+    .el-select-dropdown__item {
+      border-bottom: 1px solid #454e72;
+      background-color: #030507;
+      padding: 0 !important;
+      text-align: center;
+    }
   }
 
   button {

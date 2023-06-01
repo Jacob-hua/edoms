@@ -19,6 +19,7 @@ import EnergyMonitoring from './energy-monitoring';
 import EquipmentCondition from './equipment-condition';
 import EquipmentMonitoringCharge from './equipment-monitoring-charge';
 import EquipmentQueryOperation from './equipment-query-operation';
+import FeeSettingEnergy from './fee-setting-energy';
 import GlobalSchematic from './global-schematic';
 import Img from './img';
 import IntelligenceReportCharge from './intelligence-report-charge';
@@ -44,6 +45,7 @@ import OptimalRegulationHeat from './optimal-regulation-heat';
 import Overlay from './overlay';
 import Page from './page';
 import Qrcode from './qrcode';
+import RunningParameterEnergy from './running-parameter-energy';
 import SuspendedWindow from './suspended-window';
 import SystemDataCumulation from './system-data-cumulation';
 import Text from './text';
@@ -93,6 +95,8 @@ const ui: Record<string, any> = {
   intelligenceReportCharge: IntelligenceReportCharge,
   controlCharge: ControlCharge,
   carousel: Carousel,
+  feeSettingEnergy: FeeSettingEnergy,
+  runningParameterEnergy: RunningParameterEnergy,
 };
 
 export default ui;

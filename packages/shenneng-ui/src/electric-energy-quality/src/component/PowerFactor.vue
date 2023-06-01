@@ -59,7 +59,7 @@
             </el-checkbox-group>
           </div>
           <div v-if="selectShow" class="boxSelect">
-            <el-select v-model="dataValue" popper-class="select" class="m-2" placeholder="Select">
+            <el-select v-model="dataValue" :teleported="false" popper-class="select" class="m-2" placeholder="Select">
               <el-option v-for="item in dataOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </div>
@@ -784,7 +784,15 @@ const tableData = [
 }
 
 :deep(.el-popper.is-pure) {
-  inset: 330px 265px auto auto !important;
+  inset: auto !important;
+}
+
+:deep(.el-select-dropdown__list) {
+  margin: auto !important;
+}
+
+:deep(.el-popper__arrow::before) {
+  content: none;
 }
 
 .wrapper {
@@ -895,6 +903,18 @@ const tableData = [
       margin-right: 30px;
       background: #030507;
       box-sizing: border-box;
+
+      .select {
+        inset: auto !important;
+        background-color: #030507;
+
+        .el-select-dropdown__item {
+          border-bottom: 1px solid #454e72;
+          background-color: #030507;
+          padding: 0 !important;
+          text-align: center;
+        }
+      }
     }
   }
 
@@ -922,28 +942,5 @@ const tableData = [
   background: rgba(9, 15, 23, 0.3);
   padding: 0px;
   margin: 30px;
-}
-</style>
-
-<style lang="scss">
-.select {
-  inset: 330px auto auto 1438px !important;
-  // margin-top: 0px !important;
-  background-color: #030507;
-
-  .el-popper__arrow::before {
-    content: none;
-  }
-
-  .el-select-dropdown__list {
-    margin: 0 !important;
-
-    .el-select-dropdown__item {
-      border-bottom: 1px solid #454e72;
-      background-color: #030507;
-      padding: 0 !important;
-      text-align: center;
-    }
-  }
 }
 </style>
