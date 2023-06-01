@@ -3,6 +3,7 @@ import { EdomsRequestFunc } from '@edoms/utils';
 import { Apis, FetchHistoryDataReq, FetchHistoryDataRes, FetchRealDataReq, FetchRealDataRes } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
+  // 查询累计数据（曲线）
   fetchHistoryData: async (data: FetchHistoryDataReq): Promise<FetchHistoryDataRes> => {
     if (!request) {
       return [];
@@ -18,6 +19,7 @@ export default (request?: EdomsRequestFunc): Apis => ({
       return [];
     }
   },
+  // 查询实时数据
   fetchRealData: async (data: FetchRealDataReq): Promise<FetchRealDataRes> => {
     if (!request) {
       return [];

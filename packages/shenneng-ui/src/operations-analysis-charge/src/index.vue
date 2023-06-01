@@ -18,7 +18,14 @@
         <div class="content-data">
           <div class="station-sel">
             <span>设备选择：</span>
-            <el-select v-model="eq_value" popper-class="eq-select" class="m-2" placeholder="Select" @change="selectEq">
+            <el-select
+              v-model="eq_value"
+              :teleported="false"
+              popper-class="eq-select"
+              class="m-2"
+              placeholder="Select"
+              @change="selectEq"
+            >
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </div>
@@ -451,6 +458,18 @@ const handleClickType = (event: any) => {
   }
 }
 
+:deep(.el-popper.is-pure) {
+  inset: auto !important;
+}
+
+:deep(.el-select-dropdown__list) {
+  margin: auto !important;
+}
+
+:deep(.el-popper__arrow::before) {
+  content: none;
+}
+
 .operations-analysis-charge {
   min-height: 80px;
   position: relative;
@@ -571,6 +590,18 @@ const handleClickType = (event: any) => {
             font-family: Microsoft YaHei;
             font-weight: 400;
             color: #eaf5ff;
+          }
+
+          .eq-select {
+            inset: auto !important;
+            background-color: #030507;
+
+            .el-select-dropdown__item {
+              border-bottom: 1px solid #454e72;
+              background-color: #030507;
+              padding: 0 !important;
+              text-align: center;
+            }
           }
         }
 

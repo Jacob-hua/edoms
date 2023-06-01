@@ -3,6 +3,7 @@ import { App } from 'vue';
 import EdomsForm from '@edoms/form';
 
 import uiSelect from './fields/UISelect.vue';
+import CodeEditor from './layouts/CodeEditor.vue';
 import { setConfig } from './utils/config';
 import Editor from './Editor.vue';
 import type { InstallOptions } from './type';
@@ -13,6 +14,7 @@ export type { MoveableOptions } from '@edoms/stage';
 export * from './type';
 export * from './utils';
 export { default as EdomsEditor } from './Editor.vue';
+export { default as EdomsCodeEditor } from './layouts/CodeEditor.vue';
 export { default as editorService } from './services/editor';
 export { default as propsService } from './services/props';
 export { default as historyService } from './services/history';
@@ -39,6 +41,7 @@ export default {
     app.config.globalProperties.$EDOMS_EDITOR = option;
     setConfig(option);
     app.component('EdomsEditor', Editor);
+    app.component('EdomsCodeEditor', CodeEditor);
     app.component('MFieldsUiSelect', uiSelect);
   },
 };
