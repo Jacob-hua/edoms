@@ -19,4 +19,10 @@ export default {
       props: ['num'],
     },
   ],
+  events: [
+    {
+      label: '切换图片',
+      value: 'carousel:change',
+    },
+  ],
 };

@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 
 import { useApp } from '../../useApp';
 
@@ -32,6 +32,8 @@ const props = defineProps<{
 }>();
 
 const { provideMethod, app } = useApp(props);
+
+const node = app?.page?.getNode(props.config.id);
 
 const imgs = computed<string[]>(() => {
   if (app && props.config.imgs) {
@@ -47,6 +49,12 @@ const activeImgIndex = ref<number>(0);
 const slidesLeft = computed<number>(() =>
   slidesRef.value ? activeImgIndex.value * slidesRef.value.clientWidth * -1 : 0
 );
+
+watchEffect(() => {
+  app?.emit('carousel:change', node, {
+    activeIndex: activeImgIndex.value,
+  });
+});
 
 const switchPre = provideMethod('switchPre', () => {
   if (activeImgIndex.value === 0) {
