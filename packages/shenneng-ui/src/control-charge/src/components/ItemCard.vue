@@ -39,7 +39,13 @@
       </div>
     </div>
     <div class="select">
-      <el-checkbox v-model="config.option.checked" label="" size="large" @change="checkedChange" />
+      <el-checkbox
+        v-model="config.option.checked"
+        :value-key="config.option.id"
+        label=""
+        size="large"
+        @change="checkedChange"
+      />
     </div>
   </div>
 </template>
@@ -48,7 +54,16 @@
 import { ref, toRefs } from 'vue';
 const radioNum = ref(-1);
 const config = defineProps<{
-  option: any;
+  option: {
+    id: number;
+    name: string;
+    switch: string;
+    state: string;
+    charging: string;
+    remainder: string;
+    checked: boolean;
+    class: string;
+  };
 }>();
 const { option } = toRefs(config);
 console.log(option);
@@ -83,12 +98,15 @@ radioNum.value = Math.random();
 .red {
   color: #ff0000;
 }
+
 .green {
   color: #2dd1c0;
 }
+
 .yellow {
   color: #d1b02d;
 }
+
 .wrapper {
   width: 270px;
   height: 150px;
