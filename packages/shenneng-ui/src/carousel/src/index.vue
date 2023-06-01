@@ -22,11 +22,23 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-const imgs = ref<string[]>([
-  'https://img1.baidu.com/it/u=1525818566,3553142770&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500',
-  'https://img0.baidu.com/it/u=2971860837,688680294&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800',
-  'https://img2.baidu.com/it/u=897481939,1199174386&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=313',
-]);
+import { useApp } from '../../useApp';
+
+import AltImg from './assets/alt.svg';
+import { MCarousel } from './type';
+
+const props = defineProps<{
+  config: MCarousel;
+}>();
+
+const { provideMethod, app } = useApp(props);
+
+const imgs = computed<string[]>(() => {
+  if (app && props.config.imgs) {
+    return props.config.imgs.map((item) => app.generateImageSrc(item));
+  }
+  return [AltImg];
+});
 
 const slidesRef = ref<HTMLElement>();
 
@@ -36,23 +48,33 @@ const slidesLeft = computed<number>(() =>
   slidesRef.value ? activeImgIndex.value * slidesRef.value.clientWidth * -1 : 0
 );
 
-const handlePreImg = () => {
+const switchPre = provideMethod('switchPre', () => {
   if (activeImgIndex.value === 0) {
     return;
   }
   activeImgIndex.value -= 1;
-};
+});
 
-const handleNextImg = () => {
+const switchNext = provideMethod('switchNext', () => {
   if (activeImgIndex.value === imgs.value.length - 1) {
     return;
   }
   activeImgIndex.value += 1;
-};
+});
+
+provideMethod('jumpTo', ({ num }) => {
+  if (num > imgs.value.length - 1) {
+    activeImgIndex.value = imgs.value.length - 1;
+  } else if (num < 0) {
+    activeImgIndex.value = 0;
+  } else {
+    activeImgIndex.value = num;
+  }
+});
 
 defineExpose({
-  preImg: handlePreImg,
-  nextImg: handleNextImg,
+  switchPre,
+  switchNext,
 });
 </script>
 
@@ -76,7 +98,7 @@ defineExpose({
   & img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
 .control-wrapper {
@@ -90,7 +112,7 @@ defineExpose({
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: rgb(139, 141, 141);
+    background-color: rgb(59, 59, 59);
     opacity: 0.3;
     margin: 4px;
     cursor: pointer;
