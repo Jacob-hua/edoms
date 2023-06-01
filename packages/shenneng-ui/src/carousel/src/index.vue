@@ -24,7 +24,6 @@ import { computed, ref, watchEffect } from 'vue';
 
 import { useApp } from '../../useApp';
 
-import AltImg from './assets/alt.svg';
 import { MCarousel } from './type';
 
 const props = defineProps<{
@@ -39,7 +38,7 @@ const imgs = computed<string[]>(() => {
   if (app && props.config.imgs) {
     return props.config.imgs.map((item) => app.generateImageSrc(item));
   }
-  return [AltImg];
+  return [];
 });
 
 const slidesRef = ref<HTMLElement>();
@@ -64,7 +63,7 @@ const switchPre = provideMethod('switchPre', () => {
 });
 
 const switchNext = provideMethod('switchNext', () => {
-  if (activeImgIndex.value === imgs.value.length - 1) {
+  if (activeImgIndex.value >= imgs.value.length - 1) {
     return;
   }
   activeImgIndex.value += 1;
