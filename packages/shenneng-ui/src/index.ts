@@ -12,6 +12,7 @@ import Charts from './charts';
 import Checkbox from './checkbox';
 import Container from './container';
 import ControlCharge from './control-charge';
+import ControlPanelEnergy from './control-panel-energy';
 import EconomicIndicators from './economic-indicators';
 import EfficiencyAnalysis from './efficiency-analysis';
 import ElectricEnergyQuality from './electric-energy-quality';
@@ -97,6 +98,7 @@ const ui: Record<string, any> = {
   carousel: Carousel,
   feeSettingEnergy: FeeSettingEnergy,
   runningParameterEnergy: RunningParameterEnergy,
+  controlPanelEnergy: ControlPanelEnergy,
 };
 
 export default ui;

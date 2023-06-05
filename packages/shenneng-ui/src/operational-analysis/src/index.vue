@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-25 18:48:55
+ * @LastEditTime: 2023-06-01 17:29:33
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="367">
@@ -12,7 +12,7 @@
         <div class="wrap-divide">
           <div v-for="item in [0, 1, 2]" :key="item" class="divide"></div>
         </div>
-        <div v-show="showLeft" class="caret-left btn" @click="moveMethod('left')"></div>
+        <div v-show="showRight" class="caret-left btn" @click="moveMethod('right')"></div>
         <div id="scrollRef" ref="scrollMain" class="wrap-scroll">
           <div
             ref="wrap"
@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div v-show="showRight" class="caret-right btn" @click="moveMethod('right')"></div>
+        <div v-show="showLeft" class="caret-right btn" @click="moveMethod('left')"></div>
       </div>
       <div class="wrapper">
         <div class="left-tab">

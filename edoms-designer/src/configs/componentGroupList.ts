@@ -160,6 +160,11 @@ const componentGroupList: ComponentGroup[] = [
         text: '操作记录',
         type: 'operation-records',
       },
+      {
+        icon: 'yunxingcanshu',
+        text: '运行参数',
+        type: 'running-parameter-energy',
+      },
     ],
   },
   {
@@ -304,6 +309,16 @@ const componentGroupList: ComponentGroup[] = [
         icon: 'feijiashezhi',
         text: '费价设置',
         type: 'fee-setting-energy',
+      },
+      {
+        icon: 'yunxingcanshu',
+        text: '运行参数',
+        type: 'running-parameter-energy',
+      },
+      {
+        icon: 'yunxingcanshu',
+        text: '控制面板',
+        type: 'control-panel-energy',
       },
     ],
   },
