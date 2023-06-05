@@ -3,19 +3,25 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-19 10:18:49
+ * @LastEditTime: 2023-06-05 10:02:18
 -->
 <template>
   <div class="actual-wrapper">
     <div class="actual-top">
-      <div class="actual-value overflow-ellipsis">{{ actualValue }}</div>
-      <div class="actual-unit overflow-ellipsis" :title="config.energyName">{{ config.energyName }}</div>
+      <div class="actual-value overflow-ellipsis">
+        <LongText
+          :content="actualValue.toString()"
+          :content-style="{ width: 'inherit', fontSize: 'inherit', textAlign: 'right' }"
+        ></LongText>
+      </div>
+      <div class="actual-unit" :title="config.energyName">{{ config.energyName }}</div>
     </div>
     <div class="actual-bottom">当前系统能效</div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import LongText from '../../../LongText.vue';
 import { MEnergyMonitoring } from '../type';
 defineProps<{
   config: MEnergyMonitoring;
@@ -47,6 +53,7 @@ defineProps<{
       color: #00fff0;
       font-size: 20px;
       margin-right: 4px;
+      max-width: 75px;
     }
     .actual-unit {
       color: #c4e5f8;

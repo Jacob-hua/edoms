@@ -17,7 +17,7 @@
         </div>
         <div class="content-body">
           <div class="body-top">
-            <TopItem v-for="item in option" :key="item.num" :option="item"></TopItem>
+            <TopItem v-for="item in option.list" :key="item.num" :option="item"></TopItem>
           </div>
           <div class="body-con">
             <div class="screen">
@@ -29,15 +29,46 @@
                 <span class="span-tex">时间选择</span>
                 <TimeCalendar :option="timeType"></TimeCalendar>
               </div>
-              <el-button class="but" type="primary" plain>确认</el-button>
+              <el-button class="but" type="primary" plain @click="markSure">确认</el-button>
             </div>
             <div class="screen-card">
-              <ItemCard v-for="item in dataCard.list" :key="item.name" :option="item"></ItemCard>
+              <ItemCard
+                v-for="item in dataCard.list"
+                :key="item.name"
+                :option="item"
+                @ct-options="getControl"
+              ></ItemCard>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <el-dialog
+      v-model="dialogVisible"
+      align-center
+      class="tipDialog"
+      width="600px"
+      top="62px"
+      style="height: 300px; background: #000; border: 1px solid #013460"
+    >
+      <template #header>
+        <div class="top">
+          <span class="label">提示</span>
+        </div>
+      </template>
+      <div class="content">
+        <div class="tip">
+          <div class="icon">
+            <img src="./assets/tipIcon.png" alt="" />
+          </div>
+          <div style="line-height: 25px">
+            <span>已选用设备未达到当前设置功率，请勾选其他设备以达到设定值</span>
+          </div>
+        </div>
+        <button class="but" @click="dialogVisible = false">确认</button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -59,14 +90,17 @@ defineProps<{
 }>();
 const timeType = ref('date');
 const input = ref('');
+const dialogVisible = ref<boolean>(false);
 const isShowModel = ref<boolean>(false);
-const option = [
-  { title: '充电中', icon: dianciG, num: 12, params: 246 },
-  { title: '待机', icon: dianciB, num: 6, params: 326 },
-  { title: '摘枪', icon: dianciY, num: 1, params: 126 },
-  { title: '故障', icon: dianciR, num: 1, params: 126 },
-  { title: '参与调控', icon: control, num: 1, params: 126 },
-];
+const option = reactive<{ [list: string]: any }>({
+  list: [
+    { title: '充电中', icon: dianciG, num: 12, params: 246 },
+    { title: '待机', icon: dianciB, num: 6, params: 326 },
+    { title: '摘枪', icon: dianciY, num: 1, params: 126 },
+    { title: '故障', icon: dianciR, num: 1, params: 126 },
+    { title: '参与调控', icon: control, num: 1, params: 126 },
+  ],
+});
 const dataCard = reactive<{ [list: string]: any }>({
   list: [
     {
@@ -221,6 +255,20 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
   ],
 });
+const getControl = (opt: any) => {
+  console.log({ tit: '参数调控', opt: opt });
+  const contorlData = dataCard.list.filter(({ checked }: any) => {
+    return checked === true;
+  });
+  option.list[4].num = contorlData.length;
+  option.list[4].params = contorlData.length * 126;
+};
+const markSure = () => {
+  if (input.value && Number(input.value) > option.list[4].params) {
+    console.log('弹出框');
+    dialogVisible.value = true;
+  }
+};
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
   isShowModel.value = bl;
@@ -241,6 +289,21 @@ const handlerToShow = (e: any, bl: boolean) => {
   border: 1px solid #454e72;
   border-radius: 4px;
   box-shadow: none;
+}
+
+:deep(.el-dialog__header) {
+  padding: 0;
+  margin: 0;
+}
+
+:deep(.el-dialog__body) {
+  padding: 0;
+  width: 100%;
+  height: calc(100% - 52px);
+}
+
+:deep(.el-input) {
+  --el-input-text-color: #eaf5ff;
 }
 
 .operations-analysis-water {
@@ -388,6 +451,7 @@ const handlerToShow = (e: any, bl: boolean) => {
               .input {
                 width: 180px;
                 height: 32px;
+                color: #eaf5ff;
               }
             }
 
@@ -411,6 +475,68 @@ const handlerToShow = (e: any, bl: boolean) => {
             gap: 20px;
           }
         }
+      }
+    }
+  }
+
+  .tipDialog {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    .top {
+      width: 100%;
+      height: 52px;
+      line-height: 52px;
+      border-bottom: 1px solid #013460;
+      background-image: url('./assets/title-bg.png');
+      background-size: 100% 100%;
+      font-size: 18px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #eaf5ff;
+
+      .label {
+        margin-left: 20px;
+      }
+    }
+
+    .content {
+      width: 100%;
+      height: 100%;
+
+      .tip {
+        width: 65%;
+        font-size: 18px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffb400;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        .icon {
+          width: 51px;
+          height: 51px;
+          margin-right: 20px;
+        }
+      }
+
+      .but {
+        width: 80px;
+        height: 32px;
+        background: rgba(0, 163, 255, 0.26);
+        border: 1px solid #007bc0;
+        border-radius: 4px;
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #eaf5ff;
       }
     }
   }

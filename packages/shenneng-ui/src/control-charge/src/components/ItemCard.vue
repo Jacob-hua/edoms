@@ -67,9 +67,14 @@ const config = defineProps<{
 }>();
 const { option } = toRefs(config);
 console.log(option);
-
+const emit = defineEmits<{
+  (event: 'ctOptions', val: any): void;
+}>();
+const ctOptions = ref<any>();
 const checkedChange = () => {
-  console.log(option);
+  console.log('111');
+  ctOptions.value = option;
+  emit('ctOptions', ctOptions.value);
 };
 radioNum.value = Math.random();
 </script>
