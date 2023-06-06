@@ -118,7 +118,7 @@ useAsyncLoadJS(
   }
 ).execute();
 
-const staticResource = ref<Map<Id, string>>(new Map());
+const staticResource = ref<Map<Id, Set<string>>>(new Map());
 
 const menu = computed<MenuBarData>(() => ({
   left: [
@@ -225,7 +225,7 @@ watch(
     !defaultSelected.value && (defaultSelected.value = dsl.value.items?.[0].id);
     if (dsl.value.referenceResource) {
       for (const [id, value] of Object.entries(dsl.value.referenceResource)) {
-        staticResource.value.set(id, value);
+        staticResource.value.set(id, new Set(value));
       }
     }
   },
@@ -347,7 +347,11 @@ watch(
       if (parameter === 'upload') {
         const { execute: fileUploadExecute } = useUpload();
         const result = await fileUploadExecute(props.data as File, props.data?.name, props.data?.type);
-        result && staticResource.value.set(props.formValue?.id, result);
+        if (result) {
+          const values = staticResource.value.get(props.formValue?.id) ?? new Set<string>();
+          values.add(result);
+          staticResource.value.set(props.formValue?.id, values);
+        }
         return result;
       }
       return;
@@ -387,9 +391,10 @@ async function uploadDsl(): Promise<string | null | undefined> {
   const rawDSL = toRaw(dsl.value);
   if (rawDSL) {
     const referenceResource = Array.from(staticResource.value.entries()).reduce(
-      (referenceResource, [id, value]) => ({ ...referenceResource, [id]: value }),
+      (referenceResource, [id, value]) => ({ ...referenceResource, [id]: [...value] }),
       {}
     );
+
     rawDSL.referenceResource = referenceResource;
   }
   const DSL = serialize(rawDSL, {
@@ -402,7 +407,10 @@ async function uploadDsl(): Promise<string | null | undefined> {
     `dsl.js`,
     'text/javascript',
     'utf-8',
-    Array.from(staticResource.value.values()).join(',')
+    Array.from(staticResource.value.values())
+      .map((item) => [...item])
+      .flat()
+      .join(',')
   );
 }
 
