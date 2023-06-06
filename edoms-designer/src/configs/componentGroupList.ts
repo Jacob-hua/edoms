@@ -20,6 +20,11 @@ const componentGroupList: ComponentGroup[] = [
         type: 'img',
       },
       {
+        icon: 'tupian',
+        text: '轮播图',
+        type: 'carousel',
+      },
+      {
         icon: 'erweima',
         text: '二维码',
         type: 'qrcode',
