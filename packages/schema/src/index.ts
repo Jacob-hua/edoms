@@ -109,7 +109,7 @@ export interface MApp extends MComponent {
   index?: Id;
   tenantId?: string;
   referenceResource?: {
-    [key: Id]: string;
+    [key: Id]: Array<string>;
   };
 }
 

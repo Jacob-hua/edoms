@@ -66,6 +66,6 @@ const displayText = computed(() => {
   if (props.config?.disabledText) {
     displayText = disabledText.value;
   }
-  return displayText || '';
+  return displayText;
 });
 </script>
