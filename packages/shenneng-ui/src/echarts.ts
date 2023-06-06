@@ -10,6 +10,7 @@ import {
   DatasetComponent,
   GridComponent,
   LegendComponent,
+  MarkAreaComponent,
   MarkLineComponent,
   TitleComponent,
   ToolboxComponent,
@@ -37,6 +38,7 @@ echarts.use([
   ScatterChart,
   MarkLineComponent,
   CandlestickChart,
+  MarkAreaComponent,
 ]);
 
 export default echarts;
