@@ -1,12 +1,12 @@
 <template>
-  <div class="operations-analysis-water">
+  <div class="operations-analysis-water" @click="handlerToShow($event, true)">
     <div class="wrap-report">
       <div class="wrap-icon">
         <img class="icon-report" src="./assets/outer-bg.png" alt="" />
       </div>
       <div class="label">{{ config.title }}</div>
     </div>
-    <!-- <div v-show="isShowModel" class="model-wrapper-ftst">
+    <div v-show="isShowModel" class="model-wrapper-ftst">
       <div class="model-content">
         <div class="content-title">
           <div class="left-title-font">
@@ -16,44 +16,61 @@
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
         <div class="content-data">
-          <el-form :model="runningForm" :inline="true" label-position="top">
-            <el-radio-group v-model="runningForm.type">
-              <el-radio label="峰谷价差" />
-              <el-radio label="峰谷价差+需求调度" />
-              <el-radio label="综合经济收益" />
-            </el-radio-group>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit($event)">确认</el-button>
-            </el-form-item>
-          </el-form>
+          <div class="model-box">
+            <div class="model">
+              <span>当前模式：</span>
+              <span class="current-model">{{ currentModel }}</span>
+            </div>
+            <div class="change-btn">
+              <el-button @click="changeModel">模式切换</el-button>
+            </div>
+          </div>
+          <AutomaticMode v-if="autoModel"></AutomaticMode>
+          <ManualMode v-if="!autoModel" @setting-action="handleShowSettingDialog"></ManualMode>
         </div>
       </div>
-    </div> -->
+    </div>
+    <SettingDialog v-if="settingDialogVisible" v-model:visible="settingDialogVisible"></SettingDialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-// import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
+import AutomaticMode from './component/AutomaticMode.vue';
+import ManualMode from './component/ManualMode.vue';
+import SettingDialog from './component/SettingDialog.vue';
 import { MAssetInformationConfig } from './type';
 
 defineProps<{
   config: MAssetInformationConfig;
 }>();
-// const isShowModel = ref<boolean>(false);
+const isShowModel = ref<boolean>(false);
+const settingDialogVisible = ref<boolean>(false);
+// const currentModel = ref('自动模式');
+const autoModel = ref(true);
 
-// const runningForm = reactive({
-//   type: '峰谷价差',
-// });
-// const handlerToShow = (e: any, bl: boolean) => {
-//   e.stopPropagation();
-//   isShowModel.value = bl;
-// };
+const currentModel = computed(() => {
+  if (autoModel.value) {
+    return '自动模式';
+  } else {
+    return '手动模式';
+  }
+});
 
-// const onSubmit = (ev: Event) => {
-//   ev.stopPropagation();
-//   isShowModel.value = false;
-// };
+const handlerToShow = (e: any, bl: boolean) => {
+  e.stopPropagation();
+  isShowModel.value = bl;
+};
+
+const changeModel = () => {
+  autoModel.value = !autoModel.value;
+};
+
+const handleShowSettingDialog = (val: boolean) => {
+  console.log(val);
+  settingDialogVisible.value = val;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -105,8 +122,8 @@ defineProps<{
     z-index: 1000;
 
     .model-content {
-      width: 600px;
-      height: 50%;
+      width: 1479px;
+      height: 80%;
       position: absolute;
       left: 50%;
       top: 50%;
@@ -162,14 +179,28 @@ defineProps<{
       }
 
       .content-data {
-        width: 100%;
+        // width: 100%;
         margin: 10px 20px 30px;
         overflow-y: scroll;
         display: flex;
         flex-flow: column;
+        color: rgba(234, 245, 255, 1);
 
         :deep(.el-form) {
           justify-content: center;
+        }
+
+        .model-box {
+          display: grid;
+          grid-auto-flow: column;
+          justify-content: start;
+          align-items: center;
+          grid-column-gap: 40px;
+          padding: 10px 0 20px;
+
+          .current-model {
+            color: rgba(56, 208, 20, 1);
+          }
         }
 
         // :deep(.el-form-item__label) {
@@ -192,6 +223,7 @@ defineProps<{
           --el-button-bg-color: rgba(0, 163, 255, 0.26);
           --el-button-border-color: rgba(0, 163, 255, 0.26);
           --el-button-text-color: #eaf5ff;
+          --el-button-hover-bg-color: rgba(0, 163, 255, 0.26);
         }
       }
     }

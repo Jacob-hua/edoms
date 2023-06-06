@@ -687,7 +687,10 @@ const selectType = () => {
     selObj[selObj_item] = false;
   }
   const showObj = Object.assign(selObj, checkObj);
-  optionMonth_chart.value.legend.selected = showObj;
+  optionMonth_chart.value.legend = {
+    show: false,
+    selected: showObj,
+  };
 };
 // 无功优化补偿
 const tableData = [
