@@ -3,24 +3,18 @@
     <el-dialog v-model="dialogVisible" :width="600" :show-close="false">
       <template #header="{ close, titleId, titleClass }">
         <div class="my-header">
-          <h4 :id="titleId" :class="titleClass">设置</h4>
+          <h4 :id="titleId" :class="titleClass">权限审核</h4>
           <div class="close-btn" @click="close"></div>
         </div>
       </template>
-      <el-form :model="formModel">
-        <el-form-item label="当前状态：" prop="currentStatus">
-          <el-radio-group v-model="formModel.currentStatus">
-            <el-radio label="充电"></el-radio>
-            <el-radio label="供电"></el-radio>
-            <el-radio label="停止"></el-radio>
+      <el-form :model="formModel" label-position="right">
+        <el-form-item prop="currentModel">
+          <el-radio-group v-model="formModel.currentModel">
+            <el-radio label="自动模式" border></el-radio>
+            <el-radio label="手动模式" border></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="showInput" label="功率：" prop="power">
-          <el-input v-model="formModel.power" placeholder="请输入">
-            <template #append>kW</template>
-          </el-input>
-        </el-form-item>
-        <el-form-item class="submit-btn">
+        <el-form-item>
           <el-button @click="submit">确认</el-button>
         </el-form-item>
       </el-form>
@@ -29,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive } from 'vue';
 
 const props = withDefaults(
   defineProps<{
@@ -40,14 +34,11 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (event: 'update:visible', value: boolean): void;
-  (event: 'submitSetting', value: any): void;
+  (event: 'changeModel', value: string): void;
 }>();
 
-const showInput = ref(true);
-
 const formModel = reactive({
-  currentStatus: '',
-  power: '',
+  currentModel: '自动模式',
 });
 
 const dialogVisible = computed({
@@ -58,7 +49,7 @@ const dialogVisible = computed({
 });
 
 const submit = () => {
-  emit('submitSetting', formModel);
+  emit('changeModel', formModel.currentModel);
   emit('update:visible', false);
 };
 </script>
@@ -93,35 +84,32 @@ const submit = () => {
   cursor: pointer;
 }
 
-:deep(.el-form) {
-  --el-text-color-regular: rgba(234, 245, 255, 1);
-}
-
 :deep(.el-radio-group) {
   --el-color-primary: rgba(47, 218, 47, 1);
   --el-radio-text-color: rgba(234, 245, 255, 1);
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 20px;
 
   .el-radio {
+    --el-radio-font-size: 18px;
+    --el-radio-input-height: 18px;
+    --el-radio-input-width: 18px;
     display: grid;
     grid-auto-flow: column;
+    margin: 0;
+    width: 270px;
+    height: 80px;
+    background: #141c27;
+
     .el-radio__input {
       grid-column-start: 2;
+      justify-content: flex-end;
     }
   }
 }
 
-:deep(.el-input__wrapper) {
-  --el-input-border-color: rgba(69, 78, 114, 1);
-  background: transparent;
-}
-
-:deep(.el-input-group__append) {
-  --el-input-border-color: rgba(69, 78, 114, 1);
-  --el-color-info: rgba(255, 255, 255, 1);
-  background-color: transparent;
-}
-
-.submit-btn {
+:deep(.el-form-item) {
   display: grid;
   justify-content: center;
 }
