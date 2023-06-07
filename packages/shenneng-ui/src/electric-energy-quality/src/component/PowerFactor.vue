@@ -777,6 +777,8 @@ const tableData = [
 
 :deep(.el-input__wrapper) {
   background: #030507;
+  box-shadow: none;
+  border: 1px solid #454e72;
 
   .el-input__inner {
     font-size: 14px;
