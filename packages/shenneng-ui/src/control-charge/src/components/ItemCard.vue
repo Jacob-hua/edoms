@@ -12,7 +12,7 @@
         <span>开关状态：</span>
         <div class="mb-2 flex items-center text-sm">
           <el-radio-group :key="radioNum" v-model="config.option.switch" class="ml-4">
-            <el-radio style="margin-right: 20px" label="1" size="small">开</el-radio>
+            <el-radio style="margin-right: 10px" label="1" size="small">开</el-radio>
             <el-radio label="0" size="small">关</el-radio>
           </el-radio-group>
         </div>
@@ -95,9 +95,19 @@ radioNum.value = Math.random();
   background-color: #00a3ff;
 }
 
-:deep(.el-checkbox.el-checkbox--large .el-checkbox__inner) {
+:deep(.el-checkbox__input .el-checkbox__inner) {
   border-color: #00a3ff;
   background-color: #090f17;
+}
+
+:deep(.el-radio) {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row-reverse;
+}
+
+:deep(.el-radio.el-radio--small .el-radio__label) {
+  margin-right: 5px;
 }
 
 .red {
