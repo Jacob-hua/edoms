@@ -26,7 +26,11 @@
             </div>
           </div>
           <AutomaticMode v-if="autoModel"></AutomaticMode>
-          <ManualMode v-if="!autoModel" @setting-action="handleShowSettingDialog"></ManualMode>
+          <ManualMode
+            v-if="!autoModel"
+            :manual-status="manualStatus"
+            @setting-action="handleShowSettingDialog"
+          ></ManualMode>
         </div>
       </div>
     </div>
@@ -99,6 +103,7 @@ const handleCheckPermission = (val: boolean) => {
     if (flag.value === 'change') {
       autoModel.value = !autoModel.value;
       currentModel.value = tempMode.value;
+      manualStatus.value = undefined;
     }
     if (flag.value === 'setting') {
       manualStatus.value = tempStatus.value;

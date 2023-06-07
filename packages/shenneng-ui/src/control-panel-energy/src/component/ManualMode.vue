@@ -4,11 +4,11 @@
       <div class="anticipate-info">
         <div>
           <span>当前状态：</span>
-          <span class="anticipate-value">供电</span>
+          <span class="anticipate-value">{{ manualStatus.currentStatus }}</span>
         </div>
         <div>
           <span>供电功率：</span>
-          <span class="anticipate-value">100kW</span>
+          <span class="anticipate-value">{{ manualStatus.power ? manualStatus.power + 'kW' : '' }}</span>
         </div>
       </div>
       <div class="btn">
@@ -27,6 +27,18 @@ import { computed } from 'vue';
 // import { dateRange } from '@edoms/utils';
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+
+withDefaults(
+  defineProps<{
+    manualStatus: any;
+  }>(),
+  {
+    manualStatus: {
+      currentStatus: '供电',
+      power: '100',
+    },
+  }
+);
 
 const emit = defineEmits<{
   (event: 'settingAction', data: boolean): void;
