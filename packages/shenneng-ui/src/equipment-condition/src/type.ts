@@ -1,5 +1,10 @@
 import { MComponent } from '@edoms/schema';
 
+export enum MEconomicIndicator {
+  /** 电费 */
+  AIRHEAT = 'eqHeat',
+  AIRCONDITIONING = 'aircod',
+}
 export interface MIndicatorItemConfig {
   /** 指标标签 */
   label: string;
@@ -20,6 +25,7 @@ export interface MIndicatorItemConfig {
 }
 
 export interface MConditionItemConfig {
+  type: MEconomicIndicator;
   /** 设备标签 */
   label: string;
   /** 参数颜色 */
@@ -47,41 +53,6 @@ export interface MEquipmentCondition extends MComponent {
   conditions: MConditionItemConfig[];
 }
 
-export interface HistoryParameterItem {
-  /** 设备实例Code */
-  deviceCode: string;
-  /** 属性Code */
-  propCode: string;
-}
-
-export interface FetchHistoryDataReq {
-  /** 开始时间 */
-  startTime: string;
-  /** 结束时间 */
-  endTime: string;
-  /** 时间间隔 */
-  interval: string;
-  /** 类型 */
-  type: string;
-  /** 属性数据 */
-  dataList: HistoryParameterItem[];
-}
-
-export interface HistoryData {
-  /** 实例Code */
-  insCode: string;
-  /** 属性Code */
-  propCode: string;
-  /** 数据列表 */
-  dataList: Array<{
-    /** 时间 */
-    time: string;
-    value: string;
-  }>;
-}
-
-export type FetchHistoryDataRes = HistoryData[];
-
 export interface ParameterItem {
   /** 设备实例code */
   deviceCode: string;
@@ -103,6 +74,26 @@ export interface IndicatorDataItem {
   deviceCode: string;
 }
 
+export interface FetchCurveDataReq {
+  dataCodes: string[];
+  endTime: string;
+  startTime: string;
+  ts: string;
+  tsUnit: string;
+}
+
+export interface CurveData {
+  /** 属性Code */
+  propCode: string;
+  /** 数据列表 */
+  dataList: Array<{
+    /** 时间 */
+    time: string;
+    /** 数值 */
+    value: string;
+  }>;
+}
+
 export interface RealData {
   propCode: string;
   propVal: number;
@@ -114,8 +105,9 @@ export interface FetchRealDataReq {
 
 export type FetchRealTimeDataRes = IndicatorDataItem[];
 export type FetchRealDataRes = RealData[];
+export type FetchCurveDataRes = CurveData[];
 
 export interface Apis {
-  fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
+  fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
 }

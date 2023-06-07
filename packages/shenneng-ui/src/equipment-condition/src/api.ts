@@ -1,16 +1,16 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, FetchHistoryDataReq, FetchHistoryDataRes, FetchRealDataReq, FetchRealDataRes } from './type';
+import { Apis, FetchCurveDataReq, FetchCurveDataRes, FetchRealDataReq, FetchRealDataRes } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   // 查询累计数据（曲线）
-  fetchHistoryData: async (data: FetchHistoryDataReq): Promise<FetchHistoryDataRes> => {
+  fetchCurveData: async (data: FetchCurveDataReq): Promise<FetchCurveDataRes> => {
     if (!request) {
       return [];
     }
     try {
-      const { result } = await request<FetchHistoryDataReq, FetchHistoryDataRes>({
-        url: '/operation-monitor/history-data',
+      const { result } = await request<FetchCurveDataReq, FetchCurveDataRes>({
+        url: '/OperationalMonitorCommon/curveData',
         method: 'POST',
         data,
       });

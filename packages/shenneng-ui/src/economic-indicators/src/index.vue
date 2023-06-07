@@ -36,6 +36,7 @@ import ExposureImg from './assets/exposure.png';
 import HeatEnergyImg from './assets/heat_energy.png';
 import HumidityImg from './assets/humidity.png';
 import TemperatureImg from './assets/temperature.png';
+import WaterImg from './assets/water.png';
 import apiFactory from './api';
 import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig } from './type';
 
@@ -126,6 +127,7 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     [MEconomicIndicator.TEMPERATURE]: TemperatureImg,
     [MEconomicIndicator.HUMIDITY]: HumidityImg,
     [MEconomicIndicator.EXPOSURE]: ExposureImg,
+    [MEconomicIndicator.WATER_CONSUMPTION]: WaterImg,
   };
   return iconClassify[type];
 }

@@ -5,6 +5,8 @@ export enum MEconomicIndicator {
   ELECTRIC = 'electric',
   /** 用电量 */
   ELECTRICITY_CONSUMPTION = 'consumption',
+  /** 用水量 */
+  WATER_CONSUMPTION = 'water',
   /** 成本 */
   COST = 'cost',
   /** 制冷量 */

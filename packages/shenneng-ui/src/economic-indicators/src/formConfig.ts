@@ -10,6 +10,10 @@ const indicatorTypes = [
     value: MEconomicIndicator.ELECTRICITY_CONSUMPTION,
   },
   {
+    text: '用水量',
+    value: MEconomicIndicator.WATER_CONSUMPTION,
+  },
+  {
     text: '电费',
     value: MEconomicIndicator.ELECTRIC,
   },
