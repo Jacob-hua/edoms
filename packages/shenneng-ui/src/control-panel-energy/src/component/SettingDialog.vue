@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive } from 'vue';
 
 const props = withDefaults(
   defineProps<{
@@ -43,10 +43,10 @@ const emit = defineEmits<{
   (event: 'submitSetting', value: any): void;
 }>();
 
-const showInput = ref(true);
+// const showInput = ref(true);
 
 const formModel = reactive({
-  currentStatus: '',
+  currentStatus: '充电',
   power: '',
 });
 
@@ -55,6 +55,13 @@ const dialogVisible = computed({
   set: (value) => {
     emit('update:visible', value);
   },
+});
+
+const showInput = computed(() => {
+  if (formModel.currentStatus === '停止') {
+    return false;
+  }
+  return true;
 });
 
 const submit = () => {
