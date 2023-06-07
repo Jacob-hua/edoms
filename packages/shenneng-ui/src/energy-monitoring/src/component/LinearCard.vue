@@ -72,7 +72,7 @@ const getWidth = (pos: string): number => {
     default:
       break;
   }
-  console.log(pos, width);
+  //   console.log(pos, width);
   return width;
 };
 
@@ -80,7 +80,7 @@ const getColor = (arrcolor: any) => {
   if (!arrcolor || arrcolor.length === 0 || arrcolor[0].color == '') return '';
   const arr = arrcolor[0].color.split(',');
   arr[arr.length - 1] = '0.6)';
-  console.log(arr.join(','));
+  //   console.log(arr.join(','));
   return arr.join(',');
 };
 
@@ -105,7 +105,6 @@ const colorCardObserver = new ResizeObserver(() => {
 });
 
 onMounted(() => {
-  console.log(22222, props.config);
   if (!colorCardRef.value) {
     return;
   }
@@ -153,6 +152,10 @@ const calculatePosition = (inputValue: string | number): number => {
 const calculateCursorPosition = computed(() => `${calculatePosition(props.actualValue)}px`);
 
 const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`);
+
+const divideBackground = computed(() =>
+  props.config.style && props.config.style.backgroundColor ? props.config.style.backgroundColor : 'rgba(26, 23, 23,1)'
+);
 </script>
 
 <style lang="scss" scoped>
@@ -177,7 +180,27 @@ const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`)
       position: absolute;
       //   width: 15px;
       height: 100%;
-      background-color: black;
+      background-color: v-bind(divideBackground);
+      //   background-color: black;
+    }
+    .division-wrapper::before {
+      position: absolute;
+      content: '';
+      left: -6px;
+      bottom: 0;
+      width: 6px;
+      height: 100%;
+      border-radius: 0 0 6px 0;
+    }
+    .division-wrapper::after {
+      position: absolute;
+      height: 100%;
+      content: '';
+      right: -6px;
+      bottom: 0;
+      width: 6px;
+      height: 100%;
+      border-radius: 0 0 0 6px;
     }
   }
   .value {

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-31 15:27:14
+ * @LastEditTime: 2023-06-07 16:28:22
 -->
 <template>
   <div class="wrap-table">
@@ -250,10 +250,10 @@ onMounted(() => {
       margin-top: 20px;
       border-bottom: 1px solid #1d2634;
       .button {
-        margin-left: 20px;
-        width: 100px;
+        margin-left: 50px;
+        width: 80px;
         height: 32px;
-        background: rgba(0, 163, 255, 0.26);
+        background: rgba(0, 163, 255, 0.6);
         border: 1px solid #007bc0;
         border-radius: 4px;
         text-align: center;
@@ -261,14 +261,11 @@ onMounted(() => {
         font-weight: 400;
         color: #eaf5ff;
         line-height: 32px;
-        margin-right: 30px;
+        // margin-right: 30px;
         cursor: pointer;
       }
       .button-export {
-        width: 80px;
-        position: absolute;
-        right: 0;
-        background: rgba(0, 163, 255, 0.26);
+        margin-left: 30px;
       }
     }
     .wrap-tab {
