@@ -2,6 +2,17 @@ import { Request } from '@edoms/editor';
 
 import useInstanceConfig from '../../useInstanceConfig';
 
+import { MEconomicIndicator } from './type';
+const indicatorTypes = [
+  {
+    text: '空气热源泵',
+    value: MEconomicIndicator.AIRHEAT,
+  },
+  {
+    text: '空调',
+    value: MEconomicIndicator.AIRCONDITIONING,
+  },
+];
 export default async (request: Request) => [
   {
     text: '标题',
@@ -45,6 +56,12 @@ export default async (request: Request) => [
         name: 'label',
         text: '设备',
         type: 'text',
+      },
+      {
+        name: 'type',
+        text: '图标',
+        type: 'select',
+        options: indicatorTypes,
       },
       {
         name: 'group',

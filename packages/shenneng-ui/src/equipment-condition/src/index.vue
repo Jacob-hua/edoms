@@ -174,6 +174,7 @@ $borderColor: #505152;
 :deep(.el-drawer__body) {
   padding: 30px;
 }
+
 .drawer-header {
   height: 52px;
   line-height: 52px;
@@ -189,11 +190,12 @@ $borderColor: #505152;
   .bgcontent {
     width: 100%;
     height: 100%;
+    display: flex;
 
     .icon-report {
       width: 24px;
       height: 24px;
-      margin: 20px;
+      margin: 15px;
     }
 
     .label {
