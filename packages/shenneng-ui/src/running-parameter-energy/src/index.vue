@@ -22,22 +22,22 @@
                 <template #append>%</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="最大放电功率：" prop="maxDischargePower">
+            <el-form-item label="最大放电功率：" prop="maxDischargePower" style="width: 40%; margin-right: 10%">
               <el-input v-model="runningForm.maxDischargePower">
                 <template #append>kW</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="最小放电功率：" prop="minDischargePower">
+            <el-form-item label="最小放电功率：" prop="minDischargePower" style="width: 40%">
               <el-input v-model="runningForm.minDischargePower">
                 <template #append>kW</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="最大充电功率：" prop="maxChargePower">
+            <el-form-item label="最大充电功率：" prop="maxChargePower" style="width: 40%; margin-right: 10%">
               <el-input v-model="runningForm.maxChargePower">
                 <template #append>kW</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="最小充电功率：" prop="minChargePower">
+            <el-form-item label="最小充电功率：" prop="minChargePower" style="width: 40%">
               <el-input v-model="runningForm.minChargePower">
                 <template #append>kW</template>
               </el-input>
@@ -90,6 +90,7 @@ const onSubmit = (ev: Event) => {
 .operations-analysis-water {
   min-height: 80px;
   position: relative;
+
   .wrap-report {
     width: 100%;
     height: 100%;
@@ -100,6 +101,7 @@ const onSubmit = (ev: Event) => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
     .wrap-icon {
       width: 60px;
       height: 42px;
@@ -111,6 +113,7 @@ const onSubmit = (ev: Event) => {
       border: 1px solid #0072b3;
       border-radius: 4px;
       box-sizing: border-box;
+
       .icon-report {
         width: 22px;
         height: 24px;
@@ -193,29 +196,40 @@ const onSubmit = (ev: Event) => {
 
       .content-data {
         width: 100%;
-        margin: 10px 20px 30px;
+        // margin: 10px 20px 30px;
         overflow-y: scroll;
         display: flex;
         flex-flow: column;
 
         :deep(.el-form) {
           justify-content: center;
+          margin-top: 10px;
         }
 
         :deep(.el-form-item__label) {
           --el-text-color-regular: rgba(234, 245, 255, 1);
         }
 
+        :deep(.el-form-item) {
+          margin-right: 0;
+        }
+
         :deep(.el-input__wrapper) {
           --el-input-text-color: rgba(255, 255, 255, 1);
           --el-input-border-color: rgba(69, 78, 114, 1);
           background-color: transparent;
+          box-shadow: none;
+          border: 1px solid #454e72;
+          border-right: 0;
         }
 
         :deep(.el-input-group__append) {
           --el-input-border-color: rgba(69, 78, 114, 1);
           --el-color-info: rgba(255, 255, 255, 1);
           background-color: transparent;
+          box-shadow: none;
+          border: 1px solid #454e72;
+          border-left: 0;
         }
 
         :deep(.el-button) {
