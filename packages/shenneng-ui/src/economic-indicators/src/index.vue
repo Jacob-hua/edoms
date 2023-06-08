@@ -107,7 +107,9 @@ const updateRealData = async () => {
     targetIndexs.forEach((targetIndex) => {
       const indicatorConfig = indicatorConfigs.value[targetIndex];
       const indicator = indicators.value[targetIndex];
-      indicator.parameter = formatPrecision(Number(propVal), indicatorConfig.precision);
+      indicator.parameter = isNaN(Number(propVal))
+        ? propVal
+        : formatPrecision(Number(propVal), indicatorConfig.precision);
       indicator.propCode = propCode;
       indicator.precision = indicatorConfig.precision;
       indicator.unit = indicatorConfig.unit;

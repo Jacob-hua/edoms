@@ -22,23 +22,38 @@
               <span class="current-model">{{ currentModel }}</span>
             </div>
             <div class="change-btn">
-              <el-button @click="changeModel">模式切换</el-button>
+              <el-button @click="handleShowModelDialog">模式切换</el-button>
             </div>
           </div>
           <AutomaticMode v-if="autoModel"></AutomaticMode>
-          <ManualMode v-if="!autoModel" @setting-action="handleShowSettingDialog"></ManualMode>
+          <ManualMode
+            v-if="!autoModel"
+            :manual-status="manualStatus"
+            @setting-action="handleShowSettingDialog"
+          ></ManualMode>
         </div>
       </div>
     </div>
-    <SettingDialog v-if="settingDialogVisible" v-model:visible="settingDialogVisible"></SettingDialog>
+    <SettingDialog
+      v-if="settingDialogVisible"
+      v-model:visible="settingDialogVisible"
+      @submit-setting="handleSetStatus"
+    ></SettingDialog>
+    <ModeDialog v-model:visible="ModeDialogVisible" @change-model="handleChangeModel"></ModeDialog>
+    <PermissionsAuditing
+      v-model:visible="PermissionDialogVisible"
+      @check-permission="handleCheckPermission"
+    ></PermissionsAuditing>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 import AutomaticMode from './component/AutomaticMode.vue';
 import ManualMode from './component/ManualMode.vue';
+import ModeDialog from './component/ModeDialog.vue';
+import PermissionsAuditing from './component/PermissionsAuditing.vue';
 import SettingDialog from './component/SettingDialog.vue';
 import { MAssetInformationConfig } from './type';
 
@@ -47,29 +62,53 @@ defineProps<{
 }>();
 const isShowModel = ref<boolean>(false);
 const settingDialogVisible = ref<boolean>(false);
-// const currentModel = ref('自动模式');
+const ModeDialogVisible = ref<boolean>(false);
+const PermissionDialogVisible = ref<boolean>(false);
+const currentModel = ref('自动模式');
 const autoModel = ref(true);
-
-const currentModel = computed(() => {
-  if (autoModel.value) {
-    return '自动模式';
-  } else {
-    return '手动模式';
-  }
-});
+const flag = ref('');
+const tempMode = ref('');
+const tempStatus = ref({});
+const manualStatus = ref();
 
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
   isShowModel.value = bl;
 };
 
-const changeModel = () => {
-  autoModel.value = !autoModel.value;
+const handleChangeModel = (model: string) => {
+  tempMode.value = model;
+  PermissionDialogVisible.value = true;
+  // autoModel.value = !autoModel.value;
+  // currentModel.value = model;
+};
+
+const handleShowModelDialog = () => {
+  flag.value = 'change';
+  ModeDialogVisible.value = true;
 };
 
 const handleShowSettingDialog = (val: boolean) => {
-  console.log(val);
+  flag.value = 'setting';
   settingDialogVisible.value = val;
+};
+
+const handleSetStatus = (val: any) => {
+  tempStatus.value = val;
+  PermissionDialogVisible.value = true;
+};
+
+const handleCheckPermission = (val: boolean) => {
+  if (val) {
+    if (flag.value === 'change') {
+      autoModel.value = !autoModel.value;
+      currentModel.value = tempMode.value;
+      manualStatus.value = undefined;
+    }
+    if (flag.value === 'setting') {
+      manualStatus.value = tempStatus.value;
+    }
+  }
 };
 </script>
 

@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 17:49:21
+ * @LastEditTime: 2023-06-05 17:23:12
 -->
 <template>
   <div style="min-width: 522px; min-height: 246px">
@@ -78,7 +78,7 @@ const updateEfficiencyData = async () => {
   const result = await fetchRealData({ dataCodes });
   result.forEach(() => {
     // actualValue.value = +formatPrecision(Number(propVal), energyConfig.value.precision);
-    console.log(energyConfig.value.precision);
+    // console.log(energyConfig.value.precision);
     actualValue.value = +formatPrecision(Math.random() * 7, energyConfig.value.precision);
   });
 };

@@ -3,14 +3,14 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-06-01 17:29:33
+ * @LastEditTime: 2023-06-08 10:36:33
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="367">
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrap-header">
         <div class="wrap-divide">
-          <div v-for="item in [0, 1, 2]" :key="item" class="divide"></div>
+          <div v-for="item in divideArr" :key="item" class="divide"></div>
         </div>
         <div v-show="showRight" class="caret-left btn" @click="moveMethod('right')"></div>
         <div id="scrollRef" ref="scrollMain" class="wrap-scroll">
@@ -256,15 +256,30 @@ const wrapWith = ref<number>(0);
 const showLeft = ref<boolean>(false);
 const showRight = ref<boolean>(false);
 const distance = ref<number>(0);
-const tabWidth = computed(() => scrollMainWidth.value / 2 + 'px');
+
+const tabCount = computed<number>(() => {
+  console.log(scrollMainWidth.value);
+  if (props.config.classify.length > 4) return 4;
+  else if (props.config.classify.length < 2) return 2;
+  else return props.config.classify.length;
+});
+
+const divideArr = computed<Array<number>>(() => {
+  const arr = [];
+  for (let i = 0; i < tabCount.value + 1; i++) {
+    arr.push(i);
+  }
+  return arr;
+});
+const tabWidth = computed(() => scrollMainWidth.value / tabCount.value + 'px');
 
 const listTabWidth = computed(
-  () => (scrollMainWidth.value / 2) * (categories.value ? categories.value.length : 0) + 'px'
+  () => (scrollMainWidth.value / 4) * (categories.value ? categories.value.length : 0) + 'px'
 );
 
 const moveMethod = (flag: string) => {
   // 移动
-  distance.value += flag === 'left' ? -(scrollMainWidth.value / 2) : scrollMainWidth.value / 2;
+  distance.value += flag === 'left' ? -(scrollMainWidth.value / 4) : scrollMainWidth.value / 4;
   console.log(distance.value);
   convertArrow();
 };
@@ -274,7 +289,7 @@ const convertArrow = () => {
    * true：隐藏左箭头(右侧导航已全显示)
    * false：显示左箭头(右侧导航未全显示)
    */
-  wrapWith.value = (scrollMainWidth.value / 2) * categories.value.length;
+  wrapWith.value = (scrollMainWidth.value / 4) * categories.value.length;
   const rollWidth = wrapWith.value - Math.abs(distance.value);
   showLeft.value = rollWidth <= scollWith.value ? false : true;
   //  右箭头
@@ -299,7 +314,7 @@ onMounted(() => {
   wrapWith.value = wrap.value.offsetWidth;
   //   navWidth.value = document.getElementsByClassName('wrap-tab')[0].offsetWidth ?? 0;
   wrapWith.value <= scollWith.value && (showLeft.value = false);
-  showRight.value = categories.value.length > 2 ? true : false;
+  showRight.value = categories.value.length > 4 ? true : false;
   convertArrow();
 });
 </script>
@@ -366,6 +381,7 @@ onMounted(() => {
       //   margin: 0 10px;
       .list-tab {
         width: max-content;
+        min-width: 770px;
         .wrap-tab {
           //   width: 385px;
           width: v-bind(tabWidth);
@@ -376,7 +392,8 @@ onMounted(() => {
           justify-content: center;
           .tab {
             min-height: 20px;
-            min-width: 260px;
+            min-width: 130px;
+            width: 66.5%;
             background: rgba($color: #00a3ff, $alpha: 0.1);
             color: #c4e5f8;
             cursor: pointer;
