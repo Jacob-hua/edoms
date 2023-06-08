@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-06-08 17:39:21
+ * @LastEditTime: 2023-06-08 17:43:46
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
@@ -81,7 +81,7 @@ const { request } = useApp(props);
 const { fetchCurveData } = apiFactory(request);
 
 const categories = computed<any[]>(() => props.config.classify);
-console.log(categories.value);
+// console.log(categories.value);
 
 const activeCategory = ref<number>(0);
 const option = ref<ECOption>({});
@@ -232,7 +232,7 @@ function generateOption(series: any[] = []): ECOption {
           },
         ]
       : [];
-  console.log(dateRange(new Date(), 'day').end, dateRange(new Date(), 'day').start);
+  //   console.log(dateRange(new Date(), 'day').end, dateRange(new Date(), 'day').start);
 
   const option: ECOption = {
     legend: {
@@ -328,7 +328,7 @@ const showRight = ref<boolean>(false);
 const distance = ref<number>(0);
 
 const tabCount = computed<number>(() => {
-  console.log(scrollMainWidth.value);
+  //   console.log(scrollMainWidth.value);
   if (props.config.classify.length > 4) return 4;
   else if (props.config.classify.length < 2) return 2;
   else return props.config.classify.length;
@@ -348,7 +348,7 @@ const listTabWidth = computed(() => scrollMainWidth.value + 'px');
 const moveMethod = (flag: string) => {
   // 移动
   distance.value += flag === 'left' ? -(scrollMainWidth.value / 4) : scrollMainWidth.value / 4;
-  console.log(distance.value);
+  //   console.log(distance.value);
   convertArrow();
 };
 const convertArrow = () => {
