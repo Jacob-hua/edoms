@@ -16,7 +16,7 @@
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
         <div class="content-data">
-          <el-tabs v-model="activeName">
+          <el-tabs v-model="activeName" @tab-change="handleChange">
             <el-tab-pane
               v-for="(item, index) in tabTypes"
               :key="index"
@@ -27,7 +27,7 @@
           <div class="tab-content">
             <el-card class="equipment-select-card card-box">
               <div class="select-box">
-                <el-select v-model="selectValue">
+                <el-select v-model="selectValue" :teleported="false">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -117,16 +117,29 @@ const tabTypes = ref([
     name: 'hlx',
   },
 ]);
-const options = ref([
-  {
-    label: '研发楼西逆变压器',
-    value: 'xini',
-  },
-  {
-    label: '研发楼东逆变压器',
-    value: 'dongni',
-  },
-]);
+const optionsList = reactive({
+  inverter: [
+    {
+      label: '研发楼西逆变压器',
+      value: 'xini',
+    },
+    {
+      label: '研发楼东逆变压器',
+      value: 'dongni',
+    },
+  ],
+  combinerBox: [
+    {
+      label: '研发楼西汇流箱',
+      value: 'xihui',
+    },
+    {
+      label: '研发楼东汇流箱',
+      value: 'donghui',
+    },
+  ],
+});
+const options = ref(optionsList.inverter);
 const selectValue = ref();
 selectValue.value = options.value[0].value;
 const informations = reactive({
@@ -245,7 +258,14 @@ const informations = reactive({
     },
   ],
 });
-
+const handleChange = (name: any) => {
+  if (name === 'nbq') {
+    options.value = optionsList.inverter;
+  } else {
+    options.value = optionsList.combinerBox;
+  }
+  selectValue.value = options.value[0].value;
+};
 const equipName = computed(() => {
   const selectOption = options.value.find(({ value }) => value === selectValue.value);
   console.log(selectOption);
@@ -258,9 +278,46 @@ const handlerToShow = (e: any, bl: boolean) => {
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-input__inner) {
+  font-size: 14px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #eaf5ff;
+}
+
+:deep(.el-popper.is-pure) {
+  inset: auto !important;
+}
+
+:deep(.el-select-dropdown__list) {
+  margin: auto !important;
+}
+
+:deep(.el-popper__arrow::before) {
+  content: none;
+}
+
+:deep(.el-tabs__active-bar) {
+  background-color: #00a3ff;
+}
+
+:deep(.el-tabs__item) {
+  font-size: 16px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #899096;
+}
+
+:deep(.el-tabs__item.is-active) {
+  color: #eaf5ff;
+}
+:deep(.el-select-dropdown__item) {
+  background-color: #0d1118;
+}
 .operations-analysis-water {
   min-height: 80px;
   position: relative;
+
   .wrap-report {
     width: 100%;
     height: 100%;
@@ -271,6 +328,7 @@ const handlerToShow = (e: any, bl: boolean) => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
     .wrap-icon {
       width: 60px;
       height: 42px;
@@ -282,6 +340,7 @@ const handlerToShow = (e: any, bl: boolean) => {
       border: 1px solid #0072b3;
       border-radius: 4px;
       box-sizing: border-box;
+
       .icon-report {
         width: 22px;
         height: 24px;
@@ -394,8 +453,10 @@ const handlerToShow = (e: any, bl: boolean) => {
 
           .equipment-select-card {
             color: #eaf5ff;
+
             :deep(.el-select) {
               width: 100%;
+
               .el-input__wrapper {
                 background-color: transparent;
                 --el-border-color: #454e72;
@@ -410,11 +471,13 @@ const handlerToShow = (e: any, bl: boolean) => {
               display: flex;
               flex-flow: column;
             }
+
             .img-content {
               flex-grow: 1;
               display: flex;
               flex-flow: column;
               justify-content: center;
+
               .img-box {
                 border: 1px dashed #eaf5ff50;
               }
@@ -429,12 +492,18 @@ const handlerToShow = (e: any, bl: boolean) => {
             :deep(.el-card__header) {
               --el-card-border-color: #1d2634;
             }
+
             .card-header {
               display: grid;
               grid-auto-flow: column;
               justify-content: center;
               align-items: center;
               grid-column-gap: 5px;
+              font-size: 18px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #eaf5ff;
+
               i {
                 width: 21px;
                 height: 18px;
@@ -481,10 +550,19 @@ const handlerToShow = (e: any, bl: boolean) => {
 
                 .col-left {
                   width: 36%;
+                  font-size: 16px;
+                  font-family: Microsoft YaHei;
+                  font-weight: 400;
+                  color: #eaf5ff;
+                  opacity: 0.5;
                 }
 
                 .col-right {
                   width: 64%;
+                  font-size: 16px;
+                  font-family: Microsoft YaHei;
+                  font-weight: 400;
+                  color: #eaf5ff;
                 }
               }
             }
