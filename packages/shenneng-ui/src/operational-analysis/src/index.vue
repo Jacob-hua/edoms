@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-06-08 10:36:33
+ * @LastEditTime: 2023-06-08 17:43:46
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="367">
@@ -54,6 +54,8 @@ import { computed, onMounted, ref, watch } from 'vue';
 
 import { dateRange, formatDateRange, formatPrecision } from '@edoms/utils';
 
+import 'echarts/lib/component/dataZoom';
+
 import BusinessCard from '../../BusinessCard.vue';
 import EdomsCharts from '../../EdomsCharts.vue';
 import { ECOption } from '../../types';
@@ -79,7 +81,7 @@ const { request } = useApp(props);
 const { fetchCurveData } = apiFactory(request);
 
 const categories = computed<any[]>(() => props.config.classify);
-console.log(categories.value);
+// console.log(categories.value);
 
 const activeCategory = ref<number>(0);
 const option = ref<ECOption>({});
@@ -137,12 +139,26 @@ const getHistoryData = async () => {
     const name = data[activeTab.value].indicators[codeIndex]?.label;
     const color = data[activeTab.value].indicators[codeIndex]?.color;
     lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
+    const lineType = data[activeTab.value].lineType ?? 'line';
+    // if (lineType === 'line')
+    //   return {
+    //     name: name ? name : `未命名${index}`,
+    //     type: 'line',
+    //     showSymbol: false,
+    //     smooth: true,
+    //     color: color,
+    //     data: dataList.map(({ time, value }) => [
+    //       new Date(Number(time)),
+    //       formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
+    //     ]),
+    //   };
     return {
       name: name ? name : `未命名${index}`,
-      type: 'line',
+      type: lineType,
       showSymbol: false,
       smooth: true,
-      color: color,
+      color,
+      barWidth: '14',
       data: dataList.map(({ time, value }) => [
         new Date(Number(time)),
         formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
@@ -165,7 +181,60 @@ watch(
 function generateOption(series: any[] = []): ECOption {
   const legends = series.map(({ name }) => name);
   const colors = series.map(({ color }) => color);
-  return {
+  let end = 0;
+  if (series.length < 2) {
+    end = 100;
+  } else if ([2, 3].includes(series.length)) {
+    end = 100 - series.length * 20;
+  } else {
+    end = 100 - series.length * 18;
+  }
+  end = end < 20 ? 20 : end;
+
+  //   if (series.length < 2) {
+  //     end = 100;
+  //   } else if (series.length === 2) {
+  //     end = 60;
+  //   } else {
+  //     end = 40;
+  //   }
+
+  const dataZoom =
+    series.length > 0 && series[0].type === 'bar'
+      ? [
+          {
+            xAxisIndex: [0],
+            show: true, //flase直接隐藏图形
+            type: 'inside',
+            backgroundColor: 'transparent',
+            brushSelect: false, // 是否开启刷选功能
+            zoomLock: false, // 是否锁定选择区域大小
+            height: 10,
+            //left: 'center', //滚动条靠左侧的百分比
+            bottom: 0,
+            start: 0, //滚动条的起始位置
+            end, //滚动条的截止位置（按比例分割你的柱状图x轴长度）
+            handleStyle: {
+              color: 'rgba(40, 124, 232, 1)',
+              borderColor: 'rgba(40, 124, 232, 1)',
+            },
+            fillerColor: 'rgba(40, 124, 232, 1)',
+            borderColor: 'transparent',
+            showDetail: false,
+            dataBackground: {
+              areaStyle: {
+                opacity: 0,
+              },
+              lineStyle: {
+                color: 'transparent',
+              },
+            },
+          },
+        ]
+      : [];
+  //   console.log(dateRange(new Date(), 'day').end, dateRange(new Date(), 'day').start);
+
+  const option: ECOption = {
     legend: {
       data: legends,
       icon: 'rect',
@@ -245,8 +314,10 @@ function generateOption(series: any[] = []): ECOption {
         fontSize: 10,
       },
     },
+    dataZoom,
     series,
   };
+  return option;
 }
 
 const scrollMainWidth = ref<number>(0);
@@ -258,7 +329,7 @@ const showRight = ref<boolean>(false);
 const distance = ref<number>(0);
 
 const tabCount = computed<number>(() => {
-  console.log(scrollMainWidth.value);
+  //   console.log(scrollMainWidth.value);
   if (props.config.classify.length > 4) return 4;
   else if (props.config.classify.length < 2) return 2;
   else return props.config.classify.length;
@@ -273,14 +344,12 @@ const divideArr = computed<Array<number>>(() => {
 });
 const tabWidth = computed(() => scrollMainWidth.value / tabCount.value + 'px');
 
-const listTabWidth = computed(
-  () => (scrollMainWidth.value / 4) * (categories.value ? categories.value.length : 0) + 'px'
-);
+const listTabWidth = computed(() => scrollMainWidth.value + 'px');
 
 const moveMethod = (flag: string) => {
   // 移动
   distance.value += flag === 'left' ? -(scrollMainWidth.value / 4) : scrollMainWidth.value / 4;
-  console.log(distance.value);
+  //   console.log(distance.value);
   convertArrow();
 };
 const convertArrow = () => {
