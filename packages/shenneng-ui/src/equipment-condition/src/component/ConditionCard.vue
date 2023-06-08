@@ -217,20 +217,18 @@ function generateOption(series: any[] = []): ECOption {
       formatter: (params: any) => {
         let tip: string = '';
         if (params != null && params.length > 0) {
-          tip += '<div style="width:205px;height:50px">';
+          tip += '<div style="width:150px;height:50px">';
           for (let index = 0; index < params.length; index++) {
             tip +=
-              '<span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
-              params[index].seriesName +
-              ':</span><span style="color: ' +
-              params[index].color +
+              '<span style="margin-left:8px;color: ' +
+              props.condition.color +
               '">' +
               params[index].axisValueLabel +
               '</span> <br />' +
               '<span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
               params[index].seriesName +
               ':</span><span style="line-height:18px;margin-left:8px;color:' +
-              params[index].color +
+              props.condition.color +
               '">' +
               params[index].value[1] +
               activeIndicator.value?.unit;
