@@ -19,9 +19,18 @@ export interface MIndicatorItemConfig {
   color: string;
 }
 
+export enum MLineType {
+  /** 折线图 */
+  LINE = 'line',
+  /** 柱状图 */
+  BAR = 'bar',
+}
+
 export interface MParameterItemConfig {
   /** 标签 */
   label: string;
+  /** 曲线类型 */
+  lineType: string;
   /** 指标 */
   indicators: MIndicatorItemConfig[];
 }
