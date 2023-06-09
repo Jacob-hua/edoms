@@ -3,7 +3,7 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-06-08 17:43:46
+ * @LastEditTime: 2023-06-09 10:13:15
 -->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="822" min-height="367">
@@ -191,34 +191,26 @@ function generateOption(series: any[] = []): ECOption {
   }
   end = end < 20 ? 20 : end;
 
-  //   if (series.length < 2) {
-  //     end = 100;
-  //   } else if (series.length === 2) {
-  //     end = 60;
-  //   } else {
-  //     end = 40;
-  //   }
-
   const dataZoom =
     series.length > 0 && series[0].type === 'bar'
       ? [
           {
-            xAxisIndex: [0],
-            show: true, //flase直接隐藏图形
+            // xAxisIndex: [0],
+            // show: true, //flase直接隐藏图形
             type: 'inside',
             backgroundColor: 'transparent',
             brushSelect: false, // 是否开启刷选功能
-            zoomLock: false, // 是否锁定选择区域大小
+            zoomLock: true, // 是否锁定选择区域大小
             height: 10,
             //left: 'center', //滚动条靠左侧的百分比
             bottom: 0,
             start: 0, //滚动条的起始位置
             end, //滚动条的截止位置（按比例分割你的柱状图x轴长度）
-            handleStyle: {
-              color: 'rgba(40, 124, 232, 1)',
-              borderColor: 'rgba(40, 124, 232, 1)',
-            },
-            fillerColor: 'rgba(40, 124, 232, 1)',
+            // handleStyle: {// 滚动条两侧操作按钮样式
+            //   color: 'rgba(40, 124, 232, 1)',
+            //   borderColor: 'rgba(40, 124, 232, 1)',
+            // },
+            // fillerColor: 'rgba(40, 124, 232, 1)',// 背景颜色
             borderColor: 'transparent',
             showDetail: false,
             dataBackground: {
@@ -343,7 +335,14 @@ const divideArr = computed<Array<number>>(() => {
 });
 const tabWidth = computed(() => scrollMainWidth.value / tabCount.value + 'px');
 
-const listTabWidth = computed(() => scrollMainWidth.value + 'px');
+// const listTabWidth = computed(() => scrollMainWidth.value + 'px');
+const listTabWidth = computed(() => {
+  if (categories.value && categories.value.length * (scrollMainWidth.value / 4) <= scrollMainWidth.value)
+    return scrollMainWidth.value + 'px';
+  else {
+    return (scrollMainWidth.value / 4) * (categories.value ? categories.value.length : 0) + 'px';
+  }
+});
 
 const moveMethod = (flag: string) => {
   // 移动
