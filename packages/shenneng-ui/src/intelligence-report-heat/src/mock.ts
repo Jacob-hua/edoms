@@ -288,22 +288,22 @@ const titleData = [
     width: '125',
   },
   {
-    name: '单体一瞬时流量 \n（℃）',
+    name: '单体一瞬时流量 \n（m³/h）',
     value: 'value9',
     width: '125',
   },
   {
-    name: '单体一累计流量 \n（℃）',
+    name: '单体一累计流量 \n（m³）',
     value: 'value10',
     width: '125',
   },
   {
-    name: '单体一瞬时热量 \n（℃）',
+    name: '单体一瞬时热量 \n（GJ/h）',
     value: 'value11',
     width: '125',
   },
   {
-    name: '单体一累计热量 \n（℃）',
+    name: '单体一累计热量 \n（GJ）',
     value: 'value12',
     width: '125',
   },

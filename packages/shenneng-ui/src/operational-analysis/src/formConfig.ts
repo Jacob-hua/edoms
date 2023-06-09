@@ -3,11 +3,24 @@
  * @Author: lihao
  * @Date: 2023-04-24 11:45:45
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-25 15:03:47
+ * @LastEditTime: 2023-06-08 17:41:21
  */
 import { Request } from '@edoms/editor';
 
 import useInstanceConfig from '../../useInstanceConfig';
+
+import { MLineType } from './type';
+
+const lineTypes = [
+  {
+    text: '曲线',
+    value: MLineType.LINE,
+  },
+  {
+    text: '柱状图',
+    value: MLineType.BAR,
+  },
+];
 
 export default async (request: Request) => [
   {
@@ -52,6 +65,13 @@ export default async (request: Request) => [
           {
             text: '标签',
             name: 'label',
+          },
+          {
+            text: '曲线类型',
+            name: 'lineType',
+            type: 'select',
+            options: lineTypes,
+            defaultValue: MLineType.LINE,
           },
           {
             name: 'indicators',
