@@ -32,6 +32,7 @@ export default async (request: Request) => [
         name: 'key',
         text: '类型名称',
         type: 'text',
+        labelWidth: '80px',
       },
       {
         name: 'equipmentList',
@@ -39,6 +40,7 @@ export default async (request: Request) => [
         type: 'groupList',
         enableFullscreen: true,
         addButtonText: '添加设备',
+        labelWidth: '80px',
         fixed: false,
         items: [
           {
@@ -46,17 +48,20 @@ export default async (request: Request) => [
             name: 'eqName',
             text: '设备名称',
             type: 'text',
+            labelWidth: '80px',
           },
           {
             label: '设备编码',
             name: 'eqCode',
             text: '设备编码',
             type: 'text',
+            labelWidth: '80px',
           },
           {
             name: 'pointList',
             text: '点位名称',
             type: 'groupList',
+            labelWidth: '80px',
             enableFullscreen: true,
             addButtonText: '添加点位',
             fixed: false,
@@ -66,6 +71,7 @@ export default async (request: Request) => [
                 name: 'queryName',
                 text: '参数名称',
                 type: 'text',
+                labelWidth: '80px',
               },
               ...(await useInstanceConfig(request, 'equipment-query-operation')),
               {
@@ -73,6 +79,7 @@ export default async (request: Request) => [
                 name: 'color',
                 text: '颜色',
                 type: 'colorPicker',
+                labelWidth: '80px',
                 defaultValue: '#ff0000',
               },
             ],

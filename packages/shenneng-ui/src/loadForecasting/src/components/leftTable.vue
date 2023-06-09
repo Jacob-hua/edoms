@@ -40,7 +40,7 @@
           >
           <span v-else>{{ itm[col.value] }}</span>
         </div>
-        <div class="operation" @click="handlerToDetail(itm)">操作</div>
+        <div class="operation" @click="handlerToDetail($event, itm)">详情</div>
       </div>
     </div>
     <div class="page-wrapper">
@@ -121,7 +121,8 @@ const handlerToAdd = (num: number) => {
   currentPage.value += num;
 };
 
-const handlerToDetail = (itm: { [key: string]: string | number }) => {
+const handlerToDetail = (e: any, itm: { [key: string]: string | number }) => {
+  e.stopPropagation();
   emit('getToDetail', itm);
 };
 

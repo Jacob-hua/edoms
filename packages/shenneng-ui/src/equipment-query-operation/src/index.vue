@@ -11,6 +11,8 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
 
+import { formatPrecision } from '@edoms/utils';
+
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
@@ -77,7 +79,7 @@ const updateParameterData = async () => {
   pointDataList.forEach((item) => {
     indicatorConfigs.value[fristIndex.value].equipmentList[secondIndex.value].pointList?.forEach((element) => {
       if (item.propCode === element.property) {
-        element.data = item.propVal;
+        element.data = formatPrecision(Number(item.propVal), element.precision);
       }
     });
   });

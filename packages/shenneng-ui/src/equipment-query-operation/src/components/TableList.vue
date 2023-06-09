@@ -64,7 +64,7 @@ defineExpose({
 <style lang="scss" scoped>
 .table-list {
   width: 100%;
-  // height: calc(100% - 54px);
+  height: calc(100% - 54px);
   overflow: hidden;
   position: relative;
 
@@ -76,7 +76,6 @@ defineExpose({
     box-sizing: border-box;
 
     .left-content {
-      margin-top: 14px;
       width: 22%;
       height: 100%;
       overflow: hidden;
@@ -127,6 +126,7 @@ defineExpose({
       box-sizing: border-box;
       display: flex;
       // justify-content: space-between;
+      overflow: hidden;
       flex-wrap: wrap;
       overflow-y: auto;
 
@@ -134,7 +134,7 @@ defineExpose({
         width: 30%;
         height: 62px;
         margin-right: 3.333%;
-        margin-bottom: 30px;
+        margin-bottom: 15px;
         background-color: rgba(0, 163, 255, 0.06);
         box-sizing: border-box;
         text-align: center;

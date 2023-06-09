@@ -128,6 +128,7 @@ const handleConfirm = async (alarm: Warning) => {
     }
 
     .warning-title {
+      width: 120px;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;

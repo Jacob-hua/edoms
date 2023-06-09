@@ -4,6 +4,11 @@ import useInstanceConfig from '../../useInstanceConfig';
 
 export default async (request: Request) => [
   {
+    text: '标题',
+    name: 'title',
+    type: 'string',
+  },
+  {
     text: '轮询间隔',
     name: 'intervalDelay',
     type: 'number',
@@ -11,11 +16,6 @@ export default async (request: Request) => [
     step: 1,
     defaultValue: 10,
     append: 's',
-  },
-  {
-    text: '标题',
-    name: 'title',
-    type: 'string',
   },
   {
     text: '设备分类',

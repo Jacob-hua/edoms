@@ -4,6 +4,7 @@ export interface QueryList {
   queryUnit: string;
   queryName: string;
   queryApi?: string;
+  precision: string;
   color: string;
   [key: string]: any;
 }
