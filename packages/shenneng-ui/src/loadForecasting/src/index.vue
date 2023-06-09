@@ -18,16 +18,18 @@
         <div class="content-title">
           <div class="left-title-font">
             <span class="font-icon"></span>
-            <span class="font-value">{{ titleFont }}</span>
+            <span class="font-value">负荷预测</span>
           </div>
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
-        <div v-show="titleFont === '负荷预测'" class="content-ftst">
+        <div class="content-ftst">
           <div class="left-ftst">
             <div class="top-form">
               <FormList />
             </div>
-            <div class="bottom-table"><LeftTable @get-to-detail="handlerToDetail" /></div>
+            <div class="bottom-table">
+              <LeftTable @get-to-detail="handlerToDetail" />
+            </div>
           </div>
           <div class="right-ftst">
             <div class="date-form">
@@ -52,7 +54,19 @@
             </div>
           </div>
         </div>
-        <div v-if="titleFont === '详情'" class="content-detail">
+      </div>
+    </div>
+
+    <el-dialog v-model="dialogVisible" class="model-wrapper-ftst">
+      <div class="model-content">
+        <div class="content-title">
+          <div class="left-title-font">
+            <span class="font-icon"></span>
+            <span class="font-value">详情</span>
+          </div>
+          <div class="right-close" @click="detailsToShow"></div>
+        </div>
+        <div class="content-detail">
           <div class="date-time-form">
             <span class="day-font">时间选择</span>
             <el-date-picker
@@ -73,14 +87,14 @@
             </div>
           </div>
           <div class="chartData-wrapper">
-            <ChartData :options="getOptionsInner" width="100%" :height="280" />
+            <ChartData :options="getOptionsInner" :width="'100%'" :height="280" />
           </div>
-          <div class="table-wrapper">
+          <div class="table-wrapper" style="height: 220px">
             <RightTable :table-title-list="tableTitleList" :table-data="tableData" :current-date="18" />
           </div>
         </div>
       </div>
-    </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -98,7 +112,7 @@ defineProps<{
   config: AnaItemConfigs;
 }>();
 
-const titleFont = ref<string>('负荷预测');
+const dialogVisible = ref<boolean>(false);
 
 const isShowModel = ref<boolean>(false);
 
@@ -164,28 +178,20 @@ const getOptionsInner = computed(() => {
 
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
-  if (titleFont.value === '详情') {
-    titleFont.value = '负荷预测';
-    return;
-  }
   isShowModel.value = bl;
+};
+
+const detailsToShow = () => {
+  dialogVisible.value = false;
 };
 
 const handlerToClick = () => {
   isShowOptions.value = false;
 };
 
-const handlerToDetail = (item: { [key: string]: string | number }) => {
-  console.log(item);
-  titleFont.value = '详情';
+const handlerToDetail = () => {
+  dialogVisible.value = true;
 };
-
-watch(
-  () => titleFont.value,
-  (newV) => {
-    console.log(newV);
-  }
-);
 
 watch(
   () => isShowModel.value,
@@ -204,6 +210,7 @@ watch(
   min-width: 117px;
   min-height: 80px;
   position: relative;
+
   .wrap-report {
     width: 100%;
     height: 100%;
@@ -214,6 +221,7 @@ watch(
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
     .wrap-icon {
       width: 60px;
       height: 42px;
@@ -225,6 +233,7 @@ watch(
       border: 1px solid #0072b3;
       border-radius: 4px;
       box-sizing: border-box;
+
       .icon-report {
         width: 22px;
         height: 24px;
@@ -238,6 +247,7 @@ watch(
       font-weight: 300;
     }
   }
+
   .model-wrapper-ftst {
     position: fixed;
     top: 0;
@@ -246,6 +256,7 @@ watch(
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
+
     .model-content {
       width: 1800px;
       height: 800px;
@@ -258,6 +269,7 @@ watch(
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+
       .content-title {
         width: 100%;
         height: 52px;
@@ -269,8 +281,10 @@ watch(
         justify-content: space-between;
         background-image: url('../src/assets/title-bg.png');
         background-size: 100% 100%;
+
         .left-title-font {
           display: flex;
+
           .font-icon {
             display: block;
             width: 24px;
@@ -281,12 +295,14 @@ watch(
             background-repeat: no-repeat;
             margin-top: 14px;
           }
+
           .font-value {
             color: rgba(234, 245, 255, 1);
             font-size: 18px;
             margin-left: 15px;
           }
         }
+
         .right-close {
           width: 24px;
           height: 24px;
@@ -299,25 +315,30 @@ watch(
           cursor: pointer;
         }
       }
+
       .content-ftst {
         width: calc(100% - 60px);
         height: calc(100% - 60px - 52px);
         margin: 30px auto;
         display: flex;
         justify-content: space-between;
+
         .left-ftst {
           width: 31%;
           height: 100%;
+
           .top-form {
             width: 100%;
             height: 32%;
           }
+
           .bottom-table {
             width: 100%;
             height: 67%;
             margin-top: 2%;
           }
         }
+
         .right-ftst {
           width: 67%;
           height: 100%;
@@ -325,6 +346,7 @@ watch(
           box-sizing: border-box;
           background-color: rgba(9, 15, 23, 0.3);
           position: relative;
+
           .date-form {
             margin-top: 19px;
             padding: 0 12px;
@@ -337,9 +359,11 @@ watch(
             display: flex;
             margin-bottom: 15px;
             position: relative;
+
             .day-font {
               margin-right: 12px;
             }
+
             .button-wrapper {
               width: 100px;
               height: 32px;
@@ -352,11 +376,13 @@ watch(
               cursor: pointer;
               margin-left: 20px;
             }
+
             :deep(.el-input__wrapper) {
               background-color: rgba(3, 5, 7, 1);
               border: 1px solid rgb(69, 78, 114);
               box-shadow: none;
             }
+
             // :deep(.el-input__wrapper) {
             //   background-color: rgba(3, 5, 7, 1);
             //   border: 1px solid rgba(33, 44, 60, 1);
@@ -365,22 +391,27 @@ watch(
             :deep(.el-input__wrapper:hover) {
               box-shadow: none !important;
             }
+
             :deep(.el-input__inner) {
               color: #fff;
             }
           }
+
           .dis-rate {
             position: absolute;
             right: 20px;
             top: 93px;
+
             .rate-font {
               color: rgba(234, 245, 255, 0.7);
             }
+
             .rate-count {
               color: rgba(65, 228, 222, 1);
               font-weight: bold;
             }
           }
+
           .table-half {
             width: 100%;
             height: 161px;
@@ -391,10 +422,12 @@ watch(
           }
         }
       }
+
       .content-detail {
         width: calc(100% - 60px);
         height: calc(100% - 60px - 52px);
         margin: 30px auto;
+
         .date-time-form {
           margin-top: 19px;
           padding: 0 12px;
@@ -407,20 +440,25 @@ watch(
           display: flex;
           margin-bottom: 15px;
           position: relative;
+
           .day-font {
             margin-right: 12px;
           }
+
           :deep(.el-input__wrapper) {
             background-color: rgba(3, 5, 7, 1);
             border: 1px solid rgb(69, 78, 114);
             box-shadow: none;
           }
+
           :deep(.el-input__wrapper:hover) {
             box-shadow: none !important;
           }
+
           :deep(.el-input__inner) {
             color: #fff;
           }
+
           .input-time {
             width: 180px;
             height: 32px;
@@ -433,6 +471,7 @@ watch(
             line-height: 32px;
             border-radius: 4px;
           }
+
           .time-unit {
             line-height: 32px;
             font-size: 14px;
@@ -440,12 +479,14 @@ watch(
             margin-left: -36px;
           }
         }
+
         .content-tab-list {
           width: 100%;
           height: 100px;
           display: flex;
           justify-content: space-between;
           margin-top: 20px;
+
           .tab-item {
             width: 20%;
             height: 100%;
@@ -454,23 +495,29 @@ watch(
             display: flex;
             padding: 35px 30px;
             box-sizing: border-box;
+
             .iconfont-st {
               width: 31px;
               height: 30px;
               background-size: 100% 100%;
+
               &.line-icon-cls {
                 background-image: url('./assets/line.png');
               }
+
               &.forsee-icon-cls {
                 background-image: url('./assets/forsee.png');
               }
+
               &.rate-icon-cls {
                 background-image: url('./assets/rate.png');
               }
+
               &.percent-icon-cls {
                 background-image: url('./assets/percent.png');
               }
             }
+
             .tab-font {
               width: calc(100% - 20px - 31px - 150px);
               line-height: 30px;
@@ -478,6 +525,7 @@ watch(
               color: rgba(196, 229, 248, 1);
               font-size: 14px;
             }
+
             .tab-value {
               width: 150px;
               text-align: right;
@@ -488,11 +536,13 @@ watch(
             }
           }
         }
+
         .chartData-wrapper {
           margin-top: 20px;
           width: 100%;
           height: 280px;
         }
+
         .table-wrapper {
           margin-top: 20px;
           width: 100%;

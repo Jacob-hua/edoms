@@ -50,6 +50,7 @@ watch(
 watch(
   () => props.options,
   () => {
+    console.log(props);
     chart?.setOption(props.options, true);
   },
   {

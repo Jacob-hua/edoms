@@ -133,18 +133,18 @@ onUnmounted(() => {});
   }
   .table-content-list::-webkit-scrollbar {
     width: 1px;
-    height: 5px;
+    height: 3px;
   }
 
   .table-content-list::-webkit-scrollbar-thumb {
-    border-radius: 5px;
+    border-radius: 3px;
     // -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
-    background: rgba(255, 255, 255, 1);
+    background: rgb(199, 199, 199);
   }
 
   .table-content-list::-webkit-scrollbar-track {
     // -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+    border-radius: 3px;
     background: transparent;
   }
 }
