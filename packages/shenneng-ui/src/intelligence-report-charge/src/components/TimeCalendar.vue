@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <el-date-picker v-model="value1" :type="timeType.option" :disabled-date="disabledDateFun" @change="selectDate" />
+    <el-date-picker v-model="value1" :teleported="false" :type="timeType.option" @change="selectDate" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ const emit = defineEmits<{
 const timeType = defineProps<{
   option: any;
 }>();
-const value1 = ref(new Date('2023-05-15 00:00:00'));
+const value1 = ref(new Date());
 const selectDate = (time: Record<string, any>) => {
   console.log(time.getDate());
   if (timeType.option !== 'date') {
@@ -20,16 +20,7 @@ const selectDate = (time: Record<string, any>) => {
   }
   emit('ctTime', time);
 };
-const disabledDateFun = (time: Record<string, any>): boolean => {
-  if (
-    time.getTime() < new Date('2023-05-21 00:00:00').getTime() &&
-    time.getTime() > new Date('2023-05-14 00:00:00').getTime()
-  ) {
-    return false;
-  } else {
-    return true;
-  }
-};
+
 const setDefultTime = () => {
   value1.value = new Date('2023-05-15 00:00:00');
 };
@@ -48,6 +39,7 @@ defineExpose({
 :deep(.el-input__wrapper) {
   padding-right: 30px;
   position: relative;
+  box-shadow: none;
   background-color: #030507;
 }
 
@@ -55,10 +47,13 @@ defineExpose({
   position: absolute;
   right: 0px;
 }
-:deep(.el-input__inner) {
-  color: #ffffff;
+
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  color: #030507 !important;
 }
+
 .block {
   text-align: center;
+  margin-left: 30px;
 }
 </style>

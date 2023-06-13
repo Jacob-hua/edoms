@@ -12,30 +12,19 @@
     <div class="content-box">
       <div class="my-content">
         <div class="border-number">
-          <div><span class="big-number">420</span><span>kWh</span></div>
-          <div>累计用电</div>
+          <div style="height: 50%"><span class="big-number">420</span><span>kWh</span></div>
+          <div style="height: 50%">累计用电</div>
         </div>
 
         <div>
-          <div><span class="big-number">12543</span><span>元</span></div>
-          <div>累计用电成本</div>
-        </div>
-      </div>
-      <div class="my-content">
-        <div class="border-number">
-          <div><span class="big-number">110</span><span>kWh</span></div>
-          <div>乐基反向充电</div>
-        </div>
-
-        <div>
-          <div><span class="big-number">2543</span><span>元</span></div>
-          <div>反向充电收益</div>
+          <div style="height: 50%"><span class="big-number">12543</span><span>元</span></div>
+          <div style="height: 50%">累计用电成本</div>
         </div>
       </div>
     </div>
 
     <div class="eCharts">
-      <!-- <div>充电量分析</div> -->
+      <div class="tit">充电量分析</div>
       <EdomsCharts class="charts" :option="option"></EdomsCharts>
     </div>
 
@@ -70,52 +59,73 @@ import TimeCalendar from './TimeCalendar.vue';
 const timeType = ref<string>('date');
 const option = ref<ECOption>({});
 option.value = {
-  backgroundColor: '#030507',
-  title: {
-    text: '电量分析',
-    textStyle: {
-      color: '#fff',
-    },
+  grid: {
+    top: 40,
+    left: 50,
+    right: 25,
+    bottom: 30,
   },
   legend: {
-    bottom: 10,
+    top: 10,
+    itemWidth: 14,
+    itemHeight: 2,
     textStyle: {
-      color: '#fff',
+      color: '#EAF5FF',
     },
   },
   tooltip: {
     trigger: 'axis',
-    axisPointer: {
-      type: 'shadow',
+    backgroundColor: 'rgba(11,34,52,0.9)',
+    borderColor: '#204C6F',
+    borderWidth: 1,
+    formatter: (params: any) => {
+      let tip: string = '';
+      if (params != null && params.length > 0) {
+        tip += '<div>';
+        for (let index = 0; index < params.length; index++) {
+          tip +=
+            '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].name +
+            '</p><p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].seriesName +
+            '：</span><span style="color:' +
+            params[index].color +
+            ';font-size: 12px;font-weight: 400;">' +
+            params[index].value.straight_value +
+            '</span></p>';
+        }
+        tip += '</div>';
+      }
+      return tip;
     },
   },
   dataset: {
-    dimensions: ['product', '正向充电', '反向充电'],
+    dimensions: ['product', 'straight_value'],
     source: [
-      { product: '00:00', 正向充电: 22, 反向充电: 0 },
-      { product: '01:00', 正向充电: 0, 反向充电: -30 },
-      { product: '02:00', 正向充电: 24, 反向充电: 0 },
-      { product: '03:00', 正向充电: 0, 反向充电: -33 },
-      { product: '04:00', 正向充电: 0, 反向充电: -31 },
-      { product: '05:00', 正向充电: 24, 反向充电: 0 },
-      { product: '06:00', 正向充电: 21, 反向充电: 0 },
-      { product: '07:00', 正向充电: 22, 反向充电: 0 },
-      { product: '08:00', 正向充电: 0, 反向充电: -30 },
-      { product: '09:00', 正向充电: 0, 反向充电: -31 },
-      { product: '10:00', 正向充电: 22.4, 反向充电: 0 },
-      { product: '11:00', 正向充电: 22.3, 反向充电: 0 },
-      { product: '12:00', 正向充电: 31.4, 反向充电: 0 },
-      { product: '13:00', 正向充电: 22.4, 反向充电: 0 },
-      { product: '14:00', 正向充电: 23.4, 反向充电: 0 },
-      { product: '15:00', 正向充电: 25.5, 反向充电: 0 },
-      { product: '16:00', 正向充电: 21.4, 反向充电: 0 },
-      { product: '17:00', 正向充电: 27.5, 反向充电: 0 },
-      { product: '18:00', 正向充电: 20.0, 反向充电: 0 },
-      { product: '19:00', 正向充电: 22.7, 反向充电: 0 },
-      { product: '20:00', 正向充电: 24.2, 反向充电: 0 },
-      { product: '21:00', 正向充电: 20.6, 反向充电: 0 },
-      { product: '22:00', 正向充电: 0, 反向充电: 28.8 },
-      { product: '23:00', 正向充电: 0, 反向充电: 23.5 },
+      { product: '00:00', straight_value: 0.5 },
+      { product: '01:00', straight_value: 0.5 },
+      { product: '02:00', straight_value: 0.5 },
+      { product: '03:00', straight_value: 0.5 },
+      { product: '04:00', straight_value: 0.5 },
+      { product: '05:00', straight_value: 0.5 },
+      { product: '06:00', straight_value: 0.5 },
+      { product: '07:00', straight_value: 0.5 },
+      { product: '08:00', straight_value: 0.5 },
+      { product: '09:00', straight_value: 0.7 },
+      { product: '10:00', straight_value: 0.9 },
+      { product: '11:00', straight_value: 1.0 },
+      { product: '12:00', straight_value: 1.3 },
+      { product: '13:00', straight_value: 1.3 },
+      { product: '14:00', straight_value: 1.2 },
+      { product: '15:00', straight_value: 1.2 },
+      { product: '16:00', straight_value: 1.1 },
+      { product: '17:00', straight_value: 1.5 },
+      { product: '18:00', straight_value: 1.7 },
+      { product: '19:00', straight_value: 1.6 },
+      { product: '20:00', straight_value: 1.4 },
+      { product: '21:00', straight_value: 1.3 },
+      { product: '22:00', straight_value: 1.2 },
+      { product: '23:00', straight_value: 1.0 },
     ],
   },
   xAxis: {
@@ -123,53 +133,38 @@ option.value = {
     splitLine: {
       show: false,
     },
-  },
-  yAxis: {
-    splitLine: {
+    axisTick: {
       show: false,
     },
   },
+  yAxis: {
+    name: '元/kWh',
+    nameTextStyle: {
+      lineHeight: 28,
+      padding: [0, 20, 0, 0],
+      fontSize: '10',
+      fontFamily: 'Microsoft YaHei',
+      fontWeight: 300,
+      color: '#D8D8D8',
+    },
+    splitLine: {
+      lineStyle: {
+        type: 'dashed',
+        color: '#1A242B',
+        width: 1,
+      },
+    },
+  },
+  color: 'rgba(40,124,231,0.6)',
   series: [
     {
       type: 'bar',
+      name: '正向充电',
       barWidth: 14,
       barGap: 0, //柱间距离
       itemStyle: {
-        // @ts-ignore
-        normal: {
-          show: true,
-          color: '#154F8B',
-          barBorderRadius: 0,
-          borderWidth: 0,
-        },
-      },
-      label: {
-        // @ts-ignore
-        normal: {
-          show: false,
-          position: 'top',
-        },
-      },
-    },
-    {
-      type: 'bar',
-      barWidth: 14,
-      barGap: 0, //柱间距离
-      itemStyle: {
-        // @ts-ignore
-        normal: {
-          show: true,
-          color: '#236A12',
-          barBorderRadius: 0,
-          borderWidth: 0,
-        },
-      },
-      label: {
-        // @ts-ignore
-        normal: {
-          show: false,
-          position: 'top',
-        },
+        borderWidth: 1,
+        borderColor: '#287CE7',
       },
     },
   ],
@@ -304,65 +299,101 @@ const tableData = ref([
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
+
   :deep(.el-table thead.is-group th.el-table__cell) {
     background-color: transparent !important;
   }
+
   .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
     background-color: transparent;
   }
+
+  :deep(.el-table) {
+    color: #eaf5ff !important;
+    --el-table-border-color: #151c26;
+    --el-table-row-hover-bg-color: #05070a;
+    --el-table-current-row-bg-color: #05070a;
+  }
+
+  :deep(.el-table thead) {
+    color: #eaf5ff;
+  }
+
+  :deep(.el-table--border .el-table__cell) {
+    border: 1px solid #151c26;
+  }
+
   .button-box {
     margin-left: 20px;
+
+    button {
+      width: 80px;
+      height: 32px;
+      background: rgba(0, 163, 255, 0.26) !important;
+      border: 1px solid #007bc0;
+      border-radius: 4px;
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #eaf5ff;
+    }
   }
+
   .time-button {
-    border-bottom: 1px solid #454e72;
-    padding: 16px 12px;
+    border-bottom: 1px solid #1d2634;
+    border-top: 1px solid #1d2634;
+    padding: 12px 0;
+    margin-top: 24px;
     display: flex;
   }
+
   :deep(.el-button--primary.is-plain) {
     background-color: transparent;
   }
+
   :deep(.el-table__header) {
     background-color: transparent;
   }
-  :deep(.el-table th.el-table__cell.is-leaf) {
-    border-left-color: rgb(144, 147, 153) !important;
-    border-right-color: rgb(144, 147, 153) !important;
-    background: transparent;
-  }
+
   :deep(.el-table th.el-table__cell.is-leaf) {
     background-color: transparent !important;
   }
-  //rgb(144, 147, 153)
-  :deep(.el-table td.el-table__cell) {
-    border-color: rgb(144, 147, 153) !important;
-  }
+
   :deep(.el-table tr, .el-table thead) {
     background-color: transparent;
   }
+
   :deep(.table-inner .el-table) {
     background-color: transparent;
   }
+
   :deep(.el-table tbody tr:hover > td) {
     background-color: transparent !important; //修改成自己想要的颜色即可
   }
+
   .content-box {
-    padding: 16px 12px;
+    padding: 20px 0px 26px 30px;
     display: flex;
+
     .my-content {
       display: flex;
       background-color: #141c27;
       padding: 12px 0;
-      color: #fff;
+      width: 249px;
+      height: 80px;
+      color: #b3b4b6;
+      box-sizing: border-box;
+
       .border-number {
-        border-right: 1px solid #eee;
+        border-right: 1px solid #434952;
       }
-      &:first-child {
-        margin-right: 30px;
-      }
+
       div {
-        padding: 0 12px;
+        padding: 0 9px;
         min-width: 80px;
+        text-align: center;
       }
+
       .big-number {
         font-weight: 700;
         font-size: 22px;
@@ -371,14 +402,31 @@ const tableData = ref([
       }
     }
   }
+
   .eCharts {
     margin-bottom: 20px;
     height: 300px;
     width: 100%;
-    .charts {
-      width: 100%;
-      height: 300px;
+
+    .tit {
+      margin-left: 30px;
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #eaf5ff;
     }
+
+    .charts {
+      width: calc(100% - 60px);
+      height: 270px;
+      margin: 0px 30px;
+      background: rgba(9, 15, 23, 0.3);
+      border: 1px solid #212c3c;
+    }
+  }
+
+  .table-inner {
+    padding: 0px 30px;
   }
 }
 </style>

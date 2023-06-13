@@ -13,10 +13,22 @@
 
     <div class="chart-pv">
       <div class="chart-left">
-        <EdomsCharts class="charts" :option="option"></EdomsCharts>
+        <div class="tit">设备剩余寿命</div>
+        <div class="charts" style="position: relative">
+          <ElButton class="upbut" size="small" type="primary" :icon="ArrowUp" plain @click="backEchartData"></ElButton>
+          <EdomsCharts style="height: 100%" :option="option"></EdomsCharts>
+          <ElButton
+            class="downbut"
+            size="small"
+            type="primary"
+            :icon="ArrowDown"
+            plain
+            @click="nextEchartData"
+          ></ElButton>
+        </div>
       </div>
       <div class="chart-right">
-        <span class="all-num">200</span>
+        <div class="tit">设备状态</div>
         <EdomsCharts class="charts" :option="optionPie"></EdomsCharts>
       </div>
     </div>
@@ -39,6 +51,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { ArrowDown, ArrowUp } from '@element-plus/icons-vue';
+
+import { ElButton } from '@edoms/design';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
@@ -48,30 +63,34 @@ import TimeCalendar from './TimeCalendar.vue';
 const timeType = ref<string>('date');
 const option = ref<ECOption>({});
 const optionPie = ref<ECOption>({});
+const ydata = ref([
+  '1-9充电桩',
+  '1-8充电桩',
+  '1-7充电桩',
+  '1-6充电桩',
+  '1-5充电桩',
+  '1-4充电桩',
+  '1-3充电桩',
+  '1-2充电桩',
+  '1-1充电桩',
+]);
+const valData = ref([580, 900, 150, 750, 600, 500, 650, 850, 800]);
 option.value = {
-  backgroundColor: '#030507',
-  title: {
-    text: '设备剩余寿命',
-    textStyle: {
-      color: '#fff',
-    },
-  },
   tooltip: {
     trigger: 'axis',
-    axisPointer: {
-      type: 'shadow',
-    },
   },
   legend: {},
 
   grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
+    top: '10%',
+    left: '5%',
+    right: '5%',
+    bottom: '5%',
     containLabel: true,
   },
   xAxis: {
     type: 'value',
+    name: '(h)',
     splitLine: {
       show: false,
     },
@@ -85,23 +104,16 @@ option.value = {
     splitLine: {
       show: false,
     },
-    data: [
-      '1-1充电桩',
-      '1-2充电桩',
-      '1-3充电桩',
-      '1-4充电桩',
-      '1-5充电桩',
-      '1-6充电桩',
-      '1-7充电桩',
-      '1-8充电桩',
-      '1-9充电桩',
-    ].reverse(),
+    axisTick: {
+      show: false,
+    },
+    data: ydata.value,
   },
   series: [
     {
       type: 'bar',
       itemStyle: {
-        // color:'#1C6F0F',
+        borderWidth: 1,
         color: function (p) {
           if (p.name === '1-7充电桩') {
             return '#975602';
@@ -118,8 +130,8 @@ option.value = {
         distance: 15, // 距离
         //formatter: '{c}%' // 这里是数据展示的时候显示的数据
       },
-      data: [800, 850, 650, 500, 600, 750, 150, 900, 580].reverse(),
-      barWidth: 16,
+      data: valData.value,
+      barWidth: 12,
       barGap: 70,
     },
   ],
@@ -140,21 +152,21 @@ const data1 = [
   },
 ];
 optionPie.value = {
-  backgroundColor: '#030507',
   title: {
-    text: '设备状态',
+    text: '200',
     textStyle: {
-      color: '#fff',
+      color: '#EAF5FF',
     },
+    top: 'center',
+    left: 'center',
   },
   tooltip: {
     trigger: 'axis',
-    axisPointer: {
-      type: 'shadow',
-    },
   },
   legend: {
     bottom: 10,
+    itemWidth: 14,
+    itemHeight: 14,
     textStyle: {
       color: '#fff',
     },
@@ -179,6 +191,10 @@ optionPie.value = {
       label: {
         show: true,
         position: 'outside',
+        fontSize: 14,
+        fontWeight: 'normal',
+        color: 'inherit',
+        borderColor: 'transparent',
         formatter: function (params) {
           if (params.name !== '') {
             return params.name + '\n' + '\n' + params.value;
@@ -313,67 +329,172 @@ const tableData = ref([
     state: '投运中',
   },
 ]);
+// 上一条柱状图数据
+const backEchartData = () => {
+  if (ydata.value[ydata.value.length - 1].split('-')[1].split('充')[0] === '1') {
+    return;
+  }
+  ydata.value.shift();
+  ydata.value.push('1-' + (Number(ydata.value[ydata.value.length - 1].split('-')[1].split('充')[0]) - 1) + '充电桩');
+  valData.value.shift();
+  valData.value.push(Math.round(Math.random() * 1000));
+};
+// 下一条柱状图数据
+const nextEchartData = () => {
+  ydata.value.pop();
+  ydata.value.unshift('1-' + (Number(ydata.value[0].split('-')[1].split('充')[0]) + 1) + '充电桩');
+  valData.value.pop();
+  valData.value.unshift(Math.round(Math.random() * 1000));
+};
 </script>
 
 <style lang="scss" scoped>
 .operations-analysis-pv {
   box-sizing: border-box;
-  padding: 10px;
   width: 100%;
   height: 100%;
   overflow: auto;
+
+  .other {
+    border-bottom: 1px solid #1d2634;
+    border-top: 1px solid #1d2634;
+    padding: 12px 0;
+    margin-top: 24px;
+    display: flex;
+  }
+
   .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
     background-color: transparent;
   }
+
   :deep(.el-button--primary.is-plain) {
     background-color: transparent;
   }
+
   :deep(.el-table__header) {
     background-color: transparent;
   }
-  :deep(.el-table th.el-table__cell.is-leaf) {
-    border-left-color: rgb(144, 147, 153) !important;
-    border-right-color: rgb(144, 147, 153) !important;
-    background: transparent;
-  }
+
   :deep(.el-table th.el-table__cell.is-leaf) {
     background-color: transparent !important;
   }
-  //rgb(144, 147, 153)
-  :deep(.el-table td.el-table__cell) {
-    border-color: rgb(144, 147, 153) !important;
-  }
+
   :deep(.el-table tr, .el-table thead) {
     background-color: transparent;
   }
+
   :deep(.table-inner .el-table) {
     background-color: transparent;
   }
+
   :deep(.el-table tbody tr:hover > td) {
     background-color: transparent !important; //修改成自己想要的颜色即可
   }
-  .button-box {
-    margin-left: 50px;
+
+  :deep(.el-table) {
+    color: #eaf5ff !important;
+    --el-table-border-color: #151c26;
+    --el-table-row-hover-bg-color: #05070a;
+    --el-table-current-row-bg-color: #05070a;
   }
+
+  :deep(.el-table thead) {
+    color: #eaf5ff;
+  }
+
+  :deep(.el-table--border .el-table__cell) {
+    border: 1px solid #151c26;
+  }
+
+  :deep(.el-scrollbar__view) {
+    height: 100%;
+  }
+
+  :deep(.el-table__body) {
+    height: 100%;
+  }
+
+  .button-box {
+    margin-left: 20px;
+
+    button {
+      width: 80px;
+      height: 32px;
+      background: rgba(0, 163, 255, 0.26) !important;
+      border: 1px solid #007bc0;
+      border-radius: 4px;
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #eaf5ff;
+    }
+  }
+
   .chart-pv {
     margin-top: 20px;
     width: 100%;
-    height: 400px;
+    height: 480px;
     //background: red;
     display: flex;
     justify-content: space-between;
+
     .chart-left,
     .chart-right {
       width: 49%;
       height: 100%;
+      margin: 0px 30px;
+
+      .tit {
+        font-size: 16px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #eaf5ff;
+      }
+
       //background: greenyellow;
       .charts {
         width: 100%;
-        height: 400px;
+        height: 440px;
+        background: rgba(9, 15, 23, 0.3);
+        border: 1px solid #212c3c;
+
+        .upbut {
+          position: absolute;
+          left: 40px;
+          top: 20px;
+          width: 50px;
+          height: 20px;
+          background: rgba(0, 163, 255, 0.4);
+          border-radius: 2px;
+          text-align: center;
+          line-height: 20px;
+          z-index: 999;
+          color: #eaf5ff;
+          cursor: pointer;
+          border: 0;
+        }
+
+        .downbut {
+          position: absolute;
+          left: 40px;
+          bottom: 20px;
+          width: 50px;
+          height: 20px;
+          background: rgba(0, 163, 255, 0.4);
+          border-radius: 2px;
+          text-align: center;
+          line-height: 20px;
+          z-index: 999;
+          color: #eaf5ff;
+          cursor: pointer;
+          border: 0;
+        }
       }
     }
+
     .chart-right {
       position: relative;
+
       .all-num {
         position: absolute;
         left: 50%;
@@ -383,8 +504,9 @@ const tableData = ref([
       }
     }
   }
+
   .table-inner {
-    margin-top: 20px;
+    margin: 20px 30px 0px;
   }
 }
 </style>

@@ -41,6 +41,18 @@ const indicatorTypes = [
     text: '辐照量',
     value: MEconomicIndicator.EXPOSURE,
   },
+  {
+    text: '累计充电量',
+    value: MEconomicIndicator.Accumulated_Charging_apacity,
+  },
+  {
+    text: '日充电量',
+    value: MEconomicIndicator.Daily_Charging_apacity,
+  },
+  {
+    text: '日充电次数',
+    value: MEconomicIndicator.Daily_Charging_Times,
+  },
 ];
 
 export default async (request: Request) => [
@@ -69,7 +81,6 @@ export default async (request: Request) => [
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加指标',
-    maxItems: 10,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {

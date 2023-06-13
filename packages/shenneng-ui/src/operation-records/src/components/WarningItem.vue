@@ -1,7 +1,13 @@
 <template>
   <div class="warning-wrapper">
     <div class="warning-item" @click="handleShowSurplus(item)">
-      <span class="warning-title">{{ item.content }}</span>
+      <span class="warning-title">
+        <LongText
+          :content="item.content"
+          :content-style="{ width: 'inherit', fontSize: 'inherit', textAlign: 'center' }"
+        >
+        </LongText>
+      </span>
       <span class="warning-date">{{ item.time }}</span>
       <span class="discover">
         <img v-show="item.expend" src="../assets/to-not-col.png" />
@@ -19,6 +25,7 @@
 <script lang="ts" setup>
 import { computed, inject, Ref } from 'vue';
 
+import LongText from '../../../LongText.vue';
 // import { ElButton } from '@edoms/design';
 import { ClassName } from '../type';
 export interface Warning {
@@ -90,7 +97,7 @@ const warningBgColor = computed(() => bgColorList[textColor.value]);
 
     .warning-title {
       overflow: hidden;
-      white-space: nowrap;
+      // white-space: nowrap;
       text-overflow: ellipsis;
     }
 

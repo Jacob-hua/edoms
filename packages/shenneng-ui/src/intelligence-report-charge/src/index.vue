@@ -117,11 +117,29 @@ const getData = (symbol: string) => {
   padding: 0 !important;
   width: 124px;
   height: 32px;
+  margin-right: 30px;
   color: #eaf5ff;
   text-align: center;
   line-height: 32px;
   background: #00111a;
   border: none;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 20px;
+    background-color: #00a3ff;
+    opacity: 0.4;
+  }
+
+  &:last-child::before {
+    content: none;
+  }
 }
 
 :deep(.frist-tab > .el-tabs--card > .el-tabs__header .el-tabs__item) {
@@ -291,12 +309,13 @@ const getData = (symbol: string) => {
       .content-data {
         width: 100%;
         height: calc(100% - 52px);
-        padding: 30px;
+        padding: 30px 0px;
         box-sizing: border-box;
 
         .frist-tab {
           width: 100%;
           height: 34px;
+          margin-left: 30px;
         }
 
         .select-gro {
@@ -312,6 +331,7 @@ const getData = (symbol: string) => {
             display: flex;
             width: 100%;
             height: 100%;
+
             p {
               font-size: 16px;
               font-family: Microsoft YaHei;
