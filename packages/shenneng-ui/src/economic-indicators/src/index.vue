@@ -35,6 +35,9 @@ import ConsumptionImg from './assets/energy_consumption.png';
 import ExposureImg from './assets/exposure.png';
 import HeatEnergyImg from './assets/heat_energy.png';
 import HumidityImg from './assets/humidity.png';
+import Accumulated_ChargingImg from './assets/leijichongdian .png';
+import Daily_ChargingImg from './assets/richongdian.png';
+import Daily_TimesImg from './assets/ricishu.png';
 import TemperatureImg from './assets/temperature.png';
 import WaterImg from './assets/water.png';
 import apiFactory from './api';
@@ -130,6 +133,9 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     [MEconomicIndicator.HUMIDITY]: HumidityImg,
     [MEconomicIndicator.EXPOSURE]: ExposureImg,
     [MEconomicIndicator.WATER_CONSUMPTION]: WaterImg,
+    [MEconomicIndicator.Accumulated_Charging_apacity]: Accumulated_ChargingImg,
+    [MEconomicIndicator.Daily_Charging_apacity]: Daily_ChargingImg,
+    [MEconomicIndicator.Daily_Charging_Times]: Daily_TimesImg,
   };
   return iconClassify[type];
 }

@@ -122,7 +122,7 @@ defineExpose({
         font-family: MicrosoftYaHei;
       }
       .value-unit {
-        width: 17%;
+        width: 25%;
         height: 40px;
         font-size: 14px;
         line-height: 40px;
@@ -135,7 +135,7 @@ defineExpose({
         }
       }
       .font-value-turn {
-        width: 30%;
+        width: 25%;
         height: 40px;
         font-size: 14px;
         line-height: 40px;

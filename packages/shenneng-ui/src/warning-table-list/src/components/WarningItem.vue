@@ -2,7 +2,10 @@
   <div class="warning-wrapper">
     <div class="warning-item" @click="handleShowSurplus(item)">
       <span class="warning-type">{{ item.type }}</span>
-      <span class="warning-title">{{ item.title }}</span>
+      <span class="warning-title">
+        <LongText :content="item.title" :content-style="{ width: 'inherit', fontSize: 'inherit', textAlign: 'center' }">
+        </LongText>
+      </span>
       <span class="warning-date">{{ formatDate(item.date, 'MM-DD HH:mm') }}</span>
       <span class="discover">
         <img v-show="item.expend" src="../assets/to-not-col.png" />
@@ -11,9 +14,6 @@
     </div>
     <div v-if="item.expend" class="body">
       <div class="warning-detail">
-        <div class="warning-device">
-          {{ item.title }}
-        </div>
         <div class="warning-content">{{ item.content }}</div>
       </div>
       <div class="button-container">
@@ -32,6 +32,7 @@ import { computed, inject, Ref } from 'vue';
 import { ElButton } from '@edoms/design';
 import { formatDate } from '@edoms/utils';
 
+import LongText from '../../../LongText.vue';
 import { ClassName } from '../type';
 export interface Warning {
   // 告警Id
@@ -130,10 +131,10 @@ const handleConfirm = async (alarm: Warning) => {
     .warning-title {
       width: 120px;
       text-overflow: ellipsis;
-      white-space: nowrap;
       overflow: hidden;
     }
   }
+
   .button-wrapper {
     display: flex;
     justify-content: flex-end;
@@ -143,6 +144,7 @@ const handleConfirm = async (alarm: Warning) => {
       --el-button-border-color: #1173ec;
       --el-button-text-color: #c4e5f8;
     }
+
     :deep(.el-button) {
       --el-button-bg-color: #00a3ff10;
       border: 1px solid #083149;
@@ -151,6 +153,7 @@ const handleConfirm = async (alarm: Warning) => {
       line-height: 24px;
     }
   }
+
   .body {
     display: flex;
     flex-direction: column;
@@ -159,8 +162,8 @@ const handleConfirm = async (alarm: Warning) => {
     border-bottom: 1px solid rgba(0, 163, 255, 0.14);
 
     .warning-detail {
-      display: grid;
-      grid-template-columns: 1fr 3fr;
+      // display: grid;
+      // grid-template-columns: 1fr 3fr;
       width: 95%;
       margin-bottom: 18px;
 

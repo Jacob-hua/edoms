@@ -19,6 +19,12 @@ export enum MEconomicIndicator {
   HUMIDITY = 'humidity',
   /** 辐照量 */
   EXPOSURE = 'exposure',
+  /** 累计充电量 */
+  Accumulated_Charging_apacity = 'leijichongdian',
+  /** 日充电量 */
+  Daily_Charging_apacity = 'richongdian',
+  /** 累计充电量 */
+  Daily_Charging_Times = 'ricishu',
 }
 
 export interface MIndicatorItemConfig {
