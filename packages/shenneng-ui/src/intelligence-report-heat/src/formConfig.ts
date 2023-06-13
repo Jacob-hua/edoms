@@ -3,13 +3,13 @@
  * @Author: lihao
  * @Date: 2023-04-25 11:03:11
  * @LastEditors: lihao
- * @LastEditTime: 2023-05-04 13:50:41
+ * @LastEditTime: 2023-06-13 11:25:23
  */
-import { Request } from '@edoms/editor';
+// import { Request } from '@edoms/editor';
 
-import useInstanceConfig from '../../useInstanceConfig';
+// import useInstanceConfig from '../../useInstanceConfig';
 
-export default async (request: Request) => [
+export default async () => [
   {
     text: '标题',
     name: 'title',
@@ -25,7 +25,7 @@ export default async (request: Request) => [
     append: 's',
   },
   /** 注入业务组件的共通字段 */
-  ...(await useInstanceConfig(request, 'intelligence-report-heat')),
+  //   ...(await useInstanceConfig(request, 'intelligence-report-heat')),
   {
     text: '建筑',
     name: 'buildings',
@@ -40,7 +40,7 @@ export default async (request: Request) => [
         name: 'label',
         defaultValue: '',
       },
-      ...(await useInstanceConfig(request, 'intelligence-report-heat')),
+      //   ...(await useInstanceConfig(request, 'intelligence-report-heat')),
     ],
   },
 ];
