@@ -44,39 +44,45 @@ export const fillBackgroundImage = (value: string) => {
 
 export const isNumber = (value: string) => /^(-?\d+)(\.\d+)?$/.test(value);
 
-export const calculateMethodProps = (
-  fromCpt: Node,
-  eventConfig: EventItemConfig,
-  eventArgs?: EventArgs
-): MethodProps => {
+export interface CalculateMethodPropsArgs {
+  fromCpt: Node;
+  eventConfig: EventItemConfig;
+  toCpt?: Node;
+  eventArgs?: EventArgs;
+}
+
+export const calculateMethodProps = ({
+  fromCpt,
+  eventConfig,
+  toCpt,
+  eventArgs,
+}: CalculateMethodPropsArgs): MethodProps => {
   const { mappings } = eventConfig;
   if (!mappings) {
     return {};
   }
 
   return mappings.reduce(
-    (props, mapping: MappingStruct) => ({ ...props, [mapping.target]: computeTarge(fromCpt, mapping, eventArgs) }),
+    (props, mapping: MappingStruct) => ({
+      ...props,
+      [mapping.target]: computeTarge(mapping, eventArgs),
+    }),
     {} as MethodProps
   );
 
-  function computeTarge(fromCpt: Node, mapping: MappingStruct, eventArgs?: EventArgs): any {
-    const appStore = fromCpt.app.store;
-    const pageStore = fromCpt.page?.store ?? {};
-    const cptStore = fromCpt.store;
+  function computeTarge(mapping: MappingStruct, eventArgs?: EventArgs): any {
+    const from = fromCpt.instance ?? {};
+    const to = toCpt?.instance ?? {};
 
     const mappingClassify = {
-      [ValueSpace.APP]: ({ source }: MappingStruct) => source && fromCpt.app.store.get(source),
-      [ValueSpace.PAGE]: ({ source }: MappingStruct) => source && fromCpt.page?.store.get(source),
-      [ValueSpace.COMPONENT]: ({ source }: MappingStruct) => source && fromCpt.store.get(source),
       [ValueSpace.CONST]: () => mapping.const,
       [ValueSpace.EVENT]: ({ source }: MappingStruct) => source && eventArgs?.[source],
       [ValueSpace.EXPRESSION]: ({ expression }: MappingStruct) =>
-        new Function('app, page, cpt, event', `return ${expression ?? ''}`)(appStore, pageStore, cptStore, eventArgs),
+        new Function('from, to, event', `return ${expression ?? ''}`)(from, to, eventArgs),
       [ValueSpace.TEMPLATE]: ({ template }: MappingStruct) =>
         dots.template(template ?? '')({
-          app: appStore,
-          page: pageStore,
-          cpt: cptStore,
+          from,
+          to,
           event: eventArgs,
         }),
     };
