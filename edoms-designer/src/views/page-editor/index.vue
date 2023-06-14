@@ -119,7 +119,6 @@ useAsyncLoadJS(
 ).execute();
 
 const staticResource = ref<Map<Id, Set<string>>>(new Map());
-
 const menu = computed<MenuBarData>(() => ({
   left: [
     {
@@ -349,6 +348,7 @@ watch(
         const result = await fileUploadExecute(props.data as File, props.data?.name, props.data?.type);
         if (result) {
           const values = staticResource.value.get(props.formValue?.id) ?? new Set<string>();
+          values.clear();
           values.add(result);
           staticResource.value.set(props.formValue?.id, values);
         }
@@ -401,7 +401,6 @@ async function uploadDsl(): Promise<string | null | undefined> {
     space: 2,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
-
   return await uploadExecute(
     DSL,
     `dsl.js`,
