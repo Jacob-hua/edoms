@@ -69,15 +69,20 @@ const switchNext = provideMethod('switchNext', () => {
   activeImgIndex.value += 1;
 });
 
-provideMethod('jumpTo', ({ num }) => {
-  if (num > imgs.value.length - 1) {
-    activeImgIndex.value = imgs.value.length - 1;
-  } else if (num < 0) {
-    activeImgIndex.value = 0;
-  } else {
-    activeImgIndex.value = num;
-  }
-});
+provideMethod(
+  'jumpTo',
+  ({ num }) => {
+    console.log(num, 'num---');
+    if (num > imgs.value.length - 1) {
+      activeImgIndex.value = imgs.value.length - 1;
+    } else if (num < 0) {
+      activeImgIndex.value = 0;
+    } else {
+      activeImgIndex.value = num;
+    }
+  },
+  ['num']
+);
 
 defineExpose({
   switchPre,

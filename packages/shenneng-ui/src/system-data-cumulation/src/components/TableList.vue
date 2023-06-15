@@ -3,15 +3,21 @@
     <div v-for="(itm, idx) in tableData" :key="idx" class="table-item-list">
       <div class="left-ft"></div>
       <div class="right-content">
-        <div class="name">{{ itm.label }}</div>
+        <div class="name">
+          <LongText :content="itm.label ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
+        </div>
         <div class="value-unit">
-          <span class="value">{{ itm.dataValue ?? '--' }}</span>
+          <span class="value">
+            <LongText :content="itm.dataValue ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
+          </span>
           <span class="unit">{{ itm.unit }}</span>
         </div>
         <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'QOQ'" class="font-value-turn">
           <span class="font">{{ `${state.dateType}环比` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
-          <span class="value-to" :style="{ color: getStyle(itm, 'qoqTrend') }">{{ itm.qoqRatio }}%</span>
+          <span class="value-to" :style="{ color: getStyle(itm, 'qoqTrend') }">
+            <LongText :content="itm.qoqRatio + '%' ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
+          </span>
           <span v-show="itm.qoqTrend === 'flat'" class="turn-flat">--</span>
           <span v-show="itm.qoqTrend === 'up'" class="turn-up"></span>
           <span v-show="itm.qoqTrend === 'down'" class="turn-down"></span>
@@ -19,7 +25,9 @@
         <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'YOY'" class="font-value-turn">
           <span class="font">{{ `${state.dateType}同比` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
-          <span class="value-to" :style="{ color: getStyle(itm, 'yoyTrend') }">{{ itm.yoyRatio }}%</span>
+          <span class="value-to" :style="{ color: getStyle(itm, 'yoyTrend') }">
+            <LongText :content="itm.yoyRatio + '%' ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
+          </span>
           <span v-show="itm.yoyTrend === 'flat'" class="turn-flat">--</span>
           <span v-show="itm.yoyTrend === 'up'" class="turn-up"></span>
           <span v-show="itm.yoyTrend === 'down'" class="turn-down"></span>
@@ -32,6 +40,7 @@
 <script setup lang="ts">
 import { computed, reactive, withDefaults } from 'vue';
 
+import LongText from '../../../LongText.vue';
 import { Category } from '../type';
 
 interface CumulativeList extends Category {
@@ -126,12 +135,16 @@ defineExpose({
         height: 40px;
         font-size: 14px;
         line-height: 40px;
+        margin-left: 5px;
+        display: flex;
         .value {
           margin-right: 5px;
           color: rgba(0, 255, 240, 1);
+          width: 50%;
         }
         .unit {
           color: rgba(196, 229, 248, 1);
+          width: 50%;
         }
       }
       .font-value-turn {
@@ -142,6 +155,7 @@ defineExpose({
         display: flex;
         .value-to {
           margin: 0 5px;
+          width: 25%;
         }
         .turn-up {
           display: block;
