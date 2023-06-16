@@ -6,12 +6,16 @@ import ElDesign from '@edoms/design';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
 import { toLine } from '@edoms/utils';
 
+import i18n from '../lang';
+
 import App from './App.vue';
 
 import 'element-plus/theme-chalk/index.css';
 
 Promise.all([import('../.edoms/comp-entry'), import('../.edoms/plugin-entry')]).then(([components, plugins]) => {
   const edomsApp = createApp(App);
+
+  edomsApp.use(i18n);
 
   edomsApp.use(ElementPlus, {
     locale: zhCn,
