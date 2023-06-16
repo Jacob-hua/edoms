@@ -1,10 +1,3 @@
-/*
- * @Description:
- * @Author: lihao
- * @Date: 2023-04-18 13:24:10
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 10:04:30
- */
 import { createApp, defineAsyncComponent } from 'vue';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -16,6 +9,7 @@ import { toLine } from '@edoms/utils';
 
 import components from '../.edoms/async-comp-entry';
 import plugins from '../.edoms/plugin-entry';
+import { i18n } from '../locales';
 
 import request from './utils/request';
 import AppComponent from './App.vue';
@@ -25,6 +19,8 @@ import 'element-plus/theme-chalk/index.css';
 const edomsApp = createApp(AppComponent);
 
 edomsApp.use(request);
+
+edomsApp.use(i18n);
 
 edomsApp.use(ElementPlus, {
   locale: zhCn,

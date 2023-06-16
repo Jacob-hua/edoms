@@ -20,7 +20,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>三相不平衡</span>
+                  <span>{{ $t('electricEnergyQuality["三相不平衡"]') }}</span>
                 </span>
               </template>
               <ThreePhaseUnbalance :config="config"></ThreePhaseUnbalance>
