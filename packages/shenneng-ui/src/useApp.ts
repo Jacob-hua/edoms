@@ -48,11 +48,27 @@ export const useApp = (props: any) => {
     return callback;
   }
 
+  function t(str: string): string {
+    if (!app) {
+      return str;
+    }
+    return app.t(str);
+  }
+
+  function setMessage(message: Record<string, any>): void {
+    if (!app) {
+      return;
+    }
+    app.setMessage(message);
+  }
+
   return {
     app,
     node,
     provideMethod,
     request,
+    t,
+    setMessage,
   };
 };
 

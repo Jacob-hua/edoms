@@ -20,7 +20,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>三相不平衡</span>
+                  <span>{{ t('三相不平衡') }}</span>
                 </span>
               </template>
               <ThreePhaseUnbalance :config="config"></ThreePhaseUnbalance>
@@ -51,14 +51,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
+import useApp from '../../useApp';
+
 import PowerFactor from './component/PowerFactor.vue';
 import ThreePhaseUnbalance from './component/ThreePhaseUnbalance.vue';
 import VoltagAnalysis from './component/VoltagAnalysis.vue';
+import locales from './locales';
 import { ElectricEnergyQuality } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
+
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
 
 const showElectric = ref<boolean>(false);
 const changeElectric = (e: any, val: boolean) => {
