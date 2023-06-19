@@ -24,7 +24,10 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue';
 
+import useI18n from '../../../useI18n';
 import { MEnergyMonitoring } from '../type';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   config: MEnergyMonitoring;
@@ -32,7 +35,7 @@ const props = defineProps<{
 
 const legend = ref<any[]>([
   {
-    name: '中等',
+    name: t('中等'),
     data: {
       minValue: 1,
       maxValue: 2,
@@ -40,7 +43,7 @@ const legend = ref<any[]>([
     },
   },
   {
-    name: '良好',
+    name: t('良好'),
     data: {
       minValue: 2,
       maxValue: 3,
@@ -48,7 +51,7 @@ const legend = ref<any[]>([
     },
   },
   {
-    name: '优异',
+    name: t('优异'),
     data: {
       minValue: 3,
       maxValue: 4,

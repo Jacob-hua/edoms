@@ -10,12 +10,15 @@
     <div class="level-top">
       <div class="level-value overflow-ellipsis">{{ getCurrentLevel() }}</div>
     </div>
-    <div class="level-bottom">能效等级</div>
+    <div class="level-bottom">{{ t('能效等级') }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import useI18n from '../../../useI18n';
 import { MEnergyMonitoring } from '../type';
+
+const { t } = useI18n();
 const props = defineProps<{
   config: MEnergyMonitoring;
   actualValue: number;
