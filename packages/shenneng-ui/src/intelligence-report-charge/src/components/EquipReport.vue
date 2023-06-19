@@ -6,14 +6,14 @@
       </div>
 
       <div class="button-box">
-        <el-button size="small" type="primary" plain>查询</el-button>
-        <el-button size="small" type="primary" plain>导出</el-button>
+        <el-button size="small" type="primary" plain>{{ t('查询') }}</el-button>
+        <el-button size="small" type="primary" plain>{{ t('导出') }}</el-button>
       </div>
     </div>
 
     <div class="chart-pv">
       <div class="chart-left">
-        <div class="tit">设备剩余寿命</div>
+        <div class="tit">{{ t('设备剩余寿命') }}</div>
         <div class="charts" style="position: relative">
           <ElButton class="upbut" size="small" type="primary" :icon="ArrowUp" plain @click="backEchartData"></ElButton>
           <EdomsCharts style="height: 100%" :option="option"></EdomsCharts>
@@ -28,22 +28,22 @@
         </div>
       </div>
       <div class="chart-right">
-        <div class="tit">设备状态</div>
+        <div class="tit">{{ t('设备状态') }}</div>
         <EdomsCharts class="charts" :option="optionPie"></EdomsCharts>
       </div>
     </div>
 
     <div class="table-inner">
       <el-table border :data="tableData" size="mini" highlight-current-row height="50vh" fit style="width: 100%">
-        <el-table-column label="充电桩" prop="index" align="center" />
-        <el-table-column label="设备编码" prop="code" align="center" />
-        <el-table-column width="170" label="设备名称" prop="name" align="center" />
-        <el-table-column label="整机效率" prop="efficiency" align="center" />
-        <el-table-column label="设备健康率" prop="healthy" align="center" />
-        <el-table-column width="160" label="联系人" prop="connect" align="center" />
-        <el-table-column label="设计寿命(h)" prop="designLife" align="center" />
-        <el-table-column label="剩余寿命(h)" prop="restLife" align="center" />
-        <el-table-column label="设备状态" prop="state" align="center" />
+        <el-table-column :label="t('充电桩')" prop="index" align="center" />
+        <el-table-column :label="t('设备编码')" prop="code" align="center" />
+        <el-table-column width="170" :label="t('设备名称')" prop="name" align="center" />
+        <el-table-column :label="t('整机效率')" prop="efficiency" align="center" />
+        <el-table-column :label="t('设备健康率')" prop="healthy" align="center" />
+        <el-table-column width="160" :label="t('联系人')" prop="connect" align="center" />
+        <el-table-column :label="t('设计寿命h')" prop="designLife" align="center" />
+        <el-table-column :label="t('剩余寿命h')" prop="restLife" align="center" />
+        <el-table-column :label="t('设备状态')" prop="state" align="center" />
       </el-table>
     </div>
   </div>
@@ -57,8 +57,11 @@ import { ElButton } from '@edoms/design';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
 
 import TimeCalendar from './TimeCalendar.vue';
+
+const { t } = useI18n();
 
 const timeType = ref<string>('date');
 const option = ref<ECOption>({});
@@ -139,15 +142,15 @@ option.value = {
 const colorList = ['#9B5703', '#03659D', '#246B15'];
 const data1 = [
   {
-    name: '投运中',
+    name: t('投运中'),
     value: 85,
   },
   {
-    name: '未投运',
+    name: t('未投运'),
     value: 60,
   },
   {
-    name: '报废',
+    name: t('报废'),
     value: 55,
   },
 ];

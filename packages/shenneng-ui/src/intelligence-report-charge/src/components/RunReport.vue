@@ -4,8 +4,8 @@
       <TimeCalendar :option="timeType"></TimeCalendar>
 
       <div class="button-box">
-        <el-button size="small" type="primary" plain>查询</el-button>
-        <el-button size="small" type="primary" plain>导出</el-button>
+        <el-button size="small" type="primary" plain>{{ t('查询') }}</el-button>
+        <el-button size="small" type="primary" plain>{{ t('导出') }}</el-button>
       </div>
     </div>
 
@@ -13,23 +13,23 @@
       <div class="my-content">
         <div>
           <div style="height: 50%"><span class="big-number">2560</span><span>kWh</span></div>
-          <div style="height: 50%">累计充电</div>
+          <div style="height: 50%">{{ t('累计充电') }}</div>
         </div>
 
         <div class="border-div">
           <div style="height: 50%"><span class="big-number">420</span><span>次</span></div>
-          <div style="height: 50%">充电次数</div>
+          <div style="height: 50%">{{ t('充电次数') }}</div>
         </div>
 
         <div>
           <div style="height: 50%"><span class="big-number">110</span><span>h</span></div>
-          <div style="height: 50%">充电时长</div>
+          <div style="height: 50%">{{ t('充电时长') }}</div>
         </div>
       </div>
     </div>
 
     <div class="eCharts">
-      <div class="tit">充电量分析</div>
+      <div class="tit">{{ t('充电量分析') }}</div>
       <EdomsCharts class="charts" :option="option"></EdomsCharts>
     </div>
 
@@ -44,23 +44,23 @@
         fit
         style="width: 100%; height: 100%"
       >
-        <el-table-column fixed label="充电桩" prop="name" align="center" width="180" />
-        <el-table-column label="采集时间" prop="date" align="center" width="180" />
-        <el-table-column label="AC-DC功率(kW)" prop="A_power" align="center" width="180" />
-        <el-table-column label="AC-DC输入电压(v)" prop="A_input_voltage" align="center" width="180" />
-        <el-table-column label="AC-DC输入电流(A)" prop="A_input_current" align="center" width="180" />
-        <el-table-column label="AC-DC输出电压(v)" prop="A_output_voltage" align="center" width="180" />
-        <el-table-column label="AC-DC输出电流(A)" prop="A_output_current" align="center" width="180" />
-        <el-table-column label="充电量(kWh)" prop="charging_capacity" align="center" width="180" />
-        <el-table-column label="充电次数" prop="chargingCycles" align="center" width="180" />
-        <el-table-column label="充电时长(h)" prop="duration" align="center" width="180" />
-        <el-table-column label="DC-AC功率(kW)" prop="D_power" align="center" width="180" />
-        <el-table-column label="DC-AC输入电压(v)" prop="D_input_voltage" align="center" width="180" />
-        <el-table-column label="DC-AC输入电流(A)" prop="D_input_current" align="center" width="180" />
-        <el-table-column label="DC-AC输出电压(v)" prop="D_output_voltage" align="center" width="180" />
-        <el-table-column label="DC-AC输出电流(A)" prop="D_output_current" align="center" width="180" />
-        <el-table-column label="反向充电量(kWh)" prop="inCharging_capacity" align="center" width="180" />
-        <el-table-column label="反向充电次数" prop="inChargingCycles" align="center" width="180" />
+        <el-table-column fixed :label="t('充电桩')" prop="name" align="center" width="180" />
+        <el-table-column :label="t('采集时间')" prop="date" align="center" width="180" />
+        <el-table-column :label="t('AC_DC功率')" prop="A_power" align="center" width="180" />
+        <el-table-column :label="t('AC_DC输入电压')" prop="A_input_voltage" align="center" width="180" />
+        <el-table-column :label="t('AC_DC输入电流')" prop="A_input_current" align="center" width="180" />
+        <el-table-column :label="t('AC_DC输出电压')" prop="A_output_voltage" align="center" width="180" />
+        <el-table-column :label="t('AC_DC输出电流')" prop="A_output_current" align="center" width="180" />
+        <el-table-column :label="t('充电量')" prop="charging_capacity" align="center" width="180" />
+        <el-table-column :label="t('充电次数')" prop="chargingCycles" align="center" width="180" />
+        <el-table-column :label="t('充电时长')" prop="duration" align="center" width="180" />
+        <el-table-column :label="t('DC_AC功率')" prop="D_power" align="center" width="180" />
+        <el-table-column :label="t('DC_AC输入电压')" prop="D_input_voltage" align="center" width="180" />
+        <el-table-column :label="t('DC_AC输入电流')" prop="D_input_current" align="center" width="180" />
+        <el-table-column :label="t('DC_AC输出电压')" prop="D_output_voltage" align="center" width="180" />
+        <el-table-column :label="t('DC_AC输出电流')" prop="D_output_current" align="center" width="180" />
+        <el-table-column :label="t('反向充电量')" prop="inCharging_capacity" align="center" width="180" />
+        <el-table-column :label="t('反向充电次数')" prop="inChargingCycles" align="center" width="180" />
       </el-table>
     </div>
   </div>
@@ -71,8 +71,12 @@ import { ref } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
 
 import TimeCalendar from './TimeCalendar.vue';
+
+const { t } = useI18n();
+
 const timeType = ref<string>('date');
 const option = ref<ECOption>({});
 option.value = {
@@ -176,7 +180,7 @@ option.value = {
   series: [
     {
       type: 'bar',
-      name: '正向充电',
+      name: t('正向充电'),
       barWidth: 14,
       barGap: 0, //柱间距离
       itemStyle: {

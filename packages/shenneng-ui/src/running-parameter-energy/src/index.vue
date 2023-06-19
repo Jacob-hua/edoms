@@ -44,7 +44,7 @@
             </el-form-item>
             <el-form-item :label="t('日循环次数')" prop="cyclesNumber" style="width: 90%">
               <el-input v-model="runningForm.cyclesNumber">
-                <template #append>{{ t('次_日') }}</template>
+                <template #append>{{ t('次日') }}</template>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -60,7 +60,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 
-import useApp from '../../useApp';
+import { useApp } from '../../useApp';
 
 import locales from './locales';
 import { MAssetInformationConfig } from './type';
@@ -68,9 +68,11 @@ import { MAssetInformationConfig } from './type';
 const props = defineProps<{
   config: MAssetInformationConfig;
 }>();
+
 const { setMessage, t } = useApp(props);
 
 setMessage(locales);
+
 const isShowModel = ref<boolean>(false);
 
 const runningForm = reactive({
