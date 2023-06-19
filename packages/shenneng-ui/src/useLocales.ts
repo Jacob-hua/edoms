@@ -2,7 +2,7 @@ import { inject } from 'vue';
 
 import Core from '@edoms/core';
 
-export const useApp = () => {
+export const useLocales = () => {
   const app = inject<Core | undefined>('app');
 
   function t(str: string): string {
@@ -25,4 +25,4 @@ export const useApp = () => {
   };
 };
 
-export default useApp;
+export default useLocales;
