@@ -16,7 +16,7 @@
         ></div>
       </div>
       <div class="font-wrapper-sttst">
-        <span class="font-ft-st">峰谷比：</span>
+        <span class="font-ft-st">{{ t('峰谷比') }}：</span>
         <span class="font-rate">{{ props.list.rate }}</span>
       </div>
     </div>
@@ -25,7 +25,10 @@
 
 <script setup lang="ts">
 import { computed, withDefaults } from 'vue';
-// [key: string]: string | number | Array<{ [key: string]: string | number }>
+
+import useI18n from '../../../useI18n';
+
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
