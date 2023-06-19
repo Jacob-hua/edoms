@@ -134,7 +134,7 @@ const tableDataList = ref<Array<any>>([
   {
     unitName: '4#' + t('变压器'),
     unitType: t('出线柜') + '1',
-    unit: '万kWh',
+    unit: t('万') + 'kWh',
     dataValue: 34,
     timeUse: {
       rate: 1.72,
@@ -158,7 +158,7 @@ const tableDataList = ref<Array<any>>([
   {
     unitName: '5#' + t('变压器'),
     unitType: t('出线柜') + '2',
-    unit: '万kWh',
+    unit: t('万') + 'kWh',
     dataValue: 0,
     timeUse: {
       rate: 0,

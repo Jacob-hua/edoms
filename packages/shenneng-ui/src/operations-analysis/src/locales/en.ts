@@ -17,4 +17,5 @@ export default {
   日: 'Day',
   月: 'Month',
   年: 'Year',
+  万: 'W',
 };
