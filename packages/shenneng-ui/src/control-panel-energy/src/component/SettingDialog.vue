@@ -3,25 +3,25 @@
     <el-dialog v-model="dialogVisible" :width="600" :show-close="false">
       <template #header="{ close, titleId, titleClass }">
         <div class="my-header">
-          <h4 :id="titleId" :class="titleClass">设置</h4>
+          <h4 :id="titleId" :class="titleClass">{{ t('设置') }}</h4>
           <div class="close-btn" @click="close"></div>
         </div>
       </template>
       <el-form :model="formModel">
-        <el-form-item label="当前状态：" prop="currentStatus">
+        <el-form-item :label="t('当前状态') + '：'" prop="currentStatus">
           <el-radio-group v-model="formModel.currentStatus">
-            <el-radio label="充电"></el-radio>
-            <el-radio label="供电"></el-radio>
-            <el-radio label="停止"></el-radio>
+            <el-radio :label="t('充电')"></el-radio>
+            <el-radio :label="t('供电')"></el-radio>
+            <el-radio :label="t('停止')"></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="showInput" label="功率：" prop="power">
-          <el-input v-model="formModel.power" placeholder="请输入">
+        <el-form-item v-show="showInput" :label="t('功率') + '：'" prop="power">
+          <el-input v-model="formModel.power" :placeholder="t('请输入')">
             <template #append>kW</template>
           </el-input>
         </el-form-item>
         <el-form-item class="submit-btn">
-          <el-button @click="submit">确认</el-button>
+          <el-button @click="submit">{{ t('确认') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -30,6 +30,9 @@
 
 <script lang="ts" setup>
 import { computed, reactive } from 'vue';
+import useI18n from 'packages/shenneng-ui/src/useI18n';
+
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -46,7 +49,7 @@ const emit = defineEmits<{
 // const showInput = ref(true);
 
 const formModel = reactive({
-  currentStatus: '充电',
+  currentStatus: t('充电'),
   power: '',
 });
 
@@ -58,7 +61,7 @@ const dialogVisible = computed({
 });
 
 const showInput = computed(() => {
-  if (formModel.currentStatus === '停止') {
+  if (formModel.currentStatus === t('停止')) {
     return false;
   }
   return true;

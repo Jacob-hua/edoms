@@ -23,10 +23,13 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+import useI18n from 'packages/shenneng-ui/src/useI18n';
 
 // import { dateRange } from '@edoms/utils';
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+
+const { t } = useI18n();
 
 withDefaults(
   defineProps<{
@@ -34,7 +37,7 @@ withDefaults(
   }>(),
   {
     manualStatus: {
-      currentStatus: '供电',
+      currentStatus: t('供电'),
       power: '100',
     },
   }
@@ -66,13 +69,15 @@ const options = computed<ECOption>(() => {
           tip += '<div>';
           for (let index = 0; index < params.length; index++) {
             tip +=
-              '<p><span style="color: #F5F7FA">当前状态：</span><span style="color: ' +
+              '<p><span style="color: #F5F7FA">' +
+              t('当前状态') +
+              '：</span><span style="color: ' +
               params[index].color +
               '">' +
-              (params[index].value < 0 ? '充电' : '供电') +
+              (params[index].value < 0 ? t('充电') : t('供电')) +
               '</span></p>' +
               '<p><span style="color: #F5F7FA">' +
-              (params[index].value < 0 ? '充电功率' : '供电功率') +
+              (params[index].value < 0 ? t('充电功率') : t('供电功率')) +
               '：</span><span style="color:' +
               params[index].color +
               '">' +
@@ -90,13 +95,13 @@ const options = computed<ECOption>(() => {
       selectedMode: false,
       data: [
         {
-          name: '充电功率',
+          name: t('充电功率'),
           icon: 'rect',
           textStyle: { color: '#EFF7FF' },
           itemStyle: { color: 'rgba(40,124,231,0.6)', borderColor: '#287CE7', borderWidth: 1 },
         },
         {
-          name: '供电功率',
+          name: t('供电功率'),
           icon: 'rect',
           textStyle: { color: '#EFF7FF' },
           itemStyle: { color: 'rgba(56,174,28,0.6)', borderColor: '#38AE1C', borderWidth: 1 },
@@ -151,7 +156,7 @@ const options = computed<ECOption>(() => {
     color: ['rgba(54,153,255,0.6)'],
     series: [
       {
-        name: '充电功率',
+        name: t('充电功率'),
         type: 'bar',
         barWidth: '24px',
         data: [
@@ -173,7 +178,7 @@ const options = computed<ECOption>(() => {
         ],
       },
       {
-        name: '供电功率',
+        name: t('供电功率'),
         type: 'bar',
         data: [],
       },
@@ -182,7 +187,6 @@ const options = computed<ECOption>(() => {
 });
 
 const handleSetting = () => {
-  console.log(111);
   emit('settingAction', true);
 };
 </script>
