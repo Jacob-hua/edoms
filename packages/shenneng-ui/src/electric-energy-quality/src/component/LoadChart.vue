@@ -7,14 +7,17 @@
 -->
 <template>
   <div class="wrapper">
-    <div class="echart" style="width: 485px">负载率</div>
+    <div class="echart" style="width: 485px">{{ t('负载率') }}</div>
     <EdomsCharts class="charts" :option="option"></EdomsCharts>
   </div>
 </template>
 
 <script lang="ts" setup>
+import useLocales from 'packages/shenneng-ui/src/useLocales';
+
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+const { t } = useLocales();
 
 defineProps<{
   option: ECOption;

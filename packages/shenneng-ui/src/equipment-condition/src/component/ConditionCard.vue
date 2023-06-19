@@ -50,7 +50,6 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import useLocales from 'packages/shenneng-ui/src/useLocales';
 
 import { ElOption, ElSelect } from '@edoms/design';
 import { dateRange, EdomsRequestFunc, formatDateRange, formatPrecision } from '@edoms/utils';
@@ -58,6 +57,7 @@ import { dateRange, EdomsRequestFunc, formatDateRange, formatPrecision } from '@
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
 import useIntervalAsync from '../../../useIntervalAsync';
+import useLocales from '../../../useLocales';
 import apiFactory from '../api';
 import aircondImg from '../assets/aircod.png';
 import HeatptionImg from '../assets/eqHeat.png';

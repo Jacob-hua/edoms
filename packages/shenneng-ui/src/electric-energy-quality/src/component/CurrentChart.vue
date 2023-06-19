@@ -1,13 +1,16 @@
 <template>
   <div class="wrapper">
-    <div class="echart">电流</div>
+    <div class="echart">{{ t('电流') }}</div>
     <EdomsCharts class="charts" :option="option"></EdomsCharts>
   </div>
 </template>
 
 <script lang="ts" setup>
+import useLocales from 'packages/shenneng-ui/src/useLocales';
+
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+const { t } = useLocales();
 
 defineProps<{
   option: ECOption;

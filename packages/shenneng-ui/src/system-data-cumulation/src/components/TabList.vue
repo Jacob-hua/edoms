@@ -11,6 +11,9 @@
 <script setup lang="ts">
 import { defineProps, onBeforeMount, ref, watch, withDefaults } from 'vue';
 
+import useLocales from '../../../useLocales';
+const { t } = useLocales();
+
 const props = withDefaults(
   defineProps<{
     list: Array<{ [key: string]: string | number }>;
@@ -18,15 +21,15 @@ const props = withDefaults(
   {
     list: () => [
       {
-        key: '日',
+        key: t('日'),
         value: 'day',
       },
       {
-        key: '月',
+        key: t('月'),
         value: 'month',
       },
       {
-        key: '年',
+        key: t('年'),
         value: 'year',
       },
     ],

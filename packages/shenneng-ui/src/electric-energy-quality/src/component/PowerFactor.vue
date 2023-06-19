@@ -9,25 +9,25 @@
       </div>
     </div>
     <div class="wrapper_right">
-      <button @click="changeDilog('month')">月曲线分析</button>
-      <button @click="changeDilog('day')">日曲线分析</button>
-      <button @click="changeDilog('data')">数据分析</button>
+      <button @click="changeDilog('month')">{{ t('月曲线分析') }}</button>
+      <button @click="changeDilog('day')">{{ t('日曲线分析') }}</button>
+      <button @click="changeDilog('data')">{{ t('数据分析') }}</button>
       <div class="wrapper_right_qu">
         <div class="histogram">
           <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
         </div>
         <div class="table">
-          <p class="table_tie">无功优化补偿装置</p>
+          <p class="table_tie">{{ t('无功优化补偿装置') }}</p>
           <el-table
             :data="tableData"
             style="width: 100%"
             :header-cell-style="{ background: '#0D1218', color: '#EAF5FF', textAlign: 'center', border: 'none' }"
           >
-            <el-table-column prop="typesOf" label="类型" width="180" />
-            <el-table-column prop="position" label="接入位置" width="180" />
-            <el-table-column prop="state" label="状态" />
-            <el-table-column prop="adjustment" label="调节量" />
-            <el-table-column prop="range" label="调节范围" />
+            <el-table-column prop="typesOf" :label="t('类型')" width="180" />
+            <el-table-column prop="position" :label="t('接入位置')" width="180" />
+            <el-table-column prop="state" :label="t('状态')" />
+            <el-table-column prop="adjustment" :label="t('调节量')" />
+            <el-table-column prop="range" :label="t('调节范围')" />
           </el-table>
         </div>
       </div>
@@ -48,7 +48,7 @@
       <div class="dialog_con">
         <div class="dialog_top">
           <div class="time">
-            <span>配电室</span>
+            <span>{{ t('配电室') }}</span>
             <TimeCalendar :option="timeType"></TimeCalendar>
           </div>
           <div v-if="nowDialog" class="boxCheck">
@@ -74,6 +74,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import useLocales from 'packages/shenneng-ui/src/useLocales';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
@@ -81,11 +82,13 @@ import { ElectricEnergyQuality } from '../type';
 
 import CalculationSheet from './CalculationSheet.vue';
 import TimeCalendar from './TimeCalendar.vue';
+const { t } = useLocales();
+
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
 const lastMouth = {
-  title: '上月结算',
+  title: t('上月结算'),
 };
 const nextMouth = {
   title: '本月结算',
@@ -148,7 +151,8 @@ option_chart.value = {
   },
   xAxis: {
     type: 'category',
-    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    name: '月',
+    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
     axisLine: {
       show: false,
     },
