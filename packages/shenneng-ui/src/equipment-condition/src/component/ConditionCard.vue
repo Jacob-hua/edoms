@@ -33,7 +33,7 @@
         :teleported="false"
         popper-class="select"
         class="eq-indicator-tabs-more"
-        placeholder="其他参数"
+        :placeholder="t('其他参数')"
         @change="handleOtherIndicatorChange"
       >
         <ElOption
@@ -50,6 +50,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import useLocales from 'packages/shenneng-ui/src/useLocales';
 
 import { ElOption, ElSelect } from '@edoms/design';
 import { dateRange, EdomsRequestFunc, formatDateRange, formatPrecision } from '@edoms/utils';
@@ -78,7 +79,7 @@ const props = defineProps<{
   intervalDelay: number;
   request?: EdomsRequestFunc;
 }>();
-
+const { t } = useLocales();
 const { fetchCurveData, fetchRealData } = apiFactory(props.request);
 const indicators = ref<MIndicatorItemConfig[]>([]);
 
@@ -263,7 +264,7 @@ function generateOption(series: any[] = []): ECOption {
     },
     yAxis: {
       type: 'value',
-      name: '单位',
+      name: t('单位'),
       boundaryGap: [0, '100%'],
       splitLine: {
         lineStyle: {
