@@ -954,6 +954,7 @@ getData('day');
       font-size: 14px;
       color: #ffffff;
       font-weight: 300;
+      text-align: center;
     }
   }
 
