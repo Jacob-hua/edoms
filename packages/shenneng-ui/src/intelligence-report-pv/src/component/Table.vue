@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-25 11:03:11
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-31 15:26:05
--->
 <template>
   <div class="wrap-table">
     <div class="header">
@@ -26,12 +19,12 @@
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
         <el-row :gutter="10">
           <el-col :span="4" :offset="1">
-            <el-form-item label="日期选择：">
-              <el-date-picker v-model="state.queryForm.date" placeholder="请选择日期" />
+            <el-form-item :label="t('日期选择')">
+              <el-date-picker v-model="state.queryForm.date" :placeholder="t('请选择日期')" />
             </el-form-item>
           </el-col>
-          <div class="button">查询</div>
-          <div class="button button-export">导出</div>
+          <div class="button">{{ t('查询') }}</div>
+          <div class="button button-export">{{ t('导出') }}</div>
         </el-row>
       </el-form>
       <div class="table">
@@ -48,7 +41,7 @@
           :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
           :row-style="{ height: '50px' }"
         >
-          <el-table-column type="index" label="序号" width="60"></el-table-column>
+          <el-table-column type="index" :label="t('序号')" width="60"></el-table-column>
           <el-table-column
             v-for="item in state.titleList"
             :key="item.name"
@@ -71,12 +64,15 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
 
+import useI18n from '../../../useI18n';
 import { tableData, tableData1, titleData } from '../mock';
 import { MIntelligenceReport, MQueryForm } from '../type';
 
 defineProps<{
   config: MIntelligenceReport;
 }>();
+
+const { t } = useI18n();
 
 const queryRef = ref(ElForm);
 
@@ -85,16 +81,16 @@ const state: any = reactive({
     date: new Date(),
   } as MQueryForm,
   tabs: [
-    '全部',
-    '单体一',
-    '单体二',
-    '研发楼西',
-    '研发楼北',
-    '研发楼东',
-    '研发楼南',
-    '光伏幕墙',
-    '光伏车棚',
-    '全站数据',
+    t('全部'),
+    t('单体一'),
+    t('单体二'),
+    t('研发楼西'),
+    t('研发楼北'),
+    t('研发楼东'),
+    t('研发楼南'),
+    t('光伏幕墙'),
+    t('光伏车棚'),
+    t('全站数据'),
   ],
   titleList: [],
   tableData: [],
@@ -107,10 +103,6 @@ const state: any = reactive({
   },
 });
 
-// const curDate = new Date();
-
-// state.queryForm.date = new Date(curDate.getTime() - 24 * 60 * 60 * 1000); //前一天
-
 const activeTab = ref<number>(0);
 const changeTab = (index: number) => {
   if (activeTab.value === index) return;
@@ -120,13 +112,6 @@ const changeTab = (index: number) => {
 const handleTableData = () => {
   state.titleList = titleData;
   state.tableData = tableData;
-  //   if (props.config.buildings.length > 0) {
-  //     props.config.buildings.forEach((item: any) => {
-  //       state.tabs.push({
-  //         name: item.label,
-  //       });
-  //     });
-  //   }
 };
 
 const emit = defineEmits(['closeTable']);
