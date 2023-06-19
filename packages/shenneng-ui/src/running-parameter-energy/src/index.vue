@@ -17,38 +17,38 @@
         </div>
         <div class="content-data">
           <el-form :model="runningForm" :inline="true" label-position="top">
-            <el-form-item label="电池放电深度DOD上限：" prop="DOD" style="width: 90%">
+            <el-form-item :label="t('电池放电深度DOD上限')" prop="DOD" style="width: 90%">
               <el-input v-model="runningForm.DOD">
                 <template #append>%</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="最大放电功率：" prop="maxDischargePower" style="width: 40%; margin-right: 10%">
+            <el-form-item :label="t('最大放电功率')" prop="maxDischargePower" style="width: 40%; margin-right: 10%">
               <el-input v-model="runningForm.maxDischargePower">
                 <template #append>kW</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="最小放电功率：" prop="minDischargePower" style="width: 40%">
+            <el-form-item :label="t('最小放电功率')" prop="minDischargePower" style="width: 40%">
               <el-input v-model="runningForm.minDischargePower">
                 <template #append>kW</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="最大充电功率：" prop="maxChargePower" style="width: 40%; margin-right: 10%">
+            <el-form-item :label="t('最大充电功率')" prop="maxChargePower" style="width: 40%; margin-right: 10%">
               <el-input v-model="runningForm.maxChargePower">
                 <template #append>kW</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="最小充电功率：" prop="minChargePower" style="width: 40%">
+            <el-form-item :label="t('最小充电功率')" prop="minChargePower" style="width: 40%">
               <el-input v-model="runningForm.minChargePower">
                 <template #append>kW</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="日循环次数：" prop="cyclesNumber" style="width: 90%">
+            <el-form-item :label="t('日循环次数')" prop="cyclesNumber" style="width: 90%">
               <el-input v-model="runningForm.cyclesNumber">
-                <template #append>次/日</template>
+                <template #append>{{ t('次日') }}</template>
               </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSubmit($event)">确认</el-button>
+              <el-button type="primary" @click="onSubmit($event)">{{ t('确认') }}</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -60,11 +60,19 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 
+import { useApp } from '../../useApp';
+
+import locales from './locales';
 import { MAssetInformationConfig } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: MAssetInformationConfig;
 }>();
+
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
+
 const isShowModel = ref<boolean>(false);
 
 const runningForm = reactive({
