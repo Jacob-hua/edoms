@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-27 10:04:26
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-23 11:18:29
--->
 <template>
   <div class="wrap-intell" @click="changeReport">
     <div class="wrap-report">
@@ -22,51 +15,24 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-// import useApp from '../../useApp';
-// import useIntervalAsync from '../../useIntervalAsync';
+import useApp from '../../useApp';
+
 import Table from './component/Table.vue';
-// import apiFactory from './api';
+import locales from './locales';
 import { MIntelligenceReport } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: MIntelligenceReport;
 }>();
 
-// const { request } = useApp(props);
-
-// const { fetchEfficiencyData } = apiFactory(request);
+const { setMessage } = useApp(props);
+setMessage(locales);
 
 const showReport = ref<boolean>(false);
 
 const changeReport = () => {
   showReport.value = true;
 };
-
-// const intelligenceReport = computed<MIntelligenceReport>(() => props.config);
-// const intervalDelay = computed<number>(() => {
-//   if (typeof props.config.intervalDelay !== 'number') {
-//     return 10;
-//   }
-//   return props.config.intervalDelay;
-// });
-
-// const updateEfficiencyData = async () => {
-//   if (!intelligenceReport.value.instance) {
-//     return;
-//   }
-//   const param: FetchEfficiencyReq = {
-//     insCodeList: [intelligenceReport.value.instance[intelligenceReport.value.instance.length - 1]],
-//     propCode: '',
-//   };
-//   const result = await fetchEfficiencyData(param);
-//   result.forEach(({ insCode }) => {
-//     if (insCode !== intelligenceReport.value.instance[intelligenceReport.value.instance.length - 1]) {
-//       return;
-//     }
-//   });
-// };
-
-// useIntervalAsync(updateEfficiencyData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
