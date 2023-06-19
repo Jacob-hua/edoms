@@ -13,7 +13,7 @@
           <span class="unit">{{ itm.unit }}</span>
         </div>
         <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'QOQ'" class="font-value-turn">
-          <span class="font">{{ `${state.dateType}${t('环比')}` }}</span>
+          <span class="font">{{ `${state.dateType} ${t('环比')}` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
           <span class="value-to" :style="{ color: getStyle(itm, 'qoqTrend') }">
             <LongText :content="itm.qoqRatio + '%' ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
@@ -23,7 +23,7 @@
           <span v-show="itm.qoqTrend === 'down'" class="turn-down"></span>
         </div>
         <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'YOY'" class="font-value-turn">
-          <span class="font">{{ `${state.dateType}${t('同比')}` }}</span>
+          <span class="font">{{ `${state.dateType} ${t('同比')}` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
           <span class="value-to" :style="{ color: getStyle(itm, 'yoyTrend') }">
             <LongText :content="itm.yoyRatio + '%' ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
@@ -64,7 +64,7 @@ const props = withDefaults(
 const state = reactive<{
   dateType: string;
 }>({
-  dateType: '日',
+  dateType: t('日'),
 });
 
 const getStyle = computed(() => (itm: any, type: string) => {

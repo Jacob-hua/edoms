@@ -1,6 +1,6 @@
 <template>
-  <div v-show="props.list.length" class="tab-list">
-    <div v-for="itm in props.list" :key="itm.value" class="list-item" :style="{ width: `${100 / props.list.length}%` }">
+  <div v-show="list.length" class="tab-list">
+    <div v-for="itm in list" :key="itm.value" class="list-item" :style="{ width: `${100 / list.length}%` }">
       <div :class="['itm-key', currentIdx === itm.value ? 'active' : '']" @click="handlerToChange(itm)">
         {{ itm.key }}
       </div>
@@ -9,30 +9,24 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onBeforeMount, ref, watch, withDefaults } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 
-const props = withDefaults(
-  defineProps<{
-    list: Array<{ [key: string]: string | number }>;
-  }>(),
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
+const list: Array<{ [key: string]: string | number }> = [
   {
-    list: () => [
-      {
-        key: '日',
-        value: 'day',
-      },
-      {
-        key: '月',
-        value: 'month',
-      },
-      {
-        key: '年',
-        value: 'year',
-      },
-    ],
-  }
-);
-
+    key: t('日'),
+    value: 'day',
+  },
+  {
+    key: t('月'),
+    value: 'month',
+  },
+  {
+    key: t('年'),
+    value: 'year',
+  },
+];
 const emits = defineEmits<{
   (e: 'operate', itm: { [key: string]: any }): void;
 }>();
@@ -45,11 +39,11 @@ const handlerToChange = (itm: { [key: string]: any }) => {
 };
 
 onBeforeMount(() => {
-  currentIdx.value = props.list[0]?.value;
+  currentIdx.value = list[0]?.value;
 });
 
 watch(
-  () => props.list,
+  () => list,
   (newV: Array<{ [key: string]: string | number }>) => {
     currentIdx.value = newV[0]?.value;
   }
@@ -71,12 +65,15 @@ watch(
   border-bottom: 1px solid rgba(0, 163, 255, 0.3);
   overflow: hidden;
   clear: both;
+
   .list-item {
     height: 22px;
     border-left: 1px solid rgba(0, 163, 255, 0.3);
+
     &:last-child {
       border-right: 1px solid rgba(0, 163, 255, 0.3);
     }
+
     .itm-key {
       width: 92px;
       height: 22px;
@@ -88,6 +85,7 @@ watch(
       color: rgba(196, 229, 248, 1);
       font-size: 14px;
       box-sizing: border-box;
+
       &.active {
         color: #fff;
         border: 1px solid rgba(0, 163, 255, 1);
