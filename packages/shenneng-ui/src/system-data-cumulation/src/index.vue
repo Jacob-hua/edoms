@@ -33,7 +33,7 @@ interface CumulativeList extends Category {
 const props = defineProps<{
   config: MCumulativeConfig;
 }>();
-const { setMessage, t } = useApp(props);
+const { setMessage } = useApp(props);
 
 setMessage(locales);
 const { request } = useApp(props);
@@ -43,7 +43,7 @@ const { fetchCumulativeData } = apiFactory(request);
 const tableWrapper = ref<any>(null);
 
 const active = ref<{ [key: string]: any }>({
-  key: t('日'),
+  key: '日',
   value: 'day',
 });
 

@@ -1,7 +1,5 @@
-import useLocales from '../../useLocales';
-const { t } = useLocales();
 export default {
-  title: t('电能质量'),
+  title: '电能质量',
   type: 'electric-energy-quality',
   // 三相电颜色
   currentLa: 'rgba(40, 124, 231, 1)',

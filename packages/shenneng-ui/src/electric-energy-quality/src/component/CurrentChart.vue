@@ -6,11 +6,10 @@
 </template>
 
 <script lang="ts" setup>
-import useLocales from 'packages/shenneng-ui/src/useLocales';
-
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
-const { t } = useLocales();
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
 
 defineProps<{
   option: ECOption;

@@ -4,13 +4,13 @@
       <!-- <div class="calendar">日历插件</div> -->
       <TimeCalendar :option="timeType" class="calendar"></TimeCalendar>
       <el-tabs v-model="activeName" class="demo-tabs">
-        <el-tab-pane label="今日统计" name="day">
+        <el-tab-pane :label="t('今日统计')" name="day">
           <Statistics></Statistics>
         </el-tab-pane>
-        <el-tab-pane label="月度统计" name="month">
+        <el-tab-pane :label="t('月度统计')" name="month">
           <Statistics></Statistics>
         </el-tab-pane>
-        <el-tab-pane label="年度统计" name="year">
+        <el-tab-pane :label="t('年度统计')" name="year">
           <Statistics></Statistics>
         </el-tab-pane>
       </el-tabs>
@@ -18,10 +18,12 @@
 
     <div class="wrapper-con">
       <div class="wrapper-con-right">
-        <div class="wrapper-tie"><span>vGB/T12326-2008《电能质量：电压波动和闪变》</span></div>
+        <div class="wrapper-tie">
+          <span>{{ t('描述') }}</span>
+        </div>
         <div class="wrapper-icon">
           <img class="icon" src="../../assets/dian.png" alt="" />
-          <span class="elefont">电压波动分析</span>
+          <span class="elefont">{{ t('电压波动分析') }}</span>
         </div>
         <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
       </div>
@@ -34,9 +36,11 @@ import { ref } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
 
 import Statistics from './Statistics.vue';
 import TimeCalendar from './TimeCalendar.vue';
+const { t } = useI18n();
 // defineProps<{
 //   option: ECOption;
 // }>();

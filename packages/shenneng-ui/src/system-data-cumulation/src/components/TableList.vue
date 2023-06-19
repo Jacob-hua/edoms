@@ -23,7 +23,7 @@
           <span v-show="itm.qoqTrend === 'down'" class="turn-down"></span>
         </div>
         <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'YOY'" class="font-value-turn">
-          <span class="font">{{ `${state.dateType}${'同比'}` }}</span>
+          <span class="font">{{ `${state.dateType}${t('同比')}` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
           <span class="value-to" :style="{ color: getStyle(itm, 'yoyTrend') }">
             <LongText :content="itm.yoyRatio + '%' ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
@@ -41,7 +41,7 @@
 import { computed, reactive, withDefaults } from 'vue';
 
 import LongText from '../../../LongText.vue';
-import useLocales from '../../../useLocales';
+import useI18n from '../../../useI18n';
 import { Category } from '../type';
 
 interface CumulativeList extends Category {
@@ -51,7 +51,7 @@ interface CumulativeList extends Category {
   yoyRatio: string;
   yoyTrend: 'up' | 'down' | 'flat';
 }
-const { t } = useLocales();
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     tableData: Array<CumulativeList>;
@@ -64,7 +64,7 @@ const props = withDefaults(
 const state = reactive<{
   dateType: string;
 }>({
-  dateType: t('日'),
+  dateType: '日',
 });
 
 const getStyle = computed(() => (itm: any, type: string) => {

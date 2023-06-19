@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="wrapper_zhan">占比分布</div>
+    <div class="wrapper_zhan">{{ t('占比分布') }}</div>
     <EdomsCharts class="wrapper_chart" :option="option"></EdomsCharts>
   </div>
 </template>
@@ -8,6 +8,8 @@
 <script lang="ts" setup>
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
 
 const props = defineProps<{
   option: ECOption;

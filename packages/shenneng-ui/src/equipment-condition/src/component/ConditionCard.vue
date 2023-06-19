@@ -56,8 +56,8 @@ import { dateRange, EdomsRequestFunc, formatDateRange, formatPrecision } from '@
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
 import useIntervalAsync from '../../../useIntervalAsync';
-import useLocales from '../../../useLocales';
 import apiFactory from '../api';
 import aircondImg from '../assets/aircod.png';
 import HeatptionImg from '../assets/eqHeat.png';
@@ -79,7 +79,7 @@ const props = defineProps<{
   intervalDelay: number;
   request?: EdomsRequestFunc;
 }>();
-const { t } = useLocales();
+const { t } = useI18n();
 const { fetchCurveData, fetchRealData } = apiFactory(props.request);
 const indicators = ref<MIndicatorItemConfig[]>([]);
 

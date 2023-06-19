@@ -84,10 +84,11 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import useLocales from 'packages/shenneng-ui/src/useLocales';
+
+import useI18n from '../../../useI18n';
 
 import Formula from './Formula.vue';
-const { t } = useLocales();
+const { t } = useI18n();
 const props = defineProps<{
   option: any;
 }>();
