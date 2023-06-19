@@ -18,10 +18,10 @@
       </div>
       <div class="button-container">
         <span v-if="item.status === 'unconfirm'" class="button-wrapper">
-          <!-- <el-button type="primary" @click="handleConfirm(item)">{{ t('确认') }}</el-button> -->
-          <el-button type="primary" @click="handleConfirm(item)">确认</el-button>
-          <!-- <el-button @click="handleIgnore(item.id)">{{ t('忽略') }}</el-button> -->
-          <el-button @click="handleIgnore(item.id)">忽略</el-button>
+          <el-button type="primary" @click="handleConfirm(item)">{{ t('确认') }}</el-button>
+          <!-- <el-button type="primary" @click="handleConfirm(item)">确认</el-button> -->
+          <el-button @click="handleIgnore(item.id)">{{ t('忽略') }}</el-button>
+          <!-- <el-button @click="handleIgnore(item.id)">忽略</el-button> -->
         </span>
       </div>
     </div>
@@ -35,6 +35,7 @@ import { ElButton } from '@edoms/design';
 import { formatDate } from '@edoms/utils';
 
 import LongText from '../../../LongText.vue';
+import useI18n from '../../../useI18n';
 import { ClassName } from '../type';
 export interface Warning {
   // 告警Id
@@ -52,6 +53,8 @@ export interface Warning {
   // 是否展开
   expend?: boolean;
 }
+
+const { t } = useI18n();
 
 const colorList = {
   red: '#D72824',
