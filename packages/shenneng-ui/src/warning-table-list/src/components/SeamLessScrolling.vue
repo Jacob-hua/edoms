@@ -10,13 +10,13 @@
 <script lang="ts" setup>
 import { inject, Ref, toRefs } from 'vue';
 
-import { MConfig } from '../index.vue';
+import { MWarningConfigs } from '../type';
 
 const props = defineProps<{
   dataSource: any[];
 }>();
 const { dataSource: data } = toRefs(props);
-const config = inject<Ref<MConfig>>('config');
+const config = inject<Ref<MWarningConfigs>>('config');
 </script>
 
 <style lang="scss" scoped>
