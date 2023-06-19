@@ -8,7 +8,7 @@
           class="list-item"
           @click="handleChangeWarningType(className)"
         >
-          <div class="item" :class="calculateClassName(className)">
+          <div class="item" :class="calculateClassName(className)" :title="name">
             {{ name }}
           </div>
         </div>
@@ -32,45 +32,20 @@ import useIntervalAsync from '../../useIntervalAsync';
 
 import WarningList from './components/WarningList.vue';
 import warningApi from './api';
-import { Alarm, AlarmList, ClassName, InitAlarmRes } from './type';
-
-export interface MConfig {
-  title: string;
-  subTitle: string;
-  speed: number;
-  isScroll: boolean;
-  intervalDelay: number;
-  instance: string[];
-  timeSpan: number;
-  isVirtual: string;
-}
+import locales from './locales';
+import { Alarm, AlarmList, ClassName, InitAlarmRes, MWarningConfigs } from './type';
 
 interface HeaderData {
   name: string;
   className: ClassName;
 }
-
-const props = withDefaults(
-  defineProps<{
-    config: MConfig;
-  }>(),
-  {
-    config: () => ({
-      title: '告警管理',
-      subTitle: 'Abnormal alarm',
-      speed: 12,
-      isScroll: true,
-      intervalDelay: 5000,
-      instance: [],
-      timeSpan: 1,
-      isVirtual: '0',
-    }),
-  }
-);
+const props = defineProps<{
+  config: MWarningConfigs;
+}>();
 const config = ref({
   speed: 12,
   isScroll: true,
-}) as Ref<MConfig>;
+}) as Ref<MWarningConfigs>;
 
 watch(
   () => props.config,
@@ -84,21 +59,23 @@ watch(
     immediate: true,
   }
 );
+
+const { request, setMessage, t } = useApp(props);
+setMessage(locales);
 const headerData: HeaderData[] = [
   {
-    name: '严重告警',
+    name: t('严重警告'),
     className: 'red',
   },
   {
-    name: '重要警告',
+    name: t('重要警告'),
     className: 'orange',
   },
   {
-    name: '一般警告',
+    name: t('一般警告'),
     className: 'green',
   },
 ];
-const { request } = useApp(props);
 const { fetchInitAlarmList, fetchNewAlarmList, confirmedAlarmList } = warningApi(request);
 const activeClassName = ref<ClassName>('red');
 const commonAlarm = ref();
@@ -195,7 +172,7 @@ watch(
 );
 
 provide<Ref<ClassName>>('textColor', activeClassName);
-provide<Ref<MConfig>>('config', config);
+provide<Ref<MWarningConfigs>>('config', config);
 provide('commonAlarm', commonAlarm);
 provide('importantAlarm', importantAlarm);
 provide('seriousAlarm', seriousAlarm);
@@ -235,6 +212,10 @@ provide('confirmedAlarmList', confirmedAlarmList);
       color: rgba(196, 229, 248, 1);
       font-size: 14px;
       box-sizing: border-box;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 0 5px;
       &.active {
         color: #fff;
         border: 1px solid rgba(0, 163, 255, 1);
