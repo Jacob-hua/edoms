@@ -28,7 +28,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>功率因数</span>
+                  <span>{{ t('功率因数') }}</span>
                 </span>
               </template>
               <PowerFactor :config="config"></PowerFactor>
@@ -36,7 +36,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>电压分析</span>
+                  <span>{{ t('电压分析') }}</span>
                 </span>
               </template>
               <VoltagAnalysis></VoltagAnalysis>

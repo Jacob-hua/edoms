@@ -14,23 +14,23 @@
         <div class="text_row">
           <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.time }}</span
-            >小时
+            >{{ t('小时') }}
           </div>
-          <div>当月累计时长</div>
+          <div>{{ t('当月累计时长') }}</div>
         </div>
         <div class="text_row">
           <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.day }}</span
-            >天
+            >{{ t('天') }}
           </div>
-          <div>当月天数</div>
+          <div>{{ t('当月天数') }}</div>
         </div>
         <div class="text_row">
           <div>
             <span style="color: #41e4de; font-size: 24px">{{ item.position.max_rate }}</span
             >%
           </div>
-          <div>最大不平衡率</div>
+          <div>{{ t('最大不平衡率') }}</div>
         </div>
       </div>
     </div>
@@ -51,13 +51,14 @@ import { ref, watch } from 'vue';
 
 // import useIntervalAsync from '../../../useIntervalAsync';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
 import { ElectricEnergyQuality } from '../type';
 
 import CurrentChart from './CurrentChart.vue';
 import LoadChart from './LoadChart.vue';
 // import useApp from '../../../useApp';
 import ProportionChart from './ProportionChart.vue';
-
+const { t } = useI18n();
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
@@ -321,7 +322,7 @@ watch(
         },
       },
       legend: {
-        data: ['负载率', '三相不平衡率'],
+        data: [t('负载率'), t('三相不平衡率')],
         textStyle: {
           color: '#fff',
         },
@@ -380,7 +381,7 @@ watch(
       color: [props.config.loadRate, props.config.threePhasRate],
       series: [
         {
-          name: '负载率',
+          name: t('负载率'),
           data: [
             40.12128769, 33.735780675, 42.592085488, 36.602015599, 36.8932692, 35.80097567, 46.652001007, 42.6578128,
           ],
@@ -389,7 +390,7 @@ watch(
           symbolSize: 0,
         },
         {
-          name: '三相不平衡率',
+          name: t('三相不平衡率'),
           data: [15.3978635, 22.1156983, 19.1727799, 19.3278177, 26.1765207, 22.3943031, 13.307268, 12.6976074],
           type: 'line',
           smooth: true,
@@ -444,7 +445,7 @@ watch(
         },
       },
       legend: {
-        data: ['负载率', '三相不平衡率'],
+        data: [t('负载率'), t('三相不平衡率')],
         textStyle: {
           color: '#fff',
         },
@@ -511,7 +512,7 @@ watch(
           symbolSize: 0,
         },
         {
-          name: '三相不平衡率',
+          name: t('三相不平衡率'),
           data: [0, 0, 0, 0, 0, 0, 0, 0],
           type: 'line',
           smooth: true,
@@ -547,11 +548,11 @@ watch(
 
 const categories = ref([
   {
-    label1: '占比分布',
-    label2: '电流',
-    label3: '负载率',
+    label1: t('占比分布'),
+    label2: t('电流'),
+    label3: t('负载率'),
     position: {
-      label: '4#变压器',
+      label: `4#${t('变压器')}`,
       value: 20,
       time: 693,
       day: 28,
@@ -560,11 +561,11 @@ const categories = ref([
     name: 'four',
   },
   {
-    label1: '占比分布',
-    label2: '电流',
-    label3: '负载率',
+    label1: t('占比分布'),
+    label2: t('电流'),
+    label3: t('负载率'),
     position: {
-      label: '5#变压器',
+      label: `5#${t('变压器')}`,
       value: 20,
       time: 0,
       day: 0,

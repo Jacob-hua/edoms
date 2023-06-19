@@ -7,21 +7,23 @@
     <div class="num">
       <div class="icon-img">
         <span class="tex">{{ config.option.num }}</span
-        >台
+        >{{ t('台') }}
       </div>
-      <div style="margin-top: 10px">数量</div>
+      <div style="margin-top: 10px">{{ t('数量') }}</div>
     </div>
     <div class="params">
       <div class="icon-img">
         <span class="tex">{{ config.option.params }}</span
         >kWh
       </div>
-      <div style="margin-top: 10px">参数</div>
+      <div style="margin-top: 10px">{{ t('参数') }}</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
 const config = defineProps<{
   option: any;
 }>();

@@ -22,14 +22,14 @@
           <div class="body-con">
             <div class="screen">
               <div class="screen-con">
-                <span class="span-tex">参与调控功率</span>
-                <el-input v-model="input" class="input" placeholder="请输入" />
+                <span class="span-tex">{{ t('参与调控功率') }}</span>
+                <el-input v-model="input" class="input" :placeholder="t('请输入')" />
               </div>
               <div style="display: flex">
-                <span class="span-tex">时间选择</span>
+                <span class="span-tex">{{ t('时间选择') }}</span>
                 <TimeCalendar :option="timeType"></TimeCalendar>
               </div>
-              <el-button class="but" type="primary" plain @click="markSure">确认</el-button>
+              <el-button class="but" type="primary" plain @click="markSure">{{ t('确认') }}</el-button>
             </div>
             <div class="screen-card">
               <ItemCard
@@ -54,7 +54,7 @@
     >
       <template #header>
         <div class="top">
-          <span class="label">提示</span>
+          <span class="label">{{ t('提示_T') }}</span>
         </div>
       </template>
       <div class="content">
@@ -63,10 +63,10 @@
             <img src="./assets/tipIcon.png" alt="" />
           </div>
           <div style="line-height: 25px">
-            <span>已选用设备未达到当前设置功率，请勾选其他设备以达到设定值</span>
+            <span>{{ t('提示_C') }}</span>
           </div>
         </div>
-        <button class="but" @click="dialogVisible = false">确认</button>
+        <button class="but" @click="dialogVisible = false">{{ t('确认') }}</button>
       </div>
     </el-dialog>
   </div>
@@ -74,6 +74,8 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
+
+import useApp from '../../useApp';
 
 import control from './assets/control.png';
 import dianciB from './assets/dianciB.png';
@@ -83,29 +85,33 @@ import dianciY from './assets/dianciY.png';
 import ItemCard from './components/ItemCard.vue';
 import TimeCalendar from './components/TimeCalendar.vue';
 import TopItem from './components/TopItem.vue';
+import locales from './locales';
 import { MAssetInformationConfig } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: MAssetInformationConfig;
 }>();
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
 const timeType = ref('date');
 const input = ref('');
 const dialogVisible = ref<boolean>(false);
 const isShowModel = ref<boolean>(false);
 const option = reactive<{ [list: string]: any }>({
   list: [
-    { title: '充电中', icon: dianciG, num: 12, params: 246 },
-    { title: '待机', icon: dianciB, num: 6, params: 326 },
-    { title: '摘枪', icon: dianciY, num: 1, params: 126 },
-    { title: '故障', icon: dianciR, num: 1, params: 126 },
-    { title: '参与调控', icon: control, num: 1, params: 126 },
+    { title: t('充电中'), icon: dianciG, num: 12, params: 246 },
+    { title: t('待机'), icon: dianciB, num: 6, params: 326 },
+    { title: t('摘枪'), icon: dianciY, num: 1, params: 126 },
+    { title: t('故障'), icon: dianciR, num: 1, params: 126 },
+    { title: t('参与调控'), icon: control, num: 1, params: 126 },
   ],
 });
 const dataCard = reactive<{ [list: string]: any }>({
   list: [
     {
       id: 1,
-      name: '1-1充电桩',
+      name: `'1-1${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -115,7 +121,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 2,
-      name: '1-2充电桩',
+      name: `'1-2${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -125,37 +131,37 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 3,
-      name: '1-3充电桩',
+      name: `'1-3${t('充电桩')}`,
       switch: '0',
       charging: '-',
       remainder: '1小时30分钟',
       checked: false,
-      state: '故障',
+      state: t('故障'),
       class: 'red',
     },
     {
       id: 4,
-      name: '1-4充电桩',
+      name: `'1-4${t('充电桩')}`,
       switch: '0',
       charging: '-',
       remainder: '1小时30分钟',
       checked: false,
-      state: '待机',
+      state: t('待机'),
       class: 'green',
     },
     {
       id: 5,
-      name: '1-5充电桩',
+      name: `'1-5${t('充电桩')}`,
       switch: '0',
       charging: '-',
       remainder: '1小时30分钟',
       checked: false,
-      state: '摘枪',
+      state: t('摘枪'),
       class: 'yellow',
     },
     {
       id: 6,
-      name: '1-6充电桩',
+      name: `'1-6${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -165,7 +171,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 7,
-      name: '1-7充电桩',
+      name: `'1-7${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -175,7 +181,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 8,
-      name: '1-8充电桩',
+      name: `'1-8${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -185,7 +191,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 9,
-      name: '1-9充电桩',
+      name: `'1-9${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -195,7 +201,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 10,
-      name: '1-10充电桩',
+      name: `1-10${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -205,7 +211,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 11,
-      name: '1-11充电桩',
+      name: `1-11${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -215,7 +221,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 12,
-      name: '1-12充电桩',
+      name: `1-12${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -225,7 +231,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 13,
-      name: '1-13充电桩',
+      name: `1-13${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -235,7 +241,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 14,
-      name: '1-14充电桩',
+      name: `1-14${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -245,7 +251,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 15,
-      name: '1-15充电桩',
+      name: `1-15${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -256,7 +262,7 @@ const dataCard = reactive<{ [list: string]: any }>({
   ],
 });
 const getControl = (opt: any) => {
-  console.log({ tit: '参数调控', opt: opt });
+  console.log({ tit: t('参数调控'), opt: opt });
   const contorlData = dataCard.list.filter(({ checked }: any) => {
     return checked === true;
   });
@@ -265,7 +271,6 @@ const getControl = (opt: any) => {
 };
 const markSure = () => {
   if (input.value && Number(input.value) > option.list[4].params) {
-    console.log('弹出框');
     dialogVisible.value = true;
   }
 };
