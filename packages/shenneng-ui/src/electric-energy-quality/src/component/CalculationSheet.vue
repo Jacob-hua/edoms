@@ -4,42 +4,42 @@
     <div class="th_index">
       <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
-        <div>奖惩电费</div>
+        <div>{{ t('奖惩电费') }}</div>
       </div>
       <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
-        <div>平均功率因数</div>
+        <div>{{ t('平均功率因数') }}</div>
       </div>
       <div class="th_index_con">
         <div><span style="color: #d72824; font-size: 24px">0.59</span></div>
-        <div>最小功率因数</div>
+        <div>{{ t('最小功率因数') }}</div>
       </div>
     </div>
     <div class="alculation_sheet">
       <div class="alculation_tie">
         <img class="alculation_icon" src="../../assets/jisuan.png" />
-        <span>计算书</span>
+        <span>{{ t('计算书') }}</span>
       </div>
       <div class="alculation_con">
         <el-row>
           <el-col :span="14">
             <table>
               <tr>
-                <td class="frist_d">有功功率电量：</td>
-                <td class="second_d"><span>74.934</span>万kWh</td>
+                <td class="frist_d">{{ t('有功功率电量') }}：</td>
+                <td class="second_d"><span>74.934</span>{{ t('万') }} kWh</td>
               </tr>
               <tr>
-                <td class="frist_d">无功功率电量：</td>
-                <td class="second_d"><span>7.297</span>万kWh</td>
+                <td class="frist_d">{{ t('无功功率电量') }}：</td>
+                <td class="second_d"><span>7.297</span>{{ t('万') }} kWh</td>
               </tr>
               <tr style="margin-top: 28px">
-                <td class="frist_d">功率因数：</td>
+                <td class="frist_d">{{ t('功率因数') }}：</td>
                 <td class="second_d">
                   <Formula :option="formulaData"></Formula>
                 </td>
               </tr>
               <tr style="margin-top: 28px">
-                <td class="frist_d">惩奖系数：</td>
+                <td class="frist_d">{{ t('惩奖系数') }}：</td>
                 <td class="second_d"><span>-0.75</span></td>
               </tr>
             </table>
@@ -47,11 +47,11 @@
           <el-col :span="10">
             <table>
               <tr>
-                <td class="frist_d">惩奖电费：</td>
+                <td class="frist_d">{{ t('惩奖电费') }}：</td>
                 <td class="second_d"><span>-10524.26</span></td>
               </tr>
               <tr>
-                <td class="frist_d">考核基准：</td>
+                <td class="frist_d">{{ t('考核基准') }}：</td>
                 <td class="second_d"><span>0.9</span></td>
               </tr>
               <tr style="margin-left: 50px">
@@ -71,7 +71,7 @@
                     src="../../assets/dui.png"
                     alt=""
                     srcset=""
-                  />查对标
+                  />{{ t('查对标') }}
                 </td>
               </tr>
             </table>
@@ -85,7 +85,10 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
+import useI18n from '../../../useI18n';
+
 import Formula from './Formula.vue';
+const { t } = useI18n();
 const props = defineProps<{
   option: any;
 }>();

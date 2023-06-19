@@ -19,6 +19,7 @@ import useIntervalAsync from '../../useIntervalAsync';
 import TableList from './components/TableList.vue';
 import TabList from './components/TabList.vue';
 import apiFactory from './api';
+import locales from './locales';
 import { Category, FetchCumulativeDataReq, MCumulativeConfig } from './type';
 
 interface CumulativeList extends Category {
@@ -32,7 +33,9 @@ interface CumulativeList extends Category {
 const props = defineProps<{
   config: MCumulativeConfig;
 }>();
+const { setMessage } = useApp(props);
 
+setMessage(locales);
 const { request } = useApp(props);
 
 const { fetchCumulativeData } = apiFactory(request);

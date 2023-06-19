@@ -7,7 +7,7 @@
 -->
 <template>
   <div class="wrapper">
-    <div class="echart" style="width: 485px">负载率</div>
+    <div class="echart" style="width: 485px">{{ t('负载率') }}</div>
     <EdomsCharts class="charts" :option="option"></EdomsCharts>
   </div>
 </template>
@@ -15,6 +15,8 @@
 <script lang="ts" setup>
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
 
 defineProps<{
   option: ECOption;
