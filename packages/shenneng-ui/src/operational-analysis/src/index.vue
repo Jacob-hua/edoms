@@ -65,12 +65,15 @@ import useIntervalAsync from '../../useIntervalAsync';
 // import EquipmentParameter from './component/EquipmentParameter.vue';
 // import SystemParameter from './component/SystemParameter.vue';
 import apiFactory from './api';
+import locales from './locales';
 import { MIndicatorItemConfig, MOperationalParameters, MParameterItemConfig } from './type';
 
 const props = defineProps<{
   config: MOperationalParameters;
 }>();
-
+// 国际化
+const { setMessage, t } = useApp(props);
+setMessage(locales);
 const scrollMain = ref();
 const wrap = ref();
 // const scrollLeft = ref(0);
@@ -153,7 +156,7 @@ const getHistoryData = async () => {
     //     ]),
     //   };
     return {
-      name: name ? name : `未命名${index}`,
+      name: name ? name : `${t('未命名')}${index}`,
       type: lineType,
       showSymbol: false,
       smooth: true,
