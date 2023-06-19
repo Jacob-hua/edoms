@@ -30,8 +30,8 @@
 
 <script lang="ts" setup>
 import { computed, reactive } from 'vue';
-import useI18n from 'packages/shenneng-ui/src/useI18n';
 
+import useI18n from '../../../useI18n';
 const { t } = useI18n();
 
 const props = withDefaults(

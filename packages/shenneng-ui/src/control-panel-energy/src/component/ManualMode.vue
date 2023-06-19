@@ -3,16 +3,16 @@
     <div class="anticipate">
       <div class="anticipate-info">
         <div>
-          <span>当前状态：</span>
+          <span>{{ t('当前状态') }}：</span>
           <span class="anticipate-value">{{ manualStatus.currentStatus }}</span>
         </div>
         <div>
-          <span>供电功率：</span>
+          <span>{{ t('供电功率') }}：</span>
           <span class="anticipate-value">{{ manualStatus.power ? manualStatus.power + 'kW' : '' }}</span>
         </div>
       </div>
       <div class="btn">
-        <el-button @click="handleSetting">设置</el-button>
+        <el-button @click="handleSetting">{{ t('设置') }}</el-button>
       </div>
     </div>
     <div class="chart-box">
@@ -23,11 +23,11 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import useI18n from 'packages/shenneng-ui/src/useI18n';
 
 // import { dateRange } from '@edoms/utils';
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
 
 const { t } = useI18n();
 
@@ -37,7 +37,7 @@ withDefaults(
   }>(),
   {
     manualStatus: {
-      currentStatus: t('供电'),
+      currentStatus: '供电',
       power: '100',
     },
   }

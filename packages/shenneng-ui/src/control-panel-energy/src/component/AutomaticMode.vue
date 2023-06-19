@@ -27,10 +27,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import useI18n from 'packages/shenneng-ui/src/useI18n';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
 
 const { t } = useI18n();
 

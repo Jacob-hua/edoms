@@ -30,12 +30,12 @@
 
 <script lang="ts" setup>
 import { computed, inject, Ref } from 'vue';
-import useI18n from 'packages/shenneng-ui/src/useI18n';
 
 import { ElButton } from '@edoms/design';
 import { formatDate } from '@edoms/utils';
 
 import LongText from '../../../LongText.vue';
+import useI18n from '../../../useI18n';
 import { ClassName } from '../type';
 export interface Warning {
   // 告警Id
