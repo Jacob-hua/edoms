@@ -87,4 +87,7 @@ export default {
   充电量分析: 'Charging volume analysis',
   次: 'x/times',
   元: '￥',
+  起始值kWh: 'Starting Value/kWh',
+  结束值kWh: 'Ending Value/kWh',
+  用电量kWh: 'Electricity Consumption/kWh',
 };
