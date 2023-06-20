@@ -111,7 +111,7 @@ const dataCard = reactive<{ [list: string]: any }>({
   list: [
     {
       id: 1,
-      name: `'1-1${t('充电桩')}`,
+      name: `1-1${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -121,7 +121,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 2,
-      name: `'1-2${t('充电桩')}`,
+      name: `1-2${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -131,7 +131,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 3,
-      name: `'1-3${t('充电桩')}`,
+      name: `1-3${t('充电桩')}`,
       switch: '0',
       charging: '-',
       remainder: '1小时30分钟',
@@ -141,7 +141,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 4,
-      name: `'1-4${t('充电桩')}`,
+      name: `1-4${t('充电桩')}`,
       switch: '0',
       charging: '-',
       remainder: '1小时30分钟',
@@ -151,7 +151,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 5,
-      name: `'1-5${t('充电桩')}`,
+      name: `1-5${t('充电桩')}`,
       switch: '0',
       charging: '-',
       remainder: '1小时30分钟',
@@ -161,7 +161,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 6,
-      name: `'1-6${t('充电桩')}`,
+      name: `1-6${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -171,7 +171,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 7,
-      name: `'1-7${t('充电桩')}`,
+      name: `1-7${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -181,7 +181,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 8,
-      name: `'1-8${t('充电桩')}`,
+      name: `1-8${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',
@@ -191,7 +191,7 @@ const dataCard = reactive<{ [list: string]: any }>({
     },
     {
       id: 9,
-      name: `'1-9${t('充电桩')}`,
+      name: `1-9${t('充电桩')}`,
       switch: '1',
       charging: '60',
       remainder: '1小时30分钟',

@@ -21,9 +21,7 @@
         <span>{{ t('当前充电') }}：</span>
         <div>
           <span style="width: 44px; display: inline-block; height: 13px; background: #2fda2f"></span
-          ><span
-            style="width: 23px; height: 13px; display: inline-block; background: #68696a; margin-right: 10px"
-          ></span
+          ><span style="width: 23px; height: 13px; display: inline-block; background: #68696a; margin-right: 8px"></span
           >{{ config.option.charging }}%
         </div>
       </div>
@@ -151,6 +149,10 @@ radioNum.value = Math.random();
   .info > div {
     line-height: 27px;
     display: flex;
+
+    span {
+      white-space: nowrap;
+    }
   }
 }
 </style>

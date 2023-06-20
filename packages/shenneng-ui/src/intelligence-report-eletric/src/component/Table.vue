@@ -242,6 +242,11 @@ onMounted(() => {
   border: 1px solid #454e72 !important;
 }
 
+:deep(.wrap-select .wrap-value .value) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .wrap-table {
   //   width: 100%;
   //   height: 100%;

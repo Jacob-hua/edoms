@@ -383,7 +383,7 @@ const tableData = ref([
       display: flex;
       background-color: #141c27;
       padding: 12px 0;
-      width: 249px;
+      min-width: 249px;
       height: 80px;
       color: #b3b4b6;
       box-sizing: border-box;

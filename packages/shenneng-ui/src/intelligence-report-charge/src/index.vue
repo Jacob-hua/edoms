@@ -105,7 +105,7 @@ const getData = (symbol: string) => {
 <style lang="scss" scoped>
 :deep(.frist-tab > .el-tabs--card > .el-tabs__header .el-tabs__item) {
   padding: 0 !important;
-  width: 124px;
+  min-width: 124px;
   height: 32px;
   margin-right: 30px;
   color: #eaf5ff;
