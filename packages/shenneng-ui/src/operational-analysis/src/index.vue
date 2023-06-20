@@ -31,6 +31,7 @@
             :key="index"
             class="button-tab"
             :class="{ active: activeTab === index }"
+            :title="label"
             @click="changeActiveTab(index)"
           >
             {{ label }}
@@ -506,6 +507,11 @@ onMounted(() => {
         cursor: pointer;
         background: url('./assets/button_default.png') no-repeat;
         background-size: cover;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 10px;
+        box-sizing: border-box;
 
         &.active {
           background: url('./assets/button_active.png') no-repeat;
