@@ -139,7 +139,9 @@ watch(
           let tip: string = '';
           if (params != null && params.length > 0) {
             tip +=
-              '<div style="width:105px;height:90px"><span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">三相电流</span><br />';
+              '<div style="min-width:105px;height:90px"><span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
+              t('三相电流') +
+              '</span><br />';
             for (let index = 0; index < params.length; index++) {
               tip +=
                 '<span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
@@ -222,7 +224,9 @@ watch(
           let tip: string = '';
           if (params != null && params.length > 0) {
             tip +=
-              '<div style="width:105px;height:90px"><span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">三相电流</span><br />';
+              '<div style="min-width:105px;height:90px"><span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
+              t('三相电流') +
+              '</span><br />';
             for (let index = 0; index < params.length; index++) {
               tip +=
                 '<span style="margin-left:8px;color:#C4E5F8;font-size:12px;font-weight: 400;line-height:18px">' +
@@ -305,10 +309,10 @@ watch(
         formatter: (params: any) => {
           let tip: string = '';
           if (params != null && params.length > 0) {
-            tip += '<div style="width: 130px;height: 45px">';
+            tip += '<div style="min-width: 130px;height: 45px">';
             for (let index = 0; index < params.length; index++) {
               tip +=
-                '<p><span style="color:#F5F7FA;font-size:12px;font-weight:400">' +
+                '<p style="width:100%"><span style="color:#F5F7FA;font-size:12px;font-weight:400">' +
                 params[index].seriesName +
                 ':</span><span style="margin-left:8px;color:' +
                 params[index].color +
@@ -428,10 +432,10 @@ watch(
         formatter: (params: any) => {
           let tip: string = '';
           if (params != null && params.length > 0) {
-            tip += '<div style="width: 130px;height: 45px">';
+            tip += '<div style="min-width: 130px;height: 45px">';
             for (let index = 0; index < params.length; index++) {
               tip +=
-                '<p><span style="color:#F5F7FA;font-size:12px;font-weight:400">' +
+                '<p style="width: 100%"><span style="color:#F5F7FA;font-size:12px;font-weight:400">' +
                 params[index].seriesName +
                 ':</span><span style="margin-left:8px;color:' +
                 params[index].color +
@@ -505,7 +509,7 @@ watch(
       color: [props.config.loadRate, props.config.threePhasRate],
       series: [
         {
-          name: '负载率',
+          name: t('负载率'),
           data: [0, 0, 0, 0, 0, 0, 0, 0],
           type: 'line',
           smooth: true,
@@ -632,7 +636,7 @@ const categories = ref([
 
       .text_row {
         width: 130px;
-        height: 76px;
+        min-height: 76px;
         margin: auto;
         background: #03121c;
         border: 1px solid #022438;

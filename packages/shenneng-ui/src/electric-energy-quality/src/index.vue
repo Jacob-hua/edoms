@@ -87,7 +87,7 @@ const changeElectric = (e: any, val: boolean) => {
 }
 
 :deep(.el-tabs--border-card > .el-tabs__header .el-tabs__item) {
-  width: 130px;
+  min-width: 130px;
   height: 34px;
   background: #00141f;
   color: #8f9aa3;

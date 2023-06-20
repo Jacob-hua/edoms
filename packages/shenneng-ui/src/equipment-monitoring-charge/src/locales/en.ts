@@ -1,7 +1,7 @@
 export default {
-  设备名称: 'Device Name',
-  运行状态: 'Operating Status',
-  厂家联系人: 'Manufacturer Contact',
+  设备名称: 'Device Name:',
+  运行状态: 'Operating Status:',
+  厂家联系人: 'Manufacturer Contact:',
   设备动态图: 'Device Dynamic Image',
   铭牌参数: 'Nameplate Parameters',
   出厂参数: 'Factory Parameters',

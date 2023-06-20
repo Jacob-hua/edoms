@@ -163,7 +163,7 @@ const getChartData = () => {
           tip += '<div>';
           for (let index = 0; index < params.length; index++) {
             tip +=
-              '<p><span style="width:160px;display: inline-block;color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+              '<p><span style="min-width:160px;display: inline-block;color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
               params[index].seriesName +
               '：</span><span style="color:' +
               params[index].color +
@@ -276,7 +276,7 @@ const getChartData = () => {
           tip += '<div>';
           for (let index = 0; index < params.length; index++) {
             tip +=
-              '<p><span style="width:100px;display: inline-block;color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+              '<p><span style="min-width:100px;display: inline-block;color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
               params[index].seriesName +
               '：</span><span style="color:' +
               params[index].color +
@@ -422,7 +422,7 @@ const handleClickType = (event: any) => {
 
 :deep(.station-but > .el-tabs > .el-tabs__header > .el-tabs__nav-wrap > .el-tabs__nav-scroll > .el-tabs__nav) {
   .el-tabs__item {
-    width: 92px;
+    min-width: 92px;
     height: 32px;
     text-align: center;
     line-height: 32px;

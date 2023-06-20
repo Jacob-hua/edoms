@@ -16,7 +16,7 @@
           {{ item }}
         </div>
       </div>
-      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="100px">
+      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-min-width="100px">
         <el-row :gutter="10">
           <el-col :span="4" :offset="1">
             <el-form-item :label="t('日期选择')">

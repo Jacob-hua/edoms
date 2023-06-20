@@ -13,15 +13,15 @@
           <div class="device-info">
             <div class="info-station">{{ eq_data.eq_station }}</div>
             <div class="info-information">
-              <div class="info-tit">{{ t('设备名称') }}：</div>
+              <div class="info-tit">{{ t('设备名称') }}</div>
               <div class="info-val">{{ eq_data.eq_name }}</div>
             </div>
             <div class="info-information">
-              <div class="info-tit">{{ t('运行状态') }}：</div>
+              <div class="info-tit">{{ t('运行状态') }}</div>
               <div class="info-val">{{ eq_data.eq_satus }}</div>
             </div>
             <div class="info-information">
-              <div class="info-tit">{{ t('厂家联系人') }}：</div>
+              <div class="info-tit">{{ t('厂家联系人') }}</div>
               <div class="info-val">{{ eq_data.manufacturer }}</div>
             </div>
           </div>
@@ -40,8 +40,8 @@
               <div class="card-tit">{{ item.paramsName }}</div>
               <div class="card-con">
                 <div v-for="query in item.list" :key="query.param" class="con-item">
-                  <div class="item-left">{{ query.param }}</div>
-                  <div class="item-right">{{ query.val }}</div>
+                  <div :title="query.param" class="item-left">{{ query.param }}</div>
+                  <div :title="query.val" class="item-right">{{ query.val }}</div>
                 </div>
               </div>
             </div>
@@ -375,7 +375,7 @@ const eq_data = {
           line-height: 64px;
 
           .info-station {
-            margin-right: 140px;
+            width: 22%;
             font-size: 16px;
             font-family: Microsoft YaHei;
             font-weight: 400;
@@ -384,8 +384,7 @@ const eq_data = {
 
           .info-information {
             display: flex;
-            margin-right: 80px;
-
+            width: 26%;
             .info-tit {
               font-size: 16px;
               font-family: Microsoft YaHei;
@@ -463,6 +462,9 @@ const eq_data = {
 
                 div {
                   width: 50%;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
                 }
               }
             }

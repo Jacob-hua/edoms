@@ -828,7 +828,7 @@ const tableData = [
     width: 938px;
 
     button {
-      width: 130px;
+      min-width: 130px;
       height: 36px;
       background: rgba(0, 163, 255, 0.16);
       border: 1px solid #007bc0;

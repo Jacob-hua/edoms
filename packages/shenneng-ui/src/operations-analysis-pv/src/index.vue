@@ -78,6 +78,7 @@ const props = defineProps<{
 }>();
 
 const { setMessage, t } = useApp(props);
+console.log(t);
 setMessage(locales);
 const option = ref<ECOption>({});
 const isShowModel = ref<boolean>(false);
@@ -829,7 +830,7 @@ getData('day');
 <style lang="scss" scoped>
 :deep(.frist-tab > .el-tabs--card > .el-tabs__header .el-tabs__item) {
   padding: 0 !important;
-  width: 124px;
+  min-width: 124px;
   height: 32px;
   color: #eaf5ff;
   text-align: center;

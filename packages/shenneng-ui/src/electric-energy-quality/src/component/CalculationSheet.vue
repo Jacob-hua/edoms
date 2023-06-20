@@ -4,7 +4,7 @@
     <div class="th_index">
       <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
-        <div>{{ t('奖惩电费') }}</div>
+        <div>{{ t('惩奖电费') }}</div>
       </div>
       <div class="th_index_con">
         <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
@@ -22,7 +22,7 @@
       </div>
       <div class="alculation_con">
         <el-row>
-          <el-col :span="14">
+          <el-col :span="13">
             <table>
               <tr>
                 <td class="frist_d">{{ t('有功功率电量') }}：</td>
@@ -44,7 +44,7 @@
               </tr>
             </table>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="11">
             <table>
               <tr>
                 <td class="frist_d">{{ t('惩奖电费') }}：</td>
@@ -105,7 +105,7 @@ const formulaData = computed(() => {
 
   .balance {
     width: 36px;
-    height: 90px;
+    min-height: 90px;
     writing-mode: vertical-lr;
     background: #000a0f;
     border-radius: 2px;
@@ -126,7 +126,7 @@ const formulaData = computed(() => {
 
     .th_index_con {
       width: 130px;
-      height: 76px;
+      min-height: 76px;
       text-align: center;
       font-size: 14px;
       font-family: Microsoft YaHei;
@@ -177,7 +177,7 @@ const formulaData = computed(() => {
 
         .frist_d {
           text-align: right;
-          width: 100px;
+          min-width: 100px;
         }
 
         .second_d {

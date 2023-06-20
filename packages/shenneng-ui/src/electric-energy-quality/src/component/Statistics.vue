@@ -125,7 +125,7 @@ const { t } = useI18n();
 
       .con_sub {
         width: 150px;
-        height: 76px;
+        min-height: 76px;
         margin: auto;
         text-align: center;
         font-size: 14px;
@@ -137,7 +137,7 @@ const { t } = useI18n();
         border-radius: 0px 4px 0px 4px;
 
         div {
-          height: 37px;
+          min-height: 37px;
           line-height: 37px;
         }
       }
