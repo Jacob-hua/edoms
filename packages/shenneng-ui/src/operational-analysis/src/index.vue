@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-24 11:45:45
- * @LastEditors: lihao
- * @LastEditTime: 2023-06-09 10:13:15
--->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="367">
     <div class="wrap-body" style="width: 100%; height: 100%">
@@ -508,7 +501,6 @@ onMounted(() => {
       overflow-y: auto;
       .button-tab {
         width: calc(100% - 10px);
-        height: 24px;
         margin-bottom: 20px;
         line-height: 24px;
         cursor: pointer;

@@ -84,7 +84,7 @@ defineExpose({
 
       .itm-tab {
         width: 90%;
-        height: 24px;
+        // height: 24px;
         background-image: url('../assets/tab-def.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;

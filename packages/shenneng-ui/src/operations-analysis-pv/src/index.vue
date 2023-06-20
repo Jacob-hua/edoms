@@ -31,11 +31,18 @@
           </div>
           <div class="select-gro">
             <div v-show="activeNameF === 'power-qua' ? true : false" class="dataTotal">
-              <p v-show="activeNameS === 'month' ? true : false">{{ t('当月发电量') }}：<span>5205.3kWh</span></p>
-              <p v-if="activeNameS === 'month' || activeNameS === 'year'">
-                {{ t('累计发电量') }}：<span>61767.82kWh</span>
-              </p>
-              <p v-if="activeNameS === 'month' || activeNameS === 'year'">{{ t('装机容量') }}：<span>195kW</span></p>
+              <div v-show="activeNameS === 'month' ? true : false" class="dataSon">
+                <div :title="t('当月发电量')" class="omit">{{ t('当月发电量') }}</div>
+                <div>：5205.3kWh</div>
+              </div>
+              <div v-if="activeNameS === 'month' || activeNameS === 'year'" class="dataSon">
+                <div :title="t('累计发电量')" class="omit">{{ t('累计发电量') }}</div>
+                <div>：61767.82kWh</div>
+              </div>
+              <div v-if="activeNameS === 'month' || activeNameS === 'year'" class="dataSon">
+                <div :title="t('装机容量')" class="omit">{{ t('装机容量') }}</div>
+                <div>：195kW</div>
+              </div>
             </div>
             <div class="other" style="display: flex">
               <el-select
@@ -1045,15 +1052,20 @@ getData('day');
           .dataTotal {
             display: flex;
 
-            p {
+            .dataSon {
               font-size: 16px;
               font-family: Microsoft YaHei;
               font-weight: 400;
-              color: #8d9cbd;
+              color: #ffffff;
               margin-right: 40px;
+              display: flex;
 
-              span {
-                color: #ffffff;
+              .omit {
+                width: 150px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                text-align: right;
               }
             }
           }

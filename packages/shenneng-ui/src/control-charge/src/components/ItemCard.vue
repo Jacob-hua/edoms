@@ -12,7 +12,7 @@
         <span>{{ t('开关状态') }}：</span>
         <div class="mb-2 flex items-center text-sm">
           <el-radio-group :key="radioNum" v-model="config.option.switch" class="ml-4">
-            <el-radio style="margin-right: 10px" label="1" size="small">{{ t('开') }}</el-radio>
+            <el-radio style="margin-right: 8px" label="1" size="small">{{ t('开') }}</el-radio>
             <el-radio label="0" size="small">{{ t('关') }}</el-radio>
           </el-radio-group>
         </div>
@@ -21,7 +21,7 @@
         <span>{{ t('当前充电') }}：</span>
         <div>
           <span style="width: 44px; display: inline-block; height: 13px; background: #2fda2f"></span
-          ><span style="width: 23px; height: 13px; display: inline-block; background: #68696a; margin-right: 8px"></span
+          ><span style="width: 23px; height: 13px; display: inline-block; background: #68696a; margin-right: 5px"></span
           >{{ config.option.charging }}%
         </div>
       </div>
