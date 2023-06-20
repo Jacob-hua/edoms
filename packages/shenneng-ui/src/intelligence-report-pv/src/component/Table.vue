@@ -53,7 +53,7 @@
         </el-table>
       </div>
       <div class="wrap-page">
-        <el-pagination :background="'rgba(0, 0, 0, 0.9)'" layout="prev, pager, next,total" :total="50" />
+        <el-pagination :background="'rgba(0, 0, 0, 0.9)'" layout="prev, pager, next" :total="50" />
       </div>
     </div>
   </div>
@@ -110,7 +110,7 @@ const changeTab = (index: number) => {
   state.tableData = index % 2 === 0 ? tableData : tableData1;
 };
 const handleTableData = () => {
-  state.titleList = titleData;
+  state.titleList = titleData.map((item) => ({ ...item, name: t(item.name) }));
   state.tableData = tableData;
 };
 
