@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-24 11:45:45
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-22 15:11:44
--->
 <template>
   <div class="wrapper">
     <div class="left-tab">
@@ -89,7 +82,7 @@ watch(
     overflow-y: auto;
     .button-tab {
       width: calc(100% - 10px);
-      height: 24px;
+      // height: 24px;
       margin-bottom: 20px;
       line-height: 24px;
       cursor: pointer;

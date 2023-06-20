@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-05-04 14:00:36
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-16 10:59:54
--->
 <template>
   <div class="operations-analysis" @click="handlerToShow($event, true)">
     <div class="wrap-report">
@@ -250,6 +243,7 @@ watch(
       font-size: 14px;
       color: #ffffff;
       font-weight: 300;
+      text-align: center;
     }
   }
   .model-wrapper-gtst {

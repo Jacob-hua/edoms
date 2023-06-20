@@ -5,7 +5,7 @@ export default {
   分时电量分析: 'TOU Electricity Analysis',
   负载率分析: 'Load Rate Analysis',
   出线柜: 'Outgoing Cabinet',
-  尖: 'Rush hours',
+  尖: 'Rush',
   谷: 'Valley',
   平: 'Flat',
   峰: 'Peak',
