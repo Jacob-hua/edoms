@@ -30,7 +30,7 @@ export default {
   收益: 'Earnings',
   累计充电: 'Cumulative charging',
   充电次数: 'Charge times',
-  允电时长: 'Charging duration',
+  充电时长: 'Charging duration',
   反向冲电: 'Reverse charging',
   反向充电次数: 'Reverse charging times',
   反向充电时长: 'Reverse charging duration',
