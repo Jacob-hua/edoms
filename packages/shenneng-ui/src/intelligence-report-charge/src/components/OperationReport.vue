@@ -17,7 +17,9 @@
         </div>
 
         <div>
-          <div style="height: 50%"><span class="big-number">12543</span><span>元</span></div>
+          <div style="height: 50%">
+            <span class="big-number">12543</span><span>{{ t('元') }}</span>
+          </div>
           <div style="height: 50%">{{ t('累计用电成本') }}</div>
         </div>
       </div>

@@ -10,4 +10,5 @@ export default {
   平: 'normal',
   峰: 'Peak',
   尖峰平谷: 'Rush hours/Peak/normal/valle',
+  元: '￥',
 };

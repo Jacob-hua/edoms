@@ -17,7 +17,9 @@
         </div>
 
         <div class="border-div">
-          <div style="height: 50%"><span class="big-number">420</span><span>次</span></div>
+          <div style="height: 50%">
+            <span class="big-number">420</span><span>{{ t('次') }}</span>
+          </div>
           <div style="height: 50%">{{ t('充电次数') }}</div>
         </div>
 
