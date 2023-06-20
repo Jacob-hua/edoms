@@ -4,7 +4,8 @@
       <div class="left-ft"></div>
       <div class="right-content">
         <div class="name">
-          <LongText :content="itm.label ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
+          <span class="name-label" :title="itm.label">{{ itm.label }}</span>
+          <!-- <LongText :content="itm.label ?? '--'" :content-style="{ textAlign: 'left' }"></LongText> -->
         </div>
         <div class="value-unit">
           <span class="value">
@@ -130,6 +131,14 @@ defineExpose({
         color: rgba(196, 229, 248, 1);
         font-size: 14px;
         font-family: MicrosoftYaHei;
+
+        .name-label {
+          display: inline-block;
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
       .value-unit {
         width: 25%;
