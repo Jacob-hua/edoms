@@ -56,7 +56,7 @@
                 />
               </template>
             </el-table-column>
-            <el-table-column :label="t('单价') + '（元/kWh）'" width="210">
+            <el-table-column :label="t('单价') + '（' + t('元') + '/kWh）'" width="210">
               <template #default="scope">
                 <el-input v-model="scope.row.unit_price" placeholder="Please input" />
               </template>
