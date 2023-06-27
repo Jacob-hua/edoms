@@ -6,6 +6,7 @@
           v-for="(itm, idx) in state.dataList.equipmentList"
           :key="idx"
           :class="['itm-tab', ctIndex === idx ? 'active' : '']"
+          :title="itm.eqName"
           @click="handkerToChange(idx)"
         >
           {{ itm.eqName }}
@@ -84,7 +85,7 @@ defineExpose({
 
       .itm-tab {
         width: 90%;
-        height: 24px;
+        // height: 24px;
         background-image: url('../assets/tab-def.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
@@ -94,6 +95,11 @@ defineExpose({
         font-size: 12px;
         color: rgba(196, 229, 248, 1);
         cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 10px;
+        box-sizing: border-box;
 
         &.active {
           color: #fff;

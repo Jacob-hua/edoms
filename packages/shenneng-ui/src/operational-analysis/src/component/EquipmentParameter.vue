@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-24 11:45:45
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 10:17:40
--->
 <template>
   <div class="wrapper">
     <div class="left-tab">
@@ -85,8 +78,6 @@ watch(
     align-items: center;
     .button-tab {
       width: calc(100% - 10px);
-      height: 24px;
-      //   background-color: red;
       margin-bottom: 20px;
       line-height: 24px;
       cursor: pointer;

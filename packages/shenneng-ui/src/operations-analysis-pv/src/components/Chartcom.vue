@@ -9,8 +9,8 @@
         type="card"
         @tab-click="handleClick"
       >
-        <el-tab-pane label="电流" name="current"></el-tab-pane>
-        <el-tab-pane label="电压" name="voltage"></el-tab-pane>
+        <el-tab-pane :label="t('电流')" name="current"></el-tab-pane>
+        <el-tab-pane :label="t('电压')" name="voltage"></el-tab-pane>
       </el-tabs>
     </div>
     <EdomsCharts class="charts" :option="option"></EdomsCharts>
@@ -22,6 +22,8 @@ import { ref } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
 const props = defineProps<{
   option: ECOption;
 }>();

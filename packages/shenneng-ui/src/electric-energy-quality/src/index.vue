@@ -20,7 +20,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>三相不平衡</span>
+                  <span>{{ t('三相不平衡') }}</span>
                 </span>
               </template>
               <ThreePhaseUnbalance :config="config"></ThreePhaseUnbalance>
@@ -28,7 +28,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>功率因数</span>
+                  <span>{{ t('功率因数') }}</span>
                 </span>
               </template>
               <PowerFactor :config="config"></PowerFactor>
@@ -36,7 +36,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>电压分析</span>
+                  <span>{{ t('电压分析') }}</span>
                 </span>
               </template>
               <VoltagAnalysis></VoltagAnalysis>
@@ -51,14 +51,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
+import useApp from '../../useApp';
+
 import PowerFactor from './component/PowerFactor.vue';
 import ThreePhaseUnbalance from './component/ThreePhaseUnbalance.vue';
 import VoltagAnalysis from './component/VoltagAnalysis.vue';
+import locales from './locales';
 import { ElectricEnergyQuality } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
+
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
 
 const showElectric = ref<boolean>(false);
 const changeElectric = (e: any, val: boolean) => {
@@ -80,7 +87,7 @@ const changeElectric = (e: any, val: boolean) => {
 }
 
 :deep(.el-tabs--border-card > .el-tabs__header .el-tabs__item) {
-  width: 130px;
+  min-width: 130px;
   height: 34px;
   background: #00141f;
   color: #8f9aa3;

@@ -27,7 +27,9 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import * as echarts from 'echarts/core';
+
+// import * as echarts from 'echarts/core';
+import echarts from '../../../echarts';
 // import EdomsCharts from '../../../EdomsCharts.vue';
 // import { ECOption } from '../../../types';
 // max: 0.55,
@@ -53,7 +55,7 @@ const idList = ref<Array<string>>([
 
 const initData = (type: string, val: number) => {
   const dom = document.getElementById(type);
-  const chart = echarts.init(dom as HTMLElement);
+  const chart = echarts.init(dom as HTMLDivElement);
   const options = {
     series: [
       {

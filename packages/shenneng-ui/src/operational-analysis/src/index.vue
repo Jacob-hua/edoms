@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-24 11:45:45
- * @LastEditors: lihao
- * @LastEditTime: 2023-06-09 10:13:15
--->
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="367">
     <div class="wrap-body" style="width: 100%; height: 100%">
@@ -38,6 +31,7 @@
             :key="index"
             class="button-tab"
             :class="{ active: activeTab === index }"
+            :title="label"
             @click="changeActiveTab(index)"
           >
             {{ label }}
@@ -65,12 +59,15 @@ import useIntervalAsync from '../../useIntervalAsync';
 // import EquipmentParameter from './component/EquipmentParameter.vue';
 // import SystemParameter from './component/SystemParameter.vue';
 import apiFactory from './api';
+import locales from './locales';
 import { MIndicatorItemConfig, MOperationalParameters, MParameterItemConfig } from './type';
 
 const props = defineProps<{
   config: MOperationalParameters;
 }>();
-
+// 国际化
+const { setMessage, t } = useApp(props);
+setMessage(locales);
 const scrollMain = ref();
 const wrap = ref();
 // const scrollLeft = ref(0);
@@ -153,7 +150,7 @@ const getHistoryData = async () => {
     //     ]),
     //   };
     return {
-      name: name ? name : `未命名${index}`,
+      name: name ? name : `${t('未命名')}${index}`,
       type: lineType,
       showSymbol: false,
       smooth: true,
@@ -505,12 +502,16 @@ onMounted(() => {
       overflow-y: auto;
       .button-tab {
         width: calc(100% - 10px);
-        height: 24px;
         margin-bottom: 20px;
         line-height: 24px;
         cursor: pointer;
         background: url('./assets/button_default.png') no-repeat;
         background-size: cover;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 10px;
+        box-sizing: border-box;
 
         &.active {
           background: url('./assets/button_active.png') no-repeat;

@@ -48,23 +48,26 @@ import { ElDrawer } from '@edoms/design';
 import useApp from '../../useApp';
 
 import ConditionCard from './component/ConditionCard.vue';
+import locales from './locales';
 import { MConditionItemConfig, MEquipmentCondition } from './type';
 
 const props = defineProps<{
   config: MEquipmentCondition;
 }>();
+const { setMessage, t } = useApp(props);
 
+setMessage(locales);
 const { request } = useApp(props);
 
 const visible = ref<boolean>(false);
 
 const groupTabsRef = ref<HTMLElement>();
 
-const activeName = ref<string>('全部');
+const activeName = ref<string>(t('全部'));
 
 const groups = computed<Set<string>>(() => {
   const result = new Set<string>();
-  result.add('全部');
+  result.add(t('全部'));
   return (
     props.config.groups?.reduce((groups, { group }) => {
       groups.add(group);
@@ -74,7 +77,7 @@ const groups = computed<Set<string>>(() => {
 });
 
 const conditions = computed<MConditionItemConfig[]>(() => {
-  if (activeName.value === '全部') {
+  if (activeName.value === t('全部')) {
     return props.config.conditions;
   }
   return props.config.conditions.filter(({ group }) => group === activeName.value);

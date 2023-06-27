@@ -11,13 +11,13 @@
         <div class="content-title">
           <div class="left-title-font">
             <span class="font-icon"></span>
-            <span class="font-value">运行分析</span>
+            <span class="font-value">{{ t('运行分析') }}</span>
           </div>
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
         <div class="content-data">
           <div class="station-sel">
-            <span>设备选择：</span>
+            <span>{{ t('设备选择') }}：</span>
             <el-select
               v-model="eq_value"
               :teleported="false"
@@ -37,8 +37,8 @@
           </div>
           <div class="station-but">
             <el-tabs v-model="type_value" @tab-click="handleClickType">
-              <el-tab-pane label="正向充电" name="forward"> </el-tab-pane>
-              <el-tab-pane label="反向充电" name="reverse"> </el-tab-pane>
+              <el-tab-pane :label="t('正向充电')" name="forward"> </el-tab-pane>
+              <el-tab-pane :label="t('反向充电')" name="reverse"> </el-tab-pane>
             </el-tabs>
 
             <!-- <el-button v-for="item in stationType" :key="item.name" @click="handleClickType">{{ item.type }}</el-button> -->
@@ -61,17 +61,22 @@
 import { ref } from 'vue';
 
 import { ECOption } from '../../types';
+import useApp from '../../useApp';
 
 import Chartcom from './components/Chartcom.vue';
+import locales from './locales';
 import { OperationsAnalysisCharge } from './type';
 // 充电量
 const charging_option = ref<ECOption>({});
 // 运行参数
 const operating_option = ref<ECOption>({});
 
-defineProps<{
+const props = defineProps<{
   config: OperationsAnalysisCharge;
 }>();
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
 const isShowModel = ref<boolean>(false);
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
@@ -83,39 +88,39 @@ const type_value = ref('forward');
 const options = [
   {
     value: 'frist',
-    label: '1#充电桩',
+    label: `1#${t('充电桩')}`,
   },
   {
     value: 'second',
-    label: '2#充电桩',
+    label: `2#${t('充电桩')}`,
   },
 ];
 const stationData = [
   {
-    label: '1-1充电桩',
+    label: `1-1${t('充电桩')}`,
     name: '1-1',
   },
   {
-    label: '1-2充电桩',
+    label: `1-2${t('充电桩')}`,
     name: '1-2',
   },
   {
-    label: '1-3充电桩',
+    label: `1-3${t('充电桩')}`,
     name: '1-3',
   },
   {
-    label: '1-4充电桩',
+    label: `1-4${t('充电桩')}`,
     name: '1-4',
   },
   {
-    label: '1-5充电桩',
+    label: `1-5${t('充电桩')}`,
     name: '1-5',
   },
 ];
 
 const getChartData = () => {
   charging_option.value = {
-    tit: '充电量监测',
+    tit: t('充电量监测'),
     grid: {
       top: 40,
       left: 30,
@@ -158,7 +163,7 @@ const getChartData = () => {
           tip += '<div>';
           for (let index = 0; index < params.length; index++) {
             tip +=
-              '<p><span style="width:160px;display: inline-block;color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+              '<p><span style="min-width:160px;display: inline-block;color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
               params[index].seriesName +
               '：</span><span style="color:' +
               params[index].color +
@@ -167,7 +172,9 @@ const getChartData = () => {
               'kWh</span></p>';
           }
           tip +=
-            '<p><span style="width:160px;display: inline-block;color:#F5F7FA;font-size: 12px;font-weight: 400;">差值：</span><span style="color:#FF8A00">' +
+            '<p><span style="width:160px;display: inline-block;color:#F5F7FA;font-size: 12px;font-weight: 400;">' +
+            t('差值') +
+            '：</span><span style="color:#FF8A00">' +
             Number(params[0].value - params[1].value) +
             'kWh</span></p></div>';
         }
@@ -185,7 +192,7 @@ const getChartData = () => {
     },
     yAxis: {
       type: 'value',
-      name: '单位/kWh',
+      name: t('单位'),
       nameTextStyle: {
         // lineHeight: 28,
         padding: [0, 10, 0, 0],
@@ -210,14 +217,14 @@ const getChartData = () => {
     },
     series: [
       {
-        name: 'DC-AC（车-充电桩）输入',
+        name: t('DC_AC车充电桩输入'),
         data: [100, 150, 200, 250, 300, 350, 200, 150, 250, 300, 105, 205],
         type: 'line',
         smooth: true,
         symbolSize: 0,
       },
       {
-        name: 'DC-AC（充电桩-电网）输出',
+        name: t('DC_AC充电桩电网输出'),
         data: [200, 120, 300, 100, 350, 250, 200, 100, 300, 200, 205, 350],
         type: 'line',
         smooth: true,
@@ -226,7 +233,7 @@ const getChartData = () => {
     ],
   };
   operating_option.value = {
-    tit: '运行参数监测',
+    tit: t('运行参数监测'),
     grid: {
       top: 40,
       left: 30,
@@ -269,7 +276,7 @@ const getChartData = () => {
           tip += '<div>';
           for (let index = 0; index < params.length; index++) {
             tip +=
-              '<p><span style="width:100px;display: inline-block;color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+              '<p><span style="min-width:100px;display: inline-block;color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
               params[index].seriesName +
               '：</span><span style="color:' +
               params[index].color +
@@ -293,7 +300,7 @@ const getChartData = () => {
     },
     yAxis: {
       type: 'value',
-      name: '单位/kWh',
+      name: t('单位'),
       nameTextStyle: {
         // lineHeight: 28,
         padding: [0, 10, 0, 0],
@@ -318,21 +325,21 @@ const getChartData = () => {
     },
     series: [
       {
-        name: 'DC-AC输入电压',
+        name: t('DC_AC输入电压'),
         data: [200, 400, 250, 700, 200, 400, 250, 700, 200, 400, 250, 700],
         type: 'line',
         smooth: true,
         symbolSize: 0,
       },
       {
-        name: 'DC-AC输入电流',
+        name: t('DC_AC输入电流'),
         data: [100, 150, 120, 200, 100, 150, 120, 200, 100, 150, 120, 200],
         type: 'line',
         smooth: true,
         symbolSize: 0,
       },
       {
-        name: 'DC-AC输出电流',
+        name: t('DC_AC输出电流'),
         data: [90, 120, 140, 160, 90, 120, 140, 160, 90, 120, 140, 160],
         type: 'line',
         smooth: true,
@@ -415,7 +422,7 @@ const handleClickType = (event: any) => {
 
 :deep(.station-but > .el-tabs > .el-tabs__header > .el-tabs__nav-wrap > .el-tabs__nav-scroll > .el-tabs__nav) {
   .el-tabs__item {
-    width: 92px;
+    min-width: 92px;
     height: 32px;
     text-align: center;
     line-height: 32px;
@@ -506,6 +513,7 @@ const handleClickType = (event: any) => {
       font-size: 14px;
       color: #ffffff;
       font-weight: 300;
+      text-align: center;
     }
   }
 
