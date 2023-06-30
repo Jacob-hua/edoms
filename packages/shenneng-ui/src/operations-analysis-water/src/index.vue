@@ -777,6 +777,7 @@ const getThreeData = (symbol: string) => {
 .operations-analysis-water {
   min-height: 80px;
   position: relative;
+
   .wrap-report {
     width: 100%;
     height: 100%;
@@ -787,6 +788,7 @@ const getThreeData = (symbol: string) => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
     .wrap-icon {
       width: 60px;
       height: 42px;
@@ -798,6 +800,7 @@ const getThreeData = (symbol: string) => {
       border: 1px solid #0072b3;
       border-radius: 4px;
       box-sizing: border-box;
+
       .icon-report {
         width: 22px;
         height: 24px;
@@ -831,6 +834,8 @@ const getThreeData = (symbol: string) => {
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
 
       .content-title {
         width: 100%;
@@ -880,7 +885,6 @@ const getThreeData = (symbol: string) => {
 
       .content-data {
         width: calc(100% - 60px);
-        height: calc(100% - 112px);
         margin: 30px;
         overflow-y: scroll;
 

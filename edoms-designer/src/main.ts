@@ -3,6 +3,7 @@ import JsonViewer from 'vue3-json-viewer';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import ElementPlus, { ElDialog } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
+import en from 'element-plus/lib/locale/lang/en';
 import * as monaco from 'monaco-editor';
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
 import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
@@ -21,12 +22,20 @@ import 'virtual:svg-icons-register';
 import permissionDirective from './directive/permission';
 import roleDirective from './directive/role';
 import App from './App.vue';
+import i18n from './locales';
 import router from './router';
 
 import './assets/style/main.css';
 import 'element-plus/theme-chalk/index.css';
 import '@edoms/editor/src/theme/index.scss';
 import 'vue3-json-viewer/dist/index.css';
+
+const languages = () => {
+  if (i18n.global.locale.value === 'en') {
+    return en;
+  }
+  return zhCn;
+};
 
 // @ts-ignore
 globalThis.MonacoEnvironment = {
@@ -53,13 +62,13 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
 ElDialog['props'].closeOnClickModal.default = false;
-
 const app = createApp(App);
+
 app.use(JsonViewer);
 app.use(pinia);
 app.use(router);
 app.use(ElementPlus, {
-  locale: zhCn,
+  locale: languages(),
 });
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
@@ -68,4 +77,6 @@ app.use(ElDesign, EdomsElementPlusAdapter);
 app.use(EdomsEditor);
 app.directive('role', roleDirective);
 app.directive('permission', permissionDirective);
+app.use(i18n);
+
 app.mount('#app');

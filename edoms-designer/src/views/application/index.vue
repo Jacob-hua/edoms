@@ -15,7 +15,7 @@
             <div class="app-add-box">
               <el-icon :size="55"><Plus /></el-icon>
             </div>
-            新建应用
+            {{ $t('application.newApplication') }}
           </div>
         </template>
         <template #default="{ item }: { item: ListApplicationsResItem }">

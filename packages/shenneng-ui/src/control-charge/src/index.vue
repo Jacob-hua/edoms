@@ -363,7 +363,7 @@ const handlerToShow = (e: any, bl: boolean) => {
 
     .model-content {
       width: 1480px;
-      height: 800px;
+      height: 85%;
       position: absolute;
       left: 50%;
       top: 50%;
@@ -371,6 +371,8 @@ const handlerToShow = (e: any, bl: boolean) => {
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
 
       .content-title {
         width: 100%;
@@ -420,7 +422,7 @@ const handlerToShow = (e: any, bl: boolean) => {
 
       .content-body {
         width: 100%;
-        height: calc(100% - 52px);
+        height: 100%;
 
         .body-top {
           width: 100%;

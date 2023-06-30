@@ -21,7 +21,9 @@
                 <div class="avatar">
                   <div>
                     <span>{{ nickName }} - {{ currentTenant?.proName }}</span>
-                    <p><span>应用数:</span> {{ applicationNumber }}</p>
+                    <p>
+                      <span>{{ $t('application.quantity') }}:</span> {{ applicationNumber }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -71,6 +73,7 @@ export default {
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { RouterView, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
@@ -82,7 +85,6 @@ import useAccountStore from '@/store/account';
 import useRouterStore from '@/store/router';
 
 import BaseLayout from './BaseLayout.vue';
-
 export interface Menu {
   value: string | number;
   label: string;
@@ -91,6 +93,7 @@ export interface Menu {
   icon?: string;
   action?: (value?: any) => void;
 }
+const { t } = useI18n();
 
 const router = useRouter();
 
@@ -132,25 +135,25 @@ watch(
 const menus: Menu[] = [
   {
     value: 'switch',
-    label: '切换项目',
+    label: t('application.switchProjects'),
     icon: 'Operation',
     disabled: {
       clickEvent: true,
     },
     subMenu: tenantList.value,
   },
-  {
-    value: 'model',
-    label: '项目模型',
-    action: () => {
-      router.push({
-        path: '/model',
-      });
-    },
-  },
+  // {
+  //   value: 'model',
+  //   label: '项目模型',
+  //   action: () => {
+  //     router.push({
+  //       path: '/model',
+  //     });
+  //   },
+  // },
   {
     value: 'loginOut',
-    label: '退出登录',
+    label: t('application.logOut'),
     action: () => {
       accountStore.logout();
       router.push({

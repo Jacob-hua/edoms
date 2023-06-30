@@ -159,17 +159,16 @@ const changeElectric = (e: any, val: boolean) => {
   z-index: 1000;
 
   .wrap-body {
-    width: 100%;
     background: #000;
     position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 1800px;
-    height: 840px;
+    min-width: 1800px;
+    min-height: 840px;
     border: 1px solid #013460;
-    min-width: 822px;
-    min-height: 364px;
+    display: flex;
+    flex-direction: column;
 
     .wrap-body-top {
       width: 100%;
@@ -205,7 +204,7 @@ const changeElectric = (e: any, val: boolean) => {
 
     .wrap-body-bottom {
       width: 100%;
-      height: 788px;
+      flex: 1;
       background-color: rgba(0, 0, 0, 1);
       overflow: hidden;
 

@@ -15,7 +15,7 @@
                 <el-icon :size="20">
                   <Document />
                 </el-icon>
-                <span>应用信息</span>
+                <span>{{ $t('applicationSetting.information') }}</span>
               </span>
             </template>
             <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @success="goBack" />
@@ -26,7 +26,7 @@
                 <el-icon :size="20">
                   <Setting />
                 </el-icon>
-                <span>高级设置</span>
+                <span>{{ $t('applicationSetting.setting') }}</span>
               </span>
             </template>
             <AdvancedSetting :app-info="appInfo" @success="handleUpdateSuccess" />
@@ -37,7 +37,7 @@
                 <el-icon :size="20">
                   <Document />
                 </el-icon>
-                <span>版本管理</span>
+                <span>{{ $t('applicationSetting.versioning') }}</span>
               </span>
             </template>
             <VersionList v-if="activeName === 'version'" :app-info="appInfo" />
@@ -46,7 +46,7 @@
             <template #label>
               <span class="custom-tabs-label">
                 <el-icon :size="20"><HomeFilled /></el-icon>
-                <span>权限管理</span>
+                <span>{{ $t('applicationSetting.permission') }}</span>
               </span>
             </template>
             <PermissionList :app-info="appInfo" />
