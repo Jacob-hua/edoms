@@ -1,5 +1,7 @@
 import { EventEmitter } from 'events';
 
+import { createI18n, I18n } from 'vue-i18n';
+
 import { Callback, EventAction, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
 import { getUrlParam, setUrlParam } from '@edoms/utils';
 
@@ -49,6 +51,11 @@ class App extends EventEmitter {
 
   public eventQueueMap: Record<string, EventCache[]> = {};
 
+  public i18n: I18n = createI18n({
+    legacy: false,
+    locale: localStorage.getItem('lang') ?? navigator.language,
+  });
+
   constructor(options: AppOptionsConfig) {
     super();
     options.jsEngine && (this.jsEngine = options.jsEngine);
@@ -75,6 +82,16 @@ class App extends EventEmitter {
     options.config && this.setConfig(options.config, options.curPage);
 
     bindCommonEventListener(this);
+  }
+
+  public get t(): Function {
+    return this.i18n.global.t;
+  }
+
+  public setMessage(message: Record<string, any>) {
+    Object.keys(message).forEach((locale) => {
+      this.i18n.global.mergeLocaleMessage(locale, message[locale]);
+    });
   }
 
   /**

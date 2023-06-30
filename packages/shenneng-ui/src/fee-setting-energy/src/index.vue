@@ -24,14 +24,14 @@
                 <div style="text-align: center">{{ scope.row.index }}.</div>
               </template>
             </el-table-column>
-            <el-table-column label="尖峰平谷" width="210">
+            <el-table-column :label="t('尖峰平谷')" width="210">
               <template #default="scope">
                 <el-select v-model="scope.row.isJfpg" placeholder="Select">
                   <el-option v-for="item in jfpgData" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="开始时间" width="210">
+            <el-table-column :label="t('开始时间')" width="210">
               <template #default="scope">
                 <el-time-select
                   v-model="scope.row.startTime"
@@ -44,7 +44,7 @@
                 />
               </template>
             </el-table-column>
-            <el-table-column label="结束时间" width="210">
+            <el-table-column :label="t('结束时间')" width="210">
               <template #default="scope">
                 <el-time-select
                   v-model="scope.row.endTime"
@@ -56,22 +56,22 @@
                 />
               </template>
             </el-table-column>
-            <el-table-column label="单价（元/kWh）" width="210">
+            <el-table-column :label="t('单价') + '（' + t('元') + '/kWh）'" width="210">
               <template #default="scope">
                 <el-input v-model="scope.row.unit_price" placeholder="Please input" />
               </template>
             </el-table-column>
             <el-table-column width="100">
               <template #default="scope">
-                <el-button class="delete" @click="deleteFn(scope.row)">删除</el-button>
+                <el-button class="delete" @click="deleteFn(scope.row)">{{ t('删除') }}</el-button>
               </template>
             </el-table-column>
           </el-table>
           <div class="addCon">
-            <el-button :icon="Plus" class="add" @click="addFn">增加</el-button>
+            <el-button :icon="Plus" class="add" @click="addFn">{{ t('增加') }}</el-button>
           </div>
           <div class="submitCon">
-            <el-button class="submit">确认</el-button>
+            <el-button class="submit">{{ t('确认') }}</el-button>
           </div>
         </div>
       </div>
@@ -83,11 +83,17 @@
 import { reactive, ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 
+import useApp from '../../useApp';
+
+import locales from './locales';
 import { FeeSettingEnergy } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: FeeSettingEnergy;
 }>();
+
+const { setMessage, t } = useApp(props);
+setMessage(locales);
 const isShowModel = ref<boolean>(false);
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
@@ -139,19 +145,19 @@ const feeData = reactive<{
 const jfpgData = [
   {
     value: 'jian',
-    label: '尖',
+    label: t('尖'),
   },
   {
     value: 'feng',
-    label: '峰',
+    label: t('峰'),
   },
   {
     value: 'ping',
-    label: '平',
+    label: t('平'),
   },
   {
     value: 'gu',
-    label: '谷',
+    label: t('谷'),
   },
 ];
 const addFn = () => {

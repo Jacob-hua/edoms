@@ -3,19 +3,19 @@
     <el-dialog v-model="dialogVisible" :width="600" :show-close="false">
       <template #header="{ close, titleId, titleClass }">
         <div class="my-header">
-          <h4 :id="titleId" :class="titleClass">权限审核</h4>
+          <h4 :id="titleId" :class="titleClass">{{ t('权限审核') }}</h4>
           <div class="close-btn" @click="close"></div>
         </div>
       </template>
       <el-form :model="formModel" label-position="right">
         <el-form-item prop="currentModel">
           <el-radio-group v-model="formModel.currentModel">
-            <el-radio label="自动模式" border></el-radio>
-            <el-radio label="手动模式" border></el-radio>
+            <el-radio :label="t('自动模式')" border></el-radio>
+            <el-radio :label="t('手动模式')" border></el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button @click="submit">确认</el-button>
+          <el-button @click="submit">{{ t('确认') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -24,6 +24,9 @@
 
 <script lang="ts" setup>
 import { computed, reactive } from 'vue';
+
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -38,7 +41,7 @@ const emit = defineEmits<{
 }>();
 
 const formModel = reactive({
-  currentModel: '自动模式',
+  currentModel: t('自动模式'),
 });
 
 const dialogVisible = computed({

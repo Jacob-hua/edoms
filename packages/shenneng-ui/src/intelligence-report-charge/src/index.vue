@@ -20,9 +20,9 @@
         <div class="content-data">
           <div class="frist-tab">
             <el-tabs v-model="activeNameF" class="tab demo-tabs" type="card" @tab-click="handleClickF">
-              <el-tab-pane label="运行报告" name="power-qua"></el-tab-pane>
-              <el-tab-pane label="经营报告" name="power-gen"></el-tab-pane>
-              <el-tab-pane label="设备报告" name="power-equ"></el-tab-pane>
+              <el-tab-pane :label="t('运行报告')" name="power-qua"></el-tab-pane>
+              <el-tab-pane :label="t('经营报告')" name="power-gen"></el-tab-pane>
+              <el-tab-pane :label="t('设备报告')" name="power-equ"></el-tab-pane>
             </el-tabs>
           </div>
 
@@ -48,16 +48,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-// import EdomsCharts from '../../EdomsCharts.vue';
+import useApp from '../../useApp';
+
 import EquipReport from './components/EquipReport.vue';
 import OperationReport from './components/OperationReport.vue';
 import RunReport from './components/RunReport.vue';
-// import TimeCalendar from './components/TimeCalendar.vue';
+import locales from './locales';
 import { OperationsAnalysisPv } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: OperationsAnalysisPv;
 }>();
+
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
 
 const isShowModel = ref<boolean>(false);
 const handlerToShow = (e: any, bl: boolean) => {
@@ -67,14 +72,7 @@ const handlerToShow = (e: any, bl: boolean) => {
 const timeType = ref<string>('date');
 const activeNameF = ref('power-qua');
 const activeNameS = ref('day');
-// const value = ref('all');
 
-// const options = [
-//   {
-//     value: 'all',
-//     label: '总览',
-//   },
-// ];
 // 切换发电量/功率
 const handleClickF = (event: any) => {
   if (activeNameF.value === event.paneName) {
@@ -85,14 +83,6 @@ const handleClickF = (event: any) => {
   activeNameS.value = 'day';
   getData(activeNameS.value);
 };
-// 切换日/月/年曲线
-// const handleClickS = (event: any) => {
-//   if (activeNameS.value === event.paneName) {
-//     return;
-//   }
-//   activeNameS.value = event.paneName;
-//   getData(activeNameS.value);
-// };
 
 // 获取charts数据
 const getData = (symbol: string) => {
@@ -115,7 +105,7 @@ const getData = (symbol: string) => {
 <style lang="scss" scoped>
 :deep(.frist-tab > .el-tabs--card > .el-tabs__header .el-tabs__item) {
   padding: 0 !important;
-  width: 124px;
+  min-width: 124px;
   height: 32px;
   margin-right: 30px;
   color: #eaf5ff;

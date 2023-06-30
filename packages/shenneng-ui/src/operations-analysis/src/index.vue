@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-05-04 14:00:36
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-16 10:59:54
--->
 <template>
   <div class="operations-analysis" @click="handlerToShow($event, true)">
     <div class="wrap-report">
@@ -28,7 +21,7 @@
             <span class="font-value">{{ config.title }}</span>
           </div>
           <div class="right-select">
-            <span class="label-select">分析周期：</span>
+            <span class="label-select">{{ t('分析周期') }}：</span>
             <div class="select" @click="handlrToShowOptions($event, true)">
               <span class="font-value">{{ dateValue }}</span>
             </div>
@@ -72,46 +65,53 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 
+import useApp from '../../useApp';
+
 import ChartData from './components/chartData.vue';
 import TabList from './components/TabList.vue';
+import locales from './locales';
 import { AnaItemConfigs } from './type';
-defineProps<{
+const props = defineProps<{
   config: AnaItemConfigs;
 }>();
 
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
+
 const dateOptions = ref<Array<{ [key: string]: string }>>([
   {
-    key: '日',
+    key: t('日'),
     value: 'day',
   },
   {
-    key: '月',
+    key: t('月'),
     value: 'month',
   },
   {
-    key: '年',
+    key: t('年'),
     value: 'year',
   },
 ]);
 
 const tableTitleList = ref<Array<{ [key: string]: string }>>([
   {
-    key: '变压器单元',
+    key: t('变压器单元'),
     value: 'unitName',
     width: '18%',
   },
   {
-    key: '累计电量',
+    key: t('累计电量'),
     value: 'accumulatedPower',
     width: '15%',
   },
   {
-    key: '分时电量分析',
+    key: t('分时电量分析'),
     value: 'timePowerAna',
     width: '27%',
   },
   {
-    key: '负载率分析',
+    key: t('负载率分析'),
     value: 'loadRateAna',
     width: '40%',
   },
@@ -121,54 +121,54 @@ const isShowModel = ref<boolean>(false);
 
 const isShowOptions = ref<boolean>(false);
 
-const dateValue = ref<string>('日');
+const dateValue = ref<string>(t('日'));
 
 const tableDataList = ref<Array<any>>([
   {
-    unitName: '4#变压器',
-    unitType: '出线柜1',
-    unit: '万kWh',
+    unitName: '4#' + t('变压器'),
+    unitType: t('出线柜') + '1',
+    unit: t('万') + 'kWh',
     dataValue: 34,
     timeUse: {
       rate: 1.72,
       list: [
-        { key: '谷', value: 0.18, code: 'gu' },
-        { key: '平', value: 0.39, code: 'ping' },
-        { key: '峰', value: 0.31, code: 'feng' },
-        { key: '尖', value: 0.12, code: 'jian' },
+        { key: t('谷'), value: 0.18, code: 'gu' },
+        { key: t('平'), value: 0.39, code: 'ping' },
+        { key: t('峰'), value: 0.31, code: 'feng' },
+        { key: t('尖'), value: 0.12, code: 'jian' },
       ],
     },
     rateAna: {
       max: 0.8,
       min: 0.2,
       list: [
-        { key: '过载', dis: '0', times: '0' },
-        { key: '重载', dis: '36', times: '127' },
-        { key: '轻载', dis: '37', times: '511' },
+        { key: t('过载'), dis: '0', times: '0' },
+        { key: t('重载'), dis: '36', times: '127' },
+        { key: t('轻载'), dis: '37', times: '511' },
       ],
     },
   },
   {
-    unitName: '5#变压器',
-    unitType: '出线柜2',
-    unit: '万kWh',
+    unitName: '5#' + t('变压器'),
+    unitType: t('出线柜') + '2',
+    unit: t('万') + 'kWh',
     dataValue: 0,
     timeUse: {
       rate: 0,
       list: [
-        { key: '谷', value: 0, code: 'gu' },
-        { key: '平', value: 0, code: 'ping' },
-        { key: '峰', value: 0, code: 'feng' },
-        { key: '尖', value: 0, code: 'jian' },
+        { key: t('谷'), value: 0, code: 'gu' },
+        { key: t('平'), value: 0, code: 'ping' },
+        { key: t('峰'), value: 0, code: 'feng' },
+        { key: t('尖'), value: 0, code: 'jian' },
       ],
     },
     rateAna: {
       max: 0,
       min: 0,
       list: [
-        { key: '过载', dis: '0', times: '0' },
-        { key: '重载', dis: '0', times: '0' },
-        { key: '轻载', dis: '0', times: '0' },
+        { key: t('过载'), dis: '0', times: '0' },
+        { key: t('重载'), dis: '0', times: '0' },
+        { key: t('轻载'), dis: '0', times: '0' },
       ],
     },
   },
@@ -243,6 +243,7 @@ watch(
       font-size: 14px;
       color: #ffffff;
       font-weight: 300;
+      text-align: center;
     }
   }
   .model-wrapper-gtst {

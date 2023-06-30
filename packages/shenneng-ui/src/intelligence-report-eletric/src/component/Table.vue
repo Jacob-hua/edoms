@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-25 11:03:11
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-26 16:05:59
--->
 <template>
   <div class="wrap-table">
     <div class="header">
@@ -20,7 +13,7 @@
               <el-date-picker
                 v-model="state.queryForm.date"
                 type="date"
-                placeholder="请选择日期"
+                :placeholder="t('请选择日期')"
                 @change="changeDate"
               />
             </el-form-item>
@@ -30,7 +23,7 @@
               <Select
                 :width="148"
                 :options="state.stationOptions"
-                :default-value="'一号配电室'"
+                :default-value="t('一号配电室')"
                 @change-item="changeStation"
               ></Select>
             </el-form-item>
@@ -40,12 +33,12 @@
               <Select
                 :width="148"
                 :options="state.deviceOptions"
-                :default-value="'电压配电柜一'"
+                :default-value="t('电压配电柜一')"
                 @change-item="changeDevice"
               ></Select>
             </el-form-item>
           </el-col>
-          <div class="button">导出</div>
+          <div class="button">{{ t('导出') }}</div>
         </el-row>
       </el-form>
       <div class="table">
@@ -60,7 +53,7 @@
           }"
           :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
         >
-          <el-table-column prop="time" fixed label="时间" width="110" />
+          <el-table-column prop="time" fixed :label="t('时间')" width="110" />
           <el-table-column v-for="(item, index) in state.titleList" :key="item.name" :label="item.name">
             <el-table-column
               v-for="(val, key) in item.data"
@@ -83,11 +76,15 @@ import { ElForm } from '@edoms/design';
 import { dateFormat, formatDate } from '@edoms/utils';
 
 import Select from '../../../common/Select.vue';
+import useI18n from '../../../useI18n';
 import mockData from '../mock';
 import { MIntelligenceReport, MQueryForm } from '../type';
+
 defineProps<{
   config: MIntelligenceReport;
 }>();
+
+const { t } = useI18n();
 
 const queryRef = ref(ElForm);
 
@@ -102,37 +99,37 @@ const state: any = reactive({
   tableData: [],
   stationOptions: [
     {
-      label: '一号配电室',
+      label: t('一号配电室'),
       value: 'station1',
     },
     {
-      label: '二号配电室',
+      label: t('二号配电室'),
       value: 'station2',
     },
     {
-      label: '三号配电室',
+      label: t('三号配电室'),
       value: 'station3',
     },
     {
-      label: '四号配电室',
+      label: t('四号配电室'),
       value: 'station4',
     },
   ],
   deviceOptions: [
     {
-      label: '电压配电柜一',
+      label: t('电压配电柜一'),
       value: 'device1',
     },
     {
-      label: '电压配电柜二',
+      label: t('电压配电柜二'),
       value: 'device2',
     },
     {
-      label: '电压配电柜三',
+      label: t('电压配电柜三'),
       value: 'device3',
     },
     {
-      label: '电压配电柜四',
+      label: t('电压配电柜四'),
       value: 'device4',
     },
   ],
@@ -245,6 +242,11 @@ onMounted(() => {
   border: 1px solid #454e72 !important;
 }
 
+:deep(.wrap-select .wrap-value .value) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .wrap-table {
   //   width: 100%;
   //   height: 100%;

@@ -163,6 +163,7 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     cursor: pointer;
     min-width: 259px;
     min-height: 100px;
+    max-width: 50%;
     img {
       width: 50px;
       height: 50px;

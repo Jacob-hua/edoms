@@ -3,20 +3,20 @@
     <div class="anticipate">
       <div class="anticipate-info">
         <div>
-          <span>预期总收益：</span>
+          <span>{{ t('预期总收益') }}：</span>
           <span class="anticipate-value">1483.8元</span>
         </div>
         <div>
-          <span>预期总量：</span>
+          <span>{{ t('预期总量') }}：</span>
           <span class="anticipate-value">6451.4kWh</span>
         </div>
         <div>
-          <span>预期度电收益：</span>
+          <span>{{ t('预期度电收益') }}：</span>
           <span class="anticipate-value">0.23/kWh</span>
         </div>
       </div>
       <div class="btn">
-        <el-button>启动优化</el-button>
+        <el-button>{{ t('启动优化') }}</el-button>
       </div>
     </div>
     <div class="chart-box">
@@ -30,6 +30,9 @@ import { computed } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
+
+const { t } = useI18n();
 
 const options = computed<ECOption>(() => {
   return {
@@ -53,13 +56,15 @@ const options = computed<ECOption>(() => {
           tip += '<div>';
           for (let index = 0; index < params.length; index++) {
             tip +=
-              '<p><span style="color: #F5F7FA">当前状态：</span><span style="color: ' +
+              '<p><span style="color: #F5F7FA">' +
+              t('当前状态') +
+              '：</span><span style="color: ' +
               params[index].color +
               '">' +
-              (params[index].value < 0 ? '充电' : '供电') +
+              (params[index].value < 0 ? t('充电') : t('供电')) +
               '</span></p>' +
               '<p><span style="color: #F5F7FA">' +
-              (params[index].value < 0 ? '充电功率' : '供电功率') +
+              (params[index].value < 0 ? t('充电功率') : t('供电功率')) +
               '：</span><span style="color:' +
               params[index].color +
               '">' +
@@ -77,13 +82,13 @@ const options = computed<ECOption>(() => {
       selectedMode: false,
       data: [
         {
-          name: '充电功率',
+          name: t('充电功率'),
           icon: 'rect',
           textStyle: { color: '#EFF7FF' },
           itemStyle: { color: 'rgba(40,124,231,0.6)', borderColor: '#287CE7', borderWidth: 1 },
         },
         {
-          name: '供电功率',
+          name: t('供电功率'),
           icon: 'rect',
           textStyle: { color: '#EFF7FF' },
           itemStyle: { color: 'rgba(56,174,28,0.6)', borderColor: '#38AE1C', borderWidth: 1 },
@@ -138,7 +143,7 @@ const options = computed<ECOption>(() => {
     color: ['rgba(54,153,255,0.6)'],
     series: [
       {
-        name: '充电功率',
+        name: t('充电功率'),
         type: 'bar',
         barWidth: '24px',
         data: [
@@ -175,7 +180,7 @@ const options = computed<ECOption>(() => {
           data: [
             [
               {
-                name: '谷',
+                name: t('谷'),
                 label: {
                   color: '#FFD200',
                   show: true,
@@ -192,7 +197,7 @@ const options = computed<ECOption>(() => {
             ],
             [
               {
-                name: '平',
+                name: t('平'),
                 label: {
                   color: '#00C6FF',
                   show: true,
@@ -209,7 +214,7 @@ const options = computed<ECOption>(() => {
             ],
             [
               {
-                name: '峰',
+                name: t('峰'),
                 label: {
                   color: '#38AE1C',
                   show: true,
@@ -226,7 +231,7 @@ const options = computed<ECOption>(() => {
             ],
             [
               {
-                name: '平',
+                name: t('平'),
                 label: {
                   color: '#00C6FF',
                   show: true,
@@ -243,7 +248,7 @@ const options = computed<ECOption>(() => {
             ],
             [
               {
-                name: '峰',
+                name: t('峰'),
                 label: {
                   color: '#38AE1C',
                   show: true,
@@ -260,7 +265,7 @@ const options = computed<ECOption>(() => {
             ],
             [
               {
-                name: '平',
+                name: t('平'),
                 label: {
                   color: '#00C6FF',
                   show: true,
@@ -279,7 +284,7 @@ const options = computed<ECOption>(() => {
         },
       },
       {
-        name: '供电功率',
+        name: t('供电功率'),
         type: 'bar',
         data: [],
       },

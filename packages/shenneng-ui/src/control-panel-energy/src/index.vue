@@ -18,11 +18,11 @@
         <div class="content-data">
           <div class="model-box">
             <div class="model">
-              <span>当前模式：</span>
+              <span>{{ t('当前模式') }}：</span>
               <span class="current-model">{{ currentModel }}</span>
             </div>
             <div class="change-btn">
-              <el-button @click="handleShowModelDialog">模式切换</el-button>
+              <el-button @click="handleShowModelDialog">{{ t('模式切换') }}</el-button>
             </div>
           </div>
           <AutomaticMode v-if="autoModel"></AutomaticMode>
@@ -50,21 +50,27 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
+import useApp from '../../useApp';
+
 import AutomaticMode from './component/AutomaticMode.vue';
 import ManualMode from './component/ManualMode.vue';
 import ModeDialog from './component/ModeDialog.vue';
 import PermissionsAuditing from './component/PermissionsAuditing.vue';
 import SettingDialog from './component/SettingDialog.vue';
+import locales from './locales';
 import { MAssetInformationConfig } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: MAssetInformationConfig;
 }>();
+
+const { setMessage, t } = useApp(props);
+setMessage(locales);
 const isShowModel = ref<boolean>(false);
 const settingDialogVisible = ref<boolean>(false);
 const ModeDialogVisible = ref<boolean>(false);
 const PermissionDialogVisible = ref<boolean>(false);
-const currentModel = ref('自动模式');
+const currentModel = ref(t('自动模式'));
 const autoModel = ref(true);
 const flag = ref('');
 const tempMode = ref('');

@@ -46,15 +46,18 @@ import ColorLegend from './component/ColorLegend.vue';
 import LevelCard from './component/LevelCard.vue';
 import LinearCard from './component/LinearCard.vue';
 import apiFactory from './api';
+import locales from './locales';
 import { MEnergyMonitoring } from './type';
 
 const props = defineProps<{
   config: MEnergyMonitoring;
 }>();
 
-const { request } = useApp(props);
+const { request, setMessage } = useApp(props);
 
 const { fetchRealData } = apiFactory(request);
+
+setMessage(locales);
 
 const actualValue = ref<number>(0);
 const energyConfig = computed<MEnergyMonitoring>(() => props.config);

@@ -11,29 +11,38 @@
         <div class="content-title">
           <div class="left-title-font">
             <span class="font-icon"></span>
-            <span class="font-value">运行分析</span>
+            <span class="font-value">{{ config.title }}</span>
           </div>
           <div class="right-close" @click="handlerToShow($event, false)"></div>
         </div>
         <div class="content-data">
           <div class="frist-tab">
             <el-tabs v-model="activeNameF" class="tab demo-tabs" type="card" @tab-click="handleClickF">
-              <el-tab-pane label="发电量分析" name="power-qua"></el-tab-pane>
-              <el-tab-pane label="发电功率分析" name="power-gen"></el-tab-pane>
+              <el-tab-pane :label="t('发电量分析')" name="power-qua"></el-tab-pane>
+              <el-tab-pane :label="t('发电功率分析')" name="power-gen"></el-tab-pane>
             </el-tabs>
           </div>
           <div class="second-tab">
             <el-tabs v-model="activeNameS" class="demo-tabs" @tab-click="handleClickS">
-              <el-tab-pane label="日曲线" name="day"> </el-tab-pane>
-              <el-tab-pane label="月曲线" name="month"> </el-tab-pane>
-              <el-tab-pane v-if="activeNameF === 'power-qua'" label="年曲线" name="year"> </el-tab-pane>
+              <el-tab-pane :label="t('日曲线')" name="day"> </el-tab-pane>
+              <el-tab-pane :label="t('月曲线')" name="month"> </el-tab-pane>
+              <el-tab-pane v-if="activeNameF === 'power-qua'" :label="t('年曲线')" name="year"> </el-tab-pane>
             </el-tabs>
           </div>
           <div class="select-gro">
             <div v-show="activeNameF === 'power-qua' ? true : false" class="dataTotal">
-              <p v-show="activeNameS === 'month' ? true : false">当月发电量：<span>5205.3kWh</span></p>
-              <p v-if="activeNameS === 'month' || activeNameS === 'year'">累计发电量：<span>61767.82kWh</span></p>
-              <p v-if="activeNameS === 'month' || activeNameS === 'year'">装机容量：<span>195kW</span></p>
+              <div v-show="activeNameS === 'month' ? true : false" class="dataSon">
+                <div :title="t('当月发电量')" class="omit">{{ t('当月发电量') }}</div>
+                <div>：5205.3kWh</div>
+              </div>
+              <div v-if="activeNameS === 'month' || activeNameS === 'year'" class="dataSon">
+                <div :title="t('累计发电量')" class="omit">{{ t('累计发电量') }}</div>
+                <div>：61767.82kWh</div>
+              </div>
+              <div v-if="activeNameS === 'month' || activeNameS === 'year'" class="dataSon">
+                <div :title="t('装机容量')" class="omit">{{ t('装机容量') }}</div>
+                <div>：195kW</div>
+              </div>
             </div>
             <div class="other" style="display: flex">
               <el-select
@@ -47,7 +56,7 @@
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
               <div class="selest-time">
-                <span>日期选择：</span>
+                <span>{{ t('日期选择') }}：</span>
                 <TimeCalendar ref="timeWrapper" :option="timeType" @ct-time="changeTime"></TimeCalendar>
               </div>
             </div>
@@ -66,13 +75,18 @@ import { ref } from 'vue';
 
 import EdomsCharts from '../../EdomsCharts.vue';
 import { ECOption } from '../../types';
+import useApp from '../../useApp';
 
 import TimeCalendar from './components/TimeCalendar.vue';
+import locales from './locales';
 import { OperationsAnalysisPv } from './type';
-
-defineProps<{
+const props = defineProps<{
   config: OperationsAnalysisPv;
 }>();
+
+const { setMessage, t } = useApp(props);
+console.log(t);
+setMessage(locales);
 const option = ref<ECOption>({});
 const isShowModel = ref<boolean>(false);
 const timeWrapper = ref<any>(null);
@@ -189,7 +203,7 @@ const changeTime = (time: Record<string, any>) => {
 const options = [
   {
     value: 'all',
-    label: '总览',
+    label: t('总览'),
   },
 ];
 // 切换发电量/功率
@@ -234,7 +248,7 @@ const getData = (symbol: string) => {
         },
         xAxis: {
           type: 'category',
-          name: '时',
+          name: t('时'),
           data: [
             '1',
             '2',
@@ -285,7 +299,7 @@ const getData = (symbol: string) => {
                   params[index].value +
                   // params[index].seriesName != '总览' ? '' : 'kWh' +
                   '' +
-                  (params[index].seriesName != '总览' ? '' : 'kWh') +
+                  (params[index].seriesName != t('总览') ? '' : 'kWh') +
                   '</span></p>';
               }
               tip += '</div>';
@@ -329,14 +343,14 @@ const getData = (symbol: string) => {
         },
         series: [
           {
-            name: '总览',
+            name: t('总览'),
             data: seriesData2,
             type: 'line',
             smooth: true,
             symbolSize: 0,
           },
           {
-            name: '装机量',
+            name: t('装机量'),
             data: [
               195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195,
               195, 195, 195,
@@ -357,7 +371,7 @@ const getData = (symbol: string) => {
         },
         xAxis: {
           type: 'category',
-          name: '日',
+          name: t('日'),
           data: [
             '1',
             '2',
@@ -415,7 +429,7 @@ const getData = (symbol: string) => {
                   '：' +
                   params[index].value +
                   '' +
-                  (params[index].seriesName != '总览' ? '' : 'kWh') +
+                  (params[index].seriesName != t('总览') ? '' : 'kWh') +
                   '</span></p>';
               }
               tip += '</div>';
@@ -459,7 +473,7 @@ const getData = (symbol: string) => {
         },
         series: [
           {
-            name: '总览',
+            name: t('总览'),
             data: seriesPowerMonthData.five,
             type: 'bar',
             itemStyle: {
@@ -470,7 +484,7 @@ const getData = (symbol: string) => {
             barGap: 70,
           },
           {
-            name: '装机量',
+            name: t('装机量'),
             data: [
               195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195,
               195, 195, 195, 195, 195, 195, 195, 195, 195, 195,
@@ -493,7 +507,7 @@ const getData = (symbol: string) => {
         },
         xAxis: {
           type: 'category',
-          name: '时',
+          name: t('时'),
           data: [
             '1',
             '2',
@@ -588,7 +602,7 @@ const getData = (symbol: string) => {
         },
         series: [
           {
-            name: '发电量',
+            name: t('发电量'),
             data: seriesData1,
             type: 'bar',
             itemStyle: {
@@ -610,7 +624,7 @@ const getData = (symbol: string) => {
         },
         xAxis: {
           type: 'category',
-          name: '日',
+          name: t('日'),
           data: [
             '1',
             '2',
@@ -711,7 +725,7 @@ const getData = (symbol: string) => {
         },
         series: [
           {
-            name: '发电量',
+            name: t('发电量'),
             data: seriesMonthData.five,
             type: 'bar',
             itemStyle: {
@@ -733,7 +747,7 @@ const getData = (symbol: string) => {
         },
         xAxis: {
           type: 'category',
-          name: '月',
+          name: t('月'),
           data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
           axisTick: {
             show: false,
@@ -802,7 +816,7 @@ const getData = (symbol: string) => {
         },
         series: [
           {
-            name: '发电量',
+            name: t('发电量'),
             data: seriesYearData.five,
             type: 'bar',
             itemStyle: {
@@ -823,7 +837,7 @@ getData('day');
 <style lang="scss" scoped>
 :deep(.frist-tab > .el-tabs--card > .el-tabs__header .el-tabs__item) {
   padding: 0 !important;
-  width: 124px;
+  min-width: 124px;
   height: 32px;
   color: #eaf5ff;
   text-align: center;
@@ -948,6 +962,7 @@ getData('day');
       font-size: 14px;
       color: #ffffff;
       font-weight: 300;
+      text-align: center;
     }
   }
 
@@ -1037,15 +1052,20 @@ getData('day');
           .dataTotal {
             display: flex;
 
-            p {
+            .dataSon {
               font-size: 16px;
               font-family: Microsoft YaHei;
               font-weight: 400;
-              color: #8d9cbd;
+              color: #ffffff;
               margin-right: 40px;
+              display: flex;
 
-              span {
-                color: #ffffff;
+              .omit {
+                width: 150px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                text-align: right;
               }
             }
           }
