@@ -10,6 +10,7 @@ import { join, resolve } from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
+import vueI18n from '@intlify/vite-plugin-vue-i18n';
 import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
@@ -27,6 +28,9 @@ export default defineConfig(({ mode }) => {
         iconDirs: [resolve(process.cwd(), 'src/assets/icons/editor')],
         symbolId: 'icon-[dir]-[name]',
         customDomId: '__svg__icons__dom__',
+      }),
+      vueI18n({
+        include: [resolve(process.cwd(), 'src/locales/en'), resolve(process.cwd(), 'src/locales/zh-CN')],
       }),
     ],
     build: {

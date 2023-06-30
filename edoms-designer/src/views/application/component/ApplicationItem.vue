@@ -21,6 +21,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 import type { ListApplicationsResItem } from '@/api/application';
@@ -28,6 +29,7 @@ import PreviewImage from '@/components/ImagePreview.vue';
 import LongText from '@/components/LongText.vue';
 import PopMenu from '@/components/PopMenu.vue';
 import PopMenuOption from '@/components/PopMenuOption.vue';
+const { t } = useI18n();
 
 const props = defineProps<{
   application: ListApplicationsResItem;
@@ -40,7 +42,7 @@ const menus = computed(() => {
     return [
       {
         name: 'application',
-        label: '设置',
+        label: t('application.setting'),
         icon: 'Setting',
         action: () => {
           router.push({
@@ -54,7 +56,7 @@ const menus = computed(() => {
       },
       {
         name: 'version',
-        label: '版本',
+        label: t('application.version'),
         icon: 'Setting',
         action: () => {
           router.push({
@@ -71,7 +73,7 @@ const menus = computed(() => {
   return [
     {
       name: 'application',
-      label: '设置',
+      label: t('application.setting'),
       icon: 'Setting',
       action: () => {
         router.push({
@@ -85,7 +87,7 @@ const menus = computed(() => {
     },
     {
       name: 'version',
-      label: '版本',
+      label: t('application.version'),
       icon: 'Setting',
       action: () => {
         router.push({
@@ -99,7 +101,7 @@ const menus = computed(() => {
     },
     {
       name: 'permission',
-      label: '权限',
+      label: t('application.permission'),
       icon: 'Setting',
       action: () => {
         router.push({

@@ -19,7 +19,7 @@
           <el-input
             :value="version?.name"
             clearable
-            placeholder="请选择版本来源"
+            :placeholder="$t('applicationSetting.rules.versionSource')"
             style="cursor: pointer; width: 20%"
             :suffix-icon="ArrowDown"
           ></el-input>
@@ -32,10 +32,20 @@
       </div>
     </div>
   </div>
-  <el-dialog v-model="deleteVisible" title="删除应用" width="40%" :before-close="handleClose" center>
+  <el-dialog
+    v-model="deleteVisible"
+    :title="$t('applicationSetting.deleteApp')"
+    width="40%"
+    :before-close="handleClose"
+    center
+  >
     <div class="modal-container">
-      <p>正在删除 “{{ appInfo.name }}” 应用，应用数据将被清空。请输入下面内容后确认删除！</p>
-      <p class="confirm" @click="handleCopy">请在输入框输入"{{ confirmText }}" 以确认此操作。</p>
+      <p>
+        {{ $t('applicationSetting.tip.deletetip1') }} “{{ appInfo.name }}” {{ $t('applicationSetting.tip.deletetip2') }}
+      </p>
+      <p class="confirm" @click="handleCopy">
+        {{ $t('applicationSetting.tip.deletetip3') }}"{{ confirmText }}" {{ $t('applicationSetting.tip.deletetip4') }}
+      </p>
       <el-form ref="formRef" :model="confirmForm" :rules="rules">
         <el-form-item prop="inputText">
           <el-input v-model="confirmForm.inputText" clearable></el-input>
@@ -44,7 +54,9 @@
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" size="large" @click="handleConfirm"> 确认 </el-button>
+        <el-button type="primary" size="large" @click="handleConfirm">
+          {{ $t('applicationSetting.confirm') }}
+        </el-button>
       </span>
     </template>
   </el-dialog>
@@ -52,6 +64,7 @@
 
 <script lang="ts" setup name="advancedSetting">
 import { computed, reactive, ref, toRefs } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { ArrowDown } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance } from 'element-plus';
@@ -60,7 +73,7 @@ import applicationApi, { GetApplicationRes } from '@/api/application';
 import useAccountStore from '@/store/account';
 
 import SwitchVersion, { VersionModel } from '../../page/component/SwitchVersion.vue';
-
+const { t } = useI18n();
 interface AdvanceItem {
   name: string;
   title: string;
@@ -96,7 +109,7 @@ const formModel = reactive({
 const handleUpdateDefaultVersion = async () => {
   const { versionId } = formModel.selectedForm;
   if (!versionId) {
-    ElMessage.warning('请选择默认版本！');
+    ElMessage.warning(t('applicationSetting.rules.selectDefault'));
     return;
   }
   try {
@@ -104,7 +117,7 @@ const handleUpdateDefaultVersion = async () => {
       applicationId: props.appInfo.applicationId,
       versionId: formModel.selectedForm.versionId,
     });
-    ElMessage.success('设置默认版本成功！');
+    ElMessage.success(t('applicationSetting.tip.setDefaultSuccess'));
     emit('success');
   } catch (e: any) {
     console.log(e);
@@ -115,12 +128,12 @@ const advanceItems = computed<AdvanceItem[]>(() => {
   if (!hasRole(['manager'])) {
     return [
       {
-        name: '默认版本',
-        title: '设置该项目的默认版本',
+        name: t('applicationSetting.defaultVersion'),
+        title: t('applicationSetting.tip.setDefault'),
         buttonType: 'primary',
         disabled: false,
         formVisible: true,
-        buttonText: '确认',
+        buttonText: t('applicationSetting.confirm'),
         action: async () => {
           await handleUpdateDefaultVersion();
         },
@@ -129,19 +142,19 @@ const advanceItems = computed<AdvanceItem[]>(() => {
   }
   return [
     {
-      name: '默认版本',
-      title: '设置该项目的默认版本',
+      name: t('applicationSetting.defaultVersion'),
+      title: t('applicationSetting.tip.setDefault'),
       buttonType: 'primary',
       disabled: false,
       formVisible: true,
-      buttonText: '确认',
+      buttonText: t('applicationSetting.confirm'),
       action: async () => {
         await handleUpdateDefaultVersion();
       },
     },
     {
-      name: '删除',
-      title: '将应用删除，应用下的页面也将全部删除',
+      name: t('applicationSetting.delete'),
+      title: t('applicationSetting.tip.deleteTip'),
       buttonType: 'danger',
       disabled: false,
       action: () => {
@@ -156,7 +169,7 @@ const rules = {
   inputText: [
     {
       required: true,
-      message: '请输入确认信息',
+      message: t('applicationSetting.rules.confirmation'),
       trigger: 'blur',
     },
   ],
@@ -173,7 +186,7 @@ const handleConfirm = async () => {
     secret: confirmForm.value.inputText,
   });
   deleteVisible.value = false;
-  ElMessage.success('删除成功');
+  ElMessage.success(t('applicationSetting.deleteSuccess'));
   router.go(-1);
 };
 
@@ -184,7 +197,7 @@ const handleClose = () => {
 
 const handleCopy = () => {
   navigator.clipboard.writeText(confirmText.value);
-  ElMessage.success(`复制内容为${confirmText.value}`);
+  ElMessage.success(`${t('applicationSetting.copyTip')}${confirmText.value}`);
 };
 </script>
 

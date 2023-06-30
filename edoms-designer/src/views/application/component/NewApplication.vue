@@ -1,29 +1,29 @@
 <template>
   <div class="new-wrapper">
-    <el-dialog v-model="dialogVisible" title="新建应用" width="40%" center>
+    <el-dialog v-model="dialogVisible" :title="$t('application.newApplication')" width="40%" center>
       <el-form ref="formRef" :model="applicationForm" :rules="formRules" label-width="80px" class="demo-dynamic">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="applicationForm.name" placeholder="请输入应用名称"></el-input>
+        <el-form-item :label="$t('application.applicationName')" prop="name">
+          <el-input v-model="applicationForm.name" :placeholder="$t('application.rules.inputName')"></el-input>
         </el-form-item>
-        <el-form-item label="简介" prop="description">
+        <el-form-item :label="$t('application.introduction')" prop="description">
           <el-input
             v-model="applicationForm.description"
             type="textarea"
             resize="none"
-            placeholder="请输入应用简介内容"
+            :placeholder="$t('application.rules.inputIntroduction')"
             min="0"
             max="40"
             :rows="6"
           ></el-input>
         </el-form-item>
-        <el-form-item label="封面" prop="thumbnailId">
+        <el-form-item :label="$t('application.cover')" prop="thumbnailId">
           <ImageUpload @success="success"></ImageUpload>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleFormCancel">取消</el-button>
-          <el-button type="primary" @click="handleFormSubmit">确认</el-button>
+          <el-button @click="handleFormCancel">{{ $t('application.cancel') }}</el-button>
+          <el-button type="primary" @click="handleFormSubmit">{{ $t('application.confirm') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -32,12 +32,14 @@
 
 <script lang="ts" setup name="newApp">
 import { computed, reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { ElMessage, FormInstance } from 'element-plus';
 
 import applicationApi, { CreateApplicationReq } from '@/api/application';
 import versionApi from '@/api/version';
 import ImageUpload from '@/components/ImageUpload.vue';
 import useUploadDefaultDSL from '@/hooks/useUploadDefaultDSL';
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -73,14 +75,14 @@ const applicationForm = reactive<CreateApplicationReq>({
 
 const formRules = {
   name: [
-    { required: true, message: '请输入应用名称', trigger: 'blur' },
-    { min: 1, max: 20, message: '应用名称长度1-20字符', trigger: 'blur' },
-    { whitespace: true, message: '应用名称不能为空', trigger: 'blur' },
+    { required: true, message: t('application.rules.inputName'), trigger: 'blur' },
+    { min: 1, max: 20, message: t('application.rules.applicationLimit'), trigger: 'blur' },
+    { whitespace: true, message: t('application.rules.noName'), trigger: 'blur' },
   ],
   description: [
-    { required: true, message: '请输入应用简介', trigger: 'blur' },
-    { min: 1, max: 40, message: '应用简介长度1-40字符', trigger: 'blur' },
-    { whitespace: true, message: '应用简介不能为空', trigger: 'blur' },
+    { required: true, message: t('application.rules.inputIntroduction'), trigger: 'blur' },
+    { min: 1, max: 40, message: t('application.rules.introductionLimit'), trigger: 'blur' },
+    { whitespace: true, message: t('application.rules.noIntroduction'), trigger: 'blur' },
   ],
 };
 
@@ -105,7 +107,7 @@ const handleFormSubmit = async () => {
       versionId: versionId,
       contentId,
     });
-    ElMessage.success('创建成功');
+    ElMessage.success(t('application.success'));
     dialogVisible.value = false;
     dialogVisible.value = false;
     emit('submitted');

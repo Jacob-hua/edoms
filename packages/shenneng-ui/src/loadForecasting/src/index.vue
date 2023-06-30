@@ -264,8 +264,6 @@ watch(
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      //   margin-left: -900px;
-      //   margin-top: 70px;
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
@@ -273,7 +271,6 @@ watch(
       .content-title {
         width: 100%;
         height: 52px;
-        // background-color: rgba(134, 31, 127, 0.06);
         line-height: 52px;
         padding: 0 20px;
         box-sizing: border-box;
@@ -306,7 +303,6 @@ watch(
         .right-close {
           width: 24px;
           height: 24px;
-          // title-bg
           background-image: url('../src/assets/title-close.png');
           background-size: 14px 14px;
           background-position: center center;
@@ -352,7 +348,6 @@ watch(
             padding: 0 12px;
             box-sizing: border-box;
             width: 100%;
-            // overflow: hidden;
             color: rgba(234, 245, 255, 1);
             font-size: 14px;
             line-height: 32px;
@@ -383,11 +378,6 @@ watch(
               box-shadow: none;
             }
 
-            // :deep(.el-input__wrapper) {
-            //   background-color: rgba(3, 5, 7, 1);
-            //   border: 1px solid rgba(33, 44, 60, 1);
-            //   box-shadow: none;
-            // }
             :deep(.el-input__wrapper:hover) {
               box-shadow: none !important;
             }
@@ -415,7 +405,6 @@ watch(
           .table-half {
             width: 100%;
             height: 161px;
-            // border: 1px solid rgba(19, 25, 34, 1);
             box-sizing: border-box;
             background-color: rgba(3, 5, 7, 1);
             margin-top: 21px;
@@ -433,7 +422,6 @@ watch(
           padding: 0 12px;
           box-sizing: border-box;
           width: 100%;
-          // overflow: hidden;
           color: rgba(234, 245, 255, 1);
           font-size: 14px;
           line-height: 32px;

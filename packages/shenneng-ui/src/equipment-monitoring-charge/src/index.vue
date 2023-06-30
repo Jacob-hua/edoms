@@ -301,6 +301,8 @@ const eq_data = {
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
 
       .content-title {
         width: 100%;
@@ -350,8 +352,6 @@ const eq_data = {
 
       .content-data {
         width: 100%;
-        height: calc(100% - 52px);
-        // margin: 10px 30px 30px;
         overflow-y: scroll;
         display: flex;
         flex-flow: column;
@@ -412,7 +412,7 @@ const eq_data = {
           margin-top: 23px;
 
           .card-box {
-            height: calc(100% - 45px);
+            height: 94%;
 
             .card-tit {
               font-size: 16px;
@@ -424,7 +424,7 @@ const eq_data = {
 
             .card-con {
               width: 100%;
-              height: calc(100% - 64px);
+              height: 90%;
               background: rgba(9, 15, 23, 0.3);
               border: 1px solid #212c3c;
               box-sizing: border-box;

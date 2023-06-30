@@ -1,7 +1,9 @@
 <template>
   <div class="upload-wrapper">
     <div class="image-wrapper" @click="handlePreview"><PreviewImage :content-id="contentId" /></div>
-    <el-button type="primary" :loading="selectUploadLoading" @click="handleUpload">上传图片</el-button>
+    <el-button type="primary" :loading="selectUploadLoading" @click="handleUpload">{{
+      $t('application.uploadImage')
+    }}</el-button>
     <el-dialog v-model="dialogVisible">
       <preview-image :content-id="contentId"></preview-image>
     </el-dialog>

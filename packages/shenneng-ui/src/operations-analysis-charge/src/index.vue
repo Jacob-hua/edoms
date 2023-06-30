@@ -536,6 +536,8 @@ const handleClickType = (event: any) => {
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
 
       .content-title {
         width: 100%;
@@ -585,7 +587,6 @@ const handleClickType = (event: any) => {
 
       .content-data {
         width: 100%;
-        height: calc(100% - 52px);
         overflow-y: scroll;
 
         .station-sel {
