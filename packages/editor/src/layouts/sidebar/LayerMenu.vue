@@ -4,12 +4,12 @@
 
 <script lang="ts" setup>
 import { computed, inject, markRaw, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { Delete, DocumentCopy, Files, Plus } from '@element-plus/icons-vue';
 
 import { NodeType } from '@edoms/schema';
 
 import ContentMenu from '../../components/ContentMenu.vue';
+import useI18n from '../../hooks/useI18n';
 import type { ComponentGroup, MenuButton, MenuComponent, Services } from '../../type';
 const { t } = useI18n();
 const services = inject<Services>('services');
@@ -18,9 +18,8 @@ const node = computed(() => services?.editorService.get('node'));
 const isRoot = computed(() => node.value?.type === NodeType.ROOT);
 const isPage = computed(() => node.value?.type === NodeType.PAGE);
 const componentList = computed(() => services?.componentListService.getList() || []);
-
 const layerContentMenu = inject<(MenuComponent | MenuButton)[]>('layerContentMenu', []);
-
+console.log(useI18n);
 const createMenuItems = (group: ComponentGroup): MenuButton[] =>
   group.items.map((component) => ({
     text: component.text,

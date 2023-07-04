@@ -8,12 +8,12 @@
 
 <script lang="ts" setup>
 import { computed, inject, markRaw } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { Back, Delete, FullScreen, Grid, Memo, Right, ScaleToOriginal, ZoomIn, ZoomOut } from '@element-plus/icons-vue';
 
 import { NodeType } from '@edoms/schema';
 
 import ToolButton from '../components/ToolButton.vue';
+import useI18n from '../hooks/useI18n';
 import { ColumnLayout, GetColumnWidth, MenuBarData, MenuButton, MenuComponent, MenuItem, Services } from '../type';
 const { t } = useI18n();
 const props = withDefaults(

@@ -4,7 +4,6 @@
 
 <script lang="ts" setup>
 import { computed, inject, markRaw, reactive, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { Bottom, Delete, DocumentCopy, Top } from '@element-plus/icons-vue';
 
 import { MNode, NodeType } from '@edoms/schema';
@@ -12,6 +11,7 @@ import StageCore from '@edoms/stage';
 import { isPage } from '@edoms/utils';
 
 import ContentMenu from '../../components/ContentMenu.vue';
+import useI18n from '../../hooks/useI18n';
 import storageService from '../../services/storage';
 import { LayerOffset, Layout, MenuButton, MenuComponent, Services } from '../../type';
 import { COPY_STORAGE_KEY } from '../../utils/editor';

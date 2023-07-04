@@ -56,13 +56,13 @@
 
 <script lang="ts" setup>
 import { computed, inject } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { CaretBottom, Delete, DocumentCopy, Edit } from '@element-plus/icons-vue';
 
 import { ElIcon, elMessageBox, ElPopover, ElTooltip } from '@edoms/design';
 import type { MApp, MPage } from '@edoms/schema';
 
 import ToolButton from '../../components/ToolButton.vue';
+import useI18n from '../../hooks/useI18n';
 import type { Services } from '../../type';
 
 import PageBarScrollContainer from './PageBarScrollContainer.vue';

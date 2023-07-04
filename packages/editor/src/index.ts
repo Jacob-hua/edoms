@@ -3,15 +3,16 @@
 import EdomsForm from '@edoms/form';
 
 import uiSelect from './fields/UISelect.vue';
+import { i18n } from './hooks/useI18n';
 import CodeEditor from './layouts/CodeEditor.vue';
-import en from './locales/en';
-import zhCN from './locales/zh-CN';
+// import en from './locales/en';
+// import zhCN from './locales/zh-CN';
 import { setConfig } from './utils/config';
 import Editor from './Editor.vue';
+import i18nAs from './locales';
 import type { InstallOptions } from './type';
 
 import './theme/index.scss';
-// import i18n from './locales';
 export type { MoveableOptions } from '@edoms/stage';
 export * from './type';
 export * from './utils';
@@ -38,12 +39,19 @@ export default {
   install: (app: any, opt?: InstallOptions): void => {
     app.use(EdomsForm);
     if (app.__VUE_I18N__) {
+      i18n.value = app.__VUE_I18N__;
       //将两个语言包合并
-      app.__VUE_I18N__.global.messages.value.en = Object.assign(app.__VUE_I18N__.global.messages.value.en, en);
-      app.__VUE_I18N__.global.messages.value.zh_CN = Object.assign(app.__VUE_I18N__.global.messages.value.zh_CN, zhCN);
+      for (const item in app.__VUE_I18N__.global.messages.value) {
+        for (const lan in i18nAs) {
+          if (item === lan) {
+            app.__VUE_I18N__.global.messages.value[item] = Object.assign(
+              app.__VUE_I18N__.global.messages.value[item],
+              i18nAs[lan]
+            );
+          }
+        }
+      }
     }
-    console.log(zhCN);
-    console.log(app.__VUE_I18N__);
 
     const option = Object.assign(defaultInstallOpt, opt || {});
     app.config.globalProperties.$EDOMS_EDITOR = option;

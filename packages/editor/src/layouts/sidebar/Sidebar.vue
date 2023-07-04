@@ -40,10 +40,10 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 import { ElTabs } from '@edoms/design';
 
+import useI18n from '../../hooks/useI18n';
 import { SideBarData } from '../../type';
 
 import TabPane from './TabPane.vue';

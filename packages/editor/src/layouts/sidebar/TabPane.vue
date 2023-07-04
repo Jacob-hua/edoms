@@ -48,12 +48,12 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { Coin, Files } from '@element-plus/icons-vue';
 
 import { ElTabPane } from '@edoms/design';
 
 import MIcon from '../../components/Icon.vue';
+import useI18n from '../../hooks/useI18n';
 import { SideComponent, SideItem } from '../../type';
 
 import ComponentListPanel from './ComponentListPanel.vue';
