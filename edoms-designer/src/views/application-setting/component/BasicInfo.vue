@@ -8,31 +8,31 @@
       label-width="80px"
       class="demo-dynamic"
     >
-      <el-form-item :label="$t('applicationSetting.applicationName')" prop="name">
-        <el-input v-model="appInfo.name" :placeholder="$t('applicationSetting.rules.inputName')"></el-input>
+      <el-form-item :label="t('applicationSetting.applicationName')" prop="name">
+        <el-input v-model="appInfo.name" :placeholder="t('applicationSetting.rules.inputName')"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('applicationSetting.introduction')" prop="description">
+      <el-form-item :label="t('applicationSetting.introduction')" prop="description">
         <el-input
           v-model="appInfo.description"
           type="textarea"
-          :placeholder="$t('applicationSetting.rules.inputIntroduction')"
+          :placeholder="t('applicationSetting.rules.inputIntroduction')"
           resize="none"
           min="0"
           max="40"
           :rows="10"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('applicationSetting.preview')" prop="serviceAddress">
-        <el-input v-model="appInfo.serviceAddress" :placeholder="$t('applicationSetting.rules.inputPath')">
+      <el-form-item :label="t('applicationSetting.preview')" prop="serviceAddress">
+        <el-input v-model="appInfo.serviceAddress" :placeholder="t('applicationSetting.rules.inputPath')">
           <template #prepend>{{ previewPath }}</template>
         </el-input>
       </el-form-item>
-      <el-form-item :label="$t('applicationSetting.cover')">
+      <el-form-item :label="t('applicationSetting.cover')">
         <ImageUpload :thumbnail-id="appInfo.thumbnailId" @success="handleUploadSuccess"></ImageUpload>
       </el-form-item>
     </el-form>
     <div v-permission="ApplicationPermission.APPLICATION_DESIGN_UPDATE" class="updateBtn" @click="update(appInfo)">
-      {{ $t('applicationSetting.update') }}
+      {{ t('applicationSetting.update') }}
     </div>
   </div>
 </template>

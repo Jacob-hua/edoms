@@ -1,15 +1,15 @@
 <template>
-  <el-dialog v-model="dialogVisible" :title="$t('page.built')" width="30%">
+  <el-dialog v-model="dialogVisible" :title="t('page.built')" width="30%">
     <span>
       <el-form ref="formRef" :model="formModel" :rules="formRules" label-width="80px">
-        <el-form-item :label="$t('page.versionName')" prop="name">
-          <el-input v-model="formModel.name" clearable :placeholder="$t('page.input')"></el-input>
+        <el-form-item :label="t('page.versionName')" prop="name">
+          <el-input v-model="formModel.name" clearable :placeholder="t('page.input')"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('page.description')" prop="description">
+        <el-form-item :label="t('page.description')" prop="description">
           <el-input
             v-model="formModel.description"
             clearable
-            :placeholder="$t('page.inputdes')"
+            :placeholder="t('page.inputdes')"
             type="textarea"
             resize="none"
             min="0"
@@ -17,7 +17,7 @@
             :rows="6"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="$t('page.source')" prop="createFrom">
+        <el-form-item :label="t('page.source')" prop="createFrom">
           <SwitchVersion v-if="dialogVisible" v-model="formModel.createFrom" :application-id="applicationId">
           </SwitchVersion>
         </el-form-item>
@@ -25,8 +25,8 @@
     </span>
     <template #footer>
       <span>
-        <el-button @click="dialogVisible = false">{{ $t('page.cancel') }}</el-button>
-        <el-button type="primary" @click="handleConfirm"> {{ $t('page.confirm') }} </el-button>
+        <el-button @click="dialogVisible = false">{{ t('page.cancel') }}</el-button>
+        <el-button type="primary" @click="handleConfirm"> {{ t('page.confirm') }} </el-button>
       </span>
     </template>
   </el-dialog>

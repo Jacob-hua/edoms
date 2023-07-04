@@ -1,12 +1,12 @@
 <template>
   <div class="add-wrapper">
-    <el-dialog v-model="dialogVisible" :title="$t('permission.addPersonnel')" width="40%" center>
+    <el-dialog v-model="dialogVisible" :title="t('permission.addPersonnel')" width="40%" center>
       <el-form ref="formRef" :model="permissionAddForm" :rules="formRules" label-width="80px" class="demo-dynamic">
-        <el-form-item :label="$t('permission.permission')" prop="roleId">
+        <el-form-item :label="t('permission.permission')" prop="roleId">
           <div>{{ roleName }}</div>
         </el-form-item>
-        <el-form-item :label="$t('permission.nickname')" prop="userId">
-          <el-select v-model="permissionAddForm.userId" :placeholder="$t('permission.rules.selectNickname')">
+        <el-form-item :label="t('permission.nickname')" prop="userId">
+          <el-select v-model="permissionAddForm.userId" :placeholder="t('permission.rules.selectNickname')">
             <el-option
               v-for="{ userId, userName } in userList"
               :key="userId"
@@ -18,8 +18,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleFormCancel">{{ $t('permission.cancel') }}</el-button>
-          <el-button type="primary" @click="handleFormSubmit">{{ $t('permission.confirm') }}</el-button>
+          <el-button @click="handleFormCancel">{{ t('permission.cancel') }}</el-button>
+          <el-button type="primary" @click="handleFormSubmit">{{ t('permission.confirm') }}</el-button>
         </span>
       </template>
     </el-dialog>

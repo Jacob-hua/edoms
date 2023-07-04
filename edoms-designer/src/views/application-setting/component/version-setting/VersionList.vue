@@ -1,7 +1,7 @@
 <template>
   <el-container class="version-container">
     <el-header height="40px">
-      <span class="title">{{ $t('version.versionList') }}</span>
+      <span class="title">{{ t('version.versionList') }}</span>
     </el-header>
     <el-main v-loading="loading" element-loading-text="Loading...">
       <div class="version-list">
@@ -34,6 +34,7 @@
 
 <script lang="ts" setup name="VersionList">
 import { nextTick, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { GetApplicationRes } from '@/api/application';
@@ -41,6 +42,7 @@ import type { ListVersionResItem, ListVersionsRes } from '@/api/version';
 import versionApi from '@/api/version';
 
 import VersionListTable from './VersionListTable.vue';
+const { t } = useI18n();
 
 const route = useRoute();
 

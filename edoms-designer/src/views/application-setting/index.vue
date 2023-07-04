@@ -15,7 +15,7 @@
                 <el-icon :size="20">
                   <Document />
                 </el-icon>
-                <span>{{ $t('applicationSetting.information') }}</span>
+                <span>{{ t('applicationSetting.information') }}</span>
               </span>
             </template>
             <BasicInfo v-if="appInfoVisible" :app-info="appInfo" @success="goBack" />
@@ -26,7 +26,7 @@
                 <el-icon :size="20">
                   <Setting />
                 </el-icon>
-                <span>{{ $t('applicationSetting.setting') }}</span>
+                <span>{{ t('applicationSetting.setting') }}</span>
               </span>
             </template>
             <AdvancedSetting :app-info="appInfo" @success="handleUpdateSuccess" />
@@ -37,7 +37,7 @@
                 <el-icon :size="20">
                   <Document />
                 </el-icon>
-                <span>{{ $t('applicationSetting.versioning') }}</span>
+                <span>{{ t('applicationSetting.versioning') }}</span>
               </span>
             </template>
             <VersionList v-if="activeName === 'version'" :app-info="appInfo" />
@@ -46,7 +46,7 @@
             <template #label>
               <span class="custom-tabs-label">
                 <el-icon :size="20"><HomeFilled /></el-icon>
-                <span>{{ $t('applicationSetting.permission') }}</span>
+                <span>{{ t('applicationSetting.permission') }}</span>
               </span>
             </template>
             <PermissionList :app-info="appInfo" />
@@ -59,6 +59,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { LocationQueryValue } from 'vue-router';
 
@@ -69,6 +70,8 @@ import AdvancedSetting from './component/AdvancedSetting.vue';
 import BasicInfo from './component/BasicInfo.vue';
 import PermissionList from './component/permission/PermissionList.vue';
 import VersionList from './component/version-setting/VersionList.vue';
+const { t } = useI18n();
+
 const accountStore = useAccountStore();
 const route = useRoute();
 const { go } = useRouter();

@@ -1,6 +1,6 @@
 <template>
   <el-table :data="tableData" :max-height="maxHeight">
-    <el-table-column :label="$t('version.version')">
+    <el-table-column :label="t('version.version')">
       <template #default="scope">
         <el-row>
           <el-col :span="12">
@@ -15,18 +15,18 @@
         </el-row>
       </template>
     </el-table-column>
-    <el-table-column :label="$t('version.operate')">
+    <el-table-column :label="t('version.operate')">
       <template #default="scope">
         <el-row justify="end">
           <el-col :span="6">
-            <el-button @click="handlePreview(scope.row)">{{ $t('version.preview') }}</el-button>
+            <el-button @click="handlePreview(scope.row)">{{ t('version.preview') }}</el-button>
           </el-col>
           <el-col :span="6">
-            <el-button @click="handleEdit(scope.row)">{{ $t('version.modify') }}</el-button>
+            <el-button @click="handleEdit(scope.row)">{{ t('version.modify') }}</el-button>
           </el-col>
           <el-col v-role="['manager']" :span="6">
             <el-button @click="handleExport(scope.row)">
-              {{ $t('version.export')
+              {{ t('version.export')
               }}<el-icon>
                 <Download />
               </el-icon>
@@ -34,7 +34,7 @@
           </el-col>
           <el-col :span="6">
             <el-button @click="handleDelete(scope.row)">
-              {{ $t('version.delete')
+              {{ t('version.delete')
               }}<el-icon>
                 <Delete />
               </el-icon>

@@ -1,15 +1,15 @@
 <template>
-  <el-dialog v-model="dialogVisible" :title="$t('version.information')" width="40%" centet>
-    <el-form ref="formRef" :model="versionForm" :rules="formRules" label-width="80px" class="demo-dynamic">
-      <el-form-item :label="$t('version.versionName')" prop="name">
-        <el-input v-model="versionForm.name" :placeholder="$t('version.rules.inputName')"></el-input>
+  <el-dialog v-model="dialogVisible" :title="t('version.information')" width="40%" centet>
+    <el-form ref="formRef" :model="versionForm" :rules="formRules" label-width="142px" class="demo-dynamic">
+      <el-form-item :label="t('version.versionName')" prop="name">
+        <el-input v-model="versionForm.name" :placeholder="t('version.rules.inputName')"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('version.description')" prop="description">
+      <el-form-item :label="t('version.description')" prop="description">
         <el-input
           v-model="versionForm.description"
           type="textarea"
           resize="none"
-          :placeholder="$t('version.rules.inputDescription')"
+          :placeholder="t('version.rules.inputDescription')"
           min="0"
           max="20"
           :rows="6"
@@ -18,8 +18,8 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleFormCancle">{{ $t('version.cancel') }}</el-button>
-        <el-button type="primary" @click="handleFormSubmit">{{ $t('version.confirm') }}</el-button>
+        <el-button @click="handleFormCancle">{{ t('version.cancel') }}</el-button>
+        <el-button type="primary" @click="handleFormSubmit">{{ t('version.confirm') }}</el-button>
       </span>
     </template>
   </el-dialog>

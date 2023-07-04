@@ -8,7 +8,7 @@
           </el-icon>
           <span>{{ appName }}</span>
         </div>
-        <SwitchVersion v-model="version" :application-id="applicationId" :title="$t('page.switch')">
+        <SwitchVersion v-model="version" :application-id="applicationId" :title="t('page.switch')">
           <div class="version-btn">
             <span>{{ version?.name }}</span>
             <el-icon class="el-icon--right">
@@ -19,13 +19,11 @@
       </div>
       <div>
         <el-button type="primary" text bg size="large" :icon="FullScreen" @click="handlePreview">{{
-          $t('page.preview')
+          t('page.preview')
         }}</el-button>
-        <el-button type="primary" text bg size="large" :icon="Edit" @click="handleEdit">{{
-          $t('page.edit')
-        }}</el-button>
+        <el-button type="primary" text bg size="large" :icon="Edit" @click="handleEdit">{{ t('page.edit') }}</el-button>
         <el-button type="primary" text bg size="large" :icon="DocumentAdd" @click="handleNewVersion">
-          {{ $t('page.built') }}
+          {{ t('page.built') }}
         </el-button>
         <el-button
           v-role="['manager']"
@@ -36,7 +34,7 @@
           :icon="Download"
           @click="handleExportApplication"
         >
-          {{ $t('page.export') }}
+          {{ t('page.export') }}
         </el-button>
       </div>
     </section>
@@ -58,7 +56,7 @@
           <div></div>
         </template>
         <template #empty>
-          <el-empty :description="$t('page.noPages')" />
+          <el-empty :description="t('page.noPages')" />
         </template>
       </GridList>
     </section>
@@ -76,6 +74,7 @@
 
 <script lang="ts" setup name="Page">
 import { onActivated, ref, shallowRef, unref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { DocumentAdd, Download, Edit, FullScreen } from '@element-plus/icons-vue';
 
@@ -91,6 +90,7 @@ import useExport from '@/hooks/useExport';
 import NewVersionDialog from './component/NewVersionDialog.vue';
 import PageListItem from './component/PageListItem.vue';
 import SwitchVersion, { VersionModel } from './component/SwitchVersion.vue';
+const { t } = useI18n();
 
 const route = useRoute();
 
