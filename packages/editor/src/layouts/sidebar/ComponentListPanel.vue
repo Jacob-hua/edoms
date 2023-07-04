@@ -5,7 +5,7 @@
     <ElCollapse class="ui-component-panel" :model-value="collapseValue">
       <ElInput
         v-model="searchText"
-        placeholder="请输入组件名称"
+        :placeholder="$t('editor.rules.inputUnit')"
         class="search-input"
         size="small"
         clearable
@@ -49,7 +49,6 @@ import { removeClassNameByClassName } from '@edoms/utils';
 
 import MIcon from '../../components/Icon.vue';
 import type { ComponentGroup, ComponentItem, Services, StageOptions } from '../../type';
-
 const searchText = ref('');
 const services = inject<Services>('services');
 const stageOptions = inject<StageOptions>('stageOptions');

@@ -11,7 +11,7 @@
           :model="loginFormModel"
           :rules="loginFormRules"
         >
-          <el-form-item :label="$t('login.userName')" prop="username">
+          <el-form-item :label="t('login.userName')" prop="username">
             <el-input
               v-model="loginFormModel.username"
               type="text"
@@ -20,7 +20,7 @@
             />
           </el-form-item>
 
-          <el-form-item :label="$t('login.password')" prop="password">
+          <el-form-item :label="t('login.password')" prop="password">
             <el-input
               v-model="loginFormModel.password"
               type="password"
@@ -31,7 +31,7 @@
         </el-form>
       </div>
       <div class="footer">
-        <el-button :disabled="nextStepDisabled" type="primary" @click="nextStep">{{ $t('login.nextStep') }}</el-button>
+        <el-button :disabled="nextStepDisabled" type="primary" @click="nextStep">{{ t('login.nextStep') }}</el-button>
       </div>
     </section>
     <section v-show="tenantFormVisible" class="form-section">
@@ -45,7 +45,7 @@
           :model="tenantFormModel"
           :rules="tenantFormRules"
         >
-          <el-form-item :label="$t('login.project')" prop="tenantId">
+          <el-form-item :label="t('login.project')" prop="tenantId">
             <el-select v-model="tenantFormModel.tenantId">
               <el-option
                 v-for="{ dataCode, proName } in accountStore.tenants"
@@ -58,8 +58,8 @@
         </el-form>
       </div>
       <div class="footer">
-        <el-button type="primary" @click="backPreStep">{{ $t('login.previousStep') }}</el-button>
-        <el-button :disabled="loginDisabled" type="primary" @click="login">{{ $t('login.login') }}</el-button>
+        <el-button type="primary" @click="backPreStep">{{ t('login.previousStep') }}</el-button>
+        <el-button :disabled="loginDisabled" type="primary" @click="login">{{ t('login.login') }}</el-button>
       </div>
     </section>
   </div>

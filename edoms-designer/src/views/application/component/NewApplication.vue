@@ -1,29 +1,29 @@
 <template>
   <div class="new-wrapper">
-    <el-dialog v-model="dialogVisible" :title="$t('application.newApplication')" width="40%" center>
-      <el-form ref="formRef" :model="applicationForm" :rules="formRules" label-width="80px" class="demo-dynamic">
-        <el-form-item :label="$t('application.applicationName')" prop="name">
-          <el-input v-model="applicationForm.name" :placeholder="$t('application.rules.inputName')"></el-input>
+    <el-dialog v-model="dialogVisible" :title="t('application.newApplication')" width="40%" center>
+      <el-form ref="formRef" :model="applicationForm" :rules="formRules" label-width="100px" class="demo-dynamic">
+        <el-form-item :label="t('application.applicationName')" prop="name">
+          <el-input v-model="applicationForm.name" :placeholder="t('application.rules.inputName')"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('application.introduction')" prop="description">
+        <el-form-item :label="t('application.introduction')" prop="description">
           <el-input
             v-model="applicationForm.description"
             type="textarea"
             resize="none"
-            :placeholder="$t('application.rules.inputIntroduction')"
+            :placeholder="t('application.rules.inputIntroduction')"
             min="0"
             max="40"
             :rows="6"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="$t('application.cover')" prop="thumbnailId">
+        <el-form-item :label="t('application.cover')" prop="thumbnailId">
           <ImageUpload @success="success"></ImageUpload>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleFormCancel">{{ $t('application.cancel') }}</el-button>
-          <el-button type="primary" @click="handleFormSubmit">{{ $t('application.confirm') }}</el-button>
+          <el-button @click="handleFormCancel">{{ t('application.cancel') }}</el-button>
+          <el-button type="primary" @click="handleFormSubmit">{{ t('application.confirm') }}</el-button>
         </span>
       </template>
     </el-dialog>

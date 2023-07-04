@@ -1,15 +1,18 @@
-import { App } from 'vue';
+// import { App } from 'vue';
 
 import EdomsForm from '@edoms/form';
 
 import uiSelect from './fields/UISelect.vue';
+import { i18n } from './hooks/useI18n';
 import CodeEditor from './layouts/CodeEditor.vue';
+// import en from './locales/en';
+// import zhCN from './locales/zh-CN';
 import { setConfig } from './utils/config';
 import Editor from './Editor.vue';
+import i18nAs from './locales';
 import type { InstallOptions } from './type';
 
 import './theme/index.scss';
-
 export type { MoveableOptions } from '@edoms/stage';
 export * from './type';
 export * from './utils';
@@ -33,11 +36,24 @@ const defaultInstallOpt: InstallOptions = {
 };
 
 export default {
-  install: (app: App, opt?: InstallOptions): void => {
+  install: (app: any, opt?: InstallOptions): void => {
     app.use(EdomsForm);
-    const option = Object.assign(defaultInstallOpt, opt || {});
+    if (app.__VUE_I18N__) {
+      i18n.value = app.__VUE_I18N__;
+      //将两个语言包合并
+      for (const item in app.__VUE_I18N__.global.messages.value) {
+        for (const lan in i18nAs) {
+          if (item === lan) {
+            app.__VUE_I18N__.global.messages.value[item] = Object.assign(
+              app.__VUE_I18N__.global.messages.value[item],
+              i18nAs[lan]
+            );
+          }
+        }
+      }
+    }
 
-    // eslint-disable-next-line no-param-reassign
+    const option = Object.assign(defaultInstallOpt, opt || {});
     app.config.globalProperties.$EDOMS_EDITOR = option;
     setConfig(option);
     app.component('EdomsEditor', Editor);

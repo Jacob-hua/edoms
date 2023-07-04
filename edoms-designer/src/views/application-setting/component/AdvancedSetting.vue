@@ -19,7 +19,7 @@
           <el-input
             :value="version?.name"
             clearable
-            :placeholder="$t('applicationSetting.rules.versionSource')"
+            :placeholder="t('applicationSetting.rules.versionSource')"
             style="cursor: pointer; width: 20%"
             :suffix-icon="ArrowDown"
           ></el-input>
@@ -34,17 +34,17 @@
   </div>
   <el-dialog
     v-model="deleteVisible"
-    :title="$t('applicationSetting.deleteApp')"
+    :title="t('applicationSetting.deleteApp')"
     width="40%"
     :before-close="handleClose"
     center
   >
     <div class="modal-container">
       <p>
-        {{ $t('applicationSetting.tip.deletetip1') }} “{{ appInfo.name }}” {{ $t('applicationSetting.tip.deletetip2') }}
+        {{ t('applicationSetting.tip.deletetip1') }} “{{ appInfo.name }}” {{ t('applicationSetting.tip.deletetip2') }}
       </p>
       <p class="confirm" @click="handleCopy">
-        {{ $t('applicationSetting.tip.deletetip3') }}"{{ confirmText }}" {{ $t('applicationSetting.tip.deletetip4') }}
+        {{ t('applicationSetting.tip.deletetip3') }}"{{ confirmText }}" {{ t('applicationSetting.tip.deletetip4') }}
       </p>
       <el-form ref="formRef" :model="confirmForm" :rules="rules">
         <el-form-item prop="inputText">
@@ -55,7 +55,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button type="primary" size="large" @click="handleConfirm">
-          {{ $t('applicationSetting.confirm') }}
+          {{ t('applicationSetting.confirm') }}
         </el-button>
       </span>
     </template>

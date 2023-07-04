@@ -2,17 +2,17 @@
   <el-card class="box-card">
     <template #header>
       <div class="clearfix">
-        <span>{{ $t('permission.participant') }}</span>
-        <el-button type="primary" @click="handleAddPermission">{{ $t('permission.add') }}</el-button>
+        <span>{{ t('permission.participant') }}</span>
+        <el-button type="primary" @click="handleAddPermission">{{ t('permission.add') }}</el-button>
       </div>
     </template>
     <el-table v-loading="loading" :data="tableData" border>
-      <el-table-column prop="username" :label="$t('permission.nickname')" align="center" />
-      <el-table-column prop="roleName" :label="$t('permission.permission')" align="center" />
-      <el-table-column :label="$t('permission.operate')">
+      <el-table-column prop="username" :label="t('permission.nickname')" align="center" />
+      <el-table-column prop="roleName" :label="t('permission.permission')" align="center" />
+      <el-table-column :label="t('permission.operate')">
         <template #default="{ row }">
           <el-button v-if="row.isDisplay" size="small" type="danger" @click="handleDelete(row)">{{
-            $t('permission.delete')
+            t('permission.delete')
           }}</el-button>
         </template>
       </el-table-column>
