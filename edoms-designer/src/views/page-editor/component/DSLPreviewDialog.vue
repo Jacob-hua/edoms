@@ -1,5 +1,11 @@
 <template>
-  <el-dialog v-model="dialogVisible" destroy-on-close class="pre-viewer" title="预览" :width="stageRect.width">
+  <el-dialog
+    v-model="dialogVisible"
+    destroy-on-close
+    class="pre-viewer"
+    :title="$t('page.preview')"
+    :width="stageRect.width"
+  >
     <DSLPreview :height="stageRect.height" :content-id="contentId" :page-id="pageId" />
   </el-dialog>
 </template>

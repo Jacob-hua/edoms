@@ -63,7 +63,7 @@ pinia.use(piniaPluginPersistedstate);
 
 ElDialog['props'].closeOnClickModal.default = false;
 const app = createApp(App);
-
+app.use(i18n);
 app.use(JsonViewer);
 app.use(pinia);
 app.use(router);
@@ -77,6 +77,5 @@ app.use(ElDesign, EdomsElementPlusAdapter);
 app.use(EdomsEditor);
 app.directive('role', roleDirective);
 app.directive('permission', permissionDirective);
-app.use(i18n);
 
 app.mount('#app');

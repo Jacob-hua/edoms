@@ -10,7 +10,7 @@
       v-model="filterText"
       class="search-input"
       size="small"
-      placeholder="请输入组件名称"
+      :placeholder="$t('editor.rules.inputUnit')"
       clearable
       :prefix-icon="Search"
     ></ElInput>
@@ -20,7 +20,7 @@
       ref="tree"
       class="edoms-editor-layer-tree"
       node-key="id"
-      empty-text="页面空荡荡的"
+      :empty-text="$t('editor.noData')"
       draggable
       :default-expanded-keys="defaultExpandedKeys"
       :load="loadItems"

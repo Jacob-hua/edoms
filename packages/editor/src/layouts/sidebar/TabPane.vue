@@ -48,6 +48,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Coin, Files } from '@element-plus/icons-vue';
 
 import { ElTabPane } from '@edoms/design';
@@ -57,7 +58,7 @@ import { SideComponent, SideItem } from '../../type';
 
 import ComponentListPanel from './ComponentListPanel.vue';
 import LayerPanel from './LayerPanel.vue';
-
+const { t } = useI18n();
 const props = defineProps<{
   data?: SideItem;
 }>();
@@ -72,7 +73,7 @@ const config = computed<SideComponent | undefined>(() => {
       return {
         type: 'component',
         icon: Coin,
-        text: '组件',
+        text: t('editor.module'),
         component: ComponentListPanel,
         slots: {},
       };
@@ -80,7 +81,7 @@ const config = computed<SideComponent | undefined>(() => {
       return {
         type: 'component',
         icon: Files,
-        text: '已选组件',
+        text: t('editor.selested'),
         component: LayerPanel,
         slots: {},
       };

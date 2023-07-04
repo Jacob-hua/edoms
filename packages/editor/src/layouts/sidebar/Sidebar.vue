@@ -40,13 +40,14 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { ElTabs } from '@edoms/design';
 
 import { SideBarData } from '../../type';
 
 import TabPane from './TabPane.vue';
-
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     data?: SideBarData;
@@ -64,12 +65,12 @@ const props = withDefaults(
   }
 );
 
-const activeTabName = ref(props.data?.status);
+const activeTabName = ref(t('editor.module'));
 
 watch(
   () => props.data.status,
-  (status) => {
-    activeTabName.value = status || '0';
+  () => {
+    activeTabName.value = t('editor.module') || '0';
   }
 );
 

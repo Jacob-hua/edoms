@@ -1,15 +1,17 @@
-import { App } from 'vue';
+// import { App } from 'vue';
 
 import EdomsForm from '@edoms/form';
 
 import uiSelect from './fields/UISelect.vue';
 import CodeEditor from './layouts/CodeEditor.vue';
+import en from './locales/en';
+import zhCN from './locales/zh-CN';
 import { setConfig } from './utils/config';
 import Editor from './Editor.vue';
 import type { InstallOptions } from './type';
 
 import './theme/index.scss';
-
+// import i18n from './locales';
 export type { MoveableOptions } from '@edoms/stage';
 export * from './type';
 export * from './utils';
@@ -33,11 +35,17 @@ const defaultInstallOpt: InstallOptions = {
 };
 
 export default {
-  install: (app: App, opt?: InstallOptions): void => {
+  install: (app: any, opt?: InstallOptions): void => {
     app.use(EdomsForm);
-    const option = Object.assign(defaultInstallOpt, opt || {});
+    if (app.__VUE_I18N__) {
+      //将两个语言包合并
+      app.__VUE_I18N__.global.messages.value.en = Object.assign(app.__VUE_I18N__.global.messages.value.en, en);
+      app.__VUE_I18N__.global.messages.value.zh_CN = Object.assign(app.__VUE_I18N__.global.messages.value.zh_CN, zhCN);
+    }
+    console.log(zhCN);
+    console.log(app.__VUE_I18N__);
 
-    // eslint-disable-next-line no-param-reassign
+    const option = Object.assign(defaultInstallOpt, opt || {});
     app.config.globalProperties.$EDOMS_EDITOR = option;
     setConfig(option);
     app.component('EdomsEditor', Editor);

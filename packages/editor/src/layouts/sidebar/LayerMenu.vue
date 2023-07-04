@@ -4,13 +4,14 @@
 
 <script lang="ts" setup>
 import { computed, inject, markRaw, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Delete, DocumentCopy, Files, Plus } from '@element-plus/icons-vue';
 
 import { NodeType } from '@edoms/schema';
 
 import ContentMenu from '../../components/ContentMenu.vue';
 import type { ComponentGroup, MenuButton, MenuComponent, Services } from '../../type';
-
+const { t } = useI18n();
 const services = inject<Services>('services');
 const menu = ref<InstanceType<typeof ContentMenu>>();
 const node = computed(() => services?.editorService.get('node'));
@@ -38,7 +39,7 @@ const getSubMenuData = computed<MenuButton[]>(() => {
   if (node.value?.type === 'tabs') {
     return [
       {
-        text: '标签页',
+        text: t('editor.tabs'),
         type: 'button',
         icon: Files,
         handler: () => {
@@ -74,14 +75,14 @@ const getSubMenuData = computed<MenuButton[]>(() => {
 const menuData = computed<(MenuButton | MenuComponent)[]>(() => [
   {
     type: 'button',
-    text: '新增',
+    text: t('editor.add1'),
     icon: markRaw(Plus),
     display: () => node.value?.items,
     items: getSubMenuData.value,
   },
   {
     type: 'button',
-    text: '复制',
+    text: t('editor.copy'),
     icon: markRaw(DocumentCopy),
     display: () => !isRoot.value,
     handler: () => {
@@ -90,7 +91,7 @@ const menuData = computed<(MenuButton | MenuComponent)[]>(() => [
   },
   {
     type: 'button',
-    text: '删除',
+    text: t('editor.delete'),
     icon: markRaw(Delete),
     display: () => !isRoot.value && !isPage.value,
     handler: () => {
