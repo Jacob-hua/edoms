@@ -8,7 +8,7 @@ const i18n = createI18n({
   locale: localStorage.getItem('lang') ?? navigator.language,
   messages: {
     en,
-    zh_CN: zhCN,
+    'zh-CN': zhCN,
   },
 });
 
