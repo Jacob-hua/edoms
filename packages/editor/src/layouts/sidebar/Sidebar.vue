@@ -64,7 +64,6 @@ const props = withDefaults(
     }),
   }
 );
-
 const activeTabName = ref(t('editor.module'));
 
 watch(
