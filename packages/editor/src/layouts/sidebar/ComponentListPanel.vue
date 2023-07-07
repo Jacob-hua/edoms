@@ -5,7 +5,7 @@
     <ElCollapse class="ui-component-panel" :model-value="collapseValue">
       <ElInput
         v-model="searchText"
-        :placeholder="$t('editor.rules.inputUnit')"
+        :placeholder="$t('editor.rules.请输入组件名称')"
         class="search-input"
         size="small"
         clearable
