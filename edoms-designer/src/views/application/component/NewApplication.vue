@@ -1,29 +1,29 @@
 <template>
   <div class="new-wrapper">
-    <el-dialog v-model="dialogVisible" :title="t('application.newApplication')" width="40%" center>
+    <el-dialog v-model="dialogVisible" :title="t('application.新建应用')" width="40%" center>
       <el-form ref="formRef" :model="applicationForm" :rules="formRules" label-width="100px" class="demo-dynamic">
-        <el-form-item :label="t('application.applicationName')" prop="name">
-          <el-input v-model="applicationForm.name" :placeholder="t('application.rules.inputName')"></el-input>
+        <el-form-item :label="t('application.名称')" prop="name">
+          <el-input v-model="applicationForm.name" :placeholder="t('application.rules.请输入应用名称')"></el-input>
         </el-form-item>
-        <el-form-item :label="t('application.introduction')" prop="description">
+        <el-form-item :label="t('application.简介')" prop="description">
           <el-input
             v-model="applicationForm.description"
             type="textarea"
             resize="none"
-            :placeholder="t('application.rules.inputIntroduction')"
+            :placeholder="t('application.rules.请输入应用简介内容')"
             min="0"
             max="40"
             :rows="6"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="t('application.cover')" prop="thumbnailId">
+        <el-form-item :label="t('application.封面')" prop="thumbnailId">
           <ImageUpload @success="success"></ImageUpload>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleFormCancel">{{ t('application.cancel') }}</el-button>
-          <el-button type="primary" @click="handleFormSubmit">{{ t('application.confirm') }}</el-button>
+          <el-button @click="handleFormCancel">{{ t('application.取消') }}</el-button>
+          <el-button type="primary" @click="handleFormSubmit">{{ t('application.确认') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -75,14 +75,14 @@ const applicationForm = reactive<CreateApplicationReq>({
 
 const formRules = {
   name: [
-    { required: true, message: t('application.rules.inputName'), trigger: 'blur' },
-    { min: 1, max: 20, message: t('application.rules.applicationLimit'), trigger: 'blur' },
-    { whitespace: true, message: t('application.rules.noName'), trigger: 'blur' },
+    { required: true, message: t('application.rules.请输入应用名称'), trigger: 'blur' },
+    { min: 1, max: 20, message: t('application.rules.应用名称长度'), trigger: 'blur' },
+    { whitespace: true, message: t('application.rules.应用名称不能为空'), trigger: 'blur' },
   ],
   description: [
-    { required: true, message: t('application.rules.inputIntroduction'), trigger: 'blur' },
-    { min: 1, max: 40, message: t('application.rules.introductionLimit'), trigger: 'blur' },
-    { whitespace: true, message: t('application.rules.noIntroduction'), trigger: 'blur' },
+    { required: true, message: t('application.rules.请输入应用简介内容'), trigger: 'blur' },
+    { min: 1, max: 40, message: t('application.rules.应用简介长度'), trigger: 'blur' },
+    { whitespace: true, message: t('application.rules.应用简介不能为空'), trigger: 'blur' },
   ],
 };
 
@@ -107,7 +107,7 @@ const handleFormSubmit = async () => {
       versionId: versionId,
       contentId,
     });
-    ElMessage.success(t('application.success'));
+    ElMessage.success(t('application.创建成功'));
     dialogVisible.value = false;
     dialogVisible.value = false;
     emit('submitted');

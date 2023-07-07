@@ -6,17 +6,17 @@
           class="reference-input"
           :value="version?.name"
           clearable
-          :placeholder="t('page.select')"
+          :placeholder="t('page.请选择版本')"
           :suffix-icon="ArrowDown"
         ></el-input>
       </slot>
     </template>
     <div class="wrapper">
       <div class="header">
-        <span class="title">{{ title ?? t('page.selectVersion') }}</span>
+        <span class="title">{{ title ?? t('page.版本选择') }}</span>
         <el-icon class="close" :size="20" @click="handleClose"><Close /></el-icon>
       </div>
-      <el-input v-model="versionName" clearable :placeholder="t('page.input')"></el-input>
+      <el-input v-model="versionName" clearable :placeholder="t('page.请输入版本名称')"></el-input>
       <div class="content">
         <GridList
           v-if="visible"

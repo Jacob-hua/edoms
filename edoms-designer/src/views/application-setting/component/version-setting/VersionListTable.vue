@@ -1,6 +1,6 @@
 <template>
   <el-table :data="tableData" :max-height="maxHeight">
-    <el-table-column :label="t('version.version')">
+    <el-table-column :label="t('version.版本')">
       <template #default="scope">
         <el-row>
           <el-col :span="12">
@@ -15,18 +15,18 @@
         </el-row>
       </template>
     </el-table-column>
-    <el-table-column :label="t('version.operate')">
+    <el-table-column :label="t('version.操作')">
       <template #default="scope">
         <el-row justify="end">
           <el-col :span="6">
-            <el-button @click="handlePreview(scope.row)">{{ t('version.preview') }}</el-button>
+            <el-button @click="handlePreview(scope.row)">{{ t('version.预览') }}</el-button>
           </el-col>
           <el-col :span="6">
-            <el-button @click="handleEdit(scope.row)">{{ t('version.modify') }}</el-button>
+            <el-button @click="handleEdit(scope.row)">{{ t('version.修改') }}</el-button>
           </el-col>
           <el-col v-role="['manager']" :span="6">
             <el-button @click="handleExport(scope.row)">
-              {{ t('version.export')
+              {{ t('version.导出')
               }}<el-icon>
                 <Download />
               </el-icon>
@@ -34,7 +34,7 @@
           </el-col>
           <el-col :span="6">
             <el-button @click="handleDelete(scope.row)">
-              {{ t('version.delete')
+              {{ t('version.删除')
               }}<el-icon>
                 <Delete />
               </el-icon>
@@ -129,17 +129,17 @@ const { execute: handleUseExport } = useExport<ListVersionResItem>(
 
 const handleDelete = (row: ListVersionResItem) => {
   ElMessageBox.confirm(
-    `${t('version.delete')} ${props.applicationName}-${row.name} ${t('version.version')}？`,
-    t('version.tip'),
+    `${t('version.删除')} ${props.applicationName}-${row.name} ${t('version.版本')}？`,
+    t('version.提示'),
     {
-      confirmButtonText: t('version.confirm'),
-      cancelButtonText: t('version.cancel'),
+      confirmButtonText: t('version.确认'),
+      cancelButtonText: t('version.取消'),
       type: 'warning',
     }
   )
     .then(async () => {
       await versionApi.deleteVersion({ versionIds: [row.versionId], applicationId: props.applicationId });
-      ElMessage.success(t('version.deleteSuccess'));
+      ElMessage.success(t('version.删除成功'));
       emit('deleteSuccess');
     })
     .catch(() => {});

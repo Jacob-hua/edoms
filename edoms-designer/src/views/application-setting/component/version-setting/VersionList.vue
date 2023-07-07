@@ -1,7 +1,7 @@
 <template>
   <el-container class="version-container">
     <el-header height="40px">
-      <span class="title">{{ t('version.versionList') }}</span>
+      <span class="title">{{ t('version.版本列表') }}</span>
     </el-header>
     <el-main v-loading="loading" element-loading-text="Loading...">
       <div class="version-list">

@@ -1,15 +1,15 @@
 <template>
-  <el-dialog v-model="dialogVisible" :title="t('page.built')" width="30%">
+  <el-dialog v-model="dialogVisible" :title="t('page.新建版本')" width="30%">
     <span>
-      <el-form ref="formRef" :model="formModel" :rules="formRules" label-width="80px">
-        <el-form-item :label="t('page.versionName')" prop="name">
-          <el-input v-model="formModel.name" clearable :placeholder="t('page.input')"></el-input>
+      <el-form ref="formRef" :model="formModel" :rules="formRules" label-width="110px">
+        <el-form-item :label="t('page.版本名称')" prop="name">
+          <el-input v-model="formModel.name" clearable :placeholder="t('page.请输入版本名称')"></el-input>
         </el-form-item>
-        <el-form-item :label="t('page.description')" prop="description">
+        <el-form-item :label="t('page.版本描述')" prop="description">
           <el-input
             v-model="formModel.description"
             clearable
-            :placeholder="t('page.inputdes')"
+            :placeholder="t('page.请输入版本简介')"
             type="textarea"
             resize="none"
             min="0"
@@ -17,7 +17,7 @@
             :rows="6"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="t('page.source')" prop="createFrom">
+        <el-form-item :label="t('page.版本来源')" prop="createFrom">
           <SwitchVersion v-if="dialogVisible" v-model="formModel.createFrom" :application-id="applicationId">
           </SwitchVersion>
         </el-form-item>
@@ -25,8 +25,8 @@
     </span>
     <template #footer>
       <span>
-        <el-button @click="dialogVisible = false">{{ t('page.cancel') }}</el-button>
-        <el-button type="primary" @click="handleConfirm"> {{ t('page.confirm') }} </el-button>
+        <el-button @click="dialogVisible = false">{{ t('page.取消') }}</el-button>
+        <el-button type="primary" @click="handleConfirm"> {{ t('page.确认') }} </el-button>
       </span>
     </template>
   </el-dialog>
@@ -83,13 +83,13 @@ const formRules: FormRules = {
     {
       required: true,
       whitespace: true,
-      message: t('page.rules.noName'),
+      message: t('page.rules.版本名称不能为空'),
       trigger: 'blur',
     },
     {
       min: 1,
       max: 10,
-      message: t('page.rules.nameLimit'),
+      message: t('page.rules.版本名称字符长度'),
       trigger: 'blur',
     },
   ],
@@ -97,13 +97,13 @@ const formRules: FormRules = {
     {
       required: true,
       whitespace: true,
-      message: t('page.rules.noDes'),
+      message: t('page.rules.版本描述不能为空'),
       trigger: 'blur',
     },
     {
       min: 1,
       max: 20,
-      message: t('page.rules.desLimit'),
+      message: t('page.rules.版本描述字符长度'),
     },
   ],
 };
@@ -125,7 +125,7 @@ const handleConfirm = async () => {
       description,
       contentId,
     });
-    ElMessage.success(t('page.success'));
+    ElMessage.success(t('page.版本创建成功'));
     dialogVisible.value = false;
     emit('success');
   } catch (e) {

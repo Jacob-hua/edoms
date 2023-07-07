@@ -22,7 +22,7 @@
                   <div>
                     <span>{{ nickName }} - {{ currentTenant?.proName }}</span>
                     <p>
-                      <span>{{ $t('application.quantity') }}:</span> {{ applicationNumber }}
+                      <span>{{ t('application.应用数') }}:</span> {{ applicationNumber }}
                     </p>
                   </div>
                 </div>
@@ -135,7 +135,7 @@ watch(
 const menus: Menu[] = [
   {
     value: 'switch',
-    label: t('application.switchProjects'),
+    label: t('application.切换项目'),
     icon: 'Operation',
     disabled: {
       clickEvent: true,
@@ -153,7 +153,7 @@ const menus: Menu[] = [
   // },
   {
     value: 'loginOut',
-    label: t('application.logOut'),
+    label: t('application.退出登录'),
     action: () => {
       accountStore.logout();
       router.push({

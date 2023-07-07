@@ -8,7 +8,7 @@
           </el-icon>
           <span>{{ appName }}</span>
         </div>
-        <SwitchVersion v-model="version" :application-id="applicationId" :title="t('page.switch')">
+        <SwitchVersion v-model="version" :application-id="applicationId" :title="t('page.切换版本')">
           <div class="version-btn">
             <span>{{ version?.name }}</span>
             <el-icon class="el-icon--right">
@@ -19,11 +19,11 @@
       </div>
       <div>
         <el-button type="primary" text bg size="large" :icon="FullScreen" @click="handlePreview">{{
-          t('page.preview')
+          t('page.预览')
         }}</el-button>
-        <el-button type="primary" text bg size="large" :icon="Edit" @click="handleEdit">{{ t('page.edit') }}</el-button>
+        <el-button type="primary" text bg size="large" :icon="Edit" @click="handleEdit">{{ t('page.编辑') }}</el-button>
         <el-button type="primary" text bg size="large" :icon="DocumentAdd" @click="handleNewVersion">
-          {{ t('page.built') }}
+          {{ t('page.新建版本') }}
         </el-button>
         <el-button
           v-role="['manager']"
@@ -34,7 +34,7 @@
           :icon="Download"
           @click="handleExportApplication"
         >
-          {{ t('page.export') }}
+          {{ t('page.导出应用') }}
         </el-button>
       </div>
     </section>
@@ -56,7 +56,7 @@
           <div></div>
         </template>
         <template #empty>
-          <el-empty :description="t('page.noPages')" />
+          <el-empty :description="t('page.暂无页面')" />
         </template>
       </GridList>
     </section>

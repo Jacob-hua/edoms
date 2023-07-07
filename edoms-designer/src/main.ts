@@ -30,13 +30,6 @@ import 'element-plus/theme-chalk/index.css';
 import '@edoms/editor/src/theme/index.scss';
 import 'vue3-json-viewer/dist/index.css';
 
-const languages = () => {
-  if (i18n.global.locale.value === 'en') {
-    return en;
-  }
-  return zhCn;
-};
-
 // @ts-ignore
 globalThis.MonacoEnvironment = {
   getWorker(_: any, label: string) {
@@ -68,7 +61,7 @@ app.use(JsonViewer);
 app.use(pinia);
 app.use(router);
 app.use(ElementPlus, {
-  locale: languages(),
+  locale: i18n.global.locale.value === 'en' ? en : zhCn,
 });
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);

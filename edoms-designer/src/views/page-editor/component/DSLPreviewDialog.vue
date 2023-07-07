@@ -3,7 +3,7 @@
     v-model="dialogVisible"
     destroy-on-close
     class="pre-viewer"
-    :title="t('page.preview')"
+    :title="t('page.预览')"
     :width="stageRect.width"
   >
     <DSLPreview :height="stageRect.height" :content-id="contentId" :page-id="pageId" />

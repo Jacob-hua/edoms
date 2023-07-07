@@ -2,17 +2,17 @@
   <el-card class="box-card">
     <template #header>
       <div class="clearfix">
-        <span>{{ t('permission.participant') }}</span>
-        <el-button type="primary" @click="handleAddPermission">{{ t('permission.add') }}</el-button>
+        <span>{{ t('permission.参与者') }}</span>
+        <el-button type="primary" @click="handleAddPermission">{{ t('permission.添加') }}</el-button>
       </div>
     </template>
     <el-table v-loading="loading" :data="tableData" border>
-      <el-table-column prop="username" :label="t('permission.nickname')" align="center" />
-      <el-table-column prop="roleName" :label="t('permission.permission')" align="center" />
-      <el-table-column :label="t('permission.operate')">
+      <el-table-column prop="username" :label="t('permission.用户昵称')" align="center" />
+      <el-table-column prop="roleName" :label="t('permission.权限')" align="center" />
+      <el-table-column :label="t('permission.操作')">
         <template #default="{ row }">
           <el-button v-if="row.isDisplay" size="small" type="danger" @click="handleDelete(row)">{{
-            t('permission.delete')
+            t('permission.删除')
           }}</el-button>
         </template>
       </el-table-column>
@@ -89,9 +89,9 @@ const handleSubmitted = () => {
   getPermissionList(queryParams);
 };
 const handleDelete = async ({ userId }: Permission) => {
-  ElMessageBox.confirm(t('permission.continue'), t('permission.tip'), {
-    confirmButtonText: t('permission.confirm'),
-    cancelButtonText: t('permission.cancel'),
+  ElMessageBox.confirm(t('permission.此操作将永久删除此行记录'), t('permission.提示'), {
+    confirmButtonText: t('permission.确认'),
+    cancelButtonText: t('permission.取消'),
     type: 'warning',
   })
     .then(async () => {
@@ -99,7 +99,7 @@ const handleDelete = async ({ userId }: Permission) => {
         applicationId: props.appInfo.applicationId,
         userId,
       });
-      ElMessage.success(t('permission.deleteSuccess'));
+      ElMessage.success(t('permission.删除成功'));
       getPermissionList(queryParams);
     })
     .catch(() => {});
