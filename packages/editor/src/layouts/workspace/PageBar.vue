@@ -21,7 +21,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: $t('editor.rename'),
+                text: $t('editor.重命名'),
                 icon: Edit,
                 handler: () => rename(item),
               }"
@@ -29,7 +29,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: $t('editor.copy'),
+                text: $t('editor.复制'),
                 icon: DocumentCopy,
                 handler: () => copy(item),
               }"
@@ -37,7 +37,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: $t('editor.delete'),
+                text: $t('editor.删除'),
                 icon: Delete,
                 handler: () => remove(item),
               }"
@@ -88,12 +88,12 @@ const copy = (node: MPage) => {
 
 const rename = (node: MPage) => {
   elMessageBox
-    .prompt(`${t('editor.rename')}${node.name}`, t('editor.tip'), {
-      confirmButtonText: t('editor.confirm'),
-      cancelButtonText: t('editor.cancel'),
+    .prompt(`${t('editor.重命名')}${node.name}`, t('editor.提示'), {
+      confirmButtonText: t('editor.确认'),
+      cancelButtonText: t('editor.取消'),
       inputValue: node.name,
       inputPattern: /\S/,
-      inputErrorMessage: t('editor.rules.noPageName'),
+      inputErrorMessage: t('editor.rules.页面名不能为空'),
       closeOnClickModal: false,
     })
     .then(({ value }) => {

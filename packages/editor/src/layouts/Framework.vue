@@ -15,7 +15,7 @@
       v-model:left="columnWidth.left"
       v-model:right="columnWidth.right"
       v-loading="loading"
-      :element-loading-text="$t('editor.loading')"
+      :element-loading-text="$t('editor.页面加载中')"
       class="edoms-editor-content"
       left-class="edoms-editor-framework-left"
       center-class="edoms-editor-framework-center"

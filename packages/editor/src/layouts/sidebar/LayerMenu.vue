@@ -19,7 +19,6 @@ const isRoot = computed(() => node.value?.type === NodeType.ROOT);
 const isPage = computed(() => node.value?.type === NodeType.PAGE);
 const componentList = computed(() => services?.componentListService.getList() || []);
 const layerContentMenu = inject<(MenuComponent | MenuButton)[]>('layerContentMenu', []);
-console.log(useI18n);
 const createMenuItems = (group: ComponentGroup): MenuButton[] =>
   group.items.map((component) => ({
     text: component.text,
@@ -38,7 +37,7 @@ const getSubMenuData = computed<MenuButton[]>(() => {
   if (node.value?.type === 'tabs') {
     return [
       {
-        text: t('editor.tabs'),
+        text: t('editor.标签页'),
         type: 'button',
         icon: Files,
         handler: () => {
@@ -74,14 +73,14 @@ const getSubMenuData = computed<MenuButton[]>(() => {
 const menuData = computed<(MenuButton | MenuComponent)[]>(() => [
   {
     type: 'button',
-    text: t('editor.add1'),
+    text: t('editor.新增'),
     icon: markRaw(Plus),
     display: () => node.value?.items,
     items: getSubMenuData.value,
   },
   {
     type: 'button',
-    text: t('editor.copy'),
+    text: t('editor.复制'),
     icon: markRaw(DocumentCopy),
     display: () => !isRoot.value,
     handler: () => {
@@ -90,7 +89,7 @@ const menuData = computed<(MenuButton | MenuComponent)[]>(() => [
   },
   {
     type: 'button',
-    text: t('editor.delete'),
+    text: t('editor.删除'),
     icon: markRaw(Delete),
     display: () => !isRoot.value && !isPage.value,
     handler: () => {

@@ -34,7 +34,7 @@ const stageContentMenu = inject<(MenuButton | MenuComponent)[]>('stageContentMen
 const menuData = reactive<(MenuButton | MenuComponent)[]>([
   {
     type: 'button',
-    text: t('editor.horizontally'),
+    text: t('editor.水平居中'),
     display: () => canCenter.value,
     handler: () => {
       if (!nodes.value) return;
@@ -43,7 +43,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: t('editor.copy'),
+    text: t('editor.复制'),
     icon: markRaw(DocumentCopy),
     handler: () => {
       nodes.value && editorService?.copy(nodes.value);
@@ -52,7 +52,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: t('editor.paste'),
+    text: t('editor.粘贴'),
     display: () => canPaste.value,
     handler: () => {
       const rect = menu.value?.$el.getBoundingClientRect();
@@ -74,7 +74,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: t('editor.forwardB'),
+    text: t('editor.上移一层'),
     icon: markRaw(Top),
     display: () => !isPage(node.value) && !props.isMultiSelect,
     handler: () => {
@@ -83,7 +83,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: t('editor.backward'),
+    text: t('editor.下移一层'),
     icon: markRaw(Bottom),
     display: () => !isPage(node.value) && !props.isMultiSelect,
     handler: () => {
@@ -92,7 +92,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: t('editor.top'),
+    text: t('editor.置顶'),
     display: () => !isPage(node.value) && !props.isMultiSelect,
     handler: () => {
       editorService?.moveLayer(LayerOffset.TOP);
@@ -100,7 +100,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: t('editor.bottom'),
+    text: t('editor.置底'),
     display: () => !isPage(node.value) && !props.isMultiSelect,
     handler: () => {
       editorService?.moveLayer(LayerOffset.BOTTOM);
@@ -113,7 +113,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: t('editor.delete'),
+    text: t('editor.删除'),
     icon: Delete,
     display: () => !isPage(node.value),
     handler: () => {
@@ -126,7 +126,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: t('editor.clear'),
+    text: t('editor.清空参考线'),
     handler: () => {
       editorService?.get<StageCore>('stage').clearGuides();
     },

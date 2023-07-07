@@ -5,7 +5,7 @@
         <div>
           <MIcon :icon="Plus"></MIcon>
         </div>
-        <p>{{ $t('editor.add') }}</p>
+        <p>{{ $t('editor.新增页面') }}</p>
       </div>
     </div>
   </div>

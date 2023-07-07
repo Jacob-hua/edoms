@@ -64,12 +64,12 @@ const props = withDefaults(
     }),
   }
 );
-const activeTabName = ref(t('editor.module'));
+const activeTabName = ref(t('editor.组件'));
 
 watch(
   () => props.data.status,
   () => {
-    activeTabName.value = t('editor.module') || '0';
+    activeTabName.value = t('editor.组件') || '0';
   }
 );
 
