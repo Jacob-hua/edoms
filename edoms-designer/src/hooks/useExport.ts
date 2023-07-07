@@ -3,11 +3,13 @@ import { ref } from 'vue';
 import { MessageError } from '@/const/error';
 import { MimeType } from '@/const/mime';
 
+import i18n from '../locales';
+const { t } = i18n.global;
 export class ExportError extends MessageError {
   constructor(fileName: string, cause?: any) {
     super({
       type: 'error',
-      message: `导出${fileName}失败`,
+      message: `${t('errorTips.导出')}${fileName}${t('errorTips.失败')}`,
       cause,
     });
   }

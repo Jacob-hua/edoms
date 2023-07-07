@@ -73,7 +73,7 @@ const config = computed<SideComponent | undefined>(() => {
       return {
         type: 'component',
         icon: Coin,
-        text: t('editor.module'),
+        text: t('editor.组件'),
         component: ComponentListPanel,
         slots: {},
       };
@@ -81,7 +81,7 @@ const config = computed<SideComponent | undefined>(() => {
       return {
         type: 'component',
         icon: Files,
-        text: t('editor.selested'),
+        text: t('editor.已选组件'),
         component: LayerPanel,
         slots: {},
       };

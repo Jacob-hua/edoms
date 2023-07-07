@@ -65,7 +65,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'delete',
         icon: markRaw(Delete),
-        tooltip: `${t('editor.delete')}(Delete)`,
+        tooltip: `${t('editor.删除')}(Delete)`,
         disabled: () => services?.editorService.get('node')?.type === NodeType.PAGE,
         handler: () => services?.editorService.remove(services?.editorService.get('node')),
       });
@@ -75,7 +75,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'undo',
         icon: markRaw(Back),
-        tooltip: `${t('editor.back')}(${ctrl}+z)`,
+        tooltip: `${t('editor.后退')}(${ctrl}+z)`,
         disabled: () => !services?.historyService.state.canUndo,
         handler: () => services?.editorService.undo(),
       });
@@ -85,7 +85,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'redo',
         icon: markRaw(Right),
-        tooltip: `${t('editor.forward')}(${ctrl}+Shift+z)`,
+        tooltip: `${t('editor.前进')}(${ctrl}+Shift+z)`,
         disabled: () => !services?.historyService.state.canRedo,
         handler: () => services?.editorService.redo(),
       });
@@ -95,7 +95,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'zoom-in',
         icon: markRaw(ZoomIn),
-        tooltip: `${t('editor.amplify')}(${ctrl}+=)`,
+        tooltip: `${t('editor.放大')}(${ctrl}+=)`,
         handler: () => uiService?.zoom(0.1),
       });
       break;
@@ -104,7 +104,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'zoom-out',
         icon: markRaw(ZoomOut),
-        tooltip: `${t('editor.reduce')}(${ctrl}+-)`,
+        tooltip: `${t('editor.缩小')}(${ctrl}+-)`,
         handler: () => uiService?.zoom(-0.1),
       });
       break;
@@ -113,7 +113,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'scale-to-original',
         icon: markRaw(ScaleToOriginal),
-        tooltip: `${t('editor.zoomToActual')}(${ctrl}+1)`,
+        tooltip: `${t('editor.缩放到实际大小')}(${ctrl}+1)`,
         handler: () => uiService?.set('zoom', 1),
       });
       break;
@@ -122,7 +122,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'scale-to-fit',
         icon: markRaw(FullScreen),
-        tooltip: `${t('editor.zoomToFit')}(${ctrl}+0)`,
+        tooltip: `${t('editor.缩放以适应')}(${ctrl}+0)`,
         handler: async () => uiService?.set('zoom', await uiService.calcZoom()),
       });
       break;
@@ -131,7 +131,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'rule',
         icon: markRaw(Memo),
-        tooltip: showRule.value ? t('editor.hidRuler') : t('editor.disolayRul'),
+        tooltip: showRule.value ? t('editor.隐藏标尺') : t('editor.显示标尺'),
         handler: () => uiService?.set('showRule', !showRule.value),
       });
       break;
@@ -140,7 +140,7 @@ const getConfig = (item: MenuItem): (MenuButton | MenuComponent)[] => {
         type: 'button',
         className: 'guides',
         icon: markRaw(Grid),
-        tooltip: showGuides.value ? t('editor.hideGuid') : t('editor.showGuid'),
+        tooltip: showGuides.value ? t('editor.隐藏参考线') : t('editor.显示参考线'),
         handler: () => uiService?.set('showGuides', !showGuides.value),
       });
       break;

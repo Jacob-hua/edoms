@@ -42,7 +42,7 @@ const menus = computed(() => {
     return [
       {
         name: 'application',
-        label: t('application.setting'),
+        label: t('application.设置'),
         icon: 'Setting',
         action: () => {
           router.push({
@@ -56,7 +56,7 @@ const menus = computed(() => {
       },
       {
         name: 'version',
-        label: t('application.version'),
+        label: t('application.版本'),
         icon: 'Setting',
         action: () => {
           router.push({
@@ -73,7 +73,7 @@ const menus = computed(() => {
   return [
     {
       name: 'application',
-      label: t('application.setting'),
+      label: t('application.设置'),
       icon: 'Setting',
       action: () => {
         router.push({
@@ -87,7 +87,7 @@ const menus = computed(() => {
     },
     {
       name: 'version',
-      label: t('application.version'),
+      label: t('application.版本'),
       icon: 'Setting',
       action: () => {
         router.push({
@@ -101,7 +101,7 @@ const menus = computed(() => {
     },
     {
       name: 'permission',
-      label: t('application.permission'),
+      label: t('application.权限'),
       icon: 'Setting',
       action: () => {
         router.push({

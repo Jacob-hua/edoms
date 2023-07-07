@@ -129,9 +129,9 @@ const menu = computed<MenuBarData>(() => ({
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           try {
-            await ElMessageBox.confirm(t('page.tips1'), t('page.tip'), {
-              confirmButtonText: t('page.exit'),
-              cancelButtonText: t('page.cancel'),
+            await ElMessageBox.confirm(t('page.有修改未保存1'), t('page.版本创建成功'), {
+              confirmButtonText: t('page.退出'),
+              cancelButtonText: t('page.取消'),
               type: 'warning',
             });
             goBack();
@@ -154,18 +154,18 @@ const menu = computed<MenuBarData>(() => ({
     '/',
     {
       type: 'button',
-      text: t('page.preview'),
+      text: t('page.预览'),
       icon: Connection,
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           try {
-            await ElMessageBox.confirm(t('page.tips2'), t('page.tip'), {
-              confirmButtonText: t('page.sAndp'),
-              cancelButtonText: t('page.confirm'),
+            await ElMessageBox.confirm(t('page.有修改未保存2'), t('page.版本创建成功'), {
+              confirmButtonText: t('page.保存并预览'),
+              cancelButtonText: t('page.确认'),
               type: 'warning',
             });
             save();
-            ElMessage.success(t('page.saveSuccess'));
+            ElMessage.success(t('page.保存成功'));
           } catch (e) {
             console.error(e);
             return;
@@ -177,14 +177,14 @@ const menu = computed<MenuBarData>(() => ({
     },
     {
       type: 'button',
-      text: t('page.save'),
+      text: t('page.保存'),
       icon: Coin,
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           await save();
-          ElMessage.success(t('page.saveSuccess'));
+          ElMessage.success(t('page.保存成功'));
         } else {
-          ElMessage.warning(t('page.tips3'));
+          ElMessage.warning(t('page.当前无修改'));
         }
       },
     },
@@ -192,7 +192,7 @@ const menu = computed<MenuBarData>(() => ({
     {
       type: 'button',
       icon: Document,
-      tooltip: t('page.code'),
+      tooltip: t('page.源码'),
       handler: (service) => service?.uiService.set('showSrc', !service?.uiService.get('showSrc')),
     },
   ],

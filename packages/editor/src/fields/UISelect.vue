@@ -1,13 +1,13 @@
 <template>
   <div v-if="uiSelectMode" class="m-fields-ui-select" @click="cancelHandler">
-    <ElButton type="danger" :icon="Delete" text style="padding: 0">{{ $t('editor.cancel') }}</ElButton>
+    <ElButton type="danger" :icon="Delete" text style="padding: 0">{{ $t('editor.取消') }}</ElButton>
   </div>
   <div v-else class="m-fields-ui-select" style="display: flex" @click="startSelect">
-    <ElTooltip v-if="val" :content="$t('editor.clear1')">
+    <ElTooltip v-if="val" :content="$t('editor.清除')">
       <ElButton style="padding: 0" type="danger" :icon="Close" text @click.stop="deleteHandler"></ElButton>
     </ElTooltip>
-    <ElTooltip :content="val ? toName + '_' + val : $t('editor.cliskSele')">
-      <ElButton text style="padding: 0; margin: 0">{{ val ? toName + '_' + val : $t('editor.cliskSele') }}</ElButton>
+    <ElTooltip :content="val ? toName + '_' + val : $t('editor.点击此处选择')">
+      <ElButton text style="padding: 0; margin: 0">{{ val ? toName + '_' + val : $t('editor.点击此处选择') }}</ElButton>
     </ElTooltip>
   </div>
 </template>
