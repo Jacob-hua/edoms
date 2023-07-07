@@ -1,7 +1,7 @@
 <template>
   <div class="add-wrapper">
     <el-dialog v-model="dialogVisible" :title="t('permission.添加人员')" width="40%" center>
-      <el-form ref="formRef" :model="permissionAddForm" :rules="formRules" label-width="80px" class="demo-dynamic">
+      <el-form ref="formRef" :model="permissionAddForm" :rules="formRules" label-width="115px" class="demo-dynamic">
         <el-form-item :label="t('permission.权限')" prop="roleId">
           <div>{{ roleName }}</div>
         </el-form-item>

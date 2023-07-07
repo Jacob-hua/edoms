@@ -4,6 +4,8 @@ import Crypto from 'crypto-js';
 import fileApi from '@/api/file';
 import { MessageError } from '@/const/error';
 
+import i18n from '../locales';
+const { t } = i18n.global;
 export interface FileChunk {
   fileName: string;
   fileType: string;
@@ -23,7 +25,7 @@ export class UploadError extends MessageError {
   constructor(fileName: string, cause?: any) {
     super({
       type: 'error',
-      message: `${fileName}上传失败`,
+      message: `${fileName}${t('errorTips.上传失败')}`,
       cause,
     });
   }

@@ -1,4 +1,15 @@
 export default {
+  errorTips: {
+    请选择: 'Please select',
+    文件: 'file',
+    取消文件选择: 'Cancel File Selection',
+    文件选择异常: 'File selection exception',
+    上传失败: 'Upload failed',
+    新应用DSL上传失败: 'New application DSL upload failed',
+    导出: 'Export',
+    失败: 'Fail',
+    dsl元数据下载失败: 'DSL metadata download failed',
+  },
   application: {
     rules: {
       请输入应用名称: 'Please enter an application name',
