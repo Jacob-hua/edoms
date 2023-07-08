@@ -21,7 +21,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: $t('editor.重命名'),
+                text: t('editor.重命名'),
                 icon: Edit,
                 handler: () => rename(item),
               }"
@@ -29,7 +29,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: $t('editor.复制'),
+                text: t('editor.复制'),
                 icon: DocumentCopy,
                 handler: () => copy(item),
               }"
@@ -37,7 +37,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: $t('editor.删除'),
+                text: t('editor.删除'),
                 icon: Delete,
                 handler: () => remove(item),
               }"
