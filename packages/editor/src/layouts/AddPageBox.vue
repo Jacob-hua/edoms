@@ -5,7 +5,7 @@
         <div>
           <MIcon :icon="Plus"></MIcon>
         </div>
-        <p>{{ $t('editor.新增页面') }}</p>
+        <p>{{ t('editor.新增页面') }}</p>
       </div>
     </div>
   </div>
@@ -18,8 +18,10 @@ import { Plus } from '@element-plus/icons-vue';
 import { NodeType } from '@edoms/schema';
 
 import MIcon from '../components/Icon.vue';
+import useI18n from '../hooks/useI18n';
 import type { Services } from '../type';
 import { generatePageNameByApp } from '../utils';
+const { t } = useI18n();
 
 const services = inject<Services>('services');
 
