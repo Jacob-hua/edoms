@@ -43,6 +43,8 @@ export default {
       Object.entries(languages).forEach(([lang, message]) => {
         i18nInstance.value?.global.mergeLocaleMessage(lang, message);
       });
+
+      console.log('===>', i18nInstance.value);
     }
 
     const option = Object.assign(defaultInstallOpt, opt || {});
