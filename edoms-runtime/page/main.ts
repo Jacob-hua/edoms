@@ -9,7 +9,6 @@ import { toLine } from '@edoms/utils';
 
 import components from '../.edoms/async-comp-entry';
 import plugins from '../.edoms/plugin-entry';
-import { i18n } from '../locales';
 
 import request from './utils/request';
 import AppComponent from './App.vue';
@@ -19,8 +18,6 @@ import 'element-plus/theme-chalk/index.css';
 const edomsApp = createApp(AppComponent);
 
 edomsApp.use(request);
-
-edomsApp.use(i18n);
 
 edomsApp.use(ElementPlus, {
   locale: zhCn,

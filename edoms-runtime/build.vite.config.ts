@@ -2,7 +2,6 @@ import path from 'path';
 
 import { ConfigEnv, defineConfig, loadEnv, UserConfigExport } from 'vite';
 import htmlConfig from 'vite-plugin-html-config';
-import vueI18n from '@intlify/vite-plugin-vue-i18n';
 import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 
@@ -61,9 +60,6 @@ const buildRendererConfig: UserConfigExport = (config: ConfigEnv) => {
   return {
     plugins: [
       vue(),
-      vueI18n({
-        include: [path.resolve(process.cwd(), 'locales/en'), path.resolve(process.cwd(), 'locales/zh-CN')],
-      }),
       legacy({
         targets: ['defaults', 'not IE 11'],
       }),
@@ -118,9 +114,6 @@ const buildOfflineConfig: UserConfigExport = (config: ConfigEnv) => {
             src: './dsl.js',
           },
         ],
-      }),
-      vueI18n({
-        include: [path.resolve(process.cwd(), 'locales/en'), path.resolve(process.cwd(), 'locales/zh-CN')],
       }),
       legacy({
         targets: ['defaults', 'not IE 11'],

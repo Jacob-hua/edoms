@@ -1,19 +1,13 @@
 import path from 'path';
 
 import { defineConfig, loadEnv } from 'vite';
-import vueI18n from '@intlify/vite-plugin-vue-i18n';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    plugins: [
-      vue(),
-      vueI18n({
-        include: [path.resolve(process.cwd(), 'locales/en'), path.resolve(process.cwd(), 'locales/zh-CN')],
-      }),
-    ],
+    plugins: [vue()],
 
     resolve: {
       alias: [
