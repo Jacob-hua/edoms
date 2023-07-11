@@ -38,9 +38,9 @@ const defaultInstallOpt: InstallOptions = {
 export default {
   install: (app: any, opt?: InstallOptions): void => {
     app.use(EdomsForm);
+    console.log('====已加载语言包：', app.__VUE_I18N__.global.getLocaleMessage('en'));
     if (app.__VUE_I18N__) {
       i18n.value = app.__VUE_I18N__;
-      console.log('====已加载语言包：', app.__VUE_I18N__.global.getLocaleMessage('en'));
 
       //将两个语言包合并
       Object.entries(languages).forEach(([lang, message]) => {
