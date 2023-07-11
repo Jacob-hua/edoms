@@ -9,7 +9,7 @@ import CodeEditor from './layouts/CodeEditor.vue';
 // import zhCN from './locales/zh-CN';
 import { setConfig } from './utils/config';
 import Editor from './Editor.vue';
-import i18nAs from './locales';
+import languages from './locales';
 import type { InstallOptions } from './type';
 
 import './theme/index.scss';
@@ -38,19 +38,14 @@ const defaultInstallOpt: InstallOptions = {
 export default {
   install: (app: any, opt?: InstallOptions): void => {
     app.use(EdomsForm);
+    console.log('====已加载语言包：', app);
     if (app.__VUE_I18N__) {
       i18n.value = app.__VUE_I18N__;
+
       //将两个语言包合并
-      for (const item in app.__VUE_I18N__.global.messages.value) {
-        for (const lan in i18nAs) {
-          if (item === lan) {
-            app.__VUE_I18N__.global.messages.value[item] = Object.assign(
-              app.__VUE_I18N__.global.messages.value[item],
-              i18nAs[lan]
-            );
-          }
-        }
-      }
+      Object.entries(languages).forEach(([lang, message]) => {
+        i18n.value.global.mergeLocaleMessage(lang, message);
+      });
     }
 
     const option = Object.assign(defaultInstallOpt, opt || {});
