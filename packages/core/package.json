@@ -33,7 +33,7 @@
     "dot": "2.0.0-beta.1",
     "events": "^3.3.0",
     "lodash-es": "^4.17.21",
-    "vue": "^3.3.4",
+    "vue": "^3.2.37",
     "vue-i18n": "9.3.0-beta.19"
   },
   "devDependencies": {
