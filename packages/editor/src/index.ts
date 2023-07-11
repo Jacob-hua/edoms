@@ -1,12 +1,10 @@
-// import { App } from 'vue';
+import { App } from 'vue';
 
 import EdomsForm from '@edoms/form';
 
 import uiSelect from './fields/UISelect.vue';
-import { i18n } from './hooks/useI18n';
+import { i18nInstance } from './hooks/useI18n';
 import CodeEditor from './layouts/CodeEditor.vue';
-// import en from './locales/en';
-// import zhCN from './locales/zh-CN';
 import { setConfig } from './utils/config';
 import Editor from './Editor.vue';
 import languages from './locales';
@@ -36,15 +34,14 @@ const defaultInstallOpt: InstallOptions = {
 };
 
 export default {
-  install: (app: any, opt?: InstallOptions): void => {
+  install: (app: App, opt?: InstallOptions): void => {
     app.use(EdomsForm);
-    console.log('====已加载语言包：', app);
-    if (app.__VUE_I18N__) {
-      i18n.value = app.__VUE_I18N__;
+    if (Reflect.has(app.config.globalProperties, '$i18n')) {
+      i18nInstance.value = Reflect.get(app, '__VUE_I18N__');
 
       //将两个语言包合并
       Object.entries(languages).forEach(([lang, message]) => {
-        i18n.value.global.mergeLocaleMessage(lang, message);
+        i18nInstance.value?.global.mergeLocaleMessage(lang, message);
       });
     }
 
