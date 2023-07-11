@@ -1,17 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-05-10 09:41:38
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 09:25:55
--->
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-05-10 09:41:38
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 17:45:34
--->
 <template>
   <div class="efficency-analysis" @click="handlerToShow($event, true)">
     <div class="wrap-report">

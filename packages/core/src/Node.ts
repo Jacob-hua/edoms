@@ -4,7 +4,6 @@ import type { EventItemConfig, MComponent, MContainer, MNodeInstance, MPage } fr
 
 import type App from './App';
 import type Page from './Page';
-import Store from './Store';
 
 interface NodeOptions {
   config: MComponent | MContainer;
@@ -22,7 +21,6 @@ class Node extends EventEmitter {
   public page?: Page;
   public parent?: Node;
   public app: App;
-  public store = new Store();
 
   constructor(options: NodeOptions) {
     super();

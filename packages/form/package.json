@@ -34,7 +34,7 @@
     "@element-plus/icons-vue": "^2.0.9",
     "lodash-es": "^4.17.21",
     "sortablejs": "^1.14.0",
-    "vue": "3.2.37"
+    "vue": "^3.2.37"
   },
   "peerDependencies": {
     "vue": "^3.2.37"
