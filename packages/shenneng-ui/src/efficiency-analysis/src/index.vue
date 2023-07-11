@@ -238,24 +238,7 @@ watch(
         padding: 0 20px;
         box-sizing: border-box;
         width: 100%;
-        height: 500px;
       }
-      // .table-content::-webkit-scrollbar {
-      //   width: 3px;
-      //   height: 1px;
-      // }
-
-      // .table-content::-webkit-scrollbar-thumb {
-      //   border-radius: 3px;
-      //   // -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
-      //   background: rgba(4, 70, 108, 1);
-      // }
-
-      // .table-content::-webkit-scrollbar-track {
-      //   // -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
-      //   border-radius: 3px;
-      //   background: transparent;
-      // }
     }
   }
 }

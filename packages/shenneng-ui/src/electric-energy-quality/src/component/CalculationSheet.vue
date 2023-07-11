@@ -120,13 +120,12 @@ const formulaData = computed(() => {
 
   .th_index {
     width: 130px;
+    height: 100%;
     display: grid;
-    grid-template-rows: repeat(3, 33.3%);
+    grid-template-rows: 1fr 1fr 1fr;
     gap: 13px;
 
     .th_index_con {
-      width: 130px;
-      min-height: 76px;
       text-align: center;
       font-size: 14px;
       font-family: Microsoft YaHei;
@@ -136,10 +135,8 @@ const formulaData = computed(() => {
       border: 1px solid #02263b;
       border-radius: 0px 4px 0px 4px;
       box-sizing: border-box;
-
-      div {
-        margin-top: 13px;
-      }
+      display: grid;
+      align-items: center;
     }
   }
 

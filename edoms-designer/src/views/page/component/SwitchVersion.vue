@@ -6,17 +6,17 @@
           class="reference-input"
           :value="version?.name"
           clearable
-          placeholder="请选择版本"
+          :placeholder="t('page.请选择版本')"
           :suffix-icon="ArrowDown"
         ></el-input>
       </slot>
     </template>
     <div class="wrapper">
       <div class="header">
-        <span class="title">{{ title ?? '版本选择' }}</span>
+        <span class="title">{{ title ?? t('page.版本选择') }}</span>
         <el-icon class="close" :size="20" @click="handleClose"><Close /></el-icon>
       </div>
-      <el-input v-model="versionName" clearable placeholder="输入版本名称"></el-input>
+      <el-input v-model="versionName" clearable :placeholder="t('page.请输入版本名称')"></el-input>
       <div class="content">
         <GridList
           v-if="visible"
@@ -42,6 +42,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { ArrowDown } from '@element-plus/icons-vue';
 
 import versionApi from '@/api/version';
@@ -52,6 +53,7 @@ export interface VersionModel {
   name: string;
   contentId: string;
 }
+const { t } = useI18n();
 
 const props = defineProps<{
   applicationId: string;

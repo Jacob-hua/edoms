@@ -1,5 +1,5 @@
 <template>
-  <img :src="imgSrc" />
+  <img class="img" :src="imgSrc" />
 </template>
 
 <script lang="ts" setup>
@@ -77,3 +77,10 @@ const updateIndicatorsData = async () => {
 
 useIntervalAsync(updateIndicatorsData, intervalDelay.value);
 </script>
+
+<style lang="scss" scoped>
+.img {
+  min-width: 200px;
+  min-height: 200px;
+}
+</style>

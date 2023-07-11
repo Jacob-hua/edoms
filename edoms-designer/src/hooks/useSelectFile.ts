@@ -4,16 +4,19 @@ import { selectFile } from '@edoms/utils';
 
 import { MessageError } from '@/const/error';
 
+import i18n from '../locales';
+const { t } = i18n.global;
+
 export class SelectFileError extends MessageError {
   constructor(accepts: string[], cause?: any) {
     super({
       type: cause.type === 'CancelSelect' ? 'warning' : 'error',
       message:
         cause.type === 'WrongFormat'
-          ? `请选择${accepts}文件`
+          ? `${t('errorTips.请选择')}${accepts}${t('errorTips.文件')}`
           : cause.type === 'CancelSelect'
-          ? '取消文件选择'
-          : '文件选择异常',
+          ? t('errorTips.取消文件选择')
+          : t('errorTips.文件选择异常'),
       cause,
     });
   }

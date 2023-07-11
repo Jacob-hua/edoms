@@ -5,7 +5,7 @@
     <ElCollapse class="ui-component-panel" :model-value="collapseValue">
       <ElInput
         v-model="searchText"
-        placeholder="请输入组件名称"
+        :placeholder="t('editor.rules.请输入组件名称')"
         class="search-input"
         size="small"
         clearable
@@ -48,7 +48,9 @@ import type StageCore from '@edoms/stage';
 import { removeClassNameByClassName } from '@edoms/utils';
 
 import MIcon from '../../components/Icon.vue';
+import useI18n from '../../hooks/useI18n';
 import type { ComponentGroup, ComponentItem, Services, StageOptions } from '../../type';
+const { t } = useI18n();
 
 const searchText = ref('');
 const services = inject<Services>('services');

@@ -6,13 +6,16 @@ import { MessageError } from '@/const/error';
 import useAccountStore from '@/store/account';
 import { generateDefaultDSL } from '@/util/dsl';
 
+import i18n from '../locales';
+
 import useUpload from './useUpload';
+const { t } = i18n.global;
 
 export class UploadDefaultDSLError extends MessageError {
   constructor(cause?: any) {
     super({
       type: 'error',
-      message: '新应用DSL上传失败',
+      message: t('errorTips.新应用DSL上传失败'),
       cause,
     });
   }

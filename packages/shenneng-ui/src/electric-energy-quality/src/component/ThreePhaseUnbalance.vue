@@ -632,19 +632,21 @@ const categories = ref([
 
     .text_clm {
       display: grid;
-      grid-template-rows: repeat(3, 33.3%);
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 13px;
 
       .text_row {
         width: 130px;
-        min-height: 76px;
+        height: 100%;
         margin: auto;
         background: #03121c;
         border: 1px solid #022438;
         border-radius: 0 4px 0 4px;
         text-align: center;
+        display: grid;
+        align-items: center;
 
         div {
-          margin-top: 13px;
           font-size: 14px;
           font-family: Microsoft YaHei;
           font-weight: 400;

@@ -117,8 +117,6 @@ const cssBackgroundColor = computed<string>(() => (showDetail.value ? 'rgba(0, 0
   .wrap-report {
     width: 100%;
     height: 100%;
-    // background: rgba(0, 163, 255, 0.1);
-    // border: 1px solid #051823;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -156,15 +154,6 @@ const cssBackgroundColor = computed<string>(() => (showDetail.value ? 'rgba(0, 0
     background-color: v-bind(cssBackgroundColor);
     z-index: v-bind(cssIndex);
     cursor: default;
-    // position: fixed;
-    // left: 50%;
-    // top: 50%;
-    // transform: translate(-50%, -50%);
-    // width: 1720px;
-    // height: 945px;
-    // background: rgba($color: #000000, $alpha: 0.9);
-    // border: 1px solid #013460;
-    // z-index: 10;
   }
   .table {
     position: fixed;
@@ -172,7 +161,6 @@ const cssBackgroundColor = computed<string>(() => (showDetail.value ? 'rgba(0, 0
     top: 50%;
     transform: translate(-50%, -50%);
     width: 1720px;
-    height: 792px;
     background: rgba($color: #000000, $alpha: 0.9);
     border: 1px solid #013460;
     z-index: 15;

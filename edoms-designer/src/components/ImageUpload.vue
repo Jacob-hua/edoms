@@ -1,7 +1,9 @@
 <template>
   <div class="upload-wrapper">
     <div class="image-wrapper" @click="handlePreview"><PreviewImage :content-id="contentId" /></div>
-    <el-button type="primary" :loading="selectUploadLoading" @click="handleUpload">上传图片</el-button>
+    <el-button type="primary" :loading="selectUploadLoading" @click="handleUpload">{{
+      t('application.上传图片')
+    }}</el-button>
     <el-dialog v-model="dialogVisible">
       <preview-image :content-id="contentId"></preview-image>
     </el-dialog>
@@ -10,9 +12,11 @@
 
 <script lang="ts" setup name="ImageUpload">
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import PreviewImage from '@/components/ImagePreview.vue';
 import useSelectUpload from '@/hooks/useSelectUpload';
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{

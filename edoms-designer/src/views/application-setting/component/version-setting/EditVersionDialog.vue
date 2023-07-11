@@ -1,15 +1,15 @@
 <template>
-  <el-dialog v-model="dialogVisible" title="版本信息" width="40%" centet>
-    <el-form ref="formRef" :model="versionForm" :rules="formRules" label-width="80px" class="demo-dynamic">
-      <el-form-item label="版本名称" prop="name">
-        <el-input v-model="versionForm.name" placeholder="请输入版本名称"></el-input>
+  <el-dialog v-model="dialogVisible" :title="t('version.版本信息')" width="40%" centet>
+    <el-form ref="formRef" :model="versionForm" :rules="formRules" label-width="142px" class="demo-dynamic">
+      <el-form-item :label="t('version.版本名称')" prop="name">
+        <el-input v-model="versionForm.name" :placeholder="t('version.rules.请输入版本名称')"></el-input>
       </el-form-item>
-      <el-form-item label="版本描述" prop="description">
+      <el-form-item :label="t('version.版本描述')" prop="description">
         <el-input
           v-model="versionForm.description"
           type="textarea"
           resize="none"
-          placeholder="请输入版本描述内容"
+          :placeholder="t('version.rules.请输入版本描述内容')"
           min="0"
           max="20"
           :rows="6"
@@ -18,8 +18,8 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleFormCancle">取消</el-button>
-        <el-button type="primary" @click="handleFormSubmit">确认</el-button>
+        <el-button @click="handleFormCancle">{{ t('version.取消') }}</el-button>
+        <el-button type="primary" @click="handleFormSubmit">{{ t('version.确认') }}</el-button>
       </span>
     </template>
   </el-dialog>
@@ -27,15 +27,16 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { ElMessage, FormInstance } from 'element-plus';
 
 import versionApi from '@/api/version';
-
 export interface VersionItem {
   name: string;
   versionId: string;
   description: string;
 }
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -71,14 +72,14 @@ const versionForm = reactive({
 
 const formRules = {
   name: [
-    { required: true, message: '请输入版本名称', trigger: 'blur' },
-    { min: 1, max: 10, message: '版本名称长度1-10字符', trigger: 'blur' },
-    { whitespace: true, message: '版本名称不能为空', trigger: 'blur' },
+    { required: true, message: t('version.rules.请输入版本名称'), trigger: 'blur' },
+    { min: 1, max: 10, message: t('version.rules.版本名称长度'), trigger: 'blur' },
+    { whitespace: true, message: t('version.rules.版本名称不能为空'), trigger: 'blur' },
   ],
   description: [
-    { required: true, message: '请输入版本描述', trigger: 'blur' },
-    { min: 1, max: 20, message: '版本描述长度1-20字符', trigger: 'blur' },
-    { whitespace: true, message: '版本描述不能为空', trigger: 'blur' },
+    { required: true, message: t('version.rules.请输入版本描述内容'), trigger: 'blur' },
+    { min: 1, max: 20, message: t('version.rules.版本描述长度'), trigger: 'blur' },
+    { whitespace: true, message: t('version.rules.版本描述不能为空'), trigger: 'blur' },
   ],
 };
 
@@ -96,7 +97,7 @@ const handleFormSubmit = async () => {
       name: versionForm.name,
       description: versionForm.description,
     });
-    ElMessage.success('更新成功');
+    ElMessage.success(t('version.更新成功'));
     dialogVisible.value = false;
     emit('success');
   } catch (e: any) {

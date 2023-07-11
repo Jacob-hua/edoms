@@ -836,7 +836,6 @@ getData('day');
 
 <style lang="scss" scoped>
 :deep(.frist-tab > .el-tabs--card > .el-tabs__header .el-tabs__item) {
-  padding: 0 !important;
   min-width: 124px;
   height: 32px;
   color: #eaf5ff;
@@ -985,6 +984,8 @@ getData('day');
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
 
       .content-title {
         width: 100%;
@@ -1034,7 +1035,7 @@ getData('day');
 
       .content-data {
         width: 100%;
-        height: calc(100% - 52px);
+        height: 100%;
         padding: 30px;
         box-sizing: border-box;
 

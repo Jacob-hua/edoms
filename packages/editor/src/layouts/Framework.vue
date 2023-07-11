@@ -15,7 +15,7 @@
       v-model:left="columnWidth.left"
       v-model:right="columnWidth.right"
       v-loading="loading"
-      element-loading-text="页面加载中..."
+      :element-loading-text="t('editor.页面加载中')"
       class="edoms-editor-content"
       left-class="edoms-editor-framework-left"
       center-class="edoms-editor-framework-center"
@@ -51,11 +51,12 @@ import { ElScrollbar } from '@edoms/design';
 import type { MApp } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 
+import useI18n from '../hooks/useI18n';
 import { GetColumnWidth, Services } from '../type';
 
 import AddPageBox from './AddPageBox.vue';
 import Layout from './Layout.vue';
-
+const { t } = useI18n();
 const DEFAULT_LEFT_COLUMN_WIDTH = 310;
 const DEFAULT_RIGHT_COLUMN_WIDTH = 480;
 

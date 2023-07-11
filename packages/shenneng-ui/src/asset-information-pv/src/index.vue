@@ -380,6 +380,8 @@ const handlerToShow = (e: any, bl: boolean) => {
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
 
       .content-title {
         width: 100%;
@@ -429,7 +431,7 @@ const handlerToShow = (e: any, bl: boolean) => {
 
       .content-data {
         width: calc(100% - 60px);
-        height: calc(100% - 112px);
+        height: 100%;
         margin: 10px 30px 30px;
         overflow-y: scroll;
         display: flex;

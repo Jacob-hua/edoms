@@ -214,8 +214,6 @@ watch(
   .wrap-report {
     width: 100%;
     height: 100%;
-    // background: rgba(0, 163, 255, 0.06);
-    // border: 1px solid #051823;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -255,8 +253,8 @@ watch(
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
     .model-content {
-      width: 1480px;
-      height: 800px;
+      min-width: 1480px;
+      min-height: 800px;
       position: absolute;
       left: 50%;
       margin-left: -765px;
@@ -264,10 +262,11 @@ watch(
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
       .content-title {
         width: 100%;
         height: 52px;
-        // background-color: rgba(134, 31, 127, 0.06);
         line-height: 52px;
         padding: 0 20px;
         box-sizing: border-box;

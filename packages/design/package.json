@@ -23,10 +23,10 @@
     "node": ">=14"
   },
   "dependencies": {
-    "vue": "3.2.37"
+    "vue": "^3.2.37"
   },
   "peerDependencies": {
-    "vue": "3.2.37"
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@types/node": "^15.12.4",

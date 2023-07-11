@@ -11,7 +11,7 @@
           :model="loginFormModel"
           :rules="loginFormRules"
         >
-          <el-form-item label="用户名" prop="username">
+          <el-form-item :label="t('login.用户名')" prop="username">
             <el-input
               v-model="loginFormModel.username"
               type="text"
@@ -20,7 +20,7 @@
             />
           </el-form-item>
 
-          <el-form-item label="密  码" prop="password">
+          <el-form-item :label="t('login.密码')" prop="password">
             <el-input
               v-model="loginFormModel.password"
               type="password"
@@ -31,7 +31,7 @@
         </el-form>
       </div>
       <div class="footer">
-        <el-button :disabled="nextStepDisabled" type="primary" @click="nextStep">下一步</el-button>
+        <el-button :disabled="nextStepDisabled" type="primary" @click="nextStep">{{ t('login.下一步') }}</el-button>
       </div>
     </section>
     <section v-show="tenantFormVisible" class="form-section">
@@ -45,7 +45,7 @@
           :model="tenantFormModel"
           :rules="tenantFormRules"
         >
-          <el-form-item label="项目" prop="tenantId">
+          <el-form-item :label="t('login.项目')" prop="tenantId">
             <el-select v-model="tenantFormModel.tenantId">
               <el-option
                 v-for="{ dataCode, proName } in accountStore.tenants"
@@ -58,8 +58,8 @@
         </el-form>
       </div>
       <div class="footer">
-        <el-button type="primary" @click="backPreStep">上一步</el-button>
-        <el-button :disabled="loginDisabled" type="primary" @click="login">登录</el-button>
+        <el-button type="primary" @click="backPreStep">{{ t('login.上一步') }}</el-button>
+        <el-button :disabled="loginDisabled" type="primary" @click="login">{{ t('login.登录') }}</el-button>
       </div>
     </section>
   </div>
@@ -67,10 +67,12 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { FormInstance, FormRules } from 'element-plus';
 
 import useAccountStore from '@/store/account';
+const { t } = useI18n();
 
 const router = useRouter();
 
@@ -86,8 +88,8 @@ const loginFormModel = reactive({
 const nextStepDisabled = computed<boolean>(() => !loginFormModel.username || !loginFormModel.password);
 
 const loginFormRules = ref<FormRules>({
-  username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
-  password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+  username: [{ required: true, message: t('login.rules.用户名不能为空'), trigger: 'blur' }],
+  password: [{ required: true, message: t('login.rules.密码不能为空'), trigger: 'blur' }],
 });
 
 const loginFormRef = ref<FormInstance>();
@@ -97,7 +99,7 @@ const tenantFormModel = reactive({
 });
 
 const tenantFormRules = ref<FormRules>({
-  tenantId: [{ required: true, message: '租户不能为空', trigger: 'blur' }],
+  tenantId: [{ required: true, message: t('login.rules.租户不能为空'), trigger: 'blur' }],
 });
 
 const loginDisabled = computed<boolean>(() => !tenantFormModel.tenantId);
