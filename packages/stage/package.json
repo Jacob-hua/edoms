@@ -26,7 +26,7 @@
     "@edoms/core": "workspace:^0.0.1",
     "@edoms/schema": "workspace:^0.0.1",
     "@edoms/utils": "workspace:^0.0.1",
-    "@scena/guides": "^0.17.0",
+    "@scena/guides": "^0.28.0",
     "events": "^3.3.0",
     "keycon": "^1.1.2",
     "lodash-es": "^4.17.21",

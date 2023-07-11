@@ -460,7 +460,7 @@ importers:
       '@edoms/core': workspace:^0.0.1
       '@edoms/schema': workspace:^0.0.1
       '@edoms/utils': workspace:^0.0.1
-      '@scena/guides': ^0.17.0
+      '@scena/guides': ^0.28.0
       '@types/events': ^3.0.0
       '@types/lodash-es': ^4.17.4
       '@types/node': ^15.12.4
@@ -477,7 +477,7 @@ importers:
       '@edoms/core': link:../core
       '@edoms/schema': link:../schema
       '@edoms/utils': link:../utils
-      '@scena/guides': registry.npmmirror.com/@scena/guides/0.17.0
+      '@scena/guides': registry.npmmirror.com/@scena/guides/0.28.0
       events: registry.npmmirror.com/events/3.3.0
       keycon: registry.npmmirror.com/keycon/1.3.2
       lodash-es: registry.npmmirror.com/lodash-es/4.17.21
@@ -1341,6 +1341,12 @@ packages:
     version: 1.10.0
     dev: false
 
+  registry.npmmirror.com/@daybrush/utils/1.13.0:
+    resolution: {integrity: sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@daybrush/utils/-/utils-1.13.0.tgz}
+    name: '@daybrush/utils'
+    version: 1.13.0
+    dev: false
+
   registry.npmmirror.com/@daybrush/utils/1.6.0:
     resolution: {integrity: sha512-9MjMoOLl1U+l8lXByN3BbLZXf+mktoLyeb6t78Jz2WZ7LRldK0FNg8oW//9giO2hHCUyxS7LX6jS1hToGIfRWA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@daybrush/utils/-/utils-1.6.0.tgz}
     name: '@daybrush/utils'
@@ -1766,6 +1772,15 @@ packages:
       '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
     dev: false
 
+  registry.npmmirror.com/@scena/dragscroll/1.4.0:
+    resolution: {integrity: sha512-3O8daaZD9VXA9CP3dra6xcgt/qrm0mg0xJCwiX6druCteQ9FFsXffkF8PrqxY4Z4VJ58fFKEa0RlKqbsi/XnRA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/dragscroll/-/dragscroll-1.4.0.tgz}
+    name: '@scena/dragscroll'
+    version: 1.4.0
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.13.0
+      '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
+    dev: false
+
   registry.npmmirror.com/@scena/event-emitter/1.0.5:
     resolution: {integrity: sha512-AzY4OTb0+7ynefmWFQ6hxDdk0CySAq/D4efljfhtRHCOP7MBF9zUfhKG3TJiroVjASqVgkRJFdenS8ArZo6Olg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/event-emitter/-/event-emitter-1.0.5.tgz}
     name: '@scena/event-emitter'
@@ -1774,13 +1789,14 @@ packages:
       '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
     dev: false
 
-  registry.npmmirror.com/@scena/guides/0.17.0:
-    resolution: {integrity: sha512-gs2um9m+X0oYoZ8oU2YHobiqGx5KxaI4CWy3frbqbUq4aPiaUNFD+uj/NQC9Ja5Ftl0rehhZAE/c1tbSYSILOQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/guides/-/guides-0.17.0.tgz}
+  registry.npmmirror.com/@scena/guides/0.28.0:
+    resolution: {integrity: sha512-dza79QsLL1hDwE4qUKBcuGh+m7ZzsZGzQ0yKtE9VRm7g4ynmp77ecRMZ+MDbBsQIxNtntDcbz8nTMalqntp6Yg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/guides/-/guides-0.28.0.tgz}
     name: '@scena/guides'
-    version: 0.17.0
+    version: 0.28.0
     dependencies:
       '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
-      react-compat-guides: registry.npmmirror.com/react-compat-guides/0.14.0
+      croact: registry.npmmirror.com/croact/1.0.4
+      croact-guides: registry.npmmirror.com/croact-guides/0.25.0
     dev: false
 
   registry.npmmirror.com/@scena/matrix/1.1.1:
@@ -1791,25 +1807,26 @@ packages:
       '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
     dev: false
 
-  registry.npmmirror.com/@scena/react-guides/0.16.0:
-    resolution: {integrity: sha512-njivmQC89gsHKD1tqLsKwhQPADds+InloGDWsMDfEgfl9Fg0jE72RMLKJOxLW5kj/XMSDGSBB2FUWYTR4FcIZw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/react-guides/-/react-guides-0.16.0.tgz}
+  registry.npmmirror.com/@scena/react-guides/0.27.0:
+    resolution: {integrity: sha512-MsiygET7POqP61tMKeInCyJL9eq2ZaPrrW0zlNLFYpGTW7SvNqloBDLhPOJWWvSzm3AlMmVyIEMmteXtgu32dg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/react-guides/-/react-guides-0.27.0.tgz}
     name: '@scena/react-guides'
-    version: 0.16.0
+    version: 0.27.0
     dependencies:
-      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
-      '@scena/react-ruler': registry.npmmirror.com/@scena/react-ruler/0.8.1
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.13.0
+      '@scena/dragscroll': registry.npmmirror.com/@scena/dragscroll/1.4.0
+      '@scena/react-ruler': registry.npmmirror.com/@scena/react-ruler/0.19.0
       css-to-mat: registry.npmmirror.com/css-to-mat/1.0.3
       framework-utils: registry.npmmirror.com/framework-utils/1.1.0
-      gesto: registry.npmmirror.com/gesto/1.13.3
-      react-css-styled: registry.npmmirror.com/react-css-styled/1.0.4
+      gesto: registry.npmmirror.com/gesto/1.19.1
+      react-css-styled: registry.npmmirror.com/react-css-styled/1.1.9
     dev: false
 
-  registry.npmmirror.com/@scena/react-ruler/0.8.1:
-    resolution: {integrity: sha512-r9FbtF1kbs5CRrK7avVGcRvhJitk8BzzOUUV2uIEjDxS2dBqCOrUD2e09FXwPdv3hcFvVmGcLYeuNrjl4P7ddA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/react-ruler/-/react-ruler-0.8.1.tgz}
+  registry.npmmirror.com/@scena/react-ruler/0.19.0:
+    resolution: {integrity: sha512-2OEOjLMOptDxdSuEqID2JAljQuYoeoV09MnLjiBeyzJxoUcVjzyBCPwkMbHRKj2Z3WrwztJAFBF+y6yNNM5Lcw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/react-ruler/-/react-ruler-0.19.0.tgz}
     name: '@scena/react-ruler'
-    version: 0.8.1
+    version: 0.19.0
     dependencies:
-      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.13.0
       framework-utils: registry.npmmirror.com/framework-utils/1.1.0
     dev: false
 
@@ -4066,6 +4083,49 @@ packages:
     version: 1.1.1
     dev: true
 
+  registry.npmmirror.com/croact-css-styled/1.1.9:
+    resolution: {integrity: sha512-G7yvRiVJ3Eoj0ov2h2xR4312hpOzATay2dGS9clK8yJQothjH1sBXIyvOeRP5wBKD9mPcKcoUXPCPsl0tQog4w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/croact-css-styled/-/croact-css-styled-1.1.9.tgz}
+    name: croact-css-styled
+    version: 1.1.9
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.13.0
+      css-styled: registry.npmmirror.com/css-styled/1.0.8
+      framework-utils: registry.npmmirror.com/framework-utils/1.1.0
+    dev: false
+
+  registry.npmmirror.com/croact-guides/0.25.0:
+    resolution: {integrity: sha512-8l1xV9xDmJ1oIhp9a3ZZqWYY0KSJ/3fiGZQ693MGMC+gUhZxzXVj7tX42Qw0lvEfqgPgyx8Ju2NgKQZK2y3c5Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/croact-guides/-/croact-guides-0.25.0.tgz}
+    name: croact-guides
+    version: 0.25.0
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.13.0
+      '@scena/dragscroll': registry.npmmirror.com/@scena/dragscroll/1.4.0
+      '@scena/react-guides': registry.npmmirror.com/@scena/react-guides/0.27.0
+      croact-css-styled: registry.npmmirror.com/croact-css-styled/1.1.9
+      croact-ruler: registry.npmmirror.com/croact-ruler/0.18.0
+      css-to-mat: registry.npmmirror.com/css-to-mat/1.0.3
+      framework-utils: registry.npmmirror.com/framework-utils/1.1.0
+      gesto: registry.npmmirror.com/gesto/1.19.1
+      react-css-styled: registry.npmmirror.com/react-css-styled/1.1.9
+    dev: false
+
+  registry.npmmirror.com/croact-ruler/0.18.0:
+    resolution: {integrity: sha512-FZtYH1n3Mpv7VX24y26lAMOVqem+/qRG4a7nBy9pwDeh9Q8UycOQqAdmWxNC1CNh1Pw1k4K28/gRQOyo4r1Zag==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/croact-ruler/-/croact-ruler-0.18.0.tgz}
+    name: croact-ruler
+    version: 0.18.0
+    dependencies:
+      '@scena/react-ruler': registry.npmmirror.com/@scena/react-ruler/0.19.0
+    dev: false
+
+  registry.npmmirror.com/croact/1.0.4:
+    resolution: {integrity: sha512-9GhvyzTY/IVUrMQ2iz/mzgZ8+NcjczmIo/t4FkC1CU0CEcau6v6VsEih4jkTa4ZmRgYTF0qXEZLObCzdDFplpw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/croact/-/croact-1.0.4.tgz}
+    name: croact
+    version: 1.0.4
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.13.0
+      '@egjs/list-differ': registry.npmmirror.com/@egjs/list-differ/1.0.0
+    dev: false
+
   registry.npmmirror.com/cross-spawn/6.0.5:
     resolution: {integrity: sha512-eTVLrBSt7fjbDygz805pMnstIs2VTBNkRm0qxZd+M7A5XDdxVRWO5MxGBXZhjY4cqLYLdtrGqRf8mBPmzwSpWQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/cross-spawn/-/cross-spawn-6.0.5.tgz}
     name: cross-spawn
@@ -4127,6 +4187,14 @@ packages:
     dependencies:
       '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
       string-hash: registry.npmmirror.com/string-hash/1.1.3
+    dev: false
+
+  registry.npmmirror.com/css-styled/1.0.8:
+    resolution: {integrity: sha512-tCpP7kLRI8dI95rCh3Syl7I+v7PP+2JYOzWkl0bUEoSbJM+u8ITbutjlQVf0NC2/g4ULROJPi16sfwDIO8/84g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/css-styled/-/css-styled-1.0.8.tgz}
+    name: css-styled
+    version: 1.0.8
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.13.0
     dev: false
 
   registry.npmmirror.com/css-to-mat/1.0.3:
@@ -5920,6 +5988,15 @@ packages:
     version: 1.13.3
     dependencies:
       '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
+      '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
+    dev: false
+
+  registry.npmmirror.com/gesto/1.19.1:
+    resolution: {integrity: sha512-ofWVEdqmnpFm3AFf7aoclhoayseb3OkwSiXbXusKYu/99iN5HgeWP+SWqdghQ5TFlOgP5Zlz+6SY8mP2V0kFaQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/gesto/-/gesto-1.19.1.tgz}
+    name: gesto
+    version: 1.19.1
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.13.0
       '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter/1.0.5
     dev: false
 
@@ -8667,17 +8744,6 @@ packages:
       react-css-styled: registry.npmmirror.com/react-css-styled/1.0.4
     dev: false
 
-  registry.npmmirror.com/react-compat-guides/0.14.0:
-    resolution: {integrity: sha512-Qy5ZYSZQmbp2VvhXf9K73ZgZvx+eiDPH6GNUzzKmPcPCKVYJ3L2rbBVReOyWV9XMSQI8tLmHfkICoDBXsBDeZA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-compat-guides/-/react-compat-guides-0.14.0.tgz}
-    name: react-compat-guides
-    version: 0.14.0
-    dependencies:
-      '@scena/react-guides': registry.npmmirror.com/@scena/react-guides/0.16.0
-      react-compat-css-styled: registry.npmmirror.com/react-compat-css-styled/1.0.9
-      react-compat-ruler: registry.npmmirror.com/react-compat-ruler/0.7.1
-      react-simple-compat: registry.npmmirror.com/react-simple-compat/1.2.3
-    dev: false
-
   registry.npmmirror.com/react-compat-moveable/0.18.0:
     resolution: {integrity: sha512-ACEFE/GKtyqzJBSQ1cosZtD6cD2uuwFBsyNF/zIeM/JvF4zGae3cUUVchOpfHBjPBnjqiHjKMAaucMXPOTDosQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-compat-moveable/-/react-compat-moveable-0.18.0.tgz}
     name: react-compat-moveable
@@ -8697,21 +8763,21 @@ packages:
       react-moveable: registry.npmmirror.com/react-moveable/0.33.0
     dev: false
 
-  registry.npmmirror.com/react-compat-ruler/0.7.1:
-    resolution: {integrity: sha512-aN70fW4Zy0T8Ys0kY9wn8HvnGxGar3Rqq0H1zVvonE1bXP9y/BlAJ0HgK2bQcmwQprq7LCgLs6reGBZoEDG+0w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-compat-ruler/-/react-compat-ruler-0.7.1.tgz}
-    name: react-compat-ruler
-    version: 0.7.1
-    dependencies:
-      '@scena/react-ruler': registry.npmmirror.com/@scena/react-ruler/0.8.1
-      react-simple-compat: registry.npmmirror.com/react-simple-compat/1.2.3
-    dev: false
-
   registry.npmmirror.com/react-css-styled/1.0.4:
     resolution: {integrity: sha512-nRske1bAKOCaf7Gf3o76tKQFIYggaW1qH4rutBlitH5lYnRPA7WoAYKrcxqdUPZd00oASg3SvFZSh3Mc1Wvj3w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-css-styled/-/react-css-styled-1.0.4.tgz}
     name: react-css-styled
     version: 1.0.4
     dependencies:
       css-styled: registry.npmmirror.com/css-styled/1.0.1
+      framework-utils: registry.npmmirror.com/framework-utils/1.1.0
+    dev: false
+
+  registry.npmmirror.com/react-css-styled/1.1.9:
+    resolution: {integrity: sha512-M7fJZ3IWFaIHcZEkoFOnkjdiUFmwd8d+gTh2bpqMOcnxy/0Gsykw4dsL4QBiKsxcGow6tETUa4NAUcmJF+/nfw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-css-styled/-/react-css-styled-1.1.9.tgz}
+    name: react-css-styled
+    version: 1.1.9
+    dependencies:
+      css-styled: registry.npmmirror.com/css-styled/1.0.8
       framework-utils: registry.npmmirror.com/framework-utils/1.1.0
     dev: false
 
@@ -8743,6 +8809,7 @@ packages:
     resolution: {integrity: sha512-vYepRjSriGRyEmFtSsTQoHWVQRbBMYR4ONATeZtuf8GDY8jWGkc6R4+lIb5rVhPBIkx3ru68bpl+9r8V4YA/nA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-simple-compat/-/react-simple-compat-1.2.3.tgz}
     name: react-simple-compat
     version: 1.2.3
+    deprecated: Use 'croact' module.
     dependencies:
       '@daybrush/utils': registry.npmmirror.com/@daybrush/utils/1.10.0
       '@egjs/list-differ': registry.npmmirror.com/@egjs/list-differ/1.0.0
