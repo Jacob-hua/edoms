@@ -129,7 +129,7 @@ const menu = computed<MenuBarData>(() => ({
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           try {
-            await ElMessageBox.confirm(t('page.有修改未保存1'), t('page.版本创建成功'), {
+            await ElMessageBox.confirm(t('page.有修改未保存1'), t('page.提示'), {
               confirmButtonText: t('page.退出'),
               cancelButtonText: t('page.取消'),
               type: 'warning',
@@ -159,7 +159,7 @@ const menu = computed<MenuBarData>(() => ({
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           try {
-            await ElMessageBox.confirm(t('page.有修改未保存2'), t('page.版本创建成功'), {
+            await ElMessageBox.confirm(t('page.有修改未保存2'), t('page.提示'), {
               confirmButtonText: t('page.保存并预览'),
               cancelButtonText: t('page.确认'),
               type: 'warning',

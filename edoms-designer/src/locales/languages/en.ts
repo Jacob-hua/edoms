@@ -109,6 +109,7 @@ export default {
     版本描述: 'Description',
     请输入版本简介: 'Please enter a version introduction',
     版本来源: 'Version Source',
+    提示: 'Tip',
     取消: 'Cancel',
     确认: 'Confirm',
     退出: 'Exit',
