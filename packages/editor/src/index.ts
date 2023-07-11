@@ -44,7 +44,7 @@ export default {
         i18nInstance.value?.global.mergeLocaleMessage(lang, message);
       });
 
-      console.log('===>', i18nInstance.value);
+      console.log('===>', app, i18nInstance.value);
     }
 
     const option = Object.assign(defaultInstallOpt, opt || {});
