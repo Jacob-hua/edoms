@@ -40,6 +40,8 @@ export default {
     app.use(EdomsForm);
     if (app.__VUE_I18N__) {
       i18n.value = app.__VUE_I18N__;
+      console.log('====已加载语言包：', app.__VUE_I18N__.global.getLocaleMessage('en'));
+
       //将两个语言包合并
       Object.entries(languages).forEach(([lang, message]) => {
         i18n.value.global.mergeLocaleMessage(lang, message);
