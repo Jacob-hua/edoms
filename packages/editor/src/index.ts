@@ -36,15 +36,14 @@ const defaultInstallOpt: InstallOptions = {
 export default {
   install: (app: App, opt?: InstallOptions): void => {
     app.use(EdomsForm);
-    if (Reflect.has(app.config.globalProperties, '$i18n') && Reflect.has(app, '__VUE_I18N_SYMBOL__')) {
-      i18nInstance.value = Reflect.get(app._context.provides, Reflect.get(app, '__VUE_I18N_SYMBOL__'));
-
+    const i18nSymbol = Reflect.get(app, '__VUE_I18N_SYMBOL__');
+    const i18n = Reflect.get(app._context.provides, i18nSymbol);
+    if (i18n) {
+      i18nInstance.value = i18n;
       //将两个语言包合并
       Object.entries(languages).forEach(([lang, message]) => {
         i18nInstance.value?.global.mergeLocaleMessage(lang, message);
       });
-
-      console.log('===>', app, i18nInstance.value);
     }
 
     const option = Object.assign(defaultInstallOpt, opt || {});
