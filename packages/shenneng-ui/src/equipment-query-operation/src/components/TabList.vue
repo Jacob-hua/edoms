@@ -4,8 +4,8 @@
     <div class="tab-wrapper" :style="{ width: isShow ? '' : '100%', marginLeft: isShow ? '' : '0px' }">
       <div class="scroll-wrapper" :style="{ transform: `translateX(${-scrollDis}px)` }">
         <div v-for="(itm, ind) in props.list" :key="itm.value" class="list-item">
-          <div :class="['itm-key', currentIdx === itm.key ? 'active' : '']" @click="handlerToChange(itm, ind)">
-            {{ itm.key }}
+          <div :class="['itm-key', currentIdx === ind ? 'active' : '']" @click="handlerToChange(itm, ind)">
+            {{ itm.group }}
           </div>
         </div>
       </div>
@@ -27,14 +27,13 @@ const props = withDefaults(
     list: () => [],
   }
 );
-
 const emits = defineEmits<{
   (e: 'operate', itm: { [key: string]: any }, val: number): void;
 }>();
 
 let domList: Array<Element> = [];
 
-const currentIdx = ref<string | number>('0');
+const currentIdx = ref<string | number>(0);
 // 是否显示左右点击按钮
 const isShow = ref<boolean>(false);
 // 可以滚动dom总长度
@@ -51,7 +50,7 @@ const panIndex = ref<number>(0);
 const distanceDes = ref<number>(0);
 
 const handlerToChange = (itm: { [key: string]: any }, val: number) => {
-  currentIdx.value = itm.key;
+  currentIdx.value = val;
   emits('operate', itm, val);
 };
 
@@ -105,7 +104,7 @@ const handelrToScroll = (idx: number) => {
 };
 
 onBeforeMount(() => {
-  currentIdx.value = props.list[0]?.key;
+  currentIdx.value = 0;
 });
 
 onMounted(() => {
@@ -116,8 +115,8 @@ onMounted(() => {
 
 watch(
   () => props.list,
-  (newV: Array<{ [key: string]: string | number }>) => {
-    currentIdx.value = newV[0]?.key;
+  () => {
+    currentIdx.value = 0;
     queueMicrotask(() => {
       getDomRect();
     });
