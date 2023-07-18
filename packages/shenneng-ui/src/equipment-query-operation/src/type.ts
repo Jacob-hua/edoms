@@ -18,8 +18,7 @@ export interface EqData {
 
 export interface EqAllList {
   [x: string]: any;
-  key: string;
-  equipmentList: Array<EqData>;
+  group: string;
 }
 
 export interface EqDataList extends MComponent {
@@ -30,7 +29,8 @@ export interface EqDataList extends MComponent {
   /** 轮询间隔 */
   intervalDelay: number;
   /** 设备类型 */
-  equipmentTypeList: Array<EqAllList>;
+  typeGroups: Array<EqAllList>;
+  equipmentList: Array<EqData>;
 }
 
 export interface ParameterItem {

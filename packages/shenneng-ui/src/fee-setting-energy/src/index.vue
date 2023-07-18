@@ -283,6 +283,8 @@ const deleteFn = (scope: any) => {
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
 
       .content-title {
         width: 100%;
@@ -331,7 +333,7 @@ const deleteFn = (scope: any) => {
       }
 
       .content-data {
-        height: calc(100% - 52px);
+        height: 100%;
         position: relative;
         overflow-y: scroll;
         padding-top: 30px;
