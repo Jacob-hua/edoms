@@ -24,7 +24,6 @@ import { EqData, EqDataList } from './type';
 const props = defineProps<{
   config: EqDataList;
 }>();
-console.log(props);
 // 一级菜单索引
 const fristIndex = ref<number>(0);
 // 二级菜单索引
@@ -38,7 +37,6 @@ const indicatorConfigs = computed<EqData[]>(
       return item.group === props.config.typeGroups[fristIndex.value].group;
     }) ?? []
 );
-console.log(indicatorConfigs);
 
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -51,12 +49,9 @@ const { fetchRealData } = apiFactory(request);
 const tableWrapper = ref<any>(null);
 
 const handlerToOperate = (itm: { [key: string]: any }, val: number) => {
-  console.log(itm);
-  console.log(val);
   if (val === fristIndex.value) return;
   fristIndex.value = val;
   secondIndex.value = 0;
-  // tableWrapper.value.changeType(itm, secondIndex.value);
   updateParameterData();
 };
 const handlerToctIndex = (val: number) => {
@@ -103,8 +98,6 @@ onMounted(() => {
     handlerToOperate(props.config.typeGroups[0], 0);
   }
 });
-
-console.log(props);
 </script>
 
 <style lang="scss" scoped>
