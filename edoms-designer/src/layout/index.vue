@@ -142,15 +142,6 @@ const menus: Menu[] = [
     },
     subMenu: tenantList.value,
   },
-  // {
-  //   value: 'model',
-  //   label: '项目模型',
-  //   action: () => {
-  //     router.push({
-  //       path: '/model',
-  //     });
-  //   },
-  // },
   {
     value: 'loginOut',
     label: t('application.退出登录'),

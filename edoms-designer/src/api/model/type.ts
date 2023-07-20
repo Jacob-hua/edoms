@@ -1,5 +1,5 @@
 import type { ModelCodeType, ModelPropType } from '@/const/model';
-import { KVStruct, PageStruct } from '@/const/struct';
+import { KVStruct } from '@/const/struct';
 
 export interface ListInstanceReq {
   virtual: string;
@@ -51,11 +51,6 @@ export interface ListPointResItem {
 
 export type ListPointRes = ListPointResItem[];
 
-export interface GetDicReq {
-  /** 字典标识 */
-  mark: string;
-}
-
 export interface Dic {
   /** 字典ID */
   id: number;
@@ -67,26 +62,6 @@ export interface Dic {
   sort: string;
   /** 备注 */
   remark: string;
-}
-
-export type GetDicRes = Dic[];
-
-export interface GetModelTypeRes {
-  /** 模型类型ID */
-  modelTypeId: number;
-  /** 模型类型 */
-  modelType: string;
-}
-
-export interface TableHistoryReq {
-  /** 页码 */
-  page: number;
-  /** 页面大小 */
-  limit: number;
-  /** 操作类型 */
-  action?: string;
-  /** 表ID */
-  tableId: number;
 }
 
 export interface TableHistory {
@@ -104,34 +79,6 @@ export interface TableHistory {
   createBy: string;
   /** 操作时间 */
   createTime: string;
-}
-
-export type TableHistoryRes = PageStruct<TableHistory>;
-
-export interface UpdateModelTypeReq {
-  /** 记录ID **/
-  modelTypeId: number;
-  /** 模型类型 **/
-  modelType: string;
-}
-
-export interface ClearTableReq {
-  /** 表ID */
-  tableId: number;
-}
-
-export interface ExportTableReq {
-  /** 表ID */
-  tableId: number;
-}
-
-export interface ImportTableReq {
-  /** 表id */
-  tableId: string;
-  /** 文件名称 */
-  fileName: string;
-  /** 文件资源ID */
-  contentId: string;
 }
 
 export interface ApiStruct {
@@ -153,19 +100,3 @@ export interface ApiStruct {
   cookie: KVStruct[];
   [key: string]: any;
 }
-
-export type SaveApiReq = ApiStruct;
-
-export interface ExportTableHistoryReq {
-  /** 模型字典ID */
-  dicCimId: number;
-}
-
-export interface GetApiReq {
-  /** 模型字典ID */
-  dicCimId: number;
-}
-
-export type GetApiRes = ApiStruct;
-
-export type SimulationApiReq = ApiStruct;
