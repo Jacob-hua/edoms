@@ -15,7 +15,7 @@
             <div class="app-add-box">
               <el-icon :size="55"><Plus /></el-icon>
             </div>
-            新建应用
+            {{ t('application.新建应用') }}
           </div>
         </template>
         <template #default="{ item }: { item: ListApplicationsResItem }">
@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import applicationApi from '@/api/application';
 import { ListApplicationsRes, ListApplicationsResItem } from '@/api/application/type';
@@ -38,6 +39,8 @@ import useAccountStore from '@/store/account';
 
 import ApplicationItem from './component/ApplicationItem.vue';
 import NewApplication from './component/NewApplication.vue';
+const { t } = useI18n();
+
 const gridList = ref();
 const visible = ref<boolean>(false);
 const loadData: RequestFunc<ListApplicationsResItem> = async ({ pageSize, current }) => {

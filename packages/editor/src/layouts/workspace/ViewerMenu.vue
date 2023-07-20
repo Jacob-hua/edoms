@@ -11,10 +11,11 @@ import StageCore from '@edoms/stage';
 import { isPage } from '@edoms/utils';
 
 import ContentMenu from '../../components/ContentMenu.vue';
+import useI18n from '../../hooks/useI18n';
 import storageService from '../../services/storage';
 import { LayerOffset, Layout, MenuButton, MenuComponent, Services } from '../../type';
 import { COPY_STORAGE_KEY } from '../../utils/editor';
-
+const { t } = useI18n();
 const props = withDefaults(defineProps<{ isMultiSelect?: boolean }>(), { isMultiSelect: false });
 
 const services = inject<Services>('services');
@@ -33,7 +34,7 @@ const stageContentMenu = inject<(MenuButton | MenuComponent)[]>('stageContentMen
 const menuData = reactive<(MenuButton | MenuComponent)[]>([
   {
     type: 'button',
-    text: '水平居中',
+    text: t('editor.水平居中'),
     display: () => canCenter.value,
     handler: () => {
       if (!nodes.value) return;
@@ -42,7 +43,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: '复制',
+    text: t('editor.复制'),
     icon: markRaw(DocumentCopy),
     handler: () => {
       nodes.value && editorService?.copy(nodes.value);
@@ -51,7 +52,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: '粘贴',
+    text: t('editor.粘贴'),
     display: () => canPaste.value,
     handler: () => {
       const rect = menu.value?.$el.getBoundingClientRect();
@@ -73,7 +74,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: '上移一层',
+    text: t('editor.上移一层'),
     icon: markRaw(Top),
     display: () => !isPage(node.value) && !props.isMultiSelect,
     handler: () => {
@@ -82,7 +83,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: '下移一层',
+    text: t('editor.下移一层'),
     icon: markRaw(Bottom),
     display: () => !isPage(node.value) && !props.isMultiSelect,
     handler: () => {
@@ -91,7 +92,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: '置顶',
+    text: t('editor.置顶'),
     display: () => !isPage(node.value) && !props.isMultiSelect,
     handler: () => {
       editorService?.moveLayer(LayerOffset.TOP);
@@ -99,7 +100,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: '置底',
+    text: t('editor.置底'),
     display: () => !isPage(node.value) && !props.isMultiSelect,
     handler: () => {
       editorService?.moveLayer(LayerOffset.BOTTOM);
@@ -112,7 +113,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: '删除',
+    text: t('editor.删除'),
     icon: Delete,
     display: () => !isPage(node.value),
     handler: () => {
@@ -125,7 +126,7 @@ const menuData = reactive<(MenuButton | MenuComponent)[]>([
   },
   {
     type: 'button',
-    text: '清空参考线',
+    text: t('editor.清空参考线'),
     handler: () => {
       editorService?.get<StageCore>('stage').clearGuides();
     },

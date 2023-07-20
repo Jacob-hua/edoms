@@ -20,7 +20,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>三相不平衡</span>
+                  <span>{{ t('三相不平衡') }}</span>
                 </span>
               </template>
               <ThreePhaseUnbalance :config="config"></ThreePhaseUnbalance>
@@ -28,7 +28,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>功率因数</span>
+                  <span>{{ t('功率因数') }}</span>
                 </span>
               </template>
               <PowerFactor :config="config"></PowerFactor>
@@ -36,7 +36,7 @@
             <el-tab-pane class="tab">
               <template #label>
                 <span class="custom-tabs-label">
-                  <span>电压分析</span>
+                  <span>{{ t('电压分析') }}</span>
                 </span>
               </template>
               <VoltagAnalysis></VoltagAnalysis>
@@ -51,14 +51,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
+import useApp from '../../useApp';
+
 import PowerFactor from './component/PowerFactor.vue';
 import ThreePhaseUnbalance from './component/ThreePhaseUnbalance.vue';
 import VoltagAnalysis from './component/VoltagAnalysis.vue';
+import locales from './locales';
 import { ElectricEnergyQuality } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
+
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
 
 const showElectric = ref<boolean>(false);
 const changeElectric = (e: any, val: boolean) => {
@@ -80,7 +87,7 @@ const changeElectric = (e: any, val: boolean) => {
 }
 
 :deep(.el-tabs--border-card > .el-tabs__header .el-tabs__item) {
-  width: 130px;
+  min-width: 130px;
   height: 34px;
   background: #00141f;
   color: #8f9aa3;
@@ -152,17 +159,16 @@ const changeElectric = (e: any, val: boolean) => {
   z-index: 1000;
 
   .wrap-body {
-    width: 100%;
     background: #000;
     position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 1800px;
-    height: 840px;
+    min-width: 1800px;
+    min-height: 840px;
     border: 1px solid #013460;
-    min-width: 822px;
-    min-height: 364px;
+    display: flex;
+    flex-direction: column;
 
     .wrap-body-top {
       width: 100%;
@@ -198,7 +204,7 @@ const changeElectric = (e: any, val: boolean) => {
 
     .wrap-body-bottom {
       width: 100%;
-      height: 788px;
+      flex: 1;
       background-color: rgba(0, 0, 0, 1);
       overflow: hidden;
 

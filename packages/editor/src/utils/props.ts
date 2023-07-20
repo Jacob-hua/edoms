@@ -408,18 +408,6 @@ const eventCompLinkageConfig = () => [
             value: 'event',
           },
           {
-            text: '应用',
-            value: 'app',
-          },
-          {
-            text: '页面',
-            value: 'page',
-          },
-          {
-            text: '组件',
-            value: 'component',
-          },
-          {
             text: '表达式',
             value: 'expression',
           },

@@ -1,12 +1,12 @@
 <template>
   <div class="add-wrapper">
-    <el-dialog v-model="dialogVisible" title="添加人员" width="40%" center>
-      <el-form ref="formRef" :model="permissionAddForm" :rules="formRules" label-width="80px" class="demo-dynamic">
-        <el-form-item label="权限" prop="roleId">
+    <el-dialog v-model="dialogVisible" :title="t('permission.添加人员')" width="40%" center>
+      <el-form ref="formRef" :model="permissionAddForm" :rules="formRules" label-width="115px" class="demo-dynamic">
+        <el-form-item :label="t('permission.权限')" prop="roleId">
           <div>{{ roleName }}</div>
         </el-form-item>
-        <el-form-item label="用户昵称" prop="userId">
-          <el-select v-model="permissionAddForm.userId" placeholder="请选择用户昵称">
+        <el-form-item :label="t('permission.用户昵称')" prop="userId">
+          <el-select v-model="permissionAddForm.userId" :placeholder="t('permission.rules.请选择用户昵称')">
             <el-option
               v-for="{ userId, userName } in userList"
               :key="userId"
@@ -18,8 +18,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleFormCancel">取消</el-button>
-          <el-button type="primary" @click="handleFormSubmit">确认</el-button>
+          <el-button @click="handleFormCancel">{{ t('permission.取消') }}</el-button>
+          <el-button type="primary" @click="handleFormSubmit">{{ t('permission.确认') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -28,11 +28,12 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { ElMessage, FormInstance } from 'element-plus';
 
 import { PermissionAdd, Role, User } from '@/api/permission';
 import PermissionApi from '@/api/permission';
-
+const { t } = useI18n();
 const formRef = ref<FormInstance>();
 const props = withDefaults(
   defineProps<{
@@ -59,7 +60,7 @@ const dialogVisible = computed<boolean>({
 });
 
 const formRules = {
-  userId: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
+  userId: [{ required: true, message: t('permission.rules.用户昵称不能为空'), trigger: 'blur' }],
 };
 
 const permissionAddForm = ref<PermissionAdd>({
@@ -85,7 +86,7 @@ const handleFormSubmit = async () => {
   if (!formRef.value) return;
   await formRef.value?.validate();
   await PermissionApi.permissionAdd({ ...permissionAddForm.value });
-  ElMessage.success('添加人员成功');
+  ElMessage.success(t('permission.添加人员成功'));
   emit('submitted');
   handleFormCancel();
 };

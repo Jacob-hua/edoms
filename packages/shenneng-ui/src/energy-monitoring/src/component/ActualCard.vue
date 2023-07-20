@@ -1,10 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-25 11:03:11
- * @LastEditors: lihao
- * @LastEditTime: 2023-06-05 10:02:18
--->
 <template>
   <div class="actual-wrapper">
     <div class="actual-top">
@@ -16,13 +9,16 @@
       </div>
       <div class="actual-unit" :title="config.energyName">{{ config.energyName }}</div>
     </div>
-    <div class="actual-bottom">当前系统能效</div>
+    <div class="actual-bottom">{{ t('当前系统能效') }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import LongText from '../../../LongText.vue';
+import useI18n from '../../../useI18n';
 import { MEnergyMonitoring } from '../type';
+
+const { t } = useI18n();
 defineProps<{
   config: MEnergyMonitoring;
   actualValue: number;

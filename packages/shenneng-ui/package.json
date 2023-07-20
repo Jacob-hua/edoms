@@ -19,11 +19,11 @@
     "qrcode": "^1.5.0",
     "tiny-emitter": "^2.1.0",
     "video.js": "^8.0.4",
-    "vue": "3.2.37"
+    "vue": "^3.2.37"
   },
   "peerDependencies": {
     "@edoms/design": "workspace:^0.0.1",
-    "vue": "3.2.37"
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@testing-library/vue": "^6.4.2",

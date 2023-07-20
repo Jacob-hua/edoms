@@ -49,7 +49,7 @@
               <template #header>
                 <div class="card-header">
                   <i class="asset-icon"></i>
-                  <span>资产信息</span>
+                  <span>{{ t('资产信息') }}</span>
                 </div>
               </template>
               <div class="card-content">
@@ -64,7 +64,7 @@
               <template #header>
                 <div class="card-header">
                   <i class="factory-icon"></i>
-                  <span>出厂参数</span>
+                  <span>{{ t('出厂参数') }}</span>
                 </div>
               </template>
               <div class="card-content">
@@ -79,7 +79,7 @@
               <template #header>
                 <div class="card-header">
                   <i class="running-icon"></i>
-                  <span>运行参数</span>
+                  <span>{{ t('运行参数') }}</span>
                 </div>
               </template>
               <div class="card-content">
@@ -100,41 +100,47 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
 
+import useApp from '../../useApp';
+
+import locales from './locales';
 import { MAssetInformationConfig } from './type';
 
-defineProps<{
+const props = defineProps<{
   config: MAssetInformationConfig;
 }>();
+const { setMessage, t } = useApp(props);
+
+setMessage(locales);
 const isShowModel = ref<boolean>(false);
 const activeName = ref('nbq');
 const tabTypes = ref([
   {
-    label: '逆变器',
+    label: t('逆变器'),
     name: 'nbq',
   },
   {
-    label: '汇流箱',
+    label: t('汇流箱'),
     name: 'hlx',
   },
 ]);
 const optionsList = reactive({
   inverter: [
     {
-      label: '研发楼西逆变压器',
+      label: t('研发楼西逆变压器'),
       value: 'xini',
     },
     {
-      label: '研发楼东逆变压器',
+      label: t('研发楼东逆变压器'),
       value: 'dongni',
     },
   ],
   combinerBox: [
     {
-      label: '研发楼西汇流箱',
+      label: t('研发楼西汇流箱'),
       value: 'xihui',
     },
     {
-      label: '研发楼东汇流箱',
+      label: t('研发楼东汇流箱'),
       value: 'donghui',
     },
   ],
@@ -145,115 +151,115 @@ selectValue.value = options.value[0].value;
 const informations = reactive({
   assetInformation: [
     {
-      label: '生产厂家',
+      label: t('生产厂家'),
       value: '——',
     },
     {
-      label: '资产编号',
+      label: t('资产编号'),
       value: '——',
     },
     {
-      label: '资产类型',
+      label: t('资产类型'),
       value: '——',
     },
     {
-      label: '资产名称',
+      label: t('资产名称'),
       value: '——',
     },
     {
-      label: '资产所属',
+      label: t('资产所属'),
       value: '——',
     },
     {
-      label: '资产状态',
+      label: t('资产状态'),
       value: '——',
     },
     {
-      label: '生产厂家',
+      label: t('生产厂家'),
       value: '——',
     },
     {
-      label: '设备型号',
+      label: t('设备型号'),
       value: '——',
     },
     {
-      label: '购入时间',
+      label: t('购入时间'),
       value: '——',
     },
   ],
   factoryParameter: [
     {
-      label: '额定发电电流',
+      label: t('额定发电电流'),
       value: '50A',
     },
     {
-      label: '系统电压',
+      label: t('系统电压'),
       value: '192V',
     },
     {
-      label: '额定电流',
+      label: t('额定电流'),
       value: '50A',
     },
     {
-      label: '最大电流',
+      label: t('最大电流'),
       value: '51A',
     },
     {
-      label: '发电模式',
+      label: t('发电模式'),
       value: 'MPPT自动最大功率点跟',
     },
     {
-      label: '启动时间',
+      label: t('启动时间'),
       value: '＜10s',
     },
     {
-      label: '静态功耗',
+      label: t('静态功耗'),
       value: '＜2w',
     },
     {
-      label: '整机效率',
+      label: t('整机效率'),
       value: '＞96.5%',
     },
     {
-      label: '冷却方式',
+      label: t('冷却方式'),
       value: '风冷',
     },
   ],
   runningParameter: [
     {
-      label: '参数01',
+      label: `${t('参数')}01`,
       value: '——',
     },
     {
-      label: '参数02',
+      label: `${t('参数')}02`,
       value: '——',
     },
     {
-      label: '参数03',
+      label: `${t('参数')}03`,
       value: '——',
     },
     {
-      label: '参数04',
+      label: `${t('参数')}04`,
       value: '97.7',
     },
     {
-      label: '参数05',
+      label: `${t('参数')}05`,
       value: '——',
     },
     {
-      label: '参数06',
+      label: `${t('参数')}06`,
       value: '——',
     },
     {
-      label: '参数07',
+      label: `${t('参数')}07`,
       value: '——',
     },
     {
-      label: '参数08',
+      label: `${t('参数')}08`,
       value: '——',
     },
     {
-      label: '参数09',
+      label: `${t('参数')}09`,
       value: '——',
     },
   ],
@@ -374,6 +380,8 @@ const handlerToShow = (e: any, bl: boolean) => {
       background-color: rgba(0, 0, 0, 1);
       box-sizing: border-box;
       border: 1px solid rgba(1, 52, 96, 1);
+      display: flex;
+      flex-direction: column;
 
       .content-title {
         width: 100%;
@@ -423,7 +431,7 @@ const handlerToShow = (e: any, bl: boolean) => {
 
       .content-data {
         width: calc(100% - 60px);
-        height: calc(100% - 112px);
+        height: 100%;
         margin: 10px 30px 30px;
         overflow-y: scroll;
         display: flex;

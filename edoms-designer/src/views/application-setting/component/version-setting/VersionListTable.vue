@@ -1,6 +1,6 @@
 <template>
   <el-table :data="tableData" :max-height="maxHeight">
-    <el-table-column label="版本">
+    <el-table-column :label="t('version.版本')">
       <template #default="scope">
         <el-row>
           <el-col :span="12">
@@ -15,25 +15,27 @@
         </el-row>
       </template>
     </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column :label="t('version.操作')">
       <template #default="scope">
         <el-row justify="end">
           <el-col :span="6">
-            <el-button @click="handlePreview(scope.row)">预览</el-button>
+            <el-button @click="handlePreview(scope.row)">{{ t('version.预览') }}</el-button>
           </el-col>
           <el-col :span="6">
-            <el-button @click="handleEdit(scope.row)">修改</el-button>
+            <el-button @click="handleEdit(scope.row)">{{ t('version.修改') }}</el-button>
           </el-col>
           <el-col v-role="['manager']" :span="6">
             <el-button @click="handleExport(scope.row)">
-              导出<el-icon>
+              {{ t('version.导出')
+              }}<el-icon>
                 <Download />
               </el-icon>
             </el-button>
           </el-col>
           <el-col :span="6">
             <el-button @click="handleDelete(scope.row)">
-              删除<el-icon>
+              {{ t('version.删除')
+              }}<el-icon>
                 <Delete />
               </el-icon>
             </el-button>
@@ -56,6 +58,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Download } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
@@ -67,7 +70,7 @@ import { MimeType } from '@/const/mime';
 import useExport from '@/hooks/useExport';
 
 import EditVersionDialog, { VersionItem } from './EditVersionDialog.vue';
-
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     tableData: ListVersionResItem[];
@@ -125,14 +128,18 @@ const { execute: handleUseExport } = useExport<ListVersionResItem>(
 );
 
 const handleDelete = (row: ListVersionResItem) => {
-  ElMessageBox.confirm(`是否删除${props.applicationName}-${row.name}版本？`, '提示', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    type: 'warning',
-  })
+  ElMessageBox.confirm(
+    `${t('version.删除')} ${props.applicationName}-${row.name} ${t('version.版本')}？`,
+    t('version.提示'),
+    {
+      confirmButtonText: t('version.确认'),
+      cancelButtonText: t('version.取消'),
+      type: 'warning',
+    }
+  )
     .then(async () => {
       await versionApi.deleteVersion({ versionIds: [row.versionId], applicationId: props.applicationId });
-      ElMessage.success('删除成功');
+      ElMessage.success(t('version.删除成功'));
       emit('deleteSuccess');
     })
     .catch(() => {});

@@ -1,8 +1,7 @@
 <template>
   <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="522" min-height="261">
     <div class="warning-table-list">
-      <!-- :list="props.config.equipmentTypeList" -->
-      <TabList :list="props.config.equipmentTypeList" @operate="handlerToOperate" />
+      <TabList :list="props.config.typeGroups" @operate="handlerToOperate" />
       <TableList ref="tableWrapper" @ct-index="handlerToctIndex" />
     </div>
   </BusinessCard>
@@ -20,7 +19,7 @@ import useIntervalAsync from '../../useIntervalAsync';
 import TableList from './components/TableList.vue';
 import TabList from './components/TabList.vue';
 import apiFactory from './api';
-import { EqAllList, EqDataList } from './type';
+import { EqData, EqDataList } from './type';
 
 const props = defineProps<{
   config: EqDataList;
@@ -32,7 +31,13 @@ const secondIndex = ref<number>(0);
 // 当前点位code
 const dataCodes: string[] = [];
 // 当前点位对应数据
-const indicatorConfigs = computed<EqAllList[]>(() => props.config.equipmentTypeList ?? []);
+const indicatorConfigs = computed<EqData[]>(
+  () =>
+    props.config.equipmentList.filter((item) => {
+      return item.group === props.config.typeGroups[fristIndex.value].group;
+    }) ?? []
+);
+
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
     return 10;
@@ -44,11 +49,9 @@ const { fetchRealData } = apiFactory(request);
 const tableWrapper = ref<any>(null);
 
 const handlerToOperate = (itm: { [key: string]: any }, val: number) => {
-  console.log(itm);
   if (val === fristIndex.value) return;
   fristIndex.value = val;
   secondIndex.value = 0;
-  // tableWrapper.value.changeType(itm, secondIndex.value);
   updateParameterData();
 };
 const handlerToctIndex = (val: number) => {
@@ -57,42 +60,44 @@ const handlerToctIndex = (val: number) => {
 };
 
 watch(
-  () => props.config.equipmentTypeList,
+  () => props.config,
   () => {
-    tableWrapper.value.changeType(props.config.equipmentTypeList[0], secondIndex.value);
+    tableWrapper.value.changeType(indicatorConfigs.value, secondIndex.value);
   }
 );
 
 // 请求数据
 const updateParameterData = async () => {
-  if (indicatorConfigs.value.length === 0 || indicatorConfigs.value[fristIndex.value].equipmentList.length === 0) {
+  if (indicatorConfigs.value.length === 0) {
     return;
   }
   dataCodes.length = 0;
-  indicatorConfigs.value[fristIndex.value].equipmentList[secondIndex.value].pointList?.forEach((item) => {
-    dataCodes.push(item.property);
+  indicatorConfigs.value.forEach((item: any) => {
+    if (item.pointList.length !== 0) {
+      item.pointList.forEach((params: { property: string }) => {
+        dataCodes.push(params.property);
+      });
+    }
   });
   if (dataCodes.length === 0) {
     return;
   }
   const pointDataList = await fetchRealData({ dataCodes });
   pointDataList.forEach((item) => {
-    indicatorConfigs.value[fristIndex.value].equipmentList[secondIndex.value].pointList?.forEach((element) => {
+    indicatorConfigs.value[secondIndex.value].pointList?.forEach((element) => {
       if (item.propCode === element.property) {
         element.data = formatPrecision(Number(item.propVal), element.precision);
       }
     });
   });
-  tableWrapper.value.changeType(indicatorConfigs.value[fristIndex.value], secondIndex.value);
+  tableWrapper.value.changeType(indicatorConfigs.value, secondIndex.value);
 };
 useIntervalAsync(updateParameterData, intervalDelay.value);
 onMounted(() => {
-  if (props.config.equipmentTypeList && props.config.equipmentTypeList[0]) {
-    handlerToOperate(props.config.equipmentTypeList[0], 0);
+  if (props.config.typeGroups && props.config.typeGroups[0]) {
+    handlerToOperate(props.config.typeGroups[0], 0);
   }
 });
-
-console.log(props);
 </script>
 
 <style lang="scss" scoped>

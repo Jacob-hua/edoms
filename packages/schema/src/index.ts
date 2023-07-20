@@ -7,9 +7,6 @@ export enum NodeType {
 export type Id = string | number;
 
 export const enum ValueSpace {
-  COMPONENT = 'component',
-  PAGE = 'page',
-  APP = 'app',
   CONST = 'const',
   EXPRESSION = 'expression',
   EVENT = 'event',

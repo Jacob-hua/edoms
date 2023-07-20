@@ -9,25 +9,25 @@
       </div>
     </div>
     <div class="wrapper_right">
-      <button @click="changeDilog('month')">月曲线分析</button>
-      <button @click="changeDilog('day')">日曲线分析</button>
-      <button @click="changeDilog('data')">数据分析</button>
+      <button @click="changeDilog('month')">{{ t('月曲线分析') }}</button>
+      <button @click="changeDilog('day')">{{ t('日曲线分析') }}</button>
+      <button @click="changeDilog('data')">{{ t('数据分析') }}</button>
       <div class="wrapper_right_qu">
         <div class="histogram">
           <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
         </div>
         <div class="table">
-          <p class="table_tie">无功优化补偿装置</p>
+          <p class="table_tie">{{ t('无功优化补偿装置') }}</p>
           <el-table
             :data="tableData"
             style="width: 100%"
             :header-cell-style="{ background: '#0D1218', color: '#EAF5FF', textAlign: 'center', border: 'none' }"
           >
-            <el-table-column prop="typesOf" label="类型" width="180" />
-            <el-table-column prop="position" label="接入位置" width="180" />
-            <el-table-column prop="state" label="状态" />
-            <el-table-column prop="adjustment" label="调节量" />
-            <el-table-column prop="range" label="调节范围" />
+            <el-table-column prop="typesOf" :label="t('类型')" width="180" />
+            <el-table-column prop="position" :label="t('接入位置')" width="180" />
+            <el-table-column prop="state" :label="t('状态')" />
+            <el-table-column prop="adjustment" :label="t('调节量')" />
+            <el-table-column prop="range" :label="t('调节范围')" />
           </el-table>
         </div>
       </div>
@@ -48,7 +48,7 @@
       <div class="dialog_con">
         <div class="dialog_top">
           <div class="time">
-            <span>配电室</span>
+            <span>{{ t('配电室') }}</span>
             <TimeCalendar :option="timeType"></TimeCalendar>
           </div>
           <div v-if="nowDialog" class="boxCheck">
@@ -77,29 +77,32 @@ import { ref } from 'vue';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useI18n from '../../../useI18n';
 import { ElectricEnergyQuality } from '../type';
 
 import CalculationSheet from './CalculationSheet.vue';
 import TimeCalendar from './TimeCalendar.vue';
+const { t } = useI18n();
+
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
 const lastMouth = {
-  title: '上月结算',
+  title: t('上月结算'),
 };
 const nextMouth = {
-  title: '本月结算',
+  title: t('本月结算'),
 };
 const timeType = ref<string>('date');
 const dialogVisible = ref<boolean>(false);
 const nowDialog = ref<boolean>(false);
 const selectShow = ref<boolean>(false);
-const checkTypeList = ['箱线图', '差值波动', 'Max曲线', 'Min曲线', '均值曲线'];
-const checkList = ref<any>(['箱线图', '差值波动', 'Max曲线', 'Min曲线', '均值曲线']);
+const checkTypeList = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
+const checkList = ref<any>([t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')]);
 const dataOptions = [
-  { value: 'load', label: '功率因数-负载率' },
-  { value: 'hour', label: '功率因数-时间（小时）' },
-  { value: 'week', label: '功率因数-时间（周）' },
+  { value: 'load', label: t('功率因数_负载率') },
+  { value: 'hour', label: t('功率因数_小时') },
+  { value: 'week', label: t('功率因数_周') },
 ];
 const dataValue = ref<string>(dataOptions[0].value);
 // dialog名称
@@ -148,7 +151,8 @@ option_chart.value = {
   },
   xAxis: {
     type: 'category',
-    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    name: t('月'),
+    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
     axisLine: {
       show: false,
     },
@@ -194,7 +198,7 @@ option_chart.value = {
   },
   yAxis: {
     type: 'value',
-    name: '月度功率因数统计',
+    name: t('月度功率因数统计'),
     nameTextStyle: {
       lineHeight: 28,
       padding: [0, 0, 0, 100],
@@ -216,7 +220,7 @@ option_chart.value = {
   },
   series: [
     {
-      name: '考核基准：0.9',
+      name: `${t('考核基准')}：0.9`,
       data: [0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1],
       type: 'bar',
       itemStyle: {
@@ -236,8 +240,8 @@ const changeDilog = (val: string) => {
     timeType.value = 'month';
     nowDialog.value = true;
     selectShow.value = false;
-    title.value = '功率因数-月曲线分析';
-    checkList.value = ['箱线图', '差值波动', 'Max曲线', 'Min曲线', '均值曲线'];
+    title.value = t('功率因数_月曲线分析');
+    checkList.value = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
     // 月曲线分析图表
     optionMonth_chart.value = {
       xAxis: {
@@ -291,7 +295,7 @@ const changeDilog = (val: string) => {
             console.log(params);
             tip += '<div>';
             for (let index = 0; index < params.length; index++) {
-              if (params[index].seriesName === '箱线图') {
+              if (params[index].seriesName === t('箱线图')) {
                 // 勿删  图例待确认？
                 /*tip +=
                   '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
@@ -352,7 +356,7 @@ const changeDilog = (val: string) => {
       grid: { top: '30px', left: '30px', right: '30px', bottom: '30px' },
       series: [
         {
-          name: '箱线图',
+          name: t('箱线图'),
           type: 'candlestick',
           color: 'rgba(40,124,232,0.3)',
           data: [
@@ -381,7 +385,7 @@ const changeDilog = (val: string) => {
           },
         },
         {
-          name: '差值波动',
+          name: t('差值波动'),
           type: 'bar',
           data: [
             0.3, 0.1, 0.15, 0.3, 0.11, 0.16, 0.2, 0.2, 0.17, 0.4, 0.13, 0.18, 0.3, 0.14, 0.19, 0.2, 0.1, 0.15, 0.6,
@@ -396,7 +400,7 @@ const changeDilog = (val: string) => {
           barGap: 35,
         },
         {
-          name: 'Max曲线',
+          name: t('Max曲线'),
           type: 'line',
           color: '#207C44',
           data: [
@@ -416,7 +420,7 @@ const changeDilog = (val: string) => {
             },
             data: [
               {
-                name: '考核基准',
+                name: t('考核基准'),
                 yAxis: props.config.examine,
               },
             ],
@@ -425,7 +429,7 @@ const changeDilog = (val: string) => {
           },
         },
         {
-          name: 'Min曲线',
+          name: t('Min曲线'),
           type: 'line',
           color: '#30A9A5',
           data: [
@@ -436,7 +440,7 @@ const changeDilog = (val: string) => {
           symbolSize: 0,
         },
         {
-          name: '均值曲线',
+          name: t('均值曲线'),
           type: 'line',
           data: [
             0.36, 0.78, 0.22, 0.56, 0.23, 0.6, 0.54, 0.24, 0.35, 0.55, 0.43, 0.68, 0.79, 0.54, 0.49, 0.65, 0.52, 0.43,
@@ -451,7 +455,7 @@ const changeDilog = (val: string) => {
     timeType.value = 'date';
     nowDialog.value = false;
     selectShow.value = false;
-    title.value = '功率因数-日曲线分析';
+    title.value = t('功率因数_日曲线分析');
     // 日曲线分析
     optionMonth_chart.value = {
       xAxis: {
@@ -530,7 +534,7 @@ const changeDilog = (val: string) => {
       grid: { top: '30px', left: '30px', right: '30px', bottom: '30px' },
       series: [
         {
-          name: '负载率',
+          name: t('负载率'),
           type: 'line',
           color: '#40E0DA',
           data: [
@@ -550,7 +554,7 @@ const changeDilog = (val: string) => {
             },
             data: [
               {
-                name: '考核基准',
+                name: t('考核基准'),
                 yAxis: props.config.examine,
               },
             ],
@@ -559,7 +563,7 @@ const changeDilog = (val: string) => {
           },
         },
         {
-          name: '三相不平衡率',
+          name: t('三相不平衡率'),
           type: 'line',
           color: '#246ECE',
           data: [
@@ -575,7 +579,7 @@ const changeDilog = (val: string) => {
     timeType.value = 'date';
     nowDialog.value = false;
     selectShow.value = true;
-    title.value = '功率因数-数据分析';
+    title.value = t('功率因数_数据分析');
     // 数据分析
     optionMonth_chart.value = {
       xAxis: {
@@ -598,7 +602,7 @@ const changeDilog = (val: string) => {
         formatter: (params: any) => {
           let tip: string = '';
           if (params != null && params.length > 0) {
-            tip += '<div><p style="color: #F5F7FA">功率因数：</p>';
+            tip += '<div><p style="color: #F5F7FA">' + t('功率因数') + '：</p>';
             for (let index = 0; index < params.length; index++) {
               tip +=
                 '<p>' +
@@ -654,7 +658,7 @@ const changeDilog = (val: string) => {
             },
             data: [
               {
-                name: '考核基准',
+                name: t('考核基准'),
                 yAxis: props.config.examine,
               },
             ],
@@ -695,29 +699,29 @@ const selectType = () => {
 // 无功优化补偿
 const tableData = [
   {
-    typesOf: '类型一',
-    position: '位置一',
+    typesOf: t('类型一'),
+    position: t('位置一'),
     state: '44.20',
     adjustment: '44.20',
     range: '44.20',
   },
   {
-    typesOf: '类型一',
-    position: '位置一',
+    typesOf: t('类型一'),
+    position: t('位置一'),
     state: '44.20',
     adjustment: '44.20',
     range: '44.20',
   },
   {
-    typesOf: '类型一',
-    position: '位置一',
+    typesOf: t('类型一'),
+    position: t('位置一'),
     state: '44.20',
     adjustment: '44.20',
     range: '44.20',
   },
   {
-    typesOf: '类型一',
-    position: '位置一',
+    typesOf: t('类型一'),
+    position: t('位置一'),
     state: '44.20',
     adjustment: '44.20',
     range: '44.20',
@@ -824,7 +828,7 @@ const tableData = [
     width: 938px;
 
     button {
-      width: 130px;
+      min-width: 130px;
       height: 36px;
       background: rgba(0, 163, 255, 0.16);
       border: 1px solid #007bc0;

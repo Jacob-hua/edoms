@@ -30,6 +30,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref, toRaw, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { Back, Coin, Connection, Document } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -53,6 +54,7 @@ import useAccountStore from '@/store/account';
 import { generateDefaultDSL } from '@/util/dsl';
 
 import DSLPreviewDialog from './component/DSLPreviewDialog.vue';
+const { t } = useI18n();
 
 const { VITE_RUNTIME_PATH, VITE_ENTRY_PATH, VITE_FILE_PREVIEW_URL } = import.meta.env;
 
@@ -127,9 +129,9 @@ const menu = computed<MenuBarData>(() => ({
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           try {
-            await ElMessageBox.confirm('有修改未保存，是否仍要退出？', '提示', {
-              confirmButtonText: '退出',
-              cancelButtonText: '取消',
+            await ElMessageBox.confirm(t('page.有修改未保存1'), t('page.提示'), {
+              confirmButtonText: t('page.退出'),
+              cancelButtonText: t('page.取消'),
               type: 'warning',
             });
             goBack();
@@ -152,18 +154,18 @@ const menu = computed<MenuBarData>(() => ({
     '/',
     {
       type: 'button',
-      text: '预览',
+      text: t('page.预览'),
       icon: Connection,
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           try {
-            await ElMessageBox.confirm('有修改未保存，是否先保存再预览？', '提示', {
-              confirmButtonText: '保存并预览',
-              cancelButtonText: '取消',
+            await ElMessageBox.confirm(t('page.有修改未保存2'), t('page.提示'), {
+              confirmButtonText: t('page.保存并预览'),
+              cancelButtonText: t('page.确认'),
               type: 'warning',
             });
             save();
-            ElMessage.success('保存成功');
+            ElMessage.success(t('page.保存成功'));
           } catch (e) {
             console.error(e);
             return;
@@ -175,14 +177,14 @@ const menu = computed<MenuBarData>(() => ({
     },
     {
       type: 'button',
-      text: '保存',
+      text: t('page.保存'),
       icon: Coin,
       handler: async (services) => {
         if (services?.editorService.get<Map<Id, Id>>('modifiedNodeIds').size > 0) {
           await save();
-          ElMessage.success('保存成功');
+          ElMessage.success(t('page.保存成功'));
         } else {
-          ElMessage.warning('当前无修改，无需保存');
+          ElMessage.warning(t('page.当前无修改'));
         }
       },
     },
@@ -190,7 +192,7 @@ const menu = computed<MenuBarData>(() => ({
     {
       type: 'button',
       icon: Document,
-      tooltip: '源码',
+      tooltip: t('page.源码'),
       handler: (service) => service?.uiService.set('showSrc', !service?.uiService.get('showSrc')),
     },
   ],

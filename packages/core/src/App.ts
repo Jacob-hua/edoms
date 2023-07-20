@@ -1,12 +1,13 @@
 import { EventEmitter } from 'events';
 
+import { createI18n, I18n } from 'vue-i18n';
+
 import { Callback, EventAction, EventArgs, EventItemConfig, Id, MApp, MethodProps } from '@edoms/schema';
 import { getUrlParam, setUrlParam } from '@edoms/utils';
 
 import { bindCommonEventListener, isCommonMethod, triggerCommonMethod } from './events';
 import type Node from './Node';
 import Page from './Page';
-import Store from './Store';
 import { calculateMethodProps, fillBackgroundImage, isNumber, style2Obj } from './utils';
 
 interface AppOptionsConfig {
@@ -50,7 +51,10 @@ class App extends EventEmitter {
 
   public eventQueueMap: Record<string, EventCache[]> = {};
 
-  public store = new Store();
+  public i18n: I18n = createI18n({
+    legacy: false,
+    locale: localStorage.getItem('lang') ?? navigator.language,
+  });
 
   constructor(options: AppOptionsConfig) {
     super();
@@ -78,6 +82,16 @@ class App extends EventEmitter {
     options.config && this.setConfig(options.config, options.curPage);
 
     bindCommonEventListener(this);
+  }
+
+  public get t(): Function {
+    return this.i18n.global.t;
+  }
+
+  public setMessage(message: Record<string, any>) {
+    Object.keys(message).forEach((locale) => {
+      this.i18n.global.mergeLocaleMessage(locale, message[locale]);
+    });
   }
 
   /**
@@ -206,7 +220,7 @@ class App extends EventEmitter {
   public bindEvent(event: EventItemConfig, id: string) {
     const { name } = event;
     this.on(`${name}_${id}`, (fromCpt: Node, args?: EventArgs) => {
-      this.eventHandler(event, fromCpt, calculateMethodProps(fromCpt, event, args));
+      this.eventHandler(event, fromCpt, args);
     });
   }
 
@@ -217,13 +231,13 @@ class App extends EventEmitter {
     return super.emit(name, node, args);
   }
 
-  public eventHandler(eventConfig: EventItemConfig, fromCpt: any, props?: MethodProps) {
+  public eventHandler(eventConfig: EventItemConfig, fromCpt: any, args?: EventArgs) {
     if (!this.page) throw new Error('当前没有页面');
 
     const { action, to, page, method: methodName } = eventConfig;
 
     if (action === EventAction.COMPONENT_LINKAGE && to && methodName) {
-      this.componentLinkageHandler(eventConfig, fromCpt, props);
+      this.componentLinkageHandler(eventConfig, fromCpt, args);
     } else if (action === EventAction.ROUTE_SETTING && page) {
       setUrlParam('page', `${page}`);
     }
@@ -234,7 +248,7 @@ class App extends EventEmitter {
     this.pages.clear();
   }
 
-  private componentLinkageHandler(eventConfig: EventItemConfig, fromCpt: any, props?: MethodProps) {
+  private componentLinkageHandler(eventConfig: EventItemConfig, fromCpt: any, args?: EventArgs) {
     if (!this.page) throw new Error('当前没有页面');
     const { to, method: methodName } = eventConfig;
     if (!to || !methodName) {
@@ -246,7 +260,12 @@ class App extends EventEmitter {
     if (isCommonMethod(methodName)) {
       return triggerCommonMethod(methodName, toNode);
     }
-
+    const props = calculateMethodProps({
+      fromCpt,
+      eventConfig,
+      eventArgs: args,
+      toCpt: toNode,
+    });
     if (!toNode.instance) {
       this.addEventQueueMap({
         eventConfig,

@@ -21,7 +21,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: '重命名',
+                text: t('editor.重命名'),
                 icon: Edit,
                 handler: () => rename(item),
               }"
@@ -29,7 +29,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: '复制',
+                text: t('editor.复制'),
                 icon: DocumentCopy,
                 handler: () => copy(item),
               }"
@@ -37,7 +37,7 @@
             <ToolButton
               :data="{
                 type: 'button',
-                text: '删除',
+                text: t('editor.删除'),
                 icon: Delete,
                 handler: () => remove(item),
               }"
@@ -62,10 +62,11 @@ import { ElIcon, elMessageBox, ElPopover, ElTooltip } from '@edoms/design';
 import type { MApp, MPage } from '@edoms/schema';
 
 import ToolButton from '../../components/ToolButton.vue';
+import useI18n from '../../hooks/useI18n';
 import type { Services } from '../../type';
 
 import PageBarScrollContainer from './PageBarScrollContainer.vue';
-
+const { t } = useI18n();
 const services = inject<Services>('services');
 const editorService = services?.editorService;
 
@@ -87,12 +88,12 @@ const copy = (node: MPage) => {
 
 const rename = (node: MPage) => {
   elMessageBox
-    .prompt(`重命名${node.name}`, '提示', {
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
+    .prompt(`${t('editor.重命名')}${node.name}`, t('editor.提示'), {
+      confirmButtonText: t('editor.确认'),
+      cancelButtonText: t('editor.取消'),
       inputValue: node.name,
       inputPattern: /\S/,
-      inputErrorMessage: '页面名不能为空',
+      inputErrorMessage: t('editor.rules.页面名不能为空'),
       closeOnClickModal: false,
     })
     .then(({ value }) => {

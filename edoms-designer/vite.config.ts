@@ -1,15 +1,9 @@
-/*
- * @Description:
- * @Author: lihao
- * @Date: 2023-04-18 13:24:10
- * @LastEditors: lihao
- * @LastEditTime: 2023-04-21 11:02:50
- */
 import { join, resolve } from 'path';
 
 import { defineConfig, loadEnv } from 'vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
@@ -27,6 +21,11 @@ export default defineConfig(({ mode }) => {
         iconDirs: [resolve(process.cwd(), 'src/assets/icons/editor')],
         symbolId: 'icon-[dir]-[name]',
         customDomId: '__svg__icons__dom__',
+      }),
+      VueI18nPlugin({
+        runtimeOnly: true,
+        compositionOnly: true,
+        include: [resolve(__dirname, './src/locales/languages/**')],
       }),
     ],
     build: {

@@ -5,11 +5,13 @@ import { MApp, NodeType } from '@edoms/schema';
 import fileApi from '@/api/file';
 import { MessageError } from '@/const/error';
 
+import i18n from '../locales';
+const { t } = i18n.global;
 export class DownloadDSLError extends MessageError {
   constructor(cause?: any) {
     super({
       type: 'error',
-      message: 'dsl元数据下载失败',
+      message: t('errorTips.dsl元数据下载失败'),
       cause,
     });
   }

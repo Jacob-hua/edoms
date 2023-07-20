@@ -1,11 +1,12 @@
 <template>
-  <div v-if="state.dataList.equipmentList" class="table-list">
+  <div v-if="state.dataList" class="table-list">
     <div class="content-wrapper">
       <div class="left-content">
         <div
-          v-for="(itm, idx) in state.dataList.equipmentList"
+          v-for="(itm, idx) in state.dataList"
           :key="idx"
           :class="['itm-tab', ctIndex === idx ? 'active' : '']"
+          :title="itm.eqName"
           @click="handkerToChange(idx)"
         >
           {{ itm.eqName }}
@@ -13,9 +14,7 @@
       </div>
       <div class="right-content">
         <div
-          v-for="(eq, idx) in state.dataList.equipmentList[ctIndex]
-            ? state.dataList.equipmentList[ctIndex].pointList
-            : []"
+          v-for="(eq, idx) in state.dataList[ctIndex] ? state.dataList[ctIndex].pointList : []"
           :key="idx"
           class="itm-content"
         >
@@ -41,11 +40,13 @@ const emit = defineEmits<{
 const ctIndex = ref<number>(0);
 
 const state = reactive<{
-  dataList: { [key: string]: any };
+  dataList: { [key: number]: any };
 }>({
   dataList: {},
 });
+console.log(state);
 const changeType = (itm: { [key: string]: string | number | Array<QueryList> }, val: number) => {
+  console.log(itm);
   state.dataList = itm;
   ctIndex.value = val;
 };
@@ -84,7 +85,7 @@ defineExpose({
 
       .itm-tab {
         width: 90%;
-        height: 24px;
+        // height: 24px;
         background-image: url('../assets/tab-def.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
@@ -94,6 +95,11 @@ defineExpose({
         font-size: 12px;
         color: rgba(196, 229, 248, 1);
         cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 10px;
+        box-sizing: border-box;
 
         &.active {
           color: #fff;

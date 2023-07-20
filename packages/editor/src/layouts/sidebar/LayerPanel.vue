@@ -10,7 +10,7 @@
       v-model="filterText"
       class="search-input"
       size="small"
-      placeholder="请输入组件名称"
+      :placeholder="t('editor.rules.请输入组件名称')"
       clearable
       :prefix-icon="Search"
     ></ElInput>
@@ -20,7 +20,7 @@
       ref="tree"
       class="edoms-editor-layer-tree"
       node-key="id"
-      empty-text="页面空荡荡的"
+      :empty-text="t('editor.页面空荡荡的')"
       draggable
       :default-expanded-keys="defaultExpandedKeys"
       :load="loadItems"
@@ -75,11 +75,12 @@ import type { Id, MNode, MPage } from '@edoms/schema';
 import { MContainer, NodeType } from '@edoms/schema';
 import StageCore from '@edoms/stage';
 
+import useI18n from '../../hooks/useI18n';
 import type { Services } from '../../type';
 import { Layout } from '../../type';
 
 import LayerMenu from './LayerMenu.vue';
-
+const { t } = useI18n();
 const throttleTime = 150;
 const services = inject<Services>('services');
 const tree = ref<InstanceType<typeof ElTree>>();

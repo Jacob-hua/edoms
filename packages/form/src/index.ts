@@ -69,7 +69,7 @@ export { default as MUpload } from './fields/Upload.vue';
 export { default as Formula } from './fields/Formula.vue';
 const defaultInstallOpt = {};
 
-const install = (app: App, opt: any) => {
+const install = (app: App, opt?: any): void => {
   const option = Object.assign(defaultInstallOpt, opt);
 
   // eslint-disable-next-line no-param-reassign

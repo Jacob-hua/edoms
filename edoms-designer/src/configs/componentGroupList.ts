@@ -1,63 +1,65 @@
 import { ComponentGroup } from '@edoms/editor';
 
+import i18n from '../locales';
+const { t } = i18n.global;
 const componentGroupList: ComponentGroup[] = [
   {
-    title: '基础组件',
+    title: t('sideBarList.基础组件'),
     items: [
       {
         icon: 'wenben',
-        text: '文本',
+        text: t('sideBarList.文本'),
         type: 'text',
       },
       {
         icon: 'anniu',
-        text: '按钮',
+        text: t('sideBarList.按钮'),
         type: 'button',
       },
       {
         icon: 'tupian',
-        text: '图片',
+        text: t('sideBarList.图片'),
         type: 'img',
       },
       {
         icon: 'tupian',
-        text: '轮播图',
+        text: t('sideBarList.轮播图'),
         type: 'carousel',
       },
       {
         icon: 'erweima',
-        text: '二维码',
+        text: t('sideBarList.二维码'),
         type: 'qrcode',
       },
       {
         icon: 'duoxuankuang',
-        text: '多选框',
+        text: t('sideBarList.多选框'),
         type: 'checkbox',
       },
       {
         icon: 'zhexiantu',
-        text: '图表',
+        text: t('sideBarList.图表'),
         type: 'charts',
       },
     ],
   },
   {
-    title: '基础容器',
+    title: t('sideBarList.基础容器'),
     items: [
       {
         icon: 'zu',
-        text: '组',
+        text: t('sideBarList.组'),
         type: 'container',
       },
       {
         icon: 'mengban',
-        text: '蒙层',
+        text: t('sideBarList.蒙层'),
         type: 'overlay',
       },
       // 高阶组件
       {
         icon: 'tanchuang',
-        text: '弹窗',
+        text: t('sideBarList.弹框'),
         type: '',
         data: {
           type: 'overlay',
@@ -93,226 +95,226 @@ const componentGroupList: ComponentGroup[] = [
     ],
   },
   {
-    title: '共通组件',
+    title: t('sideBarList.共通组件'),
     items: [
       {
         icon: 'shiyitu',
-        text: '全局示意图',
+        text: t('sideBarList.全局示意图'),
         type: 'global-schematic',
       },
       {
         icon: 'zhishideng',
-        text: '多色多态指示灯',
+        text: t('sideBarList.多色多态指示灯'),
         type: 'multicolor-polymorphic-light',
       },
       {
         icon: 'zhishideng',
-        text: '多色单态指示灯',
+        text: t('sideBarList.多色单态指示灯'),
         type: 'multicolor-single-light',
       },
       {
         icon: 'zhishideng',
-        text: '图片单态指示灯',
+        text: t('sideBarList.图片单态指示灯'),
         type: 'multicolor-image-light',
       },
       {
         icon: 'gaojing',
-        text: '告警列表',
+        text: t('sideBarList.告警列表'),
         type: 'warning-table-list',
       },
       {
         icon: 'donghuanjiance',
-        text: '经济指标',
+        text: t('sideBarList.经济指标'),
         type: 'economic-indicators',
       },
       {
         icon: 'xitong',
-        text: '设备运行参数',
+        text: t('sideBarList.设备运行参数'),
         type: 'equipment-query-operation',
       },
       {
         icon: 'leijishuju',
-        text: '系统累计数据',
+        text: t('sideBarList.系统累计数据'),
         type: 'system-data-cumulation',
       },
       {
         icon: 'duoxiangnengxiao',
-        text: '运行分析',
+        text: t('sideBarList.运行分析'),
         type: 'operational-analysis',
       },
       {
         icon: 'nengxiaoguankong',
-        text: '能效监测',
+        text: t('sideBarList.能效监测'),
         type: 'energy-monitoring',
       },
       {
         icon: 'xuanfu',
-        text: '悬浮窗',
+        text: t('sideBarList.悬浮窗'),
         type: 'suspended-window',
       },
       {
         icon: 'shishigongkuang',
-        text: '设备工况',
+        text: t('sideBarList.设备工况'),
         type: 'equipment-condition',
       },
       {
         icon: 'caozuojilu',
-        text: '操作记录',
+        text: t('sideBarList.操作记录'),
         type: 'operation-records',
       },
       {
         icon: 'yunxingcanshu',
-        text: '运行参数',
+        text: t('sideBarList.运行参数'),
         type: 'running-parameter-energy',
       },
     ],
   },
   {
-    title: '运行监测-配电',
+    title: t('sideBarList.运行监测配电'),
     items: [
       {
         icon: 'diannengzhiliang',
-        text: '电能质量',
+        text: t('sideBarList.电能质量'),
         type: 'electric-energy-quality',
       },
       {
         icon: 'xitong',
-        text: '智能报告',
+        text: t('sideBarList.智能报告'),
         type: 'intelligence-report-eletric',
       },
       {
         icon: 'yunxingfenxi',
-        text: '运行分析',
+        text: t('sideBarList.运行分析'),
         type: 'operations-analysis',
       },
     ],
   },
   {
-    title: '运行监测-冷',
+    title: t('sideBarList.运行监测冷'),
     items: [
       {
         icon: 'xitong',
-        text: '智能报告',
+        text: t('sideBarList.智能报告'),
         type: 'intelligence-report-cold',
       },
       {
         icon: 'duoxiangnengxiao',
-        text: '负荷预测(冷 弹窗)',
+        text: t('sideBarList.负荷预测'),
         type: 'load-forecasting',
       },
     ],
   },
   {
-    title: '运行监测-热',
+    title: t('sideBarList.运行监测热'),
     items: [
       {
         icon: 'xitong',
-        text: '智能报告',
+        text: t('sideBarList.智能报告'),
         type: 'intelligence-report-heat',
       },
       {
         icon: 'nengxiaoguankong',
-        text: '能效分析',
+        text: t('sideBarList.能效分析'),
         type: 'efficiency-analysis',
       },
       {
         icon: 'duoxiangnengxiao',
-        text: '运行分析(热 弹窗)',
+        text: t('sideBarList.运行分析'),
         type: 'operations-analysis-heat',
       },
       {
         icon: 'duoxiangnengxiao',
-        text: '优化调控',
+        text: t('sideBarList.优化调控'),
         type: 'optimal-regulation-heat',
       },
     ],
   },
   {
-    title: '运行监测-给水',
+    title: t('sideBarList.运行监测给水'),
     items: [
       {
         icon: 'xitong',
-        text: '智能报告',
+        text: t('sideBarList.智能报告'),
         type: 'intelligence-report-water',
       },
       {
         icon: 'yunxingfenxi',
-        text: '运行分析',
+        text: t('sideBarList.运行分析'),
         type: 'operations-analysis-water',
       },
     ],
   },
   {
-    title: '运行监测-风',
+    title: t('sideBarList.运行监测风'),
     items: [
       {
         icon: 'xitong',
-        text: '智能报告',
+        text: t('sideBarList.智能报告'),
         type: 'intelligence-report-cloud',
       },
     ],
   },
   {
-    title: '运行监测-光伏',
+    title: t('sideBarList.运行监测光伏'),
     items: [
       {
         icon: 'xitong',
-        text: '智能报告',
+        text: t('sideBarList.智能报告'),
         type: 'intelligence-report-pv',
       },
       {
         icon: 'yunxingfenxi',
-        text: '运行分析',
+        text: t('sideBarList.运行分析'),
         type: 'operations-analysis-pv',
       },
       {
         icon: 'xitong',
-        text: '资产信息',
+        text: t('sideBarList.资产信息'),
         type: 'asset-information-pv',
       },
     ],
   },
   {
-    title: '运行监测-充电桩',
+    title: t('sideBarList.运行监测充电桩'),
     items: [
       {
         icon: 'xitong',
-        text: '智能报告',
+        text: t('sideBarList.智能报告'),
         type: 'intelligence-report-charge',
       },
       {
         icon: 'xitong',
-        text: '设备监测',
+        text: t('sideBarList.设备监测'),
         type: 'equipment-monitoring-charge',
       },
       {
         icon: 'yunxingfenxi',
-        text: '运行分析',
+        text: t('sideBarList.运行分析'),
         type: 'operations-analysis-charge',
       },
       {
         icon: 'chongdiankongzhi',
-        text: '充电控制',
+        text: t('sideBarList.充电控制'),
         type: 'control-charge',
       },
     ],
   },
   {
-    title: '运行监测-储能',
+    title: t('sideBarList.运行监测储能'),
     items: [
       {
         icon: 'feijiashezhi',
-        text: '费价设置',
+        text: t('sideBarList.费价设置'),
         type: 'fee-setting-energy',
       },
       {
         icon: 'yunxingcanshu',
-        text: '运行参数',
+        text: t('sideBarList.运行参数'),
         type: 'running-parameter-energy',
       },
       {
         icon: 'yunxingcanshu',
-        text: '控制面板',
+        text: t('sideBarList.控制面板'),
         type: 'control-panel-energy',
       },
     ],

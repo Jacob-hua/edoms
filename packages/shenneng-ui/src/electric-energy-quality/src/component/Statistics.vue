@@ -3,79 +3,82 @@
     <div class="fluctuation">
       <div class="fluctuation_tie">
         <img class="icon-left" src="../../assets/dian.png" alt="" />
-        <span class="elefont">电压波动</span>
+        <span class="elefont">{{ t('电压波动') }}</span>
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
-          <div>变动范围：3~4%</div>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：3~4%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
-          <div>变动范围：2~3%</div>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：2~3%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
-          <div>变动范围：1.5~2%</div>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：1.5~2%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
-          <div>变动范围：≤1.5%</div>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：≤1.5%</div>
         </div>
       </div>
     </div>
     <div class="fluctuation">
       <div class="fluctuation_tie">
         <img class="icon-left" src="../../assets/dian.png" alt="" />
-        <span class="elefont">过电压</span>
+        <span class="elefont">{{ t('过电压') }}</span>
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
-          <div>变动范围：3~4%</div>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：3~4%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">1</span>次</div>
-          <div>变动范围：2~3%</div>
+          <div><span style="color: #41e4de; font-size: 24px">1</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：2~3%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">27</span>次</div>
-          <div>变动范围：1.5~2%</div>
+          <div><span style="color: #41e4de; font-size: 24px">27</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：1.5~2%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">421</span>次</div>
-          <div>变动范围：≤1.5%</div>
+          <div><span style="color: #41e4de; font-size: 24px">421</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：≤1.5%</div>
         </div>
       </div>
     </div>
     <div class="fluctuation">
       <div class="fluctuation_tie">
         <img class="icon-left" src="../../assets/dian.png" alt="" />
-        <span class="elefont">欠电压</span>
+        <span class="elefont">{{ t('欠电压') }}</span>
       </div>
       <div class="fluctuation_con">
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>次</div>
-          <div>变动范围：3~4%</div>
+          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：3~4%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">1</span>次</div>
-          <div>变动范围：2~3%</div>
+          <div><span style="color: #41e4de; font-size: 24px">1</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：2~3%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">27</span>次</div>
-          <div>变动范围：1.5~2%</div>
+          <div><span style="color: #41e4de; font-size: 24px">27</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：1.5~2%</div>
         </div>
         <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">421</span>次</div>
-          <div>变动范围：≤1.5%</div>
+          <div><span style="color: #41e4de; font-size: 24px">421</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：≤1.5%</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
+</script>
 
 <style lang="scss" scoped>
 .wrapper-con-left {
@@ -122,7 +125,7 @@
 
       .con_sub {
         width: 150px;
-        height: 76px;
+        min-height: 76px;
         margin: auto;
         text-align: center;
         font-size: 14px;
@@ -134,7 +137,7 @@
         border-radius: 0px 4px 0px 4px;
 
         div {
-          height: 37px;
+          min-height: 37px;
           line-height: 37px;
         }
       }

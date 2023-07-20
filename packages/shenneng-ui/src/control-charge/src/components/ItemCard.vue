@@ -5,34 +5,32 @@
     </div>
     <div class="info">
       <div>
-        <span>设备名称：</span>
+        <span>{{ t('设备名称') }}：</span>
         <span>{{ config.option.name }}</span>
       </div>
       <div>
-        <span>开关状态：</span>
+        <span>{{ t('开关状态') }}：</span>
         <div class="mb-2 flex items-center text-sm">
           <el-radio-group :key="radioNum" v-model="config.option.switch" class="ml-4">
-            <el-radio style="margin-right: 10px" label="1" size="small">开</el-radio>
-            <el-radio label="0" size="small">关</el-radio>
+            <el-radio style="margin-right: 8px" label="1" size="small">{{ t('开') }}</el-radio>
+            <el-radio label="0" size="small">{{ t('关') }}</el-radio>
           </el-radio-group>
         </div>
       </div>
       <div v-if="config.option.state === 'normal'">
-        <span>当前充电：</span>
+        <span>{{ t('当前充电') }}：</span>
         <div>
           <span style="width: 44px; display: inline-block; height: 13px; background: #2fda2f"></span
-          ><span
-            style="width: 23px; height: 13px; display: inline-block; background: #68696a; margin-right: 10px"
-          ></span
+          ><span style="width: 23px; height: 13px; display: inline-block; background: #68696a; margin-right: 5px"></span
           >{{ config.option.charging }}%
         </div>
       </div>
       <div v-if="config.option.state !== 'normal'">
-        <span>当前状态：</span>
+        <span>{{ t('当前状态') }}：</span>
         <div :class="config.option.class">{{ config.option.state }}</div>
       </div>
       <div>
-        <span>剩余时间：</span>
+        <span>{{ t('剩余时间') }}：</span>
         <span style="font-size: 12px; font-family: Microsoft YaHei; font-weight: 400; color: #2fda2f">{{
           config.option.remainder
         }}</span>
@@ -52,6 +50,9 @@
 
 <script lang="ts" setup>
 import { ref, toRefs } from 'vue';
+
+import useI18n from '../../../useI18n';
+const { t } = useI18n();
 const radioNum = ref(-1);
 const config = defineProps<{
   option: {
@@ -148,6 +149,10 @@ radioNum.value = Math.random();
   .info > div {
     line-height: 27px;
     display: flex;
+
+    span {
+      white-space: nowrap;
+    }
   }
 }
 </style>

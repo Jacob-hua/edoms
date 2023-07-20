@@ -3,13 +3,14 @@ import { App } from 'vue';
 import EdomsForm from '@edoms/form';
 
 import uiSelect from './fields/UISelect.vue';
+import { i18nInstance } from './hooks/useI18n';
 import CodeEditor from './layouts/CodeEditor.vue';
 import { setConfig } from './utils/config';
 import Editor from './Editor.vue';
+import languages from './locales';
 import type { InstallOptions } from './type';
 
 import './theme/index.scss';
-
 export type { MoveableOptions } from '@edoms/stage';
 export * from './type';
 export * from './utils';
@@ -35,9 +36,17 @@ const defaultInstallOpt: InstallOptions = {
 export default {
   install: (app: App, opt?: InstallOptions): void => {
     app.use(EdomsForm);
-    const option = Object.assign(defaultInstallOpt, opt || {});
+    const i18nSymbol = Reflect.get(app, '__VUE_I18N_SYMBOL__');
+    const i18n = Reflect.get(app._context.provides, i18nSymbol);
+    if (i18n) {
+      i18nInstance.value = i18n;
+      //将两个语言包合并
+      Object.entries(languages).forEach(([lang, message]) => {
+        i18nInstance.value?.global.mergeLocaleMessage(lang, message);
+      });
+    }
 
-    // eslint-disable-next-line no-param-reassign
+    const option = Object.assign(defaultInstallOpt, opt || {});
     app.config.globalProperties.$EDOMS_EDITOR = option;
     setConfig(option);
     app.component('EdomsEditor', Editor);

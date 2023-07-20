@@ -1,17 +1,3 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-05-10 09:41:38
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-24 09:25:55
--->
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-05-10 09:41:38
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 17:45:34
--->
 <template>
   <div class="efficency-analysis" @click="handlerToShow($event, true)">
     <div class="wrap-report">
@@ -252,24 +238,7 @@ watch(
         padding: 0 20px;
         box-sizing: border-box;
         width: 100%;
-        height: 500px;
       }
-      // .table-content::-webkit-scrollbar {
-      //   width: 3px;
-      //   height: 1px;
-      // }
-
-      // .table-content::-webkit-scrollbar-thumb {
-      //   border-radius: 3px;
-      //   // -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
-      //   background: rgba(4, 70, 108, 1);
-      // }
-
-      // .table-content::-webkit-scrollbar-track {
-      //   // -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
-      //   border-radius: 3px;
-      //   background: transparent;
-      // }
     }
   }
 }

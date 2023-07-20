@@ -4,7 +4,8 @@
       <div class="left-ft"></div>
       <div class="right-content">
         <div class="name">
-          <LongText :content="itm.label ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
+          <span class="name-label" :title="itm.label">{{ itm.label }}</span>
+          <!-- <LongText :content="itm.label ?? '--'" :content-style="{ textAlign: 'left' }"></LongText> -->
         </div>
         <div class="value-unit">
           <span class="value">
@@ -13,7 +14,7 @@
           <span class="unit">{{ itm.unit }}</span>
         </div>
         <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'QOQ'" class="font-value-turn">
-          <span class="font">{{ `${state.dateType}环比` }}</span>
+          <span class="font">{{ `${state.dateType} ${t('环比')}` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
           <span class="value-to" :style="{ color: getStyle(itm, 'qoqTrend') }">
             <LongText :content="itm.qoqRatio + '%' ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
@@ -23,7 +24,7 @@
           <span v-show="itm.qoqTrend === 'down'" class="turn-down"></span>
         </div>
         <div v-show="itm.calculateType === 'ALL' || itm.calculateType === 'YOY'" class="font-value-turn">
-          <span class="font">{{ `${state.dateType}同比` }}</span>
+          <span class="font">{{ `${state.dateType} ${t('同比')}` }}</span>
           <!-- :style="{ color: getStyle(itm) }" -->
           <span class="value-to" :style="{ color: getStyle(itm, 'yoyTrend') }">
             <LongText :content="itm.yoyRatio + '%' ?? '--'" :content-style="{ textAlign: 'left' }"></LongText>
@@ -41,6 +42,7 @@
 import { computed, reactive, withDefaults } from 'vue';
 
 import LongText from '../../../LongText.vue';
+import useI18n from '../../../useI18n';
 import { Category } from '../type';
 
 interface CumulativeList extends Category {
@@ -50,7 +52,7 @@ interface CumulativeList extends Category {
   yoyRatio: string;
   yoyTrend: 'up' | 'down' | 'flat';
 }
-
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     tableData: Array<CumulativeList>;
@@ -63,7 +65,7 @@ const props = withDefaults(
 const state = reactive<{
   dateType: string;
 }>({
-  dateType: '日',
+  dateType: t('日'),
 });
 
 const getStyle = computed(() => (itm: any, type: string) => {
@@ -129,6 +131,14 @@ defineExpose({
         color: rgba(196, 229, 248, 1);
         font-size: 14px;
         font-family: MicrosoftYaHei;
+
+        .name-label {
+          display: inline-block;
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
       .value-unit {
         width: 25%;
