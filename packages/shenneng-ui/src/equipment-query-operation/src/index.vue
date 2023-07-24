@@ -68,28 +68,26 @@ watch(
 
 // 请求数据
 const updateParameterData = async () => {
-  if (indicatorConfigs.value.length === 0) {
-    return;
-  }
   dataCodes.length = 0;
-  indicatorConfigs.value.forEach((item: any) => {
-    if (item.pointList.length !== 0) {
-      item.pointList.forEach((params: { property: string }) => {
-        dataCodes.push(params.property);
-      });
-    }
-  });
-  if (dataCodes.length === 0) {
-    return;
-  }
-  const pointDataList = await fetchRealData({ dataCodes });
-  pointDataList.forEach((item) => {
-    indicatorConfigs.value[secondIndex.value].pointList?.forEach((element) => {
-      if (item.propCode === element.property) {
-        element.data = formatPrecision(Number(item.propVal), element.precision);
+  if (indicatorConfigs.value.length !== 0) {
+    indicatorConfigs.value.forEach((item: any) => {
+      if (item.pointList.length !== 0) {
+        item.pointList.forEach((params: { property: string }) => {
+          dataCodes.push(params.property);
+        });
       }
     });
-  });
+  }
+  if (dataCodes.length !== 0) {
+    const pointDataList = await fetchRealData({ dataCodes });
+    pointDataList.forEach((item) => {
+      indicatorConfigs.value[secondIndex.value].pointList?.forEach((element) => {
+        if (item.propCode === element.property) {
+          element.data = formatPrecision(Number(item.propVal), element.precision);
+        }
+      });
+    });
+  }
   tableWrapper.value.changeType(indicatorConfigs.value, secondIndex.value);
 };
 useIntervalAsync(updateParameterData, intervalDelay.value);
