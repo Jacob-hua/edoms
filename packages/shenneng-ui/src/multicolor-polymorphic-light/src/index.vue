@@ -65,10 +65,12 @@ watch(
   padding: 2px;
 }
 .light {
-  width: 15px;
-  height: 15px;
+  height: 50%;
+  aspect-ratio: 1;
+  // height: 15px;
   border-radius: 50%;
   background-color: #333333;
   margin: 2px 2px;
+  transform: translateY(50%);
 }
 </style>
