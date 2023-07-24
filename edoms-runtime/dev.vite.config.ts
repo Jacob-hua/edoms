@@ -20,7 +20,6 @@ export default defineConfig(({ mode }) => {
           find: /^@edoms\/element-plus-adapter/,
           replacement: path.join(__dirname, '../packages/element-plus-adapter/src/index.ts'),
         },
-        // { find: /^@vue-i18n/, replacement: path.join(__dirname, 'node_modules/vue-i18n/dist/vue-i18n.cjs.js') },
       ],
     },
 
