@@ -56,8 +56,9 @@ watch(
   align-items: center;
 }
 .light {
-  width: 10px;
-  height: 10px;
+  // width: 10px;
+  height: 50%;
+  aspect-ratio: 1;
   border-radius: 50%;
   background-color: #333333;
   margin: 2px 2px;
