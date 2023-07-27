@@ -36,6 +36,7 @@
               <span class="day-font">时间选择</span>
               <el-date-picker
                 v-model="dateValue"
+                :teleported="false"
                 :editable="false"
                 popper-class="datePickerDark"
                 :append-to-body="false"
@@ -206,6 +207,9 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  color: #030507 !important;
+}
 .load-forecasting-cold {
   min-width: 117px;
   min-height: 80px;

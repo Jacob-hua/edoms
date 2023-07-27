@@ -13,6 +13,7 @@
               <el-date-picker
                 v-model="state.queryForm.date"
                 type="date"
+                :teleported="false"
                 :placeholder="t('请选择日期')"
                 @change="changeDate"
               />
@@ -190,6 +191,9 @@ onMounted(() => {
 .el-table::before {
   //最下面的白线
   background-color: transparent;
+}
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  color: #030507 !important;
 }
 :deep .el-table tr {
   background-color: transparent !important;

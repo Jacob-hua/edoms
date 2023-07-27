@@ -7,6 +7,7 @@
       <span class="day-font">时间选择</span>
       <el-date-picker
         v-model="pickerDate"
+        :teleported="false"
         :editable="false"
         popper-class="datePickerDark"
         :append-to-body="false"
@@ -132,6 +133,9 @@ onUnmounted(() => {});
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  color: #030507 !important;
+}
 .left-table-list {
   width: 100%;
   height: 100%;

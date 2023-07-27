@@ -16,7 +16,7 @@
         <el-row :gutter="2">
           <el-col :span="4" :offset="1">
             <el-form-item label="时间选择">
-              <el-date-picker v-model="state.queryForm.date" type="day" placeholder="请选择日期" />
+              <el-date-picker v-model="state.queryForm.date" :teleported="false" type="day" placeholder="请选择日期" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -169,7 +169,9 @@ onMounted(() => {
 .el-table__expanded-cell {
   background-color: transparent;
 }
-
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  color: #030507 !important;
+}
 :deep .el-table tr {
   background-color: transparent !important;
 }

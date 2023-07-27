@@ -17,12 +17,22 @@
         <el-row>
           <el-col :span="4" :offset="1">
             <el-form-item label="时间：">
-              <el-date-picker v-model="state.queryForm.startDate" placeholder="请选择日期" @change="changeDate" />
+              <el-date-picker
+                v-model="state.queryForm.startDate"
+                :teleported="false"
+                placeholder="请选择日期"
+                @change="changeDate"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="3">
             <el-form-item label="—" label-width="40px">
-              <el-date-picker v-model="state.queryForm.endDate" placeholder="请选择日期" @change="changeDate" />
+              <el-date-picker
+                v-model="state.queryForm.endDate"
+                :teleported="false"
+                placeholder="请选择日期"
+                @change="changeDate"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="4" :offset="1">
@@ -165,7 +175,9 @@ onMounted(() => {
 .el-table__expanded-cell {
   background-color: transparent;
 }
-
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  color: #030507 !important;
+}
 :deep .el-table tr {
   background-color: transparent !important;
 }

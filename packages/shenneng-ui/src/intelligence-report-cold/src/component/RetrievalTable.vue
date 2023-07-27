@@ -24,6 +24,7 @@
             <el-form-item label="起始日期">
               <el-date-picker
                 v-model="state.queryForm.startDate"
+                :teleported="false"
                 placeholder="开始时间"
                 style="width: 130px"
                 type="day"
@@ -34,6 +35,7 @@
             <el-form-item label="—" label-width="35px">
               <el-date-picker
                 v-model="state.queryForm.endDate"
+                :teleported="false"
                 placeholder="结束时间"
                 style="width: 130px"
                 type="day"
@@ -255,7 +257,9 @@ onMounted(() => {
 .el-table__expanded-cell {
   background-color: transparent;
 }
-
+:deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  color: #030507 !important;
+}
 :deep .el-table tr {
   background-color: transparent !important;
 }
