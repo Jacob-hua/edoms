@@ -15,9 +15,9 @@
       </div>
       <p class="advance-item-title">{{ title }}</p>
       <SwitchVersion v-if="formVisible" v-model="formModel.selectedForm" :application-id="appInfo.applicationId">
-        <template #default="{ version }">
+        <template #default>
           <el-input
-            :value="version?.name"
+            :value="appInfo?.defaultVersionName"
             clearable
             :placeholder="t('applicationSetting.rules.请选择版本来源')"
             style="cursor: pointer; width: 20%"
@@ -86,7 +86,6 @@ interface AdvanceItem {
 const props = defineProps<{
   appInfo: GetApplicationRes;
 }>();
-
 const emit = defineEmits<{
   (event: 'success'): void;
 }>();
