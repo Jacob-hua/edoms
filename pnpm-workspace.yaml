@@ -1,4 +1,5 @@
 packages:
   - 'packages/*'
+  - 'edoms-docs'
   - 'edoms-runtime'
   - 'edoms-designer'
