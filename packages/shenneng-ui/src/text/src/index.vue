@@ -39,7 +39,9 @@ const setText = provideMethod(
 
 watch(
   () => props.config.text,
-  (text = '') => setText({ text }),
+  (text = '') => {
+    setText({ text });
+  },
   {
     immediate: true,
   }
@@ -66,7 +68,10 @@ const displayText = computed(() => {
   if (props.config?.disabledText) {
     displayText = disabledText.value;
   }
-  console.log(displayText);
-  return displayText;
+  if (!displayText.indexOf('undefined')) {
+    return '';
+  } else {
+    return displayText;
+  }
 });
 </script>
