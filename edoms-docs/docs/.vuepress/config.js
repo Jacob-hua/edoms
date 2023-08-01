@@ -3,7 +3,7 @@ import { defineUserConfig, defaultTheme } from 'vuepress';
 export default defineUserConfig({
   base: '/',
   lang: 'zh-CN',
-  title: '你好, E-DOMs',
+  title: '组件化平台',
   description: 'E-DOMs 静态站点',
   host: '0.0.0.0',
   port: 8800,
