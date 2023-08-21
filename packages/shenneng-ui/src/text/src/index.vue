@@ -68,10 +68,6 @@ const displayText = computed(() => {
   if (props.config?.disabledText) {
     displayText = disabledText.value;
   }
-  if (!displayText.indexOf('undefined')) {
-    return '';
-  } else {
-    return displayText;
-  }
+  return displayText;
 });
 </script>
