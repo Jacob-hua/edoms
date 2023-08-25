@@ -11,7 +11,7 @@ features:
 - title: 关于我
   details: E-DOMs是一个低代码开发平台...
 - title: 算法
-  details: 我也不知道E-DOMs有哪些算法,只是占个位置罢了。
+  details: E-DOMs算法占位,只是占个位置罢了。
 - title: 生活点点滴滴
   details: 记录生活中美好的时刻，把生命中的点点滴滴都堆积成无法比拟的幸福。
 footer: E-DOMs | Copyright © 2023-present JasonJing
