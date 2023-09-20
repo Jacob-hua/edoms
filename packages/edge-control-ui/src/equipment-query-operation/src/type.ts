@@ -148,5 +148,5 @@ export interface Apis {
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
-  fetchCurveData: (data: any) => Promise<any>;
+  fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
 }

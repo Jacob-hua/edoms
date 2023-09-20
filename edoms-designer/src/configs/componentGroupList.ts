@@ -167,11 +167,6 @@ const componentGroupList: ComponentGroup[] = [
         text: t('sideBarList.运行参数'),
         type: 'running-parameter-energy',
       },
-      {
-        icon: 'yunxingcanshu',
-        text: t('sideBarList.控制方式'),
-        type: 'control-mode',
-      },
     ],
   },
   {
