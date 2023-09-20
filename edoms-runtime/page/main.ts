@@ -1,4 +1,5 @@
 import { createApp, defineAsyncComponent } from 'vue';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
@@ -23,6 +24,9 @@ edomsApp.use(ElementPlus, {
   locale: zhCn,
 });
 edomsApp.use(ElDesign, EdomsElementPlusAdapter);
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  edomsApp.component(key, component as any);
+}
 
 Object.entries(components).forEach(([type, component]: [string, any]) => {
   edomsApp.component(

@@ -8,11 +8,6 @@ export default async () => [
     type: 'string',
   },
   {
-    text: '子标题',
-    name: 'subTitle',
-    type: 'string',
-  },
-  {
     text: '轮询间隔',
     name: 'intervalDelay',
     type: 'number',
@@ -20,6 +15,24 @@ export default async () => [
     step: 1,
     defaultValue: 10,
     append: 's',
+  },
+  {
+    name: 'controlMode',
+    text: '控制方式',
+    type: 'groupList',
+    enableFullscreen: true,
+    addButtonText: '添加方式',
+    labelWidth: '80px',
+    fixed: false,
+    items: [
+      {
+        label: '控制名称',
+        name: 'controlName',
+        text: '控制名称',
+        type: 'text',
+        labelWidth: '80px',
+      },
+    ],
   },
   // {
   //   text: '设备类型',

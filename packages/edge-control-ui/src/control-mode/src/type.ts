@@ -21,16 +21,15 @@ export interface EqAllList {
   group: string;
 }
 
-export interface EqDataList extends MComponent {
+export interface ControlModeList extends MComponent {
   /** 标题 */
   title: string;
   /** 子标题 */
   subTitle: string;
   /** 轮询间隔 */
   intervalDelay: number;
-  /** 设备类型 */
-  typeGroups: Array<EqAllList>;
-  equipmentList: Array<EqData>;
+  /** 控制方式 */
+  controlMode: Array<any>;
 }
 
 export interface ParameterItem {
