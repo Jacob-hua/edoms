@@ -73,30 +73,31 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
   justify-content: flex-start;
   padding: 16px;
   height: 41px;
-  .icon-left {
-    width: 5px;
-    height: 23px;
-    margin-right: 7px;
-  }
-  .icon-bg {
-    width: 23px;
-    height: 18px;
-    margin-right: 14px;
-  }
-
   & > .title-wrapper {
     display: flex;
     align-items: center;
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    gap: 4px;
     .title {
       font-size: 16px;
       font-weight: bold;
       color: #ffffff85;
-      margin-right: 19px;
     }
 
     .subtitle {
+      font-family: 'Arial', 'Microsoft YaHei', sans-serif;
       color: #ffffff45;
       font-size: 10px;
+    }
+
+    .subtitle::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      border-bottom: 1px dotted #fff; /* 虚线样式和颜色 */
     }
   }
 
