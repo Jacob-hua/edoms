@@ -219,5 +219,6 @@ export default {
     充电控制: 'Control charge',
     费价设置: 'Fee setting',
     控制面板: 'Control panel',
+    控制方式: 'control mode',
   },
 };
