@@ -12,7 +12,6 @@ import Charts from './charts';
 import Checkbox from './checkbox';
 import Container from './container';
 import ControlCharge from './control-charge';
-import ControlMode from './control-mode';
 import ControlPanelEnergy from './control-panel-energy';
 import EconomicIndicators from './economic-indicators';
 import EfficiencyAnalysis from './efficiency-analysis';
@@ -100,7 +99,6 @@ const ui: Record<string, any> = {
   feeSettingEnergy: FeeSettingEnergy,
   runningParameterEnergy: RunningParameterEnergy,
   controlPanelEnergy: ControlPanelEnergy,
-  controlMode: ControlMode,
 };
 
 export default ui;

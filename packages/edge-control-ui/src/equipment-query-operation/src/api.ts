@@ -78,23 +78,17 @@ export default (request?: EdomsRequestFunc): Apis => ({
     }
   },
   // 曲线
-  fetchCurveData: async (data: any): Promise<FetchCurveDataRes> => {
+  fetchCurveData: async (data: FetchCurveDataReq): Promise<FetchCurveDataRes> => {
     if (!request) {
       return [];
     }
     try {
-      const { result } = await request<FetchCurveDataReq, any>({
-        url: '/OperationalMonitorCommon/executeApi',
-        method: 'GET',
+      const { result } = await request<FetchCurveDataReq, FetchCurveDataRes>({
+        url: '/OperationalMonitorCommon/curveData',
+        method: 'POST',
         data,
       });
       return result;
-      // const { result } = await request<FetchCurveDataReq, FetchCurveDataRes>({
-      //   url: '/OperationalMonitorCommon/curveData',
-      //   method: 'POST',
-      //   data,
-      // });
-      // return result;
     } catch (error) {
       return [];
     }
