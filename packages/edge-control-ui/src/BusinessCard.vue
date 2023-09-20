@@ -92,12 +92,16 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
 
     .subtitle::after {
       content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      right: 0;
+      display: block;
+      width: 100%;
       height: 1px;
-      border-bottom: 1px dotted #fff; /* 虚线样式和颜色 */
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        #ffffff45 2px,
+        #ffffff45 4px
+      ); /* 虚线样式和颜色 */
     }
   }
 
