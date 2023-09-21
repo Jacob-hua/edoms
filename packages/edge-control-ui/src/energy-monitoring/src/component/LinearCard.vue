@@ -8,11 +8,16 @@
         class="division-wrapper"
       ></div>
       <div class="gradient"></div>
+      <div class="cursor-line" :style="cursorLinePositon.style">
+        <span class="excellent-value">
+          {{ transFixed(cursorLinePositon.value) || '5.0' }}
+        </span>
+      </div>
     </div>
     <div class="value">
       <div class="cursor"></div>
-      <span class="min">{{ config.minValue }}</span>
-      <span class="max">{{ config.maxValue }}</span>
+      <span class="min">{{ energyMonitoringMinNum }}</span>
+      <span class="max">{{ energyMonitoringMaxNum }}</span>
     </div>
   </div>
 </template>
@@ -31,7 +36,7 @@ const props = defineProps<{
   actualValue: number;
 }>();
 
-const bisectionNumber = computed<number>(() => (props.config.bisectionNumber ? props.config.bisectionNumber : 11));
+const bisectionNumber = computed<number>(() => (props.config.bisectionNumber ? props.config.bisectionNumber : 6));
 
 const colorCardRef = ref<HTMLElement>();
 
@@ -39,22 +44,42 @@ const colorCardWidth = ref<number>(0);
 
 const total = computed<number>(() => Number(props.config.maxValue) - Number(props.config.minValue));
 
+const energyMonitoringMaxNum = computed<string>(() => transFixed(props.config.maxValue) || '6.0');
+
+const energyMonitoringMinNum = computed<string>(() => transFixed(props.config.minValue) || '0.0');
+
+const transFixed = (value: string) => {
+  if (!value) return;
+  return Number.isInteger(Number(value)) ? value + '.0' : value;
+};
+
+const cursorLinePositon = computed(() => {
+  return {
+    style: {
+      left:
+        (colorCardWidth.value * Number(props.config.reference[0].referenceValue || 5)) /
+          Number(props.config.maxValue || 6) +
+        'px',
+      backgroundColor: props.config.reference[0].color || 'rgba(255, 255, 255,1)',
+    },
+    value: props.config.reference[0].referenceValue || 5,
+  };
+});
+
 const getWidth = (pos: string): number => {
   let width = 33.3;
   if (isNaN(total.value) || total.value <= 0) return 33.3;
   const leftVal =
     props.config.medium.length > 0
-      ? Number(props.config.medium[0].maxValue) - Number(props.config.medium[0].minValue)
+      ? Number(props.config.medium[0].maxValue) - Number(props.config.medium[0].minValue) || 1
       : 1;
-  const centerVal =
-    props.config.good.length > 0 ? Number(props.config.good[0].maxValue) - Number(props.config.good[0].minValue) : 1;
+  const centerVal = 1;
   const rightVal =
     props.config.excellent.length > 0
-      ? Number(props.config.excellent[0].maxValue) - Number(props.config.excellent[0].minValue)
+      ? Number(props.config.excellent[0].maxValue) - Number(props.config.excellent[0].minValue) || 1
       : 1;
 
   const totalVal = leftVal + centerVal + rightVal;
-
   const leftWidth = leftVal / totalVal;
   const centerWidth = centerVal / totalVal;
   const rightWidth = rightVal / totalVal;
@@ -72,33 +97,20 @@ const getWidth = (pos: string): number => {
     default:
       break;
   }
-  //   console.log(pos, width);
   return width;
 };
 
-const getColor = (arrcolor: any) => {
-  if (!arrcolor || arrcolor.length === 0 || arrcolor[0].color == '') return '';
-  const arr = arrcolor[0].color.split(',');
-  arr[arr.length - 1] = '0.6)';
-  //   console.log(arr.join(','));
-  return arr.join(',');
-};
-
-const attributeGradient = computed<string>(
+const attributeGradient = computed(
   () =>
-    `linear-gradient(90deg, ${props.config.medium[0].color || 'rgba(231, 106, 47,1)'} 0%,
-    ${props.config.good[0].color || 'rgba(231, 106, 47,1)'} ${getWidth('left')}%,
-    ${getColor(props.config.excellent) || 'rgba(54, 167, 99,0.6)'} ${getWidth('left') + getWidth('center')}%,
-    ${props.config.excellent[0].color || 'rgba(54, 167, 99,1)'}  100%`
+    `linear-gradient(to right, ${props.config.medium[0].color || 'rgba(231, 106, 47,1)'} 0%, ${
+      props.config.medium[0].color || 'rgba(231, 106, 47,1)'
+    } ${getWidth('left')}%,
+    ${props.config.excellent[0].color || 'rgba(54, 167, 99,1)'} ${getWidth('left') + getWidth('center')}%)`
 );
 
-const divideWidth = computed<any>(() => (colorCardWidth.value / (bisectionNumber.value * 2)).toFixed(2));
+//每一块的宽度
+const divideWidth = computed<any>(() => (colorCardWidth.value / bisectionNumber.value).toFixed(2));
 
-const positionDistance = computed<number>(
-  //     const totalWidth = colorCardWidth.value;
-  //   const divideWidth: any = (totalWidth / (bisectionNumber.value * 2)).toFixed(2);
-  () => (colorCardWidth.value - (bisectionNumber.value - 1) * divideWidth.value) / bisectionNumber.value
-);
 // 监听html元素变化
 const colorCardObserver = new ResizeObserver(() => {
   colorCardWidth.value = colorCardRef.value?.clientWidth ?? 0;
@@ -120,25 +132,19 @@ onUnmounted(() => {
 });
 
 const calculateDistance = (index: number): StyleValue => {
-  //   const totalWidth = colorCardWidth.value;
-  //   const divideWidth: any = (totalWidth / (bisectionNumber.value * 2)).toFixed(2);
   return {
-    left: `${positionDistance.value * index + (index - 1) * divideWidth.value}px`,
-    width: `${divideWidth.value}px`,
+    left: `${index * divideWidth.value}px`,
+    width: `2px`,
   };
 };
 
-// const calculateWidth = (): Record<string, any> => {
-//   return {
-//     width: '50%',
-//   };
-// };
-
 const calculatePosition = (inputValue: string | number): number => {
-  if (Number(inputValue) >= Number(props.config.maxValue)) {
+  if (Number(inputValue) > Number(props.config.maxValue)) {
     return colorCardWidth.value - divideWidth.value;
   }
-
+  if (Number(inputValue) == Number(props.config.maxValue) && props.config.maxValue !== '') {
+    return colorCardWidth.value - divideWidth.value;
+  }
   if (Number(inputValue) <= Number(props.config.minValue)) {
     return 0;
   }
@@ -164,25 +170,42 @@ const divideBackground = computed(() =>
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: inherit;
+
   .color {
     position: relative;
     width: 100%;
-    height: 60%;
+    height: 25%;
     display: flex;
-    // background-color: green;
+
     .gradient {
       width: 100%;
       height: 100%;
       background-image: v-bind(attributeGradient);
     }
+
+    .cursor-line {
+      position: absolute;
+      width: 2px;
+      height: 112%;
+      top: -1px;
+
+      .excellent-value {
+        position: absolute;
+        top: 140%;
+        font-size: 16px;
+        color: #fff;
+      }
+    }
+
     .division-wrapper {
       position: absolute;
-      //   width: 15px;
       height: 100%;
       background-color: v-bind(divideBackground);
-      //   background-color: black;
     }
+
     .division-wrapper::before {
       position: absolute;
       content: '';
@@ -192,6 +215,7 @@ const divideBackground = computed(() =>
       height: 100%;
       border-radius: 0 0 6px 0;
     }
+
     .division-wrapper::after {
       position: absolute;
       height: 100%;
@@ -203,6 +227,7 @@ const divideBackground = computed(() =>
       border-radius: 0 0 0 6px;
     }
   }
+
   .value {
     position: relative;
     font-size: 12px;
@@ -212,6 +237,7 @@ const divideBackground = computed(() =>
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     .cursor {
       position: absolute;
       width: 0;
@@ -224,9 +250,11 @@ const divideBackground = computed(() =>
       left: v-bind(calculateCursorPosition);
       z-index: 2;
     }
+
     .min,
     .max {
-      margin-top: 5%;
+      font-size: 16px;
+      color: #aeb0b3;
     }
   }
 

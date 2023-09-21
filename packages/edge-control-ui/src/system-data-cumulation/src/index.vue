@@ -1,8 +1,22 @@
 <template>
-  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="367">
-    <div class="warning-table-list">
+  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="300">
+    <template #operation>
       <TabList @operate="handlerToOperate" />
+    </template>
+    <div class="warning-table-list">
       <TableList ref="tableWrapper" :table-data="systemCumulativeData" />
+      <div class="page">
+        <el-pagination
+          class="msg-pagination-container"
+          :current-page="currentPage"
+          :background="true"
+          :default-page-size="4"
+          :hide-on-single-page="true"
+          layout="prev, pager, next"
+          :total="systemCumulativeData.length"
+          @current-change="changeCurrentPage"
+        />
+      </div>
     </div>
   </BusinessCard>
 </template>
@@ -47,6 +61,8 @@ const active = ref<{ [key: string]: any }>({
   value: 'day',
 });
 
+const currentPage = ref<number>(1);
+
 const systemCumulativeData = ref<CumulativeList[]>([]);
 
 const categories = computed(() => props.config.category ?? []);
@@ -86,6 +102,10 @@ const handlerToOperate = (itm: { [key: string]: any }) => {
   getSystemCumulativeData();
 };
 
+const changeCurrentPage = (val: number): void => {
+  currentPage.value = val;
+};
+
 watch(
   () => categories.value,
   (categories) => {
@@ -122,6 +142,38 @@ onMounted(() => {
 .warning-table-list {
   width: 100%;
   height: 100%;
-  padding: 0 10px;
+  padding: 20px;
+}
+
+.page {
+  float: right;
+
+  .el-pagination {
+    --el-pagination-bg-color: transparent;
+  }
+}
+
+:v-deep .msg-pagination-container.is-background .el-pager li {
+  /*对页数的样式进行修改*/
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+::v-deep .msg-pagination-container.is-background .btn-next {
+  /*对下一页的按钮样式进行修改*/
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+::v-deep .msg-pagination-container.is-background .btn-prev {
+  /*对上一页的按钮样式进行修改*/
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+::v-deep .msg-pagination-container.is-background .el-pager li:not(.disabled).active {
+  /*当前选中页数的样式进行修改*/
+  background-color: #446cff;
+  color: #fff;
 }
 </style>

@@ -60,7 +60,7 @@ export default async (request: Request) => [
     defaultValue: '#008000',
   },
   {
-    text: '中等',
+    text: '较差',
     name: 'medium',
     type: 'groupList',
     labelWidth: '70px',
@@ -85,32 +85,7 @@ export default async (request: Request) => [
     ],
   },
   {
-    text: '良好',
-    name: 'good',
-    type: 'groupList',
-    labelWidth: '70px',
-    addButtonText: '添加类别',
-    maxItems: 1,
-    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
-    items: [
-      {
-        text: '最小值',
-        name: 'minValue',
-      },
-      {
-        text: '最大值',
-        name: 'maxValue',
-      },
-      {
-        text: '颜色',
-        name: 'color',
-        type: 'colorPicker',
-        defaultValue: 'rgba(147, 135, 72,1)',
-      },
-    ],
-  },
-  {
-    text: '优异',
+    text: '优秀',
     name: 'excellent',
     type: 'groupList',
     labelWidth: '70px',
@@ -131,6 +106,27 @@ export default async (request: Request) => [
         name: 'color',
         type: 'colorPicker',
         defaultValue: 'rgba(54, 167, 99,1)',
+      },
+    ],
+  },
+  {
+    text: '参考值',
+    name: 'reference',
+    type: 'groupList',
+    labelWidth: '70px',
+    addButtonText: '添加类别',
+    maxItems: 1,
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+    items: [
+      {
+        text: '参考值',
+        name: 'referenceValue',
+      },
+      {
+        text: '颜色',
+        name: 'color',
+        type: 'colorPicker',
+        defaultValue: 'rgba(255, 255, 255,1)',
       },
     ],
   },
