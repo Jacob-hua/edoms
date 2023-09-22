@@ -2,7 +2,7 @@ export default {
   style: {
     position: 'absolute',
     left: '77',
-    width: '200',
-    height: '200',
+    width: '800',
+    height: '800',
   },
 };
