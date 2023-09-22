@@ -201,6 +201,7 @@ provide('confirmedAlarmList', confirmedAlarmList);
     color: #ffffff73;
     border: 1px solid #4d505f;
     padding: 9px 0;
+    margin: 0 1px;
     cursor: pointer;
     position: relative;
   }
