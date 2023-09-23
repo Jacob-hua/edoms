@@ -14,21 +14,19 @@
         <!-- 增长趋势 -->
         <div class="data-trend">
           <div v-if="itm.calculateType === 'ALL' || itm.calculateType === 'QOQ'" class="font-value-turn">
-            <template v-if="itm.qoqRatio">
-              <span v-show="itm.qoqTrend === 'flat'" class="turn-flat"></span>
-              <span v-show="itm.yoyTrend === 'up'" class="turn-up"></span>
-              <span v-show="itm.yoyTrend === 'down'" class="turn-down"></span>
-            </template>
+            <span class="font">{{ `${state.dateType} ${t('环比')}` }}</span>
+            <span v-show="itm.qoqTrend === 'flat'" class="turn-flat"></span>
+            <span v-show="itm.yoyTrend === 'up'" class="turn-up"><img src="../assets/add-icon.png" alt="" /></span>
+            <span v-show="itm.yoyTrend === 'down'" class="turn-down"><img src="../assets/desc-icon.png" alt="" /></span>
             <span class="value-to" :style="{ color: getStyle(itm, 'qoqTrend') }">
               {{ itm.qoqRatio === '--' ? '--' : itm.qoqRatio + '%' }}
             </span>
           </div>
           <div v-else-if="itm.calculateType === 'ALL' || itm.calculateType === 'YOY'" class="font-value-turn">
-            <template v-if="itm.yoyRatio">
-              <span v-show="itm.yoyTrend === 'flat'" class="turn-flat"></span>
-              <span v-show="itm.yoyTrend === 'up'" class="turn-up"></span>
-              <span v-show="itm.yoyTrend === 'down'" class="turn-down"></span>
-            </template>
+            <span class="font">{{ `${state.dateType} ${t('同比')}` }}</span>
+            <span v-show="itm.yoyTrend === 'flat'" class="turn-flat"></span>
+            <span v-show="itm.yoyTrend === 'up'" class="turn-up"><img src="../assets/add-icon.png" alt="" /></span>
+            <span v-show="itm.yoyTrend === 'down'" class="turn-down"><img src="../assets/desc-icon.png" alt="" /></span>
             <span class="value-to" :style="{ color: getStyle(itm, 'yoyTrend') }">
               {{ itm.yoyRatio === '--' ? '--' : itm.yoyRatio + '%' }}
             </span>
@@ -93,14 +91,6 @@ defineExpose({
   display: flex;
   align-items: $align-items;
   justify-content: $justify-content;
-}
-
-@mixin trend {
-  display: block;
-  width: 15px;
-  height: 12px;
-  margin-right: 15px;
-  background-size: 100% 100%;
 }
 
 @mixin overflow-ellipsis {
@@ -175,6 +165,7 @@ defineExpose({
         font-size: 14px;
         line-height: 40px;
         display: flex;
+        align-items: center;
 
         .value-to {
           margin: 0 5px;
@@ -199,14 +190,12 @@ defineExpose({
 .data-trend {
   @include flex-center(center, start);
 
-  .turn-up {
-    @include trend();
-    background-image: url('../assets/add-icon.png');
-  }
-
+  .turn-up,
   .turn-down {
-    @include trend();
-    background-image: url('../assets/desc-icon.png');
+    display: block;
+    width: 15px;
+    margin: 0 10px;
+    background-size: 100% 100%;
   }
 }
 

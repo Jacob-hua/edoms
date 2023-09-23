@@ -54,16 +54,26 @@ const transFixed = (value: string) => {
 };
 
 const cursorLinePositon = computed(() => {
-  return {
-    style: {
-      left:
-        (colorCardWidth.value * Number(props.config.reference[0].referenceValue || 5)) /
-          Number(props.config.maxValue || 6) +
-        'px',
-      backgroundColor: props.config.reference[0].color || 'rgba(255, 255, 255,1)',
-    },
-    value: props.config.reference[0].referenceValue || 5,
-  };
+  if (props.config.reference.length) {
+    return {
+      style: {
+        left:
+          (colorCardWidth.value * Number(props.config.reference?.[0].referenceValue || 5)) /
+            Number(props.config.maxValue || 6) +
+          'px',
+        backgroundColor: props.config.reference[0].color || 'rgba(255, 255, 255,1)',
+      },
+      value: props.config.reference?.[0].referenceValue || 5,
+    };
+  } else {
+    return {
+      style: {
+        left: '5px',
+        backgroundColor: 'rgba(255, 255, 255,1)',
+      },
+      value: 5,
+    };
+  }
 });
 
 const getWidth = (pos: string): number => {
@@ -194,7 +204,7 @@ const divideBackground = computed(() =>
 
       .excellent-value {
         position: absolute;
-        top: 140%;
+        top: 130%;
         font-size: 16px;
         color: #fff;
       }
