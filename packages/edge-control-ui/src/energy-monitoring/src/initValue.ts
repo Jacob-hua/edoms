@@ -14,6 +14,6 @@ export default {
   title: '能效监测',
   subTitle: 'Energy efficiency monitoring',
   medium: [{ minValue: '', maxValue: '', color: 'rgb(231, 106, 47,1)' }],
-  good: [{ minValue: '', maxValue: '', color: 'rgba(147, 135, 72,1)' }],
+  reference: [{ referenceValue: '', color: 'rgba(255, 255, 255,1)' }],
   excellent: [{ minValue: '', maxValue: '', color: 'rgb(54, 167, 99,1)' }],
 };

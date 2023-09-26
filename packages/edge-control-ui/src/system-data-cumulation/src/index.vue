@@ -1,7 +1,9 @@
 <template>
-  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="367">
-    <div class="warning-table-list">
+  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="300">
+    <template #operation>
       <TabList @operate="handlerToOperate" />
+    </template>
+    <div class="warning-table-list">
       <TableList ref="tableWrapper" :table-data="systemCumulativeData" />
     </div>
   </BusinessCard>
@@ -122,6 +124,6 @@ onMounted(() => {
 .warning-table-list {
   width: 100%;
   height: 100%;
-  padding: 0 10px;
+  padding: 20px;
 }
 </style>
