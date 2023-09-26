@@ -167,6 +167,21 @@ const componentGroupList: ComponentGroup[] = [
         text: t('sideBarList.运行参数'),
         type: 'running-parameter-energy',
       },
+      {
+        icon: 'feiyongduibi',
+        text: t('sideBarList.费用对比'),
+        type: 'cost-comparsion',
+      },
+      {
+        icon: 'xitongsheding',
+        text: t('sideBarList.系统设定'),
+        type: 'system-settings',
+      },
+      {
+        icon: 'shebeishikong',
+        text: t('sideBarList.设备实控'),
+        type: 'eq-control',
+      },
     ],
   },
   {

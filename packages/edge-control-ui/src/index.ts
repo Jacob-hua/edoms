@@ -13,10 +13,12 @@ import Checkbox from './checkbox';
 import Container from './container';
 import ControlCharge from './control-charge';
 import ControlPanelEnergy from './control-panel-energy';
+import CostComparsion from './cost-comparsion';
 import EconomicIndicators from './economic-indicators';
 import EfficiencyAnalysis from './efficiency-analysis';
 import ElectricEnergyQuality from './electric-energy-quality';
 import EnergyMonitoring from './energy-monitoring';
+import EqControl from './eq-control';
 import EquipmentCondition from './equipment-condition';
 import EquipmentMonitoringCharge from './equipment-monitoring-charge';
 import EquipmentQueryOperation from './equipment-query-operation';
@@ -49,6 +51,7 @@ import Qrcode from './qrcode';
 import RunningParameterEnergy from './running-parameter-energy';
 import SuspendedWindow from './suspended-window';
 import SystemDataCumulation from './system-data-cumulation';
+import SystemSettings from './system-settings';
 import Text from './text';
 import WarningTableList from './warning-table-list';
 
@@ -99,6 +102,9 @@ const ui: Record<string, any> = {
   feeSettingEnergy: FeeSettingEnergy,
   runningParameterEnergy: RunningParameterEnergy,
   controlPanelEnergy: ControlPanelEnergy,
+  costComparsion: CostComparsion,
+  systemSettings: SystemSettings,
+  eqControl: EqControl,
 };
 
 export default ui;
