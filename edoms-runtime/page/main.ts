@@ -14,6 +14,7 @@ import plugins from '../.edoms/plugin-entry';
 import request from './utils/request';
 import AppComponent from './App.vue';
 
+import '@gmct/editor/dist/style.css';
 import 'element-plus/theme-chalk/index.css';
 
 const edomsApp = createApp(AppComponent);

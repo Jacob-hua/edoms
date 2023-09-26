@@ -9,6 +9,7 @@ import { toLine } from '@edoms/utils';
 
 import App from './App.vue';
 
+import '@gmct/editor/dist/style.css';
 import 'element-plus/theme-chalk/index.css';
 
 Promise.all([import('../.edoms/comp-entry'), import('../.edoms/plugin-entry')]).then(([components, plugins]) => {

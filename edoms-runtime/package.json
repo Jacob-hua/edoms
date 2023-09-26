@@ -29,7 +29,7 @@
     "@edoms/shenneng-ui": "workspace:^0.0.1",
     "@edoms/stage": "workspace:^0.0.1",
     "@edoms/utils": "workspace:^0.0.1",
-    "@gmct/editor": "0.0.1-beta03",
+    "@gmct/editor": "0.0.1-beta04",
     "element-plus": "^2.2.25",
     "hls.js": "^1.3.3",
     "terser": "^5.14.2",
