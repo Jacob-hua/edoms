@@ -106,10 +106,10 @@ const handlerToClick = (type: number) => {
 };
 
 onMounted(async () => {
-  fetchRunningData({}).then((res: any) => {
-    console.log(res);
-    // if () {}
+  const result = await fetchRunningData({}).catch((err: any) => {
+    console.log(err);
   });
+  console.log(result);
 });
 </script>
 
