@@ -30,7 +30,7 @@ export default async (request: Request) => [
         text: '标签',
         type: 'text',
       },
-      ...(await useInstanceConfig(request, 'equipment-condition')),
+      ...(await useInstanceConfig(request, 'system-settings')),
     ],
   },
 ];

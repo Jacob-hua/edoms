@@ -10,18 +10,18 @@ export default (request?: EdomsRequestFunc): Apis => ({
         url: '/OperationalMonitorSystem/thirdApiList',
         method: 'GET',
       });
-      console.log(result, 55555);
       return result;
     } catch (error) {
       return [];
     }
   },
-  fetchTableDataList: async (): Promise<any> => {
+  fetchTableDataList: async (data: any): Promise<any> => {
     if (!request) return { nextList: [], newList: [] };
     try {
       const result = await request<any, any>({
         url: '/OperationalMonitorCommon/executeApi',
-        method: 'GET',
+        method: 'POST',
+        data,
       });
       return result;
     } catch (error) {

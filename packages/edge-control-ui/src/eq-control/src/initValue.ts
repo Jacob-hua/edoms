@@ -1,5 +1,5 @@
 export default {
-  type: 'cost-comparsion',
+  type: 'eq-control',
   style: {
     width: '392',
     height: '556',

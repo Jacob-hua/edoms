@@ -35,11 +35,18 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue';
 
+import useApp from '../../useApp';
+
+import getApi from './api';
 import { AnaItemConfigs } from './type';
 
 const props = defineProps<{
   config: AnaItemConfigs;
 }>();
+
+const { request } = useApp(props);
+
+const { fetchRealData } = getApi(request);
 
 const isShow = ref<boolean>(false);
 
@@ -56,17 +63,36 @@ const handlerToClick = () => {
   isShow.value = !isShow.value;
 };
 
+const getData = async () => {
+  const codeList: string[] = [];
+  props.config.indicators.forEach((itm: any) => {
+    codeList.push(itm.property);
+  });
+  const result = await fetchRealData({
+    dataCodes: codeList,
+  });
+  result.forEach((itm: any) => {
+    costList.value.forEach((cost: any) => {
+      if (itm.propCode === cost.id) {
+        cost.value = itm.propVal;
+      }
+    });
+  });
+};
+
 const setDate = () => {
   const datas: any[] = [];
+  if (!props.config.indicators) return;
   props.config.indicators.forEach((itm: any) => {
     datas.push({
       name: itm.label,
       value: '-',
-      id: itm.instance,
+      id: itm.property,
       unit: itm.unit,
     });
   });
   costList.value = datas;
+  getData();
 };
 
 watch(
@@ -146,6 +172,7 @@ onMounted(() => {
           color: rgba(255, 255, 255, 0.65);
           font-weight: 300;
           font-size: 12px;
+          margin-left: 5px;
         }
       }
       .font-st {
