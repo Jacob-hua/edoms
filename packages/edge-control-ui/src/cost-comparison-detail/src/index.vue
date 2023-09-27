@@ -194,7 +194,7 @@ const tableHead: any = [
   },
 ];
 
-const tableList = [
+const tableList: any = [
   {
     '00:00': 191.16,
     '01:00': 358.8,
@@ -261,12 +261,18 @@ const option = ref<ECOption>({});
 
 const lineUnit = ref<string[]>([]);
 
-const activeIndicatorConfig: any = computed<any[]>(() => props.config.indicators);
+// const activeIndicatorConfig: any = computed<any[]>(() => props.config.indicators);
 
 const updateParameterData = async () => {
   const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
+  const arr: any = [];
+  Object.keys(tableList[0]).forEach((key: string) => {
+    arr.push([key, tableList[0][key]]);
+  });
 
-  console.log(activeIndicatorConfig.value.indicators);
+  // const ydata = arr;
+  // console.log(arr);
+  // console.log(activeIndicatorConfig.value.indicators);
   const result: any = await fetchCurveData({
     startTime: start,
     endTime: end,
@@ -281,6 +287,14 @@ const updateParameterData = async () => {
   console.log(result);
 
   const chartSeries: any = [];
+  chartSeries.push({
+    name: '优化策略用电量',
+    type: 'line',
+    showSymbol: false,
+    smooth: false,
+    color: '#0f0',
+    data: [['00:00', 2]],
+  });
   // chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
   //   const activeIndicator = activeIndicatorConfig.value.get(`${insCode}:${propCode}`);
   //   const name = activeIndicator?.label;
@@ -298,6 +312,7 @@ const updateParameterData = async () => {
   //   };
   // });
   option.value = generateOption(chartSeries);
+  console.log(option.value);
 };
 
 function generateOption(series: any[] = []): ECOption {

@@ -153,7 +153,7 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
 }
 .economic-indicators {
   display: flex;
-  width: calc(100% - 40px);
+  width: 100%;
   background-color: #272d36;
   // flex-wrap: wrap;
   // align-items: center;
