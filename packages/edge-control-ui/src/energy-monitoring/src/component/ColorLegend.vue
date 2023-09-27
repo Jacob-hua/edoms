@@ -25,8 +25,8 @@ const legend = ref([
     type: 'medium',
     shape: 'block',
     style: {
-      width: '20px',
-      height: '20px',
+      width: '16px',
+      height: '16px',
       color: '#AEB0B3',
       backgroundColor: 'yellow',
     },
@@ -36,8 +36,8 @@ const legend = ref([
     type: 'excellent',
     shape: 'block',
     style: {
-      width: '20px',
-      height: '20px',
+      width: '16px',
+      height: '16px',
       color: '#AEB0B3',
       backgroundColor: 'green',
     },
@@ -48,7 +48,7 @@ const legend = ref([
     shape: 'line',
     style: {
       width: '2px',
-      height: '20px',
+      height: '16px',
       color: '#AEB0B3',
       backgroundColor: 'white',
     },
