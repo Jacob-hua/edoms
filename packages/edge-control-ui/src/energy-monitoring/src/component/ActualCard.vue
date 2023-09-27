@@ -1,7 +1,7 @@
 <template>
   <div class="actual-wrapper">
     <div class="actual-top">
-      <div class="actual-value overflow-ellipsis">
+      <div class="actual-value">
         <LongText
           :content="actualValueCom"
           :content-style="{ width: 'inherit', fontSize: 'inherit', textAlign: 'right' }"
@@ -48,8 +48,7 @@ const actualValueCom = computed<string>(() => (props.actualValue ? props.actualV
     .actual-value {
       color: #07f83b;
       font-size: 24px;
-      margin-right: 4px;
-      max-width: 75px;
+      margin-left: -6px;
       font-weight: bold;
     }
 
