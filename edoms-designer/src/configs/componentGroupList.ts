@@ -182,6 +182,11 @@ const componentGroupList: ComponentGroup[] = [
         text: t('sideBarList.设备实控'),
         type: 'eq-control',
       },
+      {
+        icon: 'yunxingcanshu',
+        text: t('sideBarList.费用对比详情'),
+        type: 'cost-comparison-detail',
+      },
     ],
   },
   {

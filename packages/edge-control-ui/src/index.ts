@@ -13,6 +13,7 @@ import Checkbox from './checkbox';
 import Container from './container';
 import ControlCharge from './control-charge';
 import ControlPanelEnergy from './control-panel-energy';
+import CostComparisonDetail from './cost-comparison-detail';
 import CostComparsion from './cost-comparsion';
 import EconomicIndicators from './economic-indicators';
 import EfficiencyAnalysis from './efficiency-analysis';
@@ -105,6 +106,7 @@ const ui: Record<string, any> = {
   costComparsion: CostComparsion,
   systemSettings: SystemSettings,
   eqControl: EqControl,
+  costComparisonDetail: CostComparisonDetail,
 };
 
 export default ui;

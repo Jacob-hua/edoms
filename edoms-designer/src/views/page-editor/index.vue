@@ -330,6 +330,7 @@ watch(
             'cost-comparsion',
             'system-settings',
             'eq-control',
+            'cost-comparison-detail',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');
