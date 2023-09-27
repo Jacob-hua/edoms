@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="367">
+  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="272">
     <template #operation>
       <div class="wrap-header">
         <div class="wrap-header-divide">
@@ -489,6 +489,7 @@ onMounted(() => {
   .charts {
     flex-grow: 1;
     height: 100%;
+    margin-top: 20px;
   }
 }
 
