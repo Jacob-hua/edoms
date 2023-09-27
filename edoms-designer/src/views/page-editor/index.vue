@@ -335,9 +335,6 @@ watch(
           const pathLastIndex = prop.lastIndexOf('.');
           const domainPath = prop.substring(0, pathLastIndex);
           model = getByPath(props.formValue ?? {}, domainPath, '');
-          if (Object.prototype.toString.call(model.instance) !== '[object Array]') {
-            model.instance = [];
-          }
         }
         if (['energy-efficiency-monitoring', 'energy-monitoring'].includes(component)) {
           model = props.formValue;
