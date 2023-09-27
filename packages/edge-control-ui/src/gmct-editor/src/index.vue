@@ -54,21 +54,19 @@ const intervalDelay = computed<number>(() => {
 
 watch(
   () => props.config.src,
-  (value: any[]) => {
+  async (value: any[]) => {
     if (!value || value.length === 0) {
       project.value = DEFAULT_PROJECT;
       return;
     }
-    // TODO: 加载远程的图模数据
-    project.value = {
-      id: '',
-      name: '',
-      gridType: 'mesh',
-      gridSize: 25,
-      gridColor: 'rgba(123, 123, 123, 0.49)',
-      vertexes: [],
-      links: [],
-    };
+
+    const url = app?.generateImageSrc(props.config.src[0]);
+    let result = DEFAULT_PROJECT;
+    if (url) {
+      const res = await fetch(url);
+      result = await res.json();
+    }
+    project.value = result;
   },
   { immediate: true }
 );
