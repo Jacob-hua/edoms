@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="value">
-      <div class="cursor"></div>
+      <div class="cursor" :style="{ left: calculateCursorPosition }"></div>
       <span class="min">{{ energyMonitoringMinNum }}</span>
       <span class="max">{{ energyMonitoringMaxNum }}</span>
     </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import { MEnergyMonitoring } from '../type';
 
@@ -126,6 +126,13 @@ const colorCardObserver = new ResizeObserver(() => {
   colorCardWidth.value = colorCardRef.value?.clientWidth ?? 0;
 });
 
+watch(
+  () => props.actualValue,
+  (newVal) => {
+    calculateCursorPosition.value = calculatePosition(newVal) + 'px';
+  }
+);
+
 onMounted(() => {
   if (!colorCardRef.value) {
     return;
@@ -149,10 +156,11 @@ const calculateDistance = (index: number): StyleValue => {
 };
 
 const calculatePosition = (inputValue: string | number): number => {
-  if (Number(inputValue) > Number(props.config.maxValue)) {
+  const maxValue = props.config.maxValue ? props.config.maxValue : 6;
+  if (Number(inputValue) > Number(maxValue)) {
     return colorCardWidth.value - divideWidth.value;
   }
-  if (Number(inputValue) == Number(props.config.maxValue) && props.config.maxValue !== '') {
+  if (Number(inputValue) == Number(maxValue) && props.config.maxValue !== '') {
     return colorCardWidth.value - divideWidth.value;
   }
   if (Number(inputValue) <= Number(props.config.minValue)) {
@@ -165,7 +173,7 @@ const calculatePosition = (inputValue: string | number): number => {
   );
 };
 
-const calculateCursorPosition = computed(() => `${calculatePosition(props.actualValue)}px`);
+const calculateCursorPosition = ref('0px');
 
 const cursorAttribute = computed(() => `12px solid ${props.config.cursorColor}`);
 
