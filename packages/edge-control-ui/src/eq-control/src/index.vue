@@ -128,7 +128,6 @@ onMounted(async () => {
   setData(result.nowList, nowList.value);
   setData(result.nextList, nextList.value);
   tableList.value = nowList.value;
-  console.log(nowList.value, nextList.value);
 });
 </script>
 
@@ -140,6 +139,7 @@ onMounted(async () => {
   padding: 12px 16px;
   box-sizing: border-box;
   position: relative;
+  overflow: hidden;
   .font-witter {
     overflow: hidden;
     min-width: 100px;
@@ -181,7 +181,7 @@ onMounted(async () => {
   }
   .table-list {
     width: 100%;
-    height: 480px;
+    height: 280px;
     margin-top: 15px;
     .table-title {
       width: 100%;
@@ -205,12 +205,13 @@ onMounted(async () => {
     }
     .table-ct {
       width: 100%;
-      max-height: 440px;
+      max-height: 240px;
       overflow: hidden;
       overflow-y: auto;
       border: 1px solid #464646;
       border-top: hidden;
       box-sizing: border-box;
+      overflow-y: auto;
       .no-data {
         width: 100%;
         padding: 20px 0;
