@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="272">
+  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="392" min-height="272">
     <template #operation>
       <TabList @operate="handlerToOperate" />
     </template>
@@ -124,6 +124,6 @@ onMounted(() => {
 .warning-table-list {
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 15px;
 }
 </style>

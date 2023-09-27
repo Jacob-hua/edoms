@@ -6,8 +6,8 @@
  * @LastEditTime: 2023-06-05 17:23:12
 -->
 <template>
-  <div style="min-width: 522px; min-height: 160px">
-    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="160">
+  <div style="min-width: 365px; min-height: 160px">
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="365" min-height="160">
       <template #operation>
         <div class="operation" @click="handleShowMore">
           <img :style="'transform: rotateZ(90deg)'" src="../../../assets/image/arrow_up.png" alt="" />
@@ -282,9 +282,9 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   display: flex;
   .left {
     height: calc(100% - 100px);
-    min-width: 124px;
+    min-width: 60px;
     width: 24%;
-    margin-left: 20px;
+    margin-left: 10px;
     margin-top: 40px;
     border-radius: 2px;
     display: flex;

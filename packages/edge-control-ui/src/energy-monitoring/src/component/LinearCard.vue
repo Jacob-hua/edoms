@@ -195,7 +195,7 @@ const divideBackground = computed(() =>
   .color {
     position: relative;
     width: 100%;
-    height: 25px;
+    height: 20px;
     display: flex;
 
     .gradient {
@@ -255,7 +255,6 @@ const divideBackground = computed(() =>
     display: flex;
     justify-content: space-between;
     align-items: center;
-    top: 10px;
 
     .cursor {
       position: absolute;
