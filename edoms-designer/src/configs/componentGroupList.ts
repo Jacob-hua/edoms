@@ -103,6 +103,11 @@ const componentGroupList: ComponentGroup[] = [
         type: 'global-schematic',
       },
       {
+        icon: 'feijiashezhi',
+        text: '图模编辑器',
+        type: 'gmct-editor',
+      },
+      {
         icon: 'zhishideng',
         text: t('sideBarList.多色多态指示灯'),
         type: 'multicolor-polymorphic-light',

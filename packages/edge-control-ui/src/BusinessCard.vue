@@ -1,8 +1,6 @@
 <template>
   <div ref="wrapper" class="business-wrapper">
     <div class="business-wrapper-header">
-      <img class="icon-left" src="../assets/image/icon_left.png" alt="" />
-      <img class="icon-bg" src="../assets/image/bg_icon.png" alt="" />
       <div class="title-wrapper">
         <span class="title">{{ title }}</span>
         <span class="subtitle">{{ subtitle }}</span>
@@ -13,7 +11,6 @@
     </div>
     <div class="business-wrapper-body">
       <slot></slot>
-      <Bottom />
     </div>
   </div>
 </template>
@@ -23,14 +20,11 @@ import { computed, ref } from 'vue';
 
 import { isNumber } from '@edoms/utils';
 
-import Bottom from './common/Bottom.vue';
-
 const props = defineProps<{
   title?: string;
   subtitle?: string;
   minWidth?: string | number;
   minHeight?: string | number;
-  //   config?: any;
 }>();
 
 const wrapper = ref<HTMLElement | null>(null);
@@ -58,15 +52,10 @@ const minHeight = computed<number | undefined>(() => {
 });
 
 const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.value}px` : 'auto'));
-// const cssBackgroundColor = computed<string>(() =>
-//     (props.config && props.config.style.backgroundColor ? props.config.style.backgroundColor : 'rgba(31, 30, 29, 1)'
-// );
 </script>
 
 <style lang="scss">
 .business-wrapper {
-  // display: grid;
-  // align-content: start;
   display: flex;
   flex-direction: column;
   border-radius: 3px;
@@ -75,43 +64,44 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
   width: inherit;
   height: inherit;
   color: #ffffff85;
-  border-bottom: 1px solid rgba(33, 88, 152, 0.5);
+  overflow: hidden;
 }
 .business-wrapper-header {
   display: flex;
   align-items: center;
   flex-direction: row;
   justify-content: flex-start;
-  position: relative;
-  padding: 2px 16px 0 0;
-  background-image: url(../assets/image/bg_card.png);
-  background-size: 100% 100%;
+  padding: 16px;
   height: 41px;
-  .icon-left {
-    width: 5px;
-    height: 23px;
-    margin-right: 7px;
-  }
-  .icon-bg {
-    width: 23px;
-    height: 18px;
-    margin-right: 14px;
-  }
-  //   background-color: red;
-
   & > .title-wrapper {
     display: flex;
     align-items: center;
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    gap: 4px;
     .title {
       font-size: 16px;
       font-weight: bold;
       color: #ffffff85;
-      margin-right: 19px;
     }
 
     .subtitle {
+      font-family: 'Arial', 'Microsoft YaHei', sans-serif;
       color: #ffffff45;
       font-size: 10px;
+    }
+
+    .subtitle::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        #ffffff45 2px,
+        #ffffff45 4px
+      ); /* 虚线样式和颜色 */
     }
   }
 
@@ -126,6 +116,5 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
   background-color: inherit;
   overflow: hidden;
   display: flex;
-  border: 1px solid rgba($color: #215898, $alpha: 0.5);
 }
 </style>

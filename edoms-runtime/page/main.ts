@@ -1,4 +1,5 @@
 import { createApp, defineAsyncComponent } from 'vue';
+import GmctEditor from '@gmct/editor';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
@@ -13,6 +14,7 @@ import plugins from '../.edoms/plugin-entry';
 import request from './utils/request';
 import AppComponent from './App.vue';
 
+import '@gmct/editor/dist/style.css';
 import 'element-plus/theme-chalk/index.css';
 
 const edomsApp = createApp(AppComponent);
@@ -23,6 +25,7 @@ edomsApp.use(ElementPlus, {
   locale: zhCn,
 });
 edomsApp.use(ElDesign, EdomsElementPlusAdapter);
+edomsApp.use(GmctEditor);
 
 Object.entries(components).forEach(([type, component]: [string, any]) => {
   edomsApp.component(

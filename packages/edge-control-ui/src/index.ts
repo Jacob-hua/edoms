@@ -1,10 +1,3 @@
-/*
- * @Description:
- * @Author: lihao
- * @Date: 2023-04-18 13:24:10
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-23 17:10:14
- */
 import AssetInformationPv from './asset-information-pv';
 import Button from './button';
 import Carousel from './carousel';
@@ -25,6 +18,7 @@ import EquipmentMonitoringCharge from './equipment-monitoring-charge';
 import EquipmentQueryOperation from './equipment-query-operation';
 import FeeSettingEnergy from './fee-setting-energy';
 import GlobalSchematic from './global-schematic';
+import GmctEditor from './gmct-editor';
 import Img from './img';
 import IntelligenceReportCharge from './intelligence-report-charge';
 import IntelligenceReportCloud from './intelligence-report-cloud';
@@ -67,6 +61,7 @@ const ui: Record<string, any> = {
   checkbox: Checkbox,
   overlay: Overlay,
   globalSchematic: GlobalSchematic,
+  gmctEditor: GmctEditor,
   multicolorImageLight: MulticolorImageLight,
   multicolorPolymorphicLight: MulticolorPolymorphicLight,
   multicolorSingleLight: MulticolorSingleLight,
