@@ -12,8 +12,8 @@
           <div class="font-wp">优化前</div>
         </div>
         <div class="count-font">
-          <div class="count-wp">{{ costList[0] }} {{ cft.unit }}</div>
-          <div class="font-wp">{{ cft.label }}</div>
+          <div class="count-wp">{{ cft[0] && cft[0].value }} {{ cft[0] && cft[0].unit }}</div>
+          <div class="font-wp">{{ cft[0] && cft[0].name }}</div>
         </div>
       </div>
       <div class="right-card">
@@ -22,8 +22,8 @@
           <div class="font-wp">优化后</div>
         </div>
         <div class="count-font">
-          <div class="count-wp">{{ costList[1] }} {{ cft.unit }}</div>
-          <div class="font-wp">{{ cft.label }}</div>
+          <div class="count-wp">{{ cft[1] && cft[1].value }} {{ cft[1] && cft[1].unit }}</div>
+          <div class="font-wp">{{ cft[1] && cft[1].name }}</div>
         </div>
       </div>
     </div>
@@ -33,6 +33,9 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue';
 
+import useApp from '../../useApp';
+
+import getApi from './api';
 import { AnaItemConfigs } from './type';
 
 const props = defineProps<{
@@ -43,33 +46,80 @@ const emit = defineEmits<{
   (event: 'openDetail'): void;
 }>();
 
-const cft = ref<{
-  label: string;
-  unit: string;
-  id: string;
-}>({
-  label: '',
-  unit: '',
-  id: '',
-});
+const { request } = useApp(props);
 
-const costList = ref<Array<number | string>>(['-', '-']);
+const { fetchRealData } = getApi(request);
+
+const cft = ref<
+  Array<{
+    name: string;
+    unit: string;
+    id: string;
+    value: any;
+  }>
+>([
+  {
+    name: '',
+    unit: '',
+    id: '',
+    value: '-',
+  },
+  {
+    name: '',
+    unit: '',
+    id: '',
+    value: '-',
+  },
+]);
+
+// const costList = ref<Array<number | string>>(['-', '-']);
 
 const handlerToClick = () => {
   emit('openDetail');
 };
 
+const getData = async () => {
+  const codeList: string[] = [];
+  props.config.indicators.forEach((itm: any) => {
+    codeList.push(itm.property);
+  });
+  const result = await fetchRealData({
+    dataCodes: codeList,
+  });
+  result.forEach((itm: any) => {
+    cft.value.forEach((cost: any) => {
+      if (itm.propCode === cost.id) {
+        cost.value = itm.propVal;
+      }
+    });
+  });
+};
+
+const setDate = () => {
+  const datas: any[] = [];
+  if (!props.config.indicators) return;
+
+  props.config.indicators.forEach((itm: any) => {
+    datas.push({
+      name: itm.label,
+      value: '-',
+      id: itm.property,
+      unit: itm.unit,
+    });
+  });
+  cft.value = datas;
+  getData();
+};
+
 watch(
-  () => props.config,
+  () => props.config.indicators,
   () => {
-    cft.value.label = props.config.label;
-    cft.value.unit = props.config.unit;
+    setDate();
   }
 );
 
 onMounted(() => {
-  cft.value.label = props.config.label;
-  cft.value.unit = props.config.unit;
+  setDate();
 });
 </script>
 

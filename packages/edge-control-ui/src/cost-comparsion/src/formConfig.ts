@@ -41,7 +41,22 @@ export default async (request: Request) => [
   //   type: 'select',
   //   options: indicatorTypes,
   // },
-  ...(await useInstanceConfig(request, 'equipment-condition')),
+  {
+    text: '参数',
+    name: 'indicators',
+    type: 'groupList',
+    labelWidth: '50px',
+    addButtonText: '添加参数',
+    title: (model: any, index: number | string) => `# ${index}`,
+    items: [
+      {
+        name: 'label',
+        text: '标签',
+        type: 'text',
+      },
+      ...(await useInstanceConfig(request, 'cost-comparsion')),
+    ],
+  },
   // {
   //   text: '参数',
   //   name: 'indicators',

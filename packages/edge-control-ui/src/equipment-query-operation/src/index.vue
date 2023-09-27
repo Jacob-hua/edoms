@@ -368,10 +368,7 @@ const tabScrollChange = (item: any) => {
 };
 const getDeviceRunParams = () => {
   const propGroup: any = props.config.deviceGroup[curdeviceTypeCode.value]?.nameGroup[curDeviceCode.value]?.propGroup;
-
   const dataCodes: string[] = propGroup.map((item: any) => item.property);
-
-  console.log('codes合集', dataCodes);
   if (dataCodes.length === 0) return;
   updateRealData();
   // const arr: any = [];
@@ -410,7 +407,6 @@ const updateRealData = async () => {
   }
 
   const result = await fetchRealData({ dataCodes });
-  console.log('测试', result);
   result.forEach(({ propVal, propCode }) => {
     const targetIndexs: number[] = [];
     deviceRunParams.value.forEach((item: any, index: number) => {
@@ -459,7 +455,6 @@ watch(
     // deviceList.value = newConfig[curdeviceTypeCode.value].nameGroup.map((e: any) => e.deviceName);
     // getDeviceRunParams();
     // deviceRunParams.value = newConfig[curdeviceTypeCode.value].nameGroup[curDeviceCode.value].propGroup;
-    console.log('121212', deviceRunParams.value);
 
     // deviceTypeList.value = newConfig.deviceGroup.map((item: any) => item.group);
   },
@@ -496,6 +491,7 @@ onMounted(() => {
 .wrap-body {
   width: 100%;
   height: 200px;
+  background-color: #272d36;
   .device-type-box {
     width: 100%;
     height: 36px;

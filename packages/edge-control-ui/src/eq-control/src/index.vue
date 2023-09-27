@@ -12,10 +12,21 @@
       </div>
       <div class="table-ct">
         <div v-for="(item, index) in tableList" :key="index" class="table-item">
-          <div v-for="(title, s) in titleList" :key="s" class="col-item">{{ item[title.value] }}</div>
+          <div
+            v-for="(title, s) in titleList"
+            :key="s"
+            class="col-item"
+            @mouseenter="handlerToEnter($event, item[title.value] as string)"
+            @mouseleave="handlerToLeave"
+          >
+            {{ item[title.value] }}
+          </div>
         </div>
         <div v-show="!tableList.length" class="no-data">暂无数据</div>
       </div>
+    </div>
+    <div v-show="font.length > 8" class="font-witter" :style="{ left: styleList.left, top: styleList.top }">
+      {{ font }}
     </div>
   </div>
 </template>
@@ -36,7 +47,7 @@ const ctIdx = ref<number>(1);
 
 const { request } = useApp(props);
 
-const { fetchRunningData } = getApi(request);
+const { fetchRunningData, fetchTableDataList } = getApi(request);
 
 const titleList = ref<Array<{ [key: string]: number | string }>>([
   { key: '设备', value: 'ct' },
@@ -44,72 +55,80 @@ const titleList = ref<Array<{ [key: string]: number | string }>>([
   { key: '参数', value: 'st' },
 ]);
 
-const tableList = ref<Array<{ [key: string]: number | string }>>([
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-  { ct: '制冷站', at: '123', st: '12:21' },
-]);
+const font = ref<string>('');
+
+const styleList = ref<{ [key: string]: string }>({
+  left: '0px',
+  top: '0px',
+});
+
+const nowList = ref<Array<{ [key: string]: number | string }>>([]);
+
+const nextList = ref<Array<{ [key: string]: number | string }>>([]);
+
+const tableList = ref<Array<{ [key: string]: number | string }>>([]);
 
 const handlerToClick = (type: number) => {
   ctIdx.value = type;
   if (ctIdx.value === 1) {
-    tableList.value = [
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-      { ct: '制冷站', at: '123', st: '12:21' },
-    ];
+    tableList.value = nowList.value;
   } else {
-    tableList.value = [];
+    tableList.value = nextList.value;
   }
 };
 
+const handlerToEnter = (e: MouseEvent, ls: string) => {
+  const { left, top } = (e.target as Element)?.getBoundingClientRect();
+  styleList.value = {
+    left: left + 'px',
+    top: top - 50 + 'px',
+  };
+  font.value = ls;
+};
+
+const handlerToLeave = () => {
+  font.value = '';
+  styleList.value = {
+    left: '',
+    top: '',
+  };
+};
+
+const setData = (list: Array<any>, newV: Array<any>) => {
+  list.forEach((itm: any) => {
+    itm.devIns.forEach((dev: any) => {
+      newV.push({
+        ct: dev.name,
+        at: dev.state ? dev.state : '-',
+        st: (() => {
+          if (!dev.stateOps) return '-:-';
+          const list = dev.stateOps.map((state: any) => state.label);
+          return list.join(':');
+        })(),
+      });
+    });
+  });
+};
+
 onMounted(async () => {
-  const result = await fetchRunningData({}).catch((err: any) => {
+  const list = await fetchRunningData({}).catch((err: any) => {
     console.log(err);
   });
-  console.log(result);
+  if (!list || !list.length) return;
+  const params = list.filter((itm: any) => itm.name === '设备实控接口')[0];
+  if (!params) return;
+  const { result } = await fetchTableDataList({
+    apiCode: params.code,
+    requestParam: {
+      lockedOrNot: false,
+    },
+  }).catch((err: any) => {
+    console.log(err);
+  });
+  setData(result.nowList, nowList.value);
+  setData(result.nextList, nextList.value);
+  tableList.value = nowList.value;
+  console.log(nowList.value, nextList.value);
 });
 </script>
 
@@ -121,6 +140,16 @@ onMounted(async () => {
   padding: 12px 16px;
   box-sizing: border-box;
   position: relative;
+  .font-witter {
+    overflow: hidden;
+    min-width: 100px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    color: #fff;
+    text-align: center;
+  }
   .title-operation {
     display: flex;
     justify-content: space-between;
@@ -207,6 +236,9 @@ onMounted(async () => {
           text-align: center;
           color: rgba(255, 255, 255, 0.8);
           font-size: 16px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           &:last-child {
             border-right: hidden;
           }

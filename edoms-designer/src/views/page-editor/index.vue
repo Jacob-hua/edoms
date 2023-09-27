@@ -327,10 +327,10 @@ watch(
             'intelligence-report-cold',
             'intelligence-report-pv',
             'optimal-regulation-heat',
-            'cost-comparsion',
             'system-settings',
             'eq-control',
             'cost-comparison-detail',
+            'cost-comparsion',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');
@@ -340,7 +340,12 @@ watch(
         if (['energy-efficiency-monitoring', 'energy-monitoring'].includes(component)) {
           model = props.formValue;
         }
-        if (model.instance[model.instance.length - 1] && model.instanceType && model.propertyType) {
+        if (
+          Object.prototype.toString.call(model.instance) === '[object Array]' &&
+          model.instance[model.instance.length - 1] &&
+          model.instanceType &&
+          model.propertyType
+        ) {
           return await requestPoints({
             insDataCode: model.instance[model.instance.length - 1],
             codeType: model.instanceType,
