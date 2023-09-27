@@ -4,7 +4,7 @@ export default {
   subTitle: 'Equipment operation parameters',
   backgroundColor: '#272d36',
   style: {
-    width: '522',
+    width: '392',
     height: '261',
   },
 };

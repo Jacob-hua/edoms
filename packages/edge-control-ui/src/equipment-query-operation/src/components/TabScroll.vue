@@ -101,7 +101,7 @@ const right = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0px 20px 22px 20px;
+  // margin: 0px 20px 22px 20px;
   cursor: pointer;
   .el-icon {
     font-size: 18px;
@@ -138,7 +138,6 @@ const right = () => {
   }
   .no-bg .el-carousel__item {
     background: rgba(#fff, 0) !important;
-    margin-top: -4px !important;
     .carousel-name {
       line-height: 24px;
       font-size: 14px !important;
