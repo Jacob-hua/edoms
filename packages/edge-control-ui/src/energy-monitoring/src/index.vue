@@ -6,8 +6,8 @@
  * @LastEditTime: 2023-06-05 17:23:12
 -->
 <template>
-  <div style="min-width: 522px; min-height: 213px">
-    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="213">
+  <div style="min-width: 522px; min-height: 160px">
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="160">
       <template #operation>
         <div class="operation" @click="handleShowMore">
           <img :style="'transform: rotateZ(90deg)'" src="../../../assets/image/arrow_up.png" alt="" />
@@ -33,8 +33,8 @@
       v-if="chartDialogVisible"
       v-model:visible="chartDialogVisible"
       :title="dialogTitle"
-      :width="960"
-      :height="480"
+      :width="1360"
+      :height="570"
       :options="options"
       @type-change="handleChangeDateType"
       @magictype-change="handleChangeMagictype"
@@ -278,14 +278,14 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
 <style lang="scss" scoped>
 .wrap-body {
   width: 100%;
-  min-height: 205px;
+  // min-height: 160px;
   display: flex;
   .left {
     height: calc(100% - 100px);
     min-width: 124px;
     width: 24%;
     margin-left: 20px;
-    margin-top: 21px;
+    margin-top: 40px;
     border-radius: 2px;
     display: flex;
     flex-direction: column;
@@ -322,6 +322,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     .bottom {
       width: 100%;
       flex: 1;
+      margin-top: 20px;
     }
   }
 }

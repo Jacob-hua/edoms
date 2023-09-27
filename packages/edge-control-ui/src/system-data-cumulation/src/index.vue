@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="300">
+  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="272">
     <template #operation>
       <TabList @operate="handlerToOperate" />
     </template>
