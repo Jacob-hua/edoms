@@ -59,7 +59,6 @@ const legendAssign = computed(() => {
   if (!props.config) {
     return legend.value;
   }
-  console.log('props.config', props.config);
   legend.value.forEach((item) => {
     if (Object.keys(props.config).includes(item.type)) {
       item.style.backgroundColor = props.config[item.type][0]?.color || item.style.backgroundColor;
