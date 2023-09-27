@@ -70,7 +70,7 @@ const headerData: HeaderData[] = [
     className: 'red',
   },
   {
-    name: t('重要警告'),
+    name: t('异常警告'),
     className: 'orange',
   },
   {

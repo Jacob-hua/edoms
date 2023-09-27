@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog v-model="dialogVisible" :width="1000">
+    <el-dialog v-model="dialogVisible" :width="1400" :height="660">
       <template #header>
         <span>{{ title }}</span>
       </template>
@@ -82,8 +82,8 @@ const handleChangeMagictype = (value: string) => {
 
 .chart-container {
   padding-top: 10px;
-  width: 960px;
-  height: 480px;
+  width: 1360px;
+  height: 570px;
 }
 
 .checked {

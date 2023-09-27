@@ -82,7 +82,7 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
   align-items: center;
   flex-direction: row;
   justify-content: flex-start;
-  //   justify-content: space-between;
+  position: relative;
   padding: 2px 16px 0 0;
   background-image: url(../assets/image/bg_card.png);
   background-size: 100% 100%;
@@ -117,6 +117,8 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
 
   & > .operation-wrapper {
     cursor: pointer;
+    position: absolute;
+    right: 10px;
   }
 }
 .business-wrapper-body {
