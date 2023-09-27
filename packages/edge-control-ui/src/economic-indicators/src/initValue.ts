@@ -9,7 +9,7 @@ export default {
   type: 'economic-indicators',
   visibleNumber: 4,
   style: {
-    width: '522',
+    width: '392',
     height: '160',
   },
   title: '经济指标',

@@ -1,6 +1,6 @@
 <template>
   <div style="min-width: 392px; min-height: 160px">
-    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="141">
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="392" min-height="141">
       <div class="economic-indicators">
         <div v-for="item in indicators" :key="item.label" class="list">
           <div class="icon">
@@ -136,8 +136,8 @@ useIntervalAsync(updateRealData, intervalDelay.value);
 
 function getIconByIndicatorType(type: MEconomicIndicator) {
   const iconClassify = {
-    [MEconomicIndicator.ELECTRICITY_CONSUMPTION]: ConsumpImg,
-    [MEconomicIndicator.ELECTRIC]: EletricImg,
+    [MEconomicIndicator.ELECTRICITY_CONSUMPTION]: EletricImg,
+    [MEconomicIndicator.ELECTRIC]: ConsumpImg,
     [MEconomicIndicator.COLD_COST]: CostImg,
     [MEconomicIndicator.REFRIGERATION_CAPACITY]: ColdImg,
   };
@@ -154,6 +154,7 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
 .economic-indicators {
   display: flex;
   width: calc(100% - 40px);
+  background-color: #272d36;
   // flex-wrap: wrap;
   // align-items: center;
   // height: 100%;

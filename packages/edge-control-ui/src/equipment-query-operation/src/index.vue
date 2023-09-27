@@ -496,6 +496,7 @@ onMounted(() => {
 .wrap-body {
   width: 100%;
   height: 200px;
+  background-color: #272d36;
   .device-type-box {
     width: 100%;
     height: 36px;
