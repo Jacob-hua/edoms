@@ -128,7 +128,6 @@ onMounted(async () => {
   setData(result.nowList, nowList.value);
   setData(result.nextList, nextList.value);
   tableList.value = nowList.value;
-  console.log(nowList.value, nextList.value);
 });
 </script>
 
