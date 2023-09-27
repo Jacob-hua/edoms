@@ -29,7 +29,7 @@ export interface EqDataList extends MComponent {
   /** 轮询间隔 */
   intervalDelay: number;
   /** 设备类型 */
-  typeGroups: Array<EqAllList>;
+  deviceGroup: Array<EqAllList>;
   equipmentList: Array<EqData>;
 }
 

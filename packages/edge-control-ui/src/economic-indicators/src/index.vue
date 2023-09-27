@@ -1,18 +1,14 @@
 <template>
-  <div style="min-width: 522px; min-height: 141px">
+  <div style="min-width: 392px; min-height: 160px">
     <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="141">
       <div class="economic-indicators">
-        <div v-for="(item, index) in initIndicators" :key="index" class="wrap-info">
-          <img :src="item.icon" alt="" />
-          <div class="wrap-conent">
-            <div class="header">
-              <span class="parameter">{{ item.parameter }}</span>
-              <span class="unit">{{ item.unit }}</span>
-            </div>
-            <div class="bottom overflow-ellipsis">
-              {{ item.label }}
-            </div>
+        <div v-for="item in indicators" :key="item.label" class="list">
+          <div class="icon">
+            <img :src="item.icon" alt="" />
           </div>
+          <div class="value">{{ item.parameter }}</div>
+          <div class="unit">{{ item.unit }}</div>
+          <div class="label">{{ item.label }}</div>
         </div>
       </div>
     </BusinessCard>
@@ -28,18 +24,10 @@ import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-import CostImg from './assets/cost.png';
-import ElectricImg from './assets/electric.png';
-import ColdEnergyImg from './assets/energy.png';
-import ConsumptionImg from './assets/energy_consumption.png';
-import ExposureImg from './assets/exposure.png';
-import HeatEnergyImg from './assets/heat_energy.png';
-import HumidityImg from './assets/humidity.png';
-import Accumulated_ChargingImg from './assets/leijichongdian .png';
-import Daily_ChargingImg from './assets/richongdian.png';
-import Daily_TimesImg from './assets/ricishu.png';
-import TemperatureImg from './assets/temperature.png';
-import WaterImg from './assets/water.png';
+import EletricImg from './assets/a-dianfei1.svg';
+import ConsumpImg from './assets/yongdianliang.svg';
+import CostImg from './assets/zhilengchengben.svg';
+import ColdImg from './assets/zhilengliang.svg';
 import apiFactory from './api';
 import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig } from './type';
 
@@ -64,12 +52,36 @@ const indicators = ref<Indicator[]>([]);
 const initIndicators = ref<Indicator[]>([]);
 
 const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
+
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
     return 10;
   }
   return props.config.intervalDelay;
 });
+
+// const list: any = ref([
+//   {
+//     label: '用电量',
+//     value: 5846,
+//     unit: '元/kWh',
+//   },
+//   {
+//     label: '制冷量',
+//     value: 5846,
+//     unit: 'kWh',
+//   },
+//   {
+//     label: '电费',
+//     value: 5846,
+//     unit: '元',
+//   },
+//   {
+//     label: '制冷成本',
+//     value: 5846,
+//     unit: '元/kWh',
+//   },
+// ]);
 
 watch(
   () => indicatorConfigs.value,
@@ -124,18 +136,10 @@ useIntervalAsync(updateRealData, intervalDelay.value);
 
 function getIconByIndicatorType(type: MEconomicIndicator) {
   const iconClassify = {
-    [MEconomicIndicator.ELECTRICITY_CONSUMPTION]: ConsumptionImg,
-    [MEconomicIndicator.COST]: CostImg,
-    [MEconomicIndicator.ELECTRIC]: ElectricImg,
-    [MEconomicIndicator.COOL_ENERGY_CONSUMPTION]: ColdEnergyImg,
-    [MEconomicIndicator.HEAT_ENERGY_CONSUMPTION]: HeatEnergyImg,
-    [MEconomicIndicator.TEMPERATURE]: TemperatureImg,
-    [MEconomicIndicator.HUMIDITY]: HumidityImg,
-    [MEconomicIndicator.EXPOSURE]: ExposureImg,
-    [MEconomicIndicator.WATER_CONSUMPTION]: WaterImg,
-    [MEconomicIndicator.Accumulated_Charging_apacity]: Accumulated_ChargingImg,
-    [MEconomicIndicator.Daily_Charging_apacity]: Daily_ChargingImg,
-    [MEconomicIndicator.Daily_Charging_Times]: Daily_TimesImg,
+    [MEconomicIndicator.ELECTRICITY_CONSUMPTION]: ConsumpImg,
+    [MEconomicIndicator.ELECTRIC]: EletricImg,
+    [MEconomicIndicator.COLD_COST]: CostImg,
+    [MEconomicIndicator.REFRIGERATION_CAPACITY]: ColdImg,
   };
   return iconClassify[type];
 }
@@ -149,70 +153,47 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
 }
 .economic-indicators {
   display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  align-items: center;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  .wrap-info {
+  width: calc(100% - 40px);
+  // flex-wrap: wrap;
+  // align-items: center;
+  // height: 100%;
+  .list {
+    margin-top: 15px;
+    width: 25%;
+    // height: 100%;
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
     align-items: center;
-    cursor: pointer;
-    min-width: 259px;
-    min-height: 100px;
-    max-width: 50%;
-    img {
-      width: 50px;
-      height: 50px;
-      margin-left: 40px;
+    font-size: 14px;
+    .icon {
+      width: 26px;
+      height: 26px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
-    .wrap-conent {
-      padding-left: 15px;
-      width: 60%;
-      height: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: left;
-      .header {
-        width: 100%;
-        height: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        .parameter {
-          font-size: 20px;
-          font-weight: bold;
-          color: #ffffff;
-          margin-right: 10px;
-        }
-        .unit {
-          font-size: 14px;
-          color: #ffffff;
-          opacity: 0.6;
-        }
-      }
-      .bottom {
-        width: 100%;
-        height: 50%;
-        margin-top: 10px;
-        font-size: 14px;
-        color: #ffffff;
-        font-weight: 300;
-        text-align: left;
-        display: flex;
-        align-items: center;
-        opacity: 0.6;
-      }
+    .value {
+      min-height: 14px;
+      color: #00ff00;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      font-weight: bold;
+      width: 100%;
+      text-align: center;
+    }
+
+    .unit {
+      min-height: 14px;
+      color: #00ff00;
+      font-weight: bold;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 8px;
     }
 
     .label {
-      font-size: 14px;
-      font-weight: bold;
-      text-align: center;
+      color: rgba(#fff, 0.65);
     }
   }
 }

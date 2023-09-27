@@ -172,6 +172,11 @@ const componentGroupList: ComponentGroup[] = [
         text: t('sideBarList.控制方式'),
         type: 'control-mode',
       },
+      {
+        icon: 'yunxingcanshu',
+        text: t('sideBarList.费用对比详情'),
+        type: 'cost-comparison-detail',
+      },
     ],
   },
   {

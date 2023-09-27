@@ -20,11 +20,11 @@
           :key="idx"
           class="carousel-name"
           :class="{
-            active: curCode == single.index,
+            active: curCode == single.tpl || curCode == single.devType,
           }"
-          @click="tabChange(single.index)"
+          @click="tabChange(single)"
         >
-          {{ single.name }}
+          {{ single.name || single.devTypeName }}
         </div>
       </el-carousel-item>
     </el-carousel>
@@ -43,8 +43,8 @@ const props = defineProps({
     default: () => [],
   },
   curCode: {
-    type: Number as any,
-    default: 0,
+    type: String,
+    default: '',
   },
   count: {
     type: Number,
@@ -140,7 +140,6 @@ const right = () => {
     background: rgba(#fff, 0) !important;
     margin-top: -4px !important;
     .carousel-name {
-      line-height: 24px;
       font-size: 14px !important;
     }
   }

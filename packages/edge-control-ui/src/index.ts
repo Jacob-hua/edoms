@@ -14,6 +14,7 @@ import Container from './container';
 import ControlCharge from './control-charge';
 import ControlMode from './control-mode';
 import ControlPanelEnergy from './control-panel-energy';
+import CostComparisonDetail from './cost-comparison-detail';
 import EconomicIndicators from './economic-indicators';
 import EfficiencyAnalysis from './efficiency-analysis';
 import ElectricEnergyQuality from './electric-energy-quality';
@@ -101,6 +102,7 @@ const ui: Record<string, any> = {
   runningParameterEnergy: RunningParameterEnergy,
   controlPanelEnergy: ControlPanelEnergy,
   controlMode: ControlMode,
+  costComparisonDetail: CostComparisonDetail,
 };
 
 export default ui;

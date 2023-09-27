@@ -1,7 +1,7 @@
-// import { Request } from '@edoms/editor';
+import { Request } from '@edoms/editor';
 
-// import useInstanceConfig from '../../useInstanceConfig';
-export default async () => [
+import useInstanceConfig from '../../useInstanceConfig';
+export default async (request: Request) => [
   {
     text: '标题',
     name: 'title',
@@ -21,20 +21,50 @@ export default async () => [
     defaultValue: 10,
     append: 's',
   },
-  // {
-  //   text: '设备类型',
-  //   name: 'equipmentTypeList',
-  //   type: 'groupList',
-  //   labelWidth: '80px',
-  //   addButtonText: '添加组',
-  //   items: [
-  //     {
-  //       name: 'key',
-  //       text: '类型名称',
-  //       type: 'text',
-  //       labelWidth: '80px',
-  //     },
-
-  //   ],
-  // },
+  {
+    text: '设备分组',
+    name: 'deviceGroup',
+    type: 'groupList',
+    labelWidth: '80px',
+    addButtonText: '添加分组',
+    items: [
+      {
+        name: 'group',
+        text: '分组名称',
+        type: 'text',
+        labelWidth: '80px',
+      },
+      {
+        text: '设备名称',
+        name: 'nameGroup',
+        type: 'groupList',
+        labelWidth: '80px',
+        addButtonText: '添加设备',
+        items: [
+          {
+            name: 'deviceName',
+            text: '设备名称',
+            type: 'text',
+            labelWidth: '80px',
+          },
+          {
+            text: '检测指标',
+            name: 'propGroup',
+            type: 'groupList',
+            labelWidth: '80px',
+            addButtonText: '添加指标',
+            items: [
+              {
+                name: 'label',
+                text: '标签',
+                type: 'text',
+                labelWidth: '80px',
+              },
+              ...(await useInstanceConfig(request, 'equipment-query-operation')),
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];

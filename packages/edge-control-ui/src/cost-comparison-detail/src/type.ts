@@ -1,43 +1,35 @@
 import { MComponent } from '@edoms/schema';
 
-export enum MEconomicIndicator {
-  /** 电费 */
-  ELECTRIC = 'eletric',
-  /** 用电量 */
-  ELECTRICITY_CONSUMPTION = 'consumption',
-  /** 制冷成本 */
-  COLD_COST = 'cost',
-  /** 制冷量 */
-  REFRIGERATION_CAPACITY = 'refrigeration',
-}
-
-export interface MIndicatorItemConfig {
-  /** 监测指标 */
-  type: MEconomicIndicator;
-  /** 标签 */
-  label: string;
-  /** 实例类型 */
-  instanceType: string;
-  /** 实例 */
-  instance: string;
-  /** 属性类型 */
-  propertyType: string;
-  /** 属性 */
-  property: string;
-  /** 精度 */
+export interface QueryList {
+  queryUnit: string;
+  queryName: string;
+  queryApi?: string;
   precision: string;
-  /** 单位 */
-  unit: string;
+  color: string;
+  [key: string]: any;
 }
 
-export interface MEconomicIndicators extends MComponent {
-  visibleNumber: number;
-  intervalDelay: number;
+export interface EqData {
+  [x: string]: any;
+  eqCode: string;
+  eqName: string;
+  pointList?: Array<QueryList>;
+}
+
+export interface EqAllList {
+  [x: string]: any;
+  group: string;
+}
+
+export interface ControlModeList extends MComponent {
   /** 标题 */
   title: string;
   /** 子标题 */
   subTitle: string;
-  indicators: MIndicatorItemConfig[];
+  /** 轮询间隔 */
+  intervalDelay: number;
+  /** 控制方式 */
+  indicators: Array<any>;
 }
 
 export interface ParameterItem {
@@ -155,5 +147,5 @@ export interface Apis {
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
-  fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
+  fetchCurveData: (data: any) => Promise<any>;
 }

@@ -75,10 +75,10 @@ const setVal = (val: any, name: string) => {
         margin-left: 4px;
       }
       .val {
-        font-size: 22px;
+        font-size: 16px;
         font-family: Source Han Sans SC VF;
         font-weight: bold;
-        color: #ffffff;
+        color: #00ff00;
       }
       .unit {
         font-size: 12px;
