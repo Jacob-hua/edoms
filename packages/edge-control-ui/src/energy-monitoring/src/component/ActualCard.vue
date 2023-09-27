@@ -1,28 +1,30 @@
 <template>
   <div class="actual-wrapper">
     <div class="actual-top">
-      <div class="actual-value overflow-ellipsis">
+      <div class="actual-value">
         <LongText
-          :content="actualValue.toString()"
+          :content="actualValueCom"
           :content-style="{ width: 'inherit', fontSize: 'inherit', textAlign: 'right' }"
         ></LongText>
       </div>
-      <div class="actual-unit" :title="config.energyName">{{ config.energyName }}</div>
     </div>
-    <div class="actual-bottom">{{ t('当前系统能效') }}</div>
+    <div class="actual-bottom">{{ t('实际COP') }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
+
 import LongText from '../../../LongText.vue';
 import useI18n from '../../../useI18n';
 import { MEnergyMonitoring } from '../type';
 
 const { t } = useI18n();
-defineProps<{
+const props = defineProps<{
   config: MEnergyMonitoring;
   actualValue: number;
 }>();
+const actualValueCom = computed<string>(() => (props.actualValue ? props.actualValue.toString() : '-'));
 </script>
 
 <style lang="scss" scoped>
@@ -31,7 +33,6 @@ defineProps<{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 
   .overflow-ellipsis {
     overflow: hidden;
@@ -42,26 +43,27 @@ defineProps<{
   .actual-top {
     display: flex;
     align-items: flex-end;
-    justify-content: center;
-    // margin-top: 20px;
     margin-bottom: 13px;
+
     .actual-value {
-      color: #00fff0;
-      font-size: 20px;
-      margin-right: 4px;
-      max-width: 75px;
+      color: #07f83b;
+      font-size: 24px;
+      margin-left: -6px;
+      font-weight: bold;
     }
+
     .actual-unit {
       color: #c4e5f8;
-      font-size: 16px;
+      font-size: 20px;
     }
   }
+
   .actual-bottom {
-    color: #c4e5f8;
-    font-size: 12px;
+    color: #ffffffa6;
+    font-size: 14px;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    justify-content: center;
   }
 }
 </style>

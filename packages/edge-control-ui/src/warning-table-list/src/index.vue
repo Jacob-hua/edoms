@@ -5,12 +5,14 @@
         <div
           v-for="({ name, className }, index) in headerData"
           :key="index"
-          class="list-item"
+          :class="[
+            'list-item',
+            calculateClassName(className),
+            activeClassName !== className ? `list-item${index + 1}` : '',
+          ]"
           @click="handleChangeWarningType(className)"
         >
-          <div class="item" :class="calculateClassName(className)" :title="name">
-            {{ name }}
-          </div>
+          {{ name }}
         </div>
       </div>
       <!-- warningItem 组件 -->
@@ -68,7 +70,7 @@ const headerData: HeaderData[] = [
     className: 'red',
   },
   {
-    name: t('重要警告'),
+    name: t('异常警告'),
     className: 'orange',
   },
   {
@@ -191,38 +193,47 @@ provide('confirmedAlarmList', confirmedAlarmList);
   justify-content: space-around;
   height: 34px;
   margin: 10px 12px 0;
-  border-top: 1px solid rgba(0, 163, 255, 0.3);
-  border-bottom: 1px solid rgba(0, 163, 255, 0.3);
-  .list-item {
-    height: 22px;
-    border-left: 1px solid rgba(0, 163, 255, 0.3);
-    margin: 5px 0;
-    &:last-child {
-      border-right: 1px solid rgba(0, 163, 255, 0.3);
-    }
 
-    .item {
-      width: 92px;
-      height: 22px;
-      background-color: rgba(0, 163, 255, 0.1);
-      text-align: center;
-      line-height: 22px;
-      margin: 0 auto;
-      cursor: pointer;
-      color: rgba(196, 229, 248, 1);
-      font-size: 14px;
-      box-sizing: border-box;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      padding: 0 5px;
-      &.active {
-        color: #fff;
-        border: 1px solid rgba(0, 163, 255, 1);
-      }
-    }
+  .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff73;
+    border: 1px solid #4d505f;
+    padding: 9px 0;
+    margin: 0 1px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .list-item.active {
+    background: #333c50;
+    color: #ffffffd9;
   }
 }
+
+//右上角浮点
+$signColor: #850606, #d5c02c, #2eb0ff;
+
+@mixin warning-sign($color) {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: $color;
+}
+
+@each $value in $signColor {
+  $i: index($signColor, $value);
+
+  .list-item#{$i}::after {
+    @include warning-sign($value);
+  }
+}
+
 .warning-list-wrapper {
   display: flex;
   justify-content: center;

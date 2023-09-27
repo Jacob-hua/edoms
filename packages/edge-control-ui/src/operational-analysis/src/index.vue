@@ -1,29 +1,21 @@
 <template>
-  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="367">
-    <div class="wrap-body" style="width: 100%; height: 100%">
+  <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="570" min-height="272">
+    <template #operation>
       <div class="wrap-header">
-        <div class="wrap-divide">
-          <div v-for="item in divideArr" :key="item" class="divide"></div>
-        </div>
-        <div v-show="showRight" class="caret-left btn" @click="moveMethod('right')"></div>
-        <div id="scrollRef" ref="scrollMain" class="wrap-scroll">
+        <div class="wrap-header-divide">
           <div
-            ref="wrap"
-            class="list-tab"
-            :style="{
-              'margin-left': distance + 'px',
-              width: listTabWidth,
-            }"
+            v-for="(item, index) in categories"
+            :key="item.label"
+            :class="{ active: activeCategory === index }"
+            class="divide-item"
+            @click="changeTab(index)"
           >
-            <div v-for="(item, index) in categories" :key="item.label" class="wrap-tab">
-              <div class="tab" :class="{ active: activeCategory === index }" @click="changeTab(index)">
-                {{ item.label }}
-              </div>
-            </div>
+            {{ item.label }}
           </div>
         </div>
-        <div v-show="showLeft" class="caret-right btn" @click="moveMethod('left')"></div>
       </div>
+    </template>
+    <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrapper">
         <div class="left-tab">
           <div
@@ -56,8 +48,6 @@ import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
-// import EquipmentParameter from './component/EquipmentParameter.vue';
-// import SystemParameter from './component/SystemParameter.vue';
 import apiFactory from './api';
 import locales from './locales';
 import { MIndicatorItemConfig, MOperationalParameters, MParameterItemConfig } from './type';
@@ -70,15 +60,12 @@ const { setMessage, t } = useApp(props);
 setMessage(locales);
 const scrollMain = ref();
 const wrap = ref();
-// const scrollLeft = ref(0);
 
 const { request } = useApp(props);
 
-// const { fetchHistoryData } = apiFactory(request);
 const { fetchCurveData } = apiFactory(request);
 
 const categories = computed<any[]>(() => props.config.classify);
-// console.log(categories.value);
 
 const activeCategory = ref<number>(0);
 const option = ref<ECOption>({});
@@ -107,7 +94,6 @@ const changeTab = (index: number) => {
   if (activeCategory.value === index) return;
   activeCategory.value = index;
   activeTab.value = 0;
-  //   option.value = {};
   getHistoryData();
 };
 const activeTab = ref<number>(0);
@@ -126,7 +112,6 @@ const getHistoryData = async () => {
     startTime: start,
     endTime: end,
     dataCodes: data[activeTab.value].indicators.map((e: any) => e.property),
-    // dataCodes: Array.from(activeIndicatorConfig.value.values()).map(({ property }) => property),
     tsUnit: 'H',
     ts: '1',
   });
@@ -137,18 +122,6 @@ const getHistoryData = async () => {
     const color = data[activeTab.value].indicators[codeIndex]?.color;
     lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
     const lineType = data[activeTab.value].lineType ?? 'line';
-    // if (lineType === 'line')
-    //   return {
-    //     name: name ? name : `未命名${index}`,
-    //     type: 'line',
-    //     showSymbol: false,
-    //     smooth: true,
-    //     color: color,
-    //     data: dataList.map(({ time, value }) => [
-    //       new Date(Number(time)),
-    //       formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
-    //     ]),
-    //   };
     return {
       name: name ? name : `${t('未命名')}${index}`,
       type: lineType,
@@ -163,14 +136,12 @@ const getHistoryData = async () => {
     };
   });
   option.value = generateOption(chartSeries);
-  //   console.log('我是曲线数据', option.value);
 };
 const { flush } = useIntervalAsync(getHistoryData, intervalDelay.value);
 
 watch(
   () => activeIndicatorConfig.value,
   () => {
-    // updateLineData();
     getHistoryData();
   }
 );
@@ -221,7 +192,6 @@ function generateOption(series: any[] = []): ECOption {
           },
         ]
       : [];
-  //   console.log(dateRange(new Date(), 'day').end, dateRange(new Date(), 'day').start);
 
   const option: ECOption = {
     legend: {
@@ -318,36 +288,28 @@ const showRight = ref<boolean>(false);
 const distance = ref<number>(0);
 
 const tabCount = computed<number>(() => {
-  //   console.log(scrollMainWidth.value);
+  console.log('props.config', props.config);
   if (props.config.classify.length > 4) return 4;
   else if (props.config.classify.length < 2) return 2;
   else return props.config.classify.length;
 });
 
-const divideArr = computed<Array<number>>(() => {
-  const arr = [];
-  for (let i = 0; i < tabCount.value + 1; i++) {
-    arr.push(i);
-  }
-  return arr;
-});
 const tabWidth = computed(() => scrollMainWidth.value / tabCount.value + 'px');
 
-// const listTabWidth = computed(() => scrollMainWidth.value + 'px');
-const listTabWidth = computed(() => {
-  if (categories.value && categories.value.length * (scrollMainWidth.value / 4) <= scrollMainWidth.value)
-    return scrollMainWidth.value + 'px';
-  else {
-    return (scrollMainWidth.value / 4) * (categories.value ? categories.value.length : 0) + 'px';
-  }
-});
+// const listTabWidth = computed(() => {
+//   if (categories.value && categories.value.length * (scrollMainWidth.value / 4) <= scrollMainWidth.value)
+//     return scrollMainWidth.value + 'px';
+//   else {
+//     return (scrollMainWidth.value / 4) * (categories.value ? categories.value.length : 0) + 'px';
+//   }
+// });
 
-const moveMethod = (flag: string) => {
-  // 移动
-  distance.value += flag === 'left' ? -(scrollMainWidth.value / 4) : scrollMainWidth.value / 4;
-  //   console.log(distance.value);
-  convertArrow();
-};
+// const moveMethod = (flag: string) => {
+//   // 移动
+//   distance.value += flag === 'left' ? -(scrollMainWidth.value / 4) : scrollMainWidth.value / 4;
+//   convertArrow();
+// };
+
 const convertArrow = () => {
   /**
    * 左箭头：滚动区域 - 隐藏区域 < 可视区域
@@ -363,8 +325,6 @@ const convertArrow = () => {
 // 监听html元素变化
 const colorCardObserver = new ResizeObserver(() => {
   scrollMainWidth.value = scrollMain.value?.clientWidth ?? 0;
-  //   tabWidth.value = scrollMainWidth.value / 2 + 'px';
-  //   console.log(tabWidth.value);
 });
 
 onMounted(() => {
@@ -373,11 +333,9 @@ onMounted(() => {
     return;
   }
   scrollMainWidth.value = scrollMain.value.clientWidth;
-  //   tabWidth = scrollMainWidth.value / 2 + 'px';
   colorCardObserver.observe(scrollMain.value);
   scollWith.value = scrollMain.value.offsetWidth;
   wrapWith.value = wrap.value.offsetWidth;
-  //   navWidth.value = document.getElementsByClassName('wrap-tab')[0].offsetWidth ?? 0;
   wrapWith.value <= scollWith.value && (showLeft.value = false);
   showRight.value = categories.value.length > 4 ? true : false;
   convertArrow();
@@ -388,12 +346,9 @@ onMounted(() => {
 .wrap-info {
   width: 100%;
   height: 100%;
-  //   background-color: green;
 }
 .wrap-body {
   width: 100%;
-  //   height: 300px;
-  //   border: 1px solid rgba($color: #215898, $alpha: 0.5);
   .wrap-header {
     margin-left: 20px;
     margin-top: 10px;
@@ -500,22 +455,33 @@ onMounted(() => {
       align-items: center;
       overflow-x: hidden;
       overflow-y: auto;
+      position: relative;
+      & > ::after {
+        content: '';
+        position: absolute;
+        height: 100%;
+        width: 1px;
+        right: 5px;
+        top: -10px;
+        background-color: rgba(255, 255, 255, 0.12);
+      }
       .button-tab {
         width: calc(100% - 10px);
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         line-height: 24px;
         cursor: pointer;
-        background: url('./assets/button_default.png') no-repeat;
         background-size: cover;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        padding-left: 10px;
+        padding: 5px 0;
         box-sizing: border-box;
-
+        font-size: 14px;
         &.active {
-          background: url('./assets/button_active.png') no-repeat;
-          background-size: cover;
+          color: #1b9aff;
+          border-right: 2px solid #1b9aff;
+          background-color: rgba(255, 255, 255, 0.08);
+          z-index: 10;
         }
       }
     }
@@ -523,6 +489,24 @@ onMounted(() => {
   .charts {
     flex-grow: 1;
     height: 100%;
+    margin-top: 20px;
+  }
+}
+
+.wrap-header-divide {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .divide-item {
+    margin: 0 10px;
+    font-size: 14px;
+    padding: 4px 0;
+    box-sizing: content-box;
+  }
+  .active {
+    color: #1b9aff;
+    border-bottom: 2px solid #1b9aff;
   }
 }
 </style>

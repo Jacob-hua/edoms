@@ -327,6 +327,10 @@ watch(
             'intelligence-report-cold',
             'intelligence-report-pv',
             'optimal-regulation-heat',
+            'cost-comparsion',
+            'system-settings',
+            'eq-control',
+            'cost-comparison-detail',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');

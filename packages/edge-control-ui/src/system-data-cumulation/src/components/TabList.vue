@@ -52,45 +52,16 @@ watch(
 
 <style lang="scss" scoped>
 .tab-list {
-  width: 100%;
-  height: 34px;
-  margin: 10px 0;
-  pointer-events: all;
-  // background-color: antiquewhite;
   display: flex;
-  justify-content: space-between;
-  padding: 5px 0px;
-  box-sizing: border-box;
-  border-top: 1px solid rgba(0, 163, 255, 0.3);
-  border-bottom: 1px solid rgba(0, 163, 255, 0.3);
-  overflow: hidden;
-  clear: both;
-
+  align-items: center;
   .list-item {
-    height: 22px;
-    border-left: 1px solid rgba(0, 163, 255, 0.3);
-
-    &:last-child {
-      border-right: 1px solid rgba(0, 163, 255, 0.3);
-    }
-
-    .itm-key {
-      width: 92px;
-      height: 22px;
-      background-color: rgba(0, 163, 255, 0.1);
-      text-align: center;
-      line-height: 22px;
-      margin: 0 auto;
-      cursor: pointer;
-      color: rgba(196, 229, 248, 1);
-      font-size: 14px;
-      box-sizing: border-box;
-
-      &.active {
-        color: #fff;
-        border: 1px solid rgba(0, 163, 255, 1);
-      }
-    }
+    margin: 0 10px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .active {
+    color: rgb(46, 176, 255);
   }
 }
 </style>

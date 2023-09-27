@@ -219,5 +219,10 @@ export default {
     充电控制: 'Control charge',
     费价设置: 'Fee setting',
     控制面板: 'Control panel',
+    费用对比: 'Cost comparsion',
+    系统设定: 'System settings',
+    设备实控: 'Equipment control',
+    控制方式: 'Control mode',
+    费用对比详情: 'Cost comparison',
   },
 };

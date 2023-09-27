@@ -107,6 +107,8 @@ const cssMinHeight = computed<string>(() => (minHeight.value ? `${minHeight.valu
 
   & > .operation-wrapper {
     cursor: pointer;
+    position: absolute;
+    right: 10px;
   }
 }
 .business-wrapper-body {
