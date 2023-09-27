@@ -50,28 +50,28 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
-import { dateRange, formatCurrentDateRange } from '@edoms/utils';
-
+// import { formatCurrentDateRange } from '@edoms/utils';
+// import { dateRange, formatCurrentDateRange, stringToDate } from '@edoms/utils';
 import EdomsCharts from '../../EdomsCharts.vue';
 import { ECOption } from '../../types';
-import useApp from '../../useApp';
+// import useApp from '../../useApp';
 // import { formatPrecision } from '@edoms/utils';
 import useIntervalAsync from '../../useIntervalAsync';
 
 import RecordTable from './components/RecordTable.vue';
 // import useIntervalAsync from '../../useIntervalAsync';
-import apiFactory from './api';
-import { ControlModeList } from './type';
+// import apiFactory from './api';
+import { CostComparsionDetail } from './type';
 
 const props = defineProps<{
-  config: ControlModeList;
+  config: CostComparsionDetail;
 }>();
 
-const { request } = useApp(props);
+// const { request } = useApp(props);
 
-const { fetchCurveData } = apiFactory(request);
+// const { fetchCurveData } = apiFactory(request);
 
 import useI18n from '../../useI18n';
 
@@ -261,40 +261,64 @@ const option = ref<ECOption>({});
 
 const lineUnit = ref<string[]>([]);
 
-// const activeIndicatorConfig: any = computed<any[]>(() => props.config.indicators);
+const indicator: any = computed<any[]>(() => props.config.indicators);
 
 const updateParameterData = async () => {
-  const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
-  const arr: any = [];
-  Object.keys(tableList[0]).forEach((key: string) => {
-    arr.push([key, tableList[0][key]]);
-  });
+  // const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
+  // const arr: any = [];
+  // Object.keys(tableList[0]).forEach((key: string) => {
+  //   arr.push(tableList[0][key]);
+  // });
 
-  // const ydata = arr;
+  // // const ydata = arr;
   // console.log(arr);
   // console.log(activeIndicatorConfig.value.indicators);
-  const result: any = await fetchCurveData({
-    startTime: start,
-    endTime: end,
-    tsUnit: 'H',
-    ts: '1',
-    dataCodes: ['PGY02014_SCD01001_STCDZ01001_U00000000_EQCD01CDQ01003_MP0000000'],
-    // dataList: Array.from(activeIndicatorConfig.value.values()).map(({ instance, property }) => ({
-    //   deviceCode: instance[instance.length - 1],
-    //   propCode: property,
-    // })),
-  });
-  console.log(result);
-
+  // const result: any = await fetchCurveData({
+  //   startTime: start,
+  //   endTime: end,
+  //   tsUnit: 'H',
+  //   ts: '1',
+  //   dataCodes: ['PGY02014_SCD01001_STCDZ01001_U00000000_EQCD01CDQ01003_MP0000000'],
+  //   // dataList: Array.from(activeIndicatorConfig.value.values()).map(({ instance, property }) => ({
+  //   //   deviceCode: instance[instance.length - 1],
+  //   //   propCode: property,
+  //   // })),
+  // });
+  if (indicator.value.length === 0) {
+    return;
+  }
   const chartSeries: any = [];
-  chartSeries.push({
-    name: '优化策略用电量',
-    type: 'line',
-    showSymbol: false,
-    smooth: false,
-    color: '#0f0',
-    data: [['00:00', 2]],
+
+  // Object.keys(tableList[0]).forEach((key: string) => {
+  //   arr.push(tableList[0][key]);
+  // });
+
+  indicator.value.map((item: any, index: number) => {
+    const arr: any = [];
+    // const activeIndicator = activeIndicatorConfig.value.get(`${insCode}:${propCode}`);
+    // const name = activeIndicator?.label;
+    // lineUnit.value.push(activeIndicator?.unit ?? '');
+    Object.keys(tableList[index]).forEach((key: string) => {
+      arr.push(tableList[index][key]);
+    });
+    return {
+      name: item.label ? item.label : `未命名${index}`,
+      type: 'line',
+      showSymbol: false,
+      smooth: true,
+      color: item.color,
+      data: arr,
+    };
   });
+
+  // chartSeries.push({
+  //   name: '优化策略用电量',
+  //   type: 'line',
+  //   showSymbol: false,
+  //   smooth: false,
+  //   color: '#0f0',
+  //   data: arr,
+  // });
   // chartSeries = result.map(({ insCode, propCode, dataList }, index) => {
   //   const activeIndicator = activeIndicatorConfig.value.get(`${insCode}:${propCode}`);
   //   const name = activeIndicator?.label;
@@ -343,18 +367,31 @@ function generateOption(series: any[] = []): ECOption {
       containLabel: true,
     },
     xAxis: {
-      type: 'time',
-      min: dateRange(new Date(), 'day').start,
-      max: dateRange(new Date(), 'day').end,
-      maxInterval: 3600 * 1000,
+      type: 'category',
+      // min: dateRange(new Date(), 'day').start,
+      // max: dateRange(new Date(), 'day').end,
+      // maxInterval: 3600 * 1000,
       splitLine: {
         show: false,
       },
-      interval: 2,
-      axisLabel: {
-        formatter: '{HH}:{mm}',
-        interval: 2,
-      },
+      data: Object.keys(tableList[0]),
+      // interval: 2,
+      // axisLabel: {
+      //   formatter: '{HH}:{mm}',
+      //   interval: 2,
+      // },
+      // type: 'time',
+      // min: dateRange(new Date(), 'day').start,
+      // max: dateRange(new Date(), 'day').end,
+      // maxInterval: 3600 * 1000,
+      // splitLine: {
+      //   show: false,
+      // },
+      // interval: 2,
+      // axisLabel: {
+      //   formatter: '{HH}:{mm}',
+      //   interval: 2,
+      // },
     },
     yAxis: {
       type: 'value',
@@ -375,6 +412,18 @@ function generateOption(series: any[] = []): ECOption {
 
 useIntervalAsync(updateParameterData, intervalDelay.value);
 
+watch(
+  () => props.config.indicators,
+  () => {
+    updateParameterData();
+    // deviceList.value = newConfig[curdeviceTypeCode.value].nameGroup.map((e: any) => e.deviceName);
+    // getDeviceRunParams();
+    // deviceRunParams.value = newConfig[curdeviceTypeCode.value].nameGroup[curDeviceCode.value].propGroup;
+
+    // deviceTypeList.value = newConfig.deviceGroup.map((item: any) => item.group);
+  },
+  { immediate: true }
+);
 onMounted(() => {
   initCols(tableHead);
 });
@@ -438,6 +487,7 @@ onMounted(() => {
   .table-box {
     width: calc(100% - 40px);
     margin-left: 20px;
+    margin-top: 20px;
     .record-table-container {
       margin-bottom: 20px;
     }

@@ -21,7 +21,7 @@ export interface EqAllList {
   group: string;
 }
 
-export interface ControlModeList extends MComponent {
+export interface CostComparsionDetail extends MComponent {
   /** 标题 */
   title: string;
   /** 子标题 */

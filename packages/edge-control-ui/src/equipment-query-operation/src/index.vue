@@ -1,5 +1,5 @@
 <template>
-  <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="522" min-height="261">
+  <BusinessCard :title="props.config.title" :subtitle="props.config.subTitle" min-width="392" min-height="261">
     <div class="wrap-body">
       <div class="device-type-box">
         <tab-scroll
