@@ -58,7 +58,7 @@ const handleChangeMagictype = (value: string) => {
 
 <style lang="scss" scoped>
 :deep(.el-dialog__header) {
-  background-color: rgba(31, 30, 29, 1);
+  background-color: #333c50;
   margin: 0;
   min-height: 14px;
 }
@@ -67,7 +67,7 @@ const handleChangeMagictype = (value: string) => {
 }
 
 :deep(.el-dialog__body) {
-  background-color: #000000;
+  background-color: #272d36;
 }
 .time-select {
   text-align: right;
