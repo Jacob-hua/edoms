@@ -261,7 +261,7 @@ const option = ref<ECOption>({});
 
 const lineUnit = ref<string[]>([]);
 
-const indicator: any = computed<any[]>(() => props.config.indicators);
+// const test: any = computed<any[]>(() => props.config.indicators);
 
 const updateParameterData = async () => {
   // const { start, end } = formatCurrentDateRange('day', 'YYYY-MM-DD HH:mm:ss');
@@ -284,16 +284,19 @@ const updateParameterData = async () => {
   //   //   propCode: property,
   //   // })),
   // });
-  if (indicator.value.length === 0) {
+  const indicator: any = props.config.indicators ? props.config.indicators : [];
+
+  console.log('ffffffff', indicator);
+  if (indicator.length === 0) {
     return;
   }
-  const chartSeries: any = [];
+  let chartSeries: any = [];
 
   // Object.keys(tableList[0]).forEach((key: string) => {
   //   arr.push(tableList[0][key]);
   // });
 
-  indicator.value.map((item: any, index: number) => {
+  chartSeries = indicator.map((item: any, index: number) => {
     const arr: any = [];
     // const activeIndicator = activeIndicatorConfig.value.get(`${insCode}:${propCode}`);
     // const name = activeIndicator?.label;
@@ -304,8 +307,8 @@ const updateParameterData = async () => {
     return {
       name: item.label ? item.label : `未命名${index}`,
       type: 'line',
-      showSymbol: false,
-      smooth: true,
+      showSymbol: true,
+      smooth: false,
       color: item.color,
       data: arr,
     };
@@ -395,7 +398,7 @@ function generateOption(series: any[] = []): ECOption {
     },
     yAxis: {
       type: 'value',
-      boundaryGap: [0, '100%'],
+      // boundaryGap: [0, '100%'],
       splitLine: {
         lineStyle: {
           type: 'dashed',
