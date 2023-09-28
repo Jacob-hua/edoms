@@ -1,38 +1,41 @@
 <template>
   <div class="cost-comparsion">
-    <div class="title-operation">
-      <span class="zh-font">费用对比</span>
-      <span class="en-font">COST COMPARSION</span>
-      <div class="operation-font" @click="handlerToClick">{{ '>' }}</div>
-    </div>
-    <div class="card-list">
-      <div class="left-card">
-        <div class="icon-font">
-          <div class="icon-wp"></div>
-          <div class="font-wp">优化前</div>
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="392" min-height="160">
+      <div class="title-operation">
+        <!-- <span class="zh-font">费用对比</span>
+        <span class="en-font">COST COMPARSION</span> -->
+        <div class="operation-font" @click="handlerToClick">{{ '>' }}</div>
+      </div>
+      <div class="card-list">
+        <div class="left-card">
+          <div class="icon-font">
+            <div class="icon-wp"></div>
+            <div class="font-wp">优化前</div>
+          </div>
+          <div class="count-font">
+            <div class="count-wp">{{ cft[0] && cft[0].value }} {{ cft[0] && cft[0].unit }}</div>
+            <div class="font-wp">{{ cft[0] && cft[0].name }}</div>
+          </div>
         </div>
-        <div class="count-font">
-          <div class="count-wp">{{ cft[0] && cft[0].value }} {{ cft[0] && cft[0].unit }}</div>
-          <div class="font-wp">{{ cft[0] && cft[0].name }}</div>
+        <div class="right-card">
+          <div class="icon-font">
+            <div class="icon-wp"></div>
+            <div class="font-wp">优化后</div>
+          </div>
+          <div class="count-font">
+            <div class="count-wp">{{ cft[1] && cft[1].value }} {{ cft[1] && cft[1].unit }}</div>
+            <div class="font-wp">{{ cft[1] && cft[1].name }}</div>
+          </div>
         </div>
       </div>
-      <div class="right-card">
-        <div class="icon-font">
-          <div class="icon-wp"></div>
-          <div class="font-wp">优化后</div>
-        </div>
-        <div class="count-font">
-          <div class="count-wp">{{ cft[1] && cft[1].value }} {{ cft[1] && cft[1].unit }}</div>
-          <div class="font-wp">{{ cft[1] && cft[1].name }}</div>
-        </div>
-      </div>
-    </div>
+    </BusinessCard>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue';
 
+import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 
 import getApi from './api';
@@ -127,14 +130,16 @@ onMounted(() => {
 .cost-comparsion {
   width: 100%;
   height: 100%;
-  background: rgba(39, 45, 54, 1);
-  padding: 12px 16px;
   box-sizing: border-box;
   .title-operation {
     display: flex;
     justify-content: space-between;
     overflow: hidden;
     line-height: 20px;
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    z-index: 9999;
     .zh-font {
       flex: 0 0 75px;
       font-size: 16px;
@@ -162,6 +167,8 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     margin-top: 25px;
+    padding: 0 10px;
+    box-sizing: border-box;
     .left-card {
       width: 48%;
       height: 76px;
