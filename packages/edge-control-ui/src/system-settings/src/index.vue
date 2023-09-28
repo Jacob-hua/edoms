@@ -1,26 +1,13 @@
 <template>
   <div class="sys-setting" contenteditable="true">
-    <div class="title-operation">
-      <span class="zh-font">系统设定参数</span>
-      <span class="en-font">SYSTEM SETTING PARAMETERS</span>
-      <div class="operation-font" @click="handlerToClick">{{ '...' }}</div>
-    </div>
-    <div class="card-list">
-      <div v-for="(itm, index) in costList.slice(0, 3)" :key="index" class="card-item">
-        <div class="tip-st">
-          <span class="count-st">{{ itm.value }}</span>
-          <span class="unit-st">{{ itm.unit }}</span>
-        </div>
-        <span class="font-st">{{ itm.name }}</span>
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="392" min-height="160">
+      <div class="title-operation">
+        <!-- <span class="zh-font">系统设定参数</span>
+        <span class="en-font">SYSTEM SETTING PARAMETERS</span> -->
+        <div class="operation-font" @click="handlerToClick">{{ '...' }}</div>
       </div>
-    </div>
-    <div v-if="isShow" class="card-more">
-      <div class="more-title" @click="handlerToClick">
-        <div class="zh-font">{{ '<' }}</div>
-        <span class="en-font">收起</span>
-      </div>
-      <div class="more-list">
-        <div v-for="(itm, index) in costList.slice(3)" :key="index" class="card-item">
+      <div class="card-list">
+        <div v-for="(itm, index) in costList.slice(0, 3)" :key="index" class="card-item">
           <div class="tip-st">
             <span class="count-st">{{ itm.value }}</span>
             <span class="unit-st">{{ itm.unit }}</span>
@@ -28,13 +15,29 @@
           <span class="font-st">{{ itm.name }}</span>
         </div>
       </div>
-    </div>
+      <div v-if="isShow" class="card-more">
+        <div class="more-title" @click="handlerToClick">
+          <div class="zh-font">{{ '<' }}</div>
+          <span class="en-font">收起</span>
+        </div>
+        <div class="more-list">
+          <div v-for="(itm, index) in costList.slice(3)" :key="index" class="card-item">
+            <div class="tip-st">
+              <span class="count-st">{{ itm.value }}</span>
+              <span class="unit-st">{{ itm.unit }}</span>
+            </div>
+            <span class="font-st">{{ itm.name }}</span>
+          </div>
+        </div>
+      </div>
+    </BusinessCard>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue';
 
+import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 
 import getApi from './api';
@@ -119,8 +122,6 @@ onMounted(() => {
 .sys-setting {
   width: 100%;
   height: 100%;
-  background: rgba(39, 45, 54, 1);
-  padding: 12px 16px;
   box-sizing: border-box;
   position: relative;
   .title-operation {
@@ -128,6 +129,10 @@ onMounted(() => {
     justify-content: space-between;
     overflow: hidden;
     line-height: 20px;
+    position: absolute;
+    right: 20px;
+    top: 0px;
+    z-index: 9999;
     .zh-font {
       flex: 0 0 100px;
       font-size: 16px;
@@ -145,7 +150,7 @@ onMounted(() => {
       font-size: 20px;
       font-weight: bold;
       cursor: pointer;
-      line-height: 8px;
+      line-height: 20px;
     }
   }
   .card-list {

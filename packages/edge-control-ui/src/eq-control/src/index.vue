@@ -1,30 +1,32 @@
 <template>
   <div class="eq-control" contenteditable="false">
-    <div class="title-operation">
-      <span class="zh-font">设备实控</span>
-      <span class="en-font">EQUIPMENT CONTROL</span>
-      <div :class="['operation-font', ctIdx === 1 ? 'active' : '']" @click="handlerToClick(1)">正在运行</div>
-      <div :class="['operation-font', ctIdx === 2 ? 'active' : '']" @click="handlerToClick(2)">即将运行</div>
-    </div>
-    <div class="table-list">
-      <div class="table-title">
-        <div v-for="(title, index) in titleList" :key="index" class="title-item">{{ title.key }}</div>
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="392" min-height="300">
+      <div class="title-operation">
+        <!-- <span class="zh-font">设备实控</span>
+        <span class="en-font">EQUIPMENT CONTROL</span> -->
+        <div :class="['operation-font', ctIdx === 1 ? 'active' : '']" @click="handlerToClick(1)">正在运行</div>
+        <div :class="['operation-font', ctIdx === 2 ? 'active' : '']" @click="handlerToClick(2)">即将运行</div>
       </div>
-      <div class="table-ct">
-        <div v-for="(item, index) in tableList" :key="index" class="table-item">
-          <div
-            v-for="(title, s) in titleList"
-            :key="s"
-            class="col-item"
-            @mouseenter="handlerToEnter($event, item[title.value] as string)"
-            @mouseleave="handlerToLeave"
-          >
-            {{ item[title.value] }}
-          </div>
+      <div class="table-list">
+        <div class="table-title">
+          <div v-for="(title, index) in titleList" :key="index" class="title-item">{{ title.key }}</div>
         </div>
-        <div v-show="!tableList.length" class="no-data">暂无数据</div>
+        <div class="table-ct">
+          <div v-for="(item, index) in tableList" :key="index" class="table-item">
+            <div
+              v-for="(title, s) in titleList"
+              :key="s"
+              class="col-item"
+              @mouseenter="handlerToEnter($event, item[title.value] as string)"
+              @mouseleave="handlerToLeave"
+            >
+              {{ item[title.value] }}
+            </div>
+          </div>
+          <div v-show="!tableList.length" class="no-data">暂无数据</div>
+        </div>
       </div>
-    </div>
+    </BusinessCard>
     <div v-show="font.length > 8" class="font-witter" :style="{ left: styleList.left, top: styleList.top }">
       {{ font }}
     </div>
@@ -34,6 +36,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 
+import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 
 import getApi from './api';
@@ -136,8 +139,6 @@ onMounted(async () => {
 .eq-control {
   width: 100%;
   height: 100%;
-  background: rgba(39, 45, 54, 1);
-  padding: 12px 16px;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
@@ -156,6 +157,10 @@ onMounted(async () => {
     justify-content: space-between;
     overflow: hidden;
     line-height: 20px;
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    z-index: 9999;
     .zh-font {
       flex: 0 0 70px;
       font-size: 16px;
@@ -184,6 +189,8 @@ onMounted(async () => {
     width: 100%;
     height: 280px;
     margin-top: 15px;
+    padding: 0 10px;
+    box-sizing: border-box;
     .table-title {
       width: 100%;
       height: 40px;
