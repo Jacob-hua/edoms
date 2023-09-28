@@ -154,10 +154,9 @@ onMounted(async () => {
   .title-operation {
     display: flex;
     justify-content: space-between;
-    overflow: hidden;
     line-height: 20px;
     position: absolute;
-    right: 20px;
+    right: 25px;
     top: 20px;
     z-index: 9999;
     .zh-font {
