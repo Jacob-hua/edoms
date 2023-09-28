@@ -10,6 +10,11 @@ export default {
   style: {
     width: '522',
     height: '246',
+    backgroundColor: 'rgba(39, 45, 54, 1)',
+    borderBottomLeftRadius: '8px',
+    borderBottomRightRadius: '8px',
+    borderTopLeftRadius: '8px',
+    borderTopRightRadius: '8px',
   },
   title: '能效监测',
   subTitle: 'Energy efficiency monitoring',
