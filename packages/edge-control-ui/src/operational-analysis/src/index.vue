@@ -3,13 +3,8 @@
     <template #operation>
       <div class="wrap-header">
         <div class="wrap-header-divide">
-          <div
-            v-for="(item, index) in categories"
-            :key="item.label"
-            :class="{ active: activeCategory === index }"
-            class="divide-item"
-            @click="changeTab(index)"
-          >
+          <div v-for="(item, index) in categories" :key="item.label" :class="{ active: activeCategory === index }"
+            class="divide-item" @click="changeTab(index)">
             {{ item.label }}
           </div>
         </div>
@@ -17,15 +12,13 @@
     </template>
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrapper">
+        <el-select v-if="pointOptions && pointOptions.length > 0" v-model="vModelpoint" @change="changeSelectPoint"
+          class="select-device" placeholder="Select" size="small">
+          <el-option v-for="item in pointOptions" :key="item.value" :label="item.label" :value="item.indicators" />
+        </el-select>
         <div class="left-tab">
-          <div
-            v-for="({ label }, index) in parameterConfigs"
-            :key="index"
-            class="button-tab"
-            :class="{ active: activeTab === index }"
-            :title="label"
-            @click="changeActiveTab(index)"
-          >
+          <div v-for="({ label }, index) in parameterConfigs" :key="index" class="button-tab"
+            :class="{ active: activeTab === index }" :title="label" @click="changeActiveTab(index)">
             {{ label }}
           </div>
         </div>
@@ -68,17 +61,27 @@ const { fetchCurveData } = apiFactory(request);
 const categories = computed<any[]>(() => props.config.classify);
 
 const activeCategory = ref<number>(0);
+
+
 const option = ref<ECOption>({});
 
 const lineUnit = ref<string[]>([]);
+
+const pointOptions = ref([])
+
+const vModelpoint = ref('')
+
+const currentIndicators = ref()
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   if (!props.config.classify) return [];
   if (props.config.classify.length == 0) return [];
   const result = props.config.classify[activeCategory.value].tabName;
   if (result) {
+    arrangePointData()
     return result;
   }
+  pointOptions.value = []
   return [];
 });
 
@@ -93,6 +96,7 @@ const intervalDelay = computed<number>(() => {
 const changeTab = (index: number) => {
   if (activeCategory.value === index) return;
   activeCategory.value = index;
+  arrangePointData()
   activeTab.value = 0;
   getHistoryData();
 };
@@ -101,6 +105,7 @@ const changeActiveTab = (index: number) => {
   activeTab.value = index;
   getHistoryData();
 };
+
 const getHistoryData = async () => {
   const date = new Date();
   option.value = {};
@@ -111,7 +116,7 @@ const getHistoryData = async () => {
   const result = await fetchCurveData({
     startTime: start,
     endTime: end,
-    dataCodes: data[activeTab.value].indicators.map((e: any) => e.property),
+    dataCodes: !isHasPoint() ? data[activeTab.value].indicators.map((e: any) => e.property) : currentIndicators.value,
     tsUnit: 'H',
     ts: '1',
   });
@@ -137,6 +142,28 @@ const getHistoryData = async () => {
   });
   option.value = generateOption(chartSeries);
 };
+
+const isHasPoint = () => {
+  const result = props.config.classify[activeCategory.value].tabName;
+  return result[activeTab.value].point?.length > 0
+}
+
+const arrangePointData = () => {
+  const result = props.config.classify[activeCategory.value].tabName;
+  const currentPoint = result[activeTab.value]?.point || []
+  pointOptions.value = currentPoint.length > 0 ? currentPoint : []
+  if (pointOptions.value.length > 0) {
+    vModelpoint.value = pointOptions.value[0].label
+  } else {
+    vModelpoint.value = ''
+  }
+}
+
+const changeSelectPoint = (val) => {
+  currentIndicators.value = [...val].map((e: any) => e.property)
+  getHistoryData()
+}
+
 const { flush } = useIntervalAsync(getHistoryData, intervalDelay.value);
 
 watch(
@@ -162,35 +189,35 @@ function generateOption(series: any[] = []): ECOption {
   const dataZoom =
     series.length > 0 && series[0].type === 'bar'
       ? [
-          {
-            // xAxisIndex: [0],
-            // show: true, //flase直接隐藏图形
-            type: 'inside',
-            backgroundColor: 'transparent',
-            brushSelect: false, // 是否开启刷选功能
-            zoomLock: true, // 是否锁定选择区域大小
-            height: 10,
-            //left: 'center', //滚动条靠左侧的百分比
-            bottom: 0,
-            start: 0, //滚动条的起始位置
-            end, //滚动条的截止位置（按比例分割你的柱状图x轴长度）
-            // handleStyle: {// 滚动条两侧操作按钮样式
-            //   color: 'rgba(40, 124, 232, 1)',
-            //   borderColor: 'rgba(40, 124, 232, 1)',
-            // },
-            // fillerColor: 'rgba(40, 124, 232, 1)',// 背景颜色
-            borderColor: 'transparent',
-            showDetail: false,
-            dataBackground: {
-              areaStyle: {
-                opacity: 0,
-              },
-              lineStyle: {
-                color: 'transparent',
-              },
+        {
+          // xAxisIndex: [0],
+          // show: true, //flase直接隐藏图形
+          type: 'inside',
+          backgroundColor: 'transparent',
+          brushSelect: false, // 是否开启刷选功能
+          zoomLock: true, // 是否锁定选择区域大小
+          height: 10,
+          //left: 'center', //滚动条靠左侧的百分比
+          bottom: 0,
+          start: 0, //滚动条的起始位置
+          end, //滚动条的截止位置（按比例分割你的柱状图x轴长度）
+          // handleStyle: {// 滚动条两侧操作按钮样式
+          //   color: 'rgba(40, 124, 232, 1)',
+          //   borderColor: 'rgba(40, 124, 232, 1)',
+          // },
+          // fillerColor: 'rgba(40, 124, 232, 1)',// 背景颜色
+          borderColor: 'transparent',
+          showDetail: false,
+          dataBackground: {
+            areaStyle: {
+              opacity: 0,
+            },
+            lineStyle: {
+              color: 'transparent',
             },
           },
-        ]
+        },
+      ]
       : [];
 
   const option: ECOption = {
@@ -288,7 +315,6 @@ const showRight = ref<boolean>(false);
 const distance = ref<number>(0);
 
 const tabCount = computed<number>(() => {
-  console.log('props.config', props.config);
   if (props.config.classify.length > 4) return 4;
   else if (props.config.classify.length < 2) return 2;
   else return props.config.classify.length;
@@ -347,8 +373,10 @@ onMounted(() => {
   width: 100%;
   height: 100%;
 }
+
 .wrap-body {
   width: 100%;
+
   .wrap-header {
     margin-left: 20px;
     margin-top: 10px;
@@ -358,7 +386,6 @@ onMounted(() => {
     border-bottom: 1px solid rgba($color: #00a3ff, $alpha: 0.3);
     display: flex;
     align-items: center;
-    position: relative;
 
     .wrap-divide {
       position: absolute;
@@ -368,12 +395,14 @@ onMounted(() => {
       align-items: center;
       justify-content: space-between;
       pointer-events: none;
+
       .divide {
         width: 1px;
         height: 12px;
         background-color: rgba($color: #00a3ff, $alpha: 0.3);
       }
     }
+
     .btn {
       height: 0;
       width: 0;
@@ -381,6 +410,7 @@ onMounted(() => {
       border-top: 8px solid transparent;
       border-bottom: 8px solid transparent;
     }
+
     .caret-left {
       position: absolute;
       left: -20px;
@@ -394,6 +424,7 @@ onMounted(() => {
       width: calc(100% - 10px);
       overflow: hidden;
       vertical-align: bottom;
+
       //   width: 100%;
       //   overflow: hidden;
       //   display: flex;
@@ -402,6 +433,7 @@ onMounted(() => {
       .list-tab {
         width: max-content;
         min-width: 770px;
+
         .wrap-tab {
           //   width: 385px;
           width: v-bind(tabWidth);
@@ -410,6 +442,7 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: center;
+
           .tab {
             min-height: 20px;
             min-width: 130px;
@@ -420,6 +453,7 @@ onMounted(() => {
             display: flex;
             align-items: center;
             justify-content: center;
+
             &.active {
               background: rgba(0, 163, 255, 0.16);
               border: 1px solid #007bc0;
@@ -438,11 +472,14 @@ onMounted(() => {
       border-left-color: #ffffff85;
     }
   }
+
   .wrapper {
     height: calc(100% - 41px);
     display: flex;
     box-sizing: border-box;
     width: 100%;
+    position: relative;
+
     .left-tab {
       min-width: 110px;
       height: calc(100% - 20px);
@@ -456,7 +493,8 @@ onMounted(() => {
       overflow-x: hidden;
       overflow-y: auto;
       position: relative;
-      & > ::after {
+
+      &> ::after {
         content: '';
         position: absolute;
         height: 100%;
@@ -465,18 +503,22 @@ onMounted(() => {
         top: -10px;
         background-color: rgba(255, 255, 255, 0.12);
       }
+
       .button-tab {
         width: calc(100% - 10px);
         margin-bottom: 10px;
-        line-height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
         background-size: cover;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        padding: 5px 0;
+        padding: 10px 0;
         box-sizing: border-box;
         font-size: 14px;
+
         &.active {
           color: #1b9aff;
           border-right: 2px solid #1b9aff;
@@ -486,6 +528,7 @@ onMounted(() => {
       }
     }
   }
+
   .charts {
     flex-grow: 1;
     height: 100%;
@@ -498,15 +541,28 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   .divide-item {
-    margin: 0 10px;
+    margin: 0 5px;
     font-size: 14px;
     padding: 4px 0;
     box-sizing: content-box;
   }
+
   .active {
     color: #1b9aff;
     border-bottom: 2px solid #1b9aff;
   }
+}
+
+.select-device {
+  position: absolute;
+  right: 15px;
+  top: 0px;
+  background-color: #1F212C;
+}
+
+:deep(.wrap-body .select-device .el-input__wrapper) {
+  background-color: #1F212C !important;
 }
 </style>
