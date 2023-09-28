@@ -223,7 +223,7 @@ const divideBackground = computed(() =>
 
       .excellent-value {
         position: absolute;
-        top: 130%;
+        top: 110%;
         font-size: 16px;
         color: #fff;
       }

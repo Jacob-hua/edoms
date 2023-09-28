@@ -10,7 +10,7 @@ export default {
   style: {
     width: '522',
     height: '246',
-    backgroundColor: 'rgba(39, 45, 54, 1)',
+    backgroundColor: 'rgba(39, 45, 54, 0.9)',
     borderBottomLeftRadius: '8px',
     borderBottomRightRadius: '8px',
     borderTopLeftRadius: '8px',

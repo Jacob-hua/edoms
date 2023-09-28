@@ -285,7 +285,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     min-width: 60px;
     width: 18%;
     margin-left: 15px;
-    margin-top: 40px;
+    margin-top: 25px;
     border-radius: 2px;
     display: flex;
     flex-direction: column;
@@ -305,7 +305,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     }
   }
   .right {
-    margin: 25px 20px;
+    margin: 0px 20px 20px;
     flex-grow: 1;
     height: calc(100% - 53px);
     display: flex;
@@ -322,7 +322,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     .bottom {
       width: 100%;
       flex: 1;
-      margin-top: 20px;
+      margin-top: 28px;
     }
   }
 }
