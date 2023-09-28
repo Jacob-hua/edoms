@@ -13,9 +13,9 @@
           {{ transFixed(cursorLinePositon.value) || '5.0' }}
         </span>
       </div>
+      <div class="cursor" :style="{ left: calculateCursorPosition }"></div>
     </div>
     <div class="value">
-      <div class="cursor" :style="{ left: calculateCursorPosition }"></div>
       <span class="min">{{ energyMonitoringMinNum }}</span>
       <span class="max">{{ energyMonitoringMaxNum }}</span>
     </div>
@@ -197,7 +197,18 @@ const divideBackground = computed(() =>
     width: 100%;
     height: 20px;
     display: flex;
-
+    .cursor {
+      position: absolute;
+      width: 0;
+      height: 0;
+      top: 15px;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid transparent;
+      border-bottom: v-bind(cursorAttribute);
+      left: v-bind(calculateCursorPosition);
+      z-index: 2;
+    }
     .gradient {
       width: 100%;
       height: 100%;
@@ -255,20 +266,7 @@ const divideBackground = computed(() =>
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    .cursor {
-      position: absolute;
-      width: 0;
-      height: 0;
-      top: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid transparent;
-      border-bottom: v-bind(cursorAttribute);
-      left: v-bind(calculateCursorPosition);
-      z-index: 2;
-    }
-
+    top: 10px;
     .min,
     .max {
       font-size: 16px;

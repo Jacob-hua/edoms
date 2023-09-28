@@ -1,10 +1,3 @@
-/*
- * @Description:
- * @Author: lihao
- * @Date: 2023-04-18 13:24:10
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-23 17:10:14
- */
 import AssetInformationPv from './asset-information-pv';
 import Button from './button';
 import Carousel from './carousel';
@@ -13,15 +6,19 @@ import Checkbox from './checkbox';
 import Container from './container';
 import ControlCharge from './control-charge';
 import ControlPanelEnergy from './control-panel-energy';
+import CostComparisonDetail from './cost-comparison-detail';
+import CostComparsion from './cost-comparsion';
 import EconomicIndicators from './economic-indicators';
 import EfficiencyAnalysis from './efficiency-analysis';
 import ElectricEnergyQuality from './electric-energy-quality';
 import EnergyMonitoring from './energy-monitoring';
+import EqControl from './eq-control';
 import EquipmentCondition from './equipment-condition';
 import EquipmentMonitoringCharge from './equipment-monitoring-charge';
 import EquipmentQueryOperation from './equipment-query-operation';
 import FeeSettingEnergy from './fee-setting-energy';
 import GlobalSchematic from './global-schematic';
+import GmctEditor from './gmct-editor';
 import Img from './img';
 import IntelligenceReportCharge from './intelligence-report-charge';
 import IntelligenceReportCloud from './intelligence-report-cloud';
@@ -49,6 +46,7 @@ import Qrcode from './qrcode';
 import RunningParameterEnergy from './running-parameter-energy';
 import SuspendedWindow from './suspended-window';
 import SystemDataCumulation from './system-data-cumulation';
+import SystemSettings from './system-settings';
 import Text from './text';
 import WarningTableList from './warning-table-list';
 
@@ -63,6 +61,7 @@ const ui: Record<string, any> = {
   checkbox: Checkbox,
   overlay: Overlay,
   globalSchematic: GlobalSchematic,
+  gmctEditor: GmctEditor,
   multicolorImageLight: MulticolorImageLight,
   multicolorPolymorphicLight: MulticolorPolymorphicLight,
   multicolorSingleLight: MulticolorSingleLight,
@@ -99,6 +98,10 @@ const ui: Record<string, any> = {
   feeSettingEnergy: FeeSettingEnergy,
   runningParameterEnergy: RunningParameterEnergy,
   controlPanelEnergy: ControlPanelEnergy,
+  costComparsion: CostComparsion,
+  systemSettings: SystemSettings,
+  eqControl: EqControl,
+  costComparisonDetail: CostComparisonDetail,
 };
 
 export default ui;

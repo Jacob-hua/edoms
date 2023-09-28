@@ -73,16 +73,16 @@ export default defineConfig(({ mode }) => {
       proxy: {
         '/api': {
           // target: 'http://192.100.4.80:8061', //思昊
-          // target: 'http://192.100.4.35:8061', //李
-          target: 'http://k8s.isiact.com/edoms-designtime-service-dev',
+          target: 'http://192.100.4.35:8061', //李
+          // target: 'http://k8s.isiact.com/edoms-designtime-service-dev',
           changeOrigin: true,
           rewrite(path) {
             return path.replace(/\/api/, '');
           },
         },
-        '/edoms-runtime-service-dev': {
+        '/edoms/run-time': {
           //   target: 'http://192.100.4.80:8062', //思昊
-          target: 'http://192.100.4.35:8061', //李
+          target: 'http://192.100.4.35:8062', //李
           // target: 'http://k8s.isiact.com',
           changeOrigin: true,
         },

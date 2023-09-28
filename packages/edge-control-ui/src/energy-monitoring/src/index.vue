@@ -283,8 +283,8 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   .left {
     height: calc(100% - 100px);
     min-width: 60px;
-    width: 24%;
-    margin-left: 10px;
+    width: 18%;
+    margin-left: 15px;
     margin-top: 40px;
     border-radius: 2px;
     display: flex;
@@ -305,7 +305,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     }
   }
   .right {
-    margin: 25px 32px 28px 30px;
+    margin: 25px 20px;
     flex-grow: 1;
     height: calc(100% - 53px);
     display: flex;

@@ -2,29 +2,13 @@ import { MComponent } from '@edoms/schema';
 
 export enum MEconomicIndicator {
   /** 电费 */
-  ELECTRIC = 'electric',
+  ELECTRIC = 'eletric',
   /** 用电量 */
   ELECTRICITY_CONSUMPTION = 'consumption',
-  /** 用水量 */
-  WATER_CONSUMPTION = 'water',
-  /** 成本 */
-  COST = 'cost',
+  /** 制冷成本 */
+  COLD_COST = 'cost',
   /** 制冷量 */
-  COOL_ENERGY_CONSUMPTION = 'cold',
-  /** 能耗 */
-  HEAT_ENERGY_CONSUMPTION = 'energy',
-  /** 温度 */
-  TEMPERATURE = 'temperature',
-  /** 湿度 */
-  HUMIDITY = 'humidity',
-  /** 辐照量 */
-  EXPOSURE = 'exposure',
-  /** 累计充电量 */
-  Accumulated_Charging_apacity = 'leijichongdian',
-  /** 日充电量 */
-  Daily_Charging_apacity = 'richongdian',
-  /** 累计充电量 */
-  Daily_Charging_Times = 'ricishu',
+  REFRIGERATION_CAPACITY = 'refrigeration',
 }
 
 export interface MIndicatorItemConfig {
