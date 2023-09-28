@@ -5,6 +5,11 @@ export default async () => [
     type: 'string',
   },
   {
+    text: '子标题',
+    name: 'subTitle',
+    type: 'string',
+  },
+  {
     text: '轮询间隔',
     name: 'intervalDelay',
     type: 'number',
