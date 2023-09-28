@@ -158,7 +158,7 @@ onMounted(async () => {
     line-height: 20px;
     position: absolute;
     right: 20px;
-    top: 5px;
+    top: 20px;
     z-index: 9999;
     .zh-font {
       flex: 0 0 70px;
@@ -187,7 +187,6 @@ onMounted(async () => {
   .table-list {
     width: 100%;
     height: 280px;
-    margin-top: 15px;
     padding: 0 10px;
     box-sizing: border-box;
     .table-title {

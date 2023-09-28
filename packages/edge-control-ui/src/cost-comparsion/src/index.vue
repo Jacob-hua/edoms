@@ -138,7 +138,7 @@ onMounted(() => {
     line-height: 20px;
     position: absolute;
     right: 20px;
-    top: 5px;
+    top: 16px;
     z-index: 9999;
     .zh-font {
       flex: 0 0 75px;
@@ -166,7 +166,6 @@ onMounted(() => {
     height: calc(100% - 24px - 25px);
     display: flex;
     justify-content: space-between;
-    margin-top: 25px;
     padding: 0 10px;
     box-sizing: border-box;
     .left-card {

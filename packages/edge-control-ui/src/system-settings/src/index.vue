@@ -131,7 +131,7 @@ onMounted(() => {
     line-height: 20px;
     position: absolute;
     right: 20px;
-    top: 0px;
+    top: 11px;
     z-index: 9999;
     .zh-font {
       flex: 0 0 100px;
@@ -156,7 +156,7 @@ onMounted(() => {
   .card-list {
     width: 100%;
     height: 56px;
-    margin-top: 25px;
+    margin-top: 10px;
     display: flex;
     justify-content: space-between;
     text-align: center;
