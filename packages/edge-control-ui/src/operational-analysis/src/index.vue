@@ -121,10 +121,12 @@ const getHistoryData = async () => {
     ts: '1',
   });
   let chartSeries = [];
-  chartSeries = result.map(({ propCode, dataList }, index) => {
-    const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
-    const name = data[activeTab.value].indicators[codeIndex]?.label;
-    const color = data[activeTab.value].indicators[codeIndex]?.color;
+  chartSeries = result.map(({ propCode, dataList }) => {
+   return data[activeTab.value].indicators?.map((indicator,index)=>{
+    // const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => indicator.property == propCode);
+    const codeIndex =indicator.property == propCode ? index : -1
+    const name = indicator.label;
+    const color = indicator.color;
     lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
     const lineType = data[activeTab.value].lineType ?? 'line';
     return {
@@ -139,8 +141,10 @@ const getHistoryData = async () => {
         formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
       ]),
     };
+    })
+    
   });
-  option.value = generateOption(chartSeries);
+  option.value = generateOption(chartSeries[0]);
 };
 
 const isHasPoint = () => {
@@ -161,6 +165,7 @@ const arrangePointData = () => {
 
 const changeSelectPoint = (val) => {
   currentIndicators.value = [...val].map((e: any) => e.property)
+  console.log('currentIndicators.value',currentIndicators.value)
   getHistoryData()
 }
 
@@ -225,7 +230,7 @@ function generateOption(series: any[] = []): ECOption {
       data: legends,
       icon: 'rect',
       itemWidth: 14,
-      itemHeight: 4,
+      itemHeight: 14,
       color: colors,
       textStyle: {
         color: '#EFF7FF',
@@ -303,6 +308,7 @@ function generateOption(series: any[] = []): ECOption {
     dataZoom,
     series,
   };
+  console.log('option',option)
   return option;
 }
 
@@ -493,19 +499,20 @@ onMounted(() => {
       overflow-x: hidden;
       overflow-y: auto;
       position: relative;
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
 
-      &> ::after {
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 1px;
-        right: 5px;
-        top: -10px;
-        background-color: rgba(255, 255, 255, 0.12);
-      }
+      // &> ::after {
+      //   content: '';
+      //   position: absolute;
+      //   height: 100%;
+      //   width: 1px;
+      //   right: 5px;
+      //   top: -10px;
+      //   background-color: rgba(255, 255, 255, 0.12);
+      // }
 
       .button-tab {
-        width: calc(100% - 10px);
+        width:100%;
         margin-bottom: 10px;
         display: flex;
         align-items: center;
@@ -518,6 +525,7 @@ onMounted(() => {
         padding: 10px 0;
         box-sizing: border-box;
         font-size: 14px;
+        min-height: 34px;
 
         &.active {
           color: #1b9aff;
@@ -533,6 +541,7 @@ onMounted(() => {
     flex-grow: 1;
     height: 100%;
     margin-top: 20px;
+    margin-right: 20px;
   }
 }
 
