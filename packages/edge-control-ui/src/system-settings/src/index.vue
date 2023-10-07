@@ -2,8 +2,6 @@
   <div class="sys-setting" contenteditable="true">
     <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="392" min-height="160">
       <div class="title-operation">
-        <!-- <span class="zh-font">系统设定参数</span>
-        <span class="en-font">SYSTEM SETTING PARAMETERS</span> -->
         <div class="operation-font" @click="handlerToClick">{{ '...' }}</div>
       </div>
       <div class="card-list">
@@ -83,30 +81,30 @@ const getData = async () => {
   });
 };
 
-const setDate = () => {
-  const datas: any[] = [];
+const setData = () => {
+  const data: any[] = [];
   if (!props.config.indicators) return;
   props.config.indicators.forEach((itm: any) => {
-    datas.push({
+    data.push({
       name: itm.label,
       value: '-',
       id: itm.property,
       unit: itm.unit,
     });
   });
-  costList.value = datas;
+  costList.value = data;
   getData();
 };
 
 watch(
   () => props.config.indicators,
   () => {
-    setDate();
+    setData();
   }
 );
 
 onMounted(() => {
-  setDate();
+  setData();
 });
 </script>
 
