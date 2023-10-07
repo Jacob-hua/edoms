@@ -51,14 +51,7 @@ const { fetchRealData } = getApi(request);
 
 const isShow = ref<boolean>(false);
 
-const costList = ref<Array<{ [key: string]: number | string }>>([
-  // {
-  //   name: '供水温度',
-  //   value: '123',
-  //   unit: '°C',
-  //   id: '',
-  // },
-]);
+const costList = ref<Array<{ [key: string]: number | string }>>([]);
 
 const handlerToClick = () => {
   isShow.value = !isShow.value;
