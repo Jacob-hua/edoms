@@ -16,8 +16,8 @@
           <div v-if="itm.calculateType === 'ALL' || itm.calculateType === 'QOQ'" class="font-value-turn">
             <span class="font">{{ `${state.dateType} ${t('环比')}` }}</span>
             <span v-show="itm.qoqTrend === 'flat'" class="turn-flat"></span>
-            <span v-show="itm.yoyTrend === 'up'" class="turn-up"><img src="../assets/add-icon.png" alt="" /></span>
-            <span v-show="itm.yoyTrend === 'down'" class="turn-down"><img src="../assets/desc-icon.png" alt="" /></span>
+            <span v-show="itm.qoqTrend === 'up'" class="turn-up"><img src="../assets/add-icon.png" alt="" /></span>
+            <span v-show="itm.qoqTrend === 'down'" class="turn-down"><img src="../assets/desc-icon.png" alt="" /></span>
             <span class="value-to" :style="{ color: getStyle(itm, 'qoqTrend') }">
               {{ itm.qoqRatio === '--' ? '--' : itm.qoqRatio + '%' }}
             </span>
@@ -70,7 +70,7 @@ const state = reactive<{
 });
 
 const getStyle = computed(() => (itm: any, type: string) => {
-  console.log('props', props.tableData);
+  console.log('propsxxxxxxx', props.tableData);
   const ft = itm[type];
   if (ft === 'flat') return '';
   if (ft === 'up') return 'rgba(215, 40, 36, 1)';
@@ -194,7 +194,7 @@ defineExpose({
   .turn-down {
     display: block;
     width: 15px;
-    margin: 0 10px;
+    margin: 0 5px;
     background-size: 100% 100%;
   }
 }
