@@ -255,7 +255,10 @@ class App extends EventEmitter {
       return;
     }
     const toNode = this.page.getNode(to);
-    if (!toNode) throw `ID为${to}的组件不存在`;
+    if (!toNode) {
+      console.error(`ID为${to}的组件不存在`);
+      return;
+    }
 
     if (isCommonMethod(methodName)) {
       return triggerCommonMethod(methodName, toNode);
