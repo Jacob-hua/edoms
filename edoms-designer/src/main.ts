@@ -17,7 +17,7 @@ import ElDesign from '@edoms/design';
 import EdomsEditor from '@edoms/editor';
 import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
 
-import 'virtual:svg-icons-register';
+import './assets/iconfont/iconfont.js';
 
 import permissionDirective from './directive/permission';
 import roleDirective from './directive/role';
