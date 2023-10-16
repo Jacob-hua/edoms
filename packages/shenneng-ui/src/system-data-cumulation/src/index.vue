@@ -47,6 +47,8 @@ const systemCumulativeData = ref();
 
 const tabData = computed(() => props.config.specificDate ?? []);
 
+const instanceCode = computed(() => props.config.property);
+
 const intervalDelay = computed<number>(() =>
   typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
 );
@@ -54,7 +56,7 @@ const intervalDelay = computed<number>(() =>
 const currentInstanceProperty = computed(() => {
   return {
     instanceType: props.config.instanceType,
-    instance: props.config.instance[0],
+    instance: instanceCode.value,
     propertyType: props.config.propertyType,
     property: props.config.property,
     precision: props.config.precision,
@@ -71,19 +73,20 @@ const transDateMap = (date: SdateType): any =>
   ]).get(date);
 
 const getSystemCumulativeData = async () => {
-  if (!props.config || props.config.instance?.length <= 0) return;
+  if (!props.config || instanceCode.value?.length <= 0) return;
   const { start, end } = formatDateRange(
     new Date(),
     transDateMap(active.value.value as SdateType),
     'YYYY-MM-DD HH:mm:ss'
   );
+
   const params: FetchSysCumulantDataReq = {
     startAt: start,
     endAt: end,
     calculateType: props.config.calculateType,
     identify: active.value.value,
-    propCode: props.config.instance?.[0],
-    jsonRule: props.config.jsonRule,
+    propCode: instanceCode.value,
+    jsonRule: JSON.parse(props.config.jsonRule),
   };
 
   const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });

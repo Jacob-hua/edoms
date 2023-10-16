@@ -65,7 +65,7 @@ const { fetchExecuteApi } = apiFactory(request);
 
 const initIndicators = ref();
 
-const instanceCode = computed(() => props.config.instance?.[0]);
+const instanceCode = computed(() => props.config.property);
 
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -91,7 +91,7 @@ const updateRealData = async () => {
     startAt: start,
     endAt: end,
     propCode: instanceCode.value,
-    jsonRule: props.config.jsonRule,
+    jsonRule: JSON.parse(props.config.jsonRule),
   };
   const result = await fetchExecuteApi({ apiCode: 'TCEStatisticsData', requestParam: params });
   initIndicators.value = result?.map(({ label, propVal, unit, precision, type }: FetchTceStatisticsData) => {

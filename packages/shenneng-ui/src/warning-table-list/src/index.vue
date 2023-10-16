@@ -122,8 +122,6 @@ const calculateIncrement = (result: InitAlarmRes) => {
   config.value.speed = props.config.speed;
 };
 
-initAlarmList();
-
 const calculateClassName = (className: string) => (activeClassName.value === className ? 'active' : '');
 
 const handleChangeWarningType = (className: ClassName) => {
@@ -159,6 +157,7 @@ watch(
     if (!intervalDelay) {
       return;
     }
+    initAlarmList();
     useIntervalAsync(updateAlarmList, intervalDelay);
   },
   { immediate: true }

@@ -119,15 +119,17 @@ defineExpose({
     .right-content {
       width: calc(100% - 16px);
       background-color: rgba(0, 163, 255, 0.06);
-      display: flex;
-      justify-content: space-between;
+      // display: flex;
+      // justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
       padding: 0 19px;
       box-sizing: border-box;
       white-space: nowrap;
       .name {
         height: 40px;
         line-height: 40px;
-        width: 23%;
+        // width: 23%;
         color: rgba(196, 229, 248, 1);
         font-size: 14px;
         font-family: MicrosoftYaHei;
@@ -141,7 +143,7 @@ defineExpose({
         }
       }
       .value-unit {
-        width: 30%;
+        // width: 30%;
         height: 40px;
         font-size: 14px;
         line-height: 40px;
@@ -150,22 +152,22 @@ defineExpose({
         .value {
           margin-right: 5px;
           color: rgba(0, 255, 240, 1);
-          width: 50%;
+          // width: 50%;
         }
         .unit {
           color: rgba(196, 229, 248, 1);
-          width: 50%;
+          // width: 50%;
         }
       }
       .font-value-turn {
-        width: 25%;
+        // width: 25%;
         height: 40px;
         font-size: 14px;
         line-height: 40px;
         display: flex;
         .value-to {
           margin: 0 5px;
-          width: 25%;
+          // width: 25%;
         }
         .turn-up {
           display: block;

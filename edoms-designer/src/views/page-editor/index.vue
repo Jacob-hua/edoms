@@ -307,15 +307,12 @@ watch(
             'multiple-energy-monitoring',
             'charts',
             'equipment-condition',
-            'system-cumulative-data',
             'equipment-operating-parameter',
-            'economic-indicators',
             'operational-analysis',
             // 'energy-monitoring',
             'electric-energy-quality',
             'warning-table-list',
             'equipment-query-operation',
-            'system-data-cumulation',
             'operations-analysis',
             'efficiency-analysis',
             // 'intelligence-report',
@@ -331,13 +328,21 @@ watch(
             'eq-control',
             'cost-comparison-detail',
             'cost-comparsion',
+            'system-data-cumulation',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');
           const domainPath = prop.substring(0, pathLastIndex);
           model = getByPath(props.formValue ?? {}, domainPath, '');
         }
-        if (['energy-efficiency-monitoring', 'energy-monitoring'].includes(component)) {
+        if (
+          [
+            'energy-efficiency-monitoring',
+            'energy-monitoring',
+            'economic-indicators',
+            'system-cumulative-data',
+          ].includes(component)
+        ) {
           model = props.formValue;
         }
         if (
