@@ -123,6 +123,11 @@ export interface FetchHistoryDataItem {
   value: string;
 }
 
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: any;
+}
+
 export type FetchHistoryDataRes = FetchHistoryDataItem[];
 
 export type FetchCumulativeDataReq = CumulativeDataReq;
@@ -132,4 +137,5 @@ export interface Apis {
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
   fetchSysCumulantData: (data: FetchSysCumulantDataReq) => Promise<FetchSysCumulantDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchSysCumulantDataRes>;
 }

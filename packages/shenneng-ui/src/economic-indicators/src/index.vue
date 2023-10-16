@@ -61,7 +61,7 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchTceStatisticsData } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
 const initIndicators = ref();
 
@@ -93,7 +93,7 @@ const updateRealData = async () => {
     propCode: instanceCode.value,
     jsonRule: props.config.jsonRule,
   };
-  const result = await fetchTceStatisticsData(params);
+  const result = await fetchExecuteApi({ apiCode: 'TCEStatisticsData', requestParam: params });
   initIndicators.value = result?.map(({ label, propVal, unit, precision, type }: FetchTceStatisticsData) => {
     return {
       label,

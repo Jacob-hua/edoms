@@ -76,14 +76,14 @@ const headerData: HeaderData[] = [
     className: 'green',
   },
 ];
-const { confirmedAlarmList, fetchCurrentAlarm } = warningApi(request);
+const { confirmedAlarmList, fetchExecuteApi } = warningApi(request);
 const activeClassName = ref<ClassName>('red');
 const commonAlarm = ref();
 const importantAlarm = ref();
 const seriousAlarm = ref();
 
 const initAlarmList = async () => {
-  const result = await fetchCurrentAlarm();
+  const result = await fetchExecuteApi({ apiCode: 'queryCurrentAlarm', requestParam: {} });
   commonAlarm.value = result?.commonAlarm;
   importantAlarm.value = result?.importantAlarm;
   seriousAlarm.value = result?.seriousAlarm;
@@ -95,7 +95,7 @@ const initAlarmList = async () => {
 };
 
 const updateAlarmList = async () => {
-  const result = await fetchCurrentAlarm();
+  const result = await fetchExecuteApi({ apiCode: 'queryCurrentAlarm', requestParam: {} });
   calculateIncrement(result);
   recordFailure({
     commonAlarm: commonAlarm.value,

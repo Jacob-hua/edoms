@@ -4,6 +4,7 @@ import {
   Apis,
   FetchCumulativeDataReq,
   FetchCumulativeDataRes,
+  FetchExecuteApiReq,
   FetchHistoryDataReq,
   FetchHistoryDataRes,
   FetchSysCumulantDataReq,
@@ -48,6 +49,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
     try {
       const { result } = await request<FetchHistoryDataReq, FetchHistoryDataRes>({
         url: '/operation-monitor/system-grand-chart-data',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetchSysCumulantDataRes> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchExecuteApiReq, FetchSysCumulantDataRes>({
+        url: '/OperationalMonitorCommon/executeApi',
         method: 'POST',
         data,
       });

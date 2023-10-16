@@ -181,6 +181,11 @@ export interface FetchTceStatisticsData {
   unit: string;
 }
 
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: any;
+}
+
 export type FetchTceStatisticsDataRes = FetchTceStatisticsData[];
 
 export type FetchHistoryDataRes = HistoryData[];
@@ -200,4 +205,5 @@ export interface Apis {
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
   fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
   fetchTceStatisticsData: (data: FetchTceStatisticsDataReq) => Promise<FetchTceStatisticsDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchTceStatisticsDataRes>;
 }

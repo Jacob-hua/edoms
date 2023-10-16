@@ -34,7 +34,7 @@ const { setMessage, t } = useApp(props);
 setMessage(locales);
 const { request } = useApp(props);
 
-const { fetchSysCumulantData } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
 const tableWrapper = ref<any>(null);
 
@@ -85,7 +85,9 @@ const getSystemCumulativeData = async () => {
     propCode: props.config.instance?.[0],
     jsonRule: props.config.jsonRule,
   };
-  const result = await fetchSysCumulantData(params);
+
+  const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
+
   if (!result || result.length <= 0) return;
   systemCumulativeData.value = result.map((item: FetchSysCumulantData) => {
     item.dataValue = formatPrecision(Number(item.dataValue), currentInstanceProperty.value.precision).toString();
