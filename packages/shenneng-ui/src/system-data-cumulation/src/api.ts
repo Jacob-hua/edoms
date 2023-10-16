@@ -1,6 +1,14 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, FetchCumulativeDataReq, FetchCumulativeDataRes, FetchHistoryDataReq, FetchHistoryDataRes } from './type';
+import {
+  Apis,
+  FetchCumulativeDataReq,
+  FetchCumulativeDataRes,
+  FetchHistoryDataReq,
+  FetchHistoryDataRes,
+  FetchSysCumulantDataReq,
+  FetchSysCumulantDataRes,
+} from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchCumulativeData: async (data: FetchCumulativeDataReq): Promise<FetchCumulativeDataRes> => {
@@ -10,6 +18,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
     try {
       const { result } = await request<FetchCumulativeDataReq, FetchCumulativeDataRes>({
         url: '/OperationalMonitorCommon/system-grand-total',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  fetchSysCumulantData: async (data: FetchSysCumulantDataReq): Promise<FetchSysCumulantDataRes> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchSysCumulantDataReq, FetchSysCumulantDataRes>({
+        url: '/componentSevice/electric/querySysCumulantData',
         method: 'POST',
         data,
       });

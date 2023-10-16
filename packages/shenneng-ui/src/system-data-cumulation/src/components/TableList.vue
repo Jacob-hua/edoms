@@ -141,7 +141,7 @@ defineExpose({
         }
       }
       .value-unit {
-        width: 25%;
+        width: 30%;
         height: 40px;
         font-size: 14px;
         line-height: 40px;

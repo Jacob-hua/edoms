@@ -12,6 +12,8 @@ import {
   FetchHistoryDataRes,
   FetchRealDataReq,
   FetchRealDataRes,
+  FetchTceStatisticsDataReq,
+  FetchTceStatisticsDataRes,
 } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
@@ -82,6 +84,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
     try {
       const { result } = await request<FetchCurveDataReq, FetchCurveDataRes>({
         url: '/OperationalMonitorCommon/curveData',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  fetchTceStatisticsData: async (data: FetchTceStatisticsDataReq): Promise<FetchTceStatisticsDataRes> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchTceStatisticsDataReq, FetchTceStatisticsDataRes>({
+        url: '/componentSevice/electric/queryTCEStatisticsData',
         method: 'POST',
         data,
       });

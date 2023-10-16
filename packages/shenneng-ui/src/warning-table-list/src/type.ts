@@ -45,5 +45,6 @@ export interface Alarm {
 export interface Apis {
   fetchInitAlarmList: (data: InitAlarmReq) => Promise<InitAlarmRes>;
   fetchNewAlarmList: (data: Pick<InitAlarmReq, 'sysInsCode' | 'isVirtual'>) => Promise<InitAlarmRes>;
+  fetchCurrentAlarm: () => Promise<InitAlarmRes>;
   confirmedAlarmList: () => Promise<string>;
 }

@@ -58,7 +58,7 @@ const emit = defineEmits<{
 
 const currentPage = ref<number>(1);
 
-const total = computed(() => props.data.length);
+const total = computed(() => props.data?.length);
 
 const pagingSliceStartAndEnd = ({ currentPage, limit }: { currentPage: number; limit: number }) => {
   return [(currentPage - 1) * limit, currentPage * limit];

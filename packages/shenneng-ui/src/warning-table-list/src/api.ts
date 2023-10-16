@@ -49,6 +49,28 @@ export default (request?: EdomsRequestFunc): Apis => ({
       };
     }
   },
+  fetchCurrentAlarm: async (): Promise<InitAlarmRes> => {
+    if (!request) {
+      return {
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
+      };
+    }
+    try {
+      const { result } = await request<InitAlarmReq, InitAlarmRes>({
+        url: '/componentSevice/alarm/queryCurrentAlarm',
+        method: 'GET',
+      });
+      return result;
+    } catch (error) {
+      return {
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
+      };
+    }
+  },
   confirmedAlarmList: async (): Promise<string> => {
     if (!request) {
       return '';
