@@ -9,9 +9,8 @@
       </div>
     </div>
     <div class="wrapper_right">
-      <button @click="changeDilog('month')">{{ t('月曲线分析') }}</button>
-      <button @click="changeDilog('day')">{{ t('日曲线分析') }}</button>
-      <button @click="changeDilog('data')">{{ t('数据分析') }}</button>
+      <button @click="changeDialog('month')">{{ t('月曲线分析') }}</button>
+      <button @click="changeDialog('day')">{{ t('日曲线分析') }}</button>
       <div class="wrapper_right_qu">
         <div class="histogram">
           <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
@@ -107,40 +106,6 @@ const dataOptions = [
 const dataValue = ref<string>(dataOptions[0].value);
 // dialog名称
 const title = ref<string>('');
-// 散点图数据
-const dataAll = [
-  [20, 0.69],
-  [32, 0.18],
-  [65, 0.54],
-  [44, 0.65],
-  [35, 0.47],
-  [78, 0.35],
-  [12, 0.65],
-  [55, 0.77],
-  [60, 0.33],
-  [44, 0.55],
-  [25, 0.2],
-  [69, 0.2],
-  [18, 0.32],
-  [54, 0.65],
-  [65, 0.44],
-  [47, 0.35],
-  [35, 0.78],
-  [65, 0.12],
-  [77, 0.55],
-  [33, 0.6],
-  [55, 0.44],
-  [20, 0.25],
-];
-const maxArr = ref<any>([]);
-const minArr = ref<any>([]);
-dataAll.forEach((item) => {
-  if (item[1] > props.config.examine) {
-    maxArr.value.push(item);
-  } else {
-    minArr.value.push(item);
-  }
-});
 // 月度功率因数统计
 const option_chart = ref<ECOption>({});
 option_chart.value = {
@@ -234,7 +199,7 @@ option_chart.value = {
 };
 const optionMonth_chart = ref<ECOption>({});
 // dialog弹框
-const changeDilog = (val: string) => {
+const changeDialog = (val: string) => {
   dialogVisible.value = true;
   if (val === 'month') {
     timeType.value = 'month';
@@ -572,104 +537,6 @@ const changeDilog = (val: string) => {
           ],
           smooth: true,
           symbolSize: 0,
-        },
-      ],
-    };
-  } else {
-    timeType.value = 'date';
-    nowDialog.value = false;
-    selectShow.value = true;
-    title.value = t('功率因数_数据分析');
-    // 数据分析
-    optionMonth_chart.value = {
-      xAxis: {
-        type: 'value',
-        axisLabel: {
-          formatter: '{value}%',
-        },
-        splitLine: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
-      },
-      tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(11,34,52,0.9)',
-        borderColor: '#204C6F',
-        borderWidth: 1,
-        formatter: (params: any) => {
-          let tip: string = '';
-          if (params != null && params.length > 0) {
-            tip += '<div><p style="color: #F5F7FA">' + t('功率因数') + '：</p>';
-            for (let index = 0; index < params.length; index++) {
-              tip +=
-                '<p>' +
-                params[index].marker +
-                '<span style="color:' +
-                params[index].color +
-                '">' +
-                params[index].value[1] +
-                '</span></p>';
-            }
-            tip += '</div>';
-          }
-          return tip;
-        },
-      },
-      yAxis: {
-        type: 'value',
-        nameTextStyle: {
-          fontSize: '14',
-          fontFamily: 'Microsoft YaHei',
-          fontWeight: 400,
-          color: '#EAF5FF',
-        },
-        splitLine: {
-          lineStyle: {
-            type: 'dashed',
-            color: '#1A242B',
-            width: 1,
-          },
-        },
-        axisLine: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
-      },
-      grid: { top: '30px', left: '55px', right: '30px', bottom: '51px' },
-      color: ['rgba(65,228,222,0.7)', 'rgba(215,40,36,0.7)'],
-      series: [
-        {
-          symbolSize: 20,
-          data: maxArr.value,
-          type: 'scatter',
-          markLine: {
-            lineStyle: {
-              color: '#0E9CFF',
-              width: 1,
-              type: 'dashed',
-            },
-            label: {
-              show: false,
-            },
-            data: [
-              {
-                name: t('考核基准'),
-                yAxis: props.config.examine,
-              },
-            ],
-            silent: true,
-            symbol: 'none',
-          },
-        },
-        {
-          symbolSize: 20,
-          data: minArr.value,
-          type: 'scatter',
         },
       ],
     };
