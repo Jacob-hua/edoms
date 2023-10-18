@@ -108,95 +108,6 @@ const dataValue = ref<string>(dataOptions[0].value);
 const title = ref<string>('');
 // 月度功率因数统计
 const option_chart = ref<ECOption>({});
-option_chart.value = {
-  grid: {
-    left: 24,
-    bottom: 28,
-    right: 20,
-  },
-  xAxis: {
-    type: 'category',
-    name: t('月'),
-    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-    axisLine: {
-      show: false,
-    },
-    axisTick: {
-      show: false,
-    },
-  },
-  color: 'rgba(40,124,232,0.5)',
-  tooltip: {
-    trigger: 'axis',
-    backgroundColor: 'rgba(11,34,52,0.9)',
-    borderColor: '#204C6F',
-    borderWidth: 1,
-    formatter: (params: any) => {
-      let tip: string = '';
-      if (params != null && params.length > 0) {
-        tip += '<div>';
-        for (let index = 0; index < params.length; index++) {
-          tip +=
-            '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-            params[index].name +
-            '</p><p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-            params[index].seriesName.split('：')[0] +
-            '：</span><span style="color: #287CE7;font-size: 12px;font-weight: 400;">' +
-            params[index].seriesName.split('：')[1] +
-            '：' +
-            params[index].value +
-            '</span></p>';
-        }
-        tip += '</div>';
-      }
-      return tip;
-    },
-  },
-  legend: {
-    top: '5%',
-    left: 'center',
-    itemWidth: 8,
-    itemHeight: 8,
-    textStyle: {
-      color: '#fff',
-    },
-  },
-  yAxis: {
-    type: 'value',
-    name: t('月度功率因数统计'),
-    nameTextStyle: {
-      lineHeight: 28,
-      padding: [0, 0, 0, 100],
-      fontSize: '14',
-      fontFamily: 'Microsoft YaHei',
-      fontWeight: 400,
-      color: '#EAF5FF',
-    },
-    splitLine: {
-      lineStyle: {
-        type: 'dashed',
-        color: '#1A242B',
-        width: 1,
-      },
-    },
-    axisLabel: {
-      show: false,
-    },
-  },
-  series: [
-    {
-      name: `${t('考核基准')}：0.9`,
-      data: [0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1],
-      type: 'bar',
-      itemStyle: {
-        borderWidth: 1,
-        borderColor: '#287CE8',
-      },
-      barWidth: 16,
-      barGap: 70,
-    },
-  ],
-};
 const optionMonth_chart = ref<ECOption>({});
 // dialog弹框
 const changeDialog = (val: string) => {
@@ -260,38 +171,14 @@ const changeDialog = (val: string) => {
             console.log(params);
             tip += '<div>';
             for (let index = 0; index < params.length; index++) {
-              if (params[index].seriesName === t('箱线图')) {
-                // 勿删  图例待确认？
-                /*tip +=
-                  '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                  params[index].seriesName +
-                  '：</p><p style="margin-left: 5px;color: #F5F7FA">开盘值：<span style="color:' +
-                  params[index].color +
-                  '">' +
-                  params[index].value[1] +
-                  '<span></p><p style="margin-left: 5px;color: #F5F7FA">封盘值：<span style="color:' +
-                  params[index].color +
-                  '">' +
-                  params[index].value[2] +
-                  '</span></p><p style="margin-left: 5px;color: #F5F7FA">最大值：<span style="color:' +
-                  params[index].color +
-                  '">' +
-                  params[index].value[4] +
-                  '</span></p><p style="margin-left: 5px;color: #F5F7FA">最小值：<span style="color:' +
-                  params[index].color +
-                  '">' +
-                  params[index].value[3] +
-                  '</span></p>';*/
-              } else {
-                tip +=
-                  '<p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                  params[index].seriesName +
-                  '：</span><span style="color:' +
-                  params[index].color +
-                  ';font-size: 12px;font-weight: 400;">' +
-                  params[index].value +
-                  '</span></p>';
-              }
+              tip +=
+                '<p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+                params[index].seriesName +
+                '：</span><span style="color:' +
+                params[index].color +
+                ';font-size: 12px;font-weight: 400;">' +
+                params[index].value +
+                '</span></p>';
             }
             tip += '</div>';
           }
