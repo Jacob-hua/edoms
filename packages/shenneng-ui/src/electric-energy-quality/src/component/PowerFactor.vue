@@ -15,20 +15,6 @@
         <div class="histogram">
           <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
         </div>
-        <div class="table">
-          <p class="table_tie">{{ t('无功优化补偿装置') }}</p>
-          <el-table
-            :data="tableData"
-            style="width: 100%"
-            :header-cell-style="{ background: '#0D1218', color: '#EAF5FF', textAlign: 'center', border: 'none' }"
-          >
-            <el-table-column prop="typesOf" :label="t('类型')" width="180" />
-            <el-table-column prop="position" :label="t('接入位置')" width="180" />
-            <el-table-column prop="state" :label="t('状态')" />
-            <el-table-column prop="adjustment" :label="t('调节量')" />
-            <el-table-column prop="range" :label="t('调节范围')" />
-          </el-table>
-        </div>
       </div>
     </div>
 
@@ -81,6 +67,7 @@ import { ElectricEnergyQuality } from '../type';
 
 import CalculationSheet from './CalculationSheet.vue';
 import TimeCalendar from './TimeCalendar.vue';
+
 const { t } = useI18n();
 
 const props = defineProps<{
@@ -97,18 +84,109 @@ const dialogVisible = ref<boolean>(false);
 const nowDialog = ref<boolean>(false);
 const selectShow = ref<boolean>(false);
 const checkTypeList = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
-const checkList = ref<any>([t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')]);
+const checkList = ref<any>(checkTypeList);
 const dataOptions = [
   { value: 'load', label: t('功率因数_负载率') },
   { value: 'hour', label: t('功率因数_小时') },
   { value: 'week', label: t('功率因数_周') },
 ];
 const dataValue = ref<string>(dataOptions[0].value);
+
 // dialog名称
 const title = ref<string>('');
+
 // 月度功率因数统计
 const option_chart = ref<ECOption>({});
 const optionMonth_chart = ref<ECOption>({});
+option_chart.value = {
+  grid: {
+    left: 24,
+    bottom: 28,
+    right: 20,
+  },
+  xAxis: {
+    type: 'category',
+    name: t('月'),
+    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+    axisLine: {
+      show: false,
+    },
+    axisTick: {
+      show: false,
+    },
+  },
+  color: 'rgba(40,124,232,0.5)',
+  tooltip: {
+    trigger: 'axis',
+    backgroundColor: 'rgba(11,34,52,0.9)',
+    borderColor: '#204C6F',
+    borderWidth: 1,
+    formatter: (params: any) => {
+      let tip: string = '';
+      if (params != null && params.length > 0) {
+        tip += '<div>';
+        for (let index = 0; index < params.length; index++) {
+          tip +=
+            '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].name +
+            '</p><p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].seriesName.split('：')[0] +
+            '：</span><span style="color: #287CE7;font-size: 12px;font-weight: 400;">' +
+            params[index].seriesName.split('：')[1] +
+            '：' +
+            params[index].value +
+            '</span></p>';
+        }
+        tip += '</div>';
+      }
+      return tip;
+    },
+  },
+  legend: {
+    top: '5%',
+    left: 'center',
+    itemWidth: 8,
+    itemHeight: 8,
+    textStyle: {
+      color: '#fff',
+    },
+  },
+  yAxis: {
+    type: 'value',
+    name: t('月度功率因数统计'),
+    nameTextStyle: {
+      lineHeight: 28,
+      padding: [0, 0, 0, 100],
+      fontSize: '14',
+      fontFamily: 'Microsoft YaHei',
+      fontWeight: 400,
+      color: '#EAF5FF',
+    },
+    splitLine: {
+      lineStyle: {
+        type: 'dashed',
+        color: '#1A242B',
+        width: 1,
+      },
+    },
+    axisLabel: {
+      show: false,
+    },
+  },
+  series: [
+    {
+      name: `${t('考核基准')}：0.9`,
+      data: [0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1],
+      type: 'bar',
+      itemStyle: {
+        borderWidth: 1,
+        borderColor: '#287CE8',
+      },
+      barWidth: 16,
+      barGap: 70,
+    },
+  ],
+};
 // dialog弹框
 const changeDialog = (val: string) => {
   dialogVisible.value = true;
@@ -117,7 +195,7 @@ const changeDialog = (val: string) => {
     nowDialog.value = true;
     selectShow.value = false;
     title.value = t('功率因数_月曲线分析');
-    checkList.value = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
+    checkList.value = checkTypeList;
     // 月曲线分析图表
     optionMonth_chart.value = {
       xAxis: {
@@ -450,37 +528,6 @@ const selectType = () => {
     selected: showObj,
   };
 };
-// 无功优化补偿
-const tableData = [
-  {
-    typesOf: t('类型一'),
-    position: t('位置一'),
-    state: '44.20',
-    adjustment: '44.20',
-    range: '44.20',
-  },
-  {
-    typesOf: t('类型一'),
-    position: t('位置一'),
-    state: '44.20',
-    adjustment: '44.20',
-    range: '44.20',
-  },
-  {
-    typesOf: t('类型一'),
-    position: t('位置一'),
-    state: '44.20',
-    adjustment: '44.20',
-    range: '44.20',
-  },
-  {
-    typesOf: t('类型一'),
-    position: t('位置一'),
-    state: '44.20',
-    adjustment: '44.20',
-    range: '44.20',
-  },
-];
 </script>
 
 <style lang="scss" scoped>
@@ -601,12 +648,12 @@ const tableData = [
       border: 1px solid #212c3c;
 
       .histogram {
-        height: 302px;
         width: 938px;
+        height: 100%;
 
         .charts {
-          height: 302px;
-          width: 938px;
+          width: 100%;
+          height: 100%;
         }
       }
 
