@@ -13,10 +13,7 @@
       <button @click="changeDialog('day')">{{ t('日曲线分析') }}</button>
       <div class="wrapper_right_qu">
         <div class="histogram">
-          <EdomsCharts
-            class="charts"
-            :option="monthlyStatistic([0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1])"
-          ></EdomsCharts>
+          <EdomsCharts class="charts" :option="monthlyStatistic(monthlyStatisticData)"></EdomsCharts>
         </div>
       </div>
     </div>
@@ -40,10 +37,10 @@
             <TimeCalendar :option="timeType"></TimeCalendar>
           </div>
           <div v-if="nowDialog" class="boxCheck">
-            <el-checkbox-group v-model="checkList" @change="selectType">
-              <el-checkbox v-for="typeItem in checkTypeList" :key="typeItem" :label="typeItem">{{
-                typeItem
-              }}</el-checkbox>
+            <el-checkbox-group v-model="activeChart" @change="selectType">
+              <el-checkbox v-for="typeItem in chartTypes" :key="typeItem" :label="typeItem">
+                {{ typeItem }}
+              </el-checkbox>
             </el-checkbox-group>
           </div>
           <div v-if="selectShow" class="boxSelect">
@@ -57,53 +54,8 @@
             class="chartsCon"
             :option="
               timeType === 'day'
-                ? dayPowerFactor(
-                    [
-                      0.55, 0.58, 0.15, 0.36, 0.53, 0.4, 0.64, 0.42, 0.27, 0.55, 0.43, 0.78, 0.39, 0.44, 0.59, 0.65,
-                      0.5, 0.45, 0.56, 0.71, 0.66, 0.47, 0.52, 0.67, 0.68,
-                    ],
-                    [
-                      0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75,
-                      0.56, 0.35, 0.52, 0.73, 0.69, 0.41, 0.5, 0.61, 0.64,
-                    ]
-                  )
-                : monthlyPowerFactor(
-                    [
-                      [0.85, 0.86, 0.7, 0.86],
-                      [0.85, 0.86, 0.75, 0.86],
-                      [0.85, 0.86, 0.6, 0.86],
-                      [0.85, 0.86, 0.55, 0.86],
-                      [0.85, 0.86, 0.7, 0.86],
-                      [0.85, 0.86, 0.75, 0.86],
-                      [0.85, 0.86, 0.7, 0.86],
-                      [0.85, 0.86, 0.65, 0.86],
-                      [0.85, 0.86, 0.7, 0.86],
-                      [0.85, 0.86, 0.65, 0.86],
-                      [0.85, 0.86, 0.55, 0.86],
-                      [0.85, 0.86, 0.6, 0.86],
-                      [0.85, 0.86, 0.7, 0.86],
-                      [0.85, 0.86, 0.75, 0.86],
-                      [0.85, 0.86, 0.6, 0.86],
-                      [0.85, 0.86, 0.7, 0.86],
-                      [0.85, 0.86, 0.55, 0.86],
-                    ],
-                    [
-                      0.3, 0.1, 0.15, 0.3, 0.11, 0.16, 0.2, 0.2, 0.17, 0.4, 0.13, 0.18, 0.3, 0.14, 0.19, 0.2, 0.1, 0.15,
-                      0.6, 0.11, 0.16, 0.7, 0.12, 0.17, 0.8, 0.13, 0.18, 0.9, 0.14, 0.19, 0.23,
-                    ],
-                    [
-                      0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75,
-                      0.56, 0.35, 0.52, 0.73, 0.69, 0.41, 0.5, 0.61, 0.64, 0.23, 0.22, 0.45, 0.33, 0.71, 0.52,
-                    ],
-                    [
-                      0.29, 0.38, 0.25, 0.36, 0.83, 0.7, 0.64, 0.42, 0.34, 0.55, 0.64, 0.28, 0.39, 0.5, 0.65, 0.55, 0.2,
-                      0.35, 0.36, 0.51, 0.6, 0.47, 0.59, 0.57, 0.6, 0.32, 0.58, 0.44, 0.34, 0.59, 0.43,
-                    ],
-                    [
-                      0.36, 0.78, 0.22, 0.56, 0.23, 0.6, 0.54, 0.24, 0.35, 0.55, 0.43, 0.68, 0.79, 0.54, 0.49, 0.65,
-                      0.52, 0.43, 0.54, 0.75, 0.67, 0.45, 0.51, 0.64, 0.65, 0.43, 0.58, 0.79, 0.34, 0.71, 0.43,
-                    ]
-                  )
+                ? dayPowerFactor(loadData, unbalanceData)
+                : monthlyPowerFactor(candlestickData, diffBarData, maxLineData, minLineData, menLineData)
             "
           ></EdomsCharts>
         </div>
@@ -128,18 +80,20 @@ const { t } = useI18n();
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
+
 const lastMouth = {
   title: t('上月结算'),
 };
 const nextMouth = {
   title: t('本月结算'),
 };
+
 const timeType = ref<string>('date');
 const dialogVisible = ref<boolean>(false);
 const nowDialog = ref<boolean>(false);
 const selectShow = ref<boolean>(false);
-const checkTypeList = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
-const checkList = ref<any>(checkTypeList);
+const chartTypes = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
+const activeChart = ref<any>(chartTypes);
 const dataOptions = [
   { value: 'load', label: t('功率因数_负载率') },
   { value: 'hour', label: t('功率因数_小时') },
@@ -149,6 +103,58 @@ const dataValue = ref<string>(dataOptions[0].value);
 
 // dialog名称
 const title = ref<string>('');
+
+const monthlyStatisticData = ref<number[]>([0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1]);
+
+const candlestickData = ref<Array<Array<number>>>([
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.75, 0.86],
+  [0.85, 0.86, 0.6, 0.86],
+  [0.85, 0.86, 0.55, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.75, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.65, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.65, 0.86],
+  [0.85, 0.86, 0.55, 0.86],
+  [0.85, 0.86, 0.6, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.75, 0.86],
+  [0.85, 0.86, 0.6, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.55, 0.86],
+]);
+
+const diffBarData = ref<number[]>([
+  0.3, 0.1, 0.15, 0.3, 0.11, 0.16, 0.2, 0.2, 0.17, 0.4, 0.13, 0.18, 0.3, 0.14, 0.19, 0.2, 0.1, 0.15, 0.6, 0.11, 0.16,
+  0.7, 0.12, 0.17, 0.8, 0.13, 0.18, 0.9, 0.14, 0.19, 0.23,
+]);
+
+const maxLineData = ref<number[]>([
+  0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35, 0.52, 0.73,
+  0.69, 0.41, 0.5, 0.61, 0.64, 0.23, 0.22, 0.45, 0.33, 0.71, 0.52,
+]);
+
+const minLineData = ref<number[]>([
+  0.29, 0.38, 0.25, 0.36, 0.83, 0.7, 0.64, 0.42, 0.34, 0.55, 0.64, 0.28, 0.39, 0.5, 0.65, 0.55, 0.2, 0.35, 0.36, 0.51,
+  0.6, 0.47, 0.59, 0.57, 0.6, 0.32, 0.58, 0.44, 0.34, 0.59, 0.43,
+]);
+
+const menLineData = ref<number[]>([
+  0.36, 0.78, 0.22, 0.56, 0.23, 0.6, 0.54, 0.24, 0.35, 0.55, 0.43, 0.68, 0.79, 0.54, 0.49, 0.65, 0.52, 0.43, 0.54, 0.75,
+  0.67, 0.45, 0.51, 0.64, 0.65, 0.43, 0.58, 0.79, 0.34, 0.71, 0.43,
+]);
+
+const loadData = ref<number[]>([
+  0.55, 0.58, 0.15, 0.36, 0.53, 0.4, 0.64, 0.42, 0.27, 0.55, 0.43, 0.78, 0.39, 0.44, 0.59, 0.65, 0.5, 0.45, 0.56, 0.71,
+  0.66, 0.47, 0.52, 0.67, 0.68,
+]);
+
+const unbalanceData = ref<number[]>([
+  0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35, 0.52, 0.73,
+  0.69, 0.41, 0.5, 0.61, 0.64,
+]);
 
 // 月度功率因数统计
 const monthlyStatistic = (data: number[]): ECOption => ({
@@ -466,7 +472,7 @@ const changeDialog = (val: string) => {
     nowDialog.value = true;
     selectShow.value = false;
     title.value = t('功率因数_月曲线分析');
-    checkList.value = checkTypeList;
+    activeChart.value = chartTypes;
   } else if (val === 'day') {
     timeType.value = 'date';
     nowDialog.value = false;
@@ -479,14 +485,14 @@ const changeDialog = (val: string) => {
 const selectType = () => {
   const checkObj: any = {};
   let checkObj_item: string = '';
-  for (let index = 0; index < checkList.value.length; index++) {
-    checkObj_item = checkList.value[index];
+  for (let index = 0; index < activeChart.value.length; index++) {
+    checkObj_item = activeChart.value[index];
     checkObj[checkObj_item] = true;
   }
   const selObj: any = {};
   let selObj_item: string = '';
-  for (let index = 0; index < checkTypeList.length; index++) {
-    selObj_item = checkTypeList[index];
+  for (let index = 0; index < chartTypes.length; index++) {
+    selObj_item = chartTypes[index];
     selObj[selObj_item] = false;
   }
   // const showObj = Object.assign(selObj, checkObj);
