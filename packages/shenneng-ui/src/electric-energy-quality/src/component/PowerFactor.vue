@@ -19,7 +19,7 @@
     </div>
 
     <el-dialog
-      v-model="dialogVisible"
+      v-model="monthlyVisible"
       width="1480px"
       top="65px"
       style="height: 723px; background: #000; border: 1px solid #013460"
@@ -27,23 +27,52 @@
       <template #header>
         <div class="my-header">
           <img style="margin: 0 20px" src="../../assets/power.png" alt="" />
-          <span>{{ title }}</span>
+          <span>{{ t('功率因数_月曲线分析') }}</span>
         </div>
       </template>
       <div class="dialog_con">
         <div class="dialog_top">
           <div class="time">
             <span>{{ t('配电室') }}</span>
-            <TimeCalendar :option="timeType"></TimeCalendar>
+            <TimeCalendar option="month"></TimeCalendar>
           </div>
-          <div v-if="nowDialog" class="boxCheck">
-            <el-checkbox-group v-model="activeChart" @change="selectType">
-              <el-checkbox v-for="typeItem in chartTypes" :key="typeItem" :label="typeItem">
-                {{ typeItem }}
-              </el-checkbox>
-            </el-checkbox-group>
+          <el-checkbox-group v-model="activeChart" @change="selectType">
+            <el-checkbox v-for="typeItem in chartTypes" :key="typeItem" :label="typeItem">
+              {{ typeItem }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <div class="chartMonth">
+          <EdomsCharts
+            class="chartsCon"
+            :option="
+              timeType === 'day'
+                ? dayPowerFactor(loadData, unbalanceData)
+                : monthlyPowerFactor(candlestickData, diffBarData, maxLineData, minLineData, menLineData)
+            "
+          ></EdomsCharts>
+        </div>
+      </div>
+    </el-dialog>
+    <el-dialog
+      v-model="dayVisible"
+      width="1480px"
+      top="65px"
+      style="height: 723px; background: #000; border: 1px solid #013460"
+    >
+      <template #header>
+        <div class="my-header">
+          <img style="margin: 0 20px" src="../../assets/power.png" alt="" />
+          <span>{{ t('功率因数_日曲线分析') }}</span>
+        </div>
+      </template>
+      <div class="dialog_con">
+        <div class="dialog_top">
+          <div class="time">
+            <span>{{ t('配电室') }}</span>
+            <TimeCalendar option="date"></TimeCalendar>
           </div>
-          <div v-if="selectShow" class="boxSelect">
+          <div class="boxSelect">
             <el-select v-model="dataValue" :teleported="false" popper-class="select" class="m-2" placeholder="Select">
               <el-option v-for="item in dataOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
@@ -89,7 +118,8 @@ const nextMouth = {
 };
 
 const timeType = ref<string>('date');
-const dialogVisible = ref<boolean>(false);
+const monthlyVisible = ref<boolean>(false);
+const dayVisible = ref<boolean>(false);
 const nowDialog = ref<boolean>(false);
 const selectShow = ref<boolean>(false);
 const chartTypes = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
@@ -100,9 +130,6 @@ const dataOptions = [
   { value: 'week', label: t('功率因数_周') },
 ];
 const dataValue = ref<string>(dataOptions[0].value);
-
-// dialog名称
-const title = ref<string>('');
 
 const monthlyStatisticData = ref<number[]>([0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1]);
 
@@ -466,18 +493,16 @@ const dayPowerFactor = (loadData: number[], unbalanceData: number[]): ECOption =
 
 // dialog弹框
 const changeDialog = (val: string) => {
-  dialogVisible.value = true;
+  monthlyVisible.value = true;
   if (val === 'month') {
     timeType.value = 'month';
     nowDialog.value = true;
     selectShow.value = false;
-    title.value = t('功率因数_月曲线分析');
     activeChart.value = chartTypes;
   } else if (val === 'day') {
     timeType.value = 'date';
     nowDialog.value = false;
     selectShow.value = false;
-    title.value = t('功率因数_日曲线分析');
   }
 };
 
