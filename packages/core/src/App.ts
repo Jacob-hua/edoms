@@ -153,15 +153,6 @@ class App extends EventEmitter {
     return `${window.location.origin}/static/${url}${fileSuffix}`;
   }
 
-  public getStaticSrc(fileStruct: FileStruct): string {
-    const isLocalPreview = getUrlParam('localPreview');
-    const { fileSuffix, url } = fileStruct;
-    if (isLocalPreview) {
-      return `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/download`;
-    }
-    return `${window.location.origin}/static/${url}${fileSuffix}`;
-  }
-
   /**
    * 设置dsl
    * @param config dsl跟节点
