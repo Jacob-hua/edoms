@@ -3,72 +3,12 @@
     <div class="fluctuation">
       <div class="fluctuation_tie">
         <img class="icon-left" src="../../assets/dian.png" alt="" />
-        <span class="elefont">{{ t('电压波动') }}</span>
+        <span class="elefont">{{ title }}</span>
       </div>
       <div class="fluctuation_con">
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：3~4%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：2~3%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：1.5~2%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：≤1.5%</div>
-        </div>
-      </div>
-    </div>
-    <div class="fluctuation">
-      <div class="fluctuation_tie">
-        <img class="icon-left" src="../../assets/dian.png" alt="" />
-        <span class="elefont">{{ t('过电压') }}</span>
-      </div>
-      <div class="fluctuation_con">
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：3~4%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">1</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：2~3%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">27</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：1.5~2%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">421</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：≤1.5%</div>
-        </div>
-      </div>
-    </div>
-    <div class="fluctuation">
-      <div class="fluctuation_tie">
-        <img class="icon-left" src="../../assets/dian.png" alt="" />
-        <span class="elefont">{{ t('欠电压') }}</span>
-      </div>
-      <div class="fluctuation_con">
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">0</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：3~4%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">1</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：2~3%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">27</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：1.5~2%</div>
-        </div>
-        <div class="con_sub">
-          <div><span style="color: #41e4de; font-size: 24px">421</span>{{ t('次') }}</div>
-          <div>{{ t('变动范围') }}：≤1.5%</div>
+        <div class="con_sub" v-for="item in tageList" :key="item.tageNum">
+          <div><span style="color: #41e4de; font-size: 24px">{{ item.tageNum }}</span>{{ t('次') }}</div>
+          <div>{{ t('变动范围') }}：{{ item.tageRange }}</div>
         </div>
       </div>
     </div>
@@ -76,27 +16,36 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import useI18n from '../../../useI18n';
+
 const { t } = useI18n();
+
+const props = defineProps<{
+  option: Array<number>;
+  title: string;
+}>();
+
+const tageList = computed(() => {
+  return props.option?.map((item, index) => {
+    return {
+      tageNum: item,
+      tageRange: ['3~4%', '2~3%', '1.5~2%', '≤1.5%'][index]
+    }
+  })
+})
 </script>
 
 <style lang="scss" scoped>
 .wrapper-con-left {
-  height: 610px;
-  margin-right: 30px;
+  margin: 12px 30px 26px 0;
   background: rgba(9, 15, 23, 0.3);
   border-bottom: 1px solid #212c3c;
 
-  .fluctuation:nth-child(n + 2) {
-    margin-top: 30px;
-  }
-
-  .fluctuation:first-child {
-    margin-top: 10px;
-  }
-
   .fluctuation {
-    height: 182px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     border: 1px solid #212c3c;
 
     .fluctuation_tie {
@@ -104,6 +53,7 @@ const { t } = useI18n();
       border-bottom: 1px solid #1d2634;
       line-height: 51px;
       display: flex;
+      align-items: center;
 
       .icon-left {
         width: 18px;
@@ -120,8 +70,8 @@ const { t } = useI18n();
     }
 
     .fluctuation_con {
-      height: 136px;
       display: flex;
+      padding: 25px 0;
 
       .con_sub {
         width: 150px;

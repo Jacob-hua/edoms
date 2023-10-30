@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <el-date-picker v-model="value1" :teleported="false" :type="timeType.option" @change="selectDate" />
+    <el-date-picker v-model="time" :teleported="false" :type="timeType.option" @change="selectDate" />
   </div>
 </template>
 
@@ -9,10 +9,13 @@ import { ref } from 'vue';
 const timeType = defineProps<{
   option: string;
 }>();
+
+const emit = defineEmits(['change-time'])
+
 console.log(timeType.option);
-const value1 = ref(new Date());
+const time = ref(new Date());
 const selectDate = () => {
-  console.log(value1);
+  emit('change-time', time.value)
 };
 </script>
 
@@ -37,6 +40,7 @@ const selectDate = () => {
 :deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
   color: #030507 !important;
 }
+
 .block {
   padding-top: 25px;
   text-align: center;

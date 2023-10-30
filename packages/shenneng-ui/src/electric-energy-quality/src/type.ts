@@ -80,6 +80,18 @@ export interface HistoryData {
   }>;
 }
 
+export interface VoltagAnallysisChart {
+  seriesData: Array<number | Record<string, any>>;
+  xAxisData: Array<string>;
+}
+
+export interface FetchVoltagAnallysisRes {
+  histogram: VoltagAnallysisChart,
+  underVoltage: Array<number>;
+  overVoltage: Array<number>;
+  voltageFluctuation: Array<number>
+}
+
 export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEfficiencyRes = EfficiencyData[];

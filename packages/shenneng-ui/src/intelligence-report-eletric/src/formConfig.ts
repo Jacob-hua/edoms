@@ -5,11 +5,11 @@
  * @LastEditors: lihao
  * @LastEditTime: 2023-05-09 15:01:01
  */
-// import { Request } from '@edoms/editor';
+import { Request } from '@edoms/editor';
 
-// import useInstanceConfig from '../../useInstanceConfig';
+import useInstanceConfig from '../../useInstanceConfig';
 
-export default async () => [
+export default async (request: Request) => [
   {
     text: '标题',
     name: 'title',
@@ -25,5 +25,5 @@ export default async () => [
     append: 's',
   },
   /** 注入业务组件的共通字段 */
-  //   ...(await useInstanceConfig(request, 'intelligence-report-eletric')),
+    ...(await useInstanceConfig(request, 'intelligence-report-eletric'))
 ];

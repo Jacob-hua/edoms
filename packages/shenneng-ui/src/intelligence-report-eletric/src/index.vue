@@ -7,19 +7,23 @@
       <div class="label">{{ config.title }}</div>
     </div>
     <div v-if="showReport" class="dialog-table">
-      <Table :config="config" @close-table="showReport = false"></Table>
+      <Table :config="config" @close-table="showReport = false" :tableData="tableData" :tableHeader="tableHeader"
+        @change-time="handleChangeTime">
+      </Table>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-
+import { ref, onMounted, computed } from 'vue';
+import { formatDate } from '@edoms/utils';
 import useApp from '../../useApp';
-
+import apiFactory from './api';
 import Table from './component/Table.vue';
 import locales from './locales';
-import { MIntelligenceReport } from './type';
+import { MIntelligenceReport, EfficiencyData } from './type';
+
+import mock from './mock.json'
 
 const props = defineProps<{
   config: MIntelligenceReport;
@@ -28,11 +32,50 @@ const props = defineProps<{
 const { setMessage } = useApp(props);
 setMessage(locales);
 
+const { request } = useApp(props);
+
+const { fetchExecuteApi } = apiFactory(request);
+
 const showReport = ref<boolean>(false);
 
-const changeReport = () => {
-  showReport.value = true;
-};
+const instanceCode = computed(() => props.config.property);
+
+const changeReport = () => showReport.value = true
+
+// Query Table data
+const tableData = ref<Array<EfficiencyData>>([])
+const tableHeader = ref()
+
+const getIntelligenceData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss')) => {
+  if (!props.config || instanceCode.value?.length <= 0) return;
+
+  // const params = { devCodes: instanceCode.value, time }
+  // const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
+  const result = mock
+  console.log('result', result)
+  if (!result || result.length <= 0) return;
+
+  tableHeader.value = result[0]?.data
+  tableData.value = result.map((item: any) => {
+    const currentItem: any = {}
+    currentItem.time = item.time
+    item.data.forEach((sign: any, index: number) => {
+      Object.keys(sign[`dev${index + 1}`]).forEach((key: any) => {
+        currentItem[`${index}${key}`] = sign[`dev${index + 1}`][key];
+      });
+    })
+    return currentItem
+  })
+}
+
+// Change time
+const handleChangeTime = (time: string) => {
+  getIntelligenceData(time)
+}
+
+onMounted(() => {
+  instanceCode.value && getIntelligenceData()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -40,6 +83,7 @@ const changeReport = () => {
   min-width: 117px;
   min-height: 80px;
   position: relative;
+
   .wrap-report {
     width: 100%;
     height: 100%;
@@ -50,6 +94,7 @@ const changeReport = () => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
     .wrap-icon {
       width: 60px;
       height: 42px;
@@ -61,6 +106,7 @@ const changeReport = () => {
       border: 1px solid #0072b3;
       border-radius: 4px;
       box-sizing: border-box;
+
       .icon-report {
         width: 22px;
         height: 24px;
@@ -74,6 +120,7 @@ const changeReport = () => {
       font-weight: 300;
     }
   }
+
   .dialog-table {
     // position: fixed;
     // left: 50%;

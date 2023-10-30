@@ -1,0 +1,86 @@
+[
+    {
+        "totalValue": 9417,
+        "deviceInsName": "T1变压器",
+        "load": {
+            "lightLoadNum": 21,
+            "heavyLoad": 0,
+            "overloadNum": 0,
+            "heavyLoadNum": 0,
+            "lightLoad": 5.25,
+            "overload": 0
+        },
+        "peakValleyRatio": 1.1,
+        "deviceInsCode": "HTransformer_PD_9617a3b0f52d4be8acb8fc368477a49e",
+        "electricAnalysis": {
+            "peakValley-3_rate": 36.04,
+            "peakValley-5": 0,
+            "peakValley-4": 2869,
+            "peakValley-2_rate": 33.49,
+            "peakValley-3": 3394,
+            "peakValley-4_rate": 30.47,
+            "peakValley-2": 3154,
+            "peakValley-1": 0,
+            "peakValley-1_rate": 0,
+            "peakValley-5_rate": 0
+        },
+        "maxLoadRate": 68.29,
+        "minLoadRate": 1.7
+    },
+    {
+        "totalValue": 9838,
+        "deviceInsName": "T2变压器",
+        "load": {
+            "lightLoadNum": 5,
+            "heavyLoad": 5.25,
+            "overloadNum": 13,
+            "heavyLoadNum": 21,
+            "lightLoad": 1.25,
+            "overload": 3.25
+        },
+        "peakValleyRatio": 1.16,
+        "deviceInsCode": "HTransformer_PD_ff1ce49576ba4180a01cf2d12d122cc8",
+        "electricAnalysis": {
+            "peakValley-3_rate": 35.14,
+            "peakValley-5": 0,
+            "peakValley-4": 2952,
+            "peakValley-2_rate": 34.85,
+            "peakValley-3": 3457,
+            "peakValley-4_rate": 30.01,
+            "peakValley-2": 3429,
+            "peakValley-1": 0,
+            "peakValley-1_rate": 0,
+            "peakValley-5_rate": 0
+        },
+        "maxLoadRate": 133.19,
+        "minLoadRate": 19.99
+    },
+    {
+        "totalValue": 9680,
+        "deviceInsName": "T3变压器",
+        "load": {
+            "lightLoadNum": 19,
+            "heavyLoad": 0,
+            "overloadNum": 0,
+            "heavyLoadNum": 0,
+            "lightLoad": 4.75,
+            "overload": 0
+        },
+        "peakValleyRatio": 1.21,
+        "deviceInsCode": "HTransformer_PD_c92ab3ca8b444d6cba81373987df3d45",
+        "electricAnalysis": {
+            "peakValley-3_rate": 34.4,
+            "peakValley-5": 0,
+            "peakValley-4": 2873,
+            "peakValley-2_rate": 35.92,
+            "peakValley-3": 3330,
+            "peakValley-4_rate": 29.68,
+            "peakValley-2": 3477,
+            "peakValley-1": 0,
+            "peakValley-1_rate": 0,
+            "peakValley-5_rate": 0
+        },
+        "maxLoadRate": 81.31,
+        "minLoadRate": 10.24
+    }
+]

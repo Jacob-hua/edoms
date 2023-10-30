@@ -10,9 +10,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
 
-import { formatPrecision } from '@edoms/utils';
-import { formatDateRange } from '@edoms/utils';
-
+import { formatPrecision ,formatDateRange} from '@edoms/utils';
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
@@ -30,8 +28,8 @@ const props = defineProps<{
 }>();
 
 const { setMessage, t } = useApp(props);
-
 setMessage(locales);
+
 const { request } = useApp(props);
 
 const { fetchExecuteApi } = apiFactory(request);
@@ -48,6 +46,8 @@ const systemCumulativeData = ref();
 const tabData = computed(() => props.config.specificDate ?? []);
 
 const instanceCode = computed(() => props.config.property);
+
+const instanceJsonRule = computed(() => props.config.jsonRule ?? '{}');
 
 const intervalDelay = computed<number>(() =>
   typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
@@ -86,7 +86,7 @@ const getSystemCumulativeData = async () => {
     calculateType: props.config.calculateType,
     identify: active.value.value,
     propCode: instanceCode.value,
-    jsonRule: JSON.parse(props.config.jsonRule),
+    jsonRule: JSON.parse(instanceJsonRule.value),
   };
 
   const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
