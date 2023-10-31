@@ -10,7 +10,8 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
 
-import { formatPrecision ,formatDateRange} from '@edoms/utils';
+import { formatDateRange, formatPrecision } from '@edoms/utils';
+
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';

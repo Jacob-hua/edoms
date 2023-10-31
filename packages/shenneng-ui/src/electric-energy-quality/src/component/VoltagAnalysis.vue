@@ -2,14 +2,11 @@
   <div class="wrapper">
     <div class="wrapper-tab">
       <!-- <div class="calendar">日历插件</div> -->
-      <TimeCalendar :option="timeType" @change-time="handleSelectTime" class="calendar"></TimeCalendar>
+      <TimeCalendar :option="timeType" class="calendar" @change-time="handleSelectTime"></TimeCalendar>
       <el-tabs v-model="activeName" class="demo-tabs">
-        <el-tab-pane :label="t('今日统计')" name="day">
-        </el-tab-pane>
-        <el-tab-pane :label="t('月度统计')" name="month">
-        </el-tab-pane>
-        <el-tab-pane :label="t('年度统计')" name="year">
-        </el-tab-pane>
+        <el-tab-pane :label="t('今日统计')" name="day"> </el-tab-pane>
+        <el-tab-pane :label="t('月度统计')" name="month"> </el-tab-pane>
+        <el-tab-pane :label="t('年度统计')" name="year"> </el-tab-pane>
       </el-tabs>
       <Statistics :title="t('电压波动')" :option="underVoltageOption"></Statistics>
       <Statistics :title="t('过电压')" :option="overVoltageOption"></Statistics>
@@ -32,49 +29,54 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+
+import { formatDate } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
 import useI18n from '../../../useI18n';
-import { formatDate } from '@edoms/utils';
+import { ElectricEnergyQuality } from '../type';
 
+import mockData from './mock.json';
 import Statistics from './Statistics.vue';
 import TimeCalendar from './TimeCalendar.vue';
-import mockData from './mock.json'
 const { t } = useI18n();
 
-type Itages = Array<number>
+type Itages = Array<number>;
 
 const props = defineProps<{
-  config: any;
+  config: ElectricEnergyQuality;
 }>();
 
 const activeName = ref('day');
 
 const timeType = ref<string>('date');
 //欠电压
-const underVoltageOption = ref<Itages>([])
+const underVoltageOption = ref<Itages>([]);
 //过电压
-const overVoltageOption = ref<Itages>([])
+const overVoltageOption = ref<Itages>([]);
 //电压波动
-const voltageFluctuationOption = ref<Itages>([])
+const voltageFluctuationOption = ref<Itages>([]);
 //电压波动分析图表
 const histogramOptions = ref<ECOption>({});
 
 const instanceCode = computed(() => props.config.property);
 
+console.log('instanceCode', instanceCode);
+
 const getVoltagAnalysisData = (time: string = formatDate(new Date(), 'YYYY-MM-DD')) => {
+  console.log('time', time);
   // if (!props.config || instanceCode.value?.length <= 0) return;
   // const params = { devCode: instanceCode.value, time }
   // const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
   // if (!result) return;
-  const { histogram, underVoltage, overVoltage, voltageFluctuation } = mockData
+  const { histogram, underVoltage, overVoltage, voltageFluctuation } = mockData;
   underVoltageOption.value = underVoltage;
   overVoltageOption.value = overVoltage;
   voltageFluctuationOption.value = voltageFluctuation;
   histogramOptions.value = fomatChartData(histogram.seriesData, histogram.xAxisData) as ECOption;
-}
+};
 
 const fomatChartData = (seriesData: Array<number>, xAxisData: Array<string>) => {
   return {
@@ -90,8 +92,8 @@ const fomatChartData = (seriesData: Array<number>, xAxisData: Array<string>) => 
         show: false,
       },
       axisLabel: {
-        interval: 0
-      }
+        interval: 0,
+      },
     },
     yAxis: {
       type: 'value',
@@ -152,15 +154,15 @@ const fomatChartData = (seriesData: Array<number>, xAxisData: Array<string>) => 
       },
     ],
   };
-}
+};
 
 const handleSelectTime = (time: string) => {
-  getVoltagAnalysisData(formatDate(time, 'YYYY-MM-DD'))
-}
+  getVoltagAnalysisData(formatDate(time, 'YYYY-MM-DD'));
+};
 
 onMounted(() => {
-  getVoltagAnalysisData()
-})
+  getVoltagAnalysisData();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -249,7 +251,7 @@ onMounted(() => {
   }
 }
 
-.demo-tabs>.el-tabs__content {
+.demo-tabs > .el-tabs__content {
   padding: 32px;
   font-size: 32px;
   font-weight: 600;

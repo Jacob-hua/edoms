@@ -7,18 +7,33 @@
     </div>
     <div class="report">
       <el-row :gutter="1">
-        <el-col :span="3" :offset="1" style="padding:10px 0">
-          <el-date-picker v-model="selectTime" type="datetime" :teleported="false" :placeholder="t('请选择日期')"
-            @change="changeDate" />
+        <el-col :span="3" :offset="1" style="padding: 10px 0">
+          <el-date-picker
+            v-model="selectTime"
+            type="datetime"
+            :teleported="false"
+            :placeholder="t('请选择日期')"
+            @change="changeDate"
+          />
         </el-col>
       </el-row>
       <div class="table">
-        <el-table :data="tableData" stripe :style="tableStyle.table" :header-cell-style="tableStyle.headerCellStyle"
-          :cell-style="tableStyle.cellStyle">
+        <el-table
+          :data="tableData"
+          stripe
+          :style="tableStyle.table"
+          :header-cell-style="tableStyle.headerCellStyle"
+          :cell-style="tableStyle.cellStyle"
+        >
           <el-table-column prop="time" fixed :label="t('时间')" width="110" />
           <el-table-column v-for="(item, index) in tableHeader" :key="item.name" :label="item.name">
-            <el-table-column v-for="(val, key) in item[`dev${index + 1}`]" :key="val" :prop="`${index}${key}`"
-              :label="key" width="110" />
+            <el-table-column
+              v-for="(val, key) in item[`dev${index + 1}`]"
+              :key="val"
+              :prop="`${index}${key}`"
+              :label="key"
+              width="110"
+            />
           </el-table-column>
         </el-table>
       </div>
@@ -28,7 +43,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+
 import { formatDate } from '@edoms/utils';
+
 import useI18n from '../../../useI18n';
 import { MIntelligenceReport } from '../type';
 
@@ -57,16 +74,15 @@ const tableStyle = {
   cellStyle: {
     textAlign: 'center',
     color: '#EAF5FF',
-    opacity: 0.8
-  }
-}
+    opacity: 0.8,
+  },
+};
 
 //Select Time
-const selectTime = ref('')
+const selectTime = ref('');
 const changeDate = () => emit('changeTime', formatDate(selectTime.value, 'YYYY-MM-DD HH:mm:ss'));
 
 const closeTable = () => emit('closeTable');
-
 </script>
 
 <style lang="scss" scoped>

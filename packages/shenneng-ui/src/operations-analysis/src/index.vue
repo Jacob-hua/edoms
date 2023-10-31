@@ -49,10 +49,10 @@
                 <span class="accumulate-unit">{{ 'Kwh' }}</span>
               </div>
               <div class="time-power-ana" :style="{ width: tableTitleList[2].width }">
-                <TabList :electric-analysis="itm.electricAnalysis" :peakValleyRatio="itm.peakValleyRatio" />
+                <TabList :electric-analysis="itm.electricAnalysis" :peak-valley-ratio="itm.peakValleyRatio" />
               </div>
               <div class="load-rate-ana" :style="{ width: tableTitleList[3].width }">
-                <ChartData :load="itm.load" :maxLoadRate="itm.maxLoadRate" :minLoadRate="itm.minLoadRate" />
+                <ChartData :load="itm.load" :max-load-rate="itm.maxLoadRate" :min-load-rate="itm.minLoadRate" />
               </div>
             </div>
           </div>
@@ -63,16 +63,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, computed } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+import { formatDateRange } from '@edoms/utils';
 
 import useApp from '../../useApp';
-import apiFactory from './api';
-import { formatDateRange } from '@edoms/utils';
+
 import ChartData from './components/chartData.vue';
 import TabList from './components/TabList.vue';
+// import apiFactory from './api';
 import locales from './locales';
-import { AnaItemConfigs, IeneryConsumptionSum, } from './type';
-import mockData from './mock.json'
+import mockData from './mock.json';
+import { AnaItemConfigs, IeneryConsumptionSum } from './type';
 
 export interface Ipeak {
   key: string;
@@ -84,14 +86,14 @@ const props = defineProps<{
   config: AnaItemConfigs;
 }>();
 
-type DateFamt = 'day' | 'month' | 'year'
+type DateFamt = 'day' | 'month' | 'year';
 
 const { setMessage, t } = useApp(props);
 setMessage(locales);
 
-const { request } = useApp(props);
+// const { request } = useApp(props);
 
-const { fetchExecuteApi } = apiFactory(request);
+// const { fetchExecuteApi } = apiFactory(request);
 
 const instanceCode = computed(() => props.config.property);
 
@@ -160,43 +162,47 @@ const handlerToClick = () => {
 const hanlderToChoose = (key: string) => {
   dateValue.value = key;
   isShowOptions.value = false;
-  getElectricAnalysisData()
+  getElectricAnalysisData();
 };
-
-
 //Query ElectricAnalysis Data
 const paging = ref({
   page: 1,
-  size: 3
-})
+  size: 3,
+});
 
 const getElectricAnalysisData = async () => {
   if (!props.config || instanceCode.value?.length <= 0) return;
-  const dateType = new Map([['日', 'day'], ['月', 'month'], ['年', 'year']]).get(dateValue.value) as DateFamt
+  const dateType = new Map([
+    ['日', 'day'],
+    ['月', 'month'],
+    ['年', 'year'],
+  ]).get(dateValue.value) as DateFamt;
   const { start, end } = formatDateRange(new Date(), dateType, 'YYYY-MM-DD HH:mm:ss');
   const params = {
     devCodes: instanceCode.value,
     sTime: start,
     eTime: end,
     feeRule: JSON.parse(instanceFeeRule.value),
-    ...paging.value
-  }
-  console.log('params', params)
+    ...paging.value,
+  };
+  console.log('params', params);
   // const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
-  const result = mockData
+  const result = mockData;
   if (!result || result.length <= 0) return;
-  tableDataList.value = result as any
-}
+  tableDataList.value = result as any;
+};
 
 watch(
   () => isShowModel.value,
   (newV) => {
     const dom = document.getElementsByClassName('model-wrapper-gtst')[0];
-    newV ? dom.addEventListener('click', handlerToClick, false) : dom.removeEventListener('click', handlerToClick, false), (isShowOptions.value = false);
+    newV
+      ? dom.addEventListener('click', handlerToClick, false)
+      : dom.removeEventListener('click', handlerToClick, false),
+      (isShowOptions.value = false);
     newV && getElectricAnalysisData();
   }
 );
-
 </script>
 
 <style lang="scss" scoped>

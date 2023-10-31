@@ -7,23 +7,30 @@
       <div class="label">{{ config.title }}</div>
     </div>
     <div v-if="showReport" class="dialog-table">
-      <Table :config="config" @close-table="showReport = false" :tableData="tableData" :tableHeader="tableHeader"
-        @change-time="handleChangeTime">
+      <Table
+        :config="config"
+        :table-data="tableData"
+        :table-header="tableHeader"
+        @close-table="showReport = false"
+        @change-time="handleChangeTime"
+      >
       </Table>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
-import { formatDate } from '@edoms/utils';
-import useApp from '../../useApp';
-import apiFactory from './api';
-import Table from './component/Table.vue';
-import locales from './locales';
-import { MIntelligenceReport, EfficiencyData } from './type';
+import { computed, onMounted, ref } from 'vue';
 
-import mock from './mock.json'
+import { formatDate } from '@edoms/utils';
+
+import useApp from '../../useApp';
+
+import Table from './component/Table.vue';
+// import apiFactory from './api';
+import locales from './locales';
+import mock from './mock.json';
+import { EfficiencyData, MIntelligenceReport } from './type';
 
 const props = defineProps<{
   config: MIntelligenceReport;
@@ -32,50 +39,49 @@ const props = defineProps<{
 const { setMessage } = useApp(props);
 setMessage(locales);
 
-const { request } = useApp(props);
+// const { request } = useApp(props);
 
-const { fetchExecuteApi } = apiFactory(request);
+// const { fetchExecuteApi } = apiFactory(request);
 
 const showReport = ref<boolean>(false);
 
 const instanceCode = computed(() => props.config.property);
 
-const changeReport = () => showReport.value = true
+const changeReport = () => (showReport.value = true);
 
 // Query Table data
-const tableData = ref<Array<EfficiencyData>>([])
-const tableHeader = ref()
+const tableData = ref<Array<EfficiencyData>>([]);
+const tableHeader = ref();
 
 const getIntelligenceData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss')) => {
   if (!props.config || instanceCode.value?.length <= 0) return;
-
+  console.log('time', time);
   // const params = { devCodes: instanceCode.value, time }
   // const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
-  const result = mock
-  console.log('result', result)
+  const result = mock;
   if (!result || result.length <= 0) return;
 
-  tableHeader.value = result[0]?.data
+  tableHeader.value = result[0]?.data;
   tableData.value = result.map((item: any) => {
-    const currentItem: any = {}
-    currentItem.time = item.time
+    const currentItem: any = {};
+    currentItem.time = item.time;
     item.data.forEach((sign: any, index: number) => {
       Object.keys(sign[`dev${index + 1}`]).forEach((key: any) => {
         currentItem[`${index}${key}`] = sign[`dev${index + 1}`][key];
       });
-    })
-    return currentItem
-  })
-}
+    });
+    return currentItem;
+  });
+};
 
 // Change time
 const handleChangeTime = (time: string) => {
-  getIntelligenceData(time)
-}
+  getIntelligenceData(time);
+};
 
 onMounted(() => {
-  instanceCode.value && getIntelligenceData()
-})
+  instanceCode.value && getIntelligenceData();
+});
 </script>
 
 <style lang="scss" scoped>

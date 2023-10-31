@@ -6,8 +6,11 @@
         <span class="elefont">{{ title }}</span>
       </div>
       <div class="fluctuation_con">
-        <div class="con_sub" v-for="item in tageList" :key="item.tageNum">
-          <div><span style="color: #41e4de; font-size: 24px">{{ item.tageNum }}</span>{{ t('次') }}</div>
+        <div v-for="item in tageList" :key="item.tageNum" class="con_sub">
+          <div>
+            <span style="color: #41e4de; font-size: 24px">{{ item.tageNum }}</span
+            >{{ t('次') }}
+          </div>
           <div>{{ t('变动范围') }}：{{ item.tageRange }}</div>
         </div>
       </div>
@@ -16,7 +19,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
+
 import useI18n from '../../../useI18n';
 
 const { t } = useI18n();
@@ -30,10 +34,10 @@ const tageList = computed(() => {
   return props.option?.map((item, index) => {
     return {
       tageNum: item,
-      tageRange: ['3~4%', '2~3%', '1.5~2%', '≤1.5%'][index]
-    }
-  })
-})
+      tageRange: ['3~4%', '2~3%', '1.5~2%', '≤1.5%'][index],
+    };
+  });
+});
 </script>
 
 <style lang="scss" scoped>
