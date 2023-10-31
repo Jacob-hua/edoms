@@ -7,7 +7,15 @@
  */
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, FetchEfficiencyReq, FetchEfficiencyRes, FetchHistoryDataReq, FetchHistoryDataRes, FetchintelligenceRes ,FetchExecuteApiReq } from './type';
+import {
+  Apis,
+  FetchEfficiencyReq,
+  FetchEfficiencyRes,
+  FetchExecuteApiReq,
+  FetchHistoryDataReq,
+  FetchHistoryDataRes,
+  FetchintelligenceRes,
+} from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchHistoryData: async (data: FetchHistoryDataReq): Promise<FetchHistoryDataRes> => {

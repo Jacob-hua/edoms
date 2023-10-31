@@ -15,7 +15,7 @@ export interface FetchExecuteApiReq {
   requestParam: any;
 }
 export interface IelectricAnalysis {
-  [key: string]: number
+  [key: string]: number;
 }
 
 export interface Iload {
@@ -38,10 +38,8 @@ export interface IeneryConsumption<T, U> {
   minLoadRate: number;
 }
 
-
-
-export type IeneryConsumptionSum = IeneryConsumption<Iload, IelectricAnalysis>
-export type FetcheneryConsumptionRes = IeneryConsumptionSum[]
+export type IeneryConsumptionSum = IeneryConsumption<Iload, IelectricAnalysis>;
+export type FetcheneryConsumptionRes = IeneryConsumptionSum[];
 export interface Apis {
   fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetcheneryConsumptionRes>;
 }

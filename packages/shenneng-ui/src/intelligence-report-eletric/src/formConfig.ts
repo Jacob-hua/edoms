@@ -25,5 +25,5 @@ export default async (request: Request) => [
     append: 's',
   },
   /** 注入业务组件的共通字段 */
-    ...(await useInstanceConfig(request, 'intelligence-report-eletric'))
+  ...(await useInstanceConfig(request, 'intelligence-report-eletric')),
 ];

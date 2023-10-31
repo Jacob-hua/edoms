@@ -86,10 +86,10 @@ export interface VoltagAnallysisChart {
 }
 
 export interface FetchVoltagAnallysisRes {
-  histogram: VoltagAnallysisChart,
+  histogram: VoltagAnallysisChart;
   underVoltage: Array<number>;
   overVoltage: Array<number>;
-  voltageFluctuation: Array<number>
+  voltageFluctuation: Array<number>;
 }
 
 export type FetchHistoryDataRes = HistoryData[];

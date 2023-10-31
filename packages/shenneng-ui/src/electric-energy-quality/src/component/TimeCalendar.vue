@@ -10,12 +10,12 @@ const timeType = defineProps<{
   option: string;
 }>();
 
-const emit = defineEmits(['change-time'])
+const emit = defineEmits(['change-time']);
 
 console.log(timeType.option);
 const time = ref(new Date());
 const selectDate = () => {
-  emit('change-time', time.value)
+  emit('change-time', time.value);
 };
 </script>
 

@@ -3,8 +3,13 @@
     <template #operation>
       <div class="wrap-header">
         <div class="wrap-header-divide">
-          <div v-for="(item, index) in categories" :key="item.label" :class="{ active: activeCategory === index }"
-            class="divide-item" @click="changeTab(index)">
+          <div
+            v-for="(item, index) in categories"
+            :key="item.label"
+            :class="{ active: activeCategory === index }"
+            class="divide-item"
+            @click="changeTab(index)"
+          >
             {{ item.label }}
           </div>
         </div>
@@ -12,13 +17,25 @@
     </template>
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrapper">
-        <el-select v-if="pointOptions && pointOptions.length > 0" v-model="vModelpoint" @change="changeSelectPoint"
-          class="select-device" placeholder="Select" size="small">
+        <el-select
+          v-if="pointOptions && pointOptions.length > 0"
+          v-model="vModelpoint"
+          class="select-device"
+          placeholder="Select"
+          size="small"
+          @change="changeSelectPoint"
+        >
           <el-option v-for="item in pointOptions" :key="item.value" :label="item.label" :value="item.indicators" />
         </el-select>
         <div class="left-tab">
-          <div v-for="({ label }, index) in parameterConfigs" :key="index" class="button-tab"
-            :class="{ active: activeTab === index }" :title="label" @click="changeActiveTab(index)">
+          <div
+            v-for="({ label }, index) in parameterConfigs"
+            :key="index"
+            class="button-tab"
+            :class="{ active: activeTab === index }"
+            :title="label"
+            @click="changeActiveTab(index)"
+          >
             {{ label }}
           </div>
         </div>
@@ -62,28 +79,29 @@ const categories = computed<any[]>(() => props.config.classify);
 
 const activeCategory = ref<number>(0);
 
-
 const option = ref<ECOption>({});
 
 const lineUnit = ref<string[]>([]);
 
-const pointOptions = ref([])
+const pointOptions = ref<Record<string, any>>([]);
 
-const vModelpoint = ref('')
+const vModelpoint = ref('');
 
-const currentIndicators = ref()
+const currentIndicators = ref();
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   if (!props.config.classify) return [];
   if (props.config.classify.length == 0) return [];
   const result = props.config.classify[activeCategory.value].tabName;
   if (result) {
-    arrangePointData()
+    arrangePointData();
     return result;
   }
-  pointOptions.value = []
+  clearPointOptions();
   return [];
 });
+
+const clearPointOptions = () => (pointOptions.value = []);
 
 const activeIndicatorConfig = ref<Map<string, MIndicatorItemConfig>>(new Map<string, MIndicatorItemConfig>());
 
@@ -96,7 +114,7 @@ const intervalDelay = computed<number>(() => {
 const changeTab = (index: number) => {
   if (activeCategory.value === index) return;
   activeCategory.value = index;
-  arrangePointData()
+  arrangePointData();
   activeTab.value = 0;
   getHistoryData();
 };
@@ -122,52 +140,50 @@ const getHistoryData = async () => {
   });
   let chartSeries = [];
   chartSeries = result.map(({ propCode, dataList }) => {
-   return data[activeTab.value].indicators?.map((indicator,index)=>{
-    // const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => indicator.property == propCode);
-    const codeIndex =indicator.property == propCode ? index : -1
-    const name = indicator.label;
-    const color = indicator.color;
-    lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
-    const lineType = data[activeTab.value].lineType ?? 'line';
-    return {
-      name: name ? name : `${t('未命名')}${index}`,
-      type: lineType,
-      showSymbol: false,
-      smooth: true,
-      color,
-      barWidth: '14',
-      data: dataList.map(({ time, value }) => [
-        new Date(Number(time)),
-        formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
-      ]),
-    };
-    })
-    
+    return data[activeTab.value].indicators?.map((indicator, index) => {
+      // const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => indicator.property == propCode);
+      const codeIndex = indicator.property == propCode ? index : -1;
+      const name = indicator.label;
+      const color = indicator.color;
+      lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
+      const lineType = data[activeTab.value].lineType ?? 'line';
+      return {
+        name: name ? name : `${t('未命名')}${index}`,
+        type: lineType,
+        showSymbol: false,
+        smooth: true,
+        color,
+        barWidth: '14',
+        data: dataList.map(({ time, value }) => [
+          new Date(Number(time)),
+          formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
+        ]),
+      };
+    });
   });
   option.value = generateOption(chartSeries[0]);
 };
 
 const isHasPoint = () => {
   const result = props.config.classify[activeCategory.value].tabName;
-  return result[activeTab.value].point?.length > 0
-}
+  return result[activeTab.value].point?.length > 0;
+};
 
 const arrangePointData = () => {
   const result = props.config.classify[activeCategory.value].tabName;
-  const currentPoint = result[activeTab.value]?.point || []
-  pointOptions.value = currentPoint.length > 0 ? currentPoint : []
+  const currentPoint = result[activeTab.value]?.point || [];
+  pointOptions.value = currentPoint.length > 0 ? currentPoint : [];
   if (pointOptions.value.length > 0) {
-    vModelpoint.value = pointOptions.value[0].label
+    vModelpoint.value = pointOptions.value[0].label;
   } else {
-    vModelpoint.value = ''
+    vModelpoint.value = '';
   }
-}
+};
 
-const changeSelectPoint = (val) => {
-  currentIndicators.value = [...val].map((e: any) => e.property)
-  console.log('currentIndicators.value',currentIndicators.value)
-  getHistoryData()
-}
+const changeSelectPoint = (val: any) => {
+  currentIndicators.value = [...val].map((e: any) => e.property);
+  getHistoryData();
+};
 
 const { flush } = useIntervalAsync(getHistoryData, intervalDelay.value);
 
@@ -194,35 +210,35 @@ function generateOption(series: any[] = []): ECOption {
   const dataZoom =
     series.length > 0 && series[0].type === 'bar'
       ? [
-        {
-          // xAxisIndex: [0],
-          // show: true, //flase直接隐藏图形
-          type: 'inside',
-          backgroundColor: 'transparent',
-          brushSelect: false, // 是否开启刷选功能
-          zoomLock: true, // 是否锁定选择区域大小
-          height: 10,
-          //left: 'center', //滚动条靠左侧的百分比
-          bottom: 0,
-          start: 0, //滚动条的起始位置
-          end, //滚动条的截止位置（按比例分割你的柱状图x轴长度）
-          // handleStyle: {// 滚动条两侧操作按钮样式
-          //   color: 'rgba(40, 124, 232, 1)',
-          //   borderColor: 'rgba(40, 124, 232, 1)',
-          // },
-          // fillerColor: 'rgba(40, 124, 232, 1)',// 背景颜色
-          borderColor: 'transparent',
-          showDetail: false,
-          dataBackground: {
-            areaStyle: {
-              opacity: 0,
-            },
-            lineStyle: {
-              color: 'transparent',
+          {
+            // xAxisIndex: [0],
+            // show: true, //flase直接隐藏图形
+            type: 'inside',
+            backgroundColor: 'transparent',
+            brushSelect: false, // 是否开启刷选功能
+            zoomLock: true, // 是否锁定选择区域大小
+            height: 10,
+            //left: 'center', //滚动条靠左侧的百分比
+            bottom: 0,
+            start: 0, //滚动条的起始位置
+            end, //滚动条的截止位置（按比例分割你的柱状图x轴长度）
+            // handleStyle: {// 滚动条两侧操作按钮样式
+            //   color: 'rgba(40, 124, 232, 1)',
+            //   borderColor: 'rgba(40, 124, 232, 1)',
+            // },
+            // fillerColor: 'rgba(40, 124, 232, 1)',// 背景颜色
+            borderColor: 'transparent',
+            showDetail: false,
+            dataBackground: {
+              areaStyle: {
+                opacity: 0,
+              },
+              lineStyle: {
+                color: 'transparent',
+              },
             },
           },
-        },
-      ]
+        ]
       : [];
 
   const option: ECOption = {
@@ -308,7 +324,6 @@ function generateOption(series: any[] = []): ECOption {
     dataZoom,
     series,
   };
-  console.log('option',option)
   return option;
 }
 
@@ -512,7 +527,7 @@ onMounted(() => {
       // }
 
       .button-tab {
-        width:100%;
+        width: 100%;
         margin-bottom: 10px;
         display: flex;
         align-items: center;
@@ -568,10 +583,10 @@ onMounted(() => {
   position: absolute;
   right: 15px;
   top: 0px;
-  background-color: #1F212C;
+  background-color: #1f212c;
 }
 
 :deep(.wrap-body .select-device .el-input__wrapper) {
-  background-color: #1F212C !important;
+  background-color: #1f212c !important;
 }
 </style>

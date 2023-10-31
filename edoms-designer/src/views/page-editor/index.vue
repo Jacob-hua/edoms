@@ -340,7 +340,7 @@ watch(
             'economic-indicators',
             'system-cumulative-data',
             'operations-analysis',
-            'intelligence-report-eletric'
+            'intelligence-report-eletric',
           ].includes(component)
         ) {
           model = props.formValue;

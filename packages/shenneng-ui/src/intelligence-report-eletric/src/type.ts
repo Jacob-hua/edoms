@@ -87,7 +87,7 @@ export interface FetchintelligenceReq {
 
 export interface Iintelligence {
   time: string;
-  data: Array<{ [key: string]: number }>
+  data: Array<{ [key: string]: number }>;
 }
 
 export interface FetchExecuteApiReq {
@@ -95,7 +95,7 @@ export interface FetchExecuteApiReq {
   requestParam: any;
 }
 
-export type FetchintelligenceRes =Iintelligence[]
+export type FetchintelligenceRes = Iintelligence[];
 
 export type FetchHistoryDataRes = HistoryData[];
 

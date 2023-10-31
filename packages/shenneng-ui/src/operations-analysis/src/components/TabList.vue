@@ -8,8 +8,12 @@
     </div>
     <div class="right-ftst">
       <div class="color-wrapper">
-        <div v-for="itm in peakList" :key="itm.code" :style="{ width: `calc(${Number(itm.value) * 100}% - 2px)` }"
-          :class="['color-wrapper-item', getClass(itm.code, 'bg')]"></div>
+        <div
+          v-for="itm in peakList"
+          :key="itm.code"
+          :style="{ width: `calc(${Number(itm.value) * 100}% - 2px)` }"
+          :class="['color-wrapper-item', getClass(itm.code, 'bg')]"
+        ></div>
       </div>
       <div class="font-wrapper-sttst">
         <span class="font-ft-st">{{ t('峰谷比') }}：</span>
@@ -21,29 +25,29 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import useI18n from '../../../useI18n';
-import { IelectricAnalysis } from '../type'
+import { IelectricAnalysis } from '../type';
 
 const { t } = useI18n();
 
 const props = defineProps<{
   electricAnalysis: IelectricAnalysis;
   peakValleyRatio: number | string;
-}>()
+}>();
 
 const peakList = computed(() => {
-  if (!props.electricAnalysis) return 
-  const currentPeak = props.electricAnalysis
+  if (!props.electricAnalysis) return;
+  const currentPeak = props.electricAnalysis;
   return [
     { key: t('谷'), value: currentPeak['peakValley-4_rate'], code: 'gu' },
     { key: t('平'), value: currentPeak['peakValley-3_rate'], code: 'ping' },
     { key: t('峰'), value: currentPeak['peakValley-2_rate'], code: 'feng' },
     { key: t('尖'), value: currentPeak['peakValley-1_rate'], code: 'jian' },
-  ]
-})
+  ];
+});
 
-const getClass = computed(() => (code: string | number, type: string) => `${code}-${type}`)
-
+const getClass = computed(() => (code: string | number, type: string) => `${code}-${type}`);
 </script>
 
 <style lang="scss" scoped>

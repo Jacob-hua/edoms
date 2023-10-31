@@ -7,7 +7,7 @@
  */
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, FetchExecuteApiReq, FetcheneryConsumptionRes } from './type';
+import { Apis, FetcheneryConsumptionRes, FetchExecuteApiReq } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetcheneryConsumptionRes> => {

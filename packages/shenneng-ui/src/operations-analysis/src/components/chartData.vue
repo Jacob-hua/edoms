@@ -26,10 +26,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+
 import echarts from '../../../echarts';
-import { Iload } from '../type'
 import useI18n from '../../../useI18n';
+import { Iload } from '../type';
 
 const { t } = useI18n();
 
@@ -42,7 +43,7 @@ export interface Ioverload {
 const props = defineProps<{
   maxLoadRate: number;
   minLoadRate: number;
-  load: Iload
+  load: Iload;
 }>();
 
 const idList = ref<Array<string>>([
@@ -51,14 +52,14 @@ const idList = ref<Array<string>>([
 ]);
 
 const loadList = computed(() => {
-  if (!props.load) return
-  const currentLoad = props.load
+  if (!props.load) return;
+  const currentLoad = props.load;
   return [
     { key: t('过载'), dis: currentLoad.overloadNum, times: currentLoad.overload },
     { key: t('重载'), dis: currentLoad.heavyLoadNum, times: currentLoad.heavyLoad },
-    { key: t('轻载'), dis: currentLoad.lightLoadNum, times: currentLoad.lightLoad }
-  ]
-})
+    { key: t('轻载'), dis: currentLoad.lightLoadNum, times: currentLoad.lightLoad },
+  ];
+});
 
 const initData = (type: string, val: number) => {
   const dom = document.getElementById(type);
@@ -83,7 +84,6 @@ onMounted(() => {
   initData(idList.value[0], props.maxLoadRate);
   initData(idList.value[1], props.minLoadRate);
 });
-
 </script>
 
 <style lang="scss" scoped>
