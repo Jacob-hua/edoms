@@ -80,7 +80,7 @@ export default defineConfig(({ mode }) => {
             return path.replace(/\/api/, '');
           },
         },
-        '/edoms/run-time': {
+        '/edoms-runtime-service-dev': {
           //   target: 'http://192.100.4.80:8062', //思昊
           target: 'http://192.100.4.35:8062', //李
           // target: 'http://k8s.isiact.com',
