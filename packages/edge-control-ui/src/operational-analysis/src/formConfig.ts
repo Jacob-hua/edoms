@@ -109,7 +109,7 @@ export default async (request: Request) => [
             movable: false,
             maxItems: 10,
             title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
-            items:[
+            items: [
               {
                 text: '点位',
                 name: 'label',
@@ -141,7 +141,7 @@ export default async (request: Request) => [
                   },
                 ],
               },
-            ]
+            ],
           },
         ],
       },

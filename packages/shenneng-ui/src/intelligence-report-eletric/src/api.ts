@@ -7,7 +7,15 @@
  */
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, FetchEfficiencyReq, FetchEfficiencyRes, FetchHistoryDataReq, FetchHistoryDataRes } from './type';
+import {
+  Apis,
+  FetchEfficiencyReq,
+  FetchEfficiencyRes,
+  FetchExecuteApiReq,
+  FetchHistoryDataReq,
+  FetchHistoryDataRes,
+  FetchintelligenceRes,
+} from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchHistoryData: async (data: FetchHistoryDataReq): Promise<FetchHistoryDataRes> => {
@@ -32,6 +40,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
     try {
       const { result } = await request<FetchEfficiencyReq, FetchEfficiencyRes>({
         url: '/operation-monitor/machine-efficiency',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetchintelligenceRes> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchExecuteApiReq, FetchintelligenceRes>({
+        url: '/OperationalMonitorCommon/executeApi',
         method: 'POST',
         data,
       });

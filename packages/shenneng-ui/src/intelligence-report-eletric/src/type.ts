@@ -80,6 +80,23 @@ export interface HistoryData {
   }>;
 }
 
+export interface FetchintelligenceReq {
+  devCodes: string;
+  time: string;
+}
+
+export interface Iintelligence {
+  time: string;
+  data: Array<{ [key: string]: number }>;
+}
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: any;
+}
+
+export type FetchintelligenceRes = Iintelligence[];
+
 export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEfficiencyRes = EfficiencyData[];
@@ -87,4 +104,5 @@ export type FetchEfficiencyRes = EfficiencyData[];
 export interface Apis {
   fetchEfficiencyData: (data: FetchEfficiencyReq) => Promise<FetchEfficiencyRes>;
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchintelligenceRes>;
 }

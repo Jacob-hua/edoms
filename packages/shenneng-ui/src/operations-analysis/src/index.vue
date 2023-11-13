@@ -41,18 +41,18 @@
           <div class="table-content">
             <div v-for="(itm, idx) in tableDataList" :key="idx" class="content-itm">
               <div class="unit-name-type" :style="{ width: tableTitleList[0].width }">
-                <span class="unit-name">{{ itm.unitName }}</span>
-                <span class="unit-type">{{ itm.unitType }}</span>
+                <span class="unit-name">{{ itm.deviceInsName }}</span>
+                <!-- <span class="unit-type">{{ itm.unitType }}</span> -->
               </div>
               <div class="accumulate-value-unit" :style="{ width: tableTitleList[1].width }">
-                <span class="accumulate-value">{{ itm.dataValue }}</span>
-                <span class="accumulate-unit">{{ itm.unit }}</span>
+                <span class="accumulate-value">{{ itm.totalValue }}</span>
+                <span class="accumulate-unit">{{ 'Kwh' }}</span>
               </div>
               <div class="time-power-ana" :style="{ width: tableTitleList[2].width }">
-                <TabList :list="itm.timeUse" />
+                <TabList :electric-analysis="itm.electricAnalysis" :peak-valley-ratio="itm.peakValleyRatio" />
               </div>
               <div class="load-rate-ana" :style="{ width: tableTitleList[3].width }">
-                <ChartData :list="itm.rateAna" :options="{}" />
+                <ChartData :load="itm.load" :max-load-rate="itm.maxLoadRate" :min-load-rate="itm.minLoadRate" />
               </div>
             </div>
           </div>
@@ -63,21 +63,41 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+import { formatDateRange } from '@edoms/utils';
 
 import useApp from '../../useApp';
 
 import ChartData from './components/chartData.vue';
 import TabList from './components/TabList.vue';
+// import apiFactory from './api';
 import locales from './locales';
-import { AnaItemConfigs } from './type';
+import mockData from './mock.json';
+import { AnaItemConfigs, IeneryConsumptionSum } from './type';
+
+export interface Ipeak {
+  key: string;
+  code: string;
+  value: string;
+}
+
 const props = defineProps<{
   config: AnaItemConfigs;
 }>();
 
-const { setMessage, t } = useApp(props);
+type DateFamt = 'day' | 'month' | 'year';
 
+const { setMessage, t } = useApp(props);
 setMessage(locales);
+
+// const { request } = useApp(props);
+
+// const { fetchExecuteApi } = apiFactory(request);
+
+const instanceCode = computed(() => props.config.property);
+
+const instanceFeeRule = computed(() => props.config.feeRule ?? '{}');
 
 const dateOptions = ref<Array<{ [key: string]: string }>>([
   {
@@ -121,58 +141,9 @@ const isShowModel = ref<boolean>(false);
 
 const isShowOptions = ref<boolean>(false);
 
-const dateValue = ref<string>(t('日'));
+const dateValue = ref('日');
 
-const tableDataList = ref<Array<any>>([
-  {
-    unitName: '4#' + t('变压器'),
-    unitType: t('出线柜') + '1',
-    unit: t('万') + 'kWh',
-    dataValue: 34,
-    timeUse: {
-      rate: 1.72,
-      list: [
-        { key: t('谷'), value: 0.18, code: 'gu' },
-        { key: t('平'), value: 0.39, code: 'ping' },
-        { key: t('峰'), value: 0.31, code: 'feng' },
-        { key: t('尖'), value: 0.12, code: 'jian' },
-      ],
-    },
-    rateAna: {
-      max: 0.8,
-      min: 0.2,
-      list: [
-        { key: t('过载'), dis: '0', times: '0' },
-        { key: t('重载'), dis: '36', times: '127' },
-        { key: t('轻载'), dis: '37', times: '511' },
-      ],
-    },
-  },
-  {
-    unitName: '5#' + t('变压器'),
-    unitType: t('出线柜') + '2',
-    unit: t('万') + 'kWh',
-    dataValue: 0,
-    timeUse: {
-      rate: 0,
-      list: [
-        { key: t('谷'), value: 0, code: 'gu' },
-        { key: t('平'), value: 0, code: 'ping' },
-        { key: t('峰'), value: 0, code: 'feng' },
-        { key: t('尖'), value: 0, code: 'jian' },
-      ],
-    },
-    rateAna: {
-      max: 0,
-      min: 0,
-      list: [
-        { key: t('过载'), dis: '0', times: '0' },
-        { key: t('重载'), dis: '0', times: '0' },
-        { key: t('轻载'), dis: '0', times: '0' },
-      ],
-    },
-  },
-]);
+const tableDataList = ref<Array<IeneryConsumptionSum>>([]);
 
 const handlerToShow = (e: any, bl: boolean) => {
   e.stopPropagation();
@@ -191,7 +162,34 @@ const handlerToClick = () => {
 const hanlderToChoose = (key: string) => {
   dateValue.value = key;
   isShowOptions.value = false;
-  // handlerToClick();
+  getElectricAnalysisData();
+};
+//Query ElectricAnalysis Data
+const paging = ref({
+  page: 1,
+  size: 3,
+});
+
+const getElectricAnalysisData = async () => {
+  if (!props.config || instanceCode.value?.length <= 0) return;
+  const dateType = new Map([
+    ['日', 'day'],
+    ['月', 'month'],
+    ['年', 'year'],
+  ]).get(dateValue.value) as DateFamt;
+  const { start, end } = formatDateRange(new Date(), dateType, 'YYYY-MM-DD HH:mm:ss');
+  const params = {
+    devCodes: instanceCode.value,
+    sTime: start,
+    eTime: end,
+    feeRule: JSON.parse(instanceFeeRule.value),
+    ...paging.value,
+  };
+  console.log('params', params);
+  // const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
+  const result = mockData;
+  if (!result || result.length <= 0) return;
+  tableDataList.value = result as any;
 };
 
 watch(
@@ -202,6 +200,7 @@ watch(
       ? dom.addEventListener('click', handlerToClick, false)
       : dom.removeEventListener('click', handlerToClick, false),
       (isShowOptions.value = false);
+    newV && getElectricAnalysisData();
   }
 );
 </script>
@@ -211,6 +210,7 @@ watch(
   min-width: 117px;
   min-height: 80px;
   position: relative;
+
   .wrap-report {
     width: 100%;
     height: 100%;
@@ -219,6 +219,7 @@ watch(
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
     .wrap-icon {
       width: 60px;
       height: 42px;
@@ -230,6 +231,7 @@ watch(
       border: 1px solid #0072b3;
       border-radius: 4px;
       box-sizing: border-box;
+
       .icon-report {
         width: 22px;
         height: 24px;
@@ -244,6 +246,7 @@ watch(
       text-align: center;
     }
   }
+
   .model-wrapper-gtst {
     position: fixed;
     top: 0;
@@ -252,6 +255,7 @@ watch(
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
+
     .model-content {
       min-width: 1480px;
       min-height: 800px;
@@ -264,6 +268,7 @@ watch(
       border: 1px solid rgba(1, 52, 96, 1);
       display: flex;
       flex-direction: column;
+
       .content-title {
         width: 100%;
         height: 52px;
@@ -274,8 +279,10 @@ watch(
         justify-content: space-between;
         background-image: url('../src/assets/title-bg.png');
         background-size: 100% 100%;
+
         .left-title-font {
           display: flex;
+
           .font-icon {
             display: block;
             width: 24px;
@@ -286,12 +293,14 @@ watch(
             background-repeat: no-repeat;
             margin-top: 14px;
           }
+
           .font-value {
             color: rgba(234, 245, 255, 1);
             font-size: 18px;
             margin-left: 15px;
           }
         }
+
         .right-close {
           width: 24px;
           height: 24px;
@@ -304,6 +313,7 @@ watch(
           cursor: pointer;
         }
       }
+
       .sub-title {
         width: 100%;
         padding: 20px 30px;
@@ -311,9 +321,11 @@ watch(
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid rgba(29, 38, 52, 1);
+
         .left-title-font {
           display: flex;
           line-height: 32px;
+
           .font-icon {
             display: block;
             width: 18px;
@@ -324,15 +336,18 @@ watch(
             background-repeat: no-repeat;
             margin-top: 7px;
           }
+
           .font-value {
             color: rgba(234, 245, 255, 1);
             font-size: 18px;
             margin-left: 15px;
           }
         }
+
         .right-select {
           display: flex;
           position: relative;
+
           .select-options {
             width: 98px;
             background-color: rgba(9, 15, 23, 1);
@@ -343,6 +358,7 @@ watch(
             padding-top: 15px;
             box-sizing: border-box;
             border: 1px solid rgba(69, 78, 114, 1);
+
             .option-item {
               width: 100%;
               line-height: 25px;
@@ -350,18 +366,21 @@ watch(
               margin-bottom: 10px;
               color: rgba(234, 245, 255, 1);
               cursor: pointer;
+
               &:hover {
                 background-color: #fff;
                 color: rgba(9, 15, 23, 1);
               }
             }
           }
+
           .label-select {
             color: rgba(234, 245, 255, 1);
             line-height: 32px;
             font-size: 16px;
             margin-right: 10px;
           }
+
           .select {
             width: 98px;
             height: 32px;
@@ -371,6 +390,7 @@ watch(
             padding: 7px 20px;
             box-sizing: border-box;
             cursor: pointer;
+
             .font-value {
               color: #fff;
               font-size: 14px;
@@ -378,28 +398,34 @@ watch(
           }
         }
       }
+
       .table-ft {
         width: calc(100% - 60px);
         height: 656px;
         margin: 0 auto;
+
         .table-title {
           width: 100%;
           height: 40px;
           display: flex;
           justify-content: space-between;
+
           .title-itm {
             height: 40px;
             line-height: 40px;
             text-align: center;
             color: rgba(234, 245, 255, 1);
             font-size: 16px;
+            padding: 0 10px;
           }
         }
+
         .table-content {
           width: 100%;
           height: calc(100% - 50px);
           overflow: hidden;
           overflow-y: auto;
+
           .content-itm {
             width: 100%;
             height: 174px;
@@ -408,6 +434,7 @@ watch(
             border: 1px solid rgba(33, 44, 60, 1);
             box-sizing: border-box;
             display: flex;
+
             // justify-content: space-between;
             .unit-name-type {
               height: 100%;
@@ -419,14 +446,16 @@ watch(
               font-size: 16px;
               display: flex;
               justify-content: space-between;
+
               .unit-name {
                 display: block;
-                width: 60%;
+                width: 100%;
                 line-height: 174px;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
               }
+
               .unit-type {
                 display: block;
                 width: 80px;
@@ -444,6 +473,7 @@ watch(
                 text-overflow: ellipsis;
               }
             }
+
             .accumulate-value-unit {
               height: 100%;
               line-height: 174px;
@@ -452,22 +482,26 @@ watch(
               color: rgba(234, 245, 255, 1);
               font-size: 16px;
               vertical-align: middle;
+
               .accumulate-value {
                 color: rgba(65, 228, 222, 1);
                 font-size: 18px;
                 margin-right: 7px;
               }
+
               .accumulate-unit {
                 color: rgba(234, 245, 255, 1);
                 font-size: 14px;
               }
             }
+
             .time-power-ana {
               height: 100%;
               border-right: 1px solid rgba(29, 38, 52, 1);
               padding: 5px 20px;
               box-sizing: border-box;
             }
+
             .load-rate-ana {
               height: 100%;
               padding: 30px 30px;
@@ -475,6 +509,7 @@ watch(
             }
           }
         }
+
         .table-content::-webkit-scrollbar {
           width: 3px;
           height: 1px;

@@ -76,18 +76,14 @@ const headerData: HeaderData[] = [
     className: 'green',
   },
 ];
-const { fetchInitAlarmList, fetchNewAlarmList, confirmedAlarmList } = warningApi(request);
+const { confirmedAlarmList, fetchExecuteApi } = warningApi(request);
 const activeClassName = ref<ClassName>('red');
 const commonAlarm = ref();
 const importantAlarm = ref();
 const seriousAlarm = ref();
 
 const initAlarmList = async () => {
-  const result = await fetchInitAlarmList({
-    sysInsCode: props.config.instance?.at(-1) as unknown as string,
-    timeSpan: props.config.timeSpan,
-    isVirtual: props.config.isVirtual ?? '1',
-  });
+  const result = await fetchExecuteApi({ apiCode: 'queryCurrentAlarm', requestParam: {} });
   commonAlarm.value = result?.commonAlarm;
   importantAlarm.value = result?.importantAlarm;
   seriousAlarm.value = result?.seriousAlarm;
@@ -99,10 +95,7 @@ const initAlarmList = async () => {
 };
 
 const updateAlarmList = async () => {
-  const result = await fetchNewAlarmList({
-    sysInsCode: props?.config?.instance?.at(-1) as unknown as string,
-    isVirtual: props.config.isVirtual ?? '1',
-  });
+  const result = await fetchExecuteApi({ apiCode: 'queryCurrentAlarm', requestParam: {} });
   calculateIncrement(result);
   recordFailure({
     commonAlarm: commonAlarm.value,
@@ -128,8 +121,6 @@ const calculateIncrement = (result: InitAlarmRes) => {
   seriousAlarm.value.list = [...result.seriousAlarm.list, ...seriousAlarm.value.list];
   config.value.speed = props.config.speed;
 };
-
-initAlarmList();
 
 const calculateClassName = (className: string) => (activeClassName.value === className ? 'active' : '');
 
@@ -166,6 +157,7 @@ watch(
     if (!intervalDelay) {
       return;
     }
+    initAlarmList();
     useIntervalAsync(updateAlarmList, intervalDelay);
   },
   { immediate: true }

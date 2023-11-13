@@ -1,16 +1,16 @@
 <template>
   <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="522" min-height="367">
     <div class="warning-table-list">
-      <TabList @operate="handlerToOperate" />
+      <TabList :tab-data="tabData" @operate="handlerToOperate" />
       <TableList ref="tableWrapper" :table-data="systemCumulativeData" />
     </div>
   </BusinessCard>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
-import { formatPrecision } from '@edoms/utils';
+import { formatDateRange, formatPrecision } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
@@ -20,63 +20,85 @@ import TableList from './components/TableList.vue';
 import TabList from './components/TabList.vue';
 import apiFactory from './api';
 import locales from './locales';
-import { Category, FetchCumulativeDataReq, MCumulativeConfig } from './type';
+import { FetchSysCumulantData, FetchSysCumulantDataReq, MCumulativeConfig } from './type';
 
-interface CumulativeList extends Category {
-  dataValue: string;
-  qoqRatio: string;
-  qoqTrend: 'up' | 'down' | 'flat';
-  yoyRatio: string;
-  yoyTrend: 'up' | 'down' | 'flat';
-}
+type SdateType = 'd' | 'm' | 'y';
 
 const props = defineProps<{
   config: MCumulativeConfig;
 }>();
-const { setMessage, t } = useApp(props);
 
+const { setMessage, t } = useApp(props);
 setMessage(locales);
+
 const { request } = useApp(props);
 
-const { fetchCumulativeData } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
 const tableWrapper = ref<any>(null);
 
 const active = ref<{ [key: string]: any }>({
   key: t('日'),
-  value: 'day',
+  value: 'd',
 });
 
-const systemCumulativeData = ref<CumulativeList[]>([]);
+const systemCumulativeData = ref();
 
-const categories = computed(() => props.config.category ?? []);
+const tabData = computed(() => props.config.specificDate ?? []);
 
-const intervalDelay = computed<number>(() => {
-  if (typeof props.config.intervalDelay !== 'number') {
-    return 10;
-  }
-  return props.config.intervalDelay;
+const instanceCode = computed(() => props.config.property);
+
+const instanceJsonRule = computed(() => props.config.jsonRule ?? '{}');
+
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
+);
+
+const currentInstanceProperty = computed(() => {
+  return {
+    instanceType: props.config.instanceType,
+    instance: instanceCode.value,
+    propertyType: props.config.propertyType,
+    property: props.config.property,
+    precision: props.config.precision,
+    ratioPrecision: props.config.ratioPrecision,
+    calculateType: props.config.calculateType,
+  };
 });
+
+const transDateMap = (date: SdateType): any =>
+  new Map([
+    ['d', 'day'],
+    ['m', 'month'],
+    ['y', 'year'],
+  ]).get(date);
 
 const getSystemCumulativeData = async () => {
-  if (!categories.value || categories.value.length <= 0) return;
-  const params: FetchCumulativeDataReq = categories.value.map((item, index) => {
-    return {
-      dateRange: active.value.value,
-      calculateType: item.calculateType,
-      identify: index.toString(),
-      propCode: item.property,
-    };
-  });
-  const result = await fetchCumulativeData(params);
+  if (!props.config || instanceCode.value?.length <= 0) return;
+  const { start, end } = formatDateRange(
+    new Date(),
+    transDateMap(active.value.value as SdateType),
+    'YYYY-MM-DD HH:mm:ss'
+  );
+
+  const params: FetchSysCumulantDataReq = {
+    startAt: start,
+    endAt: end,
+    calculateType: props.config.calculateType,
+    identify: active.value.value,
+    propCode: instanceCode.value,
+    jsonRule: JSON.parse(instanceJsonRule.value),
+  };
+
+  const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
+
   if (!result || result.length <= 0) return;
-  result.forEach(({ identify, dataValue, qoqRatio, qoqTrend, yoyRatio, yoyTrend }) => {
-    const targetResult = systemCumulativeData.value[Number(identify)];
-    targetResult.dataValue = String(formatPrecision(Number(dataValue), targetResult.precision));
-    targetResult.qoqRatio = String(formatPrecision(Number(qoqRatio), targetResult.ratioPrecision));
-    targetResult.qoqTrend = qoqTrend;
-    targetResult.yoyRatio = String(formatPrecision(Number(yoyRatio), targetResult.ratioPrecision));
-    targetResult.yoyTrend = yoyTrend;
+  systemCumulativeData.value = result.map((item: FetchSysCumulantData) => {
+    item.dataValue = formatPrecision(Number(item.dataValue), currentInstanceProperty.value.precision).toString();
+    item.qoqRatio = formatPrecision(Number(item.qoqRatio), currentInstanceProperty.value.ratioPrecision).toString();
+    item.yoyRatio = formatPrecision(Number(item.yoyRatio), currentInstanceProperty.value.ratioPrecision).toString();
+    Object.assign(item, currentInstanceProperty.value);
+    return item;
   });
 };
 
@@ -86,33 +108,8 @@ const handlerToOperate = (itm: { [key: string]: any }) => {
   getSystemCumulativeData();
 };
 
-watch(
-  () => categories.value,
-  (categories) => {
-    systemCumulativeData.value = categories.map((item) => ({
-      label: item.label,
-      instanceType: item.instanceType,
-      instance: item.instance,
-      propertyType: item.propertyType,
-      property: item.property,
-      precision: item.precision,
-      ratioPrecision: item.ratioPrecision,
-      unit: item.unit,
-      calculateType: item.calculateType,
-      dataValue: '--',
-      qoqRatio: '--',
-      qoqTrend: 'flat',
-      yoyRatio: '--',
-      yoyTrend: 'flat',
-    }));
-  },
-  {
-    immediate: true,
-    deep: true,
-  }
-);
-
 useIntervalAsync(getSystemCumulativeData, intervalDelay.value);
+
 onMounted(() => {
   tableWrapper.value.changeType(active.value.key);
 });

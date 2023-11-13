@@ -6,58 +6,29 @@
       <div class="close" @click.stop="closeTable"></div>
     </div>
     <div class="report">
-      <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-width="40px">
-        <el-row :gutter="1">
-          <el-col :span="3" :offset="1">
-            <el-form-item label="">
-              <el-date-picker
-                v-model="state.queryForm.date"
-                type="date"
-                :teleported="false"
-                :placeholder="t('请选择日期')"
-                @change="changeDate"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3" :offset="12">
-            <el-form-item label="">
-              <Select
-                :width="148"
-                :options="state.stationOptions"
-                :default-value="t('一号配电室')"
-                @change-item="changeStation"
-              ></Select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item label="">
-              <Select
-                :width="148"
-                :options="state.deviceOptions"
-                :default-value="t('电压配电柜一')"
-                @change-item="changeDevice"
-              ></Select>
-            </el-form-item>
-          </el-col>
-          <div class="button">{{ t('导出') }}</div>
-        </el-row>
-      </el-form>
+      <el-row :gutter="1">
+        <el-col :span="3" :offset="1" style="padding: 10px 0">
+          <el-date-picker
+            v-model="selectTime"
+            type="datetime"
+            :teleported="false"
+            :placeholder="t('请选择日期')"
+            @change="changeDate"
+          />
+        </el-col>
+      </el-row>
       <div class="table">
         <el-table
-          :data="state.tableData"
+          :data="tableData"
           stripe
-          :style="{ ...state.tableStyle }"
-          :header-cell-style="{
-            background: 'rgba(9, 13, 18, 1)',
-            color: '#EAF5FF',
-            textAlign: 'center',
-          }"
-          :cell-style="{ textAlign: 'center', color: '#EAF5FF', opacity: 0.6 }"
+          :style="tableStyle.table"
+          :header-cell-style="tableStyle.headerCellStyle"
+          :cell-style="tableStyle.cellStyle"
         >
           <el-table-column prop="time" fixed :label="t('时间')" width="110" />
-          <el-table-column v-for="(item, index) in state.titleList" :key="item.name" :label="item.name">
+          <el-table-column v-for="(item, index) in tableHeader" :key="item.name" :label="item.name">
             <el-table-column
-              v-for="(val, key) in item.data"
+              v-for="(val, key) in item[`dev${index + 1}`]"
               :key="val"
               :prop="`${index}${key}`"
               :label="key"
@@ -71,116 +42,47 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue';
+import { ref } from 'vue';
 
-import { ElForm } from '@edoms/design';
-import { dateFormat, formatDate } from '@edoms/utils';
+import { formatDate } from '@edoms/utils';
 
-import Select from '../../../common/Select.vue';
 import useI18n from '../../../useI18n';
-import mockData from '../mock';
-import { MIntelligenceReport, MQueryForm } from '../type';
+import { MIntelligenceReport } from '../type';
 
 defineProps<{
   config: MIntelligenceReport;
+  tableData: any;
+  tableHeader: any;
 }>();
+
+const emit = defineEmits(['closeTable', 'changeTime']);
 
 const { t } = useI18n();
 
-const queryRef = ref(ElForm);
-
-const state: any = reactive({
-  queryForm: {
-    date: new Date(),
-    station: 'station1',
-    device: 'device1',
-  } as MQueryForm,
-  testData: [],
-  titleList: [],
-  tableData: [],
-  stationOptions: [
-    {
-      label: t('一号配电室'),
-      value: 'station1',
-    },
-    {
-      label: t('二号配电室'),
-      value: 'station2',
-    },
-    {
-      label: t('三号配电室'),
-      value: 'station3',
-    },
-    {
-      label: t('四号配电室'),
-      value: 'station4',
-    },
-  ],
-  deviceOptions: [
-    {
-      label: t('电压配电柜一'),
-      value: 'device1',
-    },
-    {
-      label: t('电压配电柜二'),
-      value: 'device2',
-    },
-    {
-      label: t('电压配电柜三'),
-      value: 'device3',
-    },
-    {
-      label: t('电压配电柜四'),
-      value: 'device4',
-    },
-  ],
-  tableStyle: {
+const tableStyle = {
+  table: {
     width: '100%',
     height: '637px',
     textAlign: 'center',
     '--el-table-border-color': 'none',
   },
-});
-
-const changeDate = (val: any) => {
-  console.log(dateFormat(val), formatDate(state.queryForm.date, 'YYYY-MM-DD'), 2222222);
+  headerCellStyle: {
+    background: 'rgba(9, 13, 18, 1)',
+    color: '#EAF5FF',
+    textAlign: 'center',
+  },
+  cellStyle: {
+    textAlign: 'center',
+    color: '#EAF5FF',
+    opacity: 0.8,
+  },
 };
 
-const changeStation = (val: string | number) => {
-  state.queryForm.station = val;
-};
+//Select Time
+const selectTime = ref('');
+const changeDate = () => emit('changeTime', formatDate(selectTime.value, 'YYYY-MM-DD HH:mm:ss'));
 
-const changeDevice = (val: string | number) => {
-  state.queryForm.device = val;
-};
-
-const handleTableData = () => {
-  state.titleList = state.testData[0].device;
-  const arr: any = [];
-
-  state.testData.forEach((item: any) => {
-    const obj: any = {};
-    obj.time = item.time;
-    item.device.forEach((element: any, index: number) => {
-      Object.keys(element.data).forEach((key: any) => {
-        obj[`${index}${key}`] = element.data[key];
-      });
-    });
-    arr.push(obj);
-  });
-  state.tableData = arr;
-};
-
-const emit = defineEmits(['closeTable']);
-
-const closeTable = () => {
-  emit('closeTable');
-};
-
-onMounted(() => {
-  state.testData = mockData;
-  handleTableData();
-});
+const closeTable = () => emit('closeTable');
 </script>
 
 <style lang="scss" scoped>
@@ -188,19 +90,24 @@ onMounted(() => {
 .el-table__expanded-cell {
   background-color: transparent;
 }
+
 .el-table::before {
   //最下面的白线
   background-color: transparent;
 }
+
 :deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
   color: #030507 !important;
 }
+
 :deep .el-table tr {
   background-color: transparent !important;
 }
+
 :deep .el-table .el-table__body tr.el-table__row td {
   background: rgba(8, 11, 15, 1);
 }
+
 :deep .el-table--striped .el-table__body tr.el-table__row--striped td {
   background: rgba($color: #11161e, $alpha: 0.9);
 }
@@ -234,14 +141,17 @@ onMounted(() => {
     color: #ffffff;
   }
 }
+
 :deep(.el-select .el-input.is-focus .el-input__wrapper) {
   box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
   border: 1px solid #454e72;
 }
+
 :deep(.el-select .el-input__wrapper.is-focus) {
   box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset !important;
   border: 1px solid #454e72;
 }
+
 :deep(.el-select__popper.el-popper) {
   border: 1px solid #454e72 !important;
 }
@@ -251,6 +161,7 @@ onMounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .wrap-table {
   //   width: 100%;
   //   height: 100%;
@@ -271,6 +182,7 @@ onMounted(() => {
   background: rgba($color: #000000, $alpha: 0.9);
   border: 1px solid #013460;
   z-index: 15;
+
   .header {
     position: relative;
     width: 100%;
@@ -279,6 +191,7 @@ onMounted(() => {
     align-items: center;
     background-image: url('../assets/bg_header.png');
     background-size: cover;
+
     .icon-report {
       width: 22px;
       height: 24px;
@@ -287,11 +200,13 @@ onMounted(() => {
       background-image: url('../assets/dialog_icon_report.png');
       background-size: cover;
     }
+
     .label {
       color: #eaf5ff;
       font-size: 18px;
       font-weight: 400;
     }
+
     .close {
       position: absolute;
       right: 20px;
@@ -303,12 +218,15 @@ onMounted(() => {
       background-size: cover;
     }
   }
+
   .report {
     flex-grow: 1;
     width: 100%;
+
     .condition-form {
       height: 60px;
       margin-top: 15px;
+
       .button {
         margin-left: 20px;
         width: 80px;
@@ -324,6 +242,7 @@ onMounted(() => {
         line-height: 32px;
       }
     }
+
     .table {
       width: 96%;
       margin-left: 2%;

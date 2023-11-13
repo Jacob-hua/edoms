@@ -307,23 +307,18 @@ watch(
             'multiple-energy-monitoring',
             'charts',
             'equipment-condition',
-            'system-cumulative-data',
             'equipment-operating-parameter',
-            'economic-indicators',
             'operational-analysis',
             // 'energy-monitoring',
             'electric-energy-quality',
             'warning-table-list',
             'equipment-query-operation',
-            'system-data-cumulation',
-            'operations-analysis',
             'efficiency-analysis',
             // 'intelligence-report',
             'suspended-window',
             'intelligence-report-heat',
             'intelligence-report-water',
             'intelligence-report-cloud',
-            'intelligence-report-eletric',
             'intelligence-report-cold',
             'intelligence-report-pv',
             'optimal-regulation-heat',
@@ -331,13 +326,23 @@ watch(
             'eq-control',
             'cost-comparison-detail',
             'cost-comparsion',
+            'system-data-cumulation',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');
           const domainPath = prop.substring(0, pathLastIndex);
           model = getByPath(props.formValue ?? {}, domainPath, '');
         }
-        if (['energy-efficiency-monitoring', 'energy-monitoring'].includes(component)) {
+        if (
+          [
+            'energy-efficiency-monitoring',
+            'energy-monitoring',
+            'economic-indicators',
+            'system-cumulative-data',
+            'operations-analysis',
+            'intelligence-report-eletric',
+          ].includes(component)
+        ) {
           model = props.formValue;
         }
         if (
