@@ -39,7 +39,10 @@ export interface IeneryConsumption<T, U> {
 }
 
 export type IeneryConsumptionSum = IeneryConsumption<Iload, IelectricAnalysis>;
-export type FetcheneryConsumptionRes = IeneryConsumptionSum[];
+export interface FetcheneryConsumptionRes {
+  total?: number;
+  dataList: IeneryConsumptionSum[];
+}
 export interface Apis {
   fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetcheneryConsumptionRes>;
 }

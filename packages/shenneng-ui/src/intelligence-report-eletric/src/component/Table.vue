@@ -25,15 +25,9 @@
           :header-cell-style="tableStyle.headerCellStyle"
           :cell-style="tableStyle.cellStyle"
         >
-          <el-table-column prop="time" fixed :label="t('时间')" width="110" />
+          <el-table-column prop="time" fixed :label="t('时间')" />
           <el-table-column v-for="(item, index) in tableHeader" :key="item.name" :label="item.name">
-            <el-table-column
-              v-for="(val, key) in item[`dev${index + 1}`]"
-              :key="val"
-              :prop="`${index}${key}`"
-              :label="key"
-              width="110"
-            />
+            <el-table-column v-for="val in item[`dev${index}`]" :key="val" :prop="`dev${index}` + val" :label="val" />
           </el-table-column>
         </el-table>
       </div>

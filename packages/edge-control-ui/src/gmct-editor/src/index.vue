@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GmctEditor class="editor" :project="project" :editor-layout="editorLayout">
+    <GmctEditor ref="gmctEditorRef" class="editor" :project="project" :editor-layout="editorLayout">
       <template #topBar></template>
     </GmctEditor>
   </div>
@@ -36,6 +36,8 @@ const { request, app } = useApp(props);
 
 const node = app?.page?.getNode(props.config.id);
 
+const gmctEditorRef = ref();
+
 const { fetchIndicatorData } = apiFactory(request);
 
 const project = ref<any>(DEFAULT_PROJECT);
@@ -66,6 +68,8 @@ watch(
       const res = await fetch(url);
       result = await res.json();
     }
+    gmctEditorRef.value.app.rendererService.graph.disableMouseWheel();
+
     project.value = result;
   },
   { immediate: true }

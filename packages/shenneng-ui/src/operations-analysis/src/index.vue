@@ -71,9 +71,8 @@ import useApp from '../../useApp';
 
 import ChartData from './components/chartData.vue';
 import TabList from './components/TabList.vue';
-// import apiFactory from './api';
+import apiFactory from './api';
 import locales from './locales';
-import mockData from './mock.json';
 import { AnaItemConfigs, IeneryConsumptionSum } from './type';
 
 export interface Ipeak {
@@ -91,13 +90,17 @@ type DateFamt = 'day' | 'month' | 'year';
 const { setMessage, t } = useApp(props);
 setMessage(locales);
 
-// const { request } = useApp(props);
+const { request } = useApp(props);
 
-// const { fetchExecuteApi } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
-const instanceCode = computed(() => props.config.property);
+const instanceCode = computed(() =>
+  props.config.classify.map(({ instance }: { instance: string[] }) => instance.pop())
+);
 
-const instanceFeeRule = computed(() => props.config.feeRule ?? '{}');
+const instanceNames = computed(() =>
+  props.config.classify.map(({ instanceName }: { instanceName: string }) => instanceName)
+);
 
 const dateOptions = ref<Array<{ [key: string]: string }>>([
   {
@@ -180,16 +183,14 @@ const getElectricAnalysisData = async () => {
   const { start, end } = formatDateRange(new Date(), dateType, 'YYYY-MM-DD HH:mm:ss');
   const params = {
     devCodes: instanceCode.value,
-    sTime: start,
-    eTime: end,
-    feeRule: JSON.parse(instanceFeeRule.value),
+    devNames: instanceNames.value,
+    startTime: start,
+    endTime: end,
     ...paging.value,
   };
-  console.log('params', params);
-  // const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
-  const result = mockData;
-  if (!result || result.length <= 0) return;
-  tableDataList.value = result as any;
+  const result = await fetchExecuteApi({ apiCode: 'queryOperationAnalysis', requestParam: params });
+  if (!result || result.dataList.length <= 0) return;
+  tableDataList.value = result.dataList as any;
 };
 
 watch(
@@ -206,6 +207,13 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+@mixin Center($direction) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: $direction;
+}
+
 .operations-analysis {
   min-width: 117px;
   min-height: 80px;
@@ -214,19 +222,14 @@ watch(
   .wrap-report {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include Center(column);
     cursor: pointer;
 
     .wrap-icon {
       width: 60px;
       height: 42px;
       margin-top: 1px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      @include Center(row);
       background: rgba(0, 114, 179, 0.4);
       border: 1px solid #0072b3;
       border-radius: 4px;
@@ -428,7 +431,7 @@ watch(
 
           .content-itm {
             width: 100%;
-            height: 174px;
+            // height: 174px;
             margin-bottom: 30px;
             background-color: rgba(9, 15, 23, 0.3);
             border: 1px solid rgba(33, 44, 60, 1);
@@ -437,15 +440,12 @@ watch(
 
             // justify-content: space-between;
             .unit-name-type {
-              height: 100%;
-              line-height: 174px;
               padding: 0 10px;
               border-right: 1px solid rgba(29, 38, 52, 1);
               text-align: center;
               color: rgba(234, 245, 255, 1);
               font-size: 16px;
-              display: flex;
-              justify-content: space-between;
+              @include Center(row);
 
               .unit-name {
                 display: block;
@@ -475,8 +475,7 @@ watch(
             }
 
             .accumulate-value-unit {
-              height: 100%;
-              line-height: 174px;
+              @include Center(row);
               border-right: 1px solid rgba(29, 38, 52, 1);
               text-align: center;
               color: rgba(234, 245, 255, 1);
@@ -496,14 +495,14 @@ watch(
             }
 
             .time-power-ana {
-              height: 100%;
+              @include Center(column);
               border-right: 1px solid rgba(29, 38, 52, 1);
               padding: 5px 20px;
               box-sizing: border-box;
             }
 
             .load-rate-ana {
-              height: 100%;
+              @include Center(row);
               padding: 30px 30px;
               box-sizing: border-box;
             }

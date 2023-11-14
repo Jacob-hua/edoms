@@ -309,6 +309,7 @@ watch(
             'equipment-condition',
             'equipment-operating-parameter',
             'operational-analysis',
+            'operations-analysis',
             // 'energy-monitoring',
             'electric-energy-quality',
             'warning-table-list',
@@ -321,6 +322,7 @@ watch(
             'intelligence-report-cloud',
             'intelligence-report-cold',
             'intelligence-report-pv',
+            'intelligence-report-eletric',
             'optimal-regulation-heat',
             'system-settings',
             'eq-control',
@@ -339,8 +341,6 @@ watch(
             'energy-monitoring',
             'economic-indicators',
             'system-cumulative-data',
-            'operations-analysis',
-            'intelligence-report-eletric',
           ].includes(component)
         ) {
           model = props.formValue;
