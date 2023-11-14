@@ -4,20 +4,20 @@
     <div class="th_index">
       <div class="th_index_con">
         <div>
-          <span style="color: #41e4de; font-size: 24px">{{ props.option.rePuCoefficientCharge }}</span
+          <span style="color: #41e4de; font-size: 24px">{{ props.option.rePuCoefficientCharge?.toFixed(2) }}</span
           >元
         </div>
         <div>{{ t('惩奖电费') }}</div>
       </div>
       <div class="th_index_con">
         <div>
-          <span style="color: #41e4de; font-size: 24px">{{ props.option.avgPowerFactor }}</span>
+          <span style="color: #41e4de; font-size: 24px">{{ props.option.avgPowerFactor?.toFixed(2) }}</span>
         </div>
         <div>{{ t('平均功率因数') }}</div>
       </div>
       <div class="th_index_con">
         <div>
-          <span style="color: #d72824; font-size: 24px">{{ props.option.lowPowerFactor }}</span>
+          <span style="color: #d72824; font-size: 24px">{{ props.option.lowPowerFactor?.toFixed(2) }}</span>
         </div>
         <div>{{ t('最小功率因数') }}</div>
       </div>

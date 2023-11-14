@@ -11,7 +11,7 @@
     <div class="wrapper_right">
       <button @click="changeDilog('month')">{{ t('月曲线分析') }}</button>
       <button @click="changeDilog('day')">{{ t('日曲线分析') }}</button>
-      <button @click="changeDilog('data')">{{ t('数据分析') }}</button>
+      <!-- <button @click="changeDilog('data')">{{ t('数据分析') }}</button> -->
       <div class="wrapper_right_qu">
         <div class="histogram">
           <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
