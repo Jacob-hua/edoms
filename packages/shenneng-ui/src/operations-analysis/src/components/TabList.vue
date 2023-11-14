@@ -17,7 +17,7 @@
       </div>
       <div class="font-wrapper-sttst">
         <span class="font-ft-st">{{ t('峰谷比') }}：</span>
-        <span class="font-rate">{{ peakValleyRatio }}</span>
+        <span class="font-rate">{{ toFixedElectricAnalysis }}</span>
       </div>
     </div>
   </div>
@@ -33,17 +33,20 @@ const { t } = useI18n();
 
 const props = defineProps<{
   electricAnalysis: IelectricAnalysis;
-  peakValleyRatio: number | string;
+  peakValleyRatio: number;
 }>();
+
+const toFixedElectricAnalysis = computed(() => props.peakValleyRatio.toFixed(2));
 
 const peakList = computed(() => {
   if (!props.electricAnalysis) return;
   const currentPeak = props.electricAnalysis;
   return [
-    { key: t('谷'), value: currentPeak['peakValley-4_rate'], code: 'gu' },
-    { key: t('平'), value: currentPeak['peakValley-3_rate'], code: 'ping' },
-    { key: t('峰'), value: currentPeak['peakValley-2_rate'], code: 'feng' },
-    { key: t('尖'), value: currentPeak['peakValley-1_rate'], code: 'jian' },
+    { key: t('深谷'), value: currentPeak['deepValleyPowerRate'], code: 'shengu' },
+    { key: t('谷'), value: currentPeak['valleyPowerRate'], code: 'gu' },
+    { key: t('平'), value: currentPeak['flatPowerRate'], code: 'ping' },
+    { key: t('峰'), value: currentPeak['peakPowerRate'], code: 'feng' },
+    { key: t('尖'), value: currentPeak['pointedPeakPowerRate'], code: 'jian' },
   ];
 });
 
@@ -61,7 +64,7 @@ const getClass = computed(() => (code: string | number, type: string) => `${code
     .ftst-itm {
       display: flex;
       justify-content: space-between;
-      margin-top: 10px;
+      margin: 5px 0;
 
       .itm-font {
         width: 60px;
@@ -91,6 +94,10 @@ const getClass = computed(() => (code: string | number, type: string) => `${code
           background-color: rgba(215, 40, 36, 0.1);
           border: 1px solid rgba(215, 40, 36, 1);
         }
+        &.shengu-bg {
+          background-color: rgba(215, 40, 36, 0.1);
+          border: 1px solid rgb(200, 36, 215);
+        }
       }
 
       .itm-value {
@@ -112,6 +119,10 @@ const getClass = computed(() => (code: string | number, type: string) => `${code
 
         &.jian-font {
           color: rgba(215, 40, 36, 1);
+        }
+
+        &.shengu-font {
+          color: rgb(200, 36, 215);
         }
       }
     }
@@ -152,6 +163,10 @@ const getClass = computed(() => (code: string | number, type: string) => `${code
         &.jian-bg {
           background-color: rgba(215, 40, 36, 0.6);
           border: 1px solid rgba(215, 40, 36, 1);
+        }
+        &.shengu-bg {
+          background-color: rgba(202, 34, 224, 0.6);
+          border: 1px solid rgb(200, 36, 215);
         }
       }
     }

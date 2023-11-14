@@ -27,10 +27,9 @@ import { formatDate } from '@edoms/utils';
 import useApp from '../../useApp';
 
 import Table from './component/Table.vue';
-// import apiFactory from './api';
+import apiFactory from './api';
 import locales from './locales';
-import mock from './mock.json';
-import { EfficiencyData, MIntelligenceReport } from './type';
+import { MIntelligenceReport } from './type';
 
 const props = defineProps<{
   config: MIntelligenceReport;
@@ -39,35 +38,52 @@ const props = defineProps<{
 const { setMessage } = useApp(props);
 setMessage(locales);
 
-// const { request } = useApp(props);
+const { request } = useApp(props);
 
-// const { fetchExecuteApi } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
 const showReport = ref<boolean>(false);
 
-const instanceCode = computed(() => props.config.property);
+const instanceCode = computed(() =>
+  props.config.classify.map(({ instance }: { instance: string[] }) => instance.pop())
+);
+
+const instanceName = computed(() =>
+  props.config.classify.map(({ instanceName }: { instanceName: string }) => instanceName)
+);
 
 const changeReport = () => (showReport.value = true);
 
 // Query Table data
-const tableData = ref<Array<EfficiencyData>>([]);
+const tableData = ref();
 const tableHeader = ref();
+const page = ref({
+  page: 1,
+  size: 5,
+});
 
-const getIntelligenceData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss')) => {
+const getIntelligenceData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD')) => {
   if (!props.config || instanceCode.value?.length <= 0) return;
-  console.log('time', time);
-  // const params = { devCodes: instanceCode.value, time }
-  // const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
-  const result = mock;
-  if (!result || result.length <= 0) return;
-
-  tableHeader.value = result[0]?.data;
-  tableData.value = result.map((item: any) => {
-    const currentItem: any = {};
-    currentItem.time = item.time;
-    item.data.forEach((sign: any, index: number) => {
-      Object.keys(sign[`dev${index + 1}`]).forEach((key: any) => {
-        currentItem[`${index}${key}`] = sign[`dev${index + 1}`][key];
+  const params = { devCodes: instanceCode.value, time, devNames: instanceName.value, ...page.value };
+  const result = await fetchExecuteApi({ apiCode: 'querySmartReport', requestParam: params });
+  if (!result || result.dataList.length <= 0) return;
+  //构造表头
+  tableHeader.value = result.dataList?.map((item, index) => {
+    const currentItem: Record<string, any> = {};
+    currentItem.name = item.devInsName;
+    currentItem[`dev${index}`] = Object.keys(item.data);
+    return currentItem;
+  });
+  //构造表格数据
+  const dataKey: Record<string, any> = result.dataList[0].data;
+  const dataKeyArr = Object.keys(dataKey);
+  const timeskey = Object.keys(dataKey[dataKeyArr[0]]);
+  tableData.value = timeskey.map((item) => {
+    const currentItem: Record<string, any> = {};
+    currentItem.time = item;
+    result.dataList.forEach((cur, index) => {
+      dataKeyArr.forEach((key: string) => {
+        currentItem[`dev${index}` + key] = cur.data[key][item];
       });
     });
     return currentItem;

@@ -12,7 +12,9 @@ import { Apis, FetcheneryConsumptionRes, FetchExecuteApiReq } from './type';
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetcheneryConsumptionRes> => {
     if (!request) {
-      return [];
+      return {
+        dataList: [],
+      };
     }
     try {
       const { result } = await request<FetchExecuteApiReq, FetcheneryConsumptionRes>({
@@ -22,7 +24,9 @@ export default (request?: EdomsRequestFunc): Apis => ({
       });
       return result;
     } catch (error) {
-      return [];
+      return {
+        dataList: [],
+      };
     }
   },
 });

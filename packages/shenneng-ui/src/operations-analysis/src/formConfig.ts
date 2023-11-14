@@ -17,10 +17,19 @@ export default async (request: Request) => [
     defaultValue: 10,
     append: 's',
   },
-  ...(await useInstanceConfig(request, 'operations-analysis', ['unit'])),
   {
-    text: '费价规则',
-    name: 'feeRule',
-    type: 'textarea',
+    text: '实例',
+    name: 'classify',
+    type: 'groupList',
+    labelWidth: '70px',
+    addButtonText: '添加实例',
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+    items: [
+      {
+        text: '标签',
+        name: 'label',
+      },
+      ...(await useInstanceConfig(request, 'operations-analysis', ['unit'])),
+    ],
   },
 ];

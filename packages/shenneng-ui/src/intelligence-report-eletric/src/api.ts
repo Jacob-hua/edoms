@@ -14,7 +14,7 @@ import {
   FetchExecuteApiReq,
   FetchHistoryDataReq,
   FetchHistoryDataRes,
-  FetchintelligenceRes,
+  FetchIintelligenceRes,
 } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
@@ -48,19 +48,23 @@ export default (request?: EdomsRequestFunc): Apis => ({
       return [];
     }
   },
-  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetchintelligenceRes> => {
+  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetchIintelligenceRes> => {
     if (!request) {
-      return [];
+      return {
+        dataList: [],
+      };
     }
     try {
-      const { result } = await request<FetchExecuteApiReq, FetchintelligenceRes>({
+      const { result } = await request<FetchExecuteApiReq, FetchIintelligenceRes>({
         url: '/OperationalMonitorCommon/executeApi',
         method: 'POST',
         data,
       });
       return result;
     } catch (error) {
-      return [];
+      return {
+        dataList: [],
+      };
     }
   },
 });

@@ -24,7 +24,7 @@ const props = defineProps<{
   config: MEnergyMonitoring;
   actualValue: number;
 }>();
-const actualValueCom = computed<string>(() => (props.actualValue ? props.actualValue.toString() : '-'));
+const actualValueCom = computed<string>(() => (props.actualValue ? props.actualValue.toFixed(2).toString() : '-'));
 </script>
 
 <style lang="scss" scoped>
@@ -48,7 +48,6 @@ const actualValueCom = computed<string>(() => (props.actualValue ? props.actualV
     .actual-value {
       color: #07f83b;
       font-size: 24px;
-      margin-left: -6px;
       font-weight: bold;
     }
 

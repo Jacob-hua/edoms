@@ -3,14 +3,14 @@
     <div class="left-chart">
       <div class="chart-left-wrapper">
         <div :id="idList[0]" class="chart-ct"></div>
-        <span class="chart-num">{{ maxLoadRate + '%' }}</span>
+        <span class="chart-num">{{ maxLoadRateToFixed + '%' }}</span>
       </div>
       <span class="font-chart">Max</span>
     </div>
     <div class="middle-chart">
       <div class="chart-right-wrapper">
         <div :id="idList[1]" class="chart-ct"></div>
-        <span class="chart-num">{{ minLoadRate + '%' }}</span>
+        <span class="chart-num">{{ minLoadRateToFixed + '%' }}</span>
       </div>
       <span class="font-chart">Min</span>
     </div>
@@ -51,13 +51,16 @@ const idList = ref<Array<string>>([
   Math.random().toString().substring(3, 30),
 ]);
 
+const maxLoadRateToFixed = computed(() => props.maxLoadRate.toFixed(4));
+const minLoadRateToFixed = computed(() => props.minLoadRate.toFixed(4));
+
 const loadList = computed(() => {
   if (!props.load) return;
   const currentLoad = props.load;
   return [
-    { key: t('过载'), dis: currentLoad.overloadNum, times: currentLoad.overload },
-    { key: t('重载'), dis: currentLoad.heavyLoadNum, times: currentLoad.heavyLoad },
-    { key: t('轻载'), dis: currentLoad.lightLoadNum, times: currentLoad.lightLoad },
+    { key: t('过载'), dis: currentLoad.overloadNum ?? 0, times: currentLoad.overload ?? 0 },
+    { key: t('重载'), dis: currentLoad.heavyLoadNum ?? 0, times: currentLoad.heavyLoad ?? 0 },
+    { key: t('轻载'), dis: currentLoad.lightLoadNum ?? 0, times: currentLoad.lightLoad ?? 0 },
   ];
 });
 
