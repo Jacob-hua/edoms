@@ -109,18 +109,20 @@ const tenantFormRef = ref<FormInstance>();
 const accountStore = useAccountStore();
 
 const nextStep = () => {
-  loginFormRef.value &&
-    loginFormRef.value.validate(async (validated) => {
-      if (!validated) {
-        return;
-      }
-      await accountStore.login({
-        username: loginFormModel.username,
-        password: loginFormModel.password,
-      });
-      loginFormVisible.value = false;
-      tenantFormVisible.value = true;
+  if (!loginFormRef.value) {
+    return;
+  }
+  loginFormRef.value.validate(async (validated) => {
+    if (!validated) {
+      return;
+    }
+    await accountStore.login({
+      username: loginFormModel.username,
+      password: loginFormModel.password,
     });
+    loginFormVisible.value = false;
+    tenantFormVisible.value = true;
+  });
 };
 
 const backPreStep = () => {
