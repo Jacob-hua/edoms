@@ -5,6 +5,10 @@ export interface MParameterItemConfig {
   color: string;
 }
 
+export interface voltageAnalysis {
+  instance: string[];
+}
+
 export interface ElectricEnergyQuality extends MComponent {
   /** 标题 */
   title: string;
@@ -30,6 +34,7 @@ export interface ElectricEnergyQuality extends MComponent {
   loadRate: string;
   threePhasRate: string;
   proportion: MParameterItemConfig[];
+  voltageAnalysis: voltageAnalysis[];
 }
 
 export interface FetchEfficiencyReq {
@@ -81,8 +86,8 @@ export interface HistoryData {
 }
 
 export interface VoltagAnallysisChart {
-  seriesData: Array<number | Record<string, any>>;
-  xAxisData: Array<string>;
+  seriesData: Array<number>;
+  xaxisData: Array<string>;
 }
 
 export interface FetchVoltagAnallysisRes {
@@ -96,7 +101,19 @@ export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEfficiencyRes = EfficiencyData[];
 
+export interface FetchVoltageAnalysisReq {
+  devCode: string;
+  time: string;
+  queryType: string;
+}
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: FetchVoltageAnalysisReq;
+}
+
 export interface Apis {
   fetchEfficiencyData: (data: FetchEfficiencyReq) => Promise<FetchEfficiencyRes>;
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchVoltagAnallysisRes>;
 }
