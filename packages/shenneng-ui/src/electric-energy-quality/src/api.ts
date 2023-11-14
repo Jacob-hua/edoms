@@ -5,6 +5,7 @@ import {
   FetchEfficiencyReq,
   FetchEfficiencyRes,
   FetchExecuteApiReq,
+  FetchFactorDataReq,
   FetchHistoryDataReq,
   FetchHistoryDataRes,
   FetchVoltagAnallysisRes,
@@ -64,6 +65,51 @@ export default (request?: EdomsRequestFunc): Apis => ({
         overVoltage: [],
         voltageFluctuation: [],
       };
+    }
+  },
+  fetchFactorLoad: async (data: FetchFactorDataReq): Promise<[]> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchFactorDataReq, []>({
+        url: '/OperationalMonitorCommon/executeApi',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  fetchFactorDay: async (data: FetchFactorDataReq): Promise<[]> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchFactorDataReq, []>({
+        url: '/OperationalMonitorCommon/executeApi',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  fetchFactorWeek: async (data: FetchFactorDataReq): Promise<[]> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchFactorDataReq, []>({
+        url: '/OperationalMonitorCommon/executeApi',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
     }
   },
 });
