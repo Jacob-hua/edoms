@@ -85,4 +85,45 @@ export default async (request: Request) => [
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [...(await useInstanceConfig(request, 'electric-energy-quality', ['unit']))],
   },
+  {
+    text: '三相不平衡',
+    name: 'threeRhasList',
+    type: 'groupList',
+    labelWidth: '85px',
+    addButtonText: '选择实例',
+    maxItems: 4,
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+    items: [
+      {
+        text: '标签',
+        name: 'label',
+      },
+      ...(await useInstanceConfig(request, 'electric-energy-quality', [
+        'property',
+        'propertyType',
+        'unit',
+        'precision',
+      ])),
+    ],
+  },
+  {
+    text: '功率因数',
+    name: 'gonglvyinshu',
+    type: 'groupList',
+    labelWidth: '85px',
+    maxItems: 1,
+    addButtonText: '选择实例',
+    items: [
+      {
+        text: '标签',
+        name: 'label',
+      },
+      ...(await useInstanceConfig(request, 'electric-energy-quality', [
+        'property',
+        'propertyType',
+        'unit',
+        'precision',
+      ])),
+    ],
+  },
 ];

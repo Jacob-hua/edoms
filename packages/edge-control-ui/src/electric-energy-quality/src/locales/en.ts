@@ -17,6 +17,8 @@ export default {
   万: 'ten thousand',
   电流: 'Current',
   负载率: 'Load rate',
+  日均值: 'Day Avg',
+  典型日均值: 'Typical Day Avg',
   月曲线分析: 'Monthly curve analysis',
   日曲线分析: 'Daily curve analysis',
   数据分析: 'Data analysis',
