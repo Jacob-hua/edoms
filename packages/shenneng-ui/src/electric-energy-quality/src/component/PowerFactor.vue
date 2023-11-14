@@ -9,32 +9,17 @@
       </div>
     </div>
     <div class="wrapper_right">
-      <button @click="changeDilog('month')">{{ t('月曲线分析') }}</button>
-      <button @click="changeDilog('day')">{{ t('日曲线分析') }}</button>
-      <button @click="changeDilog('data')">{{ t('数据分析') }}</button>
+      <button @click="changeDialog('month')">{{ t('月曲线分析') }}</button>
+      <button @click="changeDialog('day')">{{ t('日曲线分析') }}</button>
       <div class="wrapper_right_qu">
         <div class="histogram">
-          <EdomsCharts class="charts" :option="option_chart"></EdomsCharts>
-        </div>
-        <div class="table">
-          <p class="table_tie">{{ t('无功优化补偿装置') }}</p>
-          <el-table
-            :data="tableData"
-            style="width: 100%"
-            :header-cell-style="{ background: '#0D1218', color: '#EAF5FF', textAlign: 'center', border: 'none' }"
-          >
-            <el-table-column prop="typesOf" :label="t('类型')" width="180" />
-            <el-table-column prop="position" :label="t('接入位置')" width="180" />
-            <el-table-column prop="state" :label="t('状态')" />
-            <el-table-column prop="adjustment" :label="t('调节量')" />
-            <el-table-column prop="range" :label="t('调节范围')" />
-          </el-table>
+          <EdomsCharts class="charts" :option="monthlyStatistic(monthlyStatisticData)"></EdomsCharts>
         </div>
       </div>
     </div>
 
     <el-dialog
-      v-model="dialogVisible"
+      v-model="monthlyVisible"
       width="1480px"
       top="65px"
       style="height: 723px; background: #000; border: 1px solid #013460"
@@ -42,30 +27,66 @@
       <template #header>
         <div class="my-header">
           <img style="margin: 0 20px" src="../../assets/power.png" alt="" />
-          <span>{{ title }}</span>
+          <span>{{ t('功率因数_月曲线分析') }}</span>
         </div>
       </template>
       <div class="dialog_con">
         <div class="dialog_top">
           <div class="time">
             <span>{{ t('配电室') }}</span>
-            <TimeCalendar :option="timeType"></TimeCalendar>
+            <TimeCalendar option="month"></TimeCalendar>
           </div>
-          <div v-if="nowDialog" class="boxCheck">
-            <el-checkbox-group v-model="checkList" @change="selectType">
-              <el-checkbox v-for="typeItem in checkTypeList" :key="typeItem" :label="typeItem">{{
-                typeItem
-              }}</el-checkbox>
-            </el-checkbox-group>
+          <el-checkbox-group v-model="activeChart" @change="selectType">
+            <el-checkbox v-for="typeItem in chartTypes" :key="typeItem" :label="typeItem">
+              {{ typeItem }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <div class="chartMonth">
+          <EdomsCharts
+            class="chartsCon"
+            :option="
+              timeType === 'day'
+                ? dayPowerFactor(loadData, unbalanceData)
+                : monthlyPowerFactor(candlestickData, diffBarData, maxLineData, minLineData, menLineData)
+            "
+          ></EdomsCharts>
+        </div>
+      </div>
+    </el-dialog>
+    <el-dialog
+      v-model="dayVisible"
+      width="1480px"
+      top="65px"
+      style="height: 723px; background: #000; border: 1px solid #013460"
+    >
+      <template #header>
+        <div class="my-header">
+          <img style="margin: 0 20px" src="../../assets/power.png" alt="" />
+          <span>{{ t('功率因数_日曲线分析') }}</span>
+        </div>
+      </template>
+      <div class="dialog_con">
+        <div class="dialog_top">
+          <div class="time">
+            <span>{{ t('配电室') }}</span>
+            <TimeCalendar option="date"></TimeCalendar>
           </div>
-          <div v-if="selectShow" class="boxSelect">
+          <div class="boxSelect">
             <el-select v-model="dataValue" :teleported="false" popper-class="select" class="m-2" placeholder="Select">
               <el-option v-for="item in dataOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </div>
         </div>
         <div class="chartMonth">
-          <EdomsCharts class="chartsCon" :option="optionMonth_chart"></EdomsCharts>
+          <EdomsCharts
+            class="chartsCon"
+            :option="
+              timeType === 'day'
+                ? dayPowerFactor(loadData, unbalanceData)
+                : monthlyPowerFactor(candlestickData, diffBarData, maxLineData, minLineData, menLineData)
+            "
+          ></EdomsCharts>
         </div>
       </div>
     </el-dialog>
@@ -82,68 +103,88 @@ import { ElectricEnergyQuality } from '../type';
 
 import CalculationSheet from './CalculationSheet.vue';
 import TimeCalendar from './TimeCalendar.vue';
+
 const { t } = useI18n();
 
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
+
 const lastMouth = {
   title: t('上月结算'),
 };
 const nextMouth = {
   title: t('本月结算'),
 };
+
 const timeType = ref<string>('date');
-const dialogVisible = ref<boolean>(false);
+const monthlyVisible = ref<boolean>(false);
+const dayVisible = ref<boolean>(false);
 const nowDialog = ref<boolean>(false);
 const selectShow = ref<boolean>(false);
-const checkTypeList = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
-const checkList = ref<any>([t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')]);
+const chartTypes = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
+const activeChart = ref<any>(chartTypes);
 const dataOptions = [
   { value: 'load', label: t('功率因数_负载率') },
   { value: 'hour', label: t('功率因数_小时') },
   { value: 'week', label: t('功率因数_周') },
 ];
 const dataValue = ref<string>(dataOptions[0].value);
-// dialog名称
-const title = ref<string>('');
-// 散点图数据
-const dataAll = [
-  [20, 0.69],
-  [32, 0.18],
-  [65, 0.54],
-  [44, 0.65],
-  [35, 0.47],
-  [78, 0.35],
-  [12, 0.65],
-  [55, 0.77],
-  [60, 0.33],
-  [44, 0.55],
-  [25, 0.2],
-  [69, 0.2],
-  [18, 0.32],
-  [54, 0.65],
-  [65, 0.44],
-  [47, 0.35],
-  [35, 0.78],
-  [65, 0.12],
-  [77, 0.55],
-  [33, 0.6],
-  [55, 0.44],
-  [20, 0.25],
-];
-const maxArr = ref<any>([]);
-const minArr = ref<any>([]);
-dataAll.forEach((item) => {
-  if (item[1] > props.config.examine) {
-    maxArr.value.push(item);
-  } else {
-    minArr.value.push(item);
-  }
-});
+
+const monthlyStatisticData = ref<number[]>([0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1]);
+
+const candlestickData = ref<Array<Array<number>>>([
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.75, 0.86],
+  [0.85, 0.86, 0.6, 0.86],
+  [0.85, 0.86, 0.55, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.75, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.65, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.65, 0.86],
+  [0.85, 0.86, 0.55, 0.86],
+  [0.85, 0.86, 0.6, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.75, 0.86],
+  [0.85, 0.86, 0.6, 0.86],
+  [0.85, 0.86, 0.7, 0.86],
+  [0.85, 0.86, 0.55, 0.86],
+]);
+
+const diffBarData = ref<number[]>([
+  0.3, 0.1, 0.15, 0.3, 0.11, 0.16, 0.2, 0.2, 0.17, 0.4, 0.13, 0.18, 0.3, 0.14, 0.19, 0.2, 0.1, 0.15, 0.6, 0.11, 0.16,
+  0.7, 0.12, 0.17, 0.8, 0.13, 0.18, 0.9, 0.14, 0.19, 0.23,
+]);
+
+const maxLineData = ref<number[]>([
+  0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35, 0.52, 0.73,
+  0.69, 0.41, 0.5, 0.61, 0.64, 0.23, 0.22, 0.45, 0.33, 0.71, 0.52,
+]);
+
+const minLineData = ref<number[]>([
+  0.29, 0.38, 0.25, 0.36, 0.83, 0.7, 0.64, 0.42, 0.34, 0.55, 0.64, 0.28, 0.39, 0.5, 0.65, 0.55, 0.2, 0.35, 0.36, 0.51,
+  0.6, 0.47, 0.59, 0.57, 0.6, 0.32, 0.58, 0.44, 0.34, 0.59, 0.43,
+]);
+
+const menLineData = ref<number[]>([
+  0.36, 0.78, 0.22, 0.56, 0.23, 0.6, 0.54, 0.24, 0.35, 0.55, 0.43, 0.68, 0.79, 0.54, 0.49, 0.65, 0.52, 0.43, 0.54, 0.75,
+  0.67, 0.45, 0.51, 0.64, 0.65, 0.43, 0.58, 0.79, 0.34, 0.71, 0.43,
+]);
+
+const loadData = ref<number[]>([
+  0.55, 0.58, 0.15, 0.36, 0.53, 0.4, 0.64, 0.42, 0.27, 0.55, 0.43, 0.78, 0.39, 0.44, 0.59, 0.65, 0.5, 0.45, 0.56, 0.71,
+  0.66, 0.47, 0.52, 0.67, 0.68,
+]);
+
+const unbalanceData = ref<number[]>([
+  0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35, 0.52, 0.73,
+  0.69, 0.41, 0.5, 0.61, 0.64,
+]);
+
 // 月度功率因数统计
-const option_chart = ref<ECOption>({});
-option_chart.value = {
+const monthlyStatistic = (data: number[]): ECOption => ({
   grid: {
     left: 24,
     bottom: 28,
@@ -221,7 +262,7 @@ option_chart.value = {
   series: [
     {
       name: `${t('考核基准')}：0.9`,
-      data: [0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1],
+      data,
       type: 'bar',
       itemStyle: {
         borderWidth: 1,
@@ -231,448 +272,237 @@ option_chart.value = {
       barGap: 70,
     },
   ],
-};
-const optionMonth_chart = ref<ECOption>({});
+});
+
+const monthlyPowerFactor = (
+  candlestick: Array<Array<number>>,
+  diffBar: number[],
+  maxLine: number[],
+  minLine: number[],
+  menLine: number[]
+): ECOption => ({
+  xAxis: {
+    type: 'category',
+    data: Array.from({ length: 31 }, (_, index) => index + 1),
+    axisTick: {
+      show: false,
+    },
+  },
+  color: 'rgba(40,124,232,0.5)',
+  tooltip: {
+    trigger: 'axis',
+    backgroundColor: 'rgba(11,34,52,0.9)',
+    borderColor: '#204C6F',
+    borderWidth: 1,
+    formatter: (params: any) => {
+      let tip: string = '';
+      if (params != null && params.length > 0) {
+        console.log(params);
+        tip += '<div>';
+        for (let index = 0; index < params.length; index++) {
+          tip +=
+            '<p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
+            params[index].seriesName +
+            '：</span><span style="color:' +
+            params[index].color +
+            ';font-size: 12px;font-weight: 400;">' +
+            params[index].value +
+            '</span></p>';
+        }
+        tip += '</div>';
+      }
+      return tip;
+    },
+  },
+  legend: {
+    show: false,
+    selected: { 箱线图: true, 差值波动: true, Max曲线: true, Min曲线: true, 均值曲线: true },
+  },
+  yAxis: {
+    type: 'value',
+    nameTextStyle: {
+      fontSize: '14',
+      fontFamily: 'Microsoft YaHei',
+      fontWeight: 400,
+      color: '#EAF5FF',
+    },
+    splitLine: {
+      lineStyle: {
+        type: 'dashed',
+        color: '#1A242B',
+        width: 1,
+      },
+    },
+  },
+  grid: { top: '30px', left: '30px', right: '30px', bottom: '30px' },
+  series: [
+    {
+      name: t('箱线图'),
+      type: 'candlestick',
+      color: 'rgba(40,124,232,0.3)',
+      data: candlestick,
+      itemStyle: {
+        color: 'rgba(40, 124, 232, 0.3)',
+        borderWidth: 1,
+        borderColor: '#287CE8',
+      },
+    },
+    {
+      name: t('差值波动'),
+      type: 'bar',
+      data: diffBar,
+      itemStyle: {
+        color: 'rgba(40, 124, 232, 0.3)',
+        borderWidth: 1,
+        borderColor: '#287CE8',
+      },
+      barWidth: 16,
+      barGap: 35,
+    },
+    {
+      name: t('Max曲线'),
+      type: 'line',
+      color: '#207C44',
+      data: maxLine,
+      smooth: true,
+      symbolSize: 0,
+      markLine: {
+        lineStyle: {
+          color: '#0E9CFF',
+          width: 1,
+          type: 'dashed',
+        },
+        label: {
+          show: false,
+        },
+        data: [
+          {
+            name: t('考核基准'),
+            yAxis: props.config.examine,
+          },
+        ],
+        silent: true,
+        symbol: 'none',
+      },
+    },
+    {
+      name: t('Min曲线'),
+      type: 'line',
+      color: '#30A9A5',
+      data: minLine,
+      smooth: true,
+      symbolSize: 0,
+    },
+    {
+      name: t('均值曲线'),
+      type: 'line',
+      data: menLine,
+      smooth: true,
+      symbolSize: 0,
+    },
+  ],
+});
+
+const dayPowerFactor = (loadData: number[], unbalanceData: number[]): ECOption => ({
+  xAxis: {
+    type: 'category',
+    data: Array.from({ length: 31 }, (_, index) => index + 1),
+    axisTick: {
+      show: false,
+    },
+  },
+  color: 'rgba(40,124,232,0.5)',
+  tooltip: {
+    trigger: 'axis',
+    backgroundColor: 'rgba(11,34,52,0.9)',
+    borderColor: '#204C6F',
+    borderWidth: 1,
+    formatter: (params: any) => {
+      let tip: string = '';
+      if (params != null && params.length > 0) {
+        tip += '<div>';
+        for (let index = 0; index < params.length; index++) {
+          tip +=
+            '<p><span style="color: #F5F7FA">' +
+            params[index].seriesName +
+            '：</span><span style="color:' +
+            params[index].color +
+            '">' +
+            params[index].value +
+            '%</span></p>';
+        }
+        tip += '</div>';
+      }
+      return tip;
+    },
+  },
+  yAxis: {
+    type: 'value',
+    nameTextStyle: {
+      fontSize: '14',
+      fontFamily: 'Microsoft YaHei',
+      fontWeight: 400,
+      color: '#EAF5FF',
+    },
+    splitLine: {
+      lineStyle: {
+        type: 'dashed',
+        color: '#1A242B',
+        width: 1,
+      },
+    },
+  },
+  grid: { top: '30px', left: '30px', right: '30px', bottom: '30px' },
+  series: [
+    {
+      name: t('负载率'),
+      type: 'line',
+      color: '#40E0DA',
+      data: loadData,
+      smooth: true,
+      symbolSize: 0,
+      markLine: {
+        lineStyle: {
+          color: '#0E9CFF',
+          width: 1,
+          type: 'dashed',
+        },
+        label: {
+          show: false,
+        },
+        data: [
+          {
+            name: t('考核基准'),
+            yAxis: props.config.examine,
+          },
+        ],
+        silent: true,
+        symbol: 'none',
+      },
+    },
+    {
+      name: t('三相不平衡率'),
+      type: 'line',
+      color: '#246ECE',
+      data: unbalanceData,
+      smooth: true,
+      symbolSize: 0,
+    },
+  ],
+});
+
 // dialog弹框
-const changeDilog = (val: string) => {
-  dialogVisible.value = true;
+const changeDialog = (val: string) => {
+  monthlyVisible.value = true;
   if (val === 'month') {
     timeType.value = 'month';
     nowDialog.value = true;
     selectShow.value = false;
-    title.value = t('功率因数_月曲线分析');
-    checkList.value = [t('箱线图'), t('差值波动'), t('Max曲线'), t('Min曲线'), t('均值曲线')];
-    // 月曲线分析图表
-    optionMonth_chart.value = {
-      xAxis: {
-        type: 'category',
-        data: [
-          '1',
-          '2',
-          '3',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          '11',
-          '12',
-          '13',
-          '14',
-          '15',
-          '16',
-          '17',
-          '18',
-          '19',
-          '20',
-          '21',
-          '22',
-          '23',
-          '24',
-          '25',
-          '26',
-          '27',
-          '28',
-          '29',
-          '30',
-          '31',
-        ],
-        axisTick: {
-          show: false,
-        },
-      },
-      color: 'rgba(40,124,232,0.5)',
-      tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(11,34,52,0.9)',
-        borderColor: '#204C6F',
-        borderWidth: 1,
-        formatter: (params: any) => {
-          let tip: string = '';
-          if (params != null && params.length > 0) {
-            console.log(params);
-            tip += '<div>';
-            for (let index = 0; index < params.length; index++) {
-              if (params[index].seriesName === t('箱线图')) {
-                // 勿删  图例待确认？
-                /*tip +=
-                  '<p style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                  params[index].seriesName +
-                  '：</p><p style="margin-left: 5px;color: #F5F7FA">开盘值：<span style="color:' +
-                  params[index].color +
-                  '">' +
-                  params[index].value[1] +
-                  '<span></p><p style="margin-left: 5px;color: #F5F7FA">封盘值：<span style="color:' +
-                  params[index].color +
-                  '">' +
-                  params[index].value[2] +
-                  '</span></p><p style="margin-left: 5px;color: #F5F7FA">最大值：<span style="color:' +
-                  params[index].color +
-                  '">' +
-                  params[index].value[4] +
-                  '</span></p><p style="margin-left: 5px;color: #F5F7FA">最小值：<span style="color:' +
-                  params[index].color +
-                  '">' +
-                  params[index].value[3] +
-                  '</span></p>';*/
-              } else {
-                tip +=
-                  '<p><span style="color: #F5F7FA;font-size: 12px;font-weight: 400;">' +
-                  params[index].seriesName +
-                  '：</span><span style="color:' +
-                  params[index].color +
-                  ';font-size: 12px;font-weight: 400;">' +
-                  params[index].value +
-                  '</span></p>';
-              }
-            }
-            tip += '</div>';
-          }
-          return tip;
-        },
-      },
-      legend: {
-        show: false,
-        selected: { 箱线图: true, 差值波动: true, Max曲线: true, Min曲线: true, 均值曲线: true },
-      },
-      yAxis: {
-        type: 'value',
-        nameTextStyle: {
-          fontSize: '14',
-          fontFamily: 'Microsoft YaHei',
-          fontWeight: 400,
-          color: '#EAF5FF',
-        },
-        splitLine: {
-          lineStyle: {
-            type: 'dashed',
-            color: '#1A242B',
-            width: 1,
-          },
-        },
-      },
-      grid: { top: '30px', left: '30px', right: '30px', bottom: '30px' },
-      series: [
-        {
-          name: t('箱线图'),
-          type: 'candlestick',
-          color: 'rgba(40,124,232,0.3)',
-          data: [
-            [0.85, 0.86, 0.7, 0.86],
-            [0.85, 0.86, 0.75, 0.86],
-            [0.85, 0.86, 0.6, 0.86],
-            [0.85, 0.86, 0.55, 0.86],
-            [0.85, 0.86, 0.7, 0.86],
-            [0.85, 0.86, 0.75, 0.86],
-            [0.85, 0.86, 0.7, 0.86],
-            [0.85, 0.86, 0.65, 0.86],
-            [0.85, 0.86, 0.7, 0.86],
-            [0.85, 0.86, 0.65, 0.86],
-            [0.85, 0.86, 0.55, 0.86],
-            [0.85, 0.86, 0.6, 0.86],
-            [0.85, 0.86, 0.7, 0.86],
-            [0.85, 0.86, 0.75, 0.86],
-            [0.85, 0.86, 0.6, 0.86],
-            [0.85, 0.86, 0.7, 0.86],
-            [0.85, 0.86, 0.55, 0.86],
-          ],
-          itemStyle: {
-            color: 'rgba(40, 124, 232, 0.3)',
-            borderWidth: 1,
-            borderColor: '#287CE8',
-          },
-        },
-        {
-          name: t('差值波动'),
-          type: 'bar',
-          data: [
-            0.3, 0.1, 0.15, 0.3, 0.11, 0.16, 0.2, 0.2, 0.17, 0.4, 0.13, 0.18, 0.3, 0.14, 0.19, 0.2, 0.1, 0.15, 0.6,
-            0.11, 0.16, 0.7, 0.12, 0.17, 0.8, 0.13, 0.18, 0.9, 0.14, 0.19, 0.23,
-          ],
-          itemStyle: {
-            color: 'rgba(40, 124, 232, 0.3)',
-            borderWidth: 1,
-            borderColor: '#287CE8',
-          },
-          barWidth: 16,
-          barGap: 35,
-        },
-        {
-          name: t('Max曲线'),
-          type: 'line',
-          color: '#207C44',
-          data: [
-            0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35,
-            0.52, 0.73, 0.69, 0.41, 0.5, 0.61, 0.64, 0.23, 0.22, 0.45, 0.33, 0.71, 0.52,
-          ],
-          smooth: true,
-          symbolSize: 0,
-          markLine: {
-            lineStyle: {
-              color: '#0E9CFF',
-              width: 1,
-              type: 'dashed',
-            },
-            label: {
-              show: false,
-            },
-            data: [
-              {
-                name: t('考核基准'),
-                yAxis: props.config.examine,
-              },
-            ],
-            silent: true,
-            symbol: 'none',
-          },
-        },
-        {
-          name: t('Min曲线'),
-          type: 'line',
-          color: '#30A9A5',
-          data: [
-            0.29, 0.38, 0.25, 0.36, 0.83, 0.7, 0.64, 0.42, 0.34, 0.55, 0.64, 0.28, 0.39, 0.5, 0.65, 0.55, 0.2, 0.35,
-            0.36, 0.51, 0.6, 0.47, 0.59, 0.57, 0.6, 0.32, 0.58, 0.44, 0.34, 0.59, 0.43,
-          ],
-          smooth: true,
-          symbolSize: 0,
-        },
-        {
-          name: t('均值曲线'),
-          type: 'line',
-          data: [
-            0.36, 0.78, 0.22, 0.56, 0.23, 0.6, 0.54, 0.24, 0.35, 0.55, 0.43, 0.68, 0.79, 0.54, 0.49, 0.65, 0.52, 0.43,
-            0.54, 0.75, 0.67, 0.45, 0.51, 0.64, 0.65, 0.43, 0.58, 0.79, 0.34, 0.71, 0.43,
-          ],
-          smooth: true,
-          symbolSize: 0,
-        },
-      ],
-    };
+    activeChart.value = chartTypes;
   } else if (val === 'day') {
     timeType.value = 'date';
     nowDialog.value = false;
     selectShow.value = false;
-    title.value = t('功率因数_日曲线分析');
-    // 日曲线分析
-    optionMonth_chart.value = {
-      xAxis: {
-        type: 'category',
-        data: [
-          '1',
-          '2',
-          '3',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          '11',
-          '12',
-          '13',
-          '14',
-          '15',
-          '16',
-          '17',
-          '18',
-          '19',
-          '20',
-          '21',
-          '22',
-          '23',
-          '24',
-        ],
-        axisTick: {
-          show: false,
-        },
-      },
-      color: 'rgba(40,124,232,0.5)',
-      tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(11,34,52,0.9)',
-        borderColor: '#204C6F',
-        borderWidth: 1,
-        formatter: (params: any) => {
-          let tip: string = '';
-          if (params != null && params.length > 0) {
-            tip += '<div>';
-            for (let index = 0; index < params.length; index++) {
-              tip +=
-                '<p><span style="color: #F5F7FA">' +
-                params[index].seriesName +
-                '：</span><span style="color:' +
-                params[index].color +
-                '">' +
-                params[index].value +
-                '%</span></p>';
-            }
-            tip += '</div>';
-          }
-          return tip;
-        },
-      },
-      yAxis: {
-        type: 'value',
-        nameTextStyle: {
-          fontSize: '14',
-          fontFamily: 'Microsoft YaHei',
-          fontWeight: 400,
-          color: '#EAF5FF',
-        },
-        splitLine: {
-          lineStyle: {
-            type: 'dashed',
-            color: '#1A242B',
-            width: 1,
-          },
-        },
-      },
-      grid: { top: '30px', left: '30px', right: '30px', bottom: '30px' },
-      series: [
-        {
-          name: t('负载率'),
-          type: 'line',
-          color: '#40E0DA',
-          data: [
-            0.55, 0.58, 0.15, 0.36, 0.53, 0.4, 0.64, 0.42, 0.27, 0.55, 0.43, 0.78, 0.39, 0.44, 0.59, 0.65, 0.5, 0.45,
-            0.56, 0.71, 0.66, 0.47, 0.52, 0.67, 0.68,
-          ],
-          smooth: true,
-          symbolSize: 0,
-          markLine: {
-            lineStyle: {
-              color: '#0E9CFF',
-              width: 1,
-              type: 'dashed',
-            },
-            label: {
-              show: false,
-            },
-            data: [
-              {
-                name: t('考核基准'),
-                yAxis: props.config.examine,
-              },
-            ],
-            silent: true,
-            symbol: 'none',
-          },
-        },
-        {
-          name: t('三相不平衡率'),
-          type: 'line',
-          color: '#246ECE',
-          data: [
-            0.25, 0.28, 0.55, 0.46, 0.33, 0.8, 0.74, 0.52, 0.37, 0.58, 0.63, 0.48, 0.29, 0.54, 0.69, 0.75, 0.56, 0.35,
-            0.52, 0.73, 0.69, 0.41, 0.5, 0.61, 0.64,
-          ],
-          smooth: true,
-          symbolSize: 0,
-        },
-      ],
-    };
-  } else {
-    timeType.value = 'date';
-    nowDialog.value = false;
-    selectShow.value = true;
-    title.value = t('功率因数_数据分析');
-    // 数据分析
-    optionMonth_chart.value = {
-      xAxis: {
-        type: 'value',
-        axisLabel: {
-          formatter: '{value}%',
-        },
-        splitLine: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
-      },
-      tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(11,34,52,0.9)',
-        borderColor: '#204C6F',
-        borderWidth: 1,
-        formatter: (params: any) => {
-          let tip: string = '';
-          if (params != null && params.length > 0) {
-            tip += '<div><p style="color: #F5F7FA">' + t('功率因数') + '：</p>';
-            for (let index = 0; index < params.length; index++) {
-              tip +=
-                '<p>' +
-                params[index].marker +
-                '<span style="color:' +
-                params[index].color +
-                '">' +
-                params[index].value[1] +
-                '</span></p>';
-            }
-            tip += '</div>';
-          }
-          return tip;
-        },
-      },
-      yAxis: {
-        type: 'value',
-        nameTextStyle: {
-          fontSize: '14',
-          fontFamily: 'Microsoft YaHei',
-          fontWeight: 400,
-          color: '#EAF5FF',
-        },
-        splitLine: {
-          lineStyle: {
-            type: 'dashed',
-            color: '#1A242B',
-            width: 1,
-          },
-        },
-        axisLine: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
-      },
-      grid: { top: '30px', left: '55px', right: '30px', bottom: '51px' },
-      color: ['rgba(65,228,222,0.7)', 'rgba(215,40,36,0.7)'],
-      series: [
-        {
-          symbolSize: 20,
-          data: maxArr.value,
-          type: 'scatter',
-          markLine: {
-            lineStyle: {
-              color: '#0E9CFF',
-              width: 1,
-              type: 'dashed',
-            },
-            label: {
-              show: false,
-            },
-            data: [
-              {
-                name: t('考核基准'),
-                yAxis: props.config.examine,
-              },
-            ],
-            silent: true,
-            symbol: 'none',
-          },
-        },
-        {
-          symbolSize: 20,
-          data: minArr.value,
-          type: 'scatter',
-        },
-      ],
-    };
   }
 };
 
@@ -680,53 +510,22 @@ const changeDilog = (val: string) => {
 const selectType = () => {
   const checkObj: any = {};
   let checkObj_item: string = '';
-  for (let index = 0; index < checkList.value.length; index++) {
-    checkObj_item = checkList.value[index];
+  for (let index = 0; index < activeChart.value.length; index++) {
+    checkObj_item = activeChart.value[index];
     checkObj[checkObj_item] = true;
   }
   const selObj: any = {};
   let selObj_item: string = '';
-  for (let index = 0; index < checkTypeList.length; index++) {
-    selObj_item = checkTypeList[index];
+  for (let index = 0; index < chartTypes.length; index++) {
+    selObj_item = chartTypes[index];
     selObj[selObj_item] = false;
   }
-  const showObj = Object.assign(selObj, checkObj);
-  optionMonth_chart.value.legend = {
-    show: false,
-    selected: showObj,
-  };
+  // const showObj = Object.assign(selObj, checkObj);
+  // optionMonth_chart.value.legend = {
+  //   show: false,
+  //   selected: showObj,
+  // };
 };
-// 无功优化补偿
-const tableData = [
-  {
-    typesOf: t('类型一'),
-    position: t('位置一'),
-    state: '44.20',
-    adjustment: '44.20',
-    range: '44.20',
-  },
-  {
-    typesOf: t('类型一'),
-    position: t('位置一'),
-    state: '44.20',
-    adjustment: '44.20',
-    range: '44.20',
-  },
-  {
-    typesOf: t('类型一'),
-    position: t('位置一'),
-    state: '44.20',
-    adjustment: '44.20',
-    range: '44.20',
-  },
-  {
-    typesOf: t('类型一'),
-    position: t('位置一'),
-    state: '44.20',
-    adjustment: '44.20',
-    range: '44.20',
-  },
-];
 </script>
 
 <style lang="scss" scoped>
@@ -847,12 +646,12 @@ const tableData = [
       border: 1px solid #212c3c;
 
       .histogram {
-        height: 302px;
         width: 938px;
+        height: 100%;
 
         .charts {
-          height: 302px;
-          width: 938px;
+          width: 100%;
+          height: 100%;
         }
       }
 
