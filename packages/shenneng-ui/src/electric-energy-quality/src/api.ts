@@ -44,7 +44,7 @@ export default (request?: EdomsRequestFunc): Apis => ({
   fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetchVoltagAnallysisRes> => {
     if (!request) {
       return {
-        histogram: { seriesData: [], xAxisData: [] },
+        histogram: { seriesData: [], xaxisData: [] },
         underVoltage: [],
         overVoltage: [],
         voltageFluctuation: [],
@@ -59,7 +59,7 @@ export default (request?: EdomsRequestFunc): Apis => ({
       return result;
     } catch (error) {
       return {
-        histogram: { seriesData: [], xAxisData: [] },
+        histogram: { seriesData: [], xaxisData: [] },
         underVoltage: [],
         overVoltage: [],
         voltageFluctuation: [],

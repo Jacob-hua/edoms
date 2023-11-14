@@ -83,12 +83,6 @@ export default async (request: Request) => [
     addButtonText: '选择实例',
     maxItems: 1,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
-    items: [
-      {
-        text: '标签',
-        name: 'label',
-      },
-      ...(await useInstanceConfig(request, 'electric-energy-quality', ['unit'])),
-    ],
+    items: [...(await useInstanceConfig(request, 'electric-energy-quality', ['unit']))],
   },
 ];

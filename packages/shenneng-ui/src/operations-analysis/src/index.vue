@@ -163,6 +163,7 @@ const handlerToClick = () => {
 };
 
 const hanlderToChoose = (key: string) => {
+  interval.value = key === '年' ? '1D' : '1H';
   dateValue.value = key;
   isShowOptions.value = false;
   getElectricAnalysisData();
@@ -172,6 +173,8 @@ const paging = ref({
   page: 1,
   size: 3,
 });
+
+const interval = ref('1H');
 
 const getElectricAnalysisData = async () => {
   if (!props.config || instanceCode.value?.length <= 0) return;
@@ -184,6 +187,7 @@ const getElectricAnalysisData = async () => {
   const params = {
     devCodes: instanceCode.value,
     devNames: instanceNames.value,
+    interval: interval.value,
     startTime: start,
     endTime: end,
     ...paging.value,
