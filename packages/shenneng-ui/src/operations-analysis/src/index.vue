@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import { formatDateRange } from '@edoms/utils';
 
@@ -194,7 +194,7 @@ const getElectricAnalysisData = async () => {
   };
   const result = await fetchExecuteApi({ apiCode: 'queryOperationAnalysis', requestParam: params });
   if (!result || result.dataList.length <= 0) return;
-  tableDataList.value = result.dataList as any;
+  tableDataList.value = result.dataList;
 };
 
 watch(
@@ -205,9 +205,12 @@ watch(
       ? dom.addEventListener('click', handlerToClick, false)
       : dom.removeEventListener('click', handlerToClick, false),
       (isShowOptions.value = false);
-    newV && getElectricAnalysisData();
   }
 );
+
+onMounted(() => {
+  getElectricAnalysisData();
+});
 </script>
 
 <style lang="scss" scoped>

@@ -64,8 +64,10 @@ const voltageFluctuationOption = ref<Itages>([]);
 //电压波动分析图表
 const histogramOptions = ref<ECOption>({});
 
-// eslint-disable-next-line vue/no-side-effects-in-computed-properties
-const instanceCode = computed(() => props.config.voltageAnalysis[0].instance.pop() ?? '');
+const instanceCode = computed(() => {
+  const voltageAnalysis = props.config.voltageAnalysis[0]?.instance;
+  return voltageAnalysis ? voltageAnalysis[voltageAnalysis.length - 1] : '';
+});
 
 const getVoltagAnalysisData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD')) => {
   if (!props.config || instanceCode.value?.length <= 0) return;
