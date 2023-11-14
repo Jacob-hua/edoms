@@ -17,6 +17,16 @@
     </template>
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrapper">
+        <el-select
+          v-if="pointOptions && pointOptions.length > 0"
+          v-model="vModelpoint"
+          class="select-device"
+          placeholder="Select"
+          size="small"
+          @change="changeSelectPoint"
+        >
+          <el-option v-for="item in pointOptions" :key="item.value" :label="item.label" :value="item.indicators" />
+        </el-select>
         <div class="left-tab">
           <div
             v-for="({ label }, index) in parameterConfigs"
@@ -68,19 +78,30 @@ const { fetchCurveData } = apiFactory(request);
 const categories = computed<any[]>(() => props.config.classify);
 
 const activeCategory = ref<number>(0);
+
 const option = ref<ECOption>({});
 
 const lineUnit = ref<string[]>([]);
+
+const pointOptions = ref<Record<string, any>>([]);
+
+const vModelpoint = ref('');
+
+const currentIndicators = ref();
 
 const parameterConfigs = computed<MParameterItemConfig[]>(() => {
   if (!props.config.classify) return [];
   if (props.config.classify.length == 0) return [];
   const result = props.config.classify[activeCategory.value].tabName;
   if (result) {
+    arrangePointData();
     return result;
   }
+  clearPointOptions();
   return [];
 });
+
+const clearPointOptions = () => (pointOptions.value = []);
 
 const activeIndicatorConfig = ref<Map<string, MIndicatorItemConfig>>(new Map<string, MIndicatorItemConfig>());
 
@@ -93,6 +114,7 @@ const intervalDelay = computed<number>(() => {
 const changeTab = (index: number) => {
   if (activeCategory.value === index) return;
   activeCategory.value = index;
+  arrangePointData();
   activeTab.value = 0;
   getHistoryData();
 };
@@ -101,6 +123,7 @@ const changeActiveTab = (index: number) => {
   activeTab.value = index;
   getHistoryData();
 };
+
 const getHistoryData = async () => {
   const date = new Date();
   option.value = {};
@@ -111,32 +134,57 @@ const getHistoryData = async () => {
   const result = await fetchCurveData({
     startTime: start,
     endTime: end,
-    dataCodes: data[activeTab.value].indicators.map((e: any) => e.property),
+    dataCodes: !isHasPoint() ? data[activeTab.value].indicators.map((e: any) => e.property) : currentIndicators.value,
     tsUnit: 'H',
     ts: '1',
   });
   let chartSeries = [];
-  chartSeries = result.map(({ propCode, dataList }, index) => {
-    const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
-    const name = data[activeTab.value].indicators[codeIndex]?.label;
-    const color = data[activeTab.value].indicators[codeIndex]?.color;
-    lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
-    const lineType = data[activeTab.value].lineType ?? 'line';
-    return {
-      name: name ? name : `${t('未命名')}${index}`,
-      type: lineType,
-      showSymbol: false,
-      smooth: true,
-      color,
-      barWidth: '14',
-      data: dataList.map(({ time, value }) => [
-        new Date(Number(time)),
-        formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
-      ]),
-    };
+  chartSeries = result.map(({ propCode, dataList }) => {
+    return data[activeTab.value].indicators?.map((indicator, index) => {
+      // const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => indicator.property == propCode);
+      const codeIndex = indicator.property == propCode ? index : -1;
+      const name = indicator.label;
+      const color = indicator.color;
+      lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
+      const lineType = data[activeTab.value].lineType ?? 'line';
+      return {
+        name: name ? name : `${t('未命名')}${index}`,
+        type: lineType,
+        showSymbol: false,
+        smooth: true,
+        color,
+        barWidth: '14',
+        data: dataList.map(({ time, value }) => [
+          new Date(Number(time)),
+          formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
+        ]),
+      };
+    });
   });
-  option.value = generateOption(chartSeries);
+  option.value = generateOption(chartSeries[0]);
 };
+
+const isHasPoint = () => {
+  const result = props.config.classify[activeCategory.value].tabName;
+  return result[activeTab.value].point?.length > 0;
+};
+
+const arrangePointData = () => {
+  const result = props.config.classify[activeCategory.value].tabName;
+  const currentPoint = result[activeTab.value]?.point || [];
+  pointOptions.value = currentPoint.length > 0 ? currentPoint : [];
+  if (pointOptions.value.length > 0) {
+    vModelpoint.value = pointOptions.value[0].label;
+  } else {
+    vModelpoint.value = '';
+  }
+};
+
+const changeSelectPoint = (val: any) => {
+  currentIndicators.value = [...val].map((e: any) => e.property);
+  getHistoryData();
+};
+
 const { flush } = useIntervalAsync(getHistoryData, intervalDelay.value);
 
 watch(
@@ -198,7 +246,7 @@ function generateOption(series: any[] = []): ECOption {
       data: legends,
       icon: 'rect',
       itemWidth: 14,
-      itemHeight: 4,
+      itemHeight: 14,
       color: colors,
       textStyle: {
         color: '#EFF7FF',
@@ -288,7 +336,6 @@ const showRight = ref<boolean>(false);
 const distance = ref<number>(0);
 
 const tabCount = computed<number>(() => {
-  console.log('props.config', props.config);
   if (props.config.classify.length > 4) return 4;
   else if (props.config.classify.length < 2) return 2;
   else return props.config.classify.length;
@@ -347,8 +394,10 @@ onMounted(() => {
   width: 100%;
   height: 100%;
 }
+
 .wrap-body {
   width: 100%;
+
   .wrap-header {
     margin-left: 20px;
     margin-top: 10px;
@@ -358,7 +407,6 @@ onMounted(() => {
     border-bottom: 1px solid rgba($color: #00a3ff, $alpha: 0.3);
     display: flex;
     align-items: center;
-    position: relative;
 
     .wrap-divide {
       position: absolute;
@@ -368,12 +416,14 @@ onMounted(() => {
       align-items: center;
       justify-content: space-between;
       pointer-events: none;
+
       .divide {
         width: 1px;
         height: 12px;
         background-color: rgba($color: #00a3ff, $alpha: 0.3);
       }
     }
+
     .btn {
       height: 0;
       width: 0;
@@ -381,6 +431,7 @@ onMounted(() => {
       border-top: 8px solid transparent;
       border-bottom: 8px solid transparent;
     }
+
     .caret-left {
       position: absolute;
       left: -20px;
@@ -394,6 +445,7 @@ onMounted(() => {
       width: calc(100% - 10px);
       overflow: hidden;
       vertical-align: bottom;
+
       //   width: 100%;
       //   overflow: hidden;
       //   display: flex;
@@ -402,6 +454,7 @@ onMounted(() => {
       .list-tab {
         width: max-content;
         min-width: 770px;
+
         .wrap-tab {
           //   width: 385px;
           width: v-bind(tabWidth);
@@ -410,6 +463,7 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: center;
+
           .tab {
             min-height: 20px;
             min-width: 130px;
@@ -420,6 +474,7 @@ onMounted(() => {
             display: flex;
             align-items: center;
             justify-content: center;
+
             &.active {
               background: rgba(0, 163, 255, 0.16);
               border: 1px solid #007bc0;
@@ -438,11 +493,14 @@ onMounted(() => {
       border-left-color: #ffffff85;
     }
   }
+
   .wrapper {
     height: calc(100% - 41px);
     display: flex;
     box-sizing: border-box;
     width: 100%;
+    position: relative;
+
     .left-tab {
       min-width: 110px;
       height: calc(100% - 20px);
@@ -456,27 +514,34 @@ onMounted(() => {
       overflow-x: hidden;
       overflow-y: auto;
       position: relative;
-      & > ::after {
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 1px;
-        right: 5px;
-        top: -10px;
-        background-color: rgba(255, 255, 255, 0.12);
-      }
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
+
+      // &> ::after {
+      //   content: '';
+      //   position: absolute;
+      //   height: 100%;
+      //   width: 1px;
+      //   right: 5px;
+      //   top: -10px;
+      //   background-color: rgba(255, 255, 255, 0.12);
+      // }
+
       .button-tab {
-        width: calc(100% - 10px);
+        width: 100%;
         margin-bottom: 10px;
-        line-height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
         background-size: cover;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        padding: 5px 0;
+        padding: 10px 0;
         box-sizing: border-box;
         font-size: 14px;
+        min-height: 34px;
+
         &.active {
           color: #1b9aff;
           border-right: 2px solid #1b9aff;
@@ -486,10 +551,12 @@ onMounted(() => {
       }
     }
   }
+
   .charts {
     flex-grow: 1;
     height: 100%;
     margin-top: 20px;
+    margin-right: 20px;
   }
 }
 
@@ -498,15 +565,28 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   .divide-item {
-    margin: 0 10px;
+    margin: 0 5px;
     font-size: 14px;
     padding: 4px 0;
     box-sizing: content-box;
   }
+
   .active {
     color: #1b9aff;
     border-bottom: 2px solid #1b9aff;
   }
+}
+
+.select-device {
+  position: absolute;
+  right: 15px;
+  top: 0px;
+  background-color: #1f212c;
+}
+
+:deep(.wrap-body .select-device .el-input__wrapper) {
+  background-color: #1f212c !important;
 }
 </style>

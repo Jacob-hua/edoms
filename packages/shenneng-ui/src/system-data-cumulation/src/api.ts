@@ -1,6 +1,15 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, FetchCumulativeDataReq, FetchCumulativeDataRes, FetchHistoryDataReq, FetchHistoryDataRes } from './type';
+import {
+  Apis,
+  FetchCumulativeDataReq,
+  FetchCumulativeDataRes,
+  FetchExecuteApiReq,
+  FetchHistoryDataReq,
+  FetchHistoryDataRes,
+  FetchSysCumulantDataReq,
+  FetchSysCumulantDataRes,
+} from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchCumulativeData: async (data: FetchCumulativeDataReq): Promise<FetchCumulativeDataRes> => {
@@ -18,6 +27,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
       return [];
     }
   },
+  fetchSysCumulantData: async (data: FetchSysCumulantDataReq): Promise<FetchSysCumulantDataRes> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchSysCumulantDataReq, FetchSysCumulantDataRes>({
+        url: '/componentSevice/electric/querySysCumulantData',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
   fetchHistoryData: async (data: FetchHistoryDataReq): Promise<FetchHistoryDataRes> => {
     if (!request) {
       return [];
@@ -25,6 +49,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
     try {
       const { result } = await request<FetchHistoryDataReq, FetchHistoryDataRes>({
         url: '/operation-monitor/system-grand-chart-data',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetchSysCumulantDataRes> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchExecuteApiReq, FetchSysCumulantDataRes>({
+        url: '/OperationalMonitorCommon/executeApi',
         method: 'POST',
         data,
       });

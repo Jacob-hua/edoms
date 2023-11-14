@@ -1,26 +1,11 @@
 <template>
   <div class="sys-setting" contenteditable="true">
-    <div class="title-operation">
-      <span class="zh-font">系统设定参数</span>
-      <span class="en-font">SYSTEM SETTING PARAMETERS</span>
-      <div class="operation-font" @click="handlerToClick">{{ '...' }}</div>
-    </div>
-    <div class="card-list">
-      <div v-for="(itm, index) in costList.slice(0, 3)" :key="index" class="card-item">
-        <div class="tip-st">
-          <span class="count-st">{{ itm.value }}</span>
-          <span class="unit-st">{{ itm.unit }}</span>
-        </div>
-        <span class="font-st">{{ itm.name }}</span>
+    <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="392" min-height="160">
+      <div class="title-operation">
+        <div class="operation-font" @click="handlerToClick">{{ '...' }}</div>
       </div>
-    </div>
-    <div v-if="isShow" class="card-more">
-      <div class="more-title" @click="handlerToClick">
-        <div class="zh-font">{{ '<' }}</div>
-        <span class="en-font">收起</span>
-      </div>
-      <div class="more-list">
-        <div v-for="(itm, index) in costList.slice(3)" :key="index" class="card-item">
+      <div class="card-list">
+        <div v-for="(itm, index) in costList.slice(0, 3)" :key="index" class="card-item">
           <div class="tip-st">
             <span class="count-st">{{ itm.value }}</span>
             <span class="unit-st">{{ itm.unit }}</span>
@@ -28,13 +13,29 @@
           <span class="font-st">{{ itm.name }}</span>
         </div>
       </div>
-    </div>
+      <div v-if="isShow" class="card-more">
+        <div class="more-title" @click="handlerToClick">
+          <div class="zh-font">{{ '<' }}</div>
+          <span class="en-font">收起</span>
+        </div>
+        <div class="more-list">
+          <div v-for="(itm, index) in costList.slice(3)" :key="index" class="card-item">
+            <div class="tip-st">
+              <span class="count-st">{{ itm.value }}</span>
+              <span class="unit-st">{{ itm.unit }}</span>
+            </div>
+            <span class="font-st">{{ itm.name }}</span>
+          </div>
+        </div>
+      </div>
+    </BusinessCard>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue';
 
+import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
 
 import getApi from './api';
@@ -50,14 +51,7 @@ const { fetchRealData } = getApi(request);
 
 const isShow = ref<boolean>(false);
 
-const costList = ref<Array<{ [key: string]: number | string }>>([
-  // {
-  //   name: '供水温度',
-  //   value: '123',
-  //   unit: '°C',
-  //   id: '',
-  // },
-]);
+const costList = ref<Array<{ [key: string]: number | string }>>([]);
 
 const handlerToClick = () => {
   isShow.value = !isShow.value;
@@ -80,30 +74,30 @@ const getData = async () => {
   });
 };
 
-const setDate = () => {
-  const datas: any[] = [];
+const setData = () => {
+  const data: any[] = [];
   if (!props.config.indicators) return;
   props.config.indicators.forEach((itm: any) => {
-    datas.push({
+    data.push({
       name: itm.label,
       value: '-',
       id: itm.property,
       unit: itm.unit,
     });
   });
-  costList.value = datas;
+  costList.value = data;
   getData();
 };
 
 watch(
   () => props.config.indicators,
   () => {
-    setDate();
+    setData();
   }
 );
 
 onMounted(() => {
-  setDate();
+  setData();
 });
 </script>
 
@@ -119,8 +113,6 @@ onMounted(() => {
 .sys-setting {
   width: 100%;
   height: 100%;
-  background: rgba(39, 45, 54, 1);
-  padding: 12px 16px;
   box-sizing: border-box;
   position: relative;
   .title-operation {
@@ -128,6 +120,10 @@ onMounted(() => {
     justify-content: space-between;
     overflow: hidden;
     line-height: 20px;
+    position: absolute;
+    right: 20px;
+    top: 11px;
+    z-index: 9999;
     .zh-font {
       flex: 0 0 100px;
       font-size: 16px;
@@ -145,13 +141,13 @@ onMounted(() => {
       font-size: 20px;
       font-weight: bold;
       cursor: pointer;
-      line-height: 8px;
+      line-height: 20px;
     }
   }
   .card-list {
     width: 100%;
     height: 56px;
-    margin-top: 25px;
+    margin-top: 10px;
     display: flex;
     justify-content: space-between;
     text-align: center;

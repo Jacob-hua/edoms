@@ -61,11 +61,14 @@ const handleChangeMagictype = (value: string) => {
   background-color: #333c50;
   margin: 0;
   min-height: 14px;
+  padding-bottom: 15px;
 }
 :deep(.el-dialog__header span) {
   color: #ffffff85;
 }
-
+:deep(.el-dialog__headerbtn) {
+  top: 0;
+}
 :deep(.el-dialog__body) {
   background-color: #272d36;
 }

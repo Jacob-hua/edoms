@@ -5,11 +5,11 @@
  * @LastEditors: lihao
  * @LastEditTime: 2023-05-09 15:01:01
  */
-// import { Request } from '@edoms/editor';
+import { Request } from '@edoms/editor';
 
-// import useInstanceConfig from '../../useInstanceConfig';
+import useInstanceConfig from '../../useInstanceConfig';
 
-export default async () => [
+export default async (request: Request) => [
   {
     text: '标题',
     name: 'title',
@@ -24,6 +24,19 @@ export default async () => [
     defaultValue: 10,
     append: 's',
   },
-  /** 注入业务组件的共通字段 */
-  //   ...(await useInstanceConfig(request, 'intelligence-report-eletric')),
+  {
+    text: '实例',
+    name: 'classify',
+    type: 'groupList',
+    labelWidth: '70px',
+    addButtonText: '添加实例',
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+    items: [
+      {
+        text: '标签',
+        name: 'label',
+      },
+      ...(await useInstanceConfig(request, 'intelligence-report-eletric')),
+    ],
+  },
 ];

@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 
-import { formatPrecision } from '@edoms/utils';
+import { formatDateRange, formatPrecision } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
@@ -41,16 +41,19 @@ import Daily_TimesImg from './assets/ricishu.png';
 import TemperatureImg from './assets/temperature.png';
 import WaterImg from './assets/water.png';
 import apiFactory from './api';
-import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig } from './type';
+import { FetchTceStatisticsData, MEconomicIndicator, MEconomicIndicators } from './type';
 
 export interface Indicator {
-  icon: string;
+  icon?: string;
   parameter: string | number;
   label: string;
   propCode: string;
+  propVal: string;
+  type: string;
   unit: string;
   precision: string;
 }
+type SdateType = 'd' | 'm' | 'y';
 
 const props = defineProps<{
   config: MEconomicIndicators;
@@ -58,12 +61,14 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchRealData } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
-const indicators = ref<Indicator[]>([]);
-const initIndicators = ref<Indicator[]>([]);
+const initIndicators = ref();
 
-const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
+const instanceCode = computed(() => props.config.property);
+
+const instanceJsonRule = computed(() => props.config.jsonRule ?? '{}');
+
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
     return 10;
@@ -71,58 +76,39 @@ const intervalDelay = computed<number>(() => {
   return props.config.intervalDelay;
 });
 
-watch(
-  () => indicatorConfigs.value,
-  (indicatorConfigs) => {
-    indicators.value = indicatorConfigs.map(({ label, type, property, unit, precision }) => ({
-      label,
-      parameter: '',
-      icon: getIconByIndicatorType(type),
-      propCode: property,
-      unit: unit,
-      precision: precision,
-    }));
-    initIndicators.value = indicators.value;
-  },
-  {
-    immediate: true,
-  }
-);
+const transDateMap = (date: SdateType): any =>
+  new Map([
+    ['d', 'day'],
+    ['m', 'month'],
+    ['y', 'year'],
+  ]).get(date);
 
 const updateRealData = async () => {
-  const dataCodes: string[] = indicatorConfigs.value.map(({ property }): string => property);
-
-  if (dataCodes.length === 0) {
+  const dataCodes = instanceCode.value;
+  if (dataCodes && dataCodes.length === 0) {
     return;
   }
-
-  const result = await fetchRealData({ dataCodes });
-  result.forEach(({ propVal, propCode }) => {
-    const targetIndexs: number[] = [];
-    indicatorConfigs.value.forEach(({ property }, index) => {
-      if (property === propCode) {
-        targetIndexs.push(index);
-      }
-    });
-    if (targetIndexs.length <= 0) {
-      return;
-    }
-    targetIndexs.forEach((targetIndex) => {
-      const indicatorConfig = indicatorConfigs.value[targetIndex];
-      const indicator = indicators.value[targetIndex];
-      indicator.parameter = isNaN(Number(propVal))
-        ? propVal
-        : formatPrecision(Number(propVal), indicatorConfig.precision);
-      indicator.propCode = propCode;
-      indicator.precision = indicatorConfig.precision;
-      indicator.unit = indicatorConfig.unit;
-    });
+  const { start, end } = formatDateRange(new Date(), transDateMap(props.config.specificDate), 'YYYY-MM-DD HH:mm:ss');
+  const params = {
+    startAt: start,
+    endAt: end,
+    propCode: instanceCode.value,
+    jsonRule: JSON.parse(instanceJsonRule.value),
+  };
+  const result = await fetchExecuteApi({ apiCode: 'TCEStatisticsData', requestParam: params });
+  initIndicators.value = result?.map(({ label, propVal, unit, precision, type }: FetchTceStatisticsData) => {
+    return {
+      label,
+      unit,
+      icon: getIconByIndicatorType(type as MEconomicIndicator),
+      parameter: isNaN(Number(propVal)) ? propVal : formatPrecision(Number(propVal), precision as string | number),
+      propCode: instanceCode.value,
+      precision: precision as string,
+    };
   });
 };
 
-useIntervalAsync(updateRealData, intervalDelay.value);
-
-function getIconByIndicatorType(type: MEconomicIndicator) {
+const getIconByIndicatorType = (type: MEconomicIndicator) => {
   const iconClassify = {
     [MEconomicIndicator.ELECTRICITY_CONSUMPTION]: ConsumptionImg,
     [MEconomicIndicator.COST]: CostImg,
@@ -138,7 +124,9 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     [MEconomicIndicator.Daily_Charging_Times]: Daily_TimesImg,
   };
   return iconClassify[type];
-}
+};
+
+useIntervalAsync(updateRealData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
@@ -147,6 +135,7 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .economic-indicators {
   display: flex;
   width: 100%;
@@ -164,11 +153,13 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     min-width: 259px;
     min-height: 100px;
     max-width: 50%;
+
     img {
       width: 50px;
       height: 50px;
       margin-left: 40px;
     }
+
     .wrap-conent {
       padding-left: 15px;
       width: 60%;
@@ -177,24 +168,28 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
       flex-direction: column;
       align-items: center;
       text-align: left;
+
       .header {
         width: 100%;
         height: 50%;
         display: flex;
         align-items: center;
         justify-content: flex-start;
+
         .parameter {
           font-size: 20px;
           font-weight: bold;
           color: #ffffff;
           margin-right: 10px;
         }
+
         .unit {
           font-size: 14px;
           color: #ffffff;
           opacity: 0.6;
         }
       }
+
       .bottom {
         width: 100%;
         height: 50%;

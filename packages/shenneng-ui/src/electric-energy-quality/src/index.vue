@@ -39,7 +39,7 @@
                   <span>{{ t('电压分析') }}</span>
                 </span>
               </template>
-              <VoltagAnalysis></VoltagAnalysis>
+              <VoltagAnalysis :config="config"></VoltagAnalysis>
             </el-tab-pane>
           </el-tabs>
         </div>

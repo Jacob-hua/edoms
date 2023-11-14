@@ -1,6 +1,6 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, InitAlarmReq, InitAlarmRes } from './type';
+import { Apis, FetchExecuteApiReq, InitAlarmReq, InitAlarmRes } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchInitAlarmList: async (data: InitAlarmReq): Promise<InitAlarmRes> => {
@@ -49,6 +49,28 @@ export default (request?: EdomsRequestFunc): Apis => ({
       };
     }
   },
+  fetchCurrentAlarm: async (): Promise<InitAlarmRes> => {
+    if (!request) {
+      return {
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
+      };
+    }
+    try {
+      const { result } = await request<InitAlarmReq, InitAlarmRes>({
+        url: '/componentSevice/alarm/queryCurrentAlarm',
+        method: 'GET',
+      });
+      return result;
+    } catch (error) {
+      return {
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
+      };
+    }
+  },
   confirmedAlarmList: async (): Promise<string> => {
     if (!request) {
       return '';
@@ -61,6 +83,29 @@ export default (request?: EdomsRequestFunc): Apis => ({
       return result;
     } catch (error) {
       return '';
+    }
+  },
+  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<InitAlarmRes> => {
+    if (!request) {
+      return {
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
+      };
+    }
+    try {
+      const { result } = await request<FetchExecuteApiReq, InitAlarmRes>({
+        url: '/OperationalMonitorCommon/executeApi',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return {
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
+      };
     }
   },
 });

@@ -53,6 +53,7 @@ export interface MEconomicIndicators extends MComponent {
   title: string;
   /** 子标题 */
   subTitle: string;
+  instance: string[];
   indicators: MIndicatorItemConfig[];
 }
 
@@ -134,6 +135,11 @@ export interface CumulativeData {
 export interface RealData {
   propCode: string;
   propVal: string;
+  type: string;
+  label: string;
+  unit: string;
+  icon?: string;
+  precision?: string | number;
 }
 
 export interface FetchCurveDataReq {
@@ -156,6 +162,32 @@ export interface CurveData {
   }>;
 }
 
+export interface FetchTceStatisticsDataReq {
+  /** 开始时间 */
+  startAt: string;
+  /** 结束时间 */
+  endAt: string;
+  /**系统实例 */
+  propCode: string;
+  /** json规则 */
+  jsonRule: any;
+}
+
+export interface FetchTceStatisticsData {
+  label: string;
+  precision: string;
+  propVal: number | string;
+  type: string;
+  unit: string;
+}
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: any;
+}
+
+export type FetchTceStatisticsDataRes = FetchTceStatisticsData[];
+
 export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEnvMonitoringRes = IndicatorDataItem[];
@@ -172,4 +204,6 @@ export interface Apis {
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
   fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
+  fetchTceStatisticsData: (data: FetchTceStatisticsDataReq) => Promise<FetchTceStatisticsDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchTceStatisticsDataRes>;
 }

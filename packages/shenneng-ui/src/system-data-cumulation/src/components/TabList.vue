@@ -1,6 +1,11 @@
 <template>
-  <div v-show="list.length" class="tab-list">
-    <div v-for="itm in list" :key="itm.value" class="list-item" :style="{ width: `${100 / list.length}%` }">
+  <div v-show="currentList.length" class="tab-list">
+    <div
+      v-for="itm in currentList"
+      :key="itm.value"
+      class="list-item"
+      :style="{ width: `${100 / currentList.length}%` }"
+    >
       <div :class="['itm-key', currentIdx === itm.value ? 'active' : '']" @click="handlerToChange(itm)">
         {{ itm.key }}
       </div>
@@ -9,29 +14,41 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 
 import useI18n from '../../../useI18n';
 const { t } = useI18n();
-const list: Array<{ [key: string]: string | number }> = [
+const list: Array<{ [key: string]: string }> = [
   {
     key: t('日'),
-    value: 'day',
+    value: 'd',
   },
   {
     key: t('月'),
-    value: 'month',
+    value: 'm',
   },
   {
     key: t('年'),
-    value: 'year',
+    value: 'y',
   },
 ];
+
+const props = defineProps<{
+  tabData: Array<string>;
+}>();
+
 const emits = defineEmits<{
   (e: 'operate', itm: { [key: string]: any }): void;
 }>();
 
 const currentIdx = ref<string | number>('0');
+
+const currentList = computed(() => {
+  return props.tabData?.map((item) => {
+    const foundKey = list.find(({ value }) => value == item)?.key;
+    return { key: foundKey, value: item };
+  });
+});
 
 const handlerToChange = (itm: { [key: string]: any }) => {
   currentIdx.value = itm.value;
@@ -39,15 +56,8 @@ const handlerToChange = (itm: { [key: string]: any }) => {
 };
 
 onBeforeMount(() => {
-  currentIdx.value = list[0]?.value;
+  currentIdx.value = props.tabData[0];
 });
-
-watch(
-  () => list,
-  (newV: Array<{ [key: string]: string | number }>) => {
-    currentIdx.value = newV[0]?.value;
-  }
-);
 </script>
 
 <style lang="scss" scoped>

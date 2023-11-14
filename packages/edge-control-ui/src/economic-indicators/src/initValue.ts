@@ -11,6 +11,11 @@ export default {
   style: {
     width: '392',
     height: '160',
+    backgroundColor: 'rgba(39, 45, 54, 1)',
+    borderBottomLeftRadius: '8px',
+    borderBottomRightRadius: '8px',
+    borderTopLeftRadius: '8px',
+    borderTopRightRadius: '8px',
   },
   title: '经济指标',
   subTitle: 'Economic indicators',

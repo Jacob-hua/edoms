@@ -42,8 +42,15 @@ export interface Alarm {
   status: 'confirmed' | 'unconfirm';
 }
 
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: any;
+}
+
 export interface Apis {
   fetchInitAlarmList: (data: InitAlarmReq) => Promise<InitAlarmRes>;
   fetchNewAlarmList: (data: Pick<InitAlarmReq, 'sysInsCode' | 'isVirtual'>) => Promise<InitAlarmRes>;
+  fetchCurrentAlarm: () => Promise<InitAlarmRes>;
   confirmedAlarmList: () => Promise<string>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<InitAlarmRes>;
 }

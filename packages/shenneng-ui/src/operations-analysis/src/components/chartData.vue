@@ -3,19 +3,19 @@
     <div class="left-chart">
       <div class="chart-left-wrapper">
         <div :id="idList[0]" class="chart-ct"></div>
-        <span class="chart-num">{{ getNum(props.list.max) }}</span>
+        <span class="chart-num">{{ maxLoadRateToFixed + '%' }}</span>
       </div>
       <span class="font-chart">Max</span>
     </div>
     <div class="middle-chart">
       <div class="chart-right-wrapper">
         <div :id="idList[1]" class="chart-ct"></div>
-        <span class="chart-num">{{ getNum(props.list.min) }}</span>
+        <span class="chart-num">{{ minLoadRateToFixed + '%' }}</span>
       </div>
       <span class="font-chart">Min</span>
     </div>
     <div class="right-list">
-      <div v-for="(itm, idx) in props.list.list" :key="idx" class="list-item">
+      <div v-for="(itm, idx) in loadList" :key="idx" class="list-item">
         <div class="icon-st"></div>
         <div class="name-st">{{ itm.key }}</div>
         <div class="date-st">{{ itm.dis }} h</div>
@@ -26,32 +26,43 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
-// import * as echarts from 'echarts/core';
 import echarts from '../../../echarts';
-// import EdomsCharts from '../../../EdomsCharts.vue';
-// import { ECOption } from '../../../types';
-// max: 0.55,
-// min: 0.11,
-// list: [
-//   { key: '过载', dis: '5', times: '3' },
-//   { key: '重载', dis: '5', times: '3' },
-//   { key: '轻载', dis: '5', times: '3' },
-// ],
+import useI18n from '../../../useI18n';
+import { Iload } from '../type';
+
+const { t } = useI18n();
+
+export interface Ioverload {
+  key: string;
+  dis: string;
+  times: string;
+}
 
 const props = defineProps<{
-  list: {
-    max: number;
-    min: number;
-    list: Array<{ [key: string]: string | number }>;
-  };
+  maxLoadRate: number;
+  minLoadRate: number;
+  load: Iload;
 }>();
 
 const idList = ref<Array<string>>([
   Math.random().toString().substring(3, 30),
   Math.random().toString().substring(3, 30),
 ]);
+
+const maxLoadRateToFixed = computed(() => props.maxLoadRate?.toFixed(4) ?? 0);
+const minLoadRateToFixed = computed(() => props.minLoadRate?.toFixed(4) ?? 0);
+
+const loadList = computed(() => {
+  if (!props.load) return;
+  const currentLoad = props.load;
+  return [
+    { key: t('过载'), dis: currentLoad.overloadNum ?? 0, times: currentLoad.overload ?? 0 },
+    { key: t('重载'), dis: currentLoad.heavyLoadNum ?? 0, times: currentLoad.heavyLoad ?? 0 },
+    { key: t('轻载'), dis: currentLoad.lightLoadNum ?? 0, times: currentLoad.lightLoad ?? 0 },
+  ];
+});
 
 const initData = (type: string, val: number) => {
   const dom = document.getElementById(type);
@@ -72,16 +83,10 @@ const initData = (type: string, val: number) => {
   chart.setOption(options);
 };
 
-const getNum = (num: number) => {
-  return (num * 100).toFixed(2) + '%';
-};
-
 onMounted(() => {
-  initData(idList.value[0], props.list.max * 100);
-  initData(idList.value[1], props.list.min * 100);
+  initData(idList.value[0], props.maxLoadRate);
+  initData(idList.value[1], props.minLoadRate);
 });
-
-console.log(props);
 </script>
 
 <style lang="scss" scoped>
@@ -90,6 +95,8 @@ console.log(props);
   height: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
   .left-chart,
   .middle-chart {
     width: 90px;
@@ -97,6 +104,7 @@ console.log(props);
     text-align: center;
     color: rgba(234, 245, 255, 1);
     font-size: 12px;
+
     .chart-left-wrapper,
     .chart-right-wrapper {
       width: 90px;
@@ -105,6 +113,7 @@ console.log(props);
       line-height: 90px;
       margin-bottom: 16px;
       position: relative;
+
       .chart-ct {
         position: absolute;
         left: 0;
@@ -112,28 +121,33 @@ console.log(props);
         width: 90px;
         height: 90px;
       }
+
       .chart-num {
         color: #ffffff;
         font-size: 15px;
       }
     }
   }
+
   .right-list {
     width: 45%;
     height: 110px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
     .list-item {
       width: 100%;
       overflow: hidden;
       display: flex;
+
       .icon-st {
         width: 16px;
         height: 16px;
         border-radius: 50%;
         background-color: rgba(65, 228, 222, 0.2);
         position: relative;
+
         &::before {
           content: '';
           width: 10px;
@@ -145,12 +159,14 @@ console.log(props);
           top: 3px;
         }
       }
+
       .name-st {
         width: 30px;
         color: rgba(234, 245, 255, 1);
         font-size: 14px;
         margin-left: 10px;
       }
+
       .date-st,
       .times-st {
         width: calc((100% - 16px - 30px - 20px) / 2);

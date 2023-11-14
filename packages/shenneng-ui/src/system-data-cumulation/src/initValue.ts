@@ -6,4 +6,5 @@ export default {
     width: '522',
     height: '367',
   },
+  specificDate: [],
 };
