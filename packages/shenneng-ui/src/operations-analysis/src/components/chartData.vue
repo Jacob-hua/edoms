@@ -51,8 +51,8 @@ const idList = ref<Array<string>>([
   Math.random().toString().substring(3, 30),
 ]);
 
-const maxLoadRateToFixed = computed(() => props.maxLoadRate.toFixed(4));
-const minLoadRateToFixed = computed(() => props.minLoadRate.toFixed(4));
+const maxLoadRateToFixed = computed(() => props.maxLoadRate?.toFixed(4) ?? 0);
+const minLoadRateToFixed = computed(() => props.minLoadRate?.toFixed(4) ?? 0);
 
 const loadList = computed(() => {
   if (!props.load) return;
@@ -95,6 +95,7 @@ onMounted(() => {
   height: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   .left-chart,
   .middle-chart {

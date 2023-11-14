@@ -8,9 +8,9 @@
         <el-tab-pane :label="t('月度统计')" name="M"> </el-tab-pane>
         <!-- <el-tab-pane :label="t('年度统计')" name="year"> </el-tab-pane> -->
       </el-tabs>
-      <Statistics :title="t('电压波动')" :option="underVoltageOption"></Statistics>
-      <Statistics :title="t('过电压')" :option="overVoltageOption"></Statistics>
-      <Statistics :title="t('欠电压')" :option="underVoltageOption"></Statistics>
+      <Statistics key="underVoltage" :title="t('电压波动')" :option="underVoltageOption"></Statistics>
+      <Statistics key="overVoltage" :title="t('过电压')" :option="overVoltageOption"></Statistics>
+      <Statistics key="underVoltage" :title="t('欠电压')" :option="underVoltageOption"></Statistics>
     </div>
 
     <div class="wrapper-con">
