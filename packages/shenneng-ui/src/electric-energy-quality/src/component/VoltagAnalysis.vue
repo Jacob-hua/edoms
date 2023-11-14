@@ -3,10 +3,10 @@
     <div class="wrapper-tab">
       <!-- <div class="calendar">日历插件</div> -->
       <TimeCalendar :option="timeType" class="calendar" @change-time="handleSelectTime"></TimeCalendar>
-      <el-tabs v-model="activeName" class="demo-tabs">
-        <el-tab-pane :label="t('今日统计')" name="day"> </el-tab-pane>
-        <el-tab-pane :label="t('月度统计')" name="month"> </el-tab-pane>
-        <el-tab-pane :label="t('年度统计')" name="year"> </el-tab-pane>
+      <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleChangeTimeRange">
+        <el-tab-pane :label="t('今日统计')" name="D"> </el-tab-pane>
+        <el-tab-pane :label="t('月度统计')" name="M"> </el-tab-pane>
+        <!-- <el-tab-pane :label="t('年度统计')" name="year"> </el-tab-pane> -->
       </el-tabs>
       <Statistics :title="t('电压波动')" :option="underVoltageOption"></Statistics>
       <Statistics :title="t('过电压')" :option="overVoltageOption"></Statistics>
@@ -35,10 +35,11 @@ import { formatDate } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
+import useApp from '../../../useApp';
 import useI18n from '../../../useI18n';
+import apiFactory from '../api';
 import { ElectricEnergyQuality } from '../type';
 
-import mockData from './mock.json';
 import Statistics from './Statistics.vue';
 import TimeCalendar from './TimeCalendar.vue';
 const { t } = useI18n();
@@ -48,8 +49,10 @@ type Itages = Array<number>;
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
+const { request } = useApp(props);
+const { fetchExecuteApi } = apiFactory(request);
 
-const activeName = ref('day');
+const activeName = ref('D');
 
 const timeType = ref<string>('date');
 //欠电压
@@ -61,21 +64,19 @@ const voltageFluctuationOption = ref<Itages>([]);
 //电压波动分析图表
 const histogramOptions = ref<ECOption>({});
 
-const instanceCode = computed(() => props.config.property);
+// eslint-disable-next-line vue/no-side-effects-in-computed-properties
+const instanceCode = computed(() => props.config.voltageAnalysis[0].instance.pop() ?? '');
 
-console.log('instanceCode', instanceCode);
-
-const getVoltagAnalysisData = (time: string = formatDate(new Date(), 'YYYY-MM-DD')) => {
-  console.log('time', time);
-  // if (!props.config || instanceCode.value?.length <= 0) return;
-  // const params = { devCode: instanceCode.value, time }
-  // const result = await fetchExecuteApi({ apiCode: 'sysCumulantData', requestParam: params });
-  // if (!result) return;
-  const { histogram, underVoltage, overVoltage, voltageFluctuation } = mockData;
+const getVoltagAnalysisData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD')) => {
+  if (!props.config || instanceCode.value?.length <= 0) return;
+  const params = { devCode: instanceCode.value, time, queryType: activeName.value };
+  const result = await fetchExecuteApi({ apiCode: 'queryVoltageAnalysis', requestParam: params });
+  if (!result) return;
+  const { histogram, underVoltage, overVoltage, voltageFluctuation } = result;
   underVoltageOption.value = underVoltage;
   overVoltageOption.value = overVoltage;
   voltageFluctuationOption.value = voltageFluctuation;
-  histogramOptions.value = fomatChartData(histogram.seriesData, histogram.xAxisData) as ECOption;
+  histogramOptions.value = fomatChartData(histogram.seriesData, histogram.xaxisData) as ECOption;
 };
 
 const fomatChartData = (seriesData: Array<number>, xAxisData: Array<string>) => {
@@ -114,35 +115,6 @@ const fomatChartData = (seriesData: Array<number>, xAxisData: Array<string>) => 
     series: [
       {
         data: seriesData,
-        // data: [
-        //   { value: 50, itemStyle: { color: 'rgba(194, 3, 3, 0.5)', borderWidth: 1, borderColor: 'rgba(194, 3, 3, 1)' } },
-        //   {
-        //     value: 100,
-        //     itemStyle: { color: 'rgba(255, 102, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(255, 102, 0, 1)' },
-        //   },
-        //   {
-        //     value: 150,
-        //     itemStyle: { color: 'rgba(230, 138, 1, 0.5)', borderWidth: 1, borderColor: 'rgba(230, 138, 1, 1)' },
-        //   },
-        //   {
-        //     value: 200,
-        //     itemStyle: { color: 'rgba(255, 255, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(255, 255, 0, 1)' },
-        //   },
-        //   { value: 250, itemStyle: { color: 'rgba(0, 255, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(0, 255, 0, 1)' } },
-        //   {
-        //     value: 200,
-        //     itemStyle: { color: 'rgba(255, 255, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(255, 255, 0, 1)' },
-        //   },
-        //   {
-        //     value: 150,
-        //     itemStyle: { color: 'rgba(230, 138, 1, 0.5)', borderWidth: 1, borderColor: 'rgba(230, 138, 1, 1)' },
-        //   },
-        //   {
-        //     value: 100,
-        //     itemStyle: { color: 'rgba(255, 102, 0, 0.5)', borderWidth: 1, borderColor: 'rgba(255, 102, 0, 1)' },
-        //   },
-        //   { value: 50, itemStyle: { color: 'rgba(194, 3, 3, 0.5)', borderWidth: 1, borderColor: 'rgba(194, 3, 3, 1)' } },
-        // ],
         label: {
           color: '#EAF5FF',
           show: true,
@@ -158,6 +130,10 @@ const fomatChartData = (seriesData: Array<number>, xAxisData: Array<string>) => 
 
 const handleSelectTime = (time: string) => {
   getVoltagAnalysisData(formatDate(time, 'YYYY-MM-DD'));
+};
+
+const handleChangeTimeRange = () => {
+  getVoltagAnalysisData();
 };
 
 onMounted(() => {

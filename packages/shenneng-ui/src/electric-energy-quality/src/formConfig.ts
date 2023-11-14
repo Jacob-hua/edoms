@@ -1,8 +1,8 @@
-// import { Request } from '@edoms/editor';
+import { Request } from '@edoms/editor';
 
-// import useInstanceConfig from '../../useInstanceConfig';
+import useInstanceConfig from '../../useInstanceConfig';
 
-export default async () => [
+export default async (request: Request) => [
   {
     text: '标题',
     name: 'title',
@@ -74,5 +74,21 @@ export default async () => [
     name: 'examine',
     type: 'number',
     labelWidth: '85px',
+  },
+  {
+    text: '电压分析',
+    name: 'voltageAnalysis',
+    type: 'groupList',
+    labelWidth: '85px',
+    addButtonText: '选择实例',
+    maxItems: 1,
+    title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
+    items: [
+      {
+        text: '标签',
+        name: 'label',
+      },
+      ...(await useInstanceConfig(request, 'electric-energy-quality', ['unit'])),
+    ],
   },
 ];
