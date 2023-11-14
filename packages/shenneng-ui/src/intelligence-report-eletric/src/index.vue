@@ -45,11 +45,11 @@ const { fetchExecuteApi } = apiFactory(request);
 const showReport = ref<boolean>(false);
 
 const instanceCode = computed(() =>
-  props.config.classify.map(({ instance }: { instance: string[] }) => instance.pop())
+  props.config.classify?.map(({ instance }: { instance: string[] }) => instance.pop())
 );
 
 const instanceName = computed(() =>
-  props.config.classify.map(({ instanceName }: { instanceName: string }) => instanceName)
+  props.config.classify?.map(({ instanceName }: { instanceName: string }) => instanceName)
 );
 
 const changeReport = () => (showReport.value = true);
