@@ -5,7 +5,7 @@
       <div class="th_index_con">
         <div>
           <span style="color: #41e4de; font-size: 24px">{{ props.option.rePuCoefficientCharge?.toFixed(2) }}</span
-          >元
+          ><span class="unit">元</span>
         </div>
         <div>{{ t('惩奖电费') }}</div>
       </div>
@@ -65,7 +65,8 @@
               <tr>
                 <td class="frist_d">{{ t('惩奖电费') }}：</td>
                 <td class="second_d">
-                  <span>{{ props.option.rePuCoefficientCharge }}</span>
+                  <span>{{ props.option.rePuCoefficientCharge?.toFixed(2) }}</span
+                  ><span class="unit">元</span>
                 </td>
               </tr>
               <tr>
@@ -139,7 +140,7 @@ const props = defineProps<{
   }
 
   .th_index {
-    width: 130px;
+    width: 170px;
     height: 100%;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
@@ -210,5 +211,8 @@ const props = defineProps<{
       }
     }
   }
+}
+.unit {
+  color: #fff;
 }
 </style>
