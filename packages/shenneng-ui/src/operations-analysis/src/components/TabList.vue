@@ -165,7 +165,7 @@ const getClass = computed(() => (code: string | number, type: string) => `${code
           border: 1px solid rgba(215, 40, 36, 1);
         }
         &.shengu-bg {
-          background-color: rgba(202, 34, 224, 0.6);
+          background-color: rgb(129 57 139 / 60%);
           border: 1px solid rgb(200, 36, 215);
         }
       }
