@@ -9,7 +9,7 @@
     "build:page:dev": "vite --config build.vite.config.ts build --mode page:dev",
     "build:playground:dev": "vite --config build.vite.config.ts build --mode playground:dev",
     "build:page:pre": "npm run build:libs:pre && vite --config build.vite.config.ts build --mode page:pre",
-    "build:page:offline": "npm run build:libs:pre && vite --config build.vite.config.ts build --mode page:offline",
+    "build:page:offline": "set NODE_OPTIONS=--max_old_space_size=6144 && npm run build:libs:pre && vite --config build.vite.config.ts build --mode page:offline",
     "build:playground:pre": "npm run build:libs:pre && vite --config build.vite.config.ts build --mode playground:pre",
     "build:libs:dev": "edoms entry && npm run build:config:dev && npm run build:value:dev && npm run build:event:dev",
     "build:libs:pre": "edoms entry && npm run build:config:pre && npm run build:value:pre && npm run build:event:pre",
