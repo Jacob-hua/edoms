@@ -52,8 +52,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { ArrowDown, ArrowUp } from '@element-plus/icons-vue';
-
-import { ElButton } from '@edoms/design';
+import { ElButton } from 'element-plus';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';

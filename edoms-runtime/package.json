@@ -23,8 +23,6 @@
   "dependencies": {
     "@edoms/cli": "workspace:^0.0.1",
     "@edoms/core": "workspace:^0.0.1",
-    "@edoms/design": "workspace:^0.0.1",
-    "@edoms/element-plus-adapter": "workspace:^0.0.1",
     "@edoms/schema": "workspace:^0.0.1",
     "@edoms/shenneng-ui": "workspace:^0.0.1",
     "@edoms/stage": "workspace:^0.0.1",

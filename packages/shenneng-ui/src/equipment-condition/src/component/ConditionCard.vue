@@ -50,8 +50,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import { ElOption, ElSelect } from 'element-plus';
 
-import { ElOption, ElSelect } from '@edoms/design';
 import { dateRange, EdomsRequestFunc, formatDateRange, formatPrecision } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
