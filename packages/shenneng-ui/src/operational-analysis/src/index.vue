@@ -119,19 +119,19 @@ const getHistoryData = async () => {
   const date = new Date();
   option.value = {};
   lineUnit.value = [];
-  const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD');
+  const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD HH:mm:ss');
   const data = parameterConfigs.value;
   if (data.length === 0) return;
   const result = await fetchCurveData({
     startTime: start,
     endTime: end,
-    dataCodes: data[activeTab.value].indicators.map((e: any) => e.property),
+    dataCodes: data[activeTab.value].indicators?.map((e: any) => e.property),
     // dataCodes: Array.from(activeIndicatorConfig.value.values()).map(({ property }) => property),
     tsUnit: 'H',
     ts: '1',
   });
   let chartSeries = [];
-  chartSeries = result.map(({ propCode, dataList }, index) => {
+  chartSeries = result?.map(({ propCode, dataList }, index) => {
     const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => item.property == propCode);
     const name = data[activeTab.value].indicators[codeIndex]?.label;
     const color = data[activeTab.value].indicators[codeIndex]?.color;
@@ -156,7 +156,7 @@ const getHistoryData = async () => {
       smooth: true,
       color,
       barWidth: '14',
-      data: dataList.map(({ time, value }) => [
+      data: dataList?.map(({ time, value }) => [
         new Date(Number(time)),
         formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
       ]),
