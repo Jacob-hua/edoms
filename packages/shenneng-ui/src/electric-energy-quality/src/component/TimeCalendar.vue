@@ -1,6 +1,12 @@
 <template>
   <div class="block">
-    <el-date-picker v-model="time" :teleported="false" :type="timeType.option" @change="selectDate" />
+    <el-date-picker
+      v-model="time"
+      :disabled-date="setDisabled"
+      :teleported="false"
+      :type="timeType.option"
+      @change="selectDate"
+    />
   </div>
 </template>
 
@@ -12,8 +18,12 @@ const timeType = defineProps<{
 
 const emit = defineEmits(['change-time']);
 
-console.log(timeType.option);
 const time = ref(new Date());
+
+const setDisabled = (time: Record<string, any>): boolean => {
+  return time.getTime() > Date.now();
+};
+
 const selectDate = () => {
   emit('change-time', time.value);
 };

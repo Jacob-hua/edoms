@@ -28,7 +28,7 @@ const alarmMap = {
   green: commonAlarm as Ref<AlarmList>,
 };
 
-const dataSource = computed(() => alarmMap[textColor.value]?.value?.list);
+const dataSource = computed(() => alarmMap[textColor.value]?.value?.list || []);
 
 const handleIgnoreAlarm = (alarmId: number) => {
   const alarmList = alarmMap[textColor.value]?.value?.list;
