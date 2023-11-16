@@ -1,6 +1,3 @@
-// import fs from 'fs'
-// import path from 'path'
-
 const fs = require('fs');
 
 const path = require('path');
@@ -15,23 +12,16 @@ function optimizeDeps() {
     name: 'optimizeDeps',
     configResolved: (config) => {
       config.optimizeDeps.include = [];
-      const concat = config.optimizeDeps.include.concat(optimizeElement());
-      config.optimizeDeps.include = Array.from(new Set(concat));
+      const concat = Array.from(new Set(optimizeElement()));
       config.optimizeDeps.include.push(
+        ...concat,
         ...[
           'element-plus',
           'vue',
-          '@gmct/editor',
-          // 'qrcode',
-          // '@element-plus/icons-vue',
-          // 'katex',
-          'element-plus/es/locale/lang/zh-cn',
-          // 'lodash',
-          // 'dayjs',
-          // 'axios',
+          '@gmct/editor', // 'qrcode', // '@element-plus/icons-vue', // 'katex',
+          'element-plus/es/locale/lang/zh-cn', // 'lodash', // 'dayjs', // 'axios',
         ]
       );
-      // console.log(config.optimizeDeps.include);
     },
   };
 }
@@ -41,8 +31,7 @@ function optimizeDeps() {
  */
 function optimizeElement() {
   const includes = ['element-plus/es'];
-  const folders = fs.readdirSync(path.resolve(rootPath, `./node_modules/element-plus/es/components`));
-  // eslint-disable-next-line array-callback-return
+  const folders = fs.readdirSync(path.resolve(rootPath, `./node_modules/element-plus/es/components`)); // eslint-disable-next-line array-callback-return
   folders.map((name) => {
     const folderName = path.resolve(rootPath, `./node_modules/element-plus/es/components`, name);
     const stat = fs.lstatSync(folderName);

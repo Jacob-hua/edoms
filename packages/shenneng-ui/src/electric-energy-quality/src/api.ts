@@ -12,6 +12,18 @@ import {
 } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
+  fetchRunningData: async (): Promise<any> => {
+    if (!request) return [];
+    try {
+      const result = await request<any, any>({
+        url: '/OperationalMonitorSystem/thirdApiList',
+        method: 'GET',
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
   fetchHistoryData: async (data: FetchHistoryDataReq): Promise<FetchHistoryDataRes> => {
     if (!request) {
       return [];
@@ -103,6 +115,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
     }
     try {
       const { result } = await request<FetchFactorDataReq, []>({
+        url: '/OperationalMonitorCommon/executeApi',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
+    }
+  },
+  fetchStData: async (data: any): Promise<any> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<any, any>({
         url: '/OperationalMonitorCommon/executeApi',
         method: 'POST',
         data,

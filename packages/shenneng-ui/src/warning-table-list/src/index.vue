@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { provide, Ref, ref, watch } from 'vue';
+import { onMounted, provide, Ref, ref, watch } from 'vue';
 
 import { stringToTimestamp, timeSubtract } from '@edoms/utils';
 
@@ -162,6 +162,10 @@ watch(
   },
   { immediate: true }
 );
+
+onMounted(() => {
+  initAlarmList();
+});
 
 provide<Ref<ClassName>>('textColor', activeClassName);
 provide<Ref<MWarningConfigs>>('config', config);

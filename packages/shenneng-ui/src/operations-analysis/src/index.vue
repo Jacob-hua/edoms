@@ -45,7 +45,7 @@
                 <!-- <span class="unit-type">{{ itm.unitType }}</span> -->
               </div>
               <div class="accumulate-value-unit" :style="{ width: tableTitleList[1].width }">
-                <span class="accumulate-value">{{ itm.totalValue }}</span>
+                <span class="accumulate-value">{{ totalValueToFixed(itm.totalValue) }}</span>
                 <span class="accumulate-unit">{{ 'Kwh' }}</span>
               </div>
               <div class="time-power-ana" :style="{ width: tableTitleList[2].width }">
@@ -95,11 +95,11 @@ const { request } = useApp(props);
 const { fetchExecuteApi } = apiFactory(request);
 
 const instanceCode = computed(() =>
-  props.config.classify.map(({ instance }: { instance: string[] }) => instance.pop())
+  props.config.classify?.map(({ instance }: { instance: string[] }) => instance.pop())
 );
 
 const instanceNames = computed(() =>
-  props.config.classify.map(({ instanceName }: { instanceName: string }) => instanceName)
+  props.config.classify?.map(({ instanceName }: { instanceName: string }) => instanceName)
 );
 
 const dateOptions = ref<Array<{ [key: string]: string }>>([
@@ -163,7 +163,7 @@ const handlerToClick = () => {
 };
 
 const hanlderToChoose = (key: string) => {
-  interval.value = key === '年' ? '1D' : '1H';
+  interval.value = key === '年' ? '1D' : key === '月' ? '6H' : '1H';
   dateValue.value = key;
   isShowOptions.value = false;
   getElectricAnalysisData();
@@ -196,6 +196,8 @@ const getElectricAnalysisData = async () => {
   if (!result || result.dataList.length <= 0) return;
   tableDataList.value = result.dataList;
 };
+
+const totalValueToFixed = (val: string | number) => (Number(val) ? Number(val).toFixed(2) : 0);
 
 watch(
   () => isShowModel.value,

@@ -81,6 +81,9 @@ class App extends EventEmitter {
     this.config = options.config;
     options.config && this.setConfig(options.config, options.curPage);
 
+    // 设置最大监听数防止内存溢出
+    this.setMaxListeners(200);
+
     bindCommonEventListener(this);
   }
 

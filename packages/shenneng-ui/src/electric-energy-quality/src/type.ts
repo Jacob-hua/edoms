@@ -125,10 +125,12 @@ export interface FetchFactorDataReq {
 }
 
 export interface Apis {
+  fetchRunningData: (data: any) => Promise<any>;
   fetchEfficiencyData: (data: FetchEfficiencyReq) => Promise<FetchEfficiencyRes>;
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
   fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchVoltagAnallysisRes>;
   fetchFactorDay: (data: FetchFactorDataReq) => Promise<[]>;
   fetchFactorWeek: (data: FetchFactorDataReq) => Promise<[]>;
   fetchFactorLoad: (data: FetchFactorDataReq) => Promise<[]>;
+  fetchStData?: (data: any) => Promise<any>;
 }

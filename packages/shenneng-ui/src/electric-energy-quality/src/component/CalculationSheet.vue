@@ -3,15 +3,22 @@
     <div class="balance">{{ props.option.title }}</div>
     <div class="th_index">
       <div class="th_index_con">
-        <div><span style="color: #41e4de; font-size: 24px">-5372</span>元</div>
+        <div>
+          <span style="color: #41e4de; font-size: 24px">{{ props.option.rePuCoefficientCharge?.toFixed(2) }}</span
+          ><span class="unit">元</span>
+        </div>
         <div>{{ t('惩奖电费') }}</div>
       </div>
       <div class="th_index_con">
-        <div><span style="color: #41e4de; font-size: 24px">0.98</span></div>
+        <div>
+          <span style="color: #41e4de; font-size: 24px">{{ props.option.avgPowerFactor?.toFixed(2) }}</span>
+        </div>
         <div>{{ t('平均功率因数') }}</div>
       </div>
       <div class="th_index_con">
-        <div><span style="color: #d72824; font-size: 24px">0.59</span></div>
+        <div>
+          <span style="color: #d72824; font-size: 24px">{{ props.option.lowPowerFactor?.toFixed(2) }}</span>
+        </div>
         <div>{{ t('最小功率因数') }}</div>
       </div>
     </div>
@@ -26,21 +33,30 @@
             <table>
               <tr>
                 <td class="frist_d">{{ t('有功功率电量') }}：</td>
-                <td class="second_d"><span>74.934</span>{{ t('万') }} kWh</td>
+                <td class="second_d">
+                  <span>{{ props.option.activePower }}</span
+                  >{{ t('万') }} kWh
+                </td>
               </tr>
               <tr>
                 <td class="frist_d">{{ t('无功功率电量') }}：</td>
-                <td class="second_d"><span>7.297</span>{{ t('万') }} kWh</td>
+                <td class="second_d">
+                  <span>{{ props.option.reactivePower }}</span
+                  >{{ t('万') }} kWh
+                </td>
               </tr>
               <tr style="margin-top: 28px">
                 <td class="frist_d">{{ t('功率因数') }}：</td>
                 <td class="second_d">
-                  <Formula :option="formulaData"></Formula>
+                  <span>{{ props.option.powerFactor }}</span>
+                  <!-- <Formula :option="formulaData"></Formula> -->
                 </td>
               </tr>
               <tr style="margin-top: 28px">
                 <td class="frist_d">{{ t('惩奖系数') }}：</td>
-                <td class="second_d"><span>-0.75</span></td>
+                <td class="second_d">
+                  <span>{{ props.option.rePuCoefficient }}</span>
+                </td>
               </tr>
             </table>
           </el-col>
@@ -48,11 +64,16 @@
             <table>
               <tr>
                 <td class="frist_d">{{ t('惩奖电费') }}：</td>
-                <td class="second_d"><span>-10524.26</span></td>
+                <td class="second_d">
+                  <span>{{ props.option.rePuCoefficientCharge?.toFixed(2) }}</span
+                  ><span class="unit">元</span>
+                </td>
               </tr>
               <tr>
                 <td class="frist_d">{{ t('考核基准') }}：</td>
-                <td class="second_d"><span>0.9</span></td>
+                <td class="second_d">
+                  <span>{{ props.option.assesStandard }}</span>
+                </td>
               </tr>
               <!-- <tr style="margin-left: 50px">
                 <td
@@ -83,12 +104,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+// import { computed } from 'vue';
 
 import useI18n from '../../../useI18n';
 
-import Formula from './Formula.vue';
-
+// import Formula from './Formula.vue';
 const { t } = useI18n();
 
 const props = defineProps<{
@@ -103,10 +123,9 @@ const props = defineProps<{
     assessBenchmark?: number;
   };
 }>();
-
-const formulaData = computed(() => {
-  return 'Cos\\varphi=\\frac{74.934}{\\sqrt{74.934^2+7.297^2}}';
-});
+// const formulaData = computed(() => {
+//   return 'Cos\\varphi=\\frac{74.934}{\\sqrt{74.934^2+7.297^2}}';
+// });
 </script>
 
 <style lang="scss" scoped>
@@ -131,7 +150,7 @@ const formulaData = computed(() => {
   }
 
   .th_index {
-    width: 130px;
+    width: 170px;
     height: 100%;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
@@ -202,5 +221,8 @@ const formulaData = computed(() => {
       }
     }
   }
+}
+.unit {
+  color: #fff;
 }
 </style>
