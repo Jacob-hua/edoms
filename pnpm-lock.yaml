@@ -240,9 +240,6 @@ importers:
       '@edoms/schema':
         specifier: workspace:^0.0.1
         version: link:../packages/schema
-      '@edoms/shenneng-ui':
-        specifier: workspace:^0.0.1
-        version: link:../packages/shenneng-ui
       '@edoms/stage':
         specifier: workspace:^0.0.1
         version: link:../packages/stage
