@@ -32,6 +32,7 @@
           bg
           size="large"
           :icon="Download"
+          :loading="loading"
           @click="handleExportApplication"
         >
           {{ t('page.导出应用') }}
@@ -61,6 +62,23 @@
       </GridList>
     </section>
     <section class="page-preview">
+      <el-dialog v-model="dslDownloadProgress" :show-close="false" :width="400" :height="300">
+        <div class="dsl-block">
+          <div>DSL数据加载中...</div>
+          <div class="progress">
+            <el-progress
+              :percentage="100"
+              :stroke-width="20"
+              status="success"
+              :striped="true"
+              color="#c1c1c1"
+              :striped-flow="true"
+              :show-text="false"
+              :duration="10"
+            />
+          </div>
+        </div>
+      </el-dialog>
       <DSLPreview class="edit" height="98%" :content-id="version?.contentId" :page-id="active?.id" />
     </section>
   </div>
@@ -143,7 +161,7 @@ onActivated(() => {
   }
 });
 
-const { execute: downloadDsl } = useDownloadDSL();
+const { execute: downloadDsl, loading: dslDownloadProgress } = useDownloadDSL();
 
 watch(() => version.value, updateDsl, { immediate: true });
 
@@ -189,7 +207,7 @@ const handleNewVersion = () => {
   newVersionVisible.value = true;
 };
 
-const { execute: handleExportApplication } = useExport(
+const { execute: handleExportApplication, loading } = useExport(
   async () =>
     await applicationApi.exportApplication({
       applicationId: applicationId.value,
@@ -261,5 +279,46 @@ const handleSelectChange = (value: MPage) => {
 
 .page-preview {
   overflow: hidden;
+  :deep(.el-dialog__header) {
+    padding: 0;
+  }
+}
+.dsl-block {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  .progress {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+</style>
+
+<style>
+@keyframes striped-flow {
+  0% {
+    background-position: -100%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}
+
+.page-preview .el-progress-bar__inner {
+  -webkit-animation: striped-flow 3s linear infinite;
+  animation: striped-flow 3s linear infinite;
+  animation-duration: 15s;
+  background-image: linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.1) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1.45em 1.25em;
 }
 </style>
