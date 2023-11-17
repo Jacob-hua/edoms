@@ -20,11 +20,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { formatDate } from '@edoms/utils';
 
 import useApp from '../../useApp';
+import useIntervalAsync from '../../useIntervalAsync';
 
 import Table from './component/Table.vue';
 import apiFactory from './api';
@@ -50,6 +51,10 @@ const instanceCode = computed(() =>
 
 const instanceName = computed(() =>
   props.config.classify?.map(({ instanceName }: { instanceName: string }) => instanceName)
+);
+
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
 );
 
 const changeReport = () => (showReport.value = true);
@@ -95,9 +100,7 @@ const handleChangeTime = (time: string) => {
   getIntelligenceData(time);
 };
 
-onMounted(() => {
-  instanceCode.value && getIntelligenceData();
-});
+useIntervalAsync(getIntelligenceData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>

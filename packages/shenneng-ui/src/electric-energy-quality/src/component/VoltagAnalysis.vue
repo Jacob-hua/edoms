@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { formatDate } from '@edoms/utils';
 
@@ -37,6 +37,7 @@ import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
 import useApp from '../../../useApp';
 import useI18n from '../../../useI18n';
+import useIntervalAsync from '../../../useIntervalAsync';
 import apiFactory from '../api';
 import { ElectricEnergyQuality } from '../type';
 
@@ -68,6 +69,10 @@ const instanceCode = computed(() => {
   const voltageAnalysis = props.config.voltageAnalysis[0]?.instance;
   return voltageAnalysis ? voltageAnalysis[voltageAnalysis.length - 1] : '';
 });
+
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
+);
 
 const getVoltagAnalysisData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD')) => {
   if (!props.config || instanceCode.value?.length <= 0) return;
@@ -138,9 +143,7 @@ const handleChangeTimeRange = () => {
   getVoltagAnalysisData();
 };
 
-onMounted(() => {
-  getVoltagAnalysisData();
-});
+useIntervalAsync(getVoltagAnalysisData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
