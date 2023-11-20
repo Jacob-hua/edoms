@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
         '@edoms/stage',
         '@edoms/utils',
         'element-plus',
-        'element-plus/es/locale/lang/zh-cn',
+        'element-plus/es/locale/lang/*.mjs',
         'element-plus/es/components/**/style/css',
       ],
       esbuildOptions: {
