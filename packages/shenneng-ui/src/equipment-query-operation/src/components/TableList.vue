@@ -46,7 +46,6 @@ const state = reactive<{
 });
 console.log(state);
 const changeType = (itm: { [key: string]: string | number | Array<QueryList> }, val: number) => {
-  console.log(itm);
   state.dataList = itm;
   ctIndex.value = val;
 };
