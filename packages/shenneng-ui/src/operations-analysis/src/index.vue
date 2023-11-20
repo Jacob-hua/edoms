@@ -63,11 +63,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { formatDateRange } from '@edoms/utils';
 
 import useApp from '../../useApp';
+import useIntervalAsync from '../../useIntervalAsync';
 
 import ChartData from './components/chartData.vue';
 import TabList from './components/TabList.vue';
@@ -100,6 +101,10 @@ const instanceCode = computed(() =>
 
 const instanceNames = computed(() =>
   props.config.classify?.map(({ instanceName }: { instanceName: string }) => instanceName)
+);
+
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
 );
 
 const dateOptions = ref<Array<{ [key: string]: string }>>([
@@ -210,9 +215,7 @@ watch(
   }
 );
 
-onMounted(() => {
-  getElectricAnalysisData();
-});
+useIntervalAsync(getElectricAnalysisData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>

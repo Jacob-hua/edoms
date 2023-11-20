@@ -6,6 +6,7 @@ export default {
   负载率分析: 'Load Rate Analysis',
   出线柜: 'Outgoing Cabinet',
   尖: 'Rush',
+  深谷: 'Deep Valley',
   谷: 'Valley',
   平: 'Flat',
   峰: 'Peak',
