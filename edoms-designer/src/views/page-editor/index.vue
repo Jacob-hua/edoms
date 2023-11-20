@@ -414,7 +414,7 @@ async function uploadDsl(): Promise<string | null | undefined> {
     rawDSL.referenceResource = referenceResource;
   }
   const DSL = serialize(rawDSL, {
-    space: 2,
+    space: 0,
     unsafe: true,
   }).replace(/"(\w+)":\s/g, '$1: ');
   return await uploadExecute(

@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading" class="wrapper">
+  <div class="wrapper">
     <iframe v-if="dsl" ref="runtimeIframe" :width="width" :height="height" :src="previewUrl"></iframe>
     <el-empty v-else></el-empty>
   </div>

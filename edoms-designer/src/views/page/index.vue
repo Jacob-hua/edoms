@@ -62,24 +62,13 @@
       </GridList>
     </section>
     <section class="page-preview">
-      <el-dialog v-model="dslDownloadProgress" :show-close="false" :width="400" :height="300">
-        <div class="dsl-block">
-          <div>DSL数据加载中...</div>
-          <div class="progress">
-            <el-progress
-              :percentage="100"
-              :stroke-width="20"
-              status="success"
-              :striped="true"
-              color="#c1c1c1"
-              :striped-flow="true"
-              :show-text="false"
-              :duration="10"
-            />
-          </div>
-        </div>
-      </el-dialog>
-      <DSLPreview class="edit" height="98%" :content-id="version?.contentId" :page-id="active?.id" />
+      <DSLPreview
+        v-loading="dslDownloadProgress"
+        class="edit"
+        height="98%"
+        :content-id="version?.contentId"
+        :page-id="active?.id"
+      />
     </section>
   </div>
   <NewVersionDialog
@@ -292,33 +281,5 @@ const handleSelectChange = (value: MPage) => {
     width: 100%;
     margin-top: 10px;
   }
-}
-</style>
-
-<style>
-@keyframes striped-flow {
-  0% {
-    background-position: -100%;
-  }
-  100% {
-    background-position: 100%;
-  }
-}
-
-.page-preview .el-progress-bar__inner {
-  -webkit-animation: striped-flow 3s linear infinite;
-  animation: striped-flow 3s linear infinite;
-  animation-duration: 15s;
-  background-image: linear-gradient(
-    45deg,
-    rgba(0, 0, 0, 0.1) 25%,
-    transparent 25%,
-    transparent 50%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0.1) 75%,
-    transparent 75%,
-    transparent
-  );
-  background-size: 1.45em 1.25em;
 }
 </style>
