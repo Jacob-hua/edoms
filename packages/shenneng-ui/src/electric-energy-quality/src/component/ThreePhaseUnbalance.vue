@@ -47,14 +47,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { formatDate } from '@edoms/utils';
 
-// import useIntervalAsync from '../../../useIntervalAsync';
-// import { ECOption } from '../../../types';
 import useApp from '../../../useApp';
 import useI18n from '../../../useI18n';
+import useIntervalAsync from '../../../useIntervalAsync';
 import apiFactory from '../api';
 import { ElectricEnergyQuality } from '../type';
 
@@ -69,6 +68,11 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 const { fetchRunningData, fetchStData } = apiFactory(request);
+
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
+);
+
 // const byq4_current = {
 //   Ia: [291.2841, 279.9651, 248.0136, 277.4367, 249.8106, 248.2334, 249.5328, 307.9369],
 //   Ib: [292.6177, 280.9302, 247.5605, 276.8418, 250.9959, 247.2667, 249.6436, 308.0461],
@@ -92,7 +96,7 @@ const getpropColor = (series: any[] = []) => {
 //   return series.map(({ label }) => label);
 // };
 
-const _fetchThreePhaseData = async (config: any) => {
+const _fetchThreePhaseData = async () => {
   const list = await fetchRunningData({}).catch((err: any) => {
     console.log(err);
   });
@@ -101,8 +105,8 @@ const _fetchThreePhaseData = async (config: any) => {
   const params = {
     apiCode: list.filter((itm: any) => itm.name === '三相不平衡接口')[0]?.code,
     requestParam: {
-      devCodes: config.threeRhasList.map((item: any) => item?.instance[2]),
-      devNames: config.threeRhasList.map((item: any) => item?.instanceName),
+      devCodes: props.config.threeRhasList.map((item: any) => item?.instance[2]),
+      devNames: props.config.threeRhasList.map((item: any) => item?.instanceName),
       time: formatDate(new Date(), 'YYYY-MM-DD'),
       page: '1',
       size: '1000',
@@ -374,48 +378,15 @@ const _fetchThreePhaseData = async (config: any) => {
 watch(
   () => props.config.proportion,
   () => {
-    _fetchThreePhaseData(props.config);
+    _fetchThreePhaseData();
   },
   {
     immediate: true,
   }
 );
 
-const categories = ref([
-  {
-    label1: t('占比分布'),
-    label2: t('电流'),
-    label3: t('负载率'),
-    position: {
-      label: `4#${t('变压器')}`,
-      value: 20,
-      time: 693,
-      day: 28,
-      max_rate: 9.52,
-    },
-    circleChart: {},
-    lineChart1: {},
-    lineChart2: {},
-    name: 'four',
-  },
-  {
-    label1: t('占比分布'),
-    label2: t('电流'),
-    label3: t('负载率'),
-    position: {
-      label: `5#${t('变压器')}`,
-      value: 20,
-      time: 0,
-      day: 0,
-      max_rate: 0,
-    },
-    circleChart: {},
-    lineChart1: {},
-    lineChart2: {},
-    name: 'five',
-  },
-]);
-// useIntervalAsync(updateEfficiencyData, intervalDelay.value);
+const categories = ref();
+useIntervalAsync(_fetchThreePhaseData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>

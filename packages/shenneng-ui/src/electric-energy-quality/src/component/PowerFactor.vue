@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { formatDate } from '@edoms/utils';
 
@@ -81,6 +81,7 @@ import EdomsCharts from '../../../EdomsCharts.vue';
 import { ECOption } from '../../../types';
 import useApp from '../../../useApp';
 import useI18n from '../../../useI18n';
+import useIntervalAsync from '../../../useIntervalAsync';
 import apiFactory from '../api';
 import { ElectricEnergyQuality } from '../type';
 
@@ -94,6 +95,10 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 const { fetchRunningData, fetchStData } = apiFactory(request);
+
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
+);
 
 const lastMouth = ref<any>({
   title: t('上月结算'),
@@ -720,7 +725,7 @@ const selectType = () => {
 //   },
 // ];
 
-const _fetchData = async (config: any) => {
+const _fetchData = async () => {
   const list = await fetchRunningData({}).catch((err: any) => {
     console.log(err);
   });
@@ -730,7 +735,7 @@ const _fetchData = async (config: any) => {
   const params1 = {
     apiCode: list.filter((itm: any) => itm.name === '功率因数')[0]?.code,
     requestParam: {
-      devInsCode: config.gonglvyinshu[0]?.instance[2],
+      devInsCode: props.config.gonglvyinshu[0]?.instance[2],
       month: formatDate(new Date(), 'YYYY-MM'),
     },
   };
@@ -744,7 +749,7 @@ const _fetchData = async (config: any) => {
   const params2 = {
     apiCode: list.filter((itm: any) => itm.name === '月度功率因数统计接口')[0]?.code,
     requestParam: {
-      devCode: config.gonglvyinshu[0]?.instance[2],
+      devCode: props.config.gonglvyinshu[0]?.instance[2],
       year: formatDate(new Date(), 'YYYY'),
     },
   };
@@ -759,7 +764,7 @@ const _fetchData = async (config: any) => {
   const params3 = {
     apiCode: list.filter((itm: any) => itm.name === '月曲线分析接口')[0]?.code,
     requestParam: {
-      devCode: config.gonglvyinshu[0]?.instance[2],
+      devCode: props.config.gonglvyinshu[0]?.instance[2],
       month: timeSt.value,
       interval: '1H',
     },
@@ -775,7 +780,7 @@ const _fetchData = async (config: any) => {
   const params4 = {
     apiCode: list.filter((itm: any) => itm.name === '日曲线分析接口')[0]?.code,
     requestParam: {
-      devCode: config.gonglvyinshu[0]?.instance[2],
+      devCode: props.config.gonglvyinshu[0]?.instance[2],
       time: formatDate(new Date(), 'YYYY-MM-DD'),
     },
   };
@@ -787,9 +792,7 @@ const _fetchData = async (config: any) => {
   }
 };
 
-onMounted(() => {
-  _fetchData(props.config);
-});
+useIntervalAsync(_fetchData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
