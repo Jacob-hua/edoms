@@ -36,7 +36,17 @@ export default defineConfig(({ mode }) => {
     },
 
     optimizeDeps: {
-      include: ['@edoms/cli', '@edoms/core', '@edoms/schema', '@edoms/stage', '@edoms/utils'],
+      include: [
+        'vue',
+        '@edoms/cli',
+        '@edoms/core',
+        '@edoms/schema',
+        '@edoms/stage',
+        '@edoms/utils',
+        'element-plus',
+        'element-plus/es/locale/lang/zh-cn',
+        'element-plus/es/components/**/style/css',
+      ],
       esbuildOptions: {
         minify: true,
       },
@@ -48,7 +58,7 @@ export default defineConfig(({ mode }) => {
       cssCodeSplit: false,
 
       commonjsOptions: {
-        include: [/@edoms\/cli/, /@edoms\/core/, /@edoms\/schema/, /@edoms\/stage/, /@edoms\/utils/, /node_modules/],
+        include: [/@edoms\//, /node_modules/],
       },
 
       rollupOptions: {
