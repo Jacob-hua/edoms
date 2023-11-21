@@ -97,7 +97,7 @@ const responseInterceptorsCatch = (error: EdomsError) => {
 
 const service = new Request({
   baseURL: import.meta.env.VITE_BASE_API,
-  timeout: 1000 * 10,
+  timeout: 1000 * 20,
   retry: 2,
   retryDelay: 1000,
   withCredentials: true,
