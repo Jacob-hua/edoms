@@ -41,6 +41,7 @@ pipeline {
 			steps {
 				echo "2. Npm build Package"
 				sh """
+				npm config set registry http://nexus.isiact.com/repository/npm-public/
 				npm install -g pnpm@7.30.5
 				pnpm bootstrap
 				pnpm build:designer
