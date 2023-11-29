@@ -1,12 +1,5 @@
-<!--
- * @Description: 
- * @Author: lihao
- * @Date: 2023-04-25 11:03:11
- * @LastEditors: lihao
- * @LastEditTime: 2023-06-05 17:23:12
--->
 <template>
-  <div style="min-width: 365px; min-height: 160px">
+  <div v-show="indicatorsVisable" style="min-width: 365px; min-height: 160px">
     <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="365" min-height="160">
       <template #operation>
         <div class="operation" @click="handleShowMore">
@@ -32,23 +25,21 @@
     <EChartsDialog
       v-if="chartDialogVisible"
       v-model:visible="chartDialogVisible"
-      :title="dialogTitle"
+      title="能效监测"
       :width="1360"
       :height="570"
-      :options="options"
+      :options="chartOptionsData"
       @type-change="handleChangeDateType"
-      @magictype-change="handleChangeMagictype"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { daysInMonth, formatDate, formatDateRange, formatPrecision, UnitTime } from '@edoms/utils';
+import { formatDate, formatDateRange, UnitTime } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
-import { ECOption } from '../../types';
 import useApp from '../../useApp';
 import useIntervalAsync from '../../useIntervalAsync';
 
@@ -58,88 +49,149 @@ import EChartsDialog from './component/EChartsDialog.vue';
 import LinearCard from './component/LinearCard.vue';
 import apiFactory from './api';
 import locales from './locales';
-import { MEnergyMonitoring } from './type';
+import { ExecuteChartsParams, MEnergyMonitoring } from './type';
 
 const props = defineProps<{
   config: MEnergyMonitoring;
 }>();
 
-const { request, setMessage } = useApp(props);
+const { request, setMessage, provideMethod } = useApp(props);
 
-const { fetchRealData, fetchHistoryData } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
 setMessage(locales);
 
-const actualValue = ref<number>(0);
-const energyConfig = computed<MEnergyMonitoring>(() => props.config);
-const intervalDelay = computed<number>(() => {
-  if (typeof props.config.intervalDelay !== 'number') {
-    return 10;
-  }
-  return props.config.intervalDelay;
+//COP属性
+const property = computed(() => props.config.property);
+
+//轮询间隔
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
+);
+
+const indicatorsVisable = ref(false);
+
+provideMethod('changeIndicatorsVisable', (visable: boolean) => {
+  indicatorsVisable.value = visable;
 });
 
-const updateEfficiencyData = async () => {
-  if (!energyConfig.value.instance) {
-    return;
-  }
-  const dataCodes: string[] = [energyConfig.value.property];
+//能效监测cop
+const actualValue = ref<number>(0);
 
-  if (dataCodes.length === 0) {
-    return;
-  }
+const getEfficiencyData = async () => {
+  if (!property.value || property.value.length <= 0) return;
 
-  const result = await fetchRealData({ dataCodes });
-  result.forEach(() => {
-    actualValue.value = +formatPrecision(Math.random() * 7, energyConfig.value.precision);
+  const time = formatDate(new Date(), 'YYYY-MM-DD');
+  const result = await fetchExecuteApi({
+    apiCode: 'queryEnergyEfficiencyMonitoring',
+    requestParam: {
+      codes: property.value,
+      time,
+    },
   });
+  if (!result) return;
+  actualValue.value = result[property.value] ?? '-';
 };
 
+//能效监测曲线
 const chartDialogVisible = ref<boolean>(false);
 
-const dialogTitle = ref<string>('');
-
-const magictype = ref<string>('line');
+const xAxisData = ref();
 
 const chartSeries = ref<any[]>([]);
 
+const interval = ref<number>(0);
+
 const dateType = ref<UnitTime>('day');
 
-const energyName = ref<string>('COP');
+const handleShowMore = () => {
+  getHistoryData(new Date(), 'day');
+  chartDialogVisible.value = true;
+};
 
-const efficiencyConfig = computed<MEnergyMonitoring>(() => props.config);
+const handleChangeDateType = (type: UnitTime) => {
+  dateType.value = type;
+  getHistoryData(new Date(), type);
+};
 
-const options = computed<ECOption>(() => {
+//获取曲线
+const chartOptionsData = ref();
+
+const dateTypeCode = new Map([
+  ['day', 'queryEnergyEfficiencyMonitoringGraphOfDay'],
+  ['month', 'queryEnergyEfficiencyMonitoringGraphOfMonthOrYear'],
+  ['year', 'queryEnergyEfficiencyMonitoringGraphOfMonthOrYear'],
+]);
+
+const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
+  const requestParam: ExecuteChartsParams = { codes: property.value };
+  if (type === 'day') {
+    interval.value = 3;
+    const { start, end } = formatDateRange(date, type, 'YYYY-MM-DD HH:mm:ss');
+    Object.assign(requestParam, {
+      startTime: start,
+      endTime: end,
+      ts: 15,
+      tsUnit: 'MIN',
+    });
+  } else {
+    interval.value = 0;
+    const time = formatDate(new Date(), type === 'month' ? 'YYYY-MM' : 'YYYY');
+    Object.assign(requestParam, { time });
+  }
+  chartSeries.value = [];
+  const result = await fetchExecuteApi({
+    apiCode: dateTypeCode.get(type) as string,
+    requestParam,
+  });
+  if (!result || Object.keys(result).length <= 0) return;
+  xAxisData.value = result.xList;
+  chartSeries.value = result[property.value];
+  chartOptionsData.value = formatChartData();
+};
+
+const formatChartData = () => {
   return {
-    legend: {
-      show: true,
-      textStyle: {
-        color: '#ffffff85',
-      },
-    },
     toolbox: {
       show: true,
-      feature: {
-        magicType: {
-          type: ['line', 'bar'],
-        },
-      },
       showTitle: false,
       right: '10%',
     },
     tooltip: {
       trigger: 'axis',
+      backgroundColor: 'rgba(11,34,52,0.9)',
+      borderWidth: 1,
+      borderColor: 'rgb(73, 73, 73)',
+      textStyle: '#fff',
+      formatter: function (params: Array<Record<string, any>>) {
+        if (!params || params.length <= 0) return;
+        return `<span style="color:#fff"><span style="margin-right:6px">${formatDate(new Date(), 'YYYY-MM-DD')}</span>${
+          params[0].axisValueLabel
+        }</span><br /><div style="display: inline-block;width:10px;height:10px;background-color:#2AF830;border-radius: 50%;margin-right:10px;"></div><span style="color:#2AF830">${
+          params[0].data[1]
+        }</span>`;
+      },
     },
     grid: {
       containLabel: true,
+    },
+    legend: {
+      data: ['COP'],
+      top: 10,
+      textStyle: {
+        color: '#EAF5FF',
+      },
     },
     xAxis: {
       type: 'category',
       splitLine: {
         show: false,
       },
+      axisTick: {
+        alignWithLabel: true,
+      },
       axisLabel: {
-        interval: 0,
+        interval: interval.value,
       },
       data: xAxisData.value,
     },
@@ -155,124 +207,27 @@ const options = computed<ECOption>(() => {
         show: true,
       },
     },
-    series: chartSeries.value.map((item) => {
-      item.type = magictype.value;
-      return item;
-    }),
-  };
-});
-
-const xAxisData = computed(() => {
-  let defaultResult = [
-    '00:00',
-    '01:00',
-    '02:00',
-    '03:00',
-    '04:00',
-    '05:00',
-    '06:00',
-    '07:00',
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18:00',
-    '19:00',
-    '20:00',
-    '21:00',
-    '22:00',
-    '23:00',
-  ];
-  if (dateType.value === 'day') {
-    return defaultResult;
-  } else if (dateType.value === 'month') {
-    const days = daysInMonth(new Date());
-    defaultResult = [];
-    for (let i = 1; i <= days; i++) {
-      defaultResult.push(i < 10 ? `0${i}` : `${i}`);
-    }
-    return defaultResult;
-  } else {
-    defaultResult = [];
-    for (let i = 1; i <= 12; i++) {
-      defaultResult.push(i < 10 ? `0${i}` : `${i}`);
-    }
-    return defaultResult;
-  }
-});
-
-const formatXAxisLabel = computed(() => {
-  if (dateType.value === 'day') {
-    return 'HH:mm';
-  }
-  if (dateType.value === 'month') {
-    return 'dd';
-  }
-  if (dateType.value === 'year') {
-    return 'MM';
-  }
-  return 'HH:mm';
-});
-
-const handleShowMore = () => {
-  dialogTitle.value = '能效监测';
-  getHistoryData(new Date(), 'day');
-  chartDialogVisible.value = true;
-};
-
-const handleChangeDateType = (type: UnitTime) => {
-  dateType.value = type;
-  magictype.value = 'line';
-  getHistoryData(new Date(), type);
-};
-
-const handleChangeMagictype = (value: string) => {
-  magictype.value = value;
-};
-
-const getHistoryData = async (date: Date, type: UnitTime = 'day') => {
-  const { start, end } = formatDateRange(date, type, 'YYYY-MM-DD HH:mm:ss');
-  let interval = '1h';
-  if (type === 'day') {
-    interval = '1h';
-  } else if (type === 'month') {
-    interval = '1d';
-  } else {
-    interval = '1n';
-  }
-  const result = await fetchHistoryData({
-    startTime: start,
-    endTime: end,
-    interval: interval,
-    type: 'dev',
-    dataList: [
+    series: [
       {
-        deviceCode: efficiencyConfig.value.instance[efficiencyConfig.value.instance.length - 1] ?? '',
-        propCode: 'COP',
+        type: 'bar',
+        data: chartSeries.value,
+        itemStyle: {
+          color: '#2AF830',
+        },
       },
     ],
-  });
-  chartSeries.value = result.map(({ dataList }, index) => ({
-    name: energyName.value ? energyName : `未命名${index}`,
-    type: magictype.value,
-    showSymbol: false,
-    data: dataList.map(({ time, value }) => {
-      const label = formatDate(time, formatXAxisLabel.value);
-      return [label, formatPrecision(+value, efficiencyConfig.value.precision)];
-    }),
-    itemStyle: {
-      color: efficiencyConfig.value?.lineColor,
-    },
-  }));
+  };
 };
 
-useIntervalAsync(updateEfficiencyData, intervalDelay.value);
+watch(
+  () => props.config.property,
+  () => {
+    chartOptionsData.value = formatChartData();
+  },
+  { immediate: true }
+);
+
+useIntervalAsync(getEfficiencyData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
@@ -280,6 +235,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
   width: 100%;
   // min-height: 160px;
   display: flex;
+
   .left {
     height: calc(100% - 100px);
     min-width: 60px;
@@ -290,35 +246,42 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     .top {
       width: 100%;
       height: 49.5%;
     }
+
     .line {
       width: calc(100% - 21px);
       height: 1px;
       background: rgba($color: #00a3ff, $alpha: 0.2);
     }
+
     .bottom {
       width: 100%;
       height: 49.5%;
     }
   }
+
   .right {
     margin: 0px 20px 20px;
     flex-grow: 1;
     height: calc(100% - 53px);
     display: flex;
     flex-direction: column;
+
     .top {
       width: 100%;
       flex: 2;
     }
+
     .line {
       width: 100%;
       height: 1px;
       background: rgba($color: #00a3ff, $alpha: 0.2);
     }
+
     .bottom {
       width: 100%;
       flex: 1;
@@ -326,6 +289,7 @@ useIntervalAsync(updateEfficiencyData, intervalDelay.value);
     }
   }
 }
+
 .operation {
   font-size: 22px;
   cursor: pointer;

@@ -4,7 +4,7 @@
       <div class="title-operation">
         <!-- <span class="zh-font">费用对比</span>
         <span class="en-font">COST COMPARSION</span> -->
-        <div class="operation-font" @click="handlerToClick">{{ '>' }}</div>
+        <div class="operation-font">{{ '>' }}</div>
       </div>
       <div class="card-list">
         <div class="left-card">
@@ -13,8 +13,8 @@
             <div class="font-wp">优化前</div>
           </div>
           <div class="count-font">
-            <div class="count-wp">{{ cft[0] && cft[0].value }} {{ cft[0] && cft[0].unit }}</div>
-            <div class="font-wp">{{ cft[0] && cft[0].name }}</div>
+            <div class="count-wp">{{ beforecostInfo.value }} {{ beforecostInfo.unit }}</div>
+            <div class="font-wp">{{ beforecostInfo.label }}</div>
           </div>
         </div>
         <div class="right-card">
@@ -23,8 +23,8 @@
             <div class="font-wp">优化后</div>
           </div>
           <div class="count-font">
-            <div class="count-wp">{{ cft[1] && cft[1].value }} {{ cft[1] && cft[1].unit }}</div>
-            <div class="font-wp">{{ cft[1] && cft[1].name }}</div>
+            <div class="count-wp">{{ aftercostInfo.value }} {{ aftercostInfo.unit }}</div>
+            <div class="font-wp">{{ aftercostInfo.label }}</div>
           </div>
         </div>
       </div>
@@ -33,7 +33,9 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+
+import { formatDate } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
@@ -45,84 +47,42 @@ const props = defineProps<{
   config: AnaItemConfigs;
 }>();
 
-const emit = defineEmits<{
-  (event: 'openDetail'): void;
-}>();
-
 const { request } = useApp(props);
 
-const { fetchRealData } = getApi(request);
+const { fetchExecuteApi } = getApi(request);
 
-const cft = ref<
-  Array<{
-    name: string;
-    unit: string;
-    id: string;
-    value: any;
-  }>
->([
-  {
-    name: '',
-    unit: '',
-    id: '',
-    value: '-',
-  },
-  {
-    name: '',
-    unit: '',
-    id: '',
-    value: '-',
-  },
-]);
+//优化前数据
+const beforecostInfo = ref({ value: '-', label: '', unit: '' });
+//优化后数据
+const aftercostInfo = ref({ value: '-', label: '', unit: '' });
+//点位
+const indicator = computed(() => props.config.indicators?.map(({ property }: { property: string }) => property));
 
-// const costList = ref<Array<number | string>>(['-', '-']);
-
-const handlerToClick = () => {
-  emit('openDetail');
+const getCostData = async () => {
+  if (!indicator.value || indicator.value.length <= 0) return;
+  const time = formatDate(new Date(), 'YYYY-MM-DD');
+  const requestParam = { codes: indicator.value.join(','), time };
+  const result = await fetchExecuteApi({ apiCode: 'queryCostComparison', requestParam });
+  if (!result || Object.keys(result).length <= 0) return;
+  beforecostInfo.value.value = result.beforeValue ?? '-';
+  aftercostInfo.value.value = result.afterValue ?? '-';
 };
 
-const getData = async () => {
-  const codeList: string[] = [];
-  props.config.indicators.forEach((itm: any) => {
-    codeList.push(itm.property);
-  });
-  const result = await fetchRealData({
-    dataCodes: codeList,
-  });
-  result.forEach((itm: any) => {
-    cft.value.forEach((cost: any) => {
-      if (itm.propCode === cost.id) {
-        cost.value = itm.propVal;
-      }
-    });
+const fomatCostData = () => {
+  if (!indicator.value || indicator.value.length <= 0) return;
+  props.config.indicators.forEach(({ label, unit }: { label: string; unit: string }, index: number) => {
+    if (index === 0) {
+      beforecostInfo.value = { ...beforecostInfo.value, label, unit };
+    }
+    if (index === 1) {
+      aftercostInfo.value = { ...aftercostInfo.value, label, unit };
+    }
   });
 };
-
-const setDate = () => {
-  const datas: any[] = [];
-  if (!props.config.indicators) return;
-
-  props.config.indicators.forEach((itm: any) => {
-    datas.push({
-      name: itm.label,
-      value: '-',
-      id: itm.property,
-      unit: itm.unit,
-    });
-  });
-  cft.value = datas;
-  getData();
-};
-
-watch(
-  () => props.config.indicators,
-  () => {
-    setDate();
-  }
-);
 
 onMounted(() => {
-  setDate();
+  fomatCostData();
+  getCostData();
 });
 </script>
 
@@ -139,7 +99,6 @@ onMounted(() => {
     position: absolute;
     right: 20px;
     top: 16px;
-    z-index: 9999;
     .zh-font {
       flex: 0 0 75px;
       font-size: 16px;

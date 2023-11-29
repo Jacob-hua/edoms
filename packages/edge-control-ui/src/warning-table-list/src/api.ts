@@ -1,6 +1,6 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis, InitAlarmReq, InitAlarmRes } from './type';
+import { Apis, FetchExecuteApiReq, FetchExecuteApiRes, InitAlarmReq, InitAlarmRes } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchInitAlarmList: async (data: InitAlarmReq): Promise<InitAlarmRes> => {
@@ -61,6 +61,29 @@ export default (request?: EdomsRequestFunc): Apis => ({
       return result;
     } catch (error) {
       return '';
+    }
+  },
+  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetchExecuteApiRes> => {
+    if (!request) {
+      return {
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
+      };
+    }
+    try {
+      const { result } = await request<FetchExecuteApiReq, FetchExecuteApiRes>({
+        url: '/OperationalMonitorCommon/executeApi',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return {
+        commonAlarm: { confirmed: false, list: [] },
+        seriousAlarm: { confirmed: false, list: [] },
+        importantAlarm: { confirmed: false, list: [] },
+      };
     }
   },
 });

@@ -7,7 +7,7 @@
       <div class="card-list">
         <div v-for="(itm, index) in costList.slice(0, 3)" :key="index" class="card-item">
           <div class="tip-st">
-            <span class="count-st">{{ itm.value }}</span>
+            <span class="count-st">{{ itm.value || '0' }}</span>
             <span class="unit-st">{{ itm.unit }}</span>
           </div>
           <span class="font-st">{{ itm.name }}</span>
@@ -21,7 +21,7 @@
         <div class="more-list">
           <div v-for="(itm, index) in costList.slice(3)" :key="index" class="card-item">
             <div class="tip-st">
-              <span class="count-st">{{ itm.value }}</span>
+              <span class="count-st">{{ itm.value || '0' }}</span>
               <span class="unit-st">{{ itm.unit }}</span>
             </div>
             <span class="font-st">{{ itm.name }}</span>
@@ -33,13 +33,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
+import useIntervalAsync from '../../useIntervalAsync';
 
 import getApi from './api';
-import { AnaItemConfigs } from './type';
+import { AnaItemConfigs, ExecuteComparsionData } from './type';
 
 const props = defineProps<{
   config: AnaItemConfigs;
@@ -47,58 +48,39 @@ const props = defineProps<{
 
 const { request } = useApp(props);
 
-const { fetchRealData } = getApi(request);
+const { fetchExecuteApi } = getApi(request);
 
 const isShow = ref<boolean>(false);
 
-const costList = ref<Array<{ [key: string]: number | string }>>([]);
+const costList = ref<ExecuteComparsionData[]>([]);
 
-const handlerToClick = () => {
-  isShow.value = !isShow.value;
-};
+//点位属性
+const costPropertys = computed(() => props.config.indicators?.map(({ property }: { property: string }) => property));
 
-const getData = async () => {
-  const codeList: string[] = [];
-  props.config.indicators.forEach((itm: any) => {
-    codeList.push(itm.property);
-  });
-  const result = await fetchRealData({
-    dataCodes: codeList,
-  });
-  result.forEach((itm: any) => {
-    costList.value.forEach((cost: any) => {
-      if (itm.propCode === cost.id) {
-        cost.value = itm.propVal;
-      }
-    });
-  });
-};
+//点位名称
+const costNames = computed(() => props.config.indicators?.map(({ label }: { label: string }) => label));
 
-const setData = () => {
-  const data: any[] = [];
-  if (!props.config.indicators) return;
-  props.config.indicators.forEach((itm: any) => {
-    data.push({
-      name: itm.label,
-      value: '-',
-      id: itm.property,
-      unit: itm.unit,
-    });
-  });
-  costList.value = data;
-  getData();
-};
-
-watch(
-  () => props.config.indicators,
-  () => {
-    setData();
-  }
+//轮询间隔
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
 );
 
-onMounted(() => {
-  setData();
-});
+const handlerToClick = () => (isShow.value = !isShow.value);
+
+const getData = async () => {
+  if (!costPropertys.value || costPropertys.value.length <= 0) return;
+  const result = await fetchExecuteApi({
+    apiCode: 'queryTplParamValue',
+    requestParam: {
+      codes: costPropertys.value.join(','),
+      names: costNames.value.join(','),
+    },
+  });
+  if (!result || result.length <= 0) return;
+  costList.value = result;
+};
+
+useIntervalAsync(getData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
@@ -123,7 +105,6 @@ onMounted(() => {
     position: absolute;
     right: 20px;
     top: 11px;
-    z-index: 9999;
     .zh-font {
       flex: 0 0 100px;
       font-size: 16px;
@@ -189,7 +170,7 @@ onMounted(() => {
     position: absolute;
     left: 102%;
     top: 0;
-    animation: setSt 0.5s linear forwards;
+    animation: setSt 0.1s linear forwards;
     z-index: 1000;
     .more-title {
       width: 75px;

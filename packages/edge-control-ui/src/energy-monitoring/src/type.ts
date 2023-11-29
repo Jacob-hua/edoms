@@ -152,6 +152,33 @@ export interface CurveData {
   }>;
 }
 
+interface ExecuteApiParams {
+  codes: string;
+  time: string;
+}
+
+interface ExecuteChartsDayApiParams {
+  codes: string;
+  startTime: string;
+  endTime: string;
+  ts: number;
+  tsUnit: string;
+}
+
+interface ExecuteChartsMandYApiParams {
+  codes: string;
+  time?: string;
+}
+
+export type ExecuteChartsParams = ExecuteChartsDayApiParams | ExecuteChartsMandYApiParams;
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: ExecuteApiParams | ExecuteChartsParams;
+}
+
+export type FetchExecuteApiRes = Record<string, any>;
+
 export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEnvMonitoringRes = IndicatorDataItem[];
@@ -168,4 +195,5 @@ export interface Apis {
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
   fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchExecuteApiRes>;
 }

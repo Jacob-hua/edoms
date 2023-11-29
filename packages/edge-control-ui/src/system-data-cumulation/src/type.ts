@@ -91,6 +91,30 @@ export interface FetchHistoryDataItem {
   value: string;
 }
 
+interface ExecuteComparsionApiParams {
+  codes: string;
+  names: string;
+  calculateType: string;
+  dateType: string;
+}
+
+export interface ExecuteComparsionData extends Category {
+  yoyRatio: number | string;
+  yoyTrend: string | null;
+  qoqRatio: number | string;
+  qoqTrend: string | null;
+  code: string;
+  name: string;
+  value: number | string;
+}
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: ExecuteComparsionApiParams;
+}
+
+export type FetchExecuteApiRes = ExecuteComparsionData[];
+
 export type FetchHistoryDataRes = FetchHistoryDataItem[];
 
 export type FetchCumulativeDataReq = CumulativeDataReq[];
@@ -99,4 +123,5 @@ export type FetchCumulativeDataRes = CumulativeDataRes[];
 export interface Apis {
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchExecuteApiRes>;
 }
