@@ -89,12 +89,12 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
         },
         '^/edoms-playground/runtime': {
-          target: 'http://localhost:8078',
+          target: 'http://127.0.0.1:8078',
           changeOrigin: true,
           prependPath: false,
         },
         '^/edoms-playground/entry': {
-          target: 'http://localhost:8078',
+          target: 'http://127.0.0.1:8078',
           changeOrigin: true,
           prependPath: false,
         },

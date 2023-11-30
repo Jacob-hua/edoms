@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <iframe v-if="dsl" ref="runtimeIframe" :width="width" :height="height" :src="previewUrl"></iframe>
+    <iframe v-if="dsl" ref="runtimeIframe" title="preview" :width="width" :height="height" :src="previewUrl"></iframe>
     <el-empty v-else></el-empty>
   </div>
 </template>
