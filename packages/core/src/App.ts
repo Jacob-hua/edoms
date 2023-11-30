@@ -151,7 +151,7 @@ class App extends EventEmitter {
     const isLocalPreview = getUrlParam('localPreview');
     const { fileSuffix, url } = fileStruct;
     if (isLocalPreview) {
-      return `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview?contentId=${url}`;
+      return `/edoms-designtime-service-dev/edoms/design-time/file/preview?contentId=${url}`;
     }
     return `${window.location.origin}/static/${url}${fileSuffix}`;
   }
