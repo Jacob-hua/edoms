@@ -35,8 +35,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-
-import { ElPagination } from '@edoms/design';
+import { ElPagination } from 'element-plus';
 
 import { Indicator } from '../index.vue';
 
@@ -64,7 +63,7 @@ const pagingSliceStartAndEnd = ({ currentPage, limit }: { currentPage: number; l
   return [(currentPage - 1) * limit, currentPage * limit];
 };
 
-const currentPageData = computed(() =>
+const currentPageData = computed<any>(() =>
   props.data?.slice(
     ...pagingSliceStartAndEnd({
       currentPage: currentPage.value,
@@ -80,11 +79,11 @@ const handleClick = (item: Indicator) => {
   emit('itemClick', item);
 };
 
-const handleSizeChange = (value: string) => {
+const handleSizeChange = (value: number) => {
   currentPage.value = Number(value);
 };
 
-const handleCurrentChange = (value: string) => {
+const handleCurrentChange = (value: number) => {
   currentPage.value = Number(value);
 };
 </script>

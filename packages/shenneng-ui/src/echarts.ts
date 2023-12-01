@@ -1,10 +1,3 @@
-/*
- * @Description:
- * @Author: lihao
- * @Date: 2023-04-24 11:07:18
- * @LastEditors: lihao
- * @LastEditTime: 2023-05-12 18:03:41
- */
 import { BarChart, CandlestickChart, LineChart, PieChart, ScatterChart } from 'echarts/charts';
 import {
   DatasetComponent,

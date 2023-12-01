@@ -13,11 +13,9 @@ import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
-import ElDesign from '@edoms/design';
 import EdomsEditor from '@edoms/editor';
-import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
 
-import 'virtual:svg-icons-register';
+import './assets/iconfont/iconfont.js';
 
 import permissionDirective from './directive/permission';
 import roleDirective from './directive/role';
@@ -66,7 +64,6 @@ app.use(ElementPlus, {
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
-app.use(ElDesign, EdomsElementPlusAdapter);
 app.use(EdomsEditor);
 app.directive('role', roleDirective);
 app.directive('permission', permissionDirective);

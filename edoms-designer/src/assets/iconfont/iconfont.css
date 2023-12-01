@@ -1,0 +1,167 @@
+@font-face {
+  font-family: "element-icons"; /* Project id 3913903 */
+  src: url('iconfont.woff2?t=1696924223105') format('woff2'),
+       url('iconfont.woff?t=1696924223105') format('woff'),
+       url('iconfont.ttf?t=1696924223105') format('truetype');
+}
+
+.element-icons {
+  font-family: "element-icons" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-group:before {
+  content: "\e641";
+}
+
+.icon-text:before {
+  content: "\e60b";
+}
+
+.icon-wind-power:before {
+  content: "\e61d";
+}
+
+.icon-wallet:before {
+  content: "\e60c";
+}
+
+.icon-cooler:before {
+  content: "\e64a";
+}
+
+.icon-distribution-box:before {
+  content: "\e676";
+}
+
+.icon-charging-pile:before {
+  content: "\e689";
+}
+
+.icon-faucet:before {
+  content: "\e606";
+}
+
+.icon-firepower:before {
+  content: "\e760";
+}
+
+.icon-photovoltaic:before {
+  content: "\e662";
+}
+
+.icon-control-panel:before {
+  content: "\e6ad";
+}
+
+.icon-economy:before {
+  content: "\e623";
+}
+
+.icon-report:before {
+  content: "\e62d";
+}
+
+.icon-topology:before {
+  content: "\e61b";
+}
+
+.icon-record:before {
+  content: "\e62b";
+}
+
+.icon-compared:before {
+  content: "\e600";
+}
+
+.icon-carousel:before {
+  content: "\e707";
+}
+
+.icon-layers:before {
+  content: "\e709";
+}
+
+.icon-QRCode:before {
+  content: "\51";
+}
+
+.icon-weather:before {
+  content: "\77";
+}
+
+.icon-data:before {
+  content: "\64";
+}
+
+.icon-electricity:before {
+  content: "\65";
+}
+
+.icon-goods:before {
+  content: "\67";
+}
+
+.icon-button:before {
+  content: "\62";
+}
+
+.icon-picture:before {
+  content: "\70";
+}
+
+.icon-led:before {
+  content: "\6c";
+}
+
+.icon-chart-line:before {
+  content: "\63";
+}
+
+.icon-surveillance-cameras:before {
+  content: "\73";
+}
+
+.icon-alarm:before {
+  content: "\61";
+}
+
+.icon-system:before {
+  content: "\e835";
+}
+
+.icon-folder:before {
+  content: "\eabe";
+}
+
+.icon-efficiency:before {
+  content: "\e91c";
+}
+
+.icon-equipment:before {
+  content: "\e62a";
+}
+
+.icon-check-correct:before {
+  content: "\e628";
+}
+
+.icon-browser:before {
+  content: "\e63c";
+}
+
+.icon-setting:before {
+  content: "\e65f";
+}
+
+.icon-mask:before {
+  content: "\e706";
+}
+
+.icon-environment:before {
+  content: "\e631";
+}
+

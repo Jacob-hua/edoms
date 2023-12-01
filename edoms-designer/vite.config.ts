@@ -84,7 +84,7 @@ export default defineConfig(({ mode }) => {
         '/edoms-runtime-service-dev': {
           //   target: 'http://192.100.4.80:8062', //思昊
           // target: 'http://192.100.4.35:8062', //李
-          target: 'http://192.100.20.4:8062', //黄明昭
+          target: 'http://192.100.4.35:8061', //黄明昭
           // target: 'http://k8s.isiact.com',
           changeOrigin: true,
         },

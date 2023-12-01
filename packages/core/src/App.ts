@@ -151,16 +151,7 @@ class App extends EventEmitter {
     const isLocalPreview = getUrlParam('localPreview');
     const { fileSuffix, url } = fileStruct;
     if (isLocalPreview) {
-      return `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/preview?contentId=${url}`;
-    }
-    return `${window.location.origin}/static/${url}${fileSuffix}`;
-  }
-
-  public getStaticSrc(fileStruct: FileStruct): string {
-    const isLocalPreview = getUrlParam('localPreview');
-    const { fileSuffix, url } = fileStruct;
-    if (isLocalPreview) {
-      return `http://k8s.isiact.com/edoms-designtime-service-dev/edoms/design-time/file/download`;
+      return `/edoms-designtime-service-dev/edoms/design-time/file/preview?contentId=${url}`;
     }
     return `${window.location.origin}/static/${url}${fileSuffix}`;
   }
@@ -267,7 +258,10 @@ class App extends EventEmitter {
       return;
     }
     const toNode = this.page.getNode(to);
-    if (!toNode) throw `ID为${to}的组件不存在`;
+    if (!toNode) {
+      console.error(`ID为${to}的组件不存在`);
+      return;
+    }
 
     if (isCommonMethod(methodName)) {
       return triggerCommonMethod(methodName, toNode);

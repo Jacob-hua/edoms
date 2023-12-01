@@ -61,8 +61,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
-
-import { ElForm } from '@edoms/design';
+import { ElForm } from 'element-plus';
 
 import useI18n from '../../../useI18n';
 import { tableData, tableData1, titleData } from '../mock';

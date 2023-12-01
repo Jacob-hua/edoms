@@ -3,8 +3,6 @@ import GmctEditor from '@gmct/editor';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
-import ElDesign from '@edoms/design';
-import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
 import { toLine } from '@edoms/utils';
 
 import App from './App.vue';
@@ -18,7 +16,6 @@ Promise.all([import('../.edoms/comp-entry'), import('../.edoms/plugin-entry')]).
   edomsApp.use(ElementPlus, {
     locale: zhCn,
   });
-  edomsApp.use(ElDesign, EdomsElementPlusAdapter);
   edomsApp.use(GmctEditor);
 
   Object.entries(components.default).forEach(([type, component]: [string, any]) => {

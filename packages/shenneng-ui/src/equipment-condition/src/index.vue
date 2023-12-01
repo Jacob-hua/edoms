@@ -42,8 +42,7 @@
 
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue';
-
-import { ElDrawer } from '@edoms/design';
+import { ElDrawer } from 'element-plus';
 
 import useApp from '../../useApp';
 

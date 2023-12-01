@@ -75,7 +75,7 @@
                   <span>{{ props.option.assesStandard }}</span>
                 </td>
               </tr>
-              <tr style="margin-left: 50px">
+              <!-- <tr style="margin-left: 50px">
                 <td
                   style="
                     width: 100px;
@@ -94,7 +94,7 @@
                     srcset=""
                   />{{ t('查对标') }}
                 </td>
-              </tr>
+              </tr> -->
             </table>
           </el-col>
         </el-row>
@@ -110,8 +110,18 @@ import useI18n from '../../../useI18n';
 
 // import Formula from './Formula.vue';
 const { t } = useI18n();
+
 const props = defineProps<{
-  option: any;
+  option: {
+    title: string;
+    penaltyBill?: number;
+    averagePowerFactor?: number;
+    minPowerFactor?: number;
+    activePower?: number;
+    reactivePower?: number;
+    penaltyFactor?: number;
+    assessBenchmark?: number;
+  };
 }>();
 // const formulaData = computed(() => {
 //   return 'Cos\\varphi=\\frac{74.934}{\\sqrt{74.934^2+7.297^2}}';

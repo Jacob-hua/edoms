@@ -7,37 +7,37 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.基础组件'),
     items: [
       {
-        icon: 'wenben',
+        icon: 'text',
         text: t('sideBarList.文本'),
         type: 'text',
       },
       {
-        icon: 'anniu',
+        icon: 'button',
         text: t('sideBarList.按钮'),
         type: 'button',
       },
       {
-        icon: 'tupian',
+        icon: 'picture',
         text: t('sideBarList.图片'),
         type: 'img',
       },
       {
-        icon: 'tupian',
+        icon: 'carousel',
         text: t('sideBarList.轮播图'),
         type: 'carousel',
       },
       {
-        icon: 'erweima',
+        icon: 'QRCode',
         text: t('sideBarList.二维码'),
         type: 'qrcode',
       },
       {
-        icon: 'duoxuankuang',
+        icon: 'check-correct',
         text: t('sideBarList.多选框'),
         type: 'checkbox',
       },
       {
-        icon: 'zhexiantu',
+        icon: 'chart-line',
         text: t('sideBarList.图表'),
         type: 'charts',
       },
@@ -47,18 +47,18 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.基础容器'),
     items: [
       {
-        icon: 'zu',
+        icon: 'group',
         text: t('sideBarList.组'),
         type: 'container',
       },
       {
-        icon: 'mengban',
+        icon: 'mask',
         text: t('sideBarList.蒙层'),
         type: 'overlay',
       },
       // 高阶组件
       {
-        icon: 'tanchuang',
+        icon: 'browser',
         text: t('sideBarList.弹框'),
         type: '',
         data: {
@@ -98,47 +98,47 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.共通组件'),
     items: [
       {
-        icon: 'shiyitu',
+        icon: 'picture',
         text: t('sideBarList.全局示意图'),
         type: 'global-schematic',
       },
       {
-        icon: 'feijiashezhi',
+        icon: 'topology',
         text: '图模编辑器',
         type: 'gmct-editor',
       },
       {
-        icon: 'zhishideng',
+        icon: 'led',
         text: t('sideBarList.多色多态指示灯'),
         type: 'multicolor-polymorphic-light',
       },
       {
-        icon: 'zhishideng',
+        icon: 'led',
         text: t('sideBarList.多色单态指示灯'),
         type: 'multicolor-single-light',
       },
       {
-        icon: 'zhishideng',
+        icon: 'led',
         text: t('sideBarList.图片单态指示灯'),
         type: 'multicolor-image-light',
       },
       {
-        icon: 'gaojing',
+        icon: 'alarm',
         text: t('sideBarList.告警列表'),
         type: 'warning-table-list',
       },
       {
-        icon: 'donghuanjiance',
+        icon: 'economy',
         text: t('sideBarList.经济指标'),
         type: 'economic-indicators',
       },
       {
-        icon: 'xitong',
+        icon: 'equipment',
         text: t('sideBarList.设备运行参数'),
         type: 'equipment-query-operation',
       },
       {
-        icon: 'leijishuju',
+        icon: 'system',
         text: t('sideBarList.系统累计数据'),
         type: 'system-data-cumulation',
       },
@@ -148,47 +148,47 @@ const componentGroupList: ComponentGroup[] = [
         type: 'operational-analysis',
       },
       {
-        icon: 'nengxiaoguankong',
+        icon: 'efficiency',
         text: t('sideBarList.能效监测'),
         type: 'energy-monitoring',
       },
       {
-        icon: 'xuanfu',
+        icon: 'layers',
         text: t('sideBarList.悬浮窗'),
         type: 'suspended-window',
       },
       {
-        icon: 'shishigongkuang',
+        icon: 'equipment',
         text: t('sideBarList.设备工况'),
         type: 'equipment-condition',
       },
       {
-        icon: 'caozuojilu',
+        icon: 'record',
         text: t('sideBarList.操作记录'),
         type: 'operation-records',
       },
       {
-        icon: 'yunxingcanshu',
+        icon: 'system',
         text: t('sideBarList.运行参数'),
         type: 'running-parameter-energy',
       },
       {
-        icon: 'feiyongduibi',
+        icon: 'compared',
         text: t('sideBarList.费用对比'),
         type: 'cost-comparsion',
       },
       {
-        icon: 'xitongsheding',
+        icon: 'system',
         text: t('sideBarList.系统设定'),
         type: 'system-settings',
       },
       {
-        icon: 'shebeishikong',
+        icon: 'control-panel',
         text: t('sideBarList.设备实控'),
         type: 'eq-control',
       },
       {
-        icon: 'yunxingcanshu',
+        icon: 'compared',
         text: t('sideBarList.费用对比详情'),
         type: 'cost-comparison-detail',
       },
@@ -198,17 +198,17 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.运行监测配电'),
     items: [
       {
-        icon: 'diannengzhiliang',
+        icon: 'electricity',
         text: t('sideBarList.电能质量'),
         type: 'electric-energy-quality',
       },
       {
-        icon: 'xitong',
+        icon: 'report',
         text: t('sideBarList.智能报告'),
         type: 'intelligence-report-eletric',
       },
       {
-        icon: 'yunxingfenxi',
+        icon: 'system',
         text: t('sideBarList.运行分析'),
         type: 'operations-analysis',
       },
@@ -218,12 +218,12 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.运行监测冷'),
     items: [
       {
-        icon: 'xitong',
+        icon: 'report',
         text: t('sideBarList.智能报告'),
         type: 'intelligence-report-cold',
       },
       {
-        icon: 'duoxiangnengxiao',
+        icon: 'goods',
         text: t('sideBarList.负荷预测'),
         type: 'load-forecasting',
       },
@@ -233,22 +233,22 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.运行监测热'),
     items: [
       {
-        icon: 'xitong',
+        icon: 'report',
         text: t('sideBarList.智能报告'),
         type: 'intelligence-report-heat',
       },
       {
-        icon: 'nengxiaoguankong',
+        icon: 'efficiency',
         text: t('sideBarList.能效分析'),
         type: 'efficiency-analysis',
       },
       {
-        icon: 'duoxiangnengxiao',
+        icon: 'system',
         text: t('sideBarList.运行分析'),
         type: 'operations-analysis-heat',
       },
       {
-        icon: 'duoxiangnengxiao',
+        icon: 'system',
         text: t('sideBarList.优化调控'),
         type: 'optimal-regulation-heat',
       },
@@ -258,12 +258,12 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.运行监测给水'),
     items: [
       {
-        icon: 'xitong',
+        icon: 'report',
         text: t('sideBarList.智能报告'),
         type: 'intelligence-report-water',
       },
       {
-        icon: 'yunxingfenxi',
+        icon: 'system',
         text: t('sideBarList.运行分析'),
         type: 'operations-analysis-water',
       },
@@ -273,7 +273,7 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.运行监测风'),
     items: [
       {
-        icon: 'xitong',
+        icon: 'report',
         text: t('sideBarList.智能报告'),
         type: 'intelligence-report-cloud',
       },
@@ -283,17 +283,17 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.运行监测光伏'),
     items: [
       {
-        icon: 'xitong',
+        icon: 'report',
         text: t('sideBarList.智能报告'),
         type: 'intelligence-report-pv',
       },
       {
-        icon: 'yunxingfenxi',
+        icon: 'system',
         text: t('sideBarList.运行分析'),
         type: 'operations-analysis-pv',
       },
       {
-        icon: 'xitong',
+        icon: 'wallet',
         text: t('sideBarList.资产信息'),
         type: 'asset-information-pv',
       },
@@ -303,22 +303,22 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.运行监测充电桩'),
     items: [
       {
-        icon: 'xitong',
+        icon: 'report',
         text: t('sideBarList.智能报告'),
         type: 'intelligence-report-charge',
       },
       {
-        icon: 'xitong',
+        icon: 'equipment',
         text: t('sideBarList.设备监测'),
         type: 'equipment-monitoring-charge',
       },
       {
-        icon: 'yunxingfenxi',
+        icon: 'system',
         text: t('sideBarList.运行分析'),
         type: 'operations-analysis-charge',
       },
       {
-        icon: 'chongdiankongzhi',
+        icon: 'charging-pile',
         text: t('sideBarList.充电控制'),
         type: 'control-charge',
       },
@@ -328,17 +328,17 @@ const componentGroupList: ComponentGroup[] = [
     title: t('sideBarList.运行监测储能'),
     items: [
       {
-        icon: 'feijiashezhi',
+        icon: 'economy',
         text: t('sideBarList.费价设置'),
         type: 'fee-setting-energy',
       },
       {
-        icon: 'yunxingcanshu',
+        icon: 'system',
         text: t('sideBarList.运行参数'),
         type: 'running-parameter-energy',
       },
       {
-        icon: 'yunxingcanshu',
+        icon: 'control-panel',
         text: t('sideBarList.控制面板'),
         type: 'control-panel-energy',
       },

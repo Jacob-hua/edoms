@@ -30,8 +30,8 @@
 
 <script lang="ts" setup>
 import { computed, inject, Ref } from 'vue';
+import { ElButton } from 'element-plus';
 
-import { ElButton } from '@edoms/design';
 import { formatDate } from '@edoms/utils';
 
 import LongText from '../../../LongText.vue';

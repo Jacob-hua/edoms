@@ -4,8 +4,6 @@ import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
 import Core from '@edoms/core';
-import ElDesign from '@edoms/design';
-import EdomsElementPlusAdapter from '@edoms/element-plus-adapter';
 import { toLine } from '@edoms/utils';
 
 import components from '../.edoms/async-comp-entry';
@@ -24,7 +22,6 @@ edomsApp.use(request);
 edomsApp.use(ElementPlus, {
   locale: zhCn,
 });
-edomsApp.use(ElDesign, EdomsElementPlusAdapter);
 edomsApp.use(GmctEditor);
 
 Object.entries(components).forEach(([type, component]: [string, any]) => {

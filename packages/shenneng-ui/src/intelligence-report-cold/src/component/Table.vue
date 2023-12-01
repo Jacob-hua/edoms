@@ -76,8 +76,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
-
-import { ElForm } from '@edoms/design';
+import { ElForm } from 'element-plus';
 
 import Select from '../../../common/Select.vue';
 import { dayData, leftDayTitle, leftMonthTitle, monthData } from '../mock';

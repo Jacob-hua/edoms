@@ -5,5 +5,10 @@ export default {
       value: 'triggerVisible',
       props: ['visible'],
     },
+    {
+      label: '设置文本',
+      value: 'setText',
+      props: ['text'],
+    },
   ],
 };

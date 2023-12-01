@@ -2,32 +2,31 @@
   <div v-for="(item, index) in categories" :key="index" class="dataEchart">
     <div class="dataEchart_frist">
       <div class="df_left">
-        <p class="position_data">{{ item.position.label }}</p>
+        <p class="position_data">{{ item.label }}</p>
         <div class="value_data_con">
           <p class="value_data">
-            <span>{{ item.position.value }}</span
-            >kv
+            <span>{{ item.voltage }}</span> kv
           </p>
         </div>
       </div>
       <div class="text_clm">
         <div class="text_row">
           <div>
-            <span style="color: #41e4de; font-size: 24px">{{ item.position.time }}</span
+            <span style="color: #41e4de; font-size: 24px">{{ item.monthTime }}</span
             >{{ t('小时') }}
           </div>
           <div>{{ t('当月累计时长') }}</div>
         </div>
         <div class="text_row">
           <div>
-            <span style="color: #41e4de; font-size: 24px">{{ item.position.day }}</span
+            <span style="color: #41e4de; font-size: 24px">{{ item.monthDay }}</span
             >{{ t('天') }}
           </div>
           <div>{{ t('当月天数') }}</div>
         </div>
         <div class="text_row">
           <div>
-            <span style="color: #41e4de; font-size: 24px">{{ item.position.max_rate }}</span
+            <span style="color: #41e4de; font-size: 24px">{{ item.maxRate }}</span
             >%
           </div>
           <div>{{ t('最大不平衡率') }}</div>
@@ -57,14 +56,11 @@ import useIntervalAsync from '../../../useIntervalAsync';
 import apiFactory from '../api';
 import { ElectricEnergyQuality } from '../type';
 
-import CurrentChart from './CurrentChart.vue';
-import LoadChart from './LoadChart.vue';
-// import useApp from '../../../useApp';
-import ProportionChart from './ProportionChart.vue';
-const { t } = useI18n();
 const props = defineProps<{
   config: ElectricEnergyQuality;
 }>();
+
+const { t } = useI18n();
 
 const { request } = useApp(props);
 const { fetchRunningData, fetchStData } = apiFactory(request);
@@ -468,5 +464,17 @@ useIntervalAsync(_fetchThreePhaseData, intervalDelay.value);
     margin: 20px 0px;
     border-right: 1px solid #1d2634;
   }
+}
+
+.echart {
+  margin-left: 22px;
+  font-size: 14px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #eaf5ff;
+}
+
+.charts {
+  height: 276px;
 }
 </style>
