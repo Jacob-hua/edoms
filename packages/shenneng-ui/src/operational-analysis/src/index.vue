@@ -507,7 +507,6 @@ onMounted(() => {
         cursor: pointer;
         background: url('./assets/button_default.png') no-repeat;
         background-size: cover;
-        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         padding-left: 10px;

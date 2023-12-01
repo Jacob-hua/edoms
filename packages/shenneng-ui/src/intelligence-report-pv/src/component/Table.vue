@@ -67,7 +67,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref } from 'vue';
 
-import { ElForm } from '@edoms/design';
 import { formatDate } from '@edoms/utils';
 
 import useApp from '../../../useApp';
@@ -85,7 +84,7 @@ const { fetchExecuteApi } = apiFactory(request);
 
 const { t } = useI18n();
 
-const queryRef = ref(ElForm);
+const queryRef = ref();
 
 const activeCodes = ref('');
 
@@ -157,7 +156,7 @@ const selectDate = (time: Record<string, any>) => {
   console.log(time.getDate());
 };
 
-const getIntelligenceReportData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD')) => {
+const getIntelligenceReportData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss')) => {
   if (!props.config.classify || props.config.classify.length <= 0) return;
   const requestParam = {
     codes: activeCodes.value || props.config.classify?.[0].codes,
