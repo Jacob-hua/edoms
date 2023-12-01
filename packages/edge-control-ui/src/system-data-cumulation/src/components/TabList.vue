@@ -16,15 +16,15 @@ const { t } = useI18n();
 const list: Array<{ [key: string]: string | number }> = [
   {
     key: t('日'),
-    value: 'day',
+    value: 'd',
   },
   {
     key: t('月'),
-    value: 'month',
+    value: 'm',
   },
   {
     key: t('年'),
-    value: 'year',
+    value: 'y',
   },
 ];
 const emits = defineEmits<{

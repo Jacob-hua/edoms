@@ -20,12 +20,11 @@ import { computed, ref } from 'vue';
 import { UnitTime } from '@edoms/utils';
 
 import EdomsCharts from '../../../EdomsCharts.vue';
-import { ECOption } from '../../../types';
 
 const props = withDefaults(
   defineProps<{
     title: string;
-    options: ECOption;
+    options: any;
     visible: boolean;
   }>(),
   {}
@@ -77,9 +76,9 @@ const handleChangeMagictype = (value: string) => {
   span {
     cursor: pointer;
     position: relative;
-    right: 10%;
+    right: 4%;
     text-align: right;
-    margin-left: 10px;
+    margin: 0 20px;
   }
 }
 

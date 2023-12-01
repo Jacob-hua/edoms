@@ -36,46 +36,28 @@ export default async (request: Request) => [
     append: 's',
   },
   {
-    name: 'label',
-    text: '标签',
-    type: 'text',
-  },
-  // {
-  //   name: 'type',
-  //   text: '图标',
-  //   type: 'select',
-  //   options: indicatorTypes,
-  // },
-  {
-    text: '参数',
     name: 'indicators',
+    text: '指标',
     type: 'groupList',
     labelWidth: '50px',
-    addButtonText: '添加参数',
-    title: (model: any, index: number | string) => `# ${index}`,
+    addButtonText: '添加指标',
+    movable: false,
+    maxItems: 2,
+    title: (model: any, index: number | string) => `参数 ${index} ${model.label ?? ''}`,
     items: [
       {
         name: 'label',
         text: '标签',
         type: 'text',
+        trim: true,
       },
-      ...(await useInstanceConfig(request, 'cost-comparsion')),
+      /** 注入业务组件的共通字段 */
+      ...(await useInstanceConfig(request, 'cost-comparison-detail')),
+      {
+        text: '颜色',
+        name: 'color',
+        type: 'colorPicker',
+      },
     ],
   },
-  // {
-  //   text: '参数',
-  //   name: 'indicators',
-  //   type: 'groupList',
-  //   labelWidth: '50px',
-  //   addButtonText: '添加参数',
-  //   title: (model: any, index: number | string) => `# ${index}`,
-  //   items: [
-  //     {
-  //       name: 'label',
-  //       text: '标签',
-  //       type: 'text',
-  //     },
-  //     ...(await useInstanceConfig(request, 'equipment-condition')),
-  //   ],
-  // },
 ];

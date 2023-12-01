@@ -1,6 +1,6 @@
 import { EdomsRequestFunc } from '@edoms/utils';
 
-import { Apis } from './type';
+import { Apis, FetchExecuteApiReq, FetchExecuteApiRes } from './type';
 
 export default (request?: EdomsRequestFunc): Apis => ({
   fetchRunningData: async (): Promise<any> => {
@@ -29,6 +29,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
         nextList: [],
         newList: [],
       };
+    }
+  },
+  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<FetchExecuteApiRes> => {
+    if (!request) {
+      return [];
+    }
+    try {
+      const { result } = await request<FetchExecuteApiReq, FetchExecuteApiRes>({
+        url: '/OperationalMonitorCommon/executeApi',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return [];
     }
   },
 });

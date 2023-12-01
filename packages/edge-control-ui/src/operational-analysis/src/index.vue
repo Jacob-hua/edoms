@@ -6,9 +6,9 @@
           <div
             v-for="(item, index) in categories"
             :key="item.label"
-            :class="{ active: activeCategory === index }"
+            :class="{ active: activeFirstTab === index }"
             class="divide-item"
-            @click="changeTab(index)"
+            @click="changeFirstTab(index)"
           >
             {{ item.label }}
           </div>
@@ -18,37 +18,42 @@
     <div class="wrap-body" style="width: 100%; height: 100%">
       <div class="wrapper">
         <el-select
-          v-if="pointOptions && pointOptions.length > 0"
-          v-model="vModelpoint"
+          v-if="categoriesThirdTabs && categoriesThirdTabs.length > 0"
+          v-model="selectPointLabel"
           class="select-device"
           placeholder="Select"
           size="small"
           @change="changeSelectPoint"
         >
-          <el-option v-for="item in pointOptions" :key="item.value" :label="item.label" :value="item.indicators" />
+          <el-option
+            v-for="item in categoriesThirdTabs"
+            :key="item.value"
+            :label="item.label"
+            :value="item.indicators"
+          />
         </el-select>
         <div class="left-tab">
           <div
-            v-for="({ label }, index) in parameterConfigs"
+            v-for="({ label }, index) in categoriesSecondTabs"
             :key="index"
             class="button-tab"
-            :class="{ active: activeTab === index }"
+            :class="{ active: activeSecondTab === index }"
             :title="label"
-            @click="changeActiveTab(index)"
+            @click="changeSecondTab(index)"
           >
             {{ label }}
           </div>
         </div>
-        <EdomsCharts class="charts" :option="option"></EdomsCharts>
+        <EdomsCharts class="charts" :option="chartSeries"></EdomsCharts>
       </div>
     </div>
   </BusinessCard>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { dateRange, formatDateRange, formatPrecision } from '@edoms/utils';
+import { formatDate, formatDateRange } from '@edoms/utils';
 
 import 'echarts/lib/component/dataZoom';
 
@@ -60,50 +65,20 @@ import useIntervalAsync from '../../useIntervalAsync';
 
 import apiFactory from './api';
 import locales from './locales';
-import { MIndicatorItemConfig, MOperationalParameters, MParameterItemConfig } from './type';
+import { MOperationalParameters } from './type';
 
 const props = defineProps<{
   config: MOperationalParameters;
 }>();
 // 国际化
-const { setMessage, t } = useApp(props);
+const { setMessage } = useApp(props);
 setMessage(locales);
-const scrollMain = ref();
-const wrap = ref();
 
 const { request } = useApp(props);
 
-const { fetchCurveData } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
-const categories = computed<any[]>(() => props.config.classify);
-
-const activeCategory = ref<number>(0);
-
-const option = ref<ECOption>({});
-
-const lineUnit = ref<string[]>([]);
-
-const pointOptions = ref<Record<string, any>>([]);
-
-const vModelpoint = ref('');
-
-const currentIndicators = ref();
-
-const parameterConfigs = computed<MParameterItemConfig[]>(() => {
-  if (!props.config.classify) return [];
-  if (props.config.classify.length == 0) return [];
-  const result = props.config.classify[activeCategory.value].tabName;
-  if (result) {
-    arrangePointData();
-    return result;
-  }
-  clearPointOptions();
-  return [];
-});
-
-const clearPointOptions = () => (pointOptions.value = []);
-
-const activeIndicatorConfig = ref<Map<string, MIndicatorItemConfig>>(new Map<string, MIndicatorItemConfig>());
+const chartSeries = ref<ECOption>({});
 
 const intervalDelay = computed<number>(() => {
   if (typeof props.config.intervalDelay !== 'number') {
@@ -111,137 +86,138 @@ const intervalDelay = computed<number>(() => {
   }
   return props.config.intervalDelay;
 });
-const changeTab = (index: number) => {
-  if (activeCategory.value === index) return;
-  activeCategory.value = index;
-  arrangePointData();
-  activeTab.value = 0;
-  getHistoryData();
+
+//一级菜单
+const activeFirstTab = ref<number>(0);
+const categories = computed(() => props.config.classify || []);
+
+const changeFirstTab = (index: number) => {
+  activeFirstTab.value = index;
+  activeSecondTab.value = 0;
+  formatFirstTabConfig();
+  changeSecondTab(0);
 };
-const activeTab = ref<number>(0);
-const changeActiveTab = (index: number) => {
-  activeTab.value = index;
+
+//二级菜单
+const categoriesSecondTabs = ref();
+const activeSecondTab = ref<number>(0);
+
+const formatFirstTabConfig = () => {
+  if (!categories.value || categories.value.length <= 0) return;
+  categoriesSecondTabs.value = categories.value[activeFirstTab.value]?.tabName || [];
+};
+
+const changeSecondTab = (index: number) => {
+  activeSecondTab.value = index;
+  selectPointCode.value = categoriesSecondTabs.value?.[activeSecondTab.value]?.point[0]?.indicators;
   getHistoryData();
 };
 
-const getHistoryData = async () => {
-  const date = new Date();
-  option.value = {};
-  lineUnit.value = [];
-  const { start, end } = formatDateRange(date, 'day', 'YYYY-MM-DD');
-  const data = parameterConfigs.value;
-  if (data.length === 0) return;
-  const result = await fetchCurveData({
-    startTime: start,
-    endTime: end,
-    dataCodes: !isHasPoint() ? data[activeTab.value].indicators.map((e: any) => e.property) : currentIndicators.value,
-    tsUnit: 'H',
-    ts: '1',
-  });
-  let chartSeries = [];
-  chartSeries = result.map(({ propCode, dataList }) => {
-    return data[activeTab.value].indicators?.map((indicator, index) => {
-      // const codeIndex = data[activeTab.value].indicators.findIndex((item: any) => indicator.property == propCode);
-      const codeIndex = indicator.property == propCode ? index : -1;
-      const name = indicator.label;
-      const color = indicator.color;
-      lineUnit.value.push(data[activeTab.value].indicators[codeIndex]?.unit);
-      const lineType = data[activeTab.value].lineType ?? 'line';
-      return {
-        name: name ? name : `${t('未命名')}${index}`,
-        type: lineType,
-        showSymbol: false,
-        smooth: true,
-        color,
-        barWidth: '14',
-        data: dataList.map(({ time, value }) => [
-          new Date(Number(time)),
-          formatPrecision(+value, data[activeTab.value].indicators[codeIndex]?.precision ?? ''),
-        ]),
-      };
-    });
-  });
-  option.value = generateOption(chartSeries[0]);
-};
-
+//三级菜单
+const selectPointLabel = ref();
+const selectPointCode = ref();
 const isHasPoint = () => {
-  const result = props.config.classify[activeCategory.value].tabName;
-  return result[activeTab.value].point?.length > 0;
+  const result = props.config.classify[activeFirstTab.value].tabName;
+  return result[activeSecondTab.value]?.point?.length > 0;
 };
 
-const arrangePointData = () => {
-  const result = props.config.classify[activeCategory.value].tabName;
-  const currentPoint = result[activeTab.value]?.point || [];
-  pointOptions.value = currentPoint.length > 0 ? currentPoint : [];
-  if (pointOptions.value.length > 0) {
-    vModelpoint.value = pointOptions.value[0].label;
+const categoriesThirdTabs = computed(() => {
+  if (isHasPoint()) {
+    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+    selectPointLabel.value = categoriesSecondTabs.value?.[activeSecondTab.value]?.point[0]?.label;
+    return categoriesSecondTabs.value?.[activeSecondTab.value]?.point;
   } else {
-    vModelpoint.value = '';
+    return [];
   }
-};
+});
 
 const changeSelectPoint = (val: any) => {
-  currentIndicators.value = [...val].map((e: any) => e.property);
+  selectPointCode.value = val;
   getHistoryData();
 };
 
-const { flush } = useIntervalAsync(getHistoryData, intervalDelay.value);
-
-watch(
-  () => activeIndicatorConfig.value,
-  () => {
-    getHistoryData();
-  }
-);
-
-function generateOption(series: any[] = []): ECOption {
-  const legends = series.map(({ name }) => name);
-  const colors = series.map(({ color }) => color);
-  let end = 0;
-  if (series.length < 2) {
-    end = 100;
-  } else if ([2, 3].includes(series.length)) {
-    end = 100 - series.length * 20;
+const formatCodes = () => {
+  let codes = '';
+  if (isHasPoint()) {
+    codes = selectPointCode.value?.map(({ property }: { property: string }) => property)?.[0];
   } else {
-    end = 100 - series.length * 18;
+    codes = categoriesSecondTabs.value[activeSecondTab.value]?.indicators?.map(
+      ({ property }: { property: string }) => property
+    )?.[0];
   }
-  end = end < 20 ? 20 : end;
+  return codes;
+};
 
-  const dataZoom =
-    series.length > 0 && series[0].type === 'bar'
-      ? [
-          {
-            // xAxisIndex: [0],
-            // show: true, //flase直接隐藏图形
-            type: 'inside',
-            backgroundColor: 'transparent',
-            brushSelect: false, // 是否开启刷选功能
-            zoomLock: true, // 是否锁定选择区域大小
-            height: 10,
-            //left: 'center', //滚动条靠左侧的百分比
-            bottom: 0,
-            start: 0, //滚动条的起始位置
-            end, //滚动条的截止位置（按比例分割你的柱状图x轴长度）
-            // handleStyle: {// 滚动条两侧操作按钮样式
-            //   color: 'rgba(40, 124, 232, 1)',
-            //   borderColor: 'rgba(40, 124, 232, 1)',
-            // },
-            // fillerColor: 'rgba(40, 124, 232, 1)',// 背景颜色
-            borderColor: 'transparent',
-            showDetail: false,
-            dataBackground: {
-              areaStyle: {
-                opacity: 0,
-              },
-              lineStyle: {
-                color: 'transparent',
-              },
-            },
-          },
-        ]
-      : [];
+const formatCurrentSerise = (type: string, list: Record<string, any>, index: number) => {
+  if (type === 'loadForecasting') {
+    return list.map((item: any[]) => item[index + 1]);
+  } else if (type === 'strategyChart') {
+    return list[index].data;
+  } else {
+    return list;
+  }
+};
 
-  const option: ECOption = {
+const formatChartSerise = (apiCode: string, data: any, codes: string) => {
+  const legends = isHasPoint()
+    ? selectPointCode.value?.map(({ label }: { label: string }) => label)
+    : categoriesSecondTabs.value[activeSecondTab.value]?.indicators?.map(({ label }: { label: string }) => label);
+  const colors = isHasPoint()
+    ? selectPointCode.value?.map(({ color }: { color: string }) => color)
+    : categoriesSecondTabs.value[activeSecondTab.value]?.indicators?.map(({ color }: { color: string }) => color);
+  const time = apiCode === 'loadForecasting' ? data.time : apiCode === 'strategyChart' ? data.timeList : data.xList;
+  const serieList =
+    apiCode === 'loadForecasting' ? data.dataList : apiCode === 'strategyChart' ? data.dataList : data[codes];
+  const type = apiCode === 'loadForecasting' ? 'line' : apiCode === 'strategyChart' ? 'bar' : 'bar';
+  const serise = legends.map((item: string, index: number) => {
+    return {
+      name: item,
+      type: type,
+      stack: 'one',
+      itemStyle: {
+        color: colors[index],
+      },
+      data: formatCurrentSerise(apiCode, serieList, index),
+    };
+  });
+  return baseChartOptions(legends, colors, time, serise);
+};
+
+//获取曲线数据
+const apis = [
+  'loadForecasting',
+  'strategyChart',
+  'queryEnergyEfficiencyMonitoringGraphOfDay',
+  'queryEnergyEfficiencyMonitoringGraphOfDay',
+];
+const getHistoryData = async () => {
+  if (!categoriesSecondTabs.value && categoriesSecondTabs.value.length <= 0) return;
+  const params = {
+    dataCodes: formatCodes(),
+    time: formatDate(new Date(), 'YYYY-MM-DD'),
+  };
+  const { start, end } = formatDateRange(new Date(), 'day', 'YYYY-MM-DD HH:mm:ss');
+  const equipmentParams = {
+    codes: formatCodes(),
+    startTime: start,
+    endTime: end,
+    ts: 1,
+    tsUnit: 'H',
+  };
+  const apiCode = apis[activeFirstTab.value];
+  const requestParam =
+    apiCode === 'strategyChart'
+      ? { tpl: 'strategyDataCodeTpl' }
+      : apiCode === 'queryEnergyEfficiencyMonitoringGraphOfDay'
+      ? equipmentParams
+      : params;
+  const result = await fetchExecuteApi({ apiCode, requestParam });
+  if (!result || Object.keys(result).length <= 0) return;
+  chartSeries.value = formatChartSerise(apiCode, result, equipmentParams.codes) as ECOption;
+};
+
+const baseChartOptions = (legends: any, colors: any, xAxisData: string[], series: any) => {
+  return {
     legend: {
       data: legends,
       icon: 'rect',
@@ -256,11 +232,16 @@ function generateOption(series: any[] = []): ECOption {
     },
     tooltip: {
       trigger: 'axis',
+      backgroundColor: 'rgba(11,34,52,0.9)',
+      borderWidth: 1,
+      borderColor: 'rgb(73, 73, 73)',
+      textStyle: '#fff',
       formatter: (params: any) => {
         let content = params[0].axisValueLabel;
         for (const i in params) {
-          const unit = lineUnit.value[Number(i)] ? lineUnit.value[Number(i)] : '';
-          content += '<br/>' + params[i].marker + params[i].seriesName + ': ' + params[i].value[1] + unit;
+          // const unit = lineUnit.value[Number(i)] ? lineUnit.value[Number(i)] : '';
+          const unit = 'KWh';
+          content += '<br/>' + params[i].marker + params[i].seriesName + ': ' + (params[i].value ?? '-') + unit;
         }
         return content;
       },
@@ -273,34 +254,21 @@ function generateOption(series: any[] = []): ECOption {
       containLabel: true,
     },
     xAxis: {
-      //   data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-      type: 'time',
-      min: dateRange(new Date(), 'day').start,
-      max: dateRange(new Date(), 'day').end,
-      maxInterval: 3600 * 1000 * 3,
+      data: xAxisData,
+      type: 'category',
       splitLine: {
         show: false,
       },
       axisTick: {
-        show: false,
-        interval: 2,
+        alignWithLabel: true,
       },
-      axisLine: {
-        lineStyle: {
-          color: 'rgba(164, 218, 255, 0.2)',
-        },
-      },
-      interval: 3600 * 1000 * 2,
       axisLabel: {
-        formatter: '{HH}:{mm}',
-        interval: 2,
-        color: '#FFFFFF',
-        fontSize: 10,
-        fontWeight: 300,
+        interval: 1,
       },
     },
     yAxis: {
       type: 'value',
+      name: 'KWh',
       boundaryGap: [0, '100%'],
       splitLine: {
         lineStyle: {
@@ -321,72 +289,20 @@ function generateOption(series: any[] = []): ECOption {
         fontSize: 10,
       },
     },
-    dataZoom,
+    // dataZoom,
     series,
   };
-  return option;
-}
-
-const scrollMainWidth = ref<number>(0);
-const scollWith = ref<number>(0);
-const wrapWith = ref<number>(0);
-// const navWidth = ref<number>(0);
-const showLeft = ref<boolean>(false);
-const showRight = ref<boolean>(false);
-const distance = ref<number>(0);
-
-const tabCount = computed<number>(() => {
-  if (props.config.classify.length > 4) return 4;
-  else if (props.config.classify.length < 2) return 2;
-  else return props.config.classify.length;
-});
-
-const tabWidth = computed(() => scrollMainWidth.value / tabCount.value + 'px');
-
-// const listTabWidth = computed(() => {
-//   if (categories.value && categories.value.length * (scrollMainWidth.value / 4) <= scrollMainWidth.value)
-//     return scrollMainWidth.value + 'px';
-//   else {
-//     return (scrollMainWidth.value / 4) * (categories.value ? categories.value.length : 0) + 'px';
-//   }
-// });
-
-// const moveMethod = (flag: string) => {
-//   // 移动
-//   distance.value += flag === 'left' ? -(scrollMainWidth.value / 4) : scrollMainWidth.value / 4;
-//   convertArrow();
-// };
-
-const convertArrow = () => {
-  /**
-   * 左箭头：滚动区域 - 隐藏区域 < 可视区域
-   * true：隐藏左箭头(右侧导航已全显示)
-   * false：显示左箭头(右侧导航未全显示)
-   */
-  wrapWith.value = (scrollMainWidth.value / 4) * categories.value.length;
-  const rollWidth = wrapWith.value - Math.abs(distance.value);
-  showLeft.value = rollWidth <= scollWith.value ? false : true;
-  //  右箭头
-  showRight.value = distance.value == 0 ? false : true;
 };
-// 监听html元素变化
-const colorCardObserver = new ResizeObserver(() => {
-  scrollMainWidth.value = scrollMain.value?.clientWidth ?? 0;
-});
 
-onMounted(() => {
-  flush();
-  if (!scrollMain.value) {
-    return;
-  }
-  scrollMainWidth.value = scrollMain.value.clientWidth;
-  colorCardObserver.observe(scrollMain.value);
-  scollWith.value = scrollMain.value.offsetWidth;
-  wrapWith.value = wrap.value.offsetWidth;
-  wrapWith.value <= scollWith.value && (showLeft.value = false);
-  showRight.value = categories.value.length > 4 ? true : false;
-  convertArrow();
-});
+watch(
+  () => props.config.classify,
+  () => {
+    formatFirstTabConfig();
+  },
+  { immediate: true }
+);
+
+useIntervalAsync(getHistoryData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>
@@ -457,7 +373,6 @@ onMounted(() => {
 
         .wrap-tab {
           //   width: 385px;
-          width: v-bind(tabWidth);
           float: left;
           //   text-align: center;
           display: flex;
@@ -546,7 +461,6 @@ onMounted(() => {
           color: #1b9aff;
           border-right: 2px solid #1b9aff;
           background-color: rgba(255, 255, 255, 0.08);
-          z-index: 10;
         }
       }
     }

@@ -6,6 +6,8 @@ import { EdomsRequestFunc } from '@edoms/utils';
 
 import useCommonMethod from './useCommonMethod';
 
+const eventComMethods: Record<string, Callback> = {};
+
 export const useApp = (props: any) => {
   const app = inject<Core | undefined>('app');
   const node = app?.page?.getNode(props.config.id);
@@ -45,6 +47,7 @@ export const useApp = (props: any) => {
       callback.__depends__ = depends;
     }
     instance.methods[methodName] = callback;
+    eventComMethods[methodName] = callback;
     return callback;
   }
 
@@ -65,6 +68,7 @@ export const useApp = (props: any) => {
   return {
     app,
     node,
+    eventComMethods,
     provideMethod,
     request,
     t,

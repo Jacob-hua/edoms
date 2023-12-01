@@ -14,23 +14,13 @@
       <template #empty>
         <el-empty :image-size="0" description="暂无数据"></el-empty>
       </template>
-      <el-table-column
-        v-for="col in tableCols"
-        :key="col.prop"
-        :prop="col.prop"
-        :label="col.label || col.name"
-        :width="colWidth"
-      />
+      <el-table-column v-for="col in tableCols" :key="col" :prop="col" :label="col" :width="colWidth" />
     </el-table>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
-// import { dateFormat } from '@/utils/public.js'
-// import i18n from '@/assets/language'
-// import useApp from '../../../useApp'
-// const { t } = useApp(props);
 
 const props: any = defineProps({
   title: {
@@ -96,13 +86,6 @@ const dateFormat = (f: any, d: any) => {
         fmt = fmt.replace(ret[1], ret[1].length === 1 ? temp : opt[k].padStart(ret[1].length, '0'));
       }
     }
-    // if (opt.hasOwnProperty(k)) {
-    //   ret = new RegExp(`(${k})`).exec(fmt);
-    //   if (ret) {
-    //     const temp = k === 'W+' ? weekArr[opt[k]] : opt[k];
-    //     fmt = fmt.replace(ret[1], ret[1].length === 1 ? temp : opt[k].padStart(ret[1].length, '0'));
-    //   }
-    // }
   }
   return fmt;
 };

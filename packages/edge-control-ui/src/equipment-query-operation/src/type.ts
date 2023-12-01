@@ -133,6 +133,25 @@ export interface CurveData {
   }>;
 }
 
+interface ExecuteComparsionApiParams {
+  codes: string;
+  names: string;
+}
+
+export interface ExecuteComparsionData {
+  unit: string;
+  code: string;
+  name: string;
+  value: number;
+}
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: ExecuteComparsionApiParams;
+}
+
+export type FetchExecuteApiRes = ExecuteComparsionData[];
+
 export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEnvMonitoringRes = IndicatorDataItem[];
@@ -149,4 +168,5 @@ export interface Apis {
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
   fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchExecuteApiRes>;
 }

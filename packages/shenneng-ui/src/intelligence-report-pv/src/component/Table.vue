@@ -8,23 +8,28 @@
     <div class="report">
       <div class="wrap-tab">
         <div
-          v-for="(item, index) in state.tabs"
-          :key="item"
+          v-for="(item, index) in tabs"
+          :key="item.label"
           :class="['tab', { active: activeTab === index }]"
-          @click="changeTab(index)"
+          @click="changeTab(index, item.value)"
         >
-          {{ item }}
+          {{ item.label }}
         </div>
       </div>
       <el-form ref="queryRef" v-model="state.queryForm" class="condition-form" label-min-width="100px">
         <el-row :gutter="10">
           <el-col :span="4" :offset="1">
             <el-form-item :label="t('日期选择')">
-              <el-date-picker v-model="state.queryForm.date" :teleported="false" :placeholder="t('请选择日期')" />
+              <el-date-picker
+                v-model="state.queryForm.date"
+                :teleported="false"
+                :placeholder="t('请选择日期')"
+                @change="selectDate"
+              />
             </el-form-item>
           </el-col>
-          <div class="button">{{ t('查询') }}</div>
-          <div class="button button-export">{{ t('导出') }}</div>
+          <!-- <div class="button">{{ t('查询') }}</div>
+          <div class="button button-export">{{ t('导出') }}</div> -->
         </el-row>
       </el-form>
       <div class="table">
@@ -42,56 +47,61 @@
           :row-style="{ height: '50px' }"
         >
           <el-table-column type="index" :label="t('序号')" width="60"></el-table-column>
-          <el-table-column
-            v-for="item in state.titleList"
-            :key="item.name"
-            :prop="item.value"
-            :label="item.name"
-            :width="item.width"
-          >
+          <el-table-column v-for="item in tableHeaders" :key="item.name" :prop="item.value" :label="item.name">
           </el-table-column>
         </el-table>
       </div>
       <div class="wrap-page">
-        <el-pagination :background="'rgba(0, 0, 0, 0.9)'" layout="prev, pager, next" :total="50" />
+        <el-pagination
+          :page-size="reportPage.limit"
+          :background="'rgba(0, 0, 0, 0.9)'"
+          layout="prev, pager, next"
+          :total="50"
+          @current-change="handleChangePageSize"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 
 import { ElForm } from '@edoms/design';
+import { formatDate } from '@edoms/utils';
 
+import useApp from '../../../useApp';
 import useI18n from '../../../useI18n';
-import { tableData, tableData1, titleData } from '../mock';
+import apiFactory from '../api';
 import { MIntelligenceReport, MQueryForm } from '../type';
 
-defineProps<{
+const props = defineProps<{
   config: MIntelligenceReport;
 }>();
+
+const { request } = useApp(props);
+
+const { fetchExecuteApi } = apiFactory(request);
 
 const { t } = useI18n();
 
 const queryRef = ref(ElForm);
 
+const activeCodes = ref('');
+
+const tabs = computed(() =>
+  props.config.classify?.map((item: { label: string; codes: string }) => {
+    return {
+      label: item.label,
+      value: item.codes,
+    };
+  })
+);
+
 const state: any = reactive({
   queryForm: {
     date: new Date(),
   } as MQueryForm,
-  tabs: [
-    t('全部'),
-    t('单体一'),
-    t('单体二'),
-    t('研发楼西'),
-    t('研发楼北'),
-    t('研发楼东'),
-    t('研发楼南'),
-    t('光伏幕墙'),
-    t('光伏车棚'),
-    t('全站数据'),
-  ],
   titleList: [],
   tableData: [],
   tableStyle: {
@@ -103,15 +113,60 @@ const state: any = reactive({
   },
 });
 
+const reportPage = ref({
+  limit: 10,
+  page: 1,
+});
+
+const tableHeaders = [
+  {
+    name: '采集时间',
+    value: 'time',
+  },
+  {
+    name: '日发电量',
+    value: 'value3',
+  },
+  {
+    name: '当日减排',
+    value: 'value4',
+  },
+  {
+    name: '实时功率',
+    value: 'value5',
+  },
+  {
+    name: '累计发电量',
+    value: 'value6',
+  },
+];
+
 const activeTab = ref<number>(0);
-const changeTab = (index: number) => {
+const changeTab = (index: number, codes: string) => {
   if (activeTab.value === index) return;
   activeTab.value = index;
-  state.tableData = index % 2 === 0 ? tableData : tableData1;
+  activeCodes.value = codes;
 };
-const handleTableData = () => {
-  state.titleList = titleData.map((item) => ({ ...item, name: t(item.name) }));
-  state.tableData = tableData;
+
+const handleChangePageSize = (page: number) => {
+  reportPage.value.page = page;
+  getIntelligenceReportData();
+};
+
+const selectDate = (time: Record<string, any>) => {
+  console.log(time.getDate());
+};
+
+const getIntelligenceReportData = async (time: string = formatDate(new Date(), 'YYYY-MM-DD')) => {
+  if (!props.config.classify || props.config.classify.length <= 0) return;
+  const requestParam = {
+    codes: activeCodes.value || props.config.classify?.[0].codes,
+    time,
+    ...reportPage.value,
+  };
+
+  const result = await fetchExecuteApi({ apiCode: '', requestParam });
+  if (!result) return;
 };
 
 const emit = defineEmits(['closeTable']);
@@ -121,7 +176,7 @@ const closeTable = () => {
 };
 
 onMounted(() => {
-  handleTableData();
+  getIntelligenceReportData();
 });
 </script>
 
@@ -313,9 +368,8 @@ onMounted(() => {
       margin-left: 2%;
     }
     .wrap-page {
-      width: 50%;
       height: 50px;
-      margin-left: 60%;
+      float: right;
       padding: 16px 16px;
     }
   }

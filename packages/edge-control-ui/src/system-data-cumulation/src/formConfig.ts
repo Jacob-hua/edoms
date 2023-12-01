@@ -60,7 +60,7 @@ export default async (request: Request) => {
           type: 'text',
           trim: true,
         },
-        ...(await useInstanceConfig(request, 'system-cumulative-data')),
+        ...(await useInstanceConfig(request, 'system-data-cumulation')),
         {
           name: 'ratioPrecision',
           text: '比率精度',

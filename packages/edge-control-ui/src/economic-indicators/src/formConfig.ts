@@ -99,7 +99,7 @@ export default async (request: Request) => [
     type: 'groupList',
     labelWidth: '80px',
     addButtonText: '添加指标',
-    maxItems: 4,
+    maxItems: 2,
     title: (model: any, index: number | string) => `# ${index} ${model.label ?? ''}`,
     items: [
       {
@@ -111,6 +111,12 @@ export default async (request: Request) => [
       {
         name: 'label',
         text: '标签',
+        type: 'text',
+        trim: true,
+      },
+      {
+        name: 'code',
+        text: '监测标识',
         type: 'text',
         trim: true,
       },

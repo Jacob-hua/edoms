@@ -8,6 +8,8 @@ import {
   FetchCurveDataRes,
   FetchEnvMonitoringReq,
   FetchEnvMonitoringRes,
+  FetchExecuteApiReq,
+  fetchExecuteApiRes,
   FetchHistoryDataReq,
   FetchHistoryDataRes,
   FetchRealDataReq,
@@ -88,6 +90,21 @@ export default (request?: EdomsRequestFunc): Apis => ({
       return result;
     } catch (error) {
       return [];
+    }
+  },
+  fetchExecuteApi: async (data: FetchExecuteApiReq): Promise<fetchExecuteApiRes> => {
+    if (!request) {
+      return {};
+    }
+    try {
+      const { result } = await request<FetchExecuteApiReq, fetchExecuteApiRes>({
+        url: '/OperationalMonitorCommon/executeApi',
+        method: 'POST',
+        data,
+      });
+      return result;
+    } catch (error) {
+      return {};
     }
   },
 });

@@ -28,6 +28,8 @@ export interface MIndicatorItemConfig {
   precision: string;
   /** 单位 */
   unit: string;
+  /** 指标code */
+  code: string;
 }
 
 export interface MEconomicIndicators extends MComponent {
@@ -140,6 +142,18 @@ export interface CurveData {
   }>;
 }
 
+interface ExecuteApiParams {
+  codes: string;
+  time: string;
+}
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: ExecuteApiParams;
+}
+
+export type fetchExecuteApiRes = Record<string, number>;
+
 export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEnvMonitoringRes = IndicatorDataItem[];
@@ -156,4 +170,5 @@ export interface Apis {
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
   fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<fetchExecuteApiRes>;
 }

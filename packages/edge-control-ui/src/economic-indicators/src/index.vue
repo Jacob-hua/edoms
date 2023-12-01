@@ -1,6 +1,11 @@
 <template>
   <div style="min-width: 392px; min-height: 160px">
     <BusinessCard :title="config.title" :subtitle="config.subTitle" min-width="392" min-height="141">
+      <template #operation>
+        <div class="operation" @click="handleShowMore">
+          <img :style="'transform: rotateZ(90deg)'" src="../../../assets/image/arrow_up.png" alt="" />
+        </div>
+      </template>
       <div class="economic-indicators">
         <div v-for="item in indicators" :key="item.label" class="list">
           <div class="icon">
@@ -18,7 +23,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { formatPrecision } from '@edoms/utils';
+import { formatDate, formatPrecision } from '@edoms/utils';
 
 import BusinessCard from '../../BusinessCard.vue';
 import useApp from '../../useApp';
@@ -29,13 +34,14 @@ import ConsumpImg from './assets/yongdianliang.svg';
 import CostImg from './assets/zhilengchengben.svg';
 import ColdImg from './assets/zhilengliang.svg';
 import apiFactory from './api';
-import { MEconomicIndicator, MEconomicIndicators, MIndicatorItemConfig } from './type';
+import { MEconomicIndicator, MEconomicIndicators } from './type';
 
 export interface Indicator {
   icon: string;
   parameter: string | number;
   label: string;
   propCode: string;
+  code: string;
   unit: string;
   precision: string;
 }
@@ -44,97 +50,55 @@ const props = defineProps<{
   config: MEconomicIndicators;
 }>();
 
-const { request } = useApp(props);
+const { request, eventComMethods } = useApp(props);
 
-const { fetchRealData } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
 const indicators = ref<Indicator[]>([]);
-const initIndicators = ref<Indicator[]>([]);
 
-const indicatorConfigs = computed<MIndicatorItemConfig[]>(() => props.config.indicators ?? []);
-
-const intervalDelay = computed<number>(() => {
-  if (typeof props.config.intervalDelay !== 'number') {
-    return 10;
-  }
-  return props.config.intervalDelay;
-});
-
-// const list: any = ref([
-//   {
-//     label: '用电量',
-//     value: 5846,
-//     unit: '元/kWh',
-//   },
-//   {
-//     label: '制冷量',
-//     value: 5846,
-//     unit: 'kWh',
-//   },
-//   {
-//     label: '电费',
-//     value: 5846,
-//     unit: '元',
-//   },
-//   {
-//     label: '制冷成本',
-//     value: 5846,
-//     unit: '元/kWh',
-//   },
-// ]);
-
-watch(
-  () => indicatorConfigs.value,
-  (indicatorConfigs) => {
-    indicators.value = indicatorConfigs.map(({ label, type, property, unit, precision }) => ({
-      label,
-      parameter: '',
-      icon: getIconByIndicatorType(type),
-      propCode: property,
-      unit: unit,
-      precision: precision,
-    }));
-    initIndicators.value = indicators.value;
-  },
-  {
-    immediate: true,
-  }
+//指标codes
+const indicatorProperty = computed(() =>
+  props.config.indicators?.map(({ property }: { property: string }) => property)
 );
 
+//轮询间隔
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
+);
+
+//能效监测
+const indicatorsVisable = ref<boolean>(false);
+
+const handleShowMore = () => {
+  indicatorsVisable.value = !indicatorsVisable.value;
+  eventComMethods['changeIndicatorsVisable'](indicatorsVisable.value);
+};
+
 const updateRealData = async () => {
-  const dataCodes: string[] = indicatorConfigs.value.map(({ property }): string => property);
+  if (!indicatorProperty.value || indicatorProperty.value.length <= 0) return;
 
-  if (dataCodes.length === 0) {
-    return;
-  }
-
-  const result = await fetchRealData({ dataCodes });
-  result.forEach(({ propVal, propCode }) => {
-    const targetIndexs: number[] = [];
-    indicatorConfigs.value.forEach(({ property }, index) => {
-      if (property === propCode) {
-        targetIndexs.push(index);
+  const time = formatDate(new Date(), 'YYYY-MM-DD');
+  const result = await fetchExecuteApi({
+    apiCode: 'queryEconomicIndicators',
+    requestParam: {
+      time,
+      codes: indicatorProperty.value.slice(0, 2).join(','),
+    },
+  });
+  if (!result) return;
+  Object.keys(result).forEach((code: string) => {
+    indicators.value.forEach((item) => {
+      if (item.propCode === code) {
+        item.parameter = formatPrecision(result[code], item.precision);
       }
-    });
-    if (targetIndexs.length <= 0) {
-      return;
-    }
-    targetIndexs.forEach((targetIndex) => {
-      const indicatorConfig = indicatorConfigs.value[targetIndex];
-      const indicator = indicators.value[targetIndex];
-      indicator.parameter = isNaN(Number(propVal))
-        ? propVal
-        : formatPrecision(Number(propVal), indicatorConfig.precision);
-      indicator.propCode = propCode;
-      indicator.precision = indicatorConfig.precision;
-      indicator.unit = indicatorConfig.unit;
+      if (item.code === code) {
+        item.parameter = formatPrecision(result[code], item.precision);
+      }
     });
   });
 };
 
-useIntervalAsync(updateRealData, intervalDelay.value);
-
-function getIconByIndicatorType(type: MEconomicIndicator) {
+const getIconByIndicatorType = (type: MEconomicIndicator) => {
   const iconClassify = {
     [MEconomicIndicator.ELECTRICITY_CONSUMPTION]: EletricImg,
     [MEconomicIndicator.ELECTRIC]: ConsumpImg,
@@ -142,7 +106,27 @@ function getIconByIndicatorType(type: MEconomicIndicator) {
     [MEconomicIndicator.REFRIGERATION_CAPACITY]: ColdImg,
   };
   return iconClassify[type];
-}
+};
+
+watch(
+  () => props.config.indicators,
+  (indicatorConfigs) => {
+    indicators.value = indicatorConfigs?.map(({ label, type, property, unit, precision, code }) => ({
+      label,
+      parameter: '',
+      icon: getIconByIndicatorType(type),
+      propCode: property,
+      unit,
+      precision,
+      code,
+    }));
+  },
+  {
+    immediate: true,
+  }
+);
+
+useIntervalAsync(updateRealData, intervalDelay.value);
 </script>
 
 <style lang="scss" scoped>

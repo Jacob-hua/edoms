@@ -8,7 +8,7 @@
         </div>
         <!-- 数值 -->
         <div class="data-value">
-          <span class="value">{{ itm.dataValue === '--' ? '-' : itm.dataValue }}</span>
+          <span class="value">{{ itm.value === '--' ? '-' : itm.value }}</span>
           <span class="value-unit-center">{{ itm.unit }}</span>
         </div>
         <!-- 增长趋势 -->
@@ -44,19 +44,12 @@
 import { computed, reactive, withDefaults } from 'vue';
 
 import useI18n from '../../../useI18n';
-import { Category } from '../type';
+import { ExecuteComparsionData } from '../type';
 
-interface CumulativeList extends Category {
-  dataValue: string;
-  qoqRatio: string;
-  qoqTrend: 'up' | 'down' | 'flat';
-  yoyRatio: string;
-  yoyTrend: 'up' | 'down' | 'flat';
-}
 const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
-    tableData: Array<CumulativeList>;
+    tableData: Array<ExecuteComparsionData>;
   }>(),
   {
     tableData: () => [],
@@ -70,7 +63,6 @@ const state = reactive<{
 });
 
 const getStyle = computed(() => (itm: any, type: string) => {
-  console.log('propsxxxxxxx', props.tableData);
   const ft = itm[type];
   if (ft === 'flat') return '';
   if (ft === 'up') return 'rgba(215, 40, 36, 1)';

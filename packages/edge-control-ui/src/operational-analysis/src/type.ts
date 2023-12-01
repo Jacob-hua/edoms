@@ -142,6 +142,26 @@ export interface FetchEnvMonitoringReq {
   dataList: ParameterItem[];
 }
 
+export interface ExecuteCurveApiParams {
+  dataCodes: string;
+  time: string;
+}
+
+export interface ExecuteCurveData {
+  totalDeviation: number | string;
+  dataList: [];
+  time: string[];
+}
+
+export interface ExecuteApiReq {
+  apiCode: string;
+  requestParam: ExecuteCurveApiParams;
+}
+
+export type FetchExecuteApiReq = ExecuteApiReq | Record<string, any>;
+
+export type FetchExecuteApiRes = ExecuteCurveData;
+
 export type FetchCurveDataRes = CurveData[];
 
 export type FetchHistoryDataRes = HistoryData[];
@@ -158,4 +178,5 @@ export interface Apis {
   fetchCurveData: (data: FetchCurveDataReq) => Promise<FetchCurveDataRes>;
   fetchCumulativeData: (data: FetchCumulativeDataReq) => Promise<FetchCumulativeDataRes>;
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchExecuteApiRes>;
 }
