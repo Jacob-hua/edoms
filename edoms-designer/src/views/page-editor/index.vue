@@ -301,6 +301,7 @@ watch(
           [
             'dynamic-monitoring',
             'system-operation-parameters',
+            'system-data-cumulation',
             'global-schematic',
             'running-parameters',
             'global-schematic-chart',
@@ -328,7 +329,6 @@ watch(
             'eq-control',
             'cost-comparison-detail',
             'cost-comparsion',
-            'system-data-cumulation',
           ].includes(component)
         ) {
           const pathLastIndex = prop.lastIndexOf('.');

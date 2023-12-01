@@ -133,6 +133,13 @@ watch(
   }
 );
 
+watch(
+  () => colorCardWidth.value,
+  () => {
+    calculateCursorPosition.value = calculatePosition(props.actualValue) + 'px';
+  }
+);
+
 onMounted(() => {
   if (!colorCardRef.value) {
     return;

@@ -23,10 +23,23 @@ export interface RealData {
   propVal: string;
 }
 
+interface ExecuteComparsionApiParams {
+  codes: string;
+  time?: string;
+}
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: ExecuteComparsionApiParams;
+}
+
+export type FetchExecuteApiRes = Record<string, any>;
+
 export type FetchRealDataRes = RealData[];
 
 export type FetchCumulativeDataRes = CumulativeData[];
 
 export interface Apis {
   fetchRealData: (data: FetchRealDataReq) => Promise<FetchRealDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchExecuteApiRes>;
 }

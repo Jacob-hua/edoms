@@ -73,6 +73,22 @@ export interface HistoryData {
   }>;
 }
 
+export interface reportDataParams {
+  codes: string;
+  page: number;
+  limit: number;
+  time: string;
+}
+
+export type reportData = Record<string, any>;
+
+export interface FetchExecuteApiReq {
+  apiCode: string;
+  requestParam: reportDataParams;
+}
+
+export type FetchExecuteApiRes = reportData[];
+
 export type FetchHistoryDataRes = HistoryData[];
 
 export type FetchEfficiencyRes = EfficiencyData[];
@@ -80,4 +96,5 @@ export type FetchEfficiencyRes = EfficiencyData[];
 export interface Apis {
   fetchEfficiencyData: (data: FetchEfficiencyReq) => Promise<FetchEfficiencyRes>;
   fetchHistoryData: (data: FetchHistoryDataReq) => Promise<FetchHistoryDataRes>;
+  fetchExecuteApi: (data: FetchExecuteApiReq) => Promise<FetchExecuteApiRes>;
 }

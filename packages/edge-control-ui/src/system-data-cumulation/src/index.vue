@@ -22,15 +22,7 @@ import TableList from './components/TableList.vue';
 import TabList from './components/TabList.vue';
 import apiFactory from './api';
 import locales from './locales';
-import { Category, FetchCumulativeDataReq, MCumulativeConfig } from './type';
-
-interface CumulativeList extends Category {
-  dataValue: string;
-  qoqRatio: string;
-  qoqTrend: 'up' | 'down' | 'flat';
-  yoyRatio: string;
-  yoyTrend: 'up' | 'down' | 'flat';
-}
+import { ExecuteComparsionData, MCumulativeConfig } from './type';
 
 const props = defineProps<{
   config: MCumulativeConfig;
@@ -40,45 +32,51 @@ const { setMessage, t } = useApp(props);
 setMessage(locales);
 const { request } = useApp(props);
 
-const { fetchCumulativeData } = apiFactory(request);
+const { fetchExecuteApi } = apiFactory(request);
 
 const tableWrapper = ref<any>(null);
 
 const active = ref<{ [key: string]: any }>({
   key: t('日'),
-  value: 'day',
+  value: 'd',
 });
 
-const systemCumulativeData = ref<CumulativeList[]>([]);
+const systemCumulativeData = ref<ExecuteComparsionData[]>([]);
 
-const categories = computed(() => props.config.category ?? []);
+//点位属性
+const propertys = computed(() => props.config.category?.map(({ property }: { property: string }) => property));
 
-const intervalDelay = computed<number>(() => {
-  if (typeof props.config.intervalDelay !== 'number') {
-    return 10;
-  }
-  return props.config.intervalDelay;
-});
+//点位名称
+const names = computed(() => props.config.category?.map(({ label }: { label: string }) => label));
+
+//calculateType
+const calculateType = computed(() => props.config.category?.[0].calculateType);
+
+//轮询间隔
+const intervalDelay = computed<number>(() =>
+  typeof props.config.intervalDelay !== 'number' ? 10 : props.config.intervalDelay
+);
 
 const getSystemCumulativeData = async () => {
-  if (!categories.value || categories.value.length <= 0) return;
-  const params: FetchCumulativeDataReq = categories.value.map((item, index) => {
-    return {
-      dateRange: active.value.value,
-      calculateType: item.calculateType,
-      identify: index.toString(),
-      propCode: item.property,
-    };
-  });
-  const result = await fetchCumulativeData(params);
+  if (!propertys.value || propertys.value.length <= 0) return;
+  const requestParam = {
+    codes: propertys.value.join(',') as string,
+    names: names.value.join(',') as string,
+    calculateType: calculateType.value,
+    dateType: active.value.value,
+  };
+  const result = await fetchExecuteApi({ apiCode: 'queryCumulativeData', requestParam });
   if (!result || result.length <= 0) return;
-  result.forEach(({ identify, dataValue, qoqRatio, qoqTrend, yoyRatio, yoyTrend }) => {
-    const targetResult = systemCumulativeData.value[Number(identify)];
-    targetResult.dataValue = String(formatPrecision(Number(dataValue), targetResult.precision));
-    targetResult.qoqRatio = String(formatPrecision(Number(qoqRatio), targetResult.ratioPrecision));
-    targetResult.qoqTrend = qoqTrend;
-    targetResult.yoyRatio = String(formatPrecision(Number(yoyRatio), targetResult.ratioPrecision));
-    targetResult.yoyTrend = yoyTrend;
+  result.forEach(({ code, value, qoqRatio, qoqTrend, yoyRatio, yoyTrend }) => {
+    systemCumulativeData.value.forEach((item) => {
+      if (item.property === code) {
+        item.value = String(formatPrecision(Number(value), item.precision));
+        item.qoqRatio = String(formatPrecision(Number(qoqRatio), item.ratioPrecision));
+        item.qoqTrend = qoqTrend;
+        item.yoyRatio = String(formatPrecision(Number(yoyRatio), item.ratioPrecision));
+        item.yoyTrend = yoyTrend;
+      }
+    });
   });
 };
 
@@ -88,6 +86,7 @@ const handlerToOperate = (itm: { [key: string]: any }) => {
   getSystemCumulativeData();
 };
 
+const categories = computed(() => props.config.category ?? []);
 watch(
   () => categories.value,
   (categories) => {
@@ -101,12 +100,16 @@ watch(
       ratioPrecision: item.ratioPrecision,
       unit: item.unit,
       calculateType: item.calculateType,
+      code: item.property,
+      name: item.label,
+      value: 0,
       dataValue: '--',
       qoqRatio: '--',
       qoqTrend: 'flat',
       yoyRatio: '--',
       yoyTrend: 'flat',
     }));
+    console.log('systemCumulativeData.value', systemCumulativeData.value);
   },
   {
     immediate: true,
@@ -115,6 +118,7 @@ watch(
 );
 
 useIntervalAsync(getSystemCumulativeData, intervalDelay.value);
+
 onMounted(() => {
   tableWrapper.value.changeType(active.value.key);
 });
@@ -125,5 +129,6 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   padding: 15px;
+  overflow-y: scroll;
 }
 </style>
